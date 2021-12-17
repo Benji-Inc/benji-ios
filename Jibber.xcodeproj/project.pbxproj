@@ -24,6 +24,7 @@
 		802C448B26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		802C448C26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */; };
+		8043F53F276BC05D0036FAC8 /* PlaceholderMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043F53E276BC05D0036FAC8 /* PlaceholderMessageCell.swift */; };
 		80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */; };
 		8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052574027441EAC00B6DC23 /* Filter+Extensions.swift */; };
 		8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */; };
@@ -876,6 +877,7 @@
 		8028C9E8273ECB1200520465 /* ConversationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListViewController.swift; sourceTree = "<group>"; };
 		802C448926CC76CC00A333A4 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTimeMachineCollectionViewLayout.swift; sourceTree = "<group>"; };
+		8043F53E276BC05D0036FAC8 /* PlaceholderMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderMessageCell.swift; sourceTree = "<group>"; };
 		80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequenceCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		8052574027441EAC00B6DC23 /* Filter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Filter+Extensions.swift"; sourceTree = "<group>"; };
 		8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageCellLayoutAttributes.swift; sourceTree = "<group>"; };
@@ -1608,6 +1610,7 @@
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
 				80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */,
 				806DA16927307FA400843C4E /* MessageSubcell.swift */,
+				8043F53E276BC05D0036FAC8 /* PlaceholderMessageCell.swift */,
 				D66121EB274C1D5C00DD9B95 /* ReactionsView.swift */,
 				806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */,
 			);
@@ -2778,6 +2781,7 @@
 				D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D6A6691D271A44FB0001D218 /* Pass.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
+				8043F53F276BC05D0036FAC8 /* PlaceholderMessageCell.swift in Sources */,
 				D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,

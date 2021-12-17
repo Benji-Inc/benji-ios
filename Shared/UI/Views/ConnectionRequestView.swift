@@ -81,7 +81,7 @@ class ConnectionRequestView: BaseView {
                 self.showSuccess(for: item, user: userWithData)
             }
         } catch {
-            logDebug(error)
+            logError(error)
         }
     }
 

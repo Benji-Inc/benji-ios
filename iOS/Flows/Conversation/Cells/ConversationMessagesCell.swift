@@ -23,6 +23,9 @@ class ConversationMessagesCell: UICollectionViewCell {
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
+    @Published var incomingTopmostMessage: ChatMessage?
+
+    // CollectionView
     private(set) lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
     lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
@@ -54,11 +57,10 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
     /// A set of the current event subscriptions. Should be cleared out when the cell is reused.
     private var subscriptions = Set<AnyCancellable>()
-    
-    @Published var incomingTopMostMessage: ChatMessage?
     private var taskPool = TaskPool()
 
     // MARK: - Lifecycle
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -244,11 +246,14 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
 }
 
 extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
-    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout, updatedFrontmostItemAt indexPath: IndexPath) {
+
+    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
+                                         updatedFrontmostItemAt indexPath: IndexPath) {
+        
         guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
         case .message(cid: let cid, messageID: let messageID):
-            self.incomingTopMostMessage = ChatClient.shared.message(cid: cid, id: messageID)
+            self.incomingTopmostMessage = ChatClient.shared.message(cid: cid, id: messageID)
         case .loadMore(_):
             break
         }

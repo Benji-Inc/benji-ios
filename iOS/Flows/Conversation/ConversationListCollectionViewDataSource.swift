@@ -23,6 +23,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     enum ItemType: Hashable {
         case conversation(ConversationId)
         case loadMore
+        case newConversation
     }
 
     var handleSelectedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -45,6 +46,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     = ConversationListCollectionViewDataSource.createConversationCellRegistration()
     private let loadMoreMessagesCellRegistration
     = ConversationListCollectionViewDataSource.createLoadMoreCellRegistration()
+    private let newConversationCellRegistration
+    = ConversationListCollectionViewDataSource.createNewConversationCellRegistration()
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -69,61 +72,46 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             let loadMoreCell
             = collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
                                                            for: indexPath,
-                                                           item: String())
+                                                           item: self)
             loadMoreCell.handleLoadMoreMessages = { [unowned self] in
                 self.handleLoadMoreMessages?()
             }
             return loadMoreCell
+        case .newConversation:
+            let newConversationCell
+            = collectionView.dequeueConfiguredReusableCell(using: self.newConversationCellRegistration,
+                                                           for: indexPath,
+                                                           item: self)
+            return newConversationCell
         }
     }
 
     /// Updates the datasource with the passed in array of conversation changes.
-    func update(with changes: [ListChange<Conversation>],
-                conversationController: ConversationListController,
-                collectionView: UICollectionView) async {
+    func update(with conversationListController: ConversationListController) async {
+        let updatedSnapshot = self.updatedSnapshot(with: conversationListController)
+        await self.apply(updatedSnapshot)
+    }
+
+    func updatedSnapshot(with conversationListController: ConversationListController)
+    -> NSDiffableDataSourceSnapshot<ConversationListSection, ConversationListItem> {
 
         var snapshot = self.snapshot()
 
-        let sectionID = ConversationListSection(conversationsController: conversationController)
+        let sectionID = ConversationListSection(conversationsController: conversationListController)
 
-        // If there's more than one change, reload all of the data.
-        guard changes.count == 1 else {
-            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
-            snapshot.appendItems(conversationController.conversations.asConversationCollectionItems,
-                                 toSection: sectionID)
-            if !conversationController.hasLoadedAllPreviousChannels {
-                snapshot.appendItems([.loadMore], toSection: sectionID)
-            }
-            await self.apply(snapshot)
-            return
-        }
+        var updatedItems: [ConversationListItem] = []
 
-        for change in changes {
-            switch change {
-            case .insert(let conversation, let index):
-                snapshot.insertItems([.conversation(conversation.cid)],
-                                     in: sectionID,
-                                     atIndex: index.item)
-            case .move:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
-                snapshot.appendItems(conversationController.conversations.asConversationCollectionItems,
-                                     toSection: sectionID)
-            case .update(let message, _):
-                snapshot.reconfigureItems([message.asConversationCollectionItem])
-            case .remove(let message, _):
-                snapshot.deleteItems([message.asConversationCollectionItem])
-            }
-        }
+        if !conversationListController.hasLoadedAllPreviousChannels
+            && conversationListController.conversations.count > 0 {
 
-        // Only show the load more cell if there are previous messages to load.
-        snapshot.deleteItems([.loadMore])
-        if !conversationController.hasLoadedAllPreviousChannels {
-            snapshot.appendItems([.loadMore], toSection: sectionID)
+            updatedItems.append(.loadMore)
         }
+        updatedItems.append(contentsOf: conversationListController.conversations.asConversationCollectionItems)
+        updatedItems.append(.newConversation)
 
-        await Task.onMainActorAsync { [snapshot = snapshot] in
-            self.apply(snapshot)
-        }
+        snapshot.setItems(updatedItems, in: sectionID)
+
+        return snapshot
     }
 
     func set(conversationPreparingToSend: ConversationId?, reloadData: Bool) {
@@ -145,7 +133,10 @@ extension ConversationListCollectionViewDataSource {
                                          dataSource: ConversationListCollectionViewDataSource)>
 
     typealias LoadMoreMessagesCellRegistration
-    = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
+    = UICollectionView.CellRegistration<LoadMoreMessagesCell, ConversationListCollectionViewDataSource>
+
+    typealias NewConversationCellRegistration
+    = UICollectionView.CellRegistration<PlaceholderMessageCell, ConversationListCollectionViewDataSource>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
@@ -164,6 +155,10 @@ extension ConversationListCollectionViewDataSource {
 
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
         return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in }
+    }
+
+    static func createNewConversationCellRegistration() -> NewConversationCellRegistration {
+        return NewConversationCellRegistration { cell, indexPath, itemIdentifier in }
     }
 }
 

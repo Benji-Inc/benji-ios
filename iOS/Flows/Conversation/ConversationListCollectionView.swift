@@ -10,7 +10,6 @@ import Foundation
 import StreamChat
 
 /// A collection view for displaying conversations.
-/// Conversations are ordered right to left. So the first conversation in the data source is on the far right.
 /// It automatically creates its own custom layout object.
 class ConversationListCollectionView: CollectionView {
 
@@ -25,7 +24,6 @@ class ConversationListCollectionView: CollectionView {
         self.keyboardDismissMode = .interactive
         self.decelerationRate = .fast
         self.showsHorizontalScrollIndicator = false
-        self.semanticContentAttribute = .forceRightToLeft
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -67,7 +65,10 @@ extension ConversationListCollectionView: MessageSendingCollectionViewType {
     }
 
     func getNewConversationContentOffset() -> CGPoint {
-        let xOffset = -self.width + self.conversationLayout.minimumLineSpacing
-        return CGPoint(x: xOffset, y: 0)
+        let proposedXOffset = self.conversationLayout.collectionViewContentSize.width - self.width
+        let proposedOffset = CGPoint(x: proposedXOffset, y: 0)
+
+        return self.conversationLayout.targetContentOffset(forProposedContentOffset: proposedOffset,
+                                                           withScrollingVelocity: .zero)
     }
 }

@@ -59,21 +59,11 @@ extension ConversationListViewController {
         
         self.conversationListController
             .channelsChangesPublisher
-            .mainSink { [unowned self] changes in
-                let nonUpdateChanges = changes.filter { change in
-                    switch change {
-                    case .update:
-                        return false
-                    default:
-                        return true
-                    }
-                }
+            .mainSink { [unowned self] _ in
                 Task {
-                    await self.dataSource.update(with: nonUpdateChanges,
-                                                 conversationController: self.conversationListController,
-                                                 collectionView: self.collectionView)
-                }.add(to: self.taskPool)
-        }.store(in: &self.cancellables)
+                    await self.dataSource.update(with: self.conversationListController)
+                }
+            }.store(in: &self.cancellables)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
             guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
@@ -90,9 +80,9 @@ extension ConversationListViewController {
     }
     
     func handleTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
-        cell.$incomingTopMostMessage
+        cell.$incomingTopmostMessage
             .removeDuplicates()
-            .mainSink { message in
+            .mainSink { [unowned self] message in
                 guard let author = message?.author else { return }
                 self.headerVC.membersVC.updateAuthor(for: conversation, user: author)
             }.store(in: &self.cancellables)

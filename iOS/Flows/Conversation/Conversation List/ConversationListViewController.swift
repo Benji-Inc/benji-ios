@@ -24,10 +24,9 @@ enum ConversationUIState {
     }
 }
 
-class ConversationListViewController: ViewController,
-                                      UICollectionViewDelegate,
-                                      UICollectionViewDelegateFlowLayout {
+class ConversationListViewController: ViewController {
 
+    // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
 
@@ -79,7 +78,7 @@ class ConversationListViewController: ViewController,
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
         let query = ChannelListQuery(filter: filter,
-                                     sort: [Sorting(key: .createdAt, isAscending: false)],
+                                     sort: [Sorting(key: .createdAt, isAscending: true)],
                                      pageSize: .channelsPageSize,
                                      messagesLimit: .messagesPageSize)
         self.conversationListController
@@ -97,7 +96,7 @@ class ConversationListViewController: ViewController,
 
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.delegate = self
+        self.collectionView.conversationLayout.delegate = self
 
         self.addChild(viewController: self.headerVC, toView: self.view)
         self.subscribeToKeyboardUpdates()
@@ -131,7 +130,8 @@ class ConversationListViewController: ViewController,
         guard let cell = self.collectionView.getBottomFrontmostCell() else { return }
 
         let cellFrame = self.view.convert(cell.bounds, from: cell)
-        let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
+        let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds,
+                                               from: self.messageInputAccessoryView)
 
         let diff = cellFrame.bottom - accessoryFrame.top
         let value = -clamp(diff, 0, 70)
@@ -180,24 +180,21 @@ class ConversationListViewController: ViewController,
         }
     }
 
-    func updateCenterMostCell() {
-        guard let ip = self.collectionView.centerIndexPath(),
-              let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
+    func update(withCenteredConversation cid: ConversationId?) {
+        if let cid = cid {
+            let conversation = ChatClient.shared.channelController(for: cid).conversation
+            /// Sets the active conversation
+            ConversationsManager.shared.activeConversation = conversation
+            let members = conversation.lastActiveMembers.filter { member in
+                return member.id != ChatClient.shared.currentUserId
+            }
+            self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
 
-        /// Sets the active conversation
-        ConversationsManager.shared.activeConversation = conversation
-
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
-        }
-        self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
-
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.view.layoutNow()
-        }
-        
-        if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            self.handleTopMessageUpdates(for: conversation, cell: cell)
+            if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+                self.handleTopMessageUpdates(for: conversation, cell: cell)
+            }
+        } else {
+            ConversationsManager.shared.activeConversation = nil
         }
     }
 
@@ -210,19 +207,15 @@ class ConversationListViewController: ViewController,
 
         let conversations = self.conversationListController.conversations
 
-        var snapshot = self.dataSource.snapshot()
+        let snapshot = self.dataSource.updatedSnapshot(with: self.conversationListController)
 
-        let section = ConversationListSection(conversationsController: self.conversationListController)
-        snapshot.appendSections([section])
-        snapshot.appendItems(conversations.asConversationCollectionItems)
-
-        if !self.conversationListController.hasLoadedAllPreviousChannels && conversations.count > 0 {
-            snapshot.appendItems([.loadMore], toSection: section)
-        }
-
-        var startingIndexPath: IndexPath? = nil
-        if let startingConversationID = self.startingConversationID {
-            startingIndexPath = snapshot.indexPathOfItem(.conversation(startingConversationID))
+        // Automatically scroll to the latest conversation.
+        let startingIndexPath: IndexPath
+        if let startingConversationID = self.startingConversationID,
+           let conversationIndexPath = snapshot.indexPathOfItem(.conversation(startingConversationID)) {
+            startingIndexPath = conversationIndexPath
+        } else {
+            startingIndexPath = IndexPath(item: clamp(conversations.count - 1, min: 0) , section: 0)
         }
 
         let animationCycle = AnimationCycle(inFromPosition: .inward,
@@ -234,9 +227,7 @@ class ConversationListViewController: ViewController,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
 
-        self.updateCenterMostCell()
-
-        guard let startingConversationID = startingConversationID else { return }
+        guard let startingConversationID = self.startingConversationID else { return }
 
         Task {
             await self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
@@ -289,49 +280,33 @@ class ConversationListViewController: ViewController,
             do {
                 try await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
             } catch {
-                logDebug(error)
+                logError(error)
             }
             self.isLoadingConversations = false
         }.add(to: self.taskPool)
     }
+}
 
-    // MARK: - UIScrollViewDelegate
+// MARK: - ConversationListCollectionViewLayoutDelegate
 
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
-                                   withVelocity velocity: CGPoint,
-                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+extension ConversationListViewController: ConversationListCollectionViewLayoutDelegate {
 
-        // Always scroll so that a cell is centered when we stop scrolling.
-        var newXOffset = CGFloat.greatestFiniteMagnitude
-        let targetOffset = targetContentOffset.pointee
+    func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
+                                              cidFor indexPath: IndexPath) -> ConversationId? {
 
-        let targetRect = CGRect(x: targetOffset.x,
-                                y: targetOffset.y,
-                                width: scrollView.width,
-                                height: scrollView.height)
-
-        let layout = self.collectionView.conversationLayout
-        guard let layoutAttributes = layout.layoutAttributesForElements(in: targetRect) else { return }
-
-        // Find the item whose center is closest to the proposed offset and set that as the new scroll target
-        for elementAttributes in layoutAttributes {
-            let possibleNewOffset = elementAttributes.frame.centerX - collectionView.halfWidth
-            if abs(possibleNewOffset - targetOffset.x) < abs(newXOffset - targetOffset.x) {
-                newXOffset = possibleNewOffset
-            }
+        let item = self.dataSource.itemIdentifier(for: indexPath)
+        switch item {
+        case .conversation(let cid):
+            return cid
+        case .loadMore, .newConversation, .none:
+            return nil
         }
-
-        targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
-
-        self.updateCenterMostCell()
     }
 
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        self.updateCenterMostCell()
-    }
+    func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
+                                              didUpdateCentered cid: ConversationId?) {
 
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.updateCenterMostCell()
+        self.update(withCenteredConversation: cid)
     }
 }
 
@@ -344,7 +319,8 @@ extension ConversationListViewController: MessageSendingViewControllerType {
     }
 
     func getCurrentMessageSequence() -> MessageSequence? {
-        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
+        guard let centeredCell
+                = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return nil
         }
 
@@ -361,7 +337,6 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             let username = User.current()?.initials ?? ""
             let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
             let userIDs = Set(self.members.userIDs)
-
             do {
                 let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
                                                                          name: nil,
@@ -374,25 +349,34 @@ extension ConversationListViewController: MessageSendingViewControllerType {
                                                                          extraData: [:])
 
                 try await controller.synchronize()
+
+                ConversationsManager.shared.activeConversation = controller.conversation
+
                 try await controller.createNewMessage(with: sendable)
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }.add(to: self.taskPool)
     }
 
     func sendMessage(_ message: Sendable) {
-        guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
+        guard let cid = self.getCurrentMessageSequence()?.streamCID else {
+            self.createNewConversation(message)
+            return
+        }
+        
         let conversationController = ChatClient.shared.channelController(for: cid)
         Task {
             do {
                 try await conversationController.createNewMessage(with: message)
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }.add(to: self.taskPool)
     }
 }
+
+// MARK: - TransitionableViewController
 
 extension ConversationListViewController: TransitionableViewController {
 

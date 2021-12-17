@@ -38,7 +38,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
                     self.layoutNow()
                 }
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }
     }

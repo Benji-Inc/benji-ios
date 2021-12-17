@@ -51,7 +51,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 do {
                     try await controller.deleteChannel()
                 } catch {
-                    logDebug(error)
+                    logError(error)
                 }
             }.add(to: self.taskPool)
         }

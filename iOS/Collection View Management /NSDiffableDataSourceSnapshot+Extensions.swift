@@ -24,6 +24,17 @@ extension NSDiffableDataSourceSnapshot {
         }
     }
 
+    /// Removes all of the current items in the specified section and inserts all the items in the given array.
+    /// If the section doesn't exist in the snapshot yet, then it is appended before inserting the items.
+    mutating func setItems(_ identifiers: [ItemIdentifierType], in section: SectionIdentifierType) {
+        if !self.sectionIdentifiers.contains(section) {
+            self.appendSections([section])
+        }
+
+        self.deleteItems(self.itemIdentifiers(inSection: section))
+        self.appendItems(identifiers, toSection: section)
+    }
+
     /// Reloads the item contained in the specified section at that section's specified index.
     /// If no item exists at that index, this function does nothing.
     mutating func reloadItem(atIndex index: Int, in section: SectionIdentifierType) {
