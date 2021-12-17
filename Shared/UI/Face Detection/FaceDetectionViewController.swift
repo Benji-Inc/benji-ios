@@ -42,6 +42,8 @@ class FaceDetectionViewController: ImageCaptureViewController {
         guard self.metalDevice.isNil else { return }
         self.setupMetal()
         self.setupCoreImage()
+        
+        self.view.addSubview(self.cameraView)
     }
     
     override func viewDidLayoutSubviews() {

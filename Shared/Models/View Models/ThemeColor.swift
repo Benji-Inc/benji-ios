@@ -43,4 +43,8 @@ enum ThemeColor: String, CaseIterable {
             return UIColor(named: "RED")!
         }
     }
+    
+    var ciColor: CIColor {
+        return CIColor(color: self.color)
+    }
 }
