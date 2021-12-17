@@ -11,7 +11,7 @@ import Localization
 
 class ReservationsViewController: NavigationBarViewController {
 
-    let contactsButton = Button()
+    let contactsButton = ThemeButton()
     var didSelectShowContacts: CompletionOptional = nil
 
     override func initializeViews() {

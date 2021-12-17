@@ -100,7 +100,7 @@ class MessageContentView: BaseView {
     }
 
     /// Sets the background color and shows/hides the bubble tail.
-    func configureBackground(color: Color,
+    func configureBackground(color: ThemeColor,
                              brightness: CGFloat,
                              showBubbleTail: Bool,
                              tailOrientation: SpeechBubbleView.TailOrientation) {

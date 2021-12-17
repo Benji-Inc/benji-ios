@@ -58,7 +58,7 @@ class CollectionViewManagerCell: UICollectionViewListCell {
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell().updated(for: state)
 
         // Customize the background color to be clear, no matter the state.
-        backgroundConfig.backgroundColor = Color.clear.color
+        backgroundConfig.backgroundColor = ThemeColor.clear.color
 
         // Apply the background configuration to the cell.
         self.backgroundConfiguration = backgroundConfig

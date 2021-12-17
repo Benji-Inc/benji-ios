@@ -10,8 +10,8 @@ import Foundation
 
 class PeopleHeaderView: UICollectionReusableView {
 
-    let titleLabel = Label(font: .regularBold)
-    let descriptionLabel = Label(font: .small)
+    let titleLabel = ThemeLabel(font: .regularBold)
+    let descriptionLabel = ThemeLabel(font: .small)
     /// Place all views under the lineView
     let lineView = BaseView()
 

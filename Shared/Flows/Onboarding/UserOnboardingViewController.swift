@@ -15,7 +15,7 @@ class UserOnboardingViewController: ViewController {
     private(set) var blurView = BlurView()
     private(set) var avatarView = AvatarView()
 
-    private(set) var nameLabel = Label(font: .regular, textColor: .textColor)
+    private(set) var nameLabel = ThemeLabel(font: .regular, textColor: .textColor)
     private(set) var messageContent = MessageContentView()
 
     override func initializeViews() {
@@ -96,7 +96,7 @@ class OnboardingMessageTextView: TextView {
         self.textAlignment = .center
         self.textContainer.lineBreakMode = .byWordWrapping
         self.isEditable = false
-        self.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
+        self.linkTextAttributes = [.foregroundColor: ThemeColor.lightGray.color, .underlineStyle: 0]
         self.lineSpacing = 2
     }
 }

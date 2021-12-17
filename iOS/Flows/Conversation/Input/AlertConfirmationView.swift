@@ -11,8 +11,8 @@ import Localization
  
 class AlertConfirmationView: BaseView {
 
-    private let label = Label(font: .regular)
-    let button = Button()
+    private let label = ThemeLabel(font: .regular)
+    let button = ThemeButton()
 
     override func initializeSubviews() {
         super.initializeSubviews()

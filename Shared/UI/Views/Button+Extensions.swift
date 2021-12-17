@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Button {
+extension ThemeButton {
 
     @MainActor
     /// Starts a loading animation on the button and hides the text.
@@ -96,7 +96,7 @@ extension Button {
                     }
                 }
                 self.errorLabel.alpha = 1.0
-                self.setBackground(color: Color.white.color.withAlphaComponent(0.4), forUIControlState: .normal)
+                self.setBackground(color: ThemeColor.white.color.withAlphaComponent(0.4), forUIControlState: .normal)
             }) { (_) in
                 continuation.resume(returning: ())
             }

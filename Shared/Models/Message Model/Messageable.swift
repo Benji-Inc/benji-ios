@@ -30,7 +30,7 @@ protocol Messageable {
     var isConsumedByMe: Bool { get }
     var isConsumed: Bool { get }
     var hasBeenConsumedBy: [Avatar] { get }
-    var color: Color { get }
+    var color: ThemeColor { get }
     var kind: MessageKind { get }
     var isDeleted: Bool { get }
     var totalReplyCount: Int { get }
@@ -70,7 +70,7 @@ extension Messageable {
         return self
     }
 
-    var color: Color {
+    var color: ThemeColor {
         if self.isFromCurrentUser {
             if self.context == .passive {
                 return .lightGray

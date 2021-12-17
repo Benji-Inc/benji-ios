@@ -28,7 +28,7 @@ class AnimatingTapView: BaseView {
     }
 
     func startFillAnimation(at startingPoint: CGPoint, completion: CompletionOptional = nil) {
-        let color = Color.textColor.color.withAlphaComponent(0.15)
+        let color = ThemeColor.textColor.color.withAlphaComponent(0.15)
         self.circleView.alpha = 0
         self.circleView.layer.cornerRadius = self.circleView.halfHeight
         self.circleView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)

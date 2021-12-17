@@ -10,9 +10,9 @@ import Foundation
 
 class AttachmentHeaderView: UICollectionReusableView {
 
-    let photoButton = Button()
+    let photoButton = ThemeButton()
     let photoImageView = UIImageView()
-    let libraryButton = Button()
+    let libraryButton = ThemeButton()
     let libraryImageView = UIImageView()
 
     override init(frame: CGRect) {
@@ -30,11 +30,11 @@ class AttachmentHeaderView: UICollectionReusableView {
         self.addSubview(self.photoImageView)
         self.photoImageView.image = UIImage(systemName: "camera")
         self.photoImageView.contentMode = .scaleAspectFit
-        self.photoImageView.tintColor = Color.gray.color
+        self.photoImageView.tintColor = ThemeColor.gray.color
 
         self.addSubview(self.libraryImageView)
         self.libraryImageView.image = UIImage(systemName: "square.grid.2x2")
-        self.libraryImageView.tintColor = Color.gray.color
+        self.libraryImageView.tintColor = ThemeColor.gray.color
         self.libraryImageView.contentMode = .scaleAspectFit
 
         self.addSubview(self.photoButton)

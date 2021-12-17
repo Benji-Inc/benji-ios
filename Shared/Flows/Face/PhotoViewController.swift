@@ -331,7 +331,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
 private class ErrorView: BaseView {
 
-    let label = Label(font: .smallBold, textColor: .red)
+    let label = ThemeLabel(font: .smallBold, textColor: .red)
     private let blurView = BlurView()
 
     override func initializeSubviews() {
@@ -339,7 +339,7 @@ private class ErrorView: BaseView {
 
         self.addSubview(self.blurView)
         self.addSubview(self.label)
-        self.backgroundColor = Color.red.color.withAlphaComponent(0.8)
+        self.backgroundColor = ThemeColor.red.color.withAlphaComponent(0.8)
     }
 
     override func layoutSubviews() {

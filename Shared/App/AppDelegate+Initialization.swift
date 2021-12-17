@@ -17,12 +17,10 @@ extension AppDelegate {
         self.window?.makeKeyAndVisible()
     }
 
-    func initializeMainCoordinator(with rootNavController: RootNavigationController,
-                                   withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
+    func initializeMainCoordinator(with rootNavController: RootNavigationController) {
         
         let router = Router(navController: rootNavController)
         self.mainCoordinator = MainCoordinator(router: router, deepLink: nil)
-        self.mainCoordinator?.launchOptions = launchOptions
         self.mainCoordinator?.start()
     }
 }

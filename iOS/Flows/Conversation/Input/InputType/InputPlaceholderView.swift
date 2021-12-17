@@ -10,7 +10,7 @@ import Foundation
 
 class InputPlaceholderView: BaseView {
 
-    let label = Label(font: .mediumBold)
+    let label = ThemeLabel(font: .mediumBold)
 
     override func initializeSubviews() {
         super.initializeSubviews()

@@ -36,7 +36,7 @@ class LaunchManager {
     
     weak var delegate: LaunchManagerDelegate?
 
-    func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) async -> LaunchStatus {
+    func launchApp() async -> LaunchStatus {
         // Initialize Parse if necessary
         if Parse.currentConfiguration.isNil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in

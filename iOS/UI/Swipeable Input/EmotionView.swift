@@ -13,10 +13,10 @@ import StreamChat
 class EmotionView: BaseView {
     
     let emojiContainer = BaseView()
-    let emojiLabel = Label(font: .small)
+    let emojiLabel = ThemeLabel(font: .small)
     
-    let label = Label(font: .small)
-    let button = Button()
+    let label = ThemeLabel(font: .small)
+    let button = ThemeButton()
     
     var didSelectEmotion: ((Emotion) -> Void)?
     
@@ -26,7 +26,7 @@ class EmotionView: BaseView {
         self.addSubview(self.emojiContainer)
         self.emojiContainer.backgroundColor = UIColor.white.withAlphaComponent(0.1)
         self.emojiContainer.layer.cornerRadius = Theme.innerCornerRadius
-        self.emojiContainer.layer.borderColor = Color.border.color.cgColor
+        self.emojiContainer.layer.borderColor = ThemeColor.border.color.cgColor
         self.emojiContainer.layer.borderWidth = 0.25
         self.emojiContainer.addSubview(self.emojiLabel)
         

@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 class EmptyAttachmentView: BaseView {
-    let button = Button()
+    let button = ThemeButton()
 
     override func initializeSubviews() {
         super.initializeSubviews()

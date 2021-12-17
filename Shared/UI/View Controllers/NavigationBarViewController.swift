@@ -13,9 +13,9 @@ import Localization
 class NavigationBarViewController: ViewController {
 
     private(set) var blurView = BlurView()
-    private(set) var backButton = Button()
-    private(set) var titleLabel = Label(font: .display)
-    private(set) var descriptionLabel = Label(font: .medium)
+    private(set) var backButton = ThemeButton()
+    private(set) var titleLabel = ThemeLabel(font: .display)
+    private(set) var descriptionLabel = ThemeLabel(font: .medium)
 
     let scrollView = UIScrollView()
 
