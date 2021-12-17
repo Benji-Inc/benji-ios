@@ -703,6 +703,7 @@
 		D6CC1489276BFA89005F617F /* Shape+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1488276BFA89005F617F /* Shape+Extensions.swift */; };
 		D6CC148B276BFDC1005F617F /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC148A276BFDC1005F617F /* Color+Extensions.swift */; };
 		D6CC148D276C003E005F617F /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC148C276C003E005F617F /* View+Extensions.swift */; };
+		D6CC148F276C1323005F617F /* newStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC148E276C1323005F617F /* newStatusView.swift */; };
 		D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
 		D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D145FC21D550E400CD8CE4 /* AttributedString.swift */; };
@@ -1167,6 +1168,7 @@
 		D6CC1488276BFA89005F617F /* Shape+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+Extensions.swift"; sourceTree = "<group>"; };
 		D6CC148A276BFDC1005F617F /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		D6CC148C276C003E005F617F /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		D6CC148E276C1323005F617F /* newStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newStatusView.swift; sourceTree = "<group>"; };
 		D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Onboarding+Cloud.swift"; sourceTree = "<group>"; };
 		D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Connection+Cloud.swift"; sourceTree = "<group>"; };
 		D6D145FC21D550E400CD8CE4 /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
@@ -2163,6 +2165,7 @@
 				D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */,
 				D6FE05212767B2BC00137EEA /* EmotionView.swift */,
 				D6CC1481276BE808005F617F /* newEmotionView.swift */,
+				D6CC148E276C1323005F617F /* newStatusView.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
@@ -2882,6 +2885,7 @@
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D605C30926F683E400C86DAD /* ConversationContentView.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
+				D6CC148F276C1323005F617F /* newStatusView.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D6155346274484B800B08459 /* InputTypeManager.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,

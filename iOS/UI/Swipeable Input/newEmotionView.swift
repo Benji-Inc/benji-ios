@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct EmojiContainer: View {
+    @State var emoji: String
     
     var body: some View {
         RoundedRectangle(cornerRadius: 5)
@@ -16,7 +17,7 @@ struct EmojiContainer: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.border, width: 0.25)
-                    Text("😔").fontType(.small)
+                    Text(self.emoji).fontType(.small)
                 }
             ).frame(width: 20, height: 20, alignment: .center)
             .color(.white, alpha: 0.1)
@@ -24,12 +25,17 @@ struct EmojiContainer: View {
 }
 
 struct newEmotionView: View {
+    
+    @State var emotion: Emotion
+    
     var body: some View {
         HStack {
-            EmojiContainer()
             Spacer.length(.short)
-            Text("Hello, World!")
+            EmojiContainer(emoji: self.emotion.emoji)
+            Spacer.length(.short)
+            Text(self.emotion.rawValue)
                 .fontType(.small)
+            Spacer.length(.short)
         }
     }
 }
@@ -37,7 +43,7 @@ struct newEmotionView: View {
 struct newEmotionView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            newEmotionView().preferredColorScheme(.light)
+            newEmotionView(emotion: .awe)
         }
     }
 }

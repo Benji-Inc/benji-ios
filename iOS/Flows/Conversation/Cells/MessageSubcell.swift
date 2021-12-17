@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// A cell for displaying individual messages, author and reactions.
 class MessageSubcell: UICollectionViewCell {
@@ -27,6 +28,13 @@ class MessageSubcell: UICollectionViewCell {
     private func initializeViews() {
         self.contentView.addSubview(self.content)
         self.contentView.addSubview(self.detailView)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        //let host = UIHostingController(rootView: ())
+        //self.parentViewController()?.addChild(viewController: host, toView: <#T##UIView?#>)
     }
 
     override func layoutSubviews() {
@@ -77,5 +85,25 @@ class MessageSubcell: UICollectionViewCell {
         self.content.authorView.alpha = messageLayoutAttributes.messageContentAlpha
 
         self.detailView.updateReadStatus(shouldRead: messageLayoutAttributes.detailAlpha == 1.0)
+    }
+}
+
+extension UIView {
+    
+    // HACK: Accessing a parent view controller from a view is an anti-pattern, but it's extremely convenient
+    // in this case where we're assigning a view controller to a cell and need to add it as a childVC.
+
+    /// Used to get the parent view controller of a collection view cell
+    fileprivate func parentViewController() -> UIViewController? {
+        
+        guard let nextResponder = self.next else { return nil }
+        
+        if let parentViewController = nextResponder as? UIViewController {
+            return parentViewController
+        } else if let parentView = nextResponder as? UIView {
+            return parentView.parentViewController()
+        } else {
+            return nil;
+        }
     }
 }
