@@ -1,14 +1,14 @@
 //
-//  NewConversationCell.swift
+//  PlaceholderMessageCell.swift
 //  Jibber
 //
-//  Created by Martin Young on 12/16/21.
+//  Created by Martin Young on 12/17/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-class PlaceholderConversationCell: UICollectionViewCell {
+class PlaceholderMessageCell: UICollectionViewCell {
 
     let dropZoneView = MessageDropZoneView()
 
@@ -26,12 +26,14 @@ class PlaceholderConversationCell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.dropZoneView)
-        self.dropZoneView.setState(.newConversation, messageColor: .white)
+        self.dropZoneView.setState(.newMessage, messageColor: .white)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.dropZoneView.expandToSuperviewSize()
+        self.dropZoneView.expandToSuperviewWidth()
+        self.dropZoneView.height = MessageContentView.bubbleHeight
+        self.dropZoneView.top = 180
     }
 }

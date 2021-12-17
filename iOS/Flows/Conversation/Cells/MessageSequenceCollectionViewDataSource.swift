@@ -139,6 +139,8 @@ extension MessageSequenceCollectionViewDataSource {
 
     typealias LoadMoreCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, UICollectionView?>
+    typealias PlaceholderMessageCellRegistration
+    = UICollectionView.CellRegistration<PlaceholderMessageCell, UICollectionView?>
 
     static func createMessageCellRegistration() -> MessageCellRegistration {
         return MessageCellRegistration { cell, indexPath, item in
