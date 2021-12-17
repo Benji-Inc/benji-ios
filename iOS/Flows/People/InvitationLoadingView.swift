@@ -14,7 +14,7 @@ class InvitationLoadingView: BaseView {
 
     let blurView = BlurView()
     let avatarView = AvatarView()
-    let label = Label(font: .small)
+    let label = ThemeLabel(font: .small)
     let progressView = UIProgressView()
 
     override func initializeSubviews() {

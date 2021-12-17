@@ -36,7 +36,7 @@ class ThemeButton: UIButton, Statusable {
     let animationView = AnimationView.with(animation: .loading)
 
     var style: ButtonStyle?
-    lazy var errorLabel = Label(font: .regular)
+    lazy var errorLabel = ThemeLabel(font: .regular)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -13,7 +13,7 @@ import StreamChat
 
 class ReactionsView: BaseView {
 
-    let label = Label(font: .small)
+    let label = ThemeLabel(font: .small)
     let imageView = DisplayableImageView()
     
     override func initializeSubviews() {

@@ -10,7 +10,7 @@ import Foundation
 
 class ToastErrorView: ToastView {
 
-    private let label = Label(font: .smallBold, textColor: .red)
+    private let label = ThemeLabel(font: .smallBold, textColor: .red)
     private let blurView = BlurView()
 
     override func initializeSubviews() {

@@ -11,7 +11,7 @@ import StreamChat
 
 class ReactionsCountView: UICollectionReusableView {
 
-    let label = Label(font: .small)
+    let label = ThemeLabel(font: .small)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

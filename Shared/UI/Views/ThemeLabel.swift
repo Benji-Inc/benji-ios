@@ -1,5 +1,5 @@
 //
-//  Label.swift
+//  ThemeLabel.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 12/25/18.
@@ -11,7 +11,7 @@ import UIKit
 import Localization
  
 /// A custom label that automatically applies font, color and kerning attributes to text set through the standard text member variable.
-class Label: UILabel {
+class ThemeLabel: UILabel {
 
     override var text: String? {
         get { return super.text }
@@ -122,7 +122,7 @@ class Label: UILabel {
     }
 }
 
-extension Label {
+extension ThemeLabel {
 
     func setSize(withWidth width: CGFloat, height: CGFloat = .greatestFiniteMagnitude) {
         self.size = self.getSize(withWidth: width, height: height)

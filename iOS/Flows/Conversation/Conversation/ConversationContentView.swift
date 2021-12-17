@@ -14,8 +14,8 @@ import StreamChat
 class ConversationContentView: BaseView {
 
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .medium, textColor: .textColor)
-    let messageLabel = Label(font: .regularBold, textColor: .textColor)
+    let label = ThemeLabel(font: .medium, textColor: .textColor)
+    let messageLabel = ThemeLabel(font: .regularBold, textColor: .textColor)
 
     private var cancellables = Set<AnyCancellable>()
     private(set) var currentItem: Conversation?

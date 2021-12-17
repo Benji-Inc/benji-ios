@@ -21,8 +21,8 @@ class WaitlistViewController: ViewController, Sizeable {
         case upgrade
     }
 
-    private let positionLabel = Label(font: .small)
-    private let remainingLabel = Label(font: .display)
+    private let positionLabel = ThemeLabel(font: .small)
+    private let remainingLabel = ThemeLabel(font: .display)
 
     private let queQuery = QuePositions.query()
 

@@ -118,7 +118,7 @@
 		D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */; };
 		D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DD21D30DAC00204BEE /* Array+Extensions.swift */; };
 		D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DF21D30E3F00204BEE /* FullScreenViewController.swift */; };
-		D61EC0E221D30E6000204BEE /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* Label.swift */; };
+		D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* ThemeLabel.swift */; };
 		D61EC0E421D30E9100204BEE /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D61EC0E621D30EB300204BEE /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E521D30EB300204BEE /* BaseView.swift */; };
 		D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E721D3107A00204BEE /* Date+Extensions.swift */; };
@@ -289,7 +289,7 @@
 		D63DB29625E999B200F6B323 /* AvatarView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */; };
 		D63DB29725E999B200F6B323 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D63DB29825E999B200F6B323 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
-		D63DB29925E999B200F6B323 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* Label.swift */; };
+		D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* ThemeLabel.swift */; };
 		D63DB29A25E999B200F6B323 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D640326025AE5CD400139396 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D640325F25AE5CD400139396 /* WelcomeViewController.swift */; };
@@ -408,7 +408,7 @@
 		D65519F42589591D00B901E4 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealias.swift */; };
 		D65519FC258959CC00B901E4 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D65519FF25895A0800B901E4 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
-		D6551A1025895C0700B901E4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* Label.swift */; };
+		D6551A1025895C0700B901E4 /* ThemeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* ThemeLabel.swift */; };
 		D6551A1325895C4F00B901E4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
 		D6551A2525895D7700B901E4 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* AvatarView.swift */; };
 		D6551A2825895D8B00B901E4 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -961,7 +961,7 @@
 		D61EC0DC21D30CF700204BEE /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		D61EC0DD21D30DAC00204BEE /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		D61EC0DF21D30E3F00204BEE /* FullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewController.swift; sourceTree = "<group>"; };
-		D61EC0E121D30E6000204BEE /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		D61EC0E121D30E6000204BEE /* ThemeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeLabel.swift; sourceTree = "<group>"; };
 		D61EC0E321D30E9100204BEE /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		D61EC0E521D30EB300204BEE /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		D61EC0E721D3107A00204BEE /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -1820,7 +1820,7 @@
 				D60C81492209360400A127A3 /* DisplayableImageView.swift */,
 				D684840922CD48D000362AC3 /* GradientView.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
-				D61EC0E121D30E6000204BEE /* Label.swift */,
+				D61EC0E121D30E6000204BEE /* ThemeLabel.swift */,
 				D6E974302752B4B000D95F08 /* MessageContentView */,
 				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */,
@@ -3028,7 +3028,7 @@
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D6C20128276CFDAC0085B187 /* newMessageDetailView.swift in Sources */,
 				D605C30826F683E400C86DAD /* ConversationPreviewViewController.swift in Sources */,
-				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
+				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
@@ -3152,7 +3152,7 @@
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
 				D63DB24325E9993F00F6B323 /* NameViewController.swift in Sources */,
-				D63DB29925E999B200F6B323 /* Label.swift in Sources */,
+				D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */,
 				80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D63DB25425E9995700F6B323 /* AnimationDuration.swift in Sources */,
 				D6E9742F27514BE500D95F08 /* ReactionsView.swift in Sources */,
@@ -3259,7 +3259,7 @@
 				D655196A2589128300B901E4 /* ThemeColor.swift in Sources */,
 				D6BF814A2721EE81006D7760 /* ToastScheduler.swift in Sources */,
 				D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */,
-				D6551A1025895C0700B901E4 /* Label.swift in Sources */,
+				D6551A1025895C0700B901E4 /* ThemeLabel.swift in Sources */,
 				D6AC90CB2594F8F80032774D /* Delegated.swift in Sources */,
 				D655191F2589121500B901E4 /* Optional+Extensions.swift in Sources */,
 				D65519042589110A00B901E4 /* MainCoordinator.swift in Sources */,

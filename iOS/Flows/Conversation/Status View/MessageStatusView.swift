@@ -92,7 +92,7 @@ private class MessageStatusContainer: BaseView {
 private class MessageReadView: MessageStatusContainer {
 
     let imageView = UIImageView()
-    let label = Label(font: .small)
+    let label = ThemeLabel(font: .small)
     let progressView = BaseView()
     private(set) var animator: UIViewPropertyAnimator?
 
@@ -232,8 +232,8 @@ private class MessageReadView: MessageStatusContainer {
 
 private class MessageReplyView: MessageStatusContainer {
 
-    let label = Label(font: .small, textColor: .textColor)
-    let countLabel = Label(font: .xtraSmall, textColor: .white)
+    let label = ThemeLabel(font: .small, textColor: .textColor)
+    let countLabel = ThemeLabel(font: .xtraSmall, textColor: .white)
 
     override func initializeSubviews() {
         super.initializeSubviews()

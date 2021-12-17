@@ -13,9 +13,9 @@ import StreamChat
 class EmotionView: BaseView {
     
     let emojiContainer = BaseView()
-    let emojiLabel = Label(font: .small)
+    let emojiLabel = ThemeLabel(font: .small)
     
-    let label = Label(font: .small)
+    let label = ThemeLabel(font: .small)
     let button = ThemeButton()
     
     var didSelectEmotion: ((Emotion) -> Void)?

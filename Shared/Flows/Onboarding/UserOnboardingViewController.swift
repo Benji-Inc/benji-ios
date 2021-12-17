@@ -15,7 +15,7 @@ class UserOnboardingViewController: ViewController {
     private(set) var blurView = BlurView()
     private(set) var avatarView = AvatarView()
 
-    private(set) var nameLabel = Label(font: .regular, textColor: .textColor)
+    private(set) var nameLabel = ThemeLabel(font: .regular, textColor: .textColor)
     private(set) var messageContent = MessageContentView()
 
     override func initializeViews() {

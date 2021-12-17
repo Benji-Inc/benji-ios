@@ -49,7 +49,7 @@ class PermissionSwitchView: BaseView {
 
     let type: PermissionType
     private let imageView = DisplayableImageView()
-    private let label = Label(font: .smallBold)
+    private let label = ThemeLabel(font: .smallBold)
     private(set) var  switchView = UISwitch()
     @Published var state: State = .hidden
 

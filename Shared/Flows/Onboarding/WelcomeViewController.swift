@@ -20,7 +20,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         case reservationError
     }
 
-    private let label = Label(font: .display, textColor: .textColor)
+    private let label = ThemeLabel(font: .display, textColor: .textColor)
     private let loginButton = ThemeButton()
     private let reservationButton = ThemeButton()
     private var reservationId: String?

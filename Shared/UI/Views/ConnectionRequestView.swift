@@ -20,7 +20,7 @@ class ConnectionRequestView: BaseView {
     private let acceptButton = ThemeButton()
     private let declineButton = ThemeButton()
     private let confettiView = ConfettiView()
-    private let successLabel = Label(font: .mediumBold)
+    private let successLabel = ThemeLabel(font: .mediumBold)
 
     var currentItem: Connection?
     var didUpdateConnection: ((Connection) -> Void)? = nil

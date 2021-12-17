@@ -18,7 +18,7 @@ class MessageDropZoneView: BaseView {
     }
 
     private let borderLayer = CAShapeLayer()
-    private let sendTypeLabel = Label(font: .regular)
+    private let sendTypeLabel = ThemeLabel(font: .regular)
 
     override func initializeSubviews() {
         super.initializeSubviews()

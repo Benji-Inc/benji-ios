@@ -25,7 +25,7 @@ class AvatarView: DisplayableImageView {
         }
     }
 
-    private let label = Label(font: .regularBold, textColor: .textColor)
+    private let label = ThemeLabel(font: .regularBold, textColor: .textColor)
 
     private var radius: CGFloat?
 
