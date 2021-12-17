@@ -25,21 +25,44 @@ struct EmojiContainer: View {
     }
 }
 
+extension Binding {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        return Binding(
+            get: { self.wrappedValue },
+            set: { selection in
+                self.wrappedValue = selection
+                handler(selection)
+        })
+    }
+}
+
 struct newEmotionView: View {
     
     @State var emotion: Emotion?
-    //private let button = Button()
-    
+        
     var body: some View {
         HStack {
-            if let emotion = emotion {
+            if let emotion = self.emotion {
                 Spacer.length(.short)
                 EmojiContainer(emoji: emotion.emoji)
                 Spacer.length(.short)
                 Text(emotion.rawValue.firstCapitalized)
-                        .fontType(.small)
+                    .fontType(.small)
                 Spacer.length(.short)
             }
+        }.overlay {
+            Picker("", selection: $emotion) {
+                ForEach(Emotion.allCases, content: { e in
+                    let text = "\(e.emoji) \(e.rawValue.firstCapitalized)"
+                    Text(text)
+                        .fontType(.small)
+                })
+            }.opacity(0.011)
+                .onChange(of: emotion) { newValue in
+                    if let e = newValue {
+                        self.configure(for: e)
+                    }
+                }
         }
     }
     
@@ -54,7 +77,6 @@ struct newEmotionView: View {
     
     func configure(for emotion: Emotion) {
         self.emotion = emotion
-//        self.button.menu = self.createMenu(for: emotion)
     }
 }
 

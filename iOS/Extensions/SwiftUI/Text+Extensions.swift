@@ -11,7 +11,4 @@ import SwiftUI
 
 extension Text {
     
-    func fontType(_ type: FontType) -> some View {
-        self.font(Font(type.font as CTFont))
-    }
 }

@@ -13,4 +13,8 @@ extension View {
     func color(_ color: ThemeColor, alpha: CGFloat = 1.0) -> some View {
         self.foregroundColor(Color(color.color.withAlphaComponent(alpha)))
     }
+    
+    func fontType(_ type: FontType) -> some View {
+        self.font(Font(type.font as CTFont))
+    }
 }
