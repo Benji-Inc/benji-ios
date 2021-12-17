@@ -239,7 +239,7 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
         switch item {
         case .message(cid: let cid, messageID: let messageID):
             self.handleTappedMessage?(cid, messageID, cell.content)
-        case .loadMore:
+        case .loadMore, .placeholder:
             break
         }
     }
@@ -251,10 +251,11 @@ extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
                                          updatedFrontmostItemAt indexPath: IndexPath) {
         
         guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+
         switch item {
         case .message(cid: let cid, messageID: let messageID):
             self.incomingTopmostMessage = ChatClient.shared.message(cid: cid, id: messageID)
-        case .loadMore(_):
+        case .loadMore, .placeholder:
             break
         }
     }

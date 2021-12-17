@@ -23,6 +23,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     enum ItemType: Hashable {
         case message(cid: ConversationId, messageID: MessageId)
         case loadMore(cid: ConversationId)
+        case placeholder
     }
 
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -39,6 +40,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     = MessageSequenceCollectionViewDataSource.createMessageCellRegistration()
     private let loadMoreRegistration
     = MessageSequenceCollectionViewDataSource.createLoadMoreCellRegistration()
+    private let placeholderRegistration
+    = MessageSequenceCollectionViewDataSource.createPlaceholderMessageCellRegistration()
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -67,6 +70,10 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                 self.handleLoadMoreMessages?(conversationID)
             }
             return loadMoreCell
+        case .placeholder:
+            return collectionView.dequeueConfiguredReusableCell(using: self.placeholderRegistration,
+                                                                for: indexPath,
+                                                                item: collectionView)
         }
     }
 
@@ -75,6 +82,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     func set(messageSequence: MessageSequence,
              itemsToReconfigure: [ItemType] = [],
              showLoadMore: Bool = false) {
+
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
             return message.isFromCurrentUser
@@ -100,7 +108,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
         userMessageItems = userMessageItems.reversed()
         if self.shouldPrepareToSend {
-            userMessageItems.append(ItemType.message(cid: cid, messageID: "placeholderMessage"))
+            userMessageItems.append(.placeholder)
         }
 
         let otherMessageItems = otherMessages.reversed().map { message in
@@ -136,7 +144,6 @@ extension MessageSequenceCollectionViewDataSource {
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          collectionView: UICollectionView)>
-
     typealias LoadMoreCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, UICollectionView?>
     typealias PlaceholderMessageCellRegistration
@@ -146,9 +153,7 @@ extension MessageSequenceCollectionViewDataSource {
         return MessageCellRegistration { cell, indexPath, item in
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
-            guard let message = messageController.message else {
-                return
-            }
+            guard let message = messageController.message else { return }
 
             cell.configure(with: message, showAuthor: false)
         }
@@ -156,6 +161,10 @@ extension MessageSequenceCollectionViewDataSource {
 
     static func createLoadMoreCellRegistration() -> LoadMoreCellRegistration {
         return LoadMoreCellRegistration { cell, indexPath, item in }
+    }
+
+    static func createPlaceholderMessageCellRegistration() -> PlaceholderMessageCellRegistration {
+        return PlaceholderMessageCellRegistration { cell, indexPath, itemIdentifier in }
     }
 }
 
@@ -186,7 +195,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
                 switch itemIdentifier {
                 case .message:
                     return self.getTimeMachineItem(forItem: itemIdentifier)
-                case .loadMore:
+                case .loadMore, .placeholder:
                     return nil
                 }
             }
@@ -201,6 +210,8 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
 
             // Put the load more item right before the oldest message item.
             return TimeMachineLayoutItem(sortValue: oldestItem.sortValue.nextDown, shouldShow: true)
+        case .placeholder:
+            return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude, shouldShow: true)
         }
     }
 }

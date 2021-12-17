@@ -32,6 +32,8 @@ class PlaceholderConversationCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.dropZoneView.expandToSuperviewSize()
+        self.dropZoneView.expandToSuperviewWidth()
+        self.dropZoneView.height = MessageContentView.bubbleHeight
+        self.dropZoneView.top = 180
     }
 }
