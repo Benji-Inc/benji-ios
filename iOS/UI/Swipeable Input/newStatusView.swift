@@ -22,8 +22,15 @@ struct newReadView: View {
             Image("checkmark-double")
                 .color(.white)
             Spacer.length(.short)
-        }.color(.white, alpha: 0.1)
-            .cornerRadius(5)
+        }.background(
+            RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+                .stroke(.border, alpha: 0.3, width: 0.25)
+                .frame(height: 20, alignment: .center)
+                .background(
+                    RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+                        .color(.white, alpha: 0.1)
+                )
+        )
     }
 }
 
@@ -42,8 +49,15 @@ struct newReplyView: View {
                 .fontType(.xtraSmall)
                 .color(.white)
             Spacer.length(.short)
-        }.color(.red, alpha: 1.0)
-            .cornerRadius(5)
+        }.background(
+            RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+                .stroke(.border, alpha: 0.3, width: 0.25)
+                .frame(height: 20, alignment: .center)
+                .background(
+                    RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+                        .color(.white, alpha: 0.1)
+                )
+        )
     }
 }
 

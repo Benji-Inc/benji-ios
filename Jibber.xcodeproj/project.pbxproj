@@ -686,6 +686,7 @@
 		D6BF814F2721EEBF006D7760 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
 		D6BF81502721EEE1006D7760 /* ToastBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastBannerView.swift */; };
 		D6BF81512721EEE1006D7760 /* ToastBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastBannerView.swift */; };
+		D6C20128276CFDAC0085B187 /* newMessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */; };
 		D6C3892C2724B8D0004D29D5 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D6C3892D2724B8D0004D29D5 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D6C3892E2724B8E4004D29D5 /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
@@ -1160,6 +1161,7 @@
 		D6B95AF2272324BD00FBE66A /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
 		D6B95AF627236E1000FBE66A /* ConversationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsManager.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
+		D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newMessageDetailView.swift; sourceTree = "<group>"; };
 		D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexable.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
 		D6CC1481276BE808005F617F /* newEmotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newEmotionView.swift; sourceTree = "<group>"; };
@@ -2166,6 +2168,7 @@
 				D6FE05212767B2BC00137EEA /* EmotionView.swift */,
 				D6CC1481276BE808005F617F /* newEmotionView.swift */,
 				D6CC148E276C1323005F617F /* newStatusView.swift */,
+				D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
@@ -3023,6 +3026,7 @@
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D6CC1489276BFA89005F617F /* Shape+Extensions.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
+				D6C20128276CFDAC0085B187 /* newMessageDetailView.swift in Sources */,
 				D605C30826F683E400C86DAD /* ConversationPreviewViewController.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,

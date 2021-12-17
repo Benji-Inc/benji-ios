@@ -7,16 +7,17 @@
 //
 
 import SwiftUI
+import StreamChat
 
 struct EmojiContainer: View {
-    @State var emoji: String
+    @State var emoji: String = ""
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 5)
+        RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
             .overlay (
                 ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.border, width: 0.25)
+                    RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+                        .stroke(.border, alpha: 0.3, width: 0.25)
                     Text(self.emoji).fontType(.small)
                 }
             ).frame(width: 20, height: 20, alignment: .center)
@@ -26,24 +27,40 @@ struct EmojiContainer: View {
 
 struct newEmotionView: View {
     
-    @State var emotion: Emotion
+    @State var emotion: Emotion?
     
     var body: some View {
         HStack {
-            Spacer.length(.short)
-            EmojiContainer(emoji: self.emotion.emoji)
-            Spacer.length(.short)
-            Text(self.emotion.rawValue)
-                .fontType(.small)
-            Spacer.length(.short)
+            if let emotion = emotion {
+                Spacer.length(.short)
+                EmojiContainer(emoji: emotion.emoji)
+                Spacer.length(.short)
+                Text(emotion.rawValue.firstCapitalized)
+                        .fontType(.small)
+                Spacer.length(.short)
+            }
         }
+    }
+    
+    func configure(for message: Messageable) {
+        let controller = ChatClient.shared.messageController(for: message)
+        if let msg = controller?.message, let reaction = msg.latestReactions.first(where: { reaction in
+            return reaction.author.userObjectId == msg.authorId
+        }), let emotion = Emotion(rawValue: reaction.type.rawValue) {
+            self.configure(for: emotion)
+        }
+    }
+    
+    func configure(for emotion: Emotion) {
+        self.emotion = emotion
+//        self.button.menu = self.createMenu(for: emotion)
     }
 }
 
 struct newEmotionView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            newEmotionView(emotion: .awe)
+            newEmotionView(emotion: .awkward)
         }
     }
 }

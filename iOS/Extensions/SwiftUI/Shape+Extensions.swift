@@ -10,6 +10,11 @@ import Foundation
 import SwiftUI
 
 extension Shape {
+    
+    func fill(_ color: ThemeColor, alpha: CGFloat = 1.0) -> some View {
+        self.fill(Color(color.color.withAlphaComponent(alpha)))
+    }
+    
     func stroke(_ color: ThemeColor, alpha: CGFloat = 1.0, width: CGFloat = 1) -> some View {
         self.stroke(Color(color.color.withAlphaComponent(alpha)), lineWidth: width)
     }
