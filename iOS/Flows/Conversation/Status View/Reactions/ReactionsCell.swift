@@ -15,7 +15,7 @@ class ReactionsCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: ReactionSummary?
 
     let container = BaseView()
-    let emojiLabel = Label(font: .reactionEmoji, textColor: .white)
+    let emojiLabel = ThemeLabel(font: .reactionEmoji, textColor: .white)
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -24,7 +24,7 @@ class ReactionsCell: CollectionViewManagerCell, ManageableCell {
         self.container.addSubview(self.emojiLabel)
         self.container.backgroundColor = UIColor.white.withAlphaComponent(0.1)
         self.container.layer.cornerRadius = Theme.innerCornerRadius
-        self.container.layer.borderColor = Color.border.color.cgColor
+        self.container.layer.borderColor = ThemeColor.border.color.cgColor
         self.container.layer.borderWidth = 0.25
     }
 

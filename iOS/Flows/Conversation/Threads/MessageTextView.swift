@@ -26,7 +26,7 @@ class MessageTextView: TextView {
 
     func setText(with message: Messageable) {
         self.setText(message.kind.text)
-        let textColor: Color = message.context == .status ? .darkGray : .textColor
+        let textColor: ThemeColor = message.context == .status ? .darkGray : .textColor
         self.setTextColor(textColor)
     }
 

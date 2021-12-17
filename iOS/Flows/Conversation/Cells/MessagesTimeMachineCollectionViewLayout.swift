@@ -124,7 +124,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
-    func getDropZoneColor() -> Color? {
+    func getDropZoneColor() -> ThemeColor? {
         guard let ip = self.getFrontmostIndexPath(in: 1),
               let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
                   return nil

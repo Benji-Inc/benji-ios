@@ -57,7 +57,8 @@ enum ReactionType: String, CaseIterable {
     }
 }
 
-enum Emotion: String, CaseIterable {
+enum Emotion: String, CaseIterable, Identifiable {
+        
     case appreciation
     case amused
     case angry
@@ -142,4 +143,6 @@ enum Emotion: String, CaseIterable {
     var reaction: MessageReactionType {
         return MessageReactionType.init(stringLiteral: self.rawValue)
     }
+    
+    var id: Emotion { self }
 }

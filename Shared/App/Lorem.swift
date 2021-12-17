@@ -113,7 +113,7 @@ class Lorem {
     class func date() -> Date {
         return self.dateList.random()
     }
-
+    
     /**
      Return a random word.
 

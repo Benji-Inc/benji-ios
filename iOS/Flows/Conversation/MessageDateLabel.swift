@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MessageDateLabel: Label {
+class MessageDateLabel: ThemeLabel {
 
     init() {
         super.init(font: .small)

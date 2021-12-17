@@ -45,7 +45,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
     }
 
     private let imageView = AvatarView()
-    let button = Button()
+    let button = ThemeButton()
 
     private let captureType: CaptureType
 

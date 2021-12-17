@@ -10,8 +10,8 @@ import Foundation
 
 extension TransitionRouter {
 
-    func fadeTranstion(fromColor: Color,
-                       toColor: Color,
+    func fadeTranstion(fromColor: ThemeColor,
+                       toColor: ThemeColor,
                        transitionContext: UIViewControllerContextTransitioning) {
 
         let containerView = transitionContext.containerView

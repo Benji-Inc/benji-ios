@@ -75,7 +75,7 @@ class TextView: UITextView {
 
     init(frame: CGRect = .zero,
          font: FontType,
-         textColor: Color,
+         textColor: ThemeColor,
          textContainer: NSTextContainer? = nil) {
 
         self.kerning = font.kern
@@ -152,11 +152,11 @@ class TextView: UITextView {
         self.kerning = fontType.kern
     }
 
-    func setTextColor(_ textColor: Color) {
+    func setTextColor(_ textColor: ThemeColor) {
         self.textColor = textColor.color
     }
 
-    func set(placeholder: Localized, color: Color = .textColor) {
+    func set(placeholder: Localized, color: ThemeColor = .textColor) {
         var styleAttributes = StringStyle(font: .regular, color: color).attributes
         let centeredParagraphStyle = NSMutableParagraphStyle()
         centeredParagraphStyle.alignment = .center

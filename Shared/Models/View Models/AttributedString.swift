@@ -25,7 +25,7 @@ struct AttributedString {
 
     init(_ localized: Localized,
          fontType: FontType = .regular,
-         color: Color) {
+         color: ThemeColor) {
 
         let style = StringStyle(font: fontType,
                                 color: color)

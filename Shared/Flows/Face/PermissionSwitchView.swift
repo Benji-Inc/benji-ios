@@ -49,7 +49,7 @@ class PermissionSwitchView: BaseView {
 
     let type: PermissionType
     private let imageView = DisplayableImageView()
-    private let label = Label(font: .smallBold)
+    private let label = ThemeLabel(font: .smallBold)
     private(set) var  switchView = UISwitch()
     @Published var state: State = .hidden
 
@@ -75,7 +75,7 @@ class PermissionSwitchView: BaseView {
 
         self.addSubview(self.imageView)
         self.imageView.displayable = self.type.image
-        self.imageView.tintColor = Color.white.color
+        self.imageView.tintColor = ThemeColor.white.color
 
         self.addSubview(self.label)
         self.label.setText(self.type.text)
@@ -87,7 +87,7 @@ class PermissionSwitchView: BaseView {
             self.updateUI(for: state)
         }.store(in: &self.cancellables)
 
-        self.layer.borderColor = Color.white.color.cgColor
+        self.layer.borderColor = ThemeColor.white.color.cgColor
         self.layer.borderWidth = 2
     }
 

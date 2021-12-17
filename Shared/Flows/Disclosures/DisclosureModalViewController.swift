@@ -17,8 +17,8 @@ struct HightlightedPhrase {
 class DisclosureModalViewController: ViewController {
 
     private let blurView = BlurView()
-    let titleLabel = Label(font: .display)
-    let descriptionLabel = Label(font: .regular)
+    let titleLabel = ThemeLabel(font: .display)
+    let descriptionLabel = ThemeLabel(font: .regular)
     let contentView = BaseView()
 
     override func initializeViews() {

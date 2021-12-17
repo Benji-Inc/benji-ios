@@ -12,7 +12,7 @@ import StreamChat
 class AddReactionView: UICollectionReusableView {
 
     let imageView = DisplayableImageView()
-    let button = Button()
+    let button = ThemeButton()
     var taskPool = TaskPool()
     var message: Message?
 
@@ -28,7 +28,7 @@ class AddReactionView: UICollectionReusableView {
     func initializeViews() {
         self.addSubview(self.imageView)
         self.imageView.displayable = UIImage(named: "add_reaction")
-        self.imageView.imageView.tintColor = Color.white.color.withAlphaComponent(0.8)
+        self.imageView.imageView.tintColor = ThemeColor.white.color.withAlphaComponent(0.8)
         self.imageView.imageView.contentMode = .scaleAspectFit
 
         self.addSubview(self.button)

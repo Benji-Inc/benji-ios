@@ -15,7 +15,7 @@ import UIKit
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
     lazy var membersVC = MembersViewController()
-    let button = Button()
+    let button = ThemeButton()
 
     private var state: ConversationUIState = .read
 

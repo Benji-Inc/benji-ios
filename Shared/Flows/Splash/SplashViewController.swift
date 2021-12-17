@@ -18,8 +18,8 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     }
 
     let animationView = AnimationView.with(animation: .loading)
-    let label = Label(font: .small)
-    let versionLabel = Label(frame: .zero, font: .small, textColor: .textColor)
+    let label = ThemeLabel(font: .small)
+    let versionLabel = ThemeLabel(frame: .zero, font: .small, textColor: .textColor)
 
     private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
 

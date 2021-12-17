@@ -12,11 +12,11 @@ import Combine
 class AvatarProfileViewController: ViewController {
 
     private let avatarView = AvatarView()
-    private let handleLabel = Label(font: .small, textColor: .textColor)
-    private let nameLabel = Label(font: .mediumBold)
+    private let handleLabel = ThemeLabel(font: .small, textColor: .textColor)
+    private let nameLabel = ThemeLabel(font: .mediumBold)
     private let vibrancyView = VibrancyView()
 
-    private let chatButton = Button()
+    private let chatButton = ThemeButton()
     private let avatar: Avatar
 
     init(with avatar: Avatar) {

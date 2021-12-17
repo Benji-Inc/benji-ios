@@ -33,7 +33,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     
     lazy var pulseLayer: CAShapeLayer = {
         let shape = CAShapeLayer()
-        shape.lineWidth = 3
+        shape.lineWidth = 1.5
         shape.lineCap = .round
         shape.fillColor = UIColor.clear.cgColor
         shape.cornerRadius = Theme.cornerRadius
@@ -75,11 +75,11 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     private func beginTyping() {
         self.pulseLayer.removeAllAnimations()
-        self.pulseLayer.strokeColor = Color.white.color.cgColor
+        self.pulseLayer.strokeColor = ThemeColor.white.color.cgColor
         
         let scale = CABasicAnimation(keyPath: "transform.scale")
-        scale.toValue = 1.25
-        scale.fromValue = 1.15
+        scale.toValue = 1.2
+        scale.fromValue = 1.0
         
         let fade = CABasicAnimation(keyPath: "opacity")
         fade.toValue = 1.0
@@ -96,7 +96,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     }
 
     private func endTyping() {
-        self.pulseLayer.strokeColor = Color.clear.color.cgColor
+        self.pulseLayer.strokeColor = ThemeColor.clear.color.cgColor
         self.pulseLayer.removeAllAnimations()
     }
 }

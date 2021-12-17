@@ -23,7 +23,7 @@ class ExpandingTextView: TextView {
         super.init(coder: aDecoder)
 
         self.font = FontType.regular.font
-        self.textColor = Color.textColor.color
+        self.textColor = ThemeColor.textColor.color
     }
     
     override func initializeViews() {
@@ -33,8 +33,8 @@ class ExpandingTextView: TextView {
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false
         self.keyboardType = .twitter
-        self.tintColor = Color.textColor.color
-        self.textColor = Color.textColor.color
+        self.tintColor = ThemeColor.textColor.color
+        self.textColor = ThemeColor.textColor.color
 
         self.textContainerInset.left = Theme.ContentOffset.long.value
         self.textContainerInset.right = Theme.ContentOffset.long.value

@@ -12,8 +12,8 @@ import Localization
 class ToastBannerView: ToastView {
 
     private let blurView = BlurView()
-    private let titleLabel = Label(font: .regularBold, textColor: .white)
-    private let descriptionLabel = Label(font: .smallBold, textColor: .white)
+    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .white)
+    private let descriptionLabel = ThemeLabel(font: .smallBold, textColor: .white)
     private let imageView = AvatarView()
 
     let leftAnimator = UIViewPropertyAnimator(duration: 0.35,
@@ -48,7 +48,7 @@ class ToastBannerView: ToastView {
         self.addSubview(self.descriptionLabel)
         self.addSubview(self.titleLabel)
 
-        self.imageView.imageView.tintColor = Color.white.color
+        self.imageView.imageView.tintColor = ThemeColor.white.color
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
@@ -158,7 +158,7 @@ class ToastBannerView: ToastView {
         self.imageView.top = Theme.contentOffset.half
 
         if self.imageView.displayable is UIImage {
-            self.imageView.layer.borderColor = Color.clear.color.cgColor
+            self.imageView.layer.borderColor = ThemeColor.clear.color.cgColor
             self.imageView.layer.borderWidth = 0
             self.imageView.set(backgroundColor: .clear)
         }

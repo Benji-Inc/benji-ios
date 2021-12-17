@@ -12,8 +12,6 @@ import Parse
 
 class MainCoordinator: Coordinator<Void> {
 
-    var launchOptions: [UIApplication.LaunchOptionsKey : Any]?
-
     lazy var splashVC = SplashViewController()
 
     /// A pool of Tasks that are automatically cancelled when our coordinator finishes
@@ -49,7 +47,7 @@ class MainCoordinator: Coordinator<Void> {
     private func runLaunchFlow() async {
         self.router.setRootModule(self.splashVC, animated: false)
 
-        let launchStatus = await LaunchManager.shared.launchApp(with: self.launchOptions)
+        let launchStatus = await LaunchManager.shared.launchApp()
 
         #if IOS
         self.handle(result: launchStatus)

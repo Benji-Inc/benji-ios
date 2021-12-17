@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,14 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-#if !NOTIFICATION
-        let rootNavController = RootNavigationController()
-        self.initializeKeyWindow(with: rootNavController)
-        self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
-        _ = UserNotificationManager.shared
-#endif
-
         return true
     }
 
@@ -54,6 +47,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #if !NOTIFICATION
         UserNotificationManager.shared.resetBadgeCount()
 #endif
+    }
+}
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    
+    var window: UIWindow?
+    var mainCoordinator: MainCoordinator?
+    
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = scene as? UIWindowScene else { return }
+
+#if !NOTIFICATION
+        let rootNavController = RootNavigationController()
+        self.initializeKeyWindow(with: rootNavController, for: windowScene)
+        self.initializeMainCoordinator(with: rootNavController)
+        _ = UserNotificationManager.shared
+#endif
+    }
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        _ = LaunchManager.shared.continueUser(activity: userActivity)
+    }
+        
+    func initializeKeyWindow(with rootViewController: UIViewController, for scene: UIWindowScene) {
+        self.window = UIWindow(windowScene: scene)
+        self.window?.rootViewController = rootViewController
+        self.window?.makeKeyAndVisible()
+    }
+
+    func initializeMainCoordinator(with rootNavController: RootNavigationController) {
+        let router = Router(navController: rootNavController)
+        self.mainCoordinator = MainCoordinator(router: router, deepLink: nil)
+        self.mainCoordinator?.start()
     }
 }
 
