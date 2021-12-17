@@ -29,7 +29,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
                                            ThemeColor.textColor.color.withAlphaComponent(0.0).cgColor],
                                     startPoint: .bottomCenter,
                                     endPoint: .topCenter)
-    let button = Button()
+    let button = ThemeButton()
     private let loadingView = InvitationLoadingView()
     private var showButton: Bool = false
 

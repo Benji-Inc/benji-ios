@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Button {
+extension ThemeButton {
 
     @MainActor
     /// Starts a loading animation on the button and hides the text.

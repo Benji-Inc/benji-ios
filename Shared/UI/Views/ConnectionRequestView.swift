@@ -17,8 +17,8 @@ class ConnectionRequestView: BaseView {
     private let avatarView = AvatarView()
     private let textView = TextView()
 
-    private let acceptButton = Button()
-    private let declineButton = Button()
+    private let acceptButton = ThemeButton()
+    private let declineButton = ThemeButton()
     private let confettiView = ConfettiView()
     private let successLabel = Label(font: .mediumBold)
 
@@ -116,7 +116,7 @@ class ConnectionRequestView: BaseView {
 
     private func updateConnection(with status: Connection.Status,
                                   user: User,
-                                  button: Button) async {
+                                  button: ThemeButton) async {
 
         await button.handleEvent(status: .loading)
 

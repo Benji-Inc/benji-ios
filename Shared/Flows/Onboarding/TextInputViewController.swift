@@ -36,8 +36,8 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
 
     private(set) var textEntry: TextEntryField
 
-    lazy var button: Button = {
-        let button = Button()
+    lazy var button: ThemeButton = {
+        let button = ThemeButton()
         button.set(style: .normal(color: .textColor, text: "Next"))
         button.height = Theme.buttonHeight
         button.didSelect { [unowned self] in

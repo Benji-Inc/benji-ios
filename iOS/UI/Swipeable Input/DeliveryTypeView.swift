@@ -12,7 +12,7 @@ import UIKit
 class DeliveryTypeView: BaseView {
 
     let label = Label(font: .small)
-    let button = Button()
+    let button = ThemeButton()
 
     var didSelectContext: ((MessageContext) -> Void)?
 

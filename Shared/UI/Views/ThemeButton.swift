@@ -20,7 +20,7 @@ enum ButtonStyle {
     case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
-class Button: UIButton, Statusable {
+class ThemeButton: UIButton, Statusable {
 
     let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDurationStandard,
                                                   curve: .linear,

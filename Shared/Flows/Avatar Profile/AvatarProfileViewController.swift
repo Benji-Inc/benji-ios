@@ -16,7 +16,7 @@ class AvatarProfileViewController: ViewController {
     private let nameLabel = Label(font: .mediumBold)
     private let vibrancyView = VibrancyView()
 
-    private let chatButton = Button()
+    private let chatButton = ThemeButton()
     private let avatar: Avatar
 
     init(with avatar: Avatar) {

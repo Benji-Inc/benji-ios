@@ -12,7 +12,7 @@ import StreamChat
 class AddReactionView: UICollectionReusableView {
 
     let imageView = DisplayableImageView()
-    let button = Button()
+    let button = ThemeButton()
     var taskPool = TaskPool()
     var message: Message?
 

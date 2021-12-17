@@ -10,9 +10,9 @@ import Foundation
 
 class AttachmentHeaderView: UICollectionReusableView {
 
-    let photoButton = Button()
+    let photoButton = ThemeButton()
     let photoImageView = UIImageView()
-    let libraryButton = Button()
+    let libraryButton = ThemeButton()
     let libraryImageView = UIImageView()
 
     override init(frame: CGRect) {

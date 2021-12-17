@@ -28,6 +28,7 @@ struct EmojiContainer: View {
 struct newEmotionView: View {
     
     @State var emotion: Emotion?
+    //private let button = Button()
     
     var body: some View {
         HStack {

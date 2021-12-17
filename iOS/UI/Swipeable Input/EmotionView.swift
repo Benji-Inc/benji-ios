@@ -16,7 +16,7 @@ class EmotionView: BaseView {
     let emojiLabel = Label(font: .small)
     
     let label = Label(font: .small)
-    let button = Button()
+    let button = ThemeButton()
     
     var didSelectEmotion: ((Emotion) -> Void)?
     
