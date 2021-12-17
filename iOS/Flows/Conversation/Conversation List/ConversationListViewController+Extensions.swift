@@ -66,8 +66,7 @@ extension ConversationListViewController {
             }.store(in: &self.cancellables)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
-            guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
-            let conversationController = ChatClient.shared.channelController(for: cid)
+            guard let conversationController = self.getCurrentConversationController() else { return }
 
             guard conversationController.areTypingEventsEnabled else { return }
 

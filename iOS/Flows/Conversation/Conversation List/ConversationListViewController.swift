@@ -265,6 +265,16 @@ class ConversationListViewController: ViewController {
         }
     }
 
+    func getCurrentConversationController() -> ConversationController? {
+        guard let centeredCell
+                = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return nil
+        }
+
+        return centeredCell.conversationController
+    }
+
+
     // MARK: - UICollection Input Handlers
 
     /// If true, the conversation controller is currently loading more conversations.
@@ -314,18 +324,14 @@ extension ConversationListViewController: ConversationListCollectionViewLayoutDe
 
 extension ConversationListViewController: MessageSendingViewControllerType {
 
+    func getCurrentMessageSequence() -> MessageSequence? {
+        return self.getCurrentConversationController()?.conversation
+    }
+
     func set(shouldLayoutForDropZone: Bool) {
         self.dataSource.layoutForDropZone = shouldLayoutForDropZone
     }
 
-    func getCurrentMessageSequence() -> MessageSequence? {
-        guard let centeredCell
-                = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            return nil
-        }
-
-        return centeredCell.conversation
-    }
 
     func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
         self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID,
@@ -364,8 +370,9 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             self.createNewConversation(message)
             return
         }
-        
+
         let conversationController = ChatClient.shared.channelController(for: cid)
+
         Task {
             do {
                 try await conversationController.createNewMessage(with: message)
