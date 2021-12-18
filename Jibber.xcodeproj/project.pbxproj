@@ -53,7 +53,6 @@
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
 		80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */; };
-		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
 		80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */; };
 		80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
 		80F1C4D6270E505E00616F01 /* Equatable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F1C4D5270E505E00616F01 /* Equatable+Extensions.swift */; };
@@ -900,7 +899,6 @@
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
 		80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryMessageSender.swift; sourceTree = "<group>"; };
-		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
 		80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListCollectionViewLayout.swift; sourceTree = "<group>"; };
 		80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		80F1C4D5270E505E00616F01 /* Equatable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Equatable+Extensions.swift"; sourceTree = "<group>"; };
@@ -1672,7 +1670,6 @@
 				8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */,
 				8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */,
 				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
-				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6B2601722E4208900143CF0 /* MessageDateLabel.swift */,
 				8070E74F271747DE004873D9 /* MessageDropZoneView.swift */,
@@ -2862,7 +2859,6 @@
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D6155346274484B800B08459 /* InputTypeManager.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,
-				80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,

@@ -56,7 +56,10 @@ class AvatarView: DisplayableImageView {
     }
 
     private func setImageFrom(initials: String?) {
-        guard let initials = initials else { return }
+        guard let initials = initials else {
+            self.label.text = nil
+            return
+        }
 
         self.imageView.isHidden = true
         self.label.isHidden = false
@@ -88,6 +91,8 @@ class AvatarView: DisplayableImageView {
     // MARK: - Open setters
 
     func set(avatar: Avatar) {
+        self.reset()
+        
         if avatar is User {
             UserStore.shared.$userUpdated.filter { user in
                 user?.objectId == avatar.userObjectId
@@ -103,9 +108,13 @@ class AvatarView: DisplayableImageView {
         self.addInteraction(interaction)
 
         guard avatar.image == nil, avatar.userObjectId == nil else { return }
+        
+        logDebug("\(avatar.fullName)")
         self.initials = avatar.initials
         self.blurView.effect = nil 
         self.layoutNow()
+        
+        logDebug("\(self.label.text ?? "")")
     }
 
     func setCorner(radius: CGFloat?) {
@@ -133,9 +142,8 @@ class AvatarView: DisplayableImageView {
     override func reset() {
         super.reset()
 
-        self.label.isHidden = true
-        self.imageView.isHidden = false
-        self.label.text = nil
+        self.initials = nil
+        self.blurView.showBlur(false)
     }
 }
 

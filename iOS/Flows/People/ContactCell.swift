@@ -53,7 +53,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         self.content.expandToSuperviewSize()
         self.content.roundCorners()
 
-        self.avatarView.setSize(for: self.contentView.height - Theme.contentOffset)
+        self.avatarView.setSize(for: self.contentView.height - Theme.ContentOffset.standard.value.doubled)
         self.avatarView.pin(.left, offset: .standard)
         self.avatarView.centerOnY()
 
