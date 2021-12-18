@@ -174,7 +174,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
 
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType {
         guard let item = self.itemIdentifier(for: indexPath) else {
-            return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude, shouldShow: false)
+            return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)
         }
 
         return self.getTimeMachineItem(forItem: item)
@@ -184,10 +184,8 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
         switch item {
         case .message(let channelID, let messageID):
             let messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
-            // If the item doesn't correspond to an actual message, then assume it's a placeholder and
-            // put it at the front.
-            return messageController.message ?? TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude,
-                                                                      shouldShow: false)
+            // If the item doesn't correspond to an actual message, then assume it's in the front.
+            return messageController.message ?? TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)
         case .loadMore:
             // Get all of the message items.
             let timeMachineItems: [TimeMachineLayoutItemType]
@@ -204,29 +202,23 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
             guard let oldestItem = timeMachineItems.min(by: { (timeMachineItem1, timeMachineItem2) in
                 return timeMachineItem1.sortValue < timeMachineItem2.sortValue
             }) else {
-                return TimeMachineLayoutItem(sortValue: -.greatestFiniteMagnitude,
-                                             shouldShow: true)
+                return TimeMachineLayoutItem(sortValue: -.greatestFiniteMagnitude)
             }
 
             // Put the load more item right before the oldest message item.
-            return TimeMachineLayoutItem(sortValue: oldestItem.sortValue.nextDown, shouldShow: true)
+            return TimeMachineLayoutItem(sortValue: oldestItem.sortValue.nextDown)
         case .placeholder:
-            return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude, shouldShow: true)
+            return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)
         }
     }
 }
 
 private struct TimeMachineLayoutItem: TimeMachineLayoutItemType {
     var sortValue: Double
-    var shouldShow: Bool
 }
 
 extension Message: TimeMachineLayoutItemType {
     var sortValue: Double {
         return self.createdAt.timeIntervalSinceReferenceDate
-    }
-
-    var shouldShow: Bool {
-        return true
     }
 }

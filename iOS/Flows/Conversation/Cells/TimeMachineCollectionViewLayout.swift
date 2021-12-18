@@ -11,7 +11,6 @@ protocol TimeMachineLayoutItemType {
     /// Used to determine the order of the time machine items.
     /// A lower value means the item is older and should appear closer to the back.
     var sortValue: Double { get }
-    var shouldShow: Bool { get }
 }
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
@@ -288,11 +287,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             scale = 1
             yOffset = 0
             alpha = 1
-        }
-
-        // If there is no message to display for this index path, don't show the cell.
-        if self.dataSource?.getTimeMachineItem(forItemAt: indexPath).shouldShow == false {
-            alpha = 0
         }
 
         let layoutClass = type(of: self).layoutAttributesClass as? UICollectionViewLayoutAttributes.Type
