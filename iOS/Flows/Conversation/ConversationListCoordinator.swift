@@ -132,10 +132,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in 
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                 self.conversationListVC.becomeFirstResponder()
-                //self.add(connections: connections, to: conversation)
+                self.add(connections: connections, to: conversation)
             }
         }
         
