@@ -226,13 +226,11 @@ extension ThreadViewController: MessageSendingViewControllerType {
         return self.parentMessage
     }
 
-    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
+    func set(messageSequencePreparingToSend: MessageSequence?) {
         self.dataSource.shouldPrepareToSend = messageSequencePreparingToSend.exists
 
-        if reloadData {
-            guard let message = self.messageController.message else { return }
-            self.dataSource.set(messageSequence: message)
-        }
+        guard let message = self.messageController.message else { return }
+        self.dataSource.set(messageSequence: message)
     }
 
     func sendMessage(_ message: Sendable) {

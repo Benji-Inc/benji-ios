@@ -324,9 +324,8 @@ extension ConversationListViewController: MessageSendingViewControllerType {
         return self.getCurrentConversationController()?.conversation
     }
 
-    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
-        self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID,
-                            reloadData: reloadData)
+    func set(messageSequencePreparingToSend: MessageSequence?) {
+        self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID)
     }
 
     func createNewConversation(_ sendable: Sendable) {

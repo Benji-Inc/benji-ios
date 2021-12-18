@@ -10,7 +10,7 @@ import Foundation
 
 protocol MessageSendingViewControllerType: UIViewController {
     func getCurrentMessageSequence() -> MessageSequence?
-    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool)
+    func set(messageSequencePreparingToSend: MessageSequence?)
     func sendMessage(_ message: Sendable)
     func createNewConversation(_ sendable: Sendable)
 }
@@ -58,12 +58,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         // Show the send message overlay so the user can see where to drag the message
         let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: view)
         view.dropZoneFrame = overlayFrame
-
-        if isEnabled, let currentMessageSequence = self.viewController.getCurrentMessageSequence() {
-            self.viewController.set(messageSequencePreparingToSend: currentMessageSequence, reloadData: true)
-        } else {
-            self.viewController.set(messageSequencePreparingToSend: nil, reloadData: true)
-        }
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
@@ -71,6 +65,10 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         self.initialContentOffset = self.collectionView.contentOffset
         self.currentSendMode = nil
+
+        guard let currentMessageSequence = self.viewController.getCurrentMessageSequence() else { return }
+
+        self.viewController.set(messageSequencePreparingToSend: currentMessageSequence)
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -131,6 +129,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
                                  didFinishSwipeSendingSendable didSend: Bool) {
 
         self.collectionView.isUserInteractionEnabled = true
+
+        self.viewController.set(messageSequencePreparingToSend: nil)
     }
 
     /// Gets the send position for the given preview view frame.

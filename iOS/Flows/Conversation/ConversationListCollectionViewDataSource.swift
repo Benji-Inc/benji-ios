@@ -108,12 +108,10 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         return snapshot
     }
 
-    func set(conversationPreparingToSend: ConversationId?, reloadData: Bool) {
+    func set(conversationPreparingToSend: ConversationId?) {
         self.conversationPreparingToSend = conversationPreparingToSend
 
-        if reloadData {
-            self.reconfigureAllItems()
-        }
+        self.reconfigureAllItems()
     }
 }
 
