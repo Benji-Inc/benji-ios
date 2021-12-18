@@ -51,7 +51,7 @@ extension PeopleCoordinator {
         } else {
             Task {
                 await self.finish()
-            }
+            }.add(to: self.taskPool)
         }
 
         self.inviteIndex += 1
@@ -67,7 +67,7 @@ extension PeopleCoordinator {
         Task {
             await self.peopleVC.showLoading(for: contact)
             await self.findUser(with: contact.cnContact, for: reservation)
-        }
+        }.add(to: self.taskPool)
     }
 
     func findUser(with contact: CNContact, for reservation: Reservation) async {
@@ -129,7 +129,7 @@ extension PeopleCoordinator {
             } catch {
                 print(error)
             }
-        }
+        }.add(to: self.taskPool)
     }
 }
 

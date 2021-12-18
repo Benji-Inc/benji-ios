@@ -14,9 +14,6 @@ class MainCoordinator: Coordinator<Void> {
 
     lazy var splashVC = SplashViewController()
 
-    /// A pool of Tasks that are automatically cancelled when our coordinator finishes
-    var taskPool = TaskPool()
-
     override func start() {
         super.start()
 
@@ -34,14 +31,6 @@ class MainCoordinator: Coordinator<Void> {
         Task {
             await self.runLaunchFlow()
         }.add(to: self.taskPool)
-    }
-
-    override func finishFlow(with result: Void) {
-        super.finishFlow(with: result)
-
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
     }
 
     private func runLaunchFlow() async {
@@ -90,7 +79,7 @@ class MainCoordinator: Coordinator<Void> {
 
             Task {
                 await self.runConversationListFlow()
-            }
+            }.add(to: self.taskPool)
             #endif
         case .login:
             break

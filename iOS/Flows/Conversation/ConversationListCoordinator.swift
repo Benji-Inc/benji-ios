@@ -91,7 +91,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             guard let cid = cid else { break }
             Task {
                 await self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
-            }
+            }.add(to: self.taskPool)
 
         default:
             break
@@ -132,7 +132,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                 self.conversationListVC.becomeFirstResponder()
                 self.add(connections: connections, to: conversation)
@@ -183,7 +183,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                 let text = LocalizedString(id: "", arguments: [String(connections.count)], default: " @(count) people have been added to the conversation.")
                 await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current()!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
             }
-        }
+        }.add(to: self.taskPool)
     }
 
     func presentConversationTitleAlert(for conversation: Conversation) {

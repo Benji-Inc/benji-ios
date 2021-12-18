@@ -42,6 +42,7 @@ class Coordinator<Result>: NSObject, CoordinatorType {
     weak var parentCoordinator: CoordinatorType?
     private(set) var childCoordinator: CoordinatorType?
     var cancellables = Set<AnyCancellable>()
+    var taskPool = TaskPool()
 
     init(router: Router, deepLink: DeepLinkable?) {
         self.router = router
@@ -100,6 +101,10 @@ class Coordinator<Result>: NSObject, CoordinatorType {
     func finishFlow(with result: Result) {
         self.removeFromParent()
         self.onFinishedFlow?(result)
+        
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
+        }
     }
 }
 
