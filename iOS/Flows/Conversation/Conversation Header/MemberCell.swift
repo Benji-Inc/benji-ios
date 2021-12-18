@@ -51,7 +51,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     func configure(with item: Member) {
         self.avatarView.set(avatar: item.displayable.value)
-
+        
         let typingUsers = item.conversationController.conversation.currentlyTypingUsers
         if typingUsers.contains(where: { typingUser in
             typingUser.userObjectId == item.displayable.value.userObjectId

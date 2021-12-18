@@ -155,9 +155,11 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.size = CGSize(width: 140, height: 140)
         self.animationView.centerOnXAndY()
 
-        self.cameraVC.view.expandToSuperviewSize()
-
         self.errorView.bottom = self.view.height - self.errorOffset
+        
+        self.tapView.expandToSuperviewSize()
+        
+        self.cameraVC.view.expandToSuperviewSize()
     }
 
     private func handle(state: PhotoState) {
