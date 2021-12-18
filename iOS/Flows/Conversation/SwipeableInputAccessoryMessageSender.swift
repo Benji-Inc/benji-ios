@@ -36,9 +36,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     let collectionView: MessageSendingCollectionViewType
     let isConversationList: Bool
 
-    /// Shows where a message should be dragged and dropped to send.
-    let sendMessageDropZone = MessageDropZoneView()
-
     private var contentContainer: UIView? {
         return self.collectionView.superview
     }
@@ -60,44 +57,11 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
-        if isEnabled {
-            self.showDropZone(for: view)
-        } else {
-            self.hideDropZone()
-        }
-    }
-
-    func showDropZone(for view: SwipeableInputAccessoryView) {
-        guard self.sendMessageDropZone.superview.isNil, let contentContainer = self.contentContainer else {
-            return
-        }
-
-        // Animate in the send overlay
-        contentContainer.addSubview(self.sendMessageDropZone)
-        self.sendMessageDropZone.alpha = 0
-        self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
-
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 1
-        }
-
         // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: contentContainer)
-        self.sendMessageDropZone.frame = overlayFrame
+        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: view)
+        view.dropZoneFrame = overlayFrame
 
-        view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
-
-        self.viewController.set(shouldLayoutForDropZone: true)
-    }
-
-    func hideDropZone() {
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 0
-        } completion: { didFinish in
-            self.sendMessageDropZone.removeFromSuperview()
-        }
-
-        self.viewController.set(shouldLayoutForDropZone: false)
+        self.viewController.set(shouldLayoutForDropZone: isEnabled)
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
@@ -126,15 +90,12 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     private func prepareForSend(with position: SendMode) {
         switch position {
         case .message:
-            self.sendMessageDropZone.setState(.newMessage,
-                                              messageColor: .white)
             if self.isConversationList, let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .newConversation:
             let offset = self.collectionView.getNewConversationContentOffset()
             self.collectionView.setContentOffset(offset, animated: true)
-            self.sendMessageDropZone.setState(.newConversation, messageColor: nil)
         }
     }
 
@@ -152,15 +113,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
 
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageDropZone.setState(.newMessage,
-                                                  messageColor: self.collectionView.getDropZoneColor())
-            }
-
             return false
         }
-
-        self.sendMessageDropZone.alpha = 0
 
         switch self.currentSendMode {
         case .message:
