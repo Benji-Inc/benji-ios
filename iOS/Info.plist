@@ -77,6 +77,23 @@
 		<string>SF-Pro-Text-Regular.otf</string>
 		<string>SF-Pro-Text-Bold.otf</string>
 	</array>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -103,22 +120,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>UIApplicationSceneManifest</key>
-        <dict>
-            <key>UIApplicationSupportsMultipleScenes</key>
-            <true/>
-            <key>UISceneConfigurations</key>
-            <dict>
-                <key>UIWindowSceneSessionRoleApplication</key>
-                <array>
-                    <dict>
-                        <key>UISceneConfigurationName</key>
-                        <string>Default Configuration</string>
-                        <key>UISceneDelegateClassName</key>
-                        <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-                    </dict>
-                </array>
-            </dict>
-        </dict>
 </dict>
 </plist>
