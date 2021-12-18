@@ -103,12 +103,6 @@
 		D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C902732FFD00013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
-		D6166C93273302110013E803 /* ParseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D6166C92273302110013E803 /* ParseSwift */; };
-		D6166C95273302FB0013E803 /* ParseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D6166C94273302FB0013E803 /* ParseSwift */; };
-		D6166C972733030E0013E803 /* ParseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D6166C962733030E0013E803 /* ParseSwift */; };
-		D6166C992733031C0013E803 /* ParseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D6166C982733031C0013E803 /* ParseSwift */; };
-		D6166C9B273303290013E803 /* ParseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D6166C9A273303290013E803 /* ParseSwift */; };
-		D6166C9D273303360013E803 /* ParseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D6166C9C273303360013E803 /* ParseSwift */; };
 		D61ACF86262898520052CE29 /* CollectionViewInputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF85262898520052CE29 /* CollectionViewInputHandler.swift */; };
 		D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D61EC0C221D3071400204BEE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0C121D3071400204BEE /* ViewController.swift */; };
@@ -1241,7 +1235,6 @@
 				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
 				D6C3893627287307004D29D5 /* StreamChat in Frameworks */,
 				D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */,
-				D6166C93273302110013E803 /* ParseSwift in Frameworks */,
 				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
 				D656EF442765A11900FF6E2C /* Localization in Frameworks */,
 			);
@@ -1253,7 +1246,6 @@
 			files = (
 				D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */,
 				D63DB1FB25E968C300F6B323 /* UserNotificationsUI.framework in Frameworks */,
-				D6166C9B273303290013E803 /* ParseSwift in Frameworks */,
 				D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */,
 				D6C3893A27287491004D29D5 /* StreamChat in Frameworks */,
 				D656EF482765A12A00FF6E2C /* Localization in Frameworks */,
@@ -1269,7 +1261,6 @@
 				D6AE0F66267CF8B600C6B048 /* PhoneNumberKit in Frameworks */,
 				D656EF462765A12100FF6E2C /* Localization in Frameworks */,
 				D6AE0F5F267CF82200C6B048 /* Lottie in Frameworks */,
-				D6166C9D273303360013E803 /* ParseSwift in Frameworks */,
 				876DD7048C07730CF091087A /* Pods_AppClip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1280,7 +1271,6 @@
 			files = (
 				D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */,
 				D656EF4A2765A13100FF6E2C /* Localization in Frameworks */,
-				D6166C992733031C0013E803 /* ParseSwift in Frameworks */,
 				6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1291,7 +1281,6 @@
 			files = (
 				D6AE0F7E267CFA6C00C6B048 /* Intents.framework in Frameworks */,
 				D656EF4C2765A13600FF6E2C /* Localization in Frameworks */,
-				D6166C972733030E0013E803 /* ParseSwift in Frameworks */,
 				7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1302,7 +1291,6 @@
 			files = (
 				D6AE0F89267CFA6D00C6B048 /* IntentsUI.framework in Frameworks */,
 				D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */,
-				D6166C95273302FB0013E803 /* ParseSwift in Frameworks */,
 				C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2301,7 +2289,6 @@
 				D6AE0F5C267CF80C00C6B048 /* Lottie */,
 				D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */,
 				D6C3893527287307004D29D5 /* StreamChat */,
-				D6166C92273302110013E803 /* ParseSwift */,
 				D656EF432765A11900FF6E2C /* Localization */,
 			);
 			productName = Benji;
@@ -2326,7 +2313,6 @@
 				D6AE0F60267CF82C00C6B048 /* Lottie */,
 				D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */,
 				D6C3893927287491004D29D5 /* StreamChat */,
-				D6166C9A273303290013E803 /* ParseSwift */,
 				D656EF472765A12A00FF6E2C /* Localization */,
 			);
 			productName = OursNotificationContent;
@@ -2351,7 +2337,6 @@
 			packageProductDependencies = (
 				D6AE0F5E267CF82200C6B048 /* Lottie */,
 				D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */,
-				D6166C9C273303360013E803 /* ParseSwift */,
 				D656EF452765A12100FF6E2C /* Localization */,
 			);
 			productName = BenjiAppClip;
@@ -2374,7 +2359,6 @@
 			name = "Notification Service";
 			packageProductDependencies = (
 				D6C3893B2728749C004D29D5 /* StreamChat */,
-				D6166C982733031C0013E803 /* ParseSwift */,
 				D656EF492765A13100FF6E2C /* Localization */,
 			);
 			productName = NotificationService;
@@ -2396,7 +2380,6 @@
 			);
 			name = "Intents Extension";
 			packageProductDependencies = (
-				D6166C962733030E0013E803 /* ParseSwift */,
 				D656EF4B2765A13600FF6E2C /* Localization */,
 			);
 			productName = "Intents Extension";
@@ -2418,7 +2401,6 @@
 			);
 			name = "Intents ExtensionUI";
 			packageProductDependencies = (
-				D6166C94273302FB0013E803 /* ParseSwift */,
 				D656EF4D2765A13B00FF6E2C /* Localization */,
 			);
 			productName = "Intents ExtensionUI";
@@ -2474,7 +2456,6 @@
 				D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
 				D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */,
-				D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */,
 			);
 			productRefGroup = D61EC0BD21D3071400204BEE /* Products */;
 			projectDirPath = "";
@@ -4114,14 +4095,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/parse-community/Parse-Swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -4149,36 +4122,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D6166C92273302110013E803 /* ParseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */;
-			productName = ParseSwift;
-		};
-		D6166C94273302FB0013E803 /* ParseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */;
-			productName = ParseSwift;
-		};
-		D6166C962733030E0013E803 /* ParseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */;
-			productName = ParseSwift;
-		};
-		D6166C982733031C0013E803 /* ParseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */;
-			productName = ParseSwift;
-		};
-		D6166C9A273303290013E803 /* ParseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */;
-			productName = ParseSwift;
-		};
-		D6166C9C273303360013E803 /* ParseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */;
-			productName = ParseSwift;
-		};
 		D656EF432765A11900FF6E2C /* Localization */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Localization;
