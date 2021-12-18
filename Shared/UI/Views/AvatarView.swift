@@ -91,7 +91,6 @@ class AvatarView: DisplayableImageView {
     // MARK: - Open setters
 
     func set(avatar: Avatar) {
-        self.reset()
         
         if avatar is User {
             UserStore.shared.$userUpdated.filter { user in
@@ -101,20 +100,18 @@ class AvatarView: DisplayableImageView {
             }.store(in: &self.cancellables)
         }
 
-        self.displayable = avatar
-
         self.avatar = avatar
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
 
-        guard avatar.image == nil, avatar.userObjectId == nil else { return }
+        if avatar.image == nil, avatar.userObjectId == nil {
+            self.initials = avatar.initials
+            self.blurView.effect = nil
+        }
         
-        logDebug("\(avatar.fullName)")
-        self.initials = avatar.initials
-        self.blurView.effect = nil 
+        self.displayable = avatar
+        
         self.layoutNow()
-        
-        logDebug("\(self.label.text ?? "")")
     }
 
     func setCorner(radius: CGFloat?) {
