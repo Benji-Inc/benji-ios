@@ -9,7 +9,6 @@
 import Foundation
 
 protocol MessageSendingViewControllerType: UIViewController {
-    func set(shouldLayoutForDropZone: Bool)
     func getCurrentMessageSequence() -> MessageSequence?
     func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool)
     func sendMessage(_ message: Sendable)
@@ -61,7 +60,11 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: view)
         view.dropZoneFrame = overlayFrame
 
-        self.viewController.set(shouldLayoutForDropZone: isEnabled)
+        if isEnabled, let currentMessageSequence = self.viewController.getCurrentMessageSequence() {
+            self.viewController.set(messageSequencePreparingToSend: currentMessageSequence, reloadData: true)
+        } else {
+            self.viewController.set(messageSequencePreparingToSend: nil, reloadData: true)
+        }
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
@@ -69,9 +72,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         self.initialContentOffset = self.collectionView.contentOffset
         self.currentSendMode = nil
-
-        guard let currentMessageSequence = self.viewController.getCurrentMessageSequence() else { return }
-        self.viewController.set(messageSequencePreparingToSend: currentMessageSequence, reloadData: true)
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -132,8 +132,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
                                  didFinishSwipeSendingSendable didSend: Bool) {
 
         self.collectionView.isUserInteractionEnabled = true
-
-        self.viewController.set(messageSequencePreparingToSend: nil, reloadData: !didSend)
     }
 
     /// Gets the send position for the given preview view frame.

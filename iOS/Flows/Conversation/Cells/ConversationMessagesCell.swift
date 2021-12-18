@@ -132,10 +132,6 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.dataSource.set(messageSequence: conversation, showLoadMore: self.shouldShowLoadMore)
     }
 
-    func set(layoutForDropZone: Bool) {
-        self.collectionLayout.layoutForDropZone = layoutForDropZone
-    }
-
     func set(isPreparedToSend: Bool) {
         self.dataSource.shouldPrepareToSend = isPreparedToSend
     }

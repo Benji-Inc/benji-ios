@@ -32,12 +32,6 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
 
-    var layoutForDropZone = false {
-        didSet {
-            self.reconfigureAllItems()
-        }
-    }
-
     /// The conversation ID of the conversation that is preparing to send, if any.
     private var conversationPreparingToSend: ConversationId?
 
@@ -148,7 +142,6 @@ extension ConversationListCollectionViewDataSource {
                 cell.set(isPreparedToSend: false)
             }
 
-            cell.set(layoutForDropZone: item.dataSource.layoutForDropZone)
             cell.set(conversation: conversationController.conversation)
         }
     }

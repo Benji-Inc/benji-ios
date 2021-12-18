@@ -222,11 +222,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
 extension ThreadViewController: MessageSendingViewControllerType {
 
-    func set(shouldLayoutForDropZone: Bool) {
-        self.threadCollectionView.threadLayout.layoutForDropZone = shouldLayoutForDropZone
-        self.threadCollectionView.threadLayout.invalidateLayout()
-    }
-
     func getCurrentMessageSequence() -> MessageSequence? {
         return self.parentMessage
     }

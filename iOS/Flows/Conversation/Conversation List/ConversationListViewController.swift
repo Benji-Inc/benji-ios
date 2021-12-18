@@ -324,11 +324,6 @@ extension ConversationListViewController: MessageSendingViewControllerType {
         return self.getCurrentConversationController()?.conversation
     }
 
-    func set(shouldLayoutForDropZone: Bool) {
-        self.dataSource.layoutForDropZone = shouldLayoutForDropZone
-    }
-
-
     func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
         self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID,
                             reloadData: reloadData)
