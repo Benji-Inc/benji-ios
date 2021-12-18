@@ -17,7 +17,6 @@ protocol MessageSendingViewControllerType: UIViewController {
 
 protocol MessageSendingCollectionViewType: CollectionView {
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect
-    func getDropZoneColor() -> ThemeColor?
     func getNewConversationContentOffset() -> CGPoint
 }
 

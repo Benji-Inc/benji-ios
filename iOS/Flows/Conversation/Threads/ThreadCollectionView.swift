@@ -40,14 +40,6 @@ extension ThreadCollectionView: MessageSendingCollectionViewType {
         return self.convert(dropZoneFrame, to: targetView)
     }
 
-    func getDropZoneColor() -> ThemeColor? {
-        if self.visibleCells.count > 0 {
-            return .darkGray
-        }
-
-        return .white
-    }
-
     func getNewConversationContentOffset() -> CGPoint {
         return .zero
     }

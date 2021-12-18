@@ -33,7 +33,6 @@ class ConversationListCollectionView: CollectionView {
     /// Returns the frame that a message drop zone should appear based on this collectionview's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect {
-        #warning("Is this being used?")
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
             let overlayFrame = CGRect(x: Theme.contentOffset,
                                       y: 100,
@@ -49,15 +48,6 @@ class ConversationListCollectionView: CollectionView {
 extension ConversationListCollectionView: MessageSendingCollectionViewType {
 
     // MARK: - MessageSendingCollectionView
-
-    func getDropZoneColor() -> ThemeColor? {
-        #warning("Still needed?")
-        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            return nil
-        }
-
-        return centerCell.getDropZoneColor()
-    }
 
     func getBottomFrontmostCell() -> MessageCell? {
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {

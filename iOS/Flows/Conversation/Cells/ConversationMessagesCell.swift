@@ -215,10 +215,6 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.collectionLayout.layoutForDropZone = isShowing
     }
 
-    func getDropZoneColor() -> ThemeColor? {
-        return self.collectionLayout.getDropZoneColor()
-    }
-
     func getBottomFrontmostCell() -> MessageCell? {
         return self.collectionLayout.getBottomFrontmostCell()
     }
