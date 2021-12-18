@@ -40,8 +40,8 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
     override func prepare() {
         guard let collectionView = self.collectionView else { return }
 
-        let itemHeight: CGFloat = collectionView.height - collectionView.contentInset.vertical
         let itemWidth: CGFloat = Theme.getPaddedWidth(with: collectionView.width)
+        let itemHeight: CGFloat = collectionView.height - collectionView.adjustedContentInset.vertical
         self.itemSize = CGSize(width: itemWidth, height: itemHeight)
 
         collectionView.contentInset = UIEdgeInsets(top: 0,
@@ -49,12 +49,7 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
                                                    bottom: 0,
                                                    right: (collectionView.width - itemWidth).half)
 
-        // NOTE: Subtracting 1 to ensure there's enough vertical space for the cells.
-        let verticalSpacing = clamp(collectionView.height - itemHeight - 1, min: 0)
-        self.sectionInset = UIEdgeInsets(top: 0,
-                                         left: 0,
-                                         bottom: verticalSpacing,
-                                         right: 0)
+        self.sectionInset = .zero
         self.minimumLineSpacing = Theme.ContentOffset.standard.value
     }
 

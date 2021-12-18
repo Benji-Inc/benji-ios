@@ -124,9 +124,6 @@ class ConversationListViewController: ViewController {
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
     /// and message drop zone don't overlap.
     private func setYOffsets() {
-        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.view)
-        self.swipeInputDelegate.sendMessageDropZone.frame = dropZoneFrame
-
         guard let cell = self.collectionView.getBottomFrontmostCell() else { return }
 
         let cellFrame = self.view.convert(cell.bounds, from: cell)
@@ -136,7 +133,6 @@ class ConversationListViewController: ViewController {
         let diff = cellFrame.bottom - accessoryFrame.top
         let value = -clamp(diff, 0, 70)
         self.collectionView.top += value
-        self.swipeInputDelegate.sendMessageDropZone.top += -clamp(diff, min: 0)
         
         self.headerVC.view.alpha = self.collectionView.top < self.headerVC.view.bottom ? 0 : 1
     }
@@ -328,14 +324,8 @@ extension ConversationListViewController: MessageSendingViewControllerType {
         return self.getCurrentConversationController()?.conversation
     }
 
-    func set(shouldLayoutForDropZone: Bool) {
-        self.dataSource.layoutForDropZone = shouldLayoutForDropZone
-    }
-
-
-    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
-        self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID,
-                            reloadData: reloadData)
+    func set(messageSequencePreparingToSend: MessageSequence?) {
+        self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID)
     }
 
     func createNewConversation(_ sendable: Sendable) {

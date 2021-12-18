@@ -25,7 +25,7 @@ class ThreadCollectionView: CollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func getBottomFrontMostCell() -> MessageSubcell? {
+    func getBottomFrontMostCell() -> MessageCell? {
         return self.threadLayout.getBottomFrontmostCell()
     }
 }
@@ -38,14 +38,6 @@ extension ThreadCollectionView: MessageSendingCollectionViewType {
         let dropZoneFrame = self.threadLayout.getDropZoneFrame()
 
         return self.convert(dropZoneFrame, to: targetView)
-    }
-
-    func getDropZoneColor() -> ThemeColor? {
-        if self.visibleCells.count > 0 {
-            return .darkGray
-        }
-
-        return .white
     }
 
     func getNewConversationContentOffset() -> CGPoint {

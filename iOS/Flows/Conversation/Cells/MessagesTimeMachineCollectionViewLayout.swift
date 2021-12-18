@@ -124,18 +124,9 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
-    func getDropZoneColor() -> ThemeColor? {
+    func getBottomFrontmostCell() -> MessageCell? {
         guard let ip = self.getFrontmostIndexPath(in: 1),
-              let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
-                  return nil
-              }
-
-        return attributes.backgroundColor == .white ? .darkGray : .white
-    }
-
-    func getBottomFrontmostCell() -> MessageSubcell? {
-        guard let ip = self.getFrontmostIndexPath(in: 1),
-              let cell = self.collectionView?.cellForItem(at: ip) as? MessageSubcell else {
+              let cell = self.collectionView?.cellForItem(at: ip) as? MessageCell else {
                   return nil
               }
         return cell

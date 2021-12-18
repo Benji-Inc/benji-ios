@@ -32,12 +32,6 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
 
-    var layoutForDropZone = false {
-        didSet {
-            self.reconfigureAllItems()
-        }
-    }
-
     /// The conversation ID of the conversation that is preparing to send, if any.
     private var conversationPreparingToSend: ConversationId?
 
@@ -114,12 +108,10 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         return snapshot
     }
 
-    func set(conversationPreparingToSend: ConversationId?, reloadData: Bool) {
+    func set(conversationPreparingToSend: ConversationId?) {
         self.conversationPreparingToSend = conversationPreparingToSend
 
-        if reloadData {
-            self.reconfigureAllItems()
-        }
+        self.reconfigureAllItems()
     }
 }
 
@@ -136,7 +128,7 @@ extension ConversationListCollectionViewDataSource {
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, ConversationListCollectionViewDataSource>
 
     typealias NewConversationCellRegistration
-    = UICollectionView.CellRegistration<PlaceholderMessageCell, ConversationListCollectionViewDataSource>
+    = UICollectionView.CellRegistration<PlaceholderConversationCell, ConversationListCollectionViewDataSource>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
@@ -148,7 +140,6 @@ extension ConversationListCollectionViewDataSource {
                 cell.set(isPreparedToSend: false)
             }
 
-            cell.set(layoutForDropZone: item.dataSource.layoutForDropZone)
             cell.set(conversation: conversationController.conversation)
         }
     }

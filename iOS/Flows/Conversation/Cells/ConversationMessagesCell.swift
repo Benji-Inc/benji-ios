@@ -70,7 +70,7 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
 
-        // Allow message subcells to scale in size without getting clipped.
+        // Allow message cells to scale in size without getting clipped.
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
 
@@ -130,10 +130,6 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
 
         self.dataSource.set(messageSequence: conversation, showLoadMore: self.shouldShowLoadMore)
-    }
-
-    func set(layoutForDropZone: Bool) {
-        self.collectionLayout.layoutForDropZone = layoutForDropZone
     }
 
     func set(isPreparedToSend: Bool) {
@@ -219,11 +215,7 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.collectionLayout.layoutForDropZone = isShowing
     }
 
-    func getDropZoneColor() -> ThemeColor? {
-        return self.collectionLayout.getDropZoneColor()
-    }
-
-    func getBottomFrontmostCell() -> MessageSubcell? {
+    func getBottomFrontmostCell() -> MessageCell? {
         return self.collectionLayout.getBottomFrontmostCell()
     }
 }
@@ -234,12 +226,12 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath),
-              let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
+              let cell = collectionView.cellForItem(at: indexPath) as? MessageCell else { return }
 
         switch item {
         case .message(cid: let cid, messageID: let messageID):
             self.handleTappedMessage?(cid, messageID, cell.content)
-        case .loadMore:
+        case .loadMore, .placeholder:
             break
         }
     }
@@ -251,10 +243,11 @@ extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
                                          updatedFrontmostItemAt indexPath: IndexPath) {
         
         guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+
         switch item {
         case .message(cid: let cid, messageID: let messageID):
             self.incomingTopmostMessage = ChatClient.shared.message(cid: cid, id: messageID)
-        case .loadMore(_):
+        case .loadMore, .placeholder:
             break
         }
     }
