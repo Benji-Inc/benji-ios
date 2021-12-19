@@ -24,7 +24,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
     @Published var incomingTopmostMessage: ChatMessage?
-
+    
     // CollectionView
     private(set) lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
     lazy var collectionView: UICollectionView = {
@@ -242,11 +242,17 @@ extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
     func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
                                          updatedFrontmostItemAt indexPath: IndexPath) {
         
-        guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else {
+            self.incomingTopmostMessage = nil
+            return
+        }
 
         switch item {
         case .message(cid: let cid, messageID: let messageID):
-            self.incomingTopmostMessage = ChatClient.shared.message(cid: cid, id: messageID)
+            let message = ChatClient.shared.message(cid: cid, id: messageID)
+            self.incomingTopmostMessage = message
+            logDebug(message.author.fullName)
+            logDebug(message.text)
         case .loadMore, .placeholder:
             break
         }

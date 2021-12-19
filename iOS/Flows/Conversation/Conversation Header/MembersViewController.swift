@@ -16,11 +16,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     var conversationController: ConversationController?
     
-    private var initialTopMostAuthor: ChatUser? {
-        didSet {
-            logDebug(self.initialTopMostAuthor?.fullName ?? "")
-        }
-    }
+    private var initialTopMostAuthor: ChatUser?
 
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())

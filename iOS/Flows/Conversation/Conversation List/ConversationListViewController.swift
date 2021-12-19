@@ -185,11 +185,6 @@ class ConversationListViewController: ViewController {
                 return member.id != ChatClient.shared.currentUserId
             }
             self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
-
-            if let convo = ConversationsManager.shared.activeConversation,
-               let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-                self.handleTopMessageUpdates(for: convo, cell: cell)
-            }
         } else {
             ConversationsManager.shared.activeConversation = nil
         }
