@@ -186,8 +186,9 @@ class ConversationListViewController: ViewController {
             }
             self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
 
-            if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-                self.handleTopMessageUpdates(for: conversation, cell: cell)
+            if let convo = ConversationsManager.shared.activeConversation,
+               let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+                self.handleTopMessageUpdates(for: convo, cell: cell)
             }
         } else {
             ConversationsManager.shared.activeConversation = nil
@@ -227,7 +228,7 @@ class ConversationListViewController: ViewController {
 
         Task {
             await self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
-        }
+        }.add(to: self.taskPool)
     }
 
     @MainActor

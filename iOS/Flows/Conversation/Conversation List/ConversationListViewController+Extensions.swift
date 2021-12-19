@@ -80,7 +80,6 @@ extension ConversationListViewController {
     
     func handleTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
         cell.$incomingTopmostMessage
-            .removeDuplicates()
             .mainSink { [unowned self] message in
                 guard let author = message?.author else { return }
                 self.headerVC.membersVC.updateAuthor(for: conversation, user: author)

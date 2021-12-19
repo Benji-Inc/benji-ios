@@ -16,7 +16,11 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     var conversationController: ConversationController?
     
-    private var initialTopMostAuthor: ChatUser?
+    private var initialTopMostAuthor: ChatUser? {
+        didSet {
+            logDebug(self.initialTopMostAuthor?.fullName ?? "")
+        }
+    }
 
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
@@ -41,6 +45,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             .mainSink { conversation in
             Task {
                 guard let cid = conversation?.cid else { return }
+                
                 self.conversationController = ChatClient.shared.channelController(for: cid)
 
                 await self.loadData()
@@ -79,26 +84,24 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             }
         }).store(in: &self.cancellables)
     }
-    
-    override func collectionViewDataWasLoaded() {
-        super.collectionViewDataWasLoaded()
-        
-        /// This is needed because sometimes the author get set before the datasource
-        if let user = self.initialTopMostAuthor,
-           let ip = self.getIndexPath(for: user) {
-            self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
-        }
-    }
 
     // MARK: Data Loading
 
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersSectionType, MembersItemType>)
     -> AnimationCycle? {
+        
+        var index: Int = 0
+        if let user = self.initialTopMostAuthor,
+           let controller = self.conversationController {
+            let member = Member(displayable: AnyHashableDisplayable.init(user),
+                                conversationController: controller)
+            index = snapshot.indexOfItem(.member(member)) ?? 0
+        }
 
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: true,
-                              scrollToIndexPath: IndexPath(row: 0, section: 0))
+                              scrollToIndexPath: IndexPath(row: index, section: 0))
     }
 
     override func getAllSections() -> [MembersCollectionViewDataSource.SectionType] {
@@ -109,7 +112,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
         var data: [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] = [:]
 
-        guard let conversation = self.activeConversation else { return data }
+        guard let conversation = self.conversationController?.conversation else { return data }
 
         let members = conversation.lastActiveMembers.filter { member in
             return member.id != ChatClient.shared.currentUserId
@@ -126,7 +129,8 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     }
     
     func updateAuthor(for conversation: Conversation, user: ChatUser) {
-        guard let conversationController = self.conversationController, conversation == conversationController.conversation else {
+        guard let controller = self.conversationController,
+              conversation == controller.conversation else {
             /// If the conversation hasn't been set yet, store the user it should scroll too once it does. 
             self.initialTopMostAuthor = user
             return
@@ -134,15 +138,10 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         
         self.initialTopMostAuthor = nil
         
-        if let ip = self.getIndexPath(for: user) {
+        let member = Member(displayable: AnyHashableDisplayable.init(user),
+                            conversationController: controller)
+        if let ip = self.dataSource.indexPath(for: .member(member)) {
             self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
         }
-    }
-    
-    private func getIndexPath(for user: ChatUser) -> IndexPath? {
-        guard let conversationController = self.conversationController else { return nil }
-        let member = Member(displayable: AnyHashableDisplayable.init(user),
-                            conversationController: conversationController)
-        return self.dataSource.indexPath(for: .member(member))
     }
 }
