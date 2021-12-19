@@ -251,8 +251,6 @@ extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
         case .message(cid: let cid, messageID: let messageID):
             let message = ChatClient.shared.message(cid: cid, id: messageID)
             self.incomingTopmostMessage = message
-            logDebug(message.author.fullName)
-            logDebug(message.text)
         case .loadMore, .placeholder:
             break
         }
