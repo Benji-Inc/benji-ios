@@ -13,36 +13,56 @@ import Lottie
 import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
-
+    
     lazy var membersVC = MembersViewController()
     let button = ThemeButton()
-
+    let topicLabel = ThemeLabel(font: .small)
+    let imageView = UIImageView(image: UIImage(systemName: "chevron.down"))
+    
     private var state: ConversationUIState = .read
-
+    
     var didTapAddPeople: CompletionOptional = nil
     var didTapUpdateTopic: CompletionOptional = nil
-
+    
     override func initializeViews() {
         super.initializeViews()
-
+        
         self.addChild(viewController: self.membersVC)
-
+        
         if !isRelease {
             self.view.addSubview(self.button)
         }
-
+        
+        self.view.addSubview(self.topicLabel)
+        self.view.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.tintColor = ThemeColor.textColor.color
+        
+        self.createMenu()
+        
+        ConversationsManager.shared.$activeConversation
+            .removeDuplicates()
+            .mainSink { conversation in
+                guard let convo = conversation else { return }
+                self.button.isVisible = convo.isOwnedByMe
+                self.topicLabel.setText(convo.title)
+                self.view.setNeedsLayout()
+            }.store(in: &self.cancellables)
+    }
+    
+    private func createMenu() {
         let add = UIAction.init(title: "Add people",
                                 image: UIImage(systemName: "person.badge.plus")) { [unowned self] _ in
             self.didTapAddPeople?()
         }
-
+        
         let topic = UIAction.init(title: "Update topic",
-                                 image: UIImage(systemName: "pencil")) { [unowned self] _ in
-             self.didTapUpdateTopic?()
+                                  image: UIImage(systemName: "pencil")) { [unowned self] _ in
+            self.didTapUpdateTopic?()
         }
-
+        
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
-
+        
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
                                      attributes: .destructive) { [unowned self] action in
@@ -55,52 +75,48 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 }
             }.add(to: self.taskPool)
         }
-
+        
         let deleteMenu = UIMenu(title: "Delete Conversation",
                                 image: UIImage(systemName: "trash"),
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
-
+        
         let menu = UIMenu(title: "Menu",
                           image: UIImage(systemName: "ellipsis.circle"),
                           identifier: nil,
                           options: [],
                           children: [topic, add, deleteMenu])
-
-        self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis")!, color: .white))
+        
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
-
-        ConversationsManager.shared.$activeConversation
-            .removeDuplicates()
-            .mainSink { conversation in
-
-            guard let convo = conversation else { return }
-            self.button.isVisible = convo.isOwnedByMe
-            self.view.setNeedsLayout()
-        }.store(in: &self.cancellables)
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         self.membersVC.view.height = 43
         self.membersVC.view.expandToSuperviewWidth()
         self.membersVC.view.pin(.bottom)
-
-        self.button.height = 44
-        self.button.width = 44
-        self.button.pin(.right, offset: .xtraLong)
-        self.button.pin(.top, offset: .negative(.custom(22)))
+        
+        self.topicLabel.setSize(withWidth: self.view.width)
+        self.topicLabel.centerOnX()
+        self.topicLabel.centerY = self.button.centerY
+        
+        self.imageView.squaredSize = 10
+        self.imageView.match(.left, to: .right, of: self.topicLabel, offset: .custom(2))
+        self.imageView.centerY = self.topicLabel.centerY
+        
+        self.button.frame = self.topicLabel.frame
     }
-
+    
     func update(for state: ConversationUIState) {
         self.state = state
-
+        
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.view.layoutNow()
         } completion: { completed in
-
+            
         }
     }
 }
+

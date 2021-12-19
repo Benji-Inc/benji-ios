@@ -62,7 +62,7 @@ extension ConversationListViewController {
             .mainSink { [unowned self] _ in
                 Task {
                     await self.dataSource.update(with: self.conversationListController)
-                }
+                }.add(to: self.taskPool)
             }.store(in: &self.cancellables)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
@@ -76,14 +76,23 @@ extension ConversationListViewController {
                 conversationController.sendKeystrokeEvent()
             }
         }.store(in: &self.cancellables)
+        
+        ConversationsManager.shared.$activeConversation.mainSink { conversation in
+            if let convo = conversation,
+               let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+                self.handleTopMessageUpdates(for: convo, cell: cell)
+            }
+        }.store(in: &self.cancellables)
     }
     
     func handleTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
+    
+        /// didUpdate is called before this is ever set. Also looks like a non centered conversation is being used
         cell.$incomingTopmostMessage
-            .removeDuplicates()
             .mainSink { [unowned self] message in
                 guard let author = message?.author else { return }
                 self.headerVC.membersVC.updateAuthor(for: conversation, user: author)
+                
             }.store(in: &self.cancellables)
     }
 }

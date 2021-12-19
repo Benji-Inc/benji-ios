@@ -91,6 +91,7 @@ class AvatarView: DisplayableImageView {
     // MARK: - Open setters
 
     func set(avatar: Avatar) {
+        self.reset()
         
         if avatar is User {
             UserStore.shared.$userUpdated.filter { user in
