@@ -301,6 +301,10 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         self.initialPreviewOrigin = self.previewView?.origin
 
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.deliveryTypeView.alpha = 0.0
+            self.emotionView.alpha = 0.0
+        }
         self.delegate?.swipeableInputAccessoryDidBeginSwipe(self)
     }
 
@@ -370,6 +374,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 self.inputContainerView.alpha = 1
                 self.previewView?.removeFromSuperview()
             }
+        }
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.deliveryTypeView.alpha = 1.0
+            self.emotionView.alpha = 1.0
         }
     }
 

@@ -134,11 +134,7 @@ extension ConversationController {
     func createNewMessage(with sendable: Sendable) async throws -> MessageId {
         switch sendable.kind {
         case .text(let text):
-            let messageId = try await self.createNewMessage(sendable: sendable, text: text)
-            let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: messageId)
-            try await controller.synchronize()
-            try await controller.addEmotion(with: sendable.emotion)
-            return messageId
+            return try await self.createNewMessage(sendable: sendable, text: text)
         case .attributedText:
             break
         case .photo:
@@ -184,6 +180,7 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation { continuation in
             var data = extraData
+            data["emotions"] = .array([.string(sendable.emotion.rawValue)])
             data["context"] = .string(sendable.context.rawValue)
             self.createNewMessage(text: text,
                                   pinning: pinning,
@@ -326,6 +323,7 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation({ continuation in
             var data = extraData
+            data["emotions"] = .array([.string(sendable.emotion.rawValue)])
             data["context"] = .string(sendable.context.rawValue)
             messageController.createNewReply(text: text,
                                              pinning: pinning,

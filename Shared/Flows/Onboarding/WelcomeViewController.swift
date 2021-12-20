@@ -97,17 +97,20 @@ class WelcomeViewController: TextInputViewController<Void> {
                 self.textEntry.alpha = 0 
                 self.reservationButton.alpha = 1
                 self.loginButton.alpha = 1
+                self.label.setText("Jibber")
             case .login:
                 break
             case .reservationInput:
                 self.reservationButton.alpha = 0
                 self.loginButton.alpha = 0
+                self.label.setText("Enter Code")
             case .foundReservation(_):
                 break
             case .reservationError:
                 self.reservationButton.alpha = 1
                 self.loginButton.alpha = 1
             }
+            self.view.setNeedsLayout()
         } completion: { (completed) in
             switch state {
             case .reservationInput:

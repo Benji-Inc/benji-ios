@@ -53,21 +53,6 @@ extension MessageController {
             }
         }
     }
-    
-    func addEmotion(with type: Emotion, extraData: [String: RawJSON] = [:]) async throws {
-        return try await withCheckedThrowingContinuation({ continuation in
-            self.addReaction(type.reaction,
-                             score: 0,
-                             enforceUnique: false,
-                             extraData: extraData) { error in
-                if let e = error {
-                    continuation.resume(throwing: e)
-                } else {
-                    continuation.resume(returning: ())
-                }
-            }
-        })
-    }
 
     func addReaction(with type: ReactionType, extraData: [String: RawJSON] = [:]) async throws {
         return try await withCheckedThrowingContinuation({ continuation in
@@ -100,7 +85,7 @@ extension MessageController {
     func createNewReply(with sendable: Sendable) async throws -> MessageId {
         switch sendable.kind {
         case .text(let text):
-            return try await self.createNewReply(text: text)
+            return try await self.createNewReply(sendable: sendable, text: text)
         case .attributedText:
             break
         case .photo:
@@ -134,7 +119,8 @@ extension MessageController {
     ///   in the response thread.
     ///   - quotedMessageId: An id of the message new message quotes. (inline reply)
     ///   - extraData: Additional extra data of the message object.
-    func createNewReply(text: String,
+    func createNewReply(sendable: Sendable,
+                        text: String,
                         pinning: MessagePinning? = nil,
                         attachments: [AnyAttachmentPayload] = [],
                         mentionedUserIds: [UserId] = [],
@@ -144,6 +130,11 @@ extension MessageController {
                         extraData: [String: RawJSON] = [:]) async throws -> MessageId {
 
         return try await withCheckedThrowingContinuation { continuation in
+            
+            var data = extraData
+            data["emotions"] = .array([.string(sendable.emotion.rawValue)])
+            data["context"] = .string(sendable.context.rawValue)
+            
             self.createNewReply(text: text,
                                 pinning: pinning,
                                 attachments: attachments,
@@ -151,7 +142,7 @@ extension MessageController {
                                 showReplyInChannel: showReplyInChannel,
                                 isSilent: isSilent,
                                 quotedMessageId: quotedMessageId,
-                                extraData: extraData) { result in
+                                extraData: data) { result in
 
                 switch result {
                 case .success(let messageID):

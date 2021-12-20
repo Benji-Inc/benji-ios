@@ -15,12 +15,7 @@ enum ConversationUIState {
     case write // Keyboard IS shown
 
     var headerHeight: CGFloat {
-        switch self {
-        case .read:
-            return 60
-        case .write:
-            return 44
-        }
+        return 60
     }
 }
 
