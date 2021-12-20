@@ -8,8 +8,56 @@
 
 import Foundation
 import UIKit
+import StreamChat
+
+private class FocusImageView: BaseView {
+    
+    private let imageView = UIImageView()
+    private var currentStatus: FocusStatus?
+    
+    override func initializeSubviews() {
+        self.contentMode = .scaleAspectFill
+        self.set(backgroundColor: .clear)
+        
+        self.addSubview(self.imageView)
+        
+        self.set(backgroundColor: .white)
+        self.layer.cornerRadius = Theme.innerCornerRadius
+        self.layer.borderColor = ThemeColor.border.color.cgColor
+        self.layer.borderWidth = 0.25
+        
+        self.tintColor = ThemeColor.darkGray.color
+    }
+    
+    func update(status: FocusStatus) {
+        guard status != self.currentStatus else { return }
+        Task {
+            await UIView.awaitAnimation(with: .fast) {
+                self.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
+                self.imageView.alpha = 0.0
+            }
+            
+            self.imageView.image = status.image
+
+            await UIView.awaitSpringAnimation(with: .fast, animations: {
+                self.transform = .identity
+                self.imageView.alpha = 1.0
+            })
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.imageView.squaredSize = self.height * 0.75
+        self.imageView.center.x = self.bounds.size.width * 0.5
+        self.imageView.center.y = self.bounds.size.height * 0.5
+    }
+}
 
 class AvatarView: DisplayableImageView {
+    
+    private let focusImageView = FocusImageView()
 
     // MARK: - Properties
 
@@ -80,12 +128,14 @@ class AvatarView: DisplayableImageView {
     private func prepareView() {
         self.insertSubview(self.label, belowSubview: self.imageView)
         self.imageView.contentMode = .scaleAspectFill
-        self.layer.masksToBounds = true
-        self.clipsToBounds = true
+        self.imageView.layer.masksToBounds = true
+        self.imageView.clipsToBounds = true
         self.setCorner(radius: Theme.innerCornerRadius)
-        self.layer.borderColor = self.borderColor.color.cgColor
-        self.layer.borderWidth = 2
-        self.set(backgroundColor: .white)
+        self.imageView.layer.borderColor = self.borderColor.color.cgColor
+        self.imageView.layer.borderWidth = 2
+        self.imageView.set(backgroundColor: .white)
+        
+        self.addSubview(self.focusImageView)
     }
 
     // MARK: - Open setters
@@ -93,15 +143,17 @@ class AvatarView: DisplayableImageView {
     func set(avatar: Avatar) {
         self.reset()
         
-        if avatar is User {
-            UserStore.shared.$userUpdated.filter { user in
-                user?.objectId == avatar.userObjectId
-            }.mainSink { user in
-                self.displayable = user
-            }.store(in: &self.cancellables)
-        }
-
+        Task {
+            if let user = avatar as? User {
+                self.subscribeToUpdates(for: user)
+            } else if let userId = avatar.userObjectId,
+                 let user = await self.findUser(with: userId) {
+                self.subscribeToUpdates(for: user)
+            }
+        }.add(to: self.taskPool)
+        
         self.avatar = avatar
+
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
 
@@ -114,27 +166,42 @@ class AvatarView: DisplayableImageView {
         
         self.layoutNow()
     }
+    
+    private func subscribeToUpdates(for user: User) {
+        UserStore.shared.$userUpdated.filter { updatedUser in
+            updatedUser?.objectId == user.userObjectId
+        }.mainSink { updatedUser in
+            self.displayable = updatedUser
+            self.focusImageView.update(status: updatedUser?.focusStatus ?? .available)
+        }.store(in: &self.cancellables)
+        
+        self.focusImageView.update(status: user.focusStatus ?? .available)
+    }
 
     func setCorner(radius: CGFloat?) {
         guard let radius = radius else {
             //if corner radius not set default to Circle
             let cornerRadius = min(frame.width, frame.height)
-            self.layer.cornerRadius = cornerRadius/2
+            self.imageView.layer.cornerRadius = cornerRadius/2
             return
         }
         self.radius = radius
-        self.layer.cornerRadius = radius
+        self.imageView.layer.cornerRadius = radius
     }
 
     func setBorder(color: ThemeColor) {
-        self.layer.borderColor = color.color.cgColor
-        self.layer.borderWidth = 2
+        self.imageView.layer.borderColor = color.color.cgColor
+        self.imageView.layer.borderWidth = 2
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.label.expandToSuperviewSize()
+        
+        self.focusImageView.squaredSize = self.height * 0.45
+        self.focusImageView.pin(.right, offset: .negative(.short))
+        self.focusImageView.pin(.bottom, offset: .negative(.short))
     }
 
     override func reset() {

@@ -112,7 +112,10 @@ class DisplayableImageView: BaseView {
             self.showResult(for: photo)
         } else if let objectID = displayable.userObjectId {
             Task {
-                await self.findUser(with: objectID)
+                let foundUser = await self.findUser(with: objectID)
+                if let user = foundUser {
+                    self.downloadAndSetImage(for: user)
+                }
             }.add(to: self.taskPool)
         } else if let file = displayable as? PFFileObject {
             Task {
@@ -121,7 +124,7 @@ class DisplayableImageView: BaseView {
         }
     }
 
-    private func findUser(with objectID: String) async {
+    func findUser(with objectID: String) async -> User? {
         var foundUser: User? = nil
 
         if let user = UserStore.shared.users.first(where: { user in
@@ -131,10 +134,8 @@ class DisplayableImageView: BaseView {
         } else if let user = try? await User.getObject(with: objectID) {
             foundUser = user
         }
-
-        if let user = foundUser {
-            self.downloadAndSetImage(for: user)
-        }
+        
+        return foundUser
     }
 
     private func downloadAndSetImage(for user: User) {
@@ -184,6 +185,8 @@ class DisplayableImageView: BaseView {
 
     func showResult(for image: UIImage?) {
         self.state = image.isNil ? .error : .success
-        self.imageView.image = image
+        Task {
+            self.imageView.image = await image?.byPreparingForDisplay()
+        }.add(to: self.taskPool)
     }
 }
