@@ -263,7 +263,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #else
             if current.fullName.isEmpty {
                 return .name(self.nameVC)
-            } else if current.smallImage.isNil || current.focusImage.isNil {
+            } else if current.smallImage.isNil {
                 return .photo(self.photoVC)
             } else {
                 return .name(self.nameVC)

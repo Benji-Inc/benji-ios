@@ -16,11 +16,8 @@ import AVFoundation
 enum PhotoState {
     case initial
     case scanEyesOpen
-    case scanEyesClosed
     case captureEyesOpen
     case didCaptureEyesOpen
-    case captureEyesClosed
-    case didCaptureEyesClosed
     case error
     case finish
 }
@@ -37,17 +34,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
         let vc = FaceDisclosureViewController(with: .smiling)
-        vc.dismissHandlers.append { [unowned self] in
-            self.currentState = .scanEyesClosed
-        }
-        vc.button.didSelect { [unowned self] in
-            vc.dismiss(animated: true, completion: nil)
-        }
-        return vc
-    }()
-
-    private lazy var focusDisclosureVC: FaceDisclosureViewController = {
-        let vc = FaceDisclosureViewController(with: .eyesClosed)
         vc.dismissHandlers.append { [unowned self] in
             self.currentState = .finish
         }
@@ -84,12 +70,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             case .scanEyesOpen:
                 guard self.cameraVC.faceDetected else { return }
                 self.currentState = .captureEyesOpen
-            case .scanEyesClosed:
-                guard self.cameraVC.faceDetected else { return }
-                self.currentState = .captureEyesClosed
             case .captureEyesOpen, .didCaptureEyesOpen:
-                break
-            case .captureEyesClosed, .didCaptureEyesClosed:
                 break
             case .finish:
                 break
@@ -100,16 +81,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.cameraVC.didCapturePhoto = { [unowned self] image in
             switch self.currentState {
-            case .captureEyesClosed:
-                if self.cameraVC.eyesAreClosed {
-                    self.currentState = .didCaptureEyesClosed
-                    self.animateError(with: nil, show: false)
-                    Task {
-                        await self.updateUser(with: image)
-                    }
-                } else {
-                    self.handleEyesNotClosed()
-                }
             case .captureEyesOpen:
                 if self.cameraVC.isSmiling {
                     self.currentState = .didCaptureEyesOpen
@@ -135,7 +106,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             .removeDuplicates()
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
                 switch self.currentState {
-                case .scanEyesOpen, .scanEyesClosed, .error:
+                case .scanEyesOpen, .error:
                     self.handleFace(isDetected: faceDetected)
                 default:
                     break
@@ -168,12 +139,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             delay(0.5) {
                 self.handleInitialState()
             }
-        case .scanEyesOpen, .scanEyesClosed:
+        case .scanEyesOpen:
             self.previousScanState = state
             self.handleScanState()
-        case .captureEyesOpen, .captureEyesClosed:
+        case .captureEyesOpen:
             self.handleCaptureState()
-        case .error, .didCaptureEyesOpen, .didCaptureEyesClosed:
+        case .error, .didCaptureEyesOpen:
             break
         case .finish:
             Task {
@@ -226,24 +197,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 Task {
                     await Task.sleep(seconds: 2.0)
                     self.currentState = .scanEyesOpen
-                    self.animateError(with: nil, show: false)
-                }
-            }
-        }
-    }
-
-    private func handleEyesNotClosed() {
-        self.animateError(with: "Please close your eyes", show: true)
-
-        UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.cameraVC.cameraView.alpha = 0.5
-        } completion: { completed in
-            UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
-                self.cameraVC.cameraView.alpha = 1.0
-            } completion: { _ in
-                Task {
-                    await Task.sleep(seconds: 2.0)
-                    self.currentState = .scanEyesClosed
                     self.animateError(with: nil, show: false)
                 }
             }
@@ -307,17 +260,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                     Task {
                         do {
                             try await self.smilingDisclosureVC.updateUser(with: data)
-                            continuation.resume(returning: ())
-                        } catch {
-                            continuation.resume(throwing: error)
-                        }
-                    }
-                })
-            case .didCaptureEyesClosed:
-                self.present(self.focusDisclosureVC, animated: true, completion: { [unowned self] in
-                    Task {
-                        do {
-                            try await self.focusDisclosureVC.updateUser(with: data)
                             continuation.resume(returning: ())
                         } catch {
                             continuation.resume(throwing: error)

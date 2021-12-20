@@ -14,13 +14,10 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
     enum CaptureType {
         case smiling
-        case eyesClosed
 
         var title: Localized {
             switch self {
             case .smiling:
-                return "Let’s Review"
-            case .eyesClosed:
                 return "Let’s Review"
             }
         }
@@ -29,8 +26,6 @@ class FaceDisclosureViewController: DisclosureModalViewController {
             switch self {
             case .smiling:
                 return HightlightedPhrase(text: "Your smile tells everyone you are available and will recieve thier notifications.", highlightedWords: ["available"])
-            case .eyesClosed:
-                return HightlightedPhrase(text: "When people see your eyes closed it tells them you are focused and all notifications are delivered silently.", highlightedWords: ["focused", "silently"])
             }
         }
 
@@ -38,8 +33,6 @@ class FaceDisclosureViewController: DisclosureModalViewController {
             switch self {
             case .smiling:
                 return User.current()?.smallImage
-            case .eyesClosed:
-                return User.current()?.focusImage
             }
         }
     }
@@ -93,9 +86,6 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         case .smiling:
             let file = PFFileObject(name:"small_image.jpeg", data: data)
             currentUser.smallImage = file
-        case .eyesClosed:
-            let file = PFFileObject(name:"focus_image.jpeg", data: data)
-            currentUser.focusImage = file
         }
 
         do {

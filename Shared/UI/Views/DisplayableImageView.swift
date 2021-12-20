@@ -139,11 +139,9 @@ class DisplayableImageView: BaseView {
 
     private func downloadAndSetImage(for user: User) {
         Task {
-            if user.focusStatus == .focused, let file = user.focusImage {
-                await self.downloadAndSet(file: file)
-            } else if let file = user.smallImage {
-                await self.downloadAndSet(file: file)
-            }
+            if let file = user.smallImage {
+               await self.downloadAndSet(file: file)
+           }
         }.add(to: self.taskPool)
     }
 

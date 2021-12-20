@@ -70,11 +70,6 @@ final class User: PFUser {
         set { self.setObject(for: .smallImage, with: newValue) }
     }
 
-    var focusImage: PFFileObject? {
-        get { return self.getObject(for: .focusImage) }
-        set { self.setObject(for: .focusImage, with: newValue) }
-    }
-
     var quePosition: Int? {
         get { return self.getObject(for: .quePosition) }
         set { self.setObject(for: .quePosition, with: newValue) }

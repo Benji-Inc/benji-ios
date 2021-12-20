@@ -76,13 +76,9 @@ enum OnboardingContent: Switchable {
                                        default: "Tap the screen so I can see you 😀")
             case .scanEyesOpen:
                 return "Now smile and tap the screen."
-            case .scanEyesClosed:
-                return "Close your eyes and tap again."
             case .didCaptureEyesOpen:
                 return "Good one!"
-            case .didCaptureEyesClosed:
-                return "Perfect!"
-            case .captureEyesOpen, .captureEyesClosed:
+            case .captureEyesOpen:
                 return "Try again"
             case .error:
                 return ""
