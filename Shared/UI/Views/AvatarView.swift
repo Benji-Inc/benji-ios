@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import StreamChat
 
-private class FocusImageView: BaseView {
+class FocusImageView: BaseView {
     
     private let imageView = UIImageView()
     private var currentStatus: FocusStatus?
@@ -57,7 +57,7 @@ private class FocusImageView: BaseView {
 
 class AvatarView: DisplayableImageView {
     
-    private let focusImageView = FocusImageView()
+    let focusImageView = FocusImageView()
 
     // MARK: - Properties
 
@@ -140,15 +140,16 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Open setters
 
-    func set(avatar: Avatar) {
+    func set(avatar: Avatar, showFocus: Bool = true) {
         self.reset()
         
+        self.focusImageView.isVisible = showFocus
         Task {
             if let user = avatar as? User {
-                self.subscribeToUpdates(for: user)
+                self.subscribeToUpdates(for: user, showFocus: showFocus)
             } else if let userId = avatar.userObjectId,
                  let user = await self.findUser(with: userId) {
-                self.subscribeToUpdates(for: user)
+                self.subscribeToUpdates(for: user, showFocus: showFocus)
             }
         }.add(to: self.taskPool)
         
@@ -167,15 +168,19 @@ class AvatarView: DisplayableImageView {
         self.layoutNow()
     }
     
-    private func subscribeToUpdates(for user: User) {
+    private func subscribeToUpdates(for user: User, showFocus: Bool) {
         UserStore.shared.$userUpdated.filter { updatedUser in
             updatedUser?.objectId == user.userObjectId
         }.mainSink { updatedUser in
             self.displayable = updatedUser
-            self.focusImageView.update(status: updatedUser?.focusStatus ?? .available)
+            if showFocus {
+                self.focusImageView.update(status: updatedUser?.focusStatus ?? .available)
+            }
         }.store(in: &self.cancellables)
         
-        self.focusImageView.update(status: user.focusStatus ?? .available)
+        if showFocus {
+            self.focusImageView.update(status: user.focusStatus ?? .available)
+        }
     }
 
     func setCorner(radius: CGFloat?) {
@@ -207,6 +212,7 @@ class AvatarView: DisplayableImageView {
     override func reset() {
         super.reset()
 
+        self.focusImageView.isVisible = false
         self.initials = nil
         self.blurView.showBlur(false)
     }

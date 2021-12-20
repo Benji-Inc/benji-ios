@@ -104,6 +104,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         self.titleLabel.setText(self.captureType.title)
         self.updateDescription(with: self.captureType.description)
         self.imageView.displayable = UIImage(data: data)
+        self.imageView.focusImageView.isVisible = false 
         self.button.isHidden = false
         self.view.layoutNow()
     }
