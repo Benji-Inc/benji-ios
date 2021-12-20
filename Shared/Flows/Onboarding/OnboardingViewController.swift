@@ -124,7 +124,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     self.current = .name(self.nameVC)
                 }
             case .failure(_):
-                break
+                self.current = .waitlist(self.waitlistVC)
             }
         }
 
@@ -240,7 +240,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     func updateInvitor(with userId: String) async throws {
         let user = try await User.localThenNetworkQuery(for: userId)
         self.invitor = user
-        self.avatarView.set(avatar: user)
+        self.avatarView.set(avatar: user, showFocus: false)
         self.nameLabel.setText(user.givenName.capitalized)
         self.avatarView.isHidden = false
         self.updateUI()
@@ -263,7 +263,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #else
             if current.fullName.isEmpty {
                 return .name(self.nameVC)
-            } else if current.smallImage.isNil || current.focusImage.isNil {
+            } else if current.smallImage.isNil {
                 return .photo(self.photoVC)
             } else {
                 return .name(self.nameVC)

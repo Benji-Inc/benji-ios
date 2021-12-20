@@ -41,6 +41,15 @@ enum UserStatus: String {
 enum FocusStatus: String {
     case focused
     case available
+    
+    var image: UIImage {
+        switch self {
+        case .focused:
+            return UIImage(systemName: "moon.zzz.fill")!
+        case .available:
+            return UIImage(systemName: "hand.wave.fill")!
+        }
+    }
 }
 
 final class User: PFUser {
@@ -68,11 +77,6 @@ final class User: PFUser {
     var smallImage: PFFileObject? {
         get { return self.getObject(for: .smallImage) }
         set { self.setObject(for: .smallImage, with: newValue) }
-    }
-
-    var focusImage: PFFileObject? {
-        get { return self.getObject(for: .focusImage) }
-        set { self.setObject(for: .focusImage, with: newValue) }
     }
 
     var quePosition: Int? {

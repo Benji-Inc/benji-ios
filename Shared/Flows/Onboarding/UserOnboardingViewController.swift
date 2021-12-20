@@ -12,7 +12,6 @@ import Localization
 
 class UserOnboardingViewController: ViewController {
 
-    private(set) var blurView = BlurView()
     private(set) var avatarView = AvatarView()
 
     private(set) var nameLabel = ThemeLabel(font: .regular, textColor: .textColor)
@@ -23,8 +22,6 @@ class UserOnboardingViewController: ViewController {
 
         self.avatarView.isHidden = true 
         self.view.set(backgroundColor: .background)
-
-        self.view.addSubview(self.blurView)
 
         self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.avatarView)
@@ -72,8 +69,6 @@ class UserOnboardingViewController: ViewController {
         self.messageContent.size = self.messageContent.getSize(for: .collapsed, with: maxWidth)
         self.messageContent.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
         self.messageContent.centerOnX()
-
-        self.blurView.expandToSuperviewSize()
     }
 
     // MARK: PUBLIC
