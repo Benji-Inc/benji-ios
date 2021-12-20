@@ -98,11 +98,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.membersVC.view.expandToSuperviewWidth()
         self.membersVC.view.pin(.bottom)
         
+        self.imageView.squaredSize = 10
+
         self.topicLabel.setSize(withWidth: self.view.width)
-        self.topicLabel.centerOnX()
+        self.topicLabel.centerX = self.view.centerX - self.imageView.halfWidth - 1
         self.topicLabel.centerY = self.button.centerY
         
-        self.imageView.squaredSize = 10
         self.imageView.match(.left, to: .right, of: self.topicLabel, offset: .custom(2))
         self.imageView.centerY = self.topicLabel.centerY
         
