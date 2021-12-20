@@ -165,6 +165,12 @@ class ConversationListViewController: ViewController {
         guard self.presentedViewController.isNil else { return }
 
         self.headerVC.update(for: state)
+        
+        self.collectionView.visibleCells.forEach { cell in
+            if let c = cell as? ConversationMessagesCell {
+                c.transitionTo(state: state)
+            }
+        }
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()

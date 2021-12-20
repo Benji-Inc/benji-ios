@@ -29,8 +29,10 @@ extension Conversation {
 
         if let friendlyName = self.name, !friendlyName.isEmpty {
             return localized(friendlyName.capitalized)
-        } else {
+        } else if self.isOwnedByMe {
             return "Add Topic"
+        } else {
+            return "No Topic"
         }
     }
 

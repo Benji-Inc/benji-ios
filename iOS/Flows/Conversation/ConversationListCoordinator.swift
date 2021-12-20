@@ -59,7 +59,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                 logDebug("Unable to change topic because no conversation is selected.")
                 return
             }
-            guard conversation.membership?.memberRole.rawValue == "owner" else {
+            guard conversation.isOwnedByMe else {
                 logDebug("Unable to change topic because conversation is not owned by user.")
                 return
             }
@@ -199,8 +199,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                !text.isEmpty {
 
                 controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
-                    self.conversationListVC.view.layoutNow()
+                    self.conversationListVC.headerVC.topicLabel.setText(text)
+                    self.conversationListVC.headerVC.view.layoutNow()
                     alertController.dismiss(animated: true, completion: {
+                        KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                         self.conversationListVC.becomeFirstResponder()
                     })
                 }
@@ -209,11 +211,15 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
+            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         })
 
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
+        
+        KeyboardManager.shared.reset()
+        self.conversationListVC.resignFirstResponder()
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
     }

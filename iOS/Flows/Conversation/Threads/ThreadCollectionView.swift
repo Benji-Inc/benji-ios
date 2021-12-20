@@ -10,10 +10,12 @@ import Foundation
 
 class ThreadCollectionView: CollectionView {
 
-    let threadLayout = MessagesTimeMachineCollectionViewLayout()
+    var threadLayout: MessagesTimeMachineCollectionViewLayout {
+        return self.collectionViewLayout as! MessagesTimeMachineCollectionViewLayout
+    }
 
     init() {
-        super.init(layout: self.threadLayout)
+        super.init(layout: MessagesTimeMachineCollectionViewLayout(with: .read))
 
         self.threadLayout.messageContentState = .thread 
         self.showsVerticalScrollIndicator = false

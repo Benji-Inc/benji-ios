@@ -88,7 +88,18 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
-
+    
+    let uiState: ConversationUIState
+    
+    init(with state: ConversationUIState) {
+        self.uiState = state
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
@@ -341,24 +352,45 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     func getCenterPoint(for section: SectionIndex,
                         withYOffset yOffset: CGFloat,
                         scale: CGFloat) -> CGPoint {
-
+        
         guard let collectionView = self.collectionView else { return .zero }
         let contentRect = CGRect(x: collectionView.contentOffset.x,
                                  y: collectionView.contentOffset.y,
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
-        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + Theme.contentOffset)
-
-        if section == 0 {
-            centerPoint.y += self.itemHeight.half
-            centerPoint.y += yOffset
-            centerPoint.y += self.itemHeight.half * (1-scale)
-        } else {
-            centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
-            centerPoint.y -= yOffset
-            centerPoint.y -= self.itemHeight.half * (1-scale)
+        
+        var centerPoint: CGPoint = .zero
+        
+        switch self.uiState {
+        case .read:
+            centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + 100)
+            
+            if section == 0 {
+                centerPoint.y += self.itemHeight.half
+                centerPoint.y += yOffset
+                centerPoint.y += self.itemHeight.doubled * (1-scale)
+                centerPoint.y -= 100 - Theme.ContentOffset.short.value
+            } else {
+                centerPoint.y += 50
+                centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
+                centerPoint.y -= yOffset
+                centerPoint.y -= self.itemHeight.doubled * (1-scale)
+            }
+            
+        case .write:
+            centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + Theme.ContentOffset.xtraLong.value)
+            
+            if section == 0 {
+                centerPoint.y += self.itemHeight.half
+                centerPoint.y += yOffset
+                centerPoint.y += self.itemHeight.half * (1-scale)
+            } else {
+                centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
+                centerPoint.y -= yOffset
+                centerPoint.y -= self.itemHeight.half * (1-scale)
+            }
         }
-
+        
         return centerPoint
     }
 

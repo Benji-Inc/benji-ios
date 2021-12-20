@@ -26,19 +26,23 @@ class ConversationMessagesCell: UICollectionViewCell {
     @Published var incomingTopmostMessage: ChatMessage?
     
     // CollectionView
-    private(set) lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
+    var collectionLayout: MessagesTimeMachineCollectionViewLayout {
+        return self.collectionView.collectionViewLayout as! MessagesTimeMachineCollectionViewLayout
+    }
+    
     lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: MessagesTimeMachineCollectionViewLayout(with: .write))
         cv.keyboardDismissMode = .interactive
         cv.showsVerticalScrollIndicator = false
         return cv
     }()
+    
     private lazy var dataSource = MessageSequenceCollectionViewDataSource(collectionView: self.collectionView)
 
     /// If true we should scroll to the last item in the collection in layout subviews.
     private var scrollToLastItemOnLayout: Bool = false
 
-    private var state: ConversationUIState = .read
+    //private var state: ConversationUIState = .read
 
     /// The conversation containing all the messages.
     var conversation: Conversation? {
@@ -108,6 +112,25 @@ class ConversationMessagesCell: UICollectionViewCell {
             self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
             self.collectionLayout.invalidateLayout()
         }
+    }
+    
+    /// WIP
+    func transitionTo(state: ConversationUIState) {
+//        guard self.collectionLayout.uiState != state else { return }
+//
+//        let newLayout = MessagesTimeMachineCollectionViewLayout(with: state)
+//        newLayout.dataSource = self.dataSource
+//        newLayout.delegate = self
+//        newLayout.prepare()
+//        self.collectionView.collectionViewLayout = newLayout
+//
+//        UIView.animate(withDuration: Theme.animationDurationSlow) {
+//            self.collectionView.collectionViewLayout.prepareForTransition(to: newLayout)
+//        } completion: { _ in
+//            self.collectionView.collectionViewLayout.finalizeLayoutTransition()
+//            self.scrollToLastItemOnLayout = true
+//            self.layoutNow()
+//        }
     }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
