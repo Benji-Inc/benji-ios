@@ -185,8 +185,6 @@ class DisplayableImageView: BaseView {
 
     func showResult(for image: UIImage?) {
         self.state = image.isNil ? .error : .success
-        Task {
-            self.imageView.image = await image?.byPreparingForDisplay()
-        }.add(to: self.taskPool)
+        self.imageView.image = image
     }
 }
