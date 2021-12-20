@@ -15,6 +15,7 @@ class ThreadCollectionView: CollectionView {
     init() {
         super.init(layout: self.threadLayout)
 
+        self.threadLayout.messageContentState = .thread 
         self.showsVerticalScrollIndicator = false
         self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true
@@ -23,10 +24,6 @@ class ThreadCollectionView: CollectionView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func getBottomFrontMostCell() -> MessageCell? {
-        return self.threadLayout.getBottomFrontmostCell()
     }
 }
 

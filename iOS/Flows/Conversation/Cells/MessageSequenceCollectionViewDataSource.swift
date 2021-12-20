@@ -154,8 +154,7 @@ extension MessageSequenceCollectionViewDataSource {
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
-
-            cell.configure(with: message, showAuthor: false)
+            cell.configure(with: message)
         }
     }
 

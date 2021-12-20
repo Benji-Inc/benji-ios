@@ -268,9 +268,10 @@ extension ConversationController {
     func createNewReply(for messageID: MessageId, with sendable: Sendable) async throws -> MessageId {
         switch sendable.kind {
         case .text(let text):
-            return try await self.createNewReply(sendable: sendable,
-                                                 messageID: messageID,
-                                                 text: text)
+            let messageId = try await self.createNewReply(sendable: sendable,
+                                                          messageID: messageID,
+                                                          text: text)
+            return messageId
         case .attributedText:
             break
         case .photo:

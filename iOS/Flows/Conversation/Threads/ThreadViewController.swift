@@ -20,8 +20,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
     let detailView = MessageDetailView()
-    /// A view that shows where a message should be dragged and dropped to send.
-    private let sendMessageDropZone = MessageDropZoneView()
+    
     private let threadCollectionView = ThreadCollectionView()
 
     /// A controller for the message that all the replies in this thread are responding to.
@@ -240,7 +239,7 @@ extension ThreadViewController: MessageSendingViewControllerType {
             } catch {
                 logError(error)
             }
-        }
+        }.add(to: self.taskPool)
     }
 
     func createNewConversation(_ sendable: Sendable) {

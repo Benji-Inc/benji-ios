@@ -38,7 +38,9 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     var backmostBrightness: CGFloat {
         return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
     }
-
+    
+    var messageContentState: MessageContentView.State = .collapsed
+    
     /// The sort value of the focused right before the most recent invalidation.
     /// This can be used to keep the focused item in place when items are inserted before it.
     private var sortValueOfFocusedItemBeforeInvalidation: Double?
@@ -118,6 +120,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
         attributes.detailAlpha = detailAlpha
         attributes.messageContentAlpha = self.layoutForDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
+        attributes.state = self.messageContentState
 
         return attributes
     }

@@ -54,9 +54,8 @@ class MessageCell: UICollectionViewCell {
         }
     }
 
-    func configure(with message: Messageable, showAuthor: Bool) {
+    func configure(with message: Messageable) {
         self.content.configure(with: message)
-        self.content.state = showAuthor ? .thread : .collapsed
         self.detailView.configure(with: message)
 
         self.setNeedsLayout()
@@ -80,6 +79,7 @@ class MessageCell: UICollectionViewCell {
         self.detailView.height = MessageDetailView.height
         self.detailView.alpha = messageLayoutAttributes.detailAlpha
 
+        self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
         self.content.textView.alpha = messageLayoutAttributes.messageContentAlpha
         self.content.authorView.alpha = messageLayoutAttributes.messageContentAlpha
