@@ -66,6 +66,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
 
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
+    
+    private(set) var topMostIndex: Int = 0
 
     init(channelID: ChannelId,
          messageID: MessageId,
@@ -99,6 +101,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.collectionView.clipsToBounds = false
 
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
+        self.threadCollectionView.threadLayout.delegate = self 
     }
 
     override func viewDidLayoutSubviews() {
@@ -131,12 +134,13 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        if self.collectionView.isTracking {
+        /// Only reset when we are at the end of the stack.
+        if self.collectionView.isTracking, self.topMostIndex == 0 {
             self.detailView.alpha = 0.0
+            
+            KeyboardManager.shared.reset()
+            self.resignFirstResponder()
         }
-
-        KeyboardManager.shared.reset()
-        self.resignFirstResponder()
     }
 
     // MARK: Data Loading
@@ -214,7 +218,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
-        }
+        }.add(to: self.taskPool)
     }
 }
 // MARK: - Messaging
@@ -301,5 +305,12 @@ extension ThreadViewController {
         KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self] frame in
             self.view.layoutNow()
         }.store(in: &self.cancellables)
+    }
+}
+
+extension ThreadViewController: TimeMachineCollectionViewLayoutDelegate {
+    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
+                                         updatedFrontmostItemAt indexPath: IndexPath) {
+        self.topMostIndex = indexPath.row
     }
 }
