@@ -40,11 +40,27 @@ class EmotionView: BaseView {
     
     func configure(for message: Messageable) {
         let controller = ChatClient.shared.messageController(for: message)
-        if let msg = controller?.message, let reaction = msg.latestReactions.first(where: { reaction in
-            return reaction.author.userObjectId == msg.authorId
-        }), let emotion = Emotion(rawValue: reaction.type.rawValue) {
-            self.isVisible = true
-            self.configure(for: emotion)
+        if let data = controller?.message?.extraData["emotions"] {
+            switch data {
+            case .array(let emotions):
+                if let first = emotions.first {
+                    switch first {
+                    case .string(let value):
+                        if let emotion = Emotion.init(rawValue: value) {
+                            self.isVisible = true
+                            self.configure(for: emotion)
+                        } else {
+                            self.isVisible = false 
+                        }
+                    default:
+                        self.isVisible = false
+                    }
+                } else {
+                    self.isVisible = false
+                }
+            default:
+                self.isVisible = false
+            }
         } else {
             self.isVisible = false
         }
