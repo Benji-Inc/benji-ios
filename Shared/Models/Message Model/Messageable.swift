@@ -53,7 +53,7 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
 extension Messageable {
 
     var canBeConsumed: Bool {
-        return self.context != .status && !self.isConsumedByMe
+        return !self.isConsumedByMe
     }
 
     var isConsumed: Bool {
@@ -78,11 +78,7 @@ extension Messageable {
                 return self.context.color
             }
         } else {
-            if self.context == .status {
-                return self.context.color
-            } else {
-                return .clear
-            }
+            return .clear
         }
     }
 

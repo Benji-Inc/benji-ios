@@ -13,7 +13,6 @@ enum MessageContext: String, CaseIterable {
 
     case timeSensitive = "time-sensitive"
     case passive = "active"
-    case status
 
     var color: ThemeColor {
         return .white 
@@ -25,8 +24,6 @@ enum MessageContext: String, CaseIterable {
             return .timeSensitive
         case .passive:
             return .passive
-        case .status:
-            return .passive
         }
     }
 
@@ -36,8 +33,6 @@ enum MessageContext: String, CaseIterable {
             return "Urgently"
         case .passive:
             return "Quietly"
-        case .status:
-            return ""
         }
     }
 }
