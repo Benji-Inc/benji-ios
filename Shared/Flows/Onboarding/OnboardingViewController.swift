@@ -240,7 +240,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     func updateInvitor(with userId: String) async throws {
         let user = try await User.localThenNetworkQuery(for: userId)
         self.invitor = user
-        self.avatarView.set(avatar: user, showFocus: false)
+        self.avatarView.set(avatar: user)
         self.nameLabel.setText(user.givenName.capitalized)
         self.avatarView.isHidden = false
         self.updateUI()
