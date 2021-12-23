@@ -37,15 +37,23 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
         self.imageView.tintColor = ThemeColor.textColor.color
+        self.imageView.isVisible = false
         
         self.createMenu()
         
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { conversation in
-                guard let convo = conversation else { return }
+                guard let convo = conversation else {
+                    self.topicLabel.isVisible = false
+                    self.imageView.isVisible = false
+                    return
+                }
                 self.button.isVisible = convo.isOwnedByMe
                 self.topicLabel.setText(convo.title)
+                self.imageView.isVisible = true
+                self.topicLabel.isVisible = true
+                
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
     }

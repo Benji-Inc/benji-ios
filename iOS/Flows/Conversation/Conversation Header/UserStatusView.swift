@@ -8,21 +8,12 @@
 
 import Foundation
 
-class UserStatusView: UICollectionReusableView {
+class UserStatusView: BaseView {
     
     private let imageView = UIImageView()
     private var currentStatus: FocusStatus?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initializeSubviews()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func initializeSubviews() {
+    override func initializeSubviews() {
         self.contentMode = .scaleAspectFill
         self.set(backgroundColor: .clear)
         
@@ -34,23 +25,30 @@ class UserStatusView: UICollectionReusableView {
         self.layer.borderWidth = 0.25
         
         self.tintColor = ThemeColor.darkGray.color
+        
+        self.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
+        self.alpha = 0.0
     }
     
     func update(status: FocusStatus) {
         guard status != self.currentStatus else { return }
+        
+        self.currentStatus = status 
         Task {
             await UIView.awaitAnimation(with: .fast) {
                 self.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
-                self.imageView.alpha = 0.0
+                self.alpha = 0.0
             }
             
-            self.imageView.image = status.image
+            if self.currentStatus == .focused {
+                self.imageView.image = status.image
 
-            await UIView.awaitSpringAnimation(with: .fast, animations: {
-                self.transform = .identity
-                self.imageView.alpha = 1.0
-            })
-        }
+                await UIView.awaitSpringAnimation(with: .fast, animations: {
+                    self.transform = .identity
+                    self.alpha = 1.0
+                })
+            }
+        }.add(to: self.taskPool)
     }
     
     override func layoutSubviews() {

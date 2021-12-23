@@ -95,7 +95,7 @@ class AvatarView: DisplayableImageView {
             if let user = avatar as? User {
                 self.subscribeToUpdates(for: user)
             } else if let userId = avatar.userObjectId,
-                 let user = await self.findUser(with: userId) {
+                      let user = await UserStore.shared.findUser(with: userId) {
                 self.subscribeToUpdates(for: user)
             }
         }.add(to: self.taskPool)
