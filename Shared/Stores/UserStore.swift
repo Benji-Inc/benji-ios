@@ -91,4 +91,18 @@ class UserStore {
             }
         }
     }
+    
+    func findUser(with objectID: String) async -> User? {
+        var foundUser: User? = nil
+
+        if let user = UserStore.shared.users.first(where: { user in
+            return user.objectId == objectID
+        }) {
+            foundUser = user
+        } else if let user = try? await User.getObject(with: objectID) {
+            foundUser = user
+        }
+        
+        return foundUser
+    }
 }

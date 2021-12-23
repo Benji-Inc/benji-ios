@@ -40,7 +40,10 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             .removeDuplicates()
             .mainSink { conversation in
             Task {
-                guard let cid = conversation?.cid else { return }
+                guard let cid = conversation?.cid else {
+                    await self.dataSource.deleteAllItems()
+                    return
+                }
                 
                 self.conversationController = ChatClient.shared.channelController(for: cid)
 

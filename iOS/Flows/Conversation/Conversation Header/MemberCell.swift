@@ -30,6 +30,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: Member?
 
     let avatarView = AvatarView()
+    let statusView = UserStatusView()
     
     lazy var pulseLayer: CAShapeLayer = {
         let shape = CAShapeLayer()
@@ -47,11 +48,19 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.avatarView)
         
         self.layer.addSublayer(self.pulseLayer)
+        self.contentView.addSubview(self.statusView)
     }
 
     func configure(with item: Member) {
         self.avatarView.set(avatar: item.displayable.value)
         
+        Task {
+            if let userId = item.displayable.value.userObjectId,
+               let user = await UserStore.shared.findUser(with: userId) {
+                self.subscribeToUpdates(for: user)
+            }
+        }
+                
         let typingUsers = item.conversationController.conversation.currentlyTypingUsers
         if typingUsers.contains(where: { typingUser in
             typingUser.userObjectId == item.displayable.value.userObjectId
@@ -71,6 +80,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.pulseLayer.frame = self.avatarView.bounds
         self.pulseLayer.path = UIBezierPath(roundedRect: self.avatarView.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.pulseLayer.position = self.avatarView.center
+        
+        self.statusView.squaredSize = self.height * 0.45
+        self.statusView.match(.right, to: .right, of: self.avatarView, offset: .short)
+        self.statusView.match(.bottom, to: .bottom, of: self.avatarView, offset: .short)
     }
 
     private func beginTyping() {
@@ -98,5 +111,15 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     private func endTyping() {
         self.pulseLayer.strokeColor = ThemeColor.clear.color.cgColor
         self.pulseLayer.removeAllAnimations()
+    }
+    
+    private func subscribeToUpdates(for user: User) {
+        UserStore.shared.$userUpdated.filter { updatedUser in
+            updatedUser?.objectId == user.userObjectId
+        }.mainSink { updatedUser in
+            self.statusView.update(status: updatedUser?.focusStatus ?? .available)
+        }.store(in: &self.cancellables)
+        
+        self.statusView.update(status: user.focusStatus ?? .available)
     }
 }

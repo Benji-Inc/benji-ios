@@ -59,7 +59,7 @@ enum ReactionType: String, CaseIterable {
 
 enum Emotion: String, CaseIterable, Identifiable {
         
-    case appreciation
+    case appreciated
     case amused
     case angry
     case anxious
@@ -71,7 +71,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case craving
     case disgusted
     case empathetic
-    case entrance
+    case entranced
     case excited
     case fearful
     case horrorified
@@ -87,7 +87,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     
     var emoji: String {
         switch self {
-        case .appreciation:
+        case .appreciated:
             return "☺️"
         case .amused:
             return "😂"
@@ -111,7 +111,7 @@ enum Emotion: String, CaseIterable, Identifiable {
             return "😖"
         case .empathetic:
             return "😔"
-        case .entrance:
+        case .entranced:
             return "🤪"
         case .excited:
             return "🤩"
