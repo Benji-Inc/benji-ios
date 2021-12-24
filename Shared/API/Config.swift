@@ -38,7 +38,7 @@ enum Environment: String {
     }
 
     var groupId: String {
-        return "group.com.Jibber"
+        return "group.Jibber"
     }
 
     var chatAPIKey: String {

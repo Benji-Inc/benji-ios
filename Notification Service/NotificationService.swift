@@ -57,7 +57,7 @@ class NotificationService: UNNotificationServiceExtension {
             if Parse.currentConfiguration.isNil  {
                 let config = ParseClientConfiguration { configuration in
                     configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                    configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
+                    configuration.containingApplicationBundleIdentifier = "com.Jibber-iOS"
                     configuration.server = Config.shared.environment.url
                     configuration.applicationId = Config.shared.environment.appId
                     configuration.isLocalDatastoreEnabled = true
