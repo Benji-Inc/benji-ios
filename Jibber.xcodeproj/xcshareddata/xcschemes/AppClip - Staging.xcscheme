@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D6C35A2C2776706F00BE64DC"
+               BuildableName = "AppClipUITests.xctest"
+               BlueprintName = "AppClipUITests"
+               ReferencedContainer = "container:Jibber.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D6C35A222776706F00BE64DC"
+               BuildableName = "AppClipTests.xctest"
+               BlueprintName = "AppClipTests"
+               ReferencedContainer = "container:Jibber.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -44,7 +64,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D6884B0D2587D25C00DA380E"
+            BlueprintIdentifier = "D6C35A112776706E00BE64DC"
             BuildableName = "AppClip.app"
             BlueprintName = "AppClip"
             ReferencedContainer = "container:Jibber.xcodeproj">

@@ -1203,7 +1203,7 @@
 			children = (
 				D6356D7E25A369F80015104F /* Shared */,
 				D6356D8425A36AC00015104F /* iOS */,
-				D6884B0F2587D25C00DA380E /* App Clip */,
+				D6884B0F2587D25C00DA380E /* AppClip */,
 				D63DB1FC25E968C300F6B323 /* Notification Content */,
 				D6AE0F6E267CF9CA00C6B048 /* Notification Service */,
 				D6AE0F7F267CFA6C00C6B048 /* Intents Extension */,
@@ -1766,13 +1766,13 @@
 			path = People;
 			sourceTree = "<group>";
 		};
-		D6884B0F2587D25C00DA380E /* App Clip */ = {
+		D6884B0F2587D25C00DA380E /* AppClip */ = {
 			isa = PBXGroup;
 			children = (
 				D6884B1E2587D25D00DA380E /* Info.plist */,
 				D6884B1F2587D25D00DA380E /* AppClip.entitlements */,
 			);
-			path = "App Clip";
+			path = AppClip;
 			sourceTree = "<group>";
 		};
 		D68BEAD224831F7C00C95D31 /* Reservations */ = {
@@ -2178,7 +2178,7 @@
 		D61EC0B421D3071400204BEE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Benjamin Dodgson";
 				TargetAttributes = {
