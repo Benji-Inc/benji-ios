@@ -3681,7 +3681,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.iOS;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG IOS";
@@ -3709,7 +3709,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.iOS;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = IOS;
@@ -3737,7 +3737,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.NotificationContent;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG NOTIFICATION";
@@ -3764,7 +3764,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.NotificationContent;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = NOTIFICATION;
@@ -3792,7 +3792,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.AppClip;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG APPCLIP";
@@ -3820,7 +3820,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.AppClip;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APPCLIP;
@@ -3853,7 +3853,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -3885,7 +3885,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Jibber.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = NOTIFICATION_SERVICE;
@@ -3918,7 +3918,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber.Intents-ExtensionUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -3950,7 +3950,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber.Intents-ExtensionUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = INTENTS_UI;
@@ -3983,7 +3983,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber.Intents-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = INTENTS_DEBUG;
@@ -4016,7 +4016,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.1.9;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber.Intents-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = INTENTS;
