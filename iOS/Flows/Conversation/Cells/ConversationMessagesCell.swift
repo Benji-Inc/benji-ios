@@ -111,24 +111,6 @@ class ConversationMessagesCell: UICollectionViewCell {
             self.collectionLayout.invalidateLayout()
         }
     }
-    
-//    /// WIP
-//    func transitionTo(state: ConversationUIState) {
-//        guard self.collectionLayout.uiState != state else { return }
-//
-////        self.collectionLayout.invalidateLayout()
-////        self.collectionLayout.prepare()
-//        self.collectionLayout.uiState = state
-//
-//        UIView.animate(withDuration: Theme.animationDurationSlow) {
-//            self.collectionView.visibleCells.forEach { cell in
-//                cell.setNeedsLayout()
-//            }
-//        } completion: { _ in
-//            self.scrollToLastItemOnLayout = true
-//            self.layoutNow()
-//        }
-//    }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
     func set(conversation: Conversation, uiState: ConversationUIState) {

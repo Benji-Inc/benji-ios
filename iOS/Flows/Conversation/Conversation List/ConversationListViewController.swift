@@ -166,10 +166,13 @@ class ConversationListViewController: ViewController {
 
         self.headerVC.update(for: state)
         
-        //self.dataSource.uiState = state
-
-        //self.dataSource.reconfigureAllItems()
-
+        ///WIP
+//        self.dataSource.uiState = state
+//
+//        UIView.animate(withDuration: Theme.animationDurationSlow) {
+//            self.dataSource.reconfigureAllItems()
+//        }
+        
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()
         }
