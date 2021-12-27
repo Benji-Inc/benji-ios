@@ -210,6 +210,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         UIView.animate(withDuration: 0.2, animations: {
             self.animationView.alpha = 0
+            self.cameraVC.boxView.backgroundColor = ThemeColor.white.color.withAlphaComponent(0.6)
             self.view.layoutNow()
         }) { (completed) in
 
@@ -243,7 +244,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func updateUser(with image: UIImage) async {
         guard let data = image.previewData else { return }
-
+                
         do {
             try await self.presentDisclosure(with: data)
         } catch {

@@ -65,6 +65,11 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             }
             self.presentConversationTitleAlert(for: conversation)
         }
+        
+        let vc = PhotoViewController()
+        delay(1.0) {
+            self.router.present(vc, source: self.conversationListVC)
+        }
     }
 
     func handle(deeplink: DeepLinkable) {

@@ -84,7 +84,7 @@ extension FaceDetectionViewController: MTKViewDelegate {
         guard let currentDrawable = view.currentDrawable else {
             return
         }
-
+        
         // make sure the image is full screen
         let drawSize = self.cameraView.drawableSize
         let scaleX = drawSize.width / ciImage.extent.width
@@ -105,5 +105,20 @@ extension FaceDetectionViewController: MTKViewDelegate {
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         // Delegate method not implemented.
+    }
+}
+
+private extension UIView {
+    func drawFace(_ box: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        context.saveGState()
+        
+        defer {
+          context.restoreGState()
+        }
+            
+        context.addRect(box)
+        UIColor.red.setStroke()
+        context.strokePath()
     }
 }

@@ -85,7 +85,7 @@ class AvatarView: DisplayableImageView {
         self.setCorner(radius: Theme.innerCornerRadius)
         self.imageView.layer.borderColor = self.borderColor.color.cgColor
         self.imageView.layer.borderWidth = 2
-        self.imageView.set(backgroundColor: .white)
+        self.imageView.set(backgroundColor: .clear)
     }
 
     // MARK: - Open setters
@@ -97,22 +97,19 @@ class AvatarView: DisplayableImageView {
             } else if let userId = avatar.userObjectId,
                       let user = await UserStore.shared.findUser(with: userId) {
                 self.subscribeToUpdates(for: user)
+            } else {
+                self.initials = avatar.initials
+                self.blurView.effect = nil
+                self.imageView.set(backgroundColor: .white)
+                self.layoutNow()
             }
         }.add(to: self.taskPool)
         
         self.avatar = avatar
-
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
-
-        if avatar.image == nil, avatar.userObjectId == nil {
-            self.initials = avatar.initials
-            self.blurView.effect = nil
-        }
         
         self.displayable = avatar
-        
-        self.layoutNow()
     }
     
     private func subscribeToUpdates(for user: User) {
