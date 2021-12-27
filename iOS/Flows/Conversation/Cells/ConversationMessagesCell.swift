@@ -31,7 +31,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
     
     lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: MessagesTimeMachineCollectionViewLayout(with: .write))
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: MessagesTimeMachineCollectionViewLayout())
         cv.keyboardDismissMode = .interactive
         cv.showsVerticalScrollIndicator = false
         return cv
@@ -41,8 +41,6 @@ class ConversationMessagesCell: UICollectionViewCell {
 
     /// If true we should scroll to the last item in the collection in layout subviews.
     private var scrollToLastItemOnLayout: Bool = false
-
-    //private var state: ConversationUIState = .read
 
     /// The conversation containing all the messages.
     var conversation: Conversation? {
@@ -114,27 +112,26 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
     }
     
-    /// WIP
-    func transitionTo(state: ConversationUIState) {
+//    /// WIP
+//    func transitionTo(state: ConversationUIState) {
 //        guard self.collectionLayout.uiState != state else { return }
 //
-//        let newLayout = MessagesTimeMachineCollectionViewLayout(with: state)
-//        newLayout.dataSource = self.dataSource
-//        newLayout.delegate = self
-//        newLayout.prepare()
-//        self.collectionView.collectionViewLayout = newLayout
+////        self.collectionLayout.invalidateLayout()
+////        self.collectionLayout.prepare()
+//        self.collectionLayout.uiState = state
 //
 //        UIView.animate(withDuration: Theme.animationDurationSlow) {
-//            self.collectionView.collectionViewLayout.prepareForTransition(to: newLayout)
+//            self.collectionView.visibleCells.forEach { cell in
+//                cell.setNeedsLayout()
+//            }
 //        } completion: { _ in
-//            self.collectionView.collectionViewLayout.finalizeLayoutTransition()
 //            self.scrollToLastItemOnLayout = true
 //            self.layoutNow()
 //        }
-    }
+//    }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
-    func set(conversation: Conversation) {
+    func set(conversation: Conversation, uiState: ConversationUIState) {
         // Create a new conversation controller if this is a different conversation than before.
         if conversation.cid != self.conversation?.cid {
             let conversationController = ChatClient.shared.channelController(for: conversation.cid)
@@ -153,6 +150,8 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
 
         self.dataSource.set(messageSequence: conversation, showLoadMore: self.shouldShowLoadMore)
+        
+        self.collectionLayout.uiState = uiState
     }
 
     func set(isPreparedToSend: Bool) {

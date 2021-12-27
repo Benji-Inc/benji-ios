@@ -15,7 +15,7 @@ class ThreadCollectionView: CollectionView {
     }
 
     init() {
-        super.init(layout: MessagesTimeMachineCollectionViewLayout(with: .write))
+        super.init(layout: MessagesTimeMachineCollectionViewLayout())
 
         self.threadLayout.messageContentState = .thread 
         self.showsVerticalScrollIndicator = false

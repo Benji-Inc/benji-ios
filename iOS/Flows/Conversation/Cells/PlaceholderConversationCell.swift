@@ -33,7 +33,7 @@ class PlaceholderConversationCell: UICollectionViewCell {
         super.layoutSubviews()
 
         self.dropZoneView.expandToSuperviewWidth()
-        self.dropZoneView.height = MessageContentView.bubbleHeight
+        self.dropZoneView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.standard.value
         self.dropZoneView.top = 172
     }
 }

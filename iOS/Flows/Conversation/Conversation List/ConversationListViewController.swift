@@ -166,11 +166,9 @@ class ConversationListViewController: ViewController {
 
         self.headerVC.update(for: state)
         
-        self.collectionView.visibleCells.forEach { cell in
-            if let c = cell as? ConversationMessagesCell {
-                c.transitionTo(state: state)
-            }
-        }
+        //self.dataSource.uiState = state
+
+        //self.dataSource.reconfigureAllItems()
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()

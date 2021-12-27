@@ -89,16 +89,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     
-    let uiState: ConversationUIState
-    
-    init(with state: ConversationUIState) {
-        self.uiState = state
-        super.init()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var uiState: ConversationUIState = .write
     
     // MARK: - UICollectionViewLayout Overrides
 

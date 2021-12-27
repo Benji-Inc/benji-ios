@@ -86,10 +86,14 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
             return message.isFromCurrentUser
+        }.filter { message in
+            return !message.isDeleted
         }
 
         let otherMessages = messageSequence.messages.filter { message in
             return !message.isFromCurrentUser
+        }.filter { message in
+            return !message.isDeleted
         }
 
         guard let cid = messageSequence.streamCID else {

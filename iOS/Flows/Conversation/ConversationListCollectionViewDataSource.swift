@@ -30,7 +30,6 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
-    @Published var conversationUIState: ConversationUIState = .read
 
     /// The conversation ID of the conversation that is preparing to send, if any.
     private var conversationPreparingToSend: ConversationId?
@@ -42,6 +41,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     = ConversationListCollectionViewDataSource.createLoadMoreCellRegistration()
     private let newConversationCellRegistration
     = ConversationListCollectionViewDataSource.createNewConversationCellRegistration()
+    
+    var uiState: ConversationUIState = .write
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -53,7 +54,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             let conversationCell
             = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
                                                            for: indexPath,
-                                                           item: (cid, self))
+                                                           item: (cid, self.uiState, self))
             conversationCell.handleTappedMessage = { [unowned self] cid, messageID, content in
                 self.handleSelectedMessage?(cid, messageID, content)
             }
@@ -122,6 +123,7 @@ extension ConversationListCollectionViewDataSource {
     typealias ConversationCellRegistration
     = UICollectionView.CellRegistration<ConversationMessagesCell,
                                         (channelID: ChannelId,
+                                         uiState: ConversationUIState,
                                          dataSource: ConversationListCollectionViewDataSource)>
 
     typealias LoadMoreMessagesCellRegistration
@@ -140,7 +142,7 @@ extension ConversationListCollectionViewDataSource {
                 cell.set(isPreparedToSend: false)
             }
 
-            cell.set(conversation: conversationController.conversation)
+            cell.set(conversation: conversationController.conversation, uiState: item.uiState)
         }
     }
 
