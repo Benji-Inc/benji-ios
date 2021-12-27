@@ -43,7 +43,7 @@ class MessageCell: UICollectionViewCell {
         self.detailView.expandToSuperviewWidth()
         self.content.expandToSuperviewWidth()
 
-        self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.short.value))
+        self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
 
         if self.content.bubbleView.orientation == .down {
             self.content.pin(.top)
