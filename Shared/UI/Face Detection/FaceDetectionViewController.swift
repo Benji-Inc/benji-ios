@@ -35,7 +35,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
     }
 
     lazy var cameraView = MTKView()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,10 +44,13 @@ class FaceDetectionViewController: ImageCaptureViewController {
         self.setupCoreImage()
         
         self.view.addSubview(self.cameraView)
+        self.view.addSubview(self.boxView)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.boxView.expandToSuperviewSize()
         
         self.cameraView.expandToSuperviewSize()
     }

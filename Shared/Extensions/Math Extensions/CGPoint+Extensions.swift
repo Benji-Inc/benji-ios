@@ -54,6 +54,12 @@ extension CGPoint {
     }
 }
 
+extension CGSize {
+  var cgPoint: CGPoint {
+    return CGPoint(x: width, y: height)
+  }
+}
+
 extension CGPoint {
   var cgSize: CGSize {
     return CGSize(width: x, height: y)

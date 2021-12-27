@@ -31,6 +31,8 @@ class ImageCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
 
     private(set) var cameraType: CameraType = .front
     var flashMode: AVCaptureDevice.FlashMode = .auto
+    
+    var boxView = BoxView() 
 
     func begin() {
         Task {
@@ -40,7 +42,7 @@ class ImageCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
                 self.configureCaptureSession()
                 self.session.startRunning()
             }
-        }
+        }.add(to: self.taskPool)
     }
 
     func stop() {

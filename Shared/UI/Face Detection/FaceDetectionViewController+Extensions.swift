@@ -84,7 +84,7 @@ extension FaceDetectionViewController: MTKViewDelegate {
         guard let currentDrawable = view.currentDrawable else {
             return
         }
-
+        
         // make sure the image is full screen
         let drawSize = self.cameraView.drawableSize
         let scaleX = drawSize.width / ciImage.extent.width

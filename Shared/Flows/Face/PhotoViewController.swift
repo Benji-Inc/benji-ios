@@ -210,6 +210,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         UIView.animate(withDuration: 0.2, animations: {
             self.animationView.alpha = 0
+            self.cameraVC.boxView.alpha = 1.0
             self.view.layoutNow()
         }) { (completed) in
 
@@ -243,8 +244,11 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func updateUser(with image: UIImage) async {
         guard let data = image.previewData else { return }
-
+                
         do {
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.cameraVC.boxView.alpha = 0.0
+            })
             try await self.presentDisclosure(with: data)
         } catch {
             self.animateError(with: "There was an error uploading your photo.", show: true)
