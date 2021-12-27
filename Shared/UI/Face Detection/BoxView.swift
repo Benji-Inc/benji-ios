@@ -16,6 +16,10 @@ class BoxView: PassThroughView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.alpha = 0
+        
+        self.backgroundColor = ThemeColor.white.color.withAlphaComponent(0.6)
                 
         // Fill rule set to exclude intersected paths
         self.maskLayer.fillRule = CAShapeLayerFillRule.evenOdd

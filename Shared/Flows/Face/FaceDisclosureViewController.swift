@@ -84,13 +84,12 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         switch self.captureType {
         case .smiling:
-            break
-            //let file = PFFileObject(name:"small_image.jpeg", data: data)
-            //currentUser.smallImage = file
+            let file = PFFileObject(name:"small_image.jpeg", data: data)
+            currentUser.smallImage = file
         }
 
         do {
-            //try await currentUser.saveToServer()
+            try await currentUser.saveToServer()
             Task.onMainActor {
                 self.updateUI(data: data)
             }
