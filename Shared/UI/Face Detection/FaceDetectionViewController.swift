@@ -81,7 +81,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
     }
 
     func detectedFace(request: VNRequest, error: Error?) {
-        guard let results = request.results as? [VNFaceObservation], let faceResult = results.first else {
+        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
             self.faceDetected = false
             return
         }

@@ -107,18 +107,3 @@ extension FaceDetectionViewController: MTKViewDelegate {
         // Delegate method not implemented.
     }
 }
-
-private extension UIView {
-    func drawFace(_ box: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.saveGState()
-        
-        defer {
-          context.restoreGState()
-        }
-            
-        context.addRect(box)
-        UIColor.red.setStroke()
-        context.strokePath()
-    }
-}

@@ -13,12 +13,6 @@ class AvatarView: DisplayableImageView {
     
     // MARK: - Properties
 
-    var borderColor: ThemeColor = .clear {
-        didSet {
-            self.setBorder(color: self.borderColor)
-        }
-    }
-
     var initials: String? {
         didSet {
             self.setImageFrom(initials: self.initials)
@@ -61,7 +55,6 @@ class AvatarView: DisplayableImageView {
             return
         }
 
-        self.imageView.isHidden = true
         self.label.isHidden = false
         self.label.setText(initials.uppercased())
         self.label.textAlignment = .center
@@ -78,14 +71,12 @@ class AvatarView: DisplayableImageView {
     }
 
     private func prepareView() {
-        self.insertSubview(self.label, belowSubview: self.imageView)
+        self.insertSubview(self.label, aboveSubview: self.imageView)
         self.imageView.contentMode = .scaleAspectFill
         self.imageView.layer.masksToBounds = true
         self.imageView.clipsToBounds = true
         self.setCorner(radius: Theme.innerCornerRadius)
-        self.imageView.layer.borderColor = self.borderColor.color.cgColor
-        self.imageView.layer.borderWidth = 2
-        self.imageView.set(backgroundColor: .clear)
+        self.imageView.set(backgroundColor: .white)
     }
 
     // MARK: - Open setters
@@ -97,11 +88,6 @@ class AvatarView: DisplayableImageView {
             } else if let userId = avatar.userObjectId,
                       let user = await UserStore.shared.findUser(with: userId) {
                 self.subscribeToUpdates(for: user)
-            } else {
-                self.initials = avatar.initials
-                self.blurView.effect = nil
-                self.imageView.set(backgroundColor: .white)
-                self.layoutNow()
             }
         }.add(to: self.taskPool)
         
@@ -110,6 +96,15 @@ class AvatarView: DisplayableImageView {
         self.addInteraction(interaction)
         
         self.displayable = avatar
+    }
+    
+    override func showResult(for image: UIImage?) {
+        super.showResult(for: image)
+        
+        if image.isNil, let avatar = self.avatar {
+            self.initials = avatar.initials
+            self.blurView.effect = nil
+        }
     }
     
     private func subscribeToUpdates(for user: User) {
@@ -129,11 +124,6 @@ class AvatarView: DisplayableImageView {
         }
         self.radius = radius
         self.imageView.layer.cornerRadius = radius
-    }
-
-    func setBorder(color: ThemeColor) {
-        self.imageView.layer.borderColor = color.color.cgColor
-        self.imageView.layer.borderWidth = 2
     }
 
     override func layoutSubviews() {
