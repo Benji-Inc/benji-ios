@@ -56,6 +56,16 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
+        
+        self.membersVC.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first else { return }
+            switch first {
+            case .member(_):
+                break
+            case .add(_):
+                self.didTapAddPeople?()
+            }
+        }.store(in: &self.cancellables)
     }
     
     private func createMenu() {

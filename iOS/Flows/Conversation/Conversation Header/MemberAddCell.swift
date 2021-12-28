@@ -16,22 +16,31 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: ChannelId?
 
     let imageView = UIImageView()
+    let containerView = BaseView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.contentView.clipsToBounds = false
-        self.contentView.addSubview(self.imageView)
+        self.contentView.addSubview(self.containerView)
+        self.containerView.addSubview(self.imageView)
         self.imageView.image = UIImage(systemName: "plus")
         self.imageView.tintColor = ThemeColor.white.color
+        
+        self.containerView.set(backgroundColor: .textColor)
+        self.containerView.layer.masksToBounds = true
+        self.containerView.layer.cornerRadius = Theme.innerCornerRadius
     }
     
     func configure(with item: ChannelId) {}
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        self.imageView.squaredSize = self.contentView.height
+        
+        self.containerView.squaredSize = self.contentView.height
+        self.containerView.centerOnXAndY()
+        
+        self.imageView.squaredSize = self.containerView.height * 0.5
         self.imageView.centerOnXAndY()
     }
 }
