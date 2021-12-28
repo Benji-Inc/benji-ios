@@ -19,6 +19,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     // Interaction handling
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
+    var handleTopicTapped: ((ConversationId) -> Void)?
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
@@ -82,6 +83,10 @@ class ConversationMessagesCell: UICollectionViewCell {
 
         self.dataSource.handleEditMessage = { [unowned self] cid, messageID in
             self.handleEditMessage?(cid, messageID)
+        }
+        
+        self.dataSource.handleTopicTapped = { [unowned self] cid in
+            self.handleTopicTapped?(cid)
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
@@ -235,7 +240,7 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
         switch item {
         case .message(cid: let cid, messageID: let messageID):
             self.handleTappedMessage?(cid, messageID, cell.content)
-        case .loadMore, .placeholder:
+        case .loadMore, .placeholder, .initial:
             break
         }
     }
@@ -255,7 +260,7 @@ extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
         case .message(cid: let cid, messageID: let messageID):
             let message = ChatClient.shared.message(cid: cid, id: messageID)
             self.incomingTopmostMessage = message
-        case .loadMore, .placeholder:
+        case .loadMore, .placeholder, .initial:
             break
         }
     }

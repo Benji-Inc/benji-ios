@@ -24,11 +24,13 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         case message(cid: ConversationId, messageID: MessageId)
         case loadMore(cid: ConversationId)
         case placeholder
+        case initial(cid: ConversationId)
     }
 
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
+    var handleTopicTapped: ((ConversationId) -> Void)?
 
     /// If true, push the bottom messages back to prepare for a new message.
     var shouldPrepareToSend = false
@@ -42,6 +44,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     = MessageSequenceCollectionViewDataSource.createLoadMoreCellRegistration()
     private let placeholderRegistration
     = MessageSequenceCollectionViewDataSource.createPlaceholderMessageCellRegistration()
+    private let initialCellRegistration
+    = MessageSequenceCollectionViewDataSource.createInitialCellRegistration()
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -74,6 +78,14 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             return collectionView.dequeueConfiguredReusableCell(using: self.placeholderRegistration,
                                                                 for: indexPath,
                                                                 item: collectionView)
+        case .initial(let conversationID):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.initialCellRegistration,
+                                                                            for: indexPath,
+                                                                            item: (conversationID, collectionView))
+            cell.handleTopicTapped = { [unowned self] in
+                self.handleTopicTapped?(conversationID)
+            }
+            return cell
         }
     }
 
@@ -106,19 +118,21 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             return ItemType.message(cid: cid, messageID: message.id)
         }
 
-        if showLoadMore {
-            userMessageItems.append(.loadMore(cid: cid))
-        }
-
         userMessageItems = userMessageItems.reversed()
         if self.shouldPrepareToSend {
             userMessageItems.append(.placeholder)
         }
 
-        let otherMessageItems = otherMessages.reversed().map { message in
+        var otherMessageItems = otherMessages.reversed().map { message in
             return ItemType.message(cid: cid, messageID: message.id)
         }
-
+        
+        if showLoadMore {
+            userMessageItems.append(.loadMore(cid: cid))
+        } else {
+            otherMessageItems.insert(.initial(cid: cid), at: 0)
+        }
+        
         var snapshot = self.snapshot()
 
         var animateDifference = true
@@ -152,6 +166,8 @@ extension MessageSequenceCollectionViewDataSource {
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, UICollectionView?>
     typealias PlaceholderMessageCellRegistration
     = UICollectionView.CellRegistration<PlaceholderMessageCell, UICollectionView?>
+    typealias InitialMessageCellRegistration
+    = UICollectionView.CellRegistration<InitialMessageCell, (channelID: ChannelId, UICollectionView?)>
 
     static func createMessageCellRegistration() -> MessageCellRegistration {
         return MessageCellRegistration { cell, indexPath, item in
@@ -168,6 +184,13 @@ extension MessageSequenceCollectionViewDataSource {
 
     static func createPlaceholderMessageCellRegistration() -> PlaceholderMessageCellRegistration {
         return PlaceholderMessageCellRegistration { cell, indexPath, itemIdentifier in }
+    }
+    
+    static func createInitialCellRegistration() -> InitialMessageCellRegistration {
+        return InitialMessageCellRegistration { cell, indexPath, item in
+            let controller = ChatClient.shared.channelController(for: item.channelID)
+            cell.configure(with: controller.conversation)
+        }
     }
 }
 
@@ -189,14 +212,14 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
             let messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
             // If the item doesn't correspond to an actual message, then assume it's in the front.
             return messageController.message ?? TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)
-        case .loadMore:
+        case .loadMore, .initial:
             // Get all of the message items.
             let timeMachineItems: [TimeMachineLayoutItemType]
             = self.snapshot().itemIdentifiers.compactMap { itemIdentifier in
                 switch itemIdentifier {
                 case .message:
                     return self.getTimeMachineItem(forItem: itemIdentifier)
-                case .loadMore, .placeholder:
+                case .loadMore, .placeholder, .initial:
                     return nil
                 }
             }
