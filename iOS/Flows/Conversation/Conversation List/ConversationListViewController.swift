@@ -180,7 +180,7 @@ class ConversationListViewController: ViewController {
             await UIView.awaitAnimation(with: .fast, animations: {
                 self.view.layoutNow()
             })
-        }
+        }.add(to: self.taskPool)
     }
 
     func update(withCenteredConversation cid: ConversationId?) {

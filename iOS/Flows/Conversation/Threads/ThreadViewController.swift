@@ -180,7 +180,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                         
         Task {
             await self.set(state: state)
-        }
+        }.add(to: self.taskPool)
     }
     
     @MainActor
