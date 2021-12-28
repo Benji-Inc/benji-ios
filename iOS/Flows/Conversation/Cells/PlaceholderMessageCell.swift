@@ -38,7 +38,7 @@ class PlaceholderMessageCell: UICollectionViewCell {
         super.layoutSubviews()
 
         self.dropZoneView.expandToSuperviewWidth()
-        self.dropZoneView.height = MessageContentView.bubbleHeight
+        self.dropZoneView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.standard.value
     }
 
     override func prepareForReuse() {

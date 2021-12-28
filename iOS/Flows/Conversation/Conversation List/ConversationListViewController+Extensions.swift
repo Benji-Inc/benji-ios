@@ -31,6 +31,10 @@ extension ConversationListViewController {
         self.dataSource.handleLoadMoreMessages = { [unowned self] in
             self.loadMoreConversationsIfNeeded()
         }
+        
+        self.dataSource.handleTopicTapped = { [unowned self] _ in
+            self.headerVC.didTapUpdateTopic?()
+        }
     }
 
     func subscribeToKeyboardUpdates() {
