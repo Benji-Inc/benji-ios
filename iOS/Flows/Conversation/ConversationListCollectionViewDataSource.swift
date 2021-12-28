@@ -146,7 +146,8 @@ extension ConversationListCollectionViewDataSource {
                 cell.set(isPreparedToSend: false)
             }
 
-            cell.set(conversation: conversationController.conversation, uiState: item.uiState)
+            cell.set(conversation: conversationController.conversation)
+            cell.set(uiState: item.uiState)
         }
     }
 
