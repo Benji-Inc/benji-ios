@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 typealias MembersSectionType = MembersCollectionViewDataSource.SectionType
 typealias MembersItemType = MembersCollectionViewDataSource.ItemType
@@ -19,9 +20,11 @@ class MembersCollectionViewDataSource: CollectionViewDataSource<MembersCollectio
 
     enum ItemType: Hashable {
         case member(Member)
+        case add(ChannelId)
     }
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
+    private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -34,6 +37,10 @@ class MembersCollectionViewDataSource: CollectionViewDataSource<MembersCollectio
             return collectionView.dequeueConfiguredReusableCell(using: self.memberConfig,
                                                                 for: indexPath,
                                                                 item: member)
+        case .add(let cid):
+            return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
+                                                                for: indexPath,
+                                                                item: cid)
         }
     }
 }
