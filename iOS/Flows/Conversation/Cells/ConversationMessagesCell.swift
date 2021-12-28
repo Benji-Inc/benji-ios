@@ -11,10 +11,14 @@ import StreamChat
 import UIKit
 import Combine
 
+protocol ConversationUIStateSettable {
+    func set(state: ConversationUIState)
+}
+
 /// A cell to display the messages of a conversation.
 /// The user's messages and other messages are put in two stacks (along the z-axis),
 /// with the most recent messages at the front.
-class ConversationMessagesCell: UICollectionViewCell {
+class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable {
 
     // Interaction handling
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -117,12 +121,12 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
     }
     
-    func set(uiState: ConversationUIState) {
-        self.collectionLayout.uiState = uiState
+    func set(state: ConversationUIState) {
+        self.collectionLayout.uiState = state
         self.collectionLayout.prepareForTransition(to: self.collectionLayout)
         
         Task {
-            await UIView.awaitAnimation(with: .slow, animations: {
+            await UIView.awaitAnimation(with: .standard, animations: {
                 self.scrollToLastItemOnLayout = true
                 self.setNeedsLayout()
                 self.collectionLayout.finalizeLayoutTransition()

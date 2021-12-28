@@ -89,7 +89,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     
-    var uiState: ConversationUIState = .write
+    var uiState: ConversationUIState = .read
     
     // MARK: - UICollectionViewLayout Overrides
 

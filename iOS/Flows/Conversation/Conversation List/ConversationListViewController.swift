@@ -170,8 +170,8 @@ class ConversationListViewController: ViewController {
         
         Task {
             self.collectionView.visibleCells.forEach { cell in
-                if let c = cell as? ConversationMessagesCell {
-                    c.set(uiState: state)
+                if let settable = cell as? ConversationUIStateSettable {
+                    settable.set(state: state)
                 }
             }
             
