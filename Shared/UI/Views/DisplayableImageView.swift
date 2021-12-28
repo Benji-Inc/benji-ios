@@ -32,12 +32,7 @@ class DisplayableImageView: BaseView {
 
     var displayable: ImageDisplayable? {
         didSet {
-            guard let displayable = self.displayable else {
-                Task {
-                    await self.showResult(for: nil)
-                }.add(to: self.taskPool)
-                return
-            }
+            guard let displayable = self.displayable else { return }
 
             Task {
                 await self.updateImageView(with: displayable)

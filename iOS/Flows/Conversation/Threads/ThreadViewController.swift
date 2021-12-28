@@ -114,7 +114,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value
         self.detailView.height = MessageDetailView.height
-        self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .short)
+        self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
         self.detailView.centerOnX()
 
         self.collectionView.collectionViewLayout.invalidateLayout()

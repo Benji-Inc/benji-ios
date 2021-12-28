@@ -169,7 +169,7 @@ class MessageContentView: BaseView {
         // Don't show the author for the collapsed state.
         guard state != .collapsed else { return .zero }
 
-        let authorHeight: CGFloat = MessageContentView.standardHeight
+        let authorHeight: CGFloat = MessageContentView.standardHeight - Theme.ContentOffset.short.value
         return self.authorView.getSize(for: authorHeight)
     }
 
