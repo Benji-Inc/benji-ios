@@ -33,16 +33,17 @@ class DisplayableImageView: BaseView {
     var displayable: ImageDisplayable? {
         didSet {
             guard let displayable = self.displayable else {
-                self.showResult(for: nil)
+                Task {
+                    await self.showResult(for: nil)
+                }.add(to: self.taskPool)
                 return
             }
 
-            self.updateImageView(with: displayable)
-            self.setNeedsLayout()
+            Task {
+                await self.updateImageView(with: displayable)
+            }.add(to: self.taskPool)
         }
     }
-
-    var didDisplayImage: ((UIImage) -> Void)? = nil
 
     deinit {
         self.reset()
@@ -107,20 +108,16 @@ class DisplayableImageView: BaseView {
         self.animationView.centerOnXAndY()
     }
 
-    func updateImageView(with displayable: ImageDisplayable) {
+    func updateImageView(with displayable: ImageDisplayable) async {
         if let photo = displayable.image {
-            self.showResult(for: photo)
+            await self.showResult(for: photo)
         } else if let objectID = displayable.userObjectId {
-            Task {
-                let foundUser = await UserStore.shared.findUser(with: objectID)
-                if let user = foundUser {
-                    self.downloadAndSetImage(for: user)
-                }
-            }.add(to: self.taskPool)
+            let foundUser = await UserStore.shared.findUser(with: objectID)
+            if let user = foundUser {
+                self.downloadAndSetImage(for: user)
+            }
         } else if let file = displayable as? PFFileObject {
-            Task {
-                await self.downloadAndSet(file: file)
-            }.add(to: self.taskPool)
+            await self.downloadAndSet(file: file)
         }
     }
 
@@ -147,10 +144,10 @@ class DisplayableImageView: BaseView {
 
             guard !Task.isCancelled else { return }
 
-            self.showResult(for: image)
+            await self.showResult(for: image)
         } catch {
             guard !Task.isCancelled else { return }
-            self.showResult(for: nil)
+            await self.showResult(for: nil)
         }
     }
 
@@ -169,8 +166,10 @@ class DisplayableImageView: BaseView {
         self.blurView.showBlur(true)
     }
 
-    func showResult(for image: UIImage?) {
+    @MainActor
+    func showResult(for image: UIImage?) async {
         self.state = image.isNil ? .error : .success
-        self.imageView.image = image
+        self.imageView.image = await image?.byPreparingForDisplay()
+        self.setNeedsLayout()
     }
 }

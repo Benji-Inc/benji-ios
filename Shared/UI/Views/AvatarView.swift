@@ -21,22 +21,6 @@ class AvatarView: DisplayableImageView {
 
     private let label = ThemeLabel(font: .regularBold, textColor: .textColor)
 
-    private var radius: CGFloat?
-
-    // MARK: - Overridden Properties
-    
-    override var frame: CGRect {
-        didSet {
-            self.setCorner(radius: self.radius)
-        }
-    }
-
-    override var bounds: CGRect {
-        didSet {
-            self.setCorner(radius: self.radius)
-        }
-    }
-
     // MARK: - Initializers
 
     override init() {
@@ -75,7 +59,7 @@ class AvatarView: DisplayableImageView {
         self.imageView.contentMode = .scaleAspectFill
         self.imageView.layer.masksToBounds = true
         self.imageView.clipsToBounds = true
-        self.setCorner(radius: Theme.innerCornerRadius)
+        self.imageView.layer.cornerRadius = Theme.innerCornerRadius
         self.imageView.set(backgroundColor: .white)
     }
 
@@ -98,8 +82,8 @@ class AvatarView: DisplayableImageView {
         self.displayable = avatar
     }
     
-    override func showResult(for image: UIImage?) {
-        super.showResult(for: image)
+    override func showResult(for image: UIImage?) async {
+        await super.showResult(for: image)
         
         if image.isNil, let avatar = self.avatar {
             self.initials = avatar.initials
@@ -113,17 +97,6 @@ class AvatarView: DisplayableImageView {
         }.mainSink { updatedUser in
             self.displayable = updatedUser
         }.store(in: &self.cancellables)
-    }
-
-    func setCorner(radius: CGFloat?) {
-        guard let radius = radius else {
-            //if corner radius not set default to Circle
-            let cornerRadius = min(frame.width, frame.height)
-            self.imageView.layer.cornerRadius = cornerRadius/2
-            return
-        }
-        self.radius = radius
-        self.imageView.layer.cornerRadius = radius
     }
 
     override func layoutSubviews() {
