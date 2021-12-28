@@ -129,9 +129,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         
         if showLoadMore {
             userMessageItems.append(.loadMore(cid: cid))
-        }
-        // IDK how this works. Seems to be in correct position but it scrolls away before the cell above it which seems backwards. 
-        else {
+        } else {
             otherMessageItems.insert(.initial(cid: cid), at: 0)
         }
         
@@ -214,7 +212,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
             let messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
             // If the item doesn't correspond to an actual message, then assume it's in the front.
             return messageController.message ?? TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)
-        case .loadMore:
+        case .loadMore, .initial:
             // Get all of the message items.
             let timeMachineItems: [TimeMachineLayoutItemType]
             = self.snapshot().itemIdentifiers.compactMap { itemIdentifier in
@@ -236,9 +234,6 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
             // Put the load more item right before the oldest message item.
             return TimeMachineLayoutItem(sortValue: oldestItem.sortValue.nextDown)
         case .placeholder:
-            return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)
-        case .initial:
-            // not sure about this.
             return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)
         }
     }
