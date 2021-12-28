@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 import Combine
 
-enum ConversationUIState {
+enum ConversationUIState: String {
     case read // Keyboard is NOT shown
     case write // Keyboard IS shown
 
