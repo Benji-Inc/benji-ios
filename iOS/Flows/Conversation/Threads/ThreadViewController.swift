@@ -68,6 +68,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
     
     private(set) var topMostIndex: Int = 0
+    
+    @Published var state: ConversationUIState = .read
+    
+    /// If true we should scroll to the last item in the collection in layout subviews.
+    private var scrollToLastItemOnLayout: Bool = false
 
     init(channelID: ChannelId,
          messageID: MessageId,
@@ -101,7 +106,24 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.collectionView.clipsToBounds = false
 
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
-        self.threadCollectionView.threadLayout.delegate = self 
+        self.threadCollectionView.threadLayout.delegate = self
+        
+        KeyboardManager.shared.$willKeyboardShow
+            .filter({ willShow in
+                if let view = KeyboardManager.shared.inputAccessoryView as? SwipeableInputAccessoryView {
+                    return view.textView.restorationIdentifier == self.messageInputAccessoryView.textView.restorationIdentifier
+                }
+                return false
+            })
+            .mainSink { [unowned self] willShow in
+                self.state = willShow ? .write : .read
+            }.store(in: &self.cancellables)
+        
+        self.$state
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+                self.updateUI(for: state)
+            }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -114,13 +136,23 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value
         self.detailView.height = MessageDetailView.height
-        self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .short)
+        self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
         self.detailView.centerOnX()
 
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pinToSafeArea(.top, offset: .noOffset)
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.centerOnX()
+        
+        if self.scrollToLastItemOnLayout {
+            self.scrollToLastItemOnLayout = false
+
+            self.threadCollectionView.threadLayout.prepare()
+            let maxOffset = self.threadCollectionView.threadLayout.maxZPosition
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
+            self.threadCollectionView.threadLayout.invalidateLayout()
+        }
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -141,6 +173,29 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             KeyboardManager.shared.reset()
             self.resignFirstResponder()
         }
+    }
+    
+    func updateUI(for state: ConversationUIState) {
+        guard self.presentedViewController.isNil else { return }
+                        
+        Task {
+            await self.set(state: state)
+        }.add(to: self.taskPool)
+    }
+    
+    @MainActor
+    private func set(state: ConversationUIState) async {
+        self.threadCollectionView.threadLayout.uiState = state
+        self.threadCollectionView.threadLayout.prepareForTransition(to: self.threadCollectionView.threadLayout)
+        
+        await UIView.awaitAnimation(with: .standard, animations: {
+            self.threadCollectionView.threadLayout.finalizeLayoutTransition()
+        })
+        
+        await UIView.awaitAnimation(with: .fast, animations: {
+            self.scrollToLastItemOnLayout = true
+            self.view.setNeedsLayout()
+        })
     }
 
     // MARK: Data Loading

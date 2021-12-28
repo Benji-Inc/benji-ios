@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 import Combine
 
-enum ConversationUIState {
+enum ConversationUIState: String {
     case read // Keyboard is NOT shown
     case write // Keyboard IS shown
 
@@ -166,16 +166,21 @@ class ConversationListViewController: ViewController {
 
         self.headerVC.update(for: state)
         
-        ///WIP
-//        self.dataSource.uiState = state
-//
-//        UIView.animate(withDuration: Theme.animationDurationSlow) {
-//            self.dataSource.reconfigureAllItems()
-//        }
+        self.dataSource.uiState = state
         
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.view.layoutNow()
-        }
+        Task {
+            self.collectionView.visibleCells.forEach { cell in
+                if let settable = cell as? ConversationUIStateSettable {
+                    settable.set(state: state)
+                }
+            }
+            
+            await self.dataSource.reconfigureAllItems()
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.view.layoutNow()
+            })
+        }.add(to: self.taskPool)
     }
 
     func update(withCenteredConversation cid: ConversationId?) {

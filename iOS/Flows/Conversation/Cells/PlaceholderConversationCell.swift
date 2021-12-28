@@ -8,9 +8,10 @@
 
 import Foundation
 
-class PlaceholderConversationCell: UICollectionViewCell {
+class PlaceholderConversationCell: UICollectionViewCell, ConversationUIStateSettable {
 
     let dropZoneView = MessageDropZoneView()
+    var topOffset: CGFloat = 172
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,6 +35,15 @@ class PlaceholderConversationCell: UICollectionViewCell {
 
         self.dropZoneView.expandToSuperviewWidth()
         self.dropZoneView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.standard.value
-        self.dropZoneView.top = 172
+        self.dropZoneView.top = self.topOffset
+    }
+    
+    func set(state: ConversationUIState) {
+        Task {
+            self.topOffset = state == .write ? 172 : 306
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.setNeedsLayout()
+            })
+        }
     }
 }

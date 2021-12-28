@@ -43,7 +43,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     private let newConversationCellRegistration
     = ConversationListCollectionViewDataSource.createNewConversationCellRegistration()
     
-    var uiState: ConversationUIState = .write
+    var uiState: ConversationUIState = .read
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -146,7 +146,8 @@ extension ConversationListCollectionViewDataSource {
                 cell.set(isPreparedToSend: false)
             }
 
-            cell.set(conversation: conversationController.conversation, uiState: item.uiState)
+            cell.set(conversation: conversationController.conversation)
+            cell.set(state: item.uiState)
         }
     }
 
@@ -155,7 +156,9 @@ extension ConversationListCollectionViewDataSource {
     }
 
     static func createNewConversationCellRegistration() -> NewConversationCellRegistration {
-        return NewConversationCellRegistration { cell, indexPath, itemIdentifier in }
+        return NewConversationCellRegistration { cell, indexPath, itemIdentifier in
+            cell.set(state: itemIdentifier.uiState)
+        }
     }
 }
 
