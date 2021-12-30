@@ -23,7 +23,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         return .fade
     }
 
-    lazy var welcomeVC = WelcomeViewController()
+    lazy var welcomeVC = newWelcomeViewController()
     lazy var phoneVC = PhoneViewController()
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
@@ -65,30 +65,34 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.load(animation: .loading)
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
+        
+        Task {
+            try await self.updateInvitor(with: newWelcomeViewController.benjiId)
+        }
 
-        self.welcomeVC.$state.mainSink { (state) in
-            switch state {
-            case .welcome:
-                self.updateUI()
-            case .login:
-                Task {
-                    try await self.updateInvitor(with: "IQgIBSPHpE")
-                }
-                self.current = .phone(self.phoneVC)
-            case .reservationInput:
-                self.updateUI()
-            case .foundReservation(let reservation):
-                self.reservationId = reservation.objectId
-                if let identity = reservation.createdBy?.objectId {
-                    Task {
-                        try await self.updateInvitor(with: identity)
-                    }
-                }
-                self.current = .phone(self.phoneVC)
-            case .reservationError:
-                self.updateUI()
-            }
-        }.store(in: &self.cancellables)
+//        self.welcomeVC.$state.mainSink { (state) in
+//            switch state {
+//            case .welcome:
+//                self.updateUI()
+//            case .login:
+//                Task {
+//                    try await self.updateInvitor(with: "IQgIBSPHpE")
+//                }
+//                self.current = .phone(self.phoneVC)
+//            case .reservationInput:
+//                self.updateUI()
+//            case .foundReservation(let reservation):
+//                self.reservationId = reservation.objectId
+//                if let identity = reservation.createdBy?.objectId {
+//                    Task {
+//                        try await self.updateInvitor(with: identity)
+//                    }
+//                }
+//                self.current = .phone(self.phoneVC)
+//            case .reservationError:
+//                self.updateUI()
+//            }
+//        }.store(in: &self.cancellables)
 
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {

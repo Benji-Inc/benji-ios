@@ -50,7 +50,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     return
                 }
                 self.button.isVisible = convo.isOwnedByMe
-                self.topicLabel.setText(convo.title)
+                self.topicLabel.setText(convo.cid.description)
                 self.imageView.isVisible = true
                 self.topicLabel.isVisible = true
                 

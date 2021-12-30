@@ -1,0 +1,30 @@
+//
+//  WelcomeCollectionView.swift
+//  Jibber
+//
+//  Created by Benji Dodgson on 12/30/21.
+//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+
+class WelcomeCollectionView: CollectionView {
+
+    var timeMachineLayout: MessagesTimeMachineCollectionViewLayout {
+        return self.collectionViewLayout as! MessagesTimeMachineCollectionViewLayout
+    }
+
+    init() {
+        super.init(layout: MessagesTimeMachineCollectionViewLayout())
+
+        self.timeMachineLayout.messageContentState = .collapsed
+        self.showsVerticalScrollIndicator = false
+        self.keyboardDismissMode = .interactive
+        self.automaticallyAdjustsScrollIndicatorInsets = true
+        self.decelerationRate = .fast
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

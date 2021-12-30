@@ -189,11 +189,11 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     func presentConversationTitleAlert(for conversation: Conversation) {
         let controller = ChatClient.shared.channelController(for: conversation.cid)
 
-        let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Update Topic", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
-            textField.placeholder = "New Name"
+            textField.placeholder = "Topic"
         }
-        let saveAction = UIAlertAction(title: "Save", style: .default, handler: { [unowned self] alert -> Void in
+        let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { [unowned self] alert -> Void in
             if let textField = alertController.textFields?.first,
                let text = textField.text,
                !text.isEmpty {
