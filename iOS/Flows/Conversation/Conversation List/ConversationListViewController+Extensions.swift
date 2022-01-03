@@ -93,6 +93,7 @@ extension ConversationListViewController {
         // didUpdate is called before this is ever set.
         // Also looks like a non centered conversation is being used
         self.topMessageSubscription = cell.$incomingTopmostMessage
+            .removeDuplicates()
             .mainSink { [unowned self] message in
                 guard let author = message?.author else { return }
                 self.headerVC.membersVC.updateAuthor(for: conversation, user: author)
