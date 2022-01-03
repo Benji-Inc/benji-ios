@@ -117,8 +117,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         var userMessageItems = userMessages.map { message in
             return ItemType.message(cid: cid, messageID: message.id)
         }
-
         userMessageItems = userMessageItems.reversed()
+
         if self.shouldPrepareToSend {
             userMessageItems.append(.placeholder)
         }
@@ -128,7 +128,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         }
         
         if showLoadMore {
-            userMessageItems.append(.loadMore(cid: cid))
+            userMessageItems.insert(.loadMore(cid: cid), at: 0)
         } else {
             otherMessageItems.insert(.initial(cid: cid), at: 0)
         }
