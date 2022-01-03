@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Parse
 
 class newWelcomeViewController: DiffableCollectionViewController<MessageSequenceSection,
                                 MessageSequenceItem,
@@ -26,7 +27,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
     
     private(set) var conversationController: ConversationController?
     
-    static let cid = ChannelId(type: .messaging, id: "BD-8A8AB720-E8AD-45BC-9A55-C78CB9154BD5")
+    static let cid = ChannelId(type: .custom("onboarding"), id: "BD-DA81E593-B9A6-4A03-B822-52D0C5A66B7C")
     static let benjiId = "xGA45bkNmv"
     
     init() {
@@ -44,6 +45,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
         self.welcomeCollectionView.timeMachineLayout.dataSource = self.dataSource
         
         self.view.addSubview(self.collectionView)
+        self.collectionView.clipsToBounds = false 
         
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .white, text: "Join the Waitlist"))
@@ -60,7 +62,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
         self.button.centerOnX()
         
         self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.pinToSafeArea(.top, offset: .noOffset)
+        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.3))
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.height = self.view.height - self.collectionView.top
         self.collectionView.centerOnX()
@@ -76,13 +78,20 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
         var data: [MessageSequenceSection: [MessageSequenceItem]] = [:]
         
         do {
-            
-            if let current = User.current(), !ChatClient.isConnected {
-                try await ChatClient.initialize(for: current)
-                self.conversationController = ChatClient.shared.channelController(for: newWelcomeViewController.cid, messageOrdering: .topToBottom)
+                        
+            if !ChatClient.isConnected {
+                try await ChatClient.connectAnonymousUser()
             }
             
-            try await self.conversationController?.loadNextMessages()
+            self.conversationController = ChatClient.shared.channelController(for: newWelcomeViewController.cid, messageOrdering: .topToBottom)
+                        
+            if let controller = self.conversationController, controller.channel.isNil {
+                try await self.conversationController?.synchronize()
+            } else if let convo = self.conversationController?.channel, convo.messages.isEmpty {
+                try await self.conversationController?.synchronize()
+            }
+            
+            try await self.conversationController?.loadPreviousMessages()
             
             var benjiMessages: [MessageSequenceItem] = []
             var otherMessages: [MessageSequenceItem] = []
@@ -98,7 +107,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
             data[.topMessages] = benjiMessages
             data[.bottomMessages] = otherMessages
         } catch {
-            logError(error)
+            logDebug(error.code.description)
         }
         
         return data

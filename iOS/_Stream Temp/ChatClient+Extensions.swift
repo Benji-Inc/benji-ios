@@ -19,6 +19,22 @@ extension ChatClient {
         guard let sharedClient = self.shared else { return false }
         return sharedClient.connectionStatus == .connected
     }
+    
+    static func connectAnonymousUser() async throws {
+        var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
+        config.applicationGroupIdentifier = Config.shared.environment.groupId
+        self.shared = ChatClient.init(config: config, tokenProvider: nil)
+                
+        return try await withCheckedThrowingContinuation({ continuation in
+            ChatClient.shared.connectAnonymousUser { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        })
+    }
 
     /// Initializes the shared chat client singleton.
     static func initialize(for user: User) async throws {
