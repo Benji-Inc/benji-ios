@@ -84,19 +84,18 @@ extension ConversationListViewController {
         ConversationsManager.shared.$activeConversation.mainSink { conversation in
             if let convo = conversation,
                let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-                self.handleTopMessageUpdates(for: convo, cell: cell)
+                self.subscribeToTopMessageUpdates(for: convo, cell: cell)
             }
         }.store(in: &self.cancellables)
     }
     
-    func handleTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
-    
-        /// didUpdate is called before this is ever set. Also looks like a non centered conversation is being used
-        cell.$incomingTopmostMessage
+    func subscribeToTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
+        // didUpdate is called before this is ever set.
+        // Also looks like a non centered conversation is being used
+        self.topMessageSubscription = cell.$incomingTopmostMessage
             .mainSink { [unowned self] message in
                 guard let author = message?.author else { return }
                 self.headerVC.membersVC.updateAuthor(for: conversation, user: author)
-                
-            }.store(in: &self.cancellables)
+            }
     }
 }
