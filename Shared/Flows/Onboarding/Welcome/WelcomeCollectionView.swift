@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A collection view to display a the Welcome Conversation using the Time Machine layout.
 class WelcomeCollectionView: CollectionView {
 
     var timeMachineLayout: MessagesTimeMachineCollectionViewLayout {
