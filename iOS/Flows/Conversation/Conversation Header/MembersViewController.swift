@@ -132,7 +132,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     func updateAuthor(for conversation: Conversation, user: ChatUser) {
         guard let controller = self.conversationController,
               conversation == controller.conversation else {
-            /// If the conversation hasn't been set yet, store the user it should scroll too once it does. 
+            // If the conversation hasn't been set yet, store the user it should scroll too once it does. 
             self.initialTopMostAuthor = user
             return
         }
