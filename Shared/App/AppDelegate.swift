@@ -17,6 +17,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        delay(2) {
+            let eventLog = EventLog(eventType: "appLaunched")
+            eventLog.payload = ["launchStatus" : "success"]
+            eventLog.saveEventually { didComplete, error in
+                if let error = error {
+                    logError(error)
+                } else {
+                    logDebug("did complete")
+                }
+            }
+        }
+
+
         return true
     }
 
@@ -42,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("DID FAIL TO REGISTER FOR PUSH \(error)")
     }
 
+    #warning("Still needed?")
     func application(_ application: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable : Any]) async -> UIBackgroundFetchResult {
 
