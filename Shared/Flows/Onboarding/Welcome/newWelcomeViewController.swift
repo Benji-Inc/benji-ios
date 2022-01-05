@@ -13,7 +13,8 @@ import Parse
 class newWelcomeViewController: DiffableCollectionViewController<MessageSequenceSection,
                                 MessageSequenceItem,
                                 MessageSequenceCollectionViewDataSource>,
-                                Sizeable, Completable {
+                                Sizeable,
+                                Completable {
     
     typealias ResultType = Void
     
@@ -37,8 +38,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
     override func initializeViews() {
         super.initializeViews()
         
@@ -50,7 +50,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .white, text: "Join the Waitlist"))
         self.button.didSelect { [unowned self] in
-            
+            // TODO: Start onboarding
         }
     }
     
@@ -78,25 +78,29 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
         var data: [MessageSequenceSection: [MessageSequenceItem]] = [:]
         
         do {
-                        
             if !ChatClient.isConnected {
                 try await ChatClient.connectAnonymousUser()
             }
-            
-            self.conversationController = ChatClient.shared.channelController(for: newWelcomeViewController.cid, messageOrdering: .topToBottom)
-                        
-            if let controller = self.conversationController, controller.channel.isNil {
-                try await self.conversationController?.synchronize()
-            } else if let convo = self.conversationController?.channel, convo.messages.isEmpty {
-                try await self.conversationController?.synchronize()
+
+            let conversationController
+            = ChatClient.shared.channelController(for: newWelcomeViewController.cid,
+                                                     messageOrdering: .topToBottom)
+            self.conversationController = conversationController
+
+            // Ensure that we've synchronized the conversation controller with the backend.
+            if conversationController.channel.isNil {
+                try await conversationController.synchronize()
+            } else if let conversation = conversationController.channel, conversation.messages.isEmpty {
+                try await conversationController.synchronize()
             }
             
-            try await self.conversationController?.loadPreviousMessages()
-            
+            try await conversationController.loadPreviousMessages()
+
+            // Put Benji's messages at the top, and all other messages below.
             var benjiMessages: [MessageSequenceItem] = []
             var otherMessages: [MessageSequenceItem] = []
             
-            self.conversationController?.messages.forEach({ message in
+            conversationController.messages.forEach({ message in
                 if message.authorId == newWelcomeViewController.benjiId {
                     benjiMessages.append(MessageSequenceItem.message(cid: newWelcomeViewController.cid, messageID: message.id))
                 } else {
