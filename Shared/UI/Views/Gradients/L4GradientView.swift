@@ -11,8 +11,8 @@ import Foundation
 class L4GradientView: GradientView {
     
     init() {
-        let colors: [CGColor] = [UIColor(named: "BG_TOP_LEFT")!.cgColor,
-                                 UIColor(named: "BG_BOTTOM_RIGHT")!.cgColor]
+        let colors: [CGColor] = [UIColor(named: "L4_TOP_LEFT")!.cgColor,
+                                 UIColor(named: "L4_BOTTOM_RIGHT")!.cgColor]
         super.init(with: colors,
                    startPoint: .topLeft,
                    endPoint: .bottomRight)

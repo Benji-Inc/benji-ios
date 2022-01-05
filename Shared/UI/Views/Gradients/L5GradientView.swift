@@ -11,11 +11,11 @@ import Foundation
 class L5GradientView: GradientView {
     
     init() {
-        let colors: [CGColor] = [UIColor(named: "BG_TOP_LEFT")!.cgColor,
-                                 UIColor(named: "BG_BOTTOM_RIGHT")!.cgColor]
+        let colors: [CGColor] = [UIColor(named: "L5_TOP")!.cgColor,
+                                 UIColor(named: "L5_BOTTOM")!.cgColor]
         super.init(with: colors,
-                   startPoint: .topLeft,
-                   endPoint: .bottomRight)
+                   startPoint: .topCenter,
+                   endPoint: .bottomCenter)
     }
     
     required init?(coder aDecoder: NSCoder) {
