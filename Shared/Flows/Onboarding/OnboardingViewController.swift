@@ -17,7 +17,8 @@ protocol OnboardingViewControllerDelegate: AnyObject {
                         didVerify user: User)
 }
 
-class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {
+class OnboardingViewController: SwitchableContentViewController<OnboardingContent>,
+                                    TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
         return .fade
@@ -50,7 +51,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     var invitor: User?
 
     init(with delegate: OnboardingViewControllerDelegate) {
-
         self.delegate = delegate
         super.init()
     }
@@ -70,29 +70,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             try await self.updateInvitor(with: newWelcomeViewController.benjiId)
         }
 
-//        self.welcomeVC.$state.mainSink { (state) in
-//            switch state {
-//            case .welcome:
-//                self.updateUI()
-//            case .login:
-//                Task {
-//                    try await self.updateInvitor(with: "IQgIBSPHpE")
-//                }
-//                self.current = .phone(self.phoneVC)
-//            case .reservationInput:
-//                self.updateUI()
-//            case .foundReservation(let reservation):
-//                self.reservationId = reservation.objectId
-//                if let identity = reservation.createdBy?.objectId {
-//                    Task {
-//                        try await self.updateInvitor(with: identity)
-//                    }
-//                }
-//                self.current = .phone(self.phoneVC)
-//            case .reservationError:
-//                self.updateUI()
-//            }
-//        }.store(in: &self.cancellables)
+        self.welcomeVC.onDidComplete = { [unowned self] result in
+            switch result {
+            case .success:
+                self.current = .phone(self.phoneVC)
+            case .failure:
+                break
+            }
+        }
 
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {
@@ -252,15 +237,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        guard let current = User.current(), let status = current.status else { return .welcome(self.welcomeVC) }
+        guard let current = User.current(), let status = current.status else {
+            return .welcome(self.welcomeVC)
+        }
 
         switch status {
         case .active, .waitlist:
-            #if APPCLIP
             return .waitlist(self.waitlistVC)
-            #else
-            fatalError()
-            #endif
         case .inactive:
             #if APPCLIP
             return .waitlist(self.waitlistVC)
