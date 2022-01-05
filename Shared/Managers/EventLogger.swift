@@ -12,18 +12,20 @@ import Parse
 class EventLogger {
 
     static func trackEvent(_ name: String) {
-        PFAnalytics.trackEvent(name)
+        let eventLog = EventLog(eventType: name)
+        eventLog.saveEventually()
     }
 
     static func trackRemoteNotification(userInfo: [AnyHashable : Any]) {
-        var dimensions: [String : String] = [:]
+        let eventLog = EventLog(eventType: "notification.remote")
 
+        var payload: [String : Any] = [:]
         for kvp in userInfo {
-            guard let key = kvp.key as? String, let value = kvp.value as? String else { break }
-            dimensions[key] = value
+            guard let key = kvp.key as? String else { break }
+            payload[key] = kvp.value
         }
+        eventLog.payload = payload
 
-        // Send the dimensions to Parse along with the 'search' event
-        PFAnalytics.trackEvent("notification.remote", dimensions: dimensions)
+        eventLog.saveEventually()
     }
 }
