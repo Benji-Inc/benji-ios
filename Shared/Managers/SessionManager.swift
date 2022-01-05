@@ -10,6 +10,7 @@ import Foundation
 import Parse
 
 class SessionManager {
+    
     static let shared = SessionManager()
     var didReceiveInvalidSessionError: ((Error) -> ())?
 
