@@ -10,11 +10,18 @@ import Foundation
 import UIKit
 
 class RootNavigationController: NavigationController, UINavigationControllerDelegate {
+    
+    private let gradientView = BackgroundGradientView()
+    
+    override func initializeViews() {
+        super.initializeViews()
+        
+        self.view.insertSubview(self.gradientView, at: 0)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.view.set(backgroundColor: .darkGray)
+        
         self.delegate = self
         self.setNavigationBarHidden(true, animated: false)
 
@@ -32,5 +39,11 @@ class RootNavigationController: NavigationController, UINavigationControllerDele
                               from fromVC: UIViewController,
                               to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return nil 
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.gradientView.expandToSuperviewSize()
     }
 }

@@ -15,7 +15,7 @@ class L3GradientView: GradientView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .L3)
+        //self.set(backgroundColor: .L3)
         self.addSubview(self.gradientView)
     }
     
