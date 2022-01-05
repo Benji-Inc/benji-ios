@@ -87,7 +87,7 @@ final class User: PFUser {
     var status: UserStatus? {
         get {
             guard let string: String = self.getObject(for: .status) else { return nil }
-            return UserStatus.init(rawValue: string)
+            return UserStatus(rawValue: string)
         }
         set { self.setObject(for: .status, with: newValue?.rawValue) }
     }

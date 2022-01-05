@@ -46,7 +46,6 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
     }
 
     func switchTo(_ content: ContentType) {
-
         if let animator = self.prepareAnimator, animator.isRunning {
             return
         }

@@ -50,7 +50,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .white, text: "Join the Waitlist"))
         self.button.didSelect { [unowned self] in
-            // TODO: Start onboarding
+            self.onDidComplete?(.success(()))
         }
     }
     
