@@ -32,10 +32,11 @@ class NotificationService: UNNotificationServiceExtension {
         self.contentHandler = contentHandler
         self.request = request
 
-        EventLogger.trackRemoteNotification(userInfo: request.content.userInfo)
-
         Task {
             await self.initializeParse()
+
+            EventLogger.trackRemoteNotification(userInfo: request.content.userInfo)
+            
             if let client = self.getChatClient() {
                 await self.updateContent(with: request,
                                          client: client,
