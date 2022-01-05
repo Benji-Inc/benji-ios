@@ -41,6 +41,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("DID FAIL TO REGISTER FOR PUSH \(error)")
     }
+
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable : Any]) async -> UIBackgroundFetchResult {
+
+        EventLogger.trackRemoteNotification(userInfo: userInfo)
+
+        return .noData
+    }
 #endif
 
     private func prepareCurrentUser() {
