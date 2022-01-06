@@ -1,5 +1,5 @@
 //
-//  D4GradientVeiw.swift
+//  D2GradientView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 1/5/22.
@@ -8,7 +8,25 @@
 
 import Foundation
 
-class D4GradientView: GradientView {
+class D1GradientView: BaseView {
+    
+    private let gradientView = D4GradientView()
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.set(backgroundColor: .black)
+        self.addSubview(self.gradientView)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.gradientView.expandToSuperviewSize()
+    }
+}
+
+private class D4GradientView: GradientView {
     
     init() {
         let colors: [CGColor] = [UIColor(named: "D4_TOP_LEFT")!.cgColor,

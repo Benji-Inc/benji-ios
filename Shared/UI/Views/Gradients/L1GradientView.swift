@@ -1,5 +1,5 @@
 //
-//  L4GradientView.swift
+//  L2GradientView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 1/5/22.
@@ -8,7 +8,25 @@
 
 import Foundation
 
-class L4GradientView: GradientView {
+class L1GradientView: GradientView {
+    
+    private let gradientView = L4GradientView()
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.set(backgroundColor: .black)
+        self.addSubview(self.gradientView)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.gradientView.expandToSuperviewSize()
+    }
+}
+
+private class L4GradientView: GradientView {
     
     init() {
         let colors: [CGColor] = [UIColor(named: "L4_TOP_LEFT")!.cgColor,
@@ -22,3 +40,4 @@ class L4GradientView: GradientView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

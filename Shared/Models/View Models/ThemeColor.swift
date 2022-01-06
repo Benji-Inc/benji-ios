@@ -12,10 +12,13 @@ import UIKit
 enum ThemeColor: String, CaseIterable {
     
     case B1
+    case B1withAlpha
     case B2
     case D1
     case D6
+    case D6withAlpha
     case L1
+    case black
 
     case border
     case background
@@ -48,6 +51,8 @@ enum ThemeColor: String, CaseIterable {
         case .red:
             return UIColor(named: "RED")!
             
+        case .B1withAlpha:
+            return ThemeColor.B1.color.withAlphaComponent(0.3)
         case .B1:
             return UIColor(named: "B1")!
         case .B2:
@@ -56,8 +61,12 @@ enum ThemeColor: String, CaseIterable {
             return UIColor(named: "D1")!
         case .D6:
             return UIColor(named: "D6")!
+        case .D6withAlpha:
+            return ThemeColor.D6.color.withAlphaComponent(0.2)
         case .L1:
             return UIColor(named: "L1")!
+        case .black:
+            return UIColor(named: "BLACK")!
         }
     }
     

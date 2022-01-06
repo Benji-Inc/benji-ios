@@ -55,7 +55,7 @@ class ThemeLabel: UILabel {
 
     init(frame: CGRect = .zero,
          font: FontType,
-         textColor: ThemeColor = .textColor) {
+         textColor: ThemeColor = .white) {
         
         self.kerning = font.kern
         self.stringCasing = .unchanged
