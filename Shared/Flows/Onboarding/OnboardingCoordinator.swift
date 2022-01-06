@@ -43,9 +43,14 @@ extension OnboardingCoordinator: LaunchActivityHandler {
 
 extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
-    nonisolated func onboardingView(_ controller: OnboardingViewController,
-                                    didVerify user: User) {
+    nonisolated func onboardingViewController(_ controller: OnboardingViewController,
+                                              didOnboard user: User) {
         Task {
+            await controller.showLoading()
+            try await ActivateUser().makeRequest(andUpdate: [],
+                                                 viewsToIgnore: [controller.view])
+            await controller.hideLoading()
+
             await self.checkForPermissions()
         }
     }

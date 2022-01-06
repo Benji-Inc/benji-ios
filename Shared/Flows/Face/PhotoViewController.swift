@@ -212,9 +212,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.animationView.alpha = 0
             self.cameraVC.boxView.alpha = 1.0
             self.view.layoutNow()
-        }) { (completed) in
-
-        }
+        })
     }
 
     private func handleCaptureState() {

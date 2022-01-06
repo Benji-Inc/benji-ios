@@ -13,12 +13,11 @@ import Intents
 import Localization
 
 protocol OnboardingViewControllerDelegate: AnyObject {
-    func onboardingView(_ controller: OnboardingViewController,
-                        didVerify user: User)
+    func onboardingViewController(_ controller: OnboardingViewController, didOnboard user: User)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>,
-                                    TransitionableViewController {
+                                TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
         return .fade
@@ -85,7 +84,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.codeVC.phoneNumber = phone
                 self.current = .code(self.codeVC)
             case .failure(_):
-                break 
+                break
             }
         }
 
@@ -97,19 +96,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 }
 
                 guard let current = User.current() else { return }
-                if current.isOnboarded, current.status == .active {
-                    #if APPCLIP
-                    self.current = .waitlist(self.waitlistVC)
-                    #else
-                    self.showLoading(user: current)
-                    #endif
-                } else if current.status == .inactive, current.isOnboarded {
-                    #if APPCLIP
-                    self.current = .waitlist(self.waitlistVC)
-                    #else
-                    self.showLoading(user: current)
-                    #endif
-                } else {
+
+                switch current.status {
+                case .active:
+                    self.delegate.onboardingViewController(self, didOnboard: current)
+                case .needsVerification, .waitlist, .inactive, .none:
                     self.current = .name(self.nameVC)
                 }
             case .failure(_):
@@ -128,23 +119,17 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.photoVC.$currentState
             .filter({ state in
-                return state != .error 
+                return state != .error
             })
             .mainSink { [unowned self] _ in
-            self.updateUI()
-        }.store(in: &self.cancellables)
+                self.updateUI()
+            }.store(in: &self.cancellables)
 
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                Task {
-                    self.showLoading()
-                    guard let fullName = UserDefaultsManager.getString(for: .fullName) else { return }
-                    try await ActivateUser(fullName: fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
-                    await self.hideLoading()
-                    guard let user = User.current(), user.status == .active else { return }
-                    self.delegate.onboardingView(self, didVerify: user)
-                }
+                guard let user = User.current() else { return }
+                self.delegate.onboardingViewController(self, didOnboard: user)
             case .failure(_):
                 break
             }
@@ -153,13 +138,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.waitlistVC.$state.mainSink { [unowned self] _ in
             self.updateUI()
         }.store(in: &self.cancellables)
-    }
-
-    private func saveInitialConversation(with conversationId: String?) async throws {
-        guard let id = conversationId else { return }
-        let object = InitialConveration()
-        object.conversationIdString = id
-        try await object.saveLocally()
     }
 
     override func viewDidLayoutSubviews() {
@@ -171,69 +149,52 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.centerOnXAndY()
     }
 
-    override func shouldShowLargeAvatar() -> Bool {
-        guard let current = self.current else { return false }
-        switch current {
-        case .welcome(_):
-            return true
-        case .phone(_):
-            return true
-        case .code(_):
-            return true
-        case .name(_):
-            return false
-        case .waitlist(_):
-            return true
-        case .photo(_):
-            return false
-        }
+    // MARK: - Onboarding Step Completion Handling
+
+    private func saveInitialConversation(with conversationId: String?) async throws {
+        guard let id = conversationId else { return }
+        let object = InitialConveration()
+        object.conversationIdString = id
+        try await object.saveLocally()
     }
 
-    private func showLoading() {
-        self.loadingBlur.removeFromSuperview()
-        self.view.addSubview(self.loadingBlur)
-        self.view.layoutNow()
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.loadingBlur.showBlur(true)
-        } completion: { completed in
-            self.loadingAnimationView.play()
-        }
-    }
+    private func handleNameSuccess(for name: String) {
+        Task {
+            guard let user = User.current() else { return }
+            user.formatName(from: name)
+            try await user.saveLocalThenServer()
 
-    @MainActor
-    private func hideLoading() async {
-        return await withCheckedContinuation { continuation in
-            self.loadingAnimationView.stop()
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.loadingBlur.effect = nil
-            } completion: { completed in
-                self.loadingBlur.removeFromSuperview()
-                continuation.resume(returning: ())
+            switch user.status {
+            case .none, .needsVerification:
+                self.current = .phone(self.phoneVC)
+            case .inactive:
+#if APPCLIP
+                // The user can't activate their account in an app clip
+                self.current = .waitlist(self.waitlistVC)
+#else
+                if user.isOnboarded {
+                    self.delegate.onboardingViewController(self, didOnboard: User.current()!)
+                } else {
+                    self.current = .photo(self.photoVC)
+                }
+#endif
+            case .waitlist:
+                self.current = .waitlist(self.waitlistVC)
+            case .active:
+                self.delegate.onboardingViewController(self, didOnboard: user)
             }
         }
     }
 
-    private func showLoading(user: User) {
-        self.loadingBlur.removeFromSuperview()
-        self.view.addSubview(self.loadingBlur)
-        self.view.layoutNow()
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.loadingBlur.showBlur(true)
-        } completion: { completed in
-            self.loadingAnimationView.play()
-            self.delegate.onboardingView(self, didVerify: user)
-        }
-    }
+    // MARK: - SwitchableContentViewController Overrides
 
-    @MainActor
-    func updateInvitor(with userId: String) async throws {
-        let user = try await User.localThenNetworkQuery(for: userId)
-        self.invitor = user
-        self.avatarView.set(avatar: user)
-        self.nameLabel.setText(user.givenName.capitalized)
-        self.avatarView.isHidden = false
-        self.updateUI()
-        self.view.layoutNow()
+    override func shouldShowLargeAvatar() -> Bool {
+        switch self.current {
+        case .welcome, .phone, .code, .waitlist:
+            return true
+        case .name, .photo, .none:
+            return false
+        }
     }
 
     override func getInitialContent() -> OnboardingContent {
@@ -245,9 +206,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .active, .waitlist:
             return .waitlist(self.waitlistVC)
         case .inactive:
-            #if APPCLIP
+#if APPCLIP
             return .waitlist(self.waitlistVC)
-            #else
+#else
             if current.fullName.isEmpty {
                 return .name(self.nameVC)
             } else if current.smallImage.isNil {
@@ -255,7 +216,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             } else {
                 return .name(self.nameVC)
             }
-            #endif
+#endif
         case .needsVerification:
             return .welcome(self.welcomeVC)
         }
@@ -267,13 +228,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.avatarView.isHidden = self.invitor.isNil
     }
 
-    override func getMessage() -> Localized? {
-        guard let content = self.current else { return nil }
-        return content.getDescription(with: self.invitor)
-    }
-
     override func didSelectBackButton() {
-        super.willUpdateContent()
+        super.didSelectBackButton()
 
         guard let content = self.current else { return }
         switch content {
@@ -288,12 +244,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
+    override func getMessage() -> Localized? {
+        guard let content = self.current else { return nil }
+        return content.getDescription(with: self.invitor)
+    }
+
     func handle(launchActivity: LaunchActivity) {
-        guard let content = self.current, case OnboardingContent.welcome(_) = content else { return }
+        guard let content = self.current, case OnboardingContent.welcome = content else { return }
 
         switch launchActivity {
         case .onboarding(let phoneNumber):
-
             self.current = .phone(self.phoneVC)
 
             delay(0.25) { [unowned self] in
@@ -325,26 +285,52 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    private func handleNameSuccess(for name: String) {
-        UserDefaultsManager.update(key: .fullName, with: name)
-        // User has been allowed to continue
-        if User.current()?.status == .inactive {
-            #if APPCLIP
-            Task {
-                User.current()?.formatName(from: name)
-                try await User.current()?.saveLocalThenServer()
-                self.current = .waitlist(self.waitlistVC)
+    @MainActor
+    func updateInvitor(with userId: String) async throws {
+        let user = try await User.localThenNetworkQuery(for: userId)
+        self.invitor = user
+        self.avatarView.set(avatar: user)
+        self.nameLabel.setText(user.givenName.capitalized)
+        self.avatarView.isHidden = false
+        self.updateUI()
+        self.view.layoutNow()
+    }
+
+    // MARK: - Loading Animations
+
+    func showLoading() {
+        self.loadingBlur.removeFromSuperview()
+        self.view.addSubview(self.loadingBlur)
+        self.view.layoutNow()
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.loadingBlur.showBlur(true)
+        } completion: { completed in
+            self.loadingAnimationView.play()
+        }
+    }
+
+    @MainActor
+    func hideLoading() async {
+        return await withCheckedContinuation { continuation in
+            self.loadingAnimationView.stop()
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.loadingBlur.effect = nil
+            } completion: { completed in
+                self.loadingBlur.removeFromSuperview()
+                continuation.resume(returning: ())
             }
-            #else
-            if let current = User.current(), current.isOnboarded {
-                self.delegate.onboardingView(self, didVerify: User.current()!)
-            } else {
-                self.current = .photo(self.photoVC)
-            }
-            #endif
-        } else {
-            // User is on the waitlist
-            self.current = .waitlist(self.waitlistVC)
+        }
+    }
+
+    private func showLoading(user: User) {
+        self.loadingBlur.removeFromSuperview()
+        self.view.addSubview(self.loadingBlur)
+        self.view.layoutNow()
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.loadingBlur.showBlur(true)
+        } completion: { completed in
+            self.loadingAnimationView.play()
+            self.delegate.onboardingViewController(self, didOnboard: user)
         }
     }
 }
