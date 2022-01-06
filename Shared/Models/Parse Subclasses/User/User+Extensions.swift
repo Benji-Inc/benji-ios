@@ -21,7 +21,6 @@ extension User: Avatar {
     }
 
     var isOnboarded: Bool {
-
         if self.fullName.isEmpty {
             return false
         } else if self.smallImage.isNil {

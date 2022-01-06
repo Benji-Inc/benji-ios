@@ -76,36 +76,15 @@ struct VerifyCode: CloudFunction {
 struct ActivateUser: CloudFunction {
 
     typealias ReturnType = Any
-    let fullName: String
 
     @discardableResult
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
 
-        let fullName = self.formatName(from: fullName)
-
         return try await self.makeRequest(andUpdate: statusables,
-                                          params: ["givenName": fullName.givenName,
-                                                   "familyName": fullName.familyName],
-                                               callName: "setActiveStatus",
-                                               delayInterval: 0.0,
-                                               viewsToIgnore: viewsToIgnore)
+                                          params: [:],
+                                          callName: "setActiveStatus",
+                                          delayInterval: 0.0,
+                                          viewsToIgnore: viewsToIgnore)
     }
 
-    private func formatName(from text: String) -> (givenName: String, familyName: String) {
-        let components = text.components(separatedBy: " ").filter { (component) -> Bool in
-            return !component.isEmpty
-        }
-
-        var givenName = ""
-        var familyName = ""
-
-        if let first = components.first {
-            givenName = first
-        }
-        if let last = components.last {
-            familyName = last
-        }
-
-        return (givenName, familyName)
-    }
 }
