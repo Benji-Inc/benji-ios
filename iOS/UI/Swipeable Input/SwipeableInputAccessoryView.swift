@@ -298,8 +298,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
-                                              bubbleColor: self.currentContext.color.color,
-                                              borderColor: self.currentContext.color.color)
+                                              bubbleColor: self.currentContext.color.color)
         self.previewView?.frame = self.inputContainerView.frame
         self.previewView?.messageKind = self.currentMessageKind
         self.previewView?.showShadow(withOffset: 8)

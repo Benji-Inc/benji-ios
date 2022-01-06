@@ -19,6 +19,10 @@ class SpeechBubbleView: BaseView {
         case left
         case right
     }
+    
+    let shapeMask = CAShapeLayer()
+    
+    let gradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight], startPoint: .topLeft, endPoint: .bottomRight)
 
     /// The direction that the speech bubble's tail is pointing.
     var orientation: TailOrientation {
@@ -30,29 +34,15 @@ class SpeechBubbleView: BaseView {
     /// The color of the speech bubble.
     var bubbleColor: UIColor? {
         get {
-            guard let cgColor = self.bubbleLayer.fillColor else { return nil }
-            return UIColor(cgColor: cgColor)
+            //guard let cgColor = self.bubbleLayer.fillColor else { return nil }
+            //return UIColor(cgColor: cgColor)
+            return .red
         }
         set {
             // CALayers are implicitly animated. Disable animations so the color changes immediately.
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            self.bubbleLayer.fillColor = newValue?.cgColor
-            CATransaction.commit()
-        }
-    }
-
-    /// The color of the border around the speech bubble.
-    var borderColor: UIColor? {
-        get {
-            guard let cgColor = self.bubbleLayer.strokeColor else { return nil }
-            return UIColor(cgColor: cgColor)
-        }
-        set {
-            // CALayers are implicitly animated. Disable animations so the color changes immediately.
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            self.bubbleLayer.strokeColor = newValue?.cgColor
+            //self.bubbleLayer.fillColor = newValue?.cgColor
             CATransaction.commit()
         }
     }
@@ -81,17 +71,16 @@ class SpeechBubbleView: BaseView {
     /// The layer for drawing the speech bubble background.
     let bubbleLayer = CAShapeLayer()
 
-    init(orientation: TailOrientation, bubbleColor: UIColor? = nil, borderColor: UIColor? = nil) {
+    init(orientation: TailOrientation, bubbleColor: UIColor? = nil) {
         self.orientation = orientation
 
         super.init()
 
         self.bubbleColor = bubbleColor
-        self.borderColor = borderColor
     }
 
-    convenience init(orientation: TailOrientation, bubbleColor: ThemeColor, borderColor: ThemeColor) {
-        self.init(orientation: orientation, bubbleColor: bubbleColor.color, borderColor: borderColor.color)
+    convenience init(orientation: TailOrientation, bubbleColor: ThemeColor) {
+        self.init(orientation: orientation, bubbleColor: bubbleColor.color)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,14 +89,13 @@ class SpeechBubbleView: BaseView {
         super.init(coder: aDecoder)
 
         self.bubbleColor = ThemeColor.white.color
-        self.borderColor = ThemeColor.white.color
     }
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.layer.insertSublayer(self.bubbleLayer, at: 0)
-        self.bubbleLayer.lineWidth = 2
+        self.layer.insertSublayer(self.gradientLayer, at: 1)
     }
 
     override func layoutSubviews() {
@@ -133,6 +121,7 @@ class SpeechBubbleView: BaseView {
 
         self.updateBubblePath()
         self.bubbleLayer.frame = self.bounds
+        self.gradientLayer.frame = self.bubbleLayer.bounds
 
         CATransaction.commit()
     }
@@ -198,6 +187,10 @@ class SpeechBubbleView: BaseView {
         }
 
         path.closeSubpath()
+        
+        self.shapeMask.path = path
+        self.gradientLayer.mask = self.shapeMask
+        
         self.bubbleLayer.path = path
     }
 }

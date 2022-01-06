@@ -9,6 +9,32 @@
 import Foundation
 import QuartzCore
 
+class GradientLayer: CAGradientLayer {
+
+    init(with colors: [ThemeColor],
+         startPoint: CAGradientLayer.Point,
+         endPoint: CAGradientLayer.Point) {
+        
+        let cgColors = colors.compactMap { color in
+            return color.color.cgColor
+        }
+        
+        super.init()
+        self.startPoint = startPoint.point
+        self.endPoint = endPoint.point
+        self.colors = cgColors
+        self.type = .axial
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(layer: Any) {
+        super.init()
+    }
+}
+
 class GradientView: PassThroughView {
 
     private lazy var gradient = CAGradientLayer(start: self.start,
