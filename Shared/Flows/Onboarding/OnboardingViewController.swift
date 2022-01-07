@@ -11,9 +11,16 @@ import Parse
 import Lottie
 import Intents
 import Localization
+import PhoneNumberKit
 
+@MainActor
 protocol OnboardingViewControllerDelegate: AnyObject {
-    func onboardingViewController(_ controller: OnboardingViewController, didOnboard user: User)
+    func onboardingViewControllerDidStartOnboarding(_ controller: OnboardingViewController)
+    func onboardingViewController(_ controller: OnboardingViewController, didEnter phoneNumber: PhoneNumber)
+    func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController,
+                                               andReturnCID conversationId: String?)
+    func onboardingViewController(_ controller: OnboardingViewController, didEnterName name: String)
+    func onboardingViewControllerDidTakePhoto(_ controller: OnboardingViewController)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>,
@@ -23,12 +30,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         return .fade
     }
 
-    lazy var welcomeVC = newWelcomeViewController()
+    lazy var welcomeVC = WelcomeViewController()
     lazy var phoneVC = PhoneViewController()
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
-    lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
+    lazy var waitlistVC = WaitlistViewController()
 
     let loadingBlur = BlurView()
     let loadingAnimationView = AnimationView()
@@ -66,13 +73,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
         
         Task {
-            try await self.updateInvitor(with: newWelcomeViewController.benjiId)
+            try await self.updateInvitor(with: WelcomeViewController.benjiId)
         }
 
         self.welcomeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                self.current = .phone(self.phoneVC)
+                self.delegate.onboardingViewControllerDidStartOnboarding(self)
             case .failure:
                 break
             }
@@ -81,8 +88,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let phone):
-                self.codeVC.phoneNumber = phone
-                self.current = .code(self.codeVC)
+                self.delegate.onboardingViewController(self, didEnter: phone)
             case .failure(_):
                 break
             }
@@ -91,27 +97,17 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let conversationId):
-                Task {
-                    try await self.saveInitialConversation(with: conversationId)
-                }
-
-                guard let current = User.current() else { return }
-
-                switch current.status {
-                case .active:
-                    self.delegate.onboardingViewController(self, didOnboard: current)
-                case .needsVerification, .waitlist, .inactive, .none:
-                    self.current = .name(self.nameVC)
-                }
+                self.delegate.onboardingViewControllerDidVerifyCode(self,
+                                                                    andReturnCID: conversationId)
             case .failure(_):
-                self.current = .waitlist(self.waitlistVC)
+                break
             }
         }
 
         self.nameVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let name):
-                self.handleNameSuccess(for: name)
+                self.delegate.onboardingViewController(self, didEnterName: name)
             case .failure(_):
                 break
             }
@@ -128,8 +124,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                guard let user = User.current() else { return }
-                self.delegate.onboardingViewController(self, didOnboard: user)
+                self.delegate.onboardingViewControllerDidTakePhoto(self)
             case .failure(_):
                 break
             }
@@ -149,76 +144,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.centerOnXAndY()
     }
 
-    // MARK: - Onboarding Step Completion Handling
-
-    private func saveInitialConversation(with conversationId: String?) async throws {
-        guard let id = conversationId else { return }
-        let object = InitialConveration()
-        object.conversationIdString = id
-        try await object.saveLocally()
-    }
-
-    private func handleNameSuccess(for name: String) {
-        Task {
-            guard let user = User.current() else { return }
-            user.formatName(from: name)
-            try await user.saveLocalThenServer()
-
-            switch user.status {
-            case .none, .needsVerification:
-                self.current = .phone(self.phoneVC)
-            case .inactive:
-#if APPCLIP
-                // The user can't activate their account in an app clip
-                self.current = .waitlist(self.waitlistVC)
-#else
-                if user.isOnboarded {
-                    self.delegate.onboardingViewController(self, didOnboard: User.current()!)
-                } else {
-                    self.current = .photo(self.photoVC)
-                }
-#endif
-            case .waitlist:
-                self.current = .waitlist(self.waitlistVC)
-            case .active:
-                self.delegate.onboardingViewController(self, didOnboard: user)
-            }
-        }
-    }
-
     // MARK: - SwitchableContentViewController Overrides
 
     override func shouldShowLargeAvatar() -> Bool {
-        switch self.current {
+        switch self.currentContent {
         case .welcome, .phone, .code, .waitlist:
             return true
         case .name, .photo, .none:
             return false
-        }
-    }
-
-    override func getInitialContent() -> OnboardingContent {
-        guard let current = User.current(), let status = current.status else {
-            return .welcome(self.welcomeVC)
-        }
-
-        switch status {
-        case .active, .waitlist:
-            return .waitlist(self.waitlistVC)
-        case .inactive:
-#if APPCLIP
-            return .waitlist(self.waitlistVC)
-#else
-            if current.fullName.isEmpty {
-                return .name(self.nameVC)
-            } else if current.smallImage.isNil {
-                return .photo(self.photoVC)
-            } else {
-                return .name(self.nameVC)
-            }
-#endif
-        case .needsVerification:
-            return .welcome(self.welcomeVC)
         }
     }
 
@@ -231,30 +164,30 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func didSelectBackButton() {
         super.didSelectBackButton()
 
-        guard let content = self.current else { return }
+        guard let content = self.currentContent else { return }
         switch content {
         case .phone(_):
-            self.current = .welcome(self.welcomeVC)
+            self.switchTo(.welcome(self.welcomeVC))
         case .code(_):
-            self.current = .phone(self.phoneVC)
+            self.switchTo(.phone(self.phoneVC))
         case .photo(_):
-            self.current = .name(self.nameVC)
+            self.switchTo(.name(self.nameVC))
         default:
             break
         }
     }
 
     override func getMessage() -> Localized? {
-        guard let content = self.current else { return nil }
+        guard let content = self.currentContent else { return nil }
         return content.getDescription(with: self.invitor)
     }
 
     func handle(launchActivity: LaunchActivity) {
-        guard let content = self.current, case OnboardingContent.welcome = content else { return }
+        guard let content = self.currentContent, case OnboardingContent.welcome = content else { return }
 
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            self.current = .phone(self.phoneVC)
+            self.switchTo(.phone(self.phoneVC))
 
             delay(0.25) { [unowned self] in
                 self.phoneVC.textField.text = phoneNumber
@@ -268,7 +201,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 if let userId = reservation.createdBy?.objectId {
                     try await self.updateInvitor(with: userId)
                     await self.hideLoading()
-                    self.current = .phone(self.phoneVC)
+                    self.switchTo(.phone(self.phoneVC))
                 }
 
             }
@@ -279,7 +212,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 if let userId = pass.owner?.objectId {
                     try await self.updateInvitor(with: userId)
                     await self.hideLoading()
-                    self.current = .phone(self.phoneVC)
+                    self.switchTo(.phone(self.phoneVC))
                 }
             }
         }
@@ -319,18 +252,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.loadingBlur.removeFromSuperview()
                 continuation.resume(returning: ())
             }
-        }
-    }
-
-    private func showLoading(user: User) {
-        self.loadingBlur.removeFromSuperview()
-        self.view.addSubview(self.loadingBlur)
-        self.view.layoutNow()
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.loadingBlur.showBlur(true)
-        } completion: { completed in
-            self.loadingAnimationView.play()
-            self.delegate.onboardingViewController(self, didOnboard: user)
         }
     }
 }

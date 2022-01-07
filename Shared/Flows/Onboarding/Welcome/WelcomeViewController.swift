@@ -10,11 +10,11 @@ import Foundation
 import StreamChat
 import Parse
 
-class newWelcomeViewController: DiffableCollectionViewController<MessageSequenceSection,
-                                MessageSequenceItem,
-                                MessageSequenceCollectionViewDataSource>,
-                                Sizeable,
-                                Completable {
+class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSection,
+                             MessageSequenceItem,
+                             MessageSequenceCollectionViewDataSource>,
+                             Sizeable,
+                             Completable {
     
     typealias ResultType = Void
     
@@ -45,7 +45,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
         self.welcomeCollectionView.timeMachineLayout.dataSource = self.dataSource
         
         self.view.addSubview(self.collectionView)
-        self.collectionView.clipsToBounds = false 
+        self.collectionView.clipsToBounds = false
         
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .white, text: "Join the Waitlist"))
@@ -83,7 +83,7 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
             }
 
             let conversationController
-            = ChatClient.shared.channelController(for: newWelcomeViewController.cid,
+            = ChatClient.shared.channelController(for: WelcomeViewController.cid,
                                                      messageOrdering: .topToBottom)
             self.conversationController = conversationController
 
@@ -101,10 +101,10 @@ class newWelcomeViewController: DiffableCollectionViewController<MessageSequence
             var otherMessages: [MessageSequenceItem] = []
             
             conversationController.messages.forEach({ message in
-                if message.authorId == newWelcomeViewController.benjiId {
-                    benjiMessages.append(MessageSequenceItem.message(cid: newWelcomeViewController.cid, messageID: message.id))
+                if message.authorId == WelcomeViewController.benjiId {
+                    benjiMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
                 } else {
-                    otherMessages.append(MessageSequenceItem.message(cid: newWelcomeViewController.cid, messageID: message.id))
+                    otherMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
                 }
             })
             
