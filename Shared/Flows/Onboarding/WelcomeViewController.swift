@@ -20,7 +20,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         case reservationError
     }
 
-    private let label = ThemeLabel(font: .display, textColor: .textColor)
+    private let label = ThemeLabel(font: .display)
     private let loginButton = ThemeButton()
     private let reservationButton = ThemeButton()
     private var reservationId: String?
@@ -57,7 +57,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         }
 
         self.view.addSubview(self.reservationButton)
-        self.reservationButton.set(style: .normal(color: .white, text: "RSVP"))
+        self.reservationButton.set(style: .normal(color: .T1, text: "RSVP"))
         self.reservationButton.didSelect { [unowned self] in
             self.state = .reservationInput
         }

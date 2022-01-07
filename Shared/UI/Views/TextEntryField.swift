@@ -29,7 +29,7 @@ class TextEntryField: BaseView, Sizeable {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .white)
+        self.set(backgroundColor: .B1)
 
         self.addSubview(self.textField)
 
@@ -41,9 +41,9 @@ class TextEntryField: BaseView, Sizeable {
         if let placeholder = self.placeholder {
             let attributed = AttributedString(placeholder,
                                               fontType: .medium,
-                                              color: .lightGray)
+                                              color: .T1)
             self.textField.setPlaceholder(attributed: attributed)
-            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .textColor),
+            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .T1withAlpha),
                                                 alignment: .center)
         }
 

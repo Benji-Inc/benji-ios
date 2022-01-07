@@ -19,7 +19,7 @@ class PhoneTextField: PhoneNumberTextField {
         self.withPrefix = false
         self.textContentType = .telephoneNumber
         self.keyboardType = .numbersAndPunctuation
-        self.textColor = ThemeColor.textColor.color
+        self.textColor = ThemeColor.T1.color
         self.textAlignment = .center
     }
 

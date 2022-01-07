@@ -22,9 +22,9 @@ class DeliveryTypeView: BaseView {
         self.addSubview(self.label)
         self.addSubview(self.button)
 
-        self.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        self.set(backgroundColor: .B1withAlpha)
         self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.border.color.cgColor
+        self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
         self.layer.borderWidth = 0.25
 
         self.clipsToBounds = true

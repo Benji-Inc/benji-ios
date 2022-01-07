@@ -30,9 +30,9 @@ class MessageContentView: BaseView {
     static let bubbleTailLength: CGFloat = 12
 
     /// A speech bubble background view for the message.
-    let bubbleView = SpeechBubbleView(orientation: .down)
+    let bubbleView = MessageBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
-    let textView = MessageTextView(font: .regular, textColor: .textColor)
+    let textView = MessageTextView(font: .regular, textColor: .T1)
     private (set) var message: Messageable?
 
     let authorView = AvatarView()
@@ -95,17 +95,20 @@ class MessageContentView: BaseView {
         #endif
 
         self.authorView.set(avatar: message.avatar)
-
+        
+        self.bubbleView.configure(with: message)
         self.setNeedsLayout()
     }
 
     /// Sets the background color and shows/hides the bubble tail.
-    func configureBackground(color: ThemeColor,
+    func configureBackground(color: UIColor,
+                             textColor: UIColor,
                              brightness: CGFloat,
                              showBubbleTail: Bool,
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
-        self.bubbleView.bubbleColor = color.color.color(withBrightness: brightness)
+        self.textView.textColor = textColor
+        self.bubbleView.bubbleColor = color.withAlphaComponent(brightness)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
     }
@@ -124,10 +127,7 @@ class MessageContentView: BaseView {
         if self.state == .thread {
             self.textView.textAlignment = .left
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-
-            if self.textView.top < MessageContentView.padding.value {
-                self.textView.pin(.top, offset: MessageContentView.padding)
-            }
+            self.textView.centerOnY()
         } else if state == .expanded {
             if self.textView.numberOfLines > 1 {
                 self.textView.textAlignment = .left
@@ -140,7 +140,6 @@ class MessageContentView: BaseView {
                 self.textView.center = self.bubbleView.center
                 self.textView.center.y += self.bubbleView.tailLength.half
             }
-
         } else if self.textView.numberOfLines > 1 {
             self.textView.textAlignment = .left
             self.textView.pin(.left, offset: MessageContentView.padding)

@@ -13,7 +13,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Connection
 
     private let avatarView = AvatarView()
-    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .textColor)
+    private let titleLabel = ThemeLabel(font: .regularBold)
 
     var currentItem: Connection?
 

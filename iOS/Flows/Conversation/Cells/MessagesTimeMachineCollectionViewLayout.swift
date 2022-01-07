@@ -33,10 +33,10 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     var layoutForDropZone: Bool = false
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
-    var frontmostBrightness: CGFloat = 0.89
+    var frontmostBrightness: CGFloat = 1
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
     var backmostBrightness: CGFloat {
-        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
+        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.2
     }
     
     var messageContentState: MessageContentView.State = .collapsed
@@ -105,16 +105,27 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         let detailAlpha = 1 - abs(normalizedZOffset) / 0.2
         let textViewAlpha = 1 - abs(normalizedZOffset) / 0.8
 
-        // The most recent visible item should be white.
+        // The most recent visible item should be saturated color.
         if let itemFocusPosition = self.itemFocusPositions[indexPath] {
-            let normalizedFocusDistance = abs(itemFocusPosition - self.zPosition)/self.itemHeight.half
+            var normalizedFocusDistance = abs(itemFocusPosition - self.zPosition)/self.itemHeight.half
+            normalizedFocusDistance = clamp(normalizedFocusDistance, 0, 1)
 
-            backgroundBrightness += lerpClamped(normalizedFocusDistance,
-                                                start: 1-self.frontmostBrightness,
-                                                end: 0)
+            // Figure out how saturated the color should be.
+            // Lerp between D1 to L1
+            let saturatedColor = ThemeColor.D1.color
+            let unsaturatedColor = ThemeColor.L1.color
+            attributes.backgroundColor = lerp(normalizedFocusDistance,
+                                              color1: saturatedColor,
+                                              color2: unsaturatedColor)
+
+            // Lerp text T1 and T2
+            let unsaturatedTextColor = ThemeColor.T1.color
+            let saturatedTextColor = ThemeColor.T2.color
+            attributes.textColor = lerp(normalizedFocusDistance,
+                                        color1: unsaturatedTextColor,
+                                        color2: saturatedTextColor)
         }
 
-        attributes.backgroundColor = .white
         attributes.brightness = backgroundBrightness
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down

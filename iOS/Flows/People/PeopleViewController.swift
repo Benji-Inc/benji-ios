@@ -25,8 +25,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     let blurView = BlurView()
 
-    let gradientView = GradientView(with: [ThemeColor.textColor.color.withAlphaComponent(1.0).cgColor,
-                                           ThemeColor.textColor.color.withAlphaComponent(0.0).cgColor],
+    let gradientView = GradientView(with: [ThemeColor.black.color.withAlphaComponent(1.0).cgColor,
+                                           ThemeColor.black.color.withAlphaComponent(0.0).cgColor],
                                     startPoint: .bottomCenter,
                                     endPoint: .topCenter)
     let button = ThemeButton()
@@ -111,7 +111,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func updateButton() {
-        self.button.set(style: .normal(color: .white, text: self.getButtonTitle()))
+        self.button.set(style: .normal(color: .B1, text: self.getButtonTitle()))
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.showButton = self.selectedItems.count > 0
             self.view.layoutNow()

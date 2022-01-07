@@ -14,14 +14,13 @@ class UserOnboardingViewController: ViewController {
 
     private(set) var avatarView = AvatarView()
 
-    private(set) var nameLabel = ThemeLabel(font: .regular, textColor: .textColor)
+    private(set) var nameLabel = ThemeLabel(font: .regular)
     private(set) var messageContent = MessageContentView()
 
     override func initializeViews() {
         super.initializeViews()
 
         self.avatarView.isHidden = true 
-        self.view.set(backgroundColor: .background)
 
         self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.avatarView)
@@ -30,7 +29,8 @@ class UserOnboardingViewController: ViewController {
         }
 
         self.view.addSubview(self.messageContent)
-        self.messageContent.configureBackground(color: .white,
+        self.messageContent.configureBackground(color: ThemeColor.D1.color,
+                                                textColor: ThemeColor.T1.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: true,
                                                 tailOrientation: .up)
@@ -91,7 +91,6 @@ class OnboardingMessageTextView: TextView {
         self.textAlignment = .center
         self.textContainer.lineBreakMode = .byWordWrapping
         self.isEditable = false
-        self.linkTextAttributes = [.foregroundColor: ThemeColor.lightGray.color, .underlineStyle: 0]
         self.lineSpacing = 2
     }
 }

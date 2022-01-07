@@ -15,7 +15,7 @@ class ExpandingTextView: TextView {
     init() {
         super.init(frame: .zero,
                    font: .regular,
-                   textColor: .textColor,
+                   textColor: .T1,
                    textContainer: nil)
     }
 
@@ -23,7 +23,7 @@ class ExpandingTextView: TextView {
         super.init(coder: aDecoder)
 
         self.font = FontType.regular.font
-        self.textColor = ThemeColor.textColor.color
+        self.textColor = ThemeColor.T1.color
     }
     
     override func initializeViews() {
@@ -33,12 +33,11 @@ class ExpandingTextView: TextView {
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false
         self.keyboardType = .twitter
-        self.tintColor = ThemeColor.textColor.color
-        self.textColor = ThemeColor.textColor.color
+        self.tintColor = ThemeColor.T1.color
 
         self.textContainerInset.left = Theme.ContentOffset.long.value
         self.textContainerInset.right = Theme.ContentOffset.long.value
-        self.textContainerInset.top = Theme.ContentOffset.long.value
+        self.textContainerInset.top = Theme.ContentOffset.long.value + 1
         self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
 
@@ -60,17 +59,17 @@ class ExpandingTextView: TextView {
         }
 
         self.initialPlaceholder = placeholderText
-        self.set(placeholder: placeholderText, color: .lightGray)
+        self.set(placeholder: placeholderText, color: .T1withAlpha)
     }
 
     func setPlaceholder(for kind: MessageKind) {
         switch kind {
         case .text(_):
             if let placeholder = self.initialPlaceholder {
-                self.set(placeholder: placeholder, color: .darkGray)
+                self.set(placeholder: placeholder)
             }
         case .photo(_, _), .video(_, _):
-            self.set(placeholder: "Add comment", color: .darkGray)
+            self.set(placeholder: "Add comment")
         default:
             break
         }
@@ -78,13 +77,13 @@ class ExpandingTextView: TextView {
 
     override func textViewDidBeginEditing() {
         super.textViewDidBeginEditing()
-        self.set(placeholder: "", color: .lightGray)
+        self.set(placeholder: "")
         self.setNeedsDisplay()
     }
 
     override func textDidEndEditing() {
         super.textDidEndEditing()
-        self.set(placeholder: self.initialPlaceholder ?? "", color: .lightGray)
+        self.set(placeholder: self.initialPlaceholder ?? "")
         self.setNeedsDisplay()
     }
 }

@@ -68,21 +68,17 @@ class MessageCell: UICollectionViewCell {
                 = layoutAttributes as? ConversationMessageCellLayoutAttributes else {
             return
         }
-
-        self.content.textView.isVisible = messageLayoutAttributes.shouldShowText
         
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
+                                         textColor: messageLayoutAttributes.textColor,
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
-
         self.detailView.height = MessageDetailView.height
         self.detailView.alpha = messageLayoutAttributes.detailAlpha
 
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
-        self.content.textView.alpha = messageLayoutAttributes.messageContentAlpha
-        self.content.authorView.alpha = messageLayoutAttributes.messageContentAlpha
 
         self.detailView.updateReadStatus(shouldRead: messageLayoutAttributes.detailAlpha == 1.0)
     }

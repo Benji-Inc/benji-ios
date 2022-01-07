@@ -19,7 +19,7 @@ class AvatarView: DisplayableImageView {
         }
     }
 
-    private let label = ThemeLabel(font: .regularBold, textColor: .textColor)
+    private let label = ThemeLabel(font: .regularBold)
 
     // MARK: - Initializers
 
@@ -60,7 +60,7 @@ class AvatarView: DisplayableImageView {
         self.imageView.layer.masksToBounds = true
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius
-        self.imageView.set(backgroundColor: .white)
+        self.imageView.set(backgroundColor: .T1)
     }
 
     // MARK: - Open setters

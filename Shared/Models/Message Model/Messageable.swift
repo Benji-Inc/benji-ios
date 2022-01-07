@@ -73,7 +73,7 @@ extension Messageable {
     var color: ThemeColor {
         if self.isFromCurrentUser {
             if self.context == .passive {
-                return .lightGray
+                return .T1
             } else {
                 return self.context.color
             }

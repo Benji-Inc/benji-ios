@@ -19,7 +19,6 @@ class ConnectionRequestView: BaseView {
 
     private let acceptButton = ThemeButton()
     private let declineButton = ThemeButton()
-    private let confettiView = ConfettiView()
     private let successLabel = ThemeLabel(font: .mediumBold)
 
     var currentItem: Connection?
@@ -30,16 +29,15 @@ class ConnectionRequestView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.confettiView)
         self.addSubview(self.successLabel)
         self.successLabel.textAlignment = .center
         self.addSubview(self.containerView)
-        self.containerView.set(backgroundColor: .gray)
+        self.containerView.set(backgroundColor: .B1)
 
         self.containerView.addSubview(self.textView)
         self.containerView.addSubview(self.avatarView)
         self.containerView.addSubview(self.acceptButton)
-        self.acceptButton.set(style: .normal(color: .darkGray, text: "Accept"))
+        self.acceptButton.set(style: .normal(color: .B2, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
             guard let from = self.currentItem?.from else { return }
             Task {
@@ -47,7 +45,7 @@ class ConnectionRequestView: BaseView {
             }
         }
         self.containerView.addSubview(self.declineButton)
-        self.declineButton.set(style: .normal(color: .white, text: "Decline"))
+        self.declineButton.set(style: .normal(color: .T1, text: "Decline"))
         self.declineButton.didSelect { [unowned self] in
             guard let from = self.currentItem?.from else { return }
             Task {
@@ -59,7 +57,6 @@ class ConnectionRequestView: BaseView {
 
         self.set(backgroundColor: .clear)
         self.containerView.roundCorners()
-        self.confettiView.clipsToBounds = true
     }
 
     @MainActor
@@ -73,7 +70,7 @@ class ConnectionRequestView: BaseView {
             if let status = item.status, status == .invited {
                 let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
 
-                self.textView.linkTextAttributes = [.foregroundColor: ThemeColor.lightGray.color, .underlineStyle: 0]
+                self.textView.linkTextAttributes = [.foregroundColor: ThemeColor.D1.color, .underlineStyle: 0]
                 self.textView.text = localized(text)
                 self.avatarView.set(avatar: userWithData)
                 self.layoutNow()
@@ -89,7 +86,6 @@ class ConnectionRequestView: BaseView {
         super.layoutSubviews()
 
         self.containerView.expandToSuperviewSize()
-        self.confettiView.expandToSuperviewSize()
 
         self.avatarView.left = Theme.contentOffset.half
         self.avatarView.top = Theme.contentOffset.half
@@ -148,7 +144,6 @@ class ConnectionRequestView: BaseView {
             self.containerView.alpha = 0
             self.successLabel.alpha = 1
         } completion: { completed in
-            self.confettiView.startConfetti(with: 3.0)
             if shouldComplete {
                 self.didUpdateConnection?(connection)
             }

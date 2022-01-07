@@ -62,7 +62,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         self.button.isHidden = true
         self.contentView.addSubview(self.button)
-        self.button.set(style: .normal(color: .white, text: "Got it"))
+        self.button.set(style: .normal(color: .B1, text: "Got it"))
     }
 
     override func viewDidLayoutSubviews() {
