@@ -42,21 +42,6 @@ class SpeechBubbleView: BaseView {
         }
     }
 
-    /// The color of the border around the speech bubble.
-    var borderColor: UIColor? {
-        get {
-            guard let cgColor = self.bubbleLayer.strokeColor else { return nil }
-            return UIColor(cgColor: cgColor)
-        }
-        set {
-            // CALayers are implicitly animated. Disable animations so the color changes immediately.
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            self.bubbleLayer.strokeColor = newValue?.cgColor
-            CATransaction.commit()
-        }
-    }
-
     /// The distance from the base of the tail to the point.
     var tailLength: CGFloat = 12 {
         didSet { self.setNeedsLayout() }
@@ -81,17 +66,16 @@ class SpeechBubbleView: BaseView {
     /// The layer for drawing the speech bubble background.
     let bubbleLayer = CAShapeLayer()
 
-    init(orientation: TailOrientation, bubbleColor: UIColor? = nil, borderColor: UIColor? = nil) {
+    init(orientation: TailOrientation, bubbleColor: UIColor? = nil) {
         self.orientation = orientation
 
         super.init()
 
         self.bubbleColor = bubbleColor
-        self.borderColor = borderColor
     }
 
-    convenience init(orientation: TailOrientation, bubbleColor: ThemeColor, borderColor: ThemeColor) {
-        self.init(orientation: orientation, bubbleColor: bubbleColor.color, borderColor: borderColor.color)
+    convenience init(orientation: TailOrientation, bubbleColor: ThemeColor) {
+        self.init(orientation: orientation, bubbleColor: bubbleColor.color)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -99,15 +83,13 @@ class SpeechBubbleView: BaseView {
 
         super.init(coder: aDecoder)
 
-        self.bubbleColor = ThemeColor.white.color
-        self.borderColor = ThemeColor.white.color
+        self.bubbleColor = ThemeColor.T1.color
     }
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.layer.insertSublayer(self.bubbleLayer, at: 0)
-        self.bubbleLayer.lineWidth = 2
+        self.layer.addSublayer(self.bubbleLayer)
     }
 
     override func layoutSubviews() {
@@ -131,14 +113,15 @@ class SpeechBubbleView: BaseView {
             CATransaction.disableActions()
         }
 
-        self.updateBubblePath()
+        self.bubbleLayer.path = self.updateBubblePath()
         self.bubbleLayer.frame = self.bounds
 
         CATransaction.commit()
     }
 
+    @discardableResult
     /// Draws a path for the bubble and applies it to the bubble layer.
-    private func updateBubblePath() {
+    func updateBubblePath() -> CGPath {
         let cornerRadius: CGFloat = Theme.cornerRadius
         let bubbleFrame = self.bubbleFrame
         let tailBaseLength = self.tailBaseLength
@@ -198,6 +181,7 @@ class SpeechBubbleView: BaseView {
         }
 
         path.closeSubpath()
-        self.bubbleLayer.path = path
+                
+        return path
     }
 }

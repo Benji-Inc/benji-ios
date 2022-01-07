@@ -96,7 +96,7 @@ extension ThemeButton {
                     }
                 }
                 self.errorLabel.alpha = 1.0
-                self.setBackground(color: ThemeColor.white.color.withAlphaComponent(0.4), forUIControlState: .normal)
+                self.setBackground(color: ThemeColor.B1.color.withAlphaComponent(0.4), forUIControlState: .normal)
             }) { (_) in
                 continuation.resume(returning: ())
             }

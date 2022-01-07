@@ -9,8 +9,8 @@
 import Foundation
 import os
 
-func logDebug(_ message: String) {
-    Logger().log(level: .debug, "🟡 === \(message)")
+func logDebug(_ message: CustomStringConvertible) {
+    Logger().log(level: .debug, "🟡 === \(message.description)")
 }
 
 func logError(_ error: Error) {

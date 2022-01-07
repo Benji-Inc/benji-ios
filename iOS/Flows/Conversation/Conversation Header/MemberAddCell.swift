@@ -25,9 +25,9 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.containerView)
         self.containerView.addSubview(self.imageView)
         self.imageView.image = UIImage(systemName: "plus")
-        self.imageView.tintColor = ThemeColor.white.color
+        self.imageView.tintColor = ThemeColor.D6.color
         
-        self.containerView.set(backgroundColor: .textColor)
+        self.containerView.set(backgroundColor: .black)
         self.containerView.layer.masksToBounds = true
         self.containerView.layer.cornerRadius = Theme.innerCornerRadius
     }

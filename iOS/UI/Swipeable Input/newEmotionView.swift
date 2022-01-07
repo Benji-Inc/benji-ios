@@ -17,11 +17,11 @@ struct EmojiContainer: View {
             .overlay (
                 ZStack {
                     RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                        .stroke(.border, alpha: 0.3, width: 0.25)
+                        .stroke(.D6withAlpha, alpha: 0.3, width: 0.25)
                     Text(self.emoji).fontType(.small)
                 }
             ).frame(width: 20, height: 20, alignment: .center)
-            .color(.white, alpha: 0.1)
+            .color(.T1, alpha: 0.1)
     }
 }
 

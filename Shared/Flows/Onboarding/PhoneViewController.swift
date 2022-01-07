@@ -24,7 +24,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         phoneField.withFlag = true
         phoneField.withDefaultPickerUI = true
         phoneField.withExamplePlaceholder = true
-        phoneField.textColor = ThemeColor.darkGray.color
+        phoneField.textColor = ThemeColor.T1.color
 
         super.init(textField: phoneField, placeholder: phoneField.placeholder)
 

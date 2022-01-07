@@ -8,16 +8,40 @@
 
 import Foundation
 
+enum InputType {
+
+    case photo
+    case video
+    case keyboard
+    case calendar
+    case jibs
+    case confirmation
+
+    var image: UIImage? {
+        switch self {
+        case .photo:
+            return UIImage(systemName: "photo")
+        case .video:
+            return UIImage(systemName: "video")
+        case .keyboard:
+            return UIImage(systemName: "abc")
+        case .calendar:
+            return UIImage(systemName: "calendar")
+        case .jibs:
+            return UIImage(systemName: "bitcoinsign.circle")
+        case .confirmation:
+            return nil
+        }
+    }
+}
+
 class InputTextView: ExpandingTextView {
 
     lazy var countView = CharacterCountView()
     lazy var confirmationView = AlertConfirmationView()
-    lazy var placeholderView = InputPlaceholderView()
 
     private(set) var currentInputType: InputType?
     @Published var inputText: String = ""
-
-    weak var attachmentDelegate: AttachmentViewControllerDelegate?
 
     override func initializeViews() {
         super.initializeViews()
@@ -41,8 +65,7 @@ class InputTextView: ExpandingTextView {
         case .keyboard:
             self.inputView = nil
         case .photo, .video, .calendar, .jibs:
-            self.placeholderView.configure(with: type)
-            self.inputView = self.placeholderView
+            self.inputView = nil
         }
 
         self.currentInputType = type

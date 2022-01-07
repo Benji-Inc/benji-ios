@@ -17,7 +17,7 @@ class AlertConfirmationView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .white)
+        self.set(backgroundColor: .B1)
 
         self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
@@ -25,7 +25,7 @@ class AlertConfirmationView: BaseView {
         self.label.textAlignment = .center
 
         self.addSubview(self.button)
-        self.button.set(style: .normal(color: .darkGray, text: "Cancel"))
+        self.button.set(style: .normal(color: .B1, text: "Cancel"))
     }
 
     func setAlertMessage(for avatars: [Avatar]) {

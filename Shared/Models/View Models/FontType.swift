@@ -59,9 +59,9 @@ enum FontType {
     var kern: CGFloat {
         switch self {
         case .small, .xtraSmall:
-            return -0.5
+            return 0
         default:
-            return 1
+            return -0.5
         }
     }
 

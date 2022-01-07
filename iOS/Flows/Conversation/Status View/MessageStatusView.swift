@@ -85,9 +85,9 @@ private class MessageStatusContainer: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        self.set(backgroundColor: .B1withAlpha)
         self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.border.color.cgColor
+        self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
         self.layer.borderWidth = 0.25
 
         self.clipsToBounds = true 
@@ -107,10 +107,11 @@ private class MessageReadView: MessageStatusContainer {
         self.addSubview(self.progressView)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
+        self.imageView.tintColor = ThemeColor.red.color
         self.addSubview(self.label)
 
         self.progressView.width = 1
-        self.progressView.set(backgroundColor: .white)
+        self.progressView.set(backgroundColor: .T1)
         self.progressView.alpha = 0
     }
 
@@ -181,7 +182,7 @@ private class MessageReadView: MessageStatusContainer {
         } else {
             self.label.setText("Error")
         }
-
+        
         self.layoutNow()
     }
 
@@ -236,8 +237,8 @@ private class MessageReadView: MessageStatusContainer {
 
 private class MessageReplyView: MessageStatusContainer {
 
-    let label = ThemeLabel(font: .small, textColor: .textColor)
-    let countLabel = ThemeLabel(font: .xtraSmall, textColor: .white)
+    let label = ThemeLabel(font: .small)
+    let countLabel = ThemeLabel(font: .xtraSmall)
 
     override func initializeSubviews() {
         super.initializeSubviews()

@@ -12,7 +12,7 @@ import Combine
 class AvatarProfileViewController: ViewController {
 
     private let avatarView = AvatarView()
-    private let handleLabel = ThemeLabel(font: .small, textColor: .textColor)
+    private let handleLabel = ThemeLabel(font: .small)
     private let nameLabel = ThemeLabel(font: .mediumBold)
     private let vibrancyView = VibrancyView()
 

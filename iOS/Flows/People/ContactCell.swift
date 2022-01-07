@@ -15,8 +15,8 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Contact
 
     private let avatarView = AvatarView()
-    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .textColor)
-    private let subTitleLabel = ThemeLabel(font: .small, textColor: .textColor)
+    private let titleLabel = ThemeLabel(font: .regularBold)
+    private let subTitleLabel = ThemeLabel(font: .small)
     private let animationView = AnimationView.with(animation: .checkbox)
     private let content = BaseView()
 
@@ -27,7 +27,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.content)
-        self.content.set(backgroundColor: .darkGray)
+        self.content.set(backgroundColor: .B2)
 
         self.content.addSubview(self.avatarView)
         self.content.addSubview(self.titleLabel)

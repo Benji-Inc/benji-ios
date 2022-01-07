@@ -18,7 +18,7 @@ class ReservationsViewController: NavigationBarViewController {
         super.initializeViews()
 
         self.view.addSubview(self.contactsButton)
-        self.contactsButton.set(style: .normal(color: .darkGray, text: "Invite Contacts"))
+        self.contactsButton.set(style: .normal(color: .B1, text: "Invite Contacts"))
         self.contactsButton.didSelect { [unowned self] in
             self.didSelectShowContacts?()
         }

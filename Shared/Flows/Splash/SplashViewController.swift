@@ -19,7 +19,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
 
     let animationView = AnimationView.with(animation: .loading)
     let label = ThemeLabel(font: .small)
-    let versionLabel = ThemeLabel(frame: .zero, font: .small, textColor: .textColor)
+    let versionLabel = ThemeLabel(font: .small)
 
     private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
 
@@ -27,7 +27,6 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         didSet {
             guard let text = self.text else { return }
             self.label.setText(text)
-            self.label.setTextColor(.textColor)
             self.view.layoutNow()
         }
     }
