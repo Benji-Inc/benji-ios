@@ -96,12 +96,7 @@ class MessageContentView: BaseView {
 
         self.authorView.set(avatar: message.avatar)
         
-        if message.isFromCurrentUser {
-            self.bubbleView.gradientLayer.updateColors(with: [.D4TopLeft, .D4BottomRight])
-        } else {
-            self.bubbleView.gradientLayer.updateColors(with: [.L4TopLeft, .L4BottomRight])
-        }
-
+        self.bubbleView.configure(with: message)
         self.setNeedsLayout()
     }
 

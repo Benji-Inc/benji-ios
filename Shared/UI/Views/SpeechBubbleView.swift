@@ -89,7 +89,7 @@ class SpeechBubbleView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.layer.insertSublayer(self.bubbleLayer, at: 0)
+        self.layer.addSublayer(self.bubbleLayer)
     }
 
     override func layoutSubviews() {

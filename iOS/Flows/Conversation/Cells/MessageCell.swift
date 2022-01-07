@@ -70,7 +70,7 @@ class MessageCell: UICollectionViewCell {
         }
         
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
-                                         brightness: 1.0, //TODO
+                                         brightness: messageLayoutAttributes.brightness, //TODO
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
 
