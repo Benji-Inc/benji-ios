@@ -15,7 +15,7 @@ enum MessageContext: String, CaseIterable {
     case passive = "active"
 
     var color: ThemeColor {
-        return .white 
+        return .B1
     }
 
     var interruptionLevel: UNNotificationInterruptionLevel {

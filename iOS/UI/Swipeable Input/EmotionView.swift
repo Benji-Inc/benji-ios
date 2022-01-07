@@ -25,7 +25,6 @@ class EmotionView: BaseView {
         
         self.addSubview(self.emojiContainer)
         self.emojiContainer.set(backgroundColor: .B1withAlpha)
-        self.emojiContainer.backgroundColor = UIColor.white.withAlphaComponent(0.1)
         self.emojiContainer.layer.cornerRadius = Theme.innerCornerRadius
         self.emojiContainer.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
         self.emojiContainer.layer.borderWidth = 0.25

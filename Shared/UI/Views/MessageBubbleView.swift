@@ -16,9 +16,9 @@ class MessageBubbleView: SpeechBubbleView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-                
+                        
         self.gradientLayer.opacity = 0.2
-        self.layer.insertSublayer(self.gradientLayer, at: 2)
+        self.layer.insertSublayer(self.gradientLayer, at: 1)
     }
     
     override func layoutSubviews() {

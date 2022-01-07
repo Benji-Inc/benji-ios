@@ -41,7 +41,7 @@ extension TransitionRouter {
             snapshot.authorView.alpha = 0 
 
             toView.configure(with: message)
-            toView.bubbleView.bubbleColor = ThemeColor.white.color
+            toView.bubbleView.bubbleColor = fromView.bubbleView.bubbleColor
             toView.bubbleView.tailLength = 0
             toView.bubbleView.orientation = fromView.bubbleView.orientation
             toView.state = .thread

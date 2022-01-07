@@ -34,8 +34,7 @@ class MessageDropZoneView: BaseView {
 
         self.sendTypeLabel.setSize(withWidth: self.width)
         self.sendTypeLabel.centerOnXAndY()
-
-        self.borderLayer.frame = self.bounds
+        
         self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 5).cgPath
     }
 
@@ -50,6 +49,7 @@ class MessageDropZoneView: BaseView {
         case .newConversation:
             self.sendTypeLabel.setText("Start a new conversation here")
             self.sendTypeLabel.isHidden = false
+            self.set(backgroundColor: .clear)
         case .none:
             self.sendTypeLabel.isHidden = true
         }
@@ -61,17 +61,17 @@ class MessageDropZoneView: BaseView {
 
     func setColors(for messageColor: ThemeColor?) {
         guard let color = messageColor else {
-            self.borderLayer.strokeColor = ThemeColor.white.color.cgColor
+            self.borderLayer.strokeColor = ThemeColor.B1.color.cgColor
             self.sendTypeLabel.setTextColor(.white)
             self.borderLayer.fillColor = ThemeColor.clear.color.cgColor
             return
         }
 
-        if color != .white {
+        if color != .B1 {
             self.borderLayer.strokeColor = color.color.cgColor
             self.sendTypeLabel.setTextColor(color)
         } else {
-            self.borderLayer.strokeColor = ThemeColor.white.color.cgColor
+            self.borderLayer.strokeColor = ThemeColor.B1.color.cgColor
             self.sendTypeLabel.setTextColor(.white)
         }
 
