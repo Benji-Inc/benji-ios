@@ -26,6 +26,15 @@ class GradientLayer: CAGradientLayer {
         self.type = .axial
     }
     
+    func updateColors(with colors: [ThemeColor]) {
+        let cgColors = colors.compactMap { color in
+            return color.color.cgColor
+        }
+        
+        self.colors = cgColors
+        self.setNeedsLayout()
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
