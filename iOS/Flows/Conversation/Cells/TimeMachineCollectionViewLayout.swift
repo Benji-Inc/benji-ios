@@ -41,7 +41,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Data Source
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
     weak var delegate: TimeMachineCollectionViewLayoutDelegate?
-    private var lastFrontmostIndexPath: [SectionIndex: IndexPath] = [:]
 
     var sectionCount: Int {
         return self.collectionView?.numberOfSections ?? 0
@@ -256,8 +255,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             normalizedZOffset = 0
         }
 
-        if normalizedZOffset == 0, indexPath != self.lastFrontmostIndexPath[indexPath.section] {
-            self.lastFrontmostIndexPath[indexPath.section] = indexPath
+        if normalizedZOffset == 0 {
             self.delegate?.timeMachineCollectionViewLayout(self, updatedFrontmostItemAt: indexPath)
         }
 

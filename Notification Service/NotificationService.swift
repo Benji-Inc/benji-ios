@@ -34,6 +34,9 @@ class NotificationService: UNNotificationServiceExtension {
 
         Task {
             await self.initializeParse()
+
+            EventLogger.trackRemoteNotification(userInfo: request.content.userInfo)
+            
             if let client = self.getChatClient() {
                 await self.updateContent(with: request,
                                          client: client,
@@ -139,10 +142,12 @@ class NotificationService: UNNotificationServiceExtension {
             return member.id
         } ?? []
 
-        /// Map members to recipients
-        if let recipients = try? await User.fetchAndUpdateLocalContainer(where: memberIds, container: .users).compactMap({ user in
-            return user.iNPerson
-        }) {
+        // Map members to recipients
+        if let recipients = try? await User.fetchAndUpdateLocalContainer(where: memberIds,
+                                                                              container: .users)
+            .compactMap({ user in
+                return user.iNPerson
+            }) {
             self.recipients = recipients
         }
 

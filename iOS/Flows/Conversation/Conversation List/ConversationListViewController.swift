@@ -30,6 +30,7 @@ class ConversationListViewController: ViewController {
     private(set) var conversationListController: ConversationListController
 
     var selectedMessageView: MessageContentView?
+    var topMessageSubscription: AnyCancellable?
 
     // Input handlers
     var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?

@@ -40,6 +40,7 @@ final class Pass: PFObject, PFSubclassing {
 }
 
 extension Pass: Objectable {
+
     typealias KeyType = PassKey
 
     func getObject<Type>(for key: PassKey) -> Type? {

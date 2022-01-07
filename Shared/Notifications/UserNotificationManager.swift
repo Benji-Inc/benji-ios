@@ -127,7 +127,6 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) async {
-
         do {
             let installation = try await PFInstallation.getCurrent()
             installation.badge = 0

@@ -10,6 +10,7 @@ import Foundation
 import Parse
 
 extension User: Objectable {
+    
     typealias KeyType = UserKey
 
     func getObject<Type>(for key: UserKey) -> Type? {
