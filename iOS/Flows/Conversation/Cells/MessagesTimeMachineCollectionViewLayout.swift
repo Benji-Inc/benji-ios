@@ -114,7 +114,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                                                 end: 0)
         }
 
-        attributes.backgroundColor = .white
+        attributes.backgroundColor = indexPath.section == 0 ? .D1 : .L1
         attributes.brightness = backgroundBrightness
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down

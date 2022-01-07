@@ -19,10 +19,6 @@ class SpeechBubbleView: BaseView {
         case left
         case right
     }
-    
-    let shapeMask = CAShapeLayer()
-    
-    let gradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight], startPoint: .topLeft, endPoint: .bottomRight)
 
     /// The direction that the speech bubble's tail is pointing.
     var orientation: TailOrientation {
@@ -34,15 +30,14 @@ class SpeechBubbleView: BaseView {
     /// The color of the speech bubble.
     var bubbleColor: UIColor? {
         get {
-            //guard let cgColor = self.bubbleLayer.fillColor else { return nil }
-            //return UIColor(cgColor: cgColor)
-            return .red
+            guard let cgColor = self.bubbleLayer.fillColor else { return nil }
+            return UIColor(cgColor: cgColor)
         }
         set {
             // CALayers are implicitly animated. Disable animations so the color changes immediately.
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            //self.bubbleLayer.fillColor = newValue?.cgColor
+            self.bubbleLayer.fillColor = newValue?.cgColor
             CATransaction.commit()
         }
     }
@@ -95,7 +90,6 @@ class SpeechBubbleView: BaseView {
         super.initializeSubviews()
 
         self.layer.insertSublayer(self.bubbleLayer, at: 0)
-        self.layer.insertSublayer(self.gradientLayer, at: 1)
     }
 
     override func layoutSubviews() {
@@ -119,15 +113,15 @@ class SpeechBubbleView: BaseView {
             CATransaction.disableActions()
         }
 
-        self.updateBubblePath()
+        self.bubbleLayer.path = self.updateBubblePath()
         self.bubbleLayer.frame = self.bounds
-        self.gradientLayer.frame = self.bubbleLayer.bounds
 
         CATransaction.commit()
     }
 
+    @discardableResult
     /// Draws a path for the bubble and applies it to the bubble layer.
-    private func updateBubblePath() {
+    func updateBubblePath() -> CGPath {
         let cornerRadius: CGFloat = Theme.cornerRadius
         let bubbleFrame = self.bubbleFrame
         let tailBaseLength = self.tailBaseLength
@@ -187,10 +181,7 @@ class SpeechBubbleView: BaseView {
         }
 
         path.closeSubpath()
-        
-        self.shapeMask.path = path
-        self.gradientLayer.mask = self.shapeMask
-        
-        self.bubbleLayer.path = path
+                
+        return path
     }
 }

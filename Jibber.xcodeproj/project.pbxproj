@@ -65,6 +65,10 @@
 		D605AC91278624EB0015D800 /* L1GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC8F278624EB0015D800 /* L1GradientView.swift */; };
 		D605AC99278625400015D800 /* L5GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC98278625400015D800 /* L5GradientView.swift */; };
 		D605AC9A278625400015D800 /* L5GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC98278625400015D800 /* L5GradientView.swift */; };
+		D605AC9C27877F890015D800 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9B27877F890015D800 /* MessageBubbleView.swift */; };
+		D605AC9D27877F890015D800 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9B27877F890015D800 /* MessageBubbleView.swift */; };
+		D605AC9F2787C2900015D800 /* D1GradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9E2787C2900015D800 /* D1GradientLayer.swift */; };
+		D605ACA02787C2900015D800 /* D1GradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9E2787C2900015D800 /* D1GradientLayer.swift */; };
 		D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
 		D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE39236F44A8004FA89A /* User+Extensions.swift */; };
@@ -736,6 +740,8 @@
 		D605AC86278624560015D800 /* D1GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = D1GradientView.swift; sourceTree = "<group>"; };
 		D605AC8F278624EB0015D800 /* L1GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L1GradientView.swift; sourceTree = "<group>"; };
 		D605AC98278625400015D800 /* L5GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L5GradientView.swift; sourceTree = "<group>"; };
+		D605AC9B27877F890015D800 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
+		D605AC9E2787C2900015D800 /* D1GradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = D1GradientLayer.swift; sourceTree = "<group>"; };
 		D6090E552377CB2F00833DA7 /* Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messageable.swift; sourceTree = "<group>"; };
 		D609AE35236F3F81004FA89A /* User+Objectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Objectable.swift"; sourceTree = "<group>"; };
 		D609AE39236F44A8004FA89A /* User+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Extensions.swift"; sourceTree = "<group>"; };
@@ -1600,20 +1606,21 @@
 				D66F0FE122C041AF00BA277D /* AvatarView.swift */,
 				D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */,
 				D61EC0E521D30EB300204BEE /* BaseView.swift */,
-				D60C814522092F6B00A127A3 /* ThemeButton.swift */,
 				D6FEF02C257EB71700F9789B /* Button+Extensions.swift */,
 				D6629C7425AD254C002C3B92 /* ConfettiView.swift */,
 				D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */,
 				D60C81492209360400A127A3 /* DisplayableImageView.swift */,
 				D67243E027861C2A004C0A52 /* Gradients */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
-				D61EC0E121D30E6000204BEE /* ThemeLabel.swift */,
 				D6E974302752B4B000D95F08 /* MessageContentView */,
+				D605AC9B27877F890015D800 /* MessageBubbleView.swift */,
 				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */,
 				D6F733D923D37C6300FBC7BC /* TextEntryField.swift */,
 				D6D1503D21DAF98500CD8CE4 /* TextField.swift */,
 				D61EC0E321D30E9100204BEE /* TextView.swift */,
+				D60C814522092F6B00A127A3 /* ThemeButton.swift */,
+				D61EC0E121D30E6000204BEE /* ThemeLabel.swift */,
 				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
 				D69B75FA264842D00007020D /* VideoView.swift */,
 			);
@@ -1726,6 +1733,7 @@
 				D605AC86278624560015D800 /* D1GradientView.swift */,
 				D605AC8F278624EB0015D800 /* L1GradientView.swift */,
 				D605AC98278625400015D800 /* L5GradientView.swift */,
+				D605AC9E2787C2900015D800 /* D1GradientLayer.swift */,
 			);
 			path = Gradients;
 			sourceTree = "<group>";
@@ -2553,6 +2561,7 @@
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
+				D605AC9F2787C2900015D800 /* D1GradientLayer.swift in Sources */,
 				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,
 				80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
@@ -2710,6 +2719,7 @@
 				D6CC148D276C003E005F617F /* View+Extensions.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				807A7BC526C5B5A20023A71E /* Task+Extensions.swift in Sources */,
+				D605AC9C27877F890015D800 /* MessageBubbleView.swift in Sources */,
 				D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
@@ -2792,6 +2802,7 @@
 				D63DB24025E9993800F6B323 /* AvatarProfileViewController.swift in Sources */,
 				D63DB23C25E9992600F6B323 /* UIWindow+Extensions.swift in Sources */,
 				D605AC9A278625400015D800 /* L5GradientView.swift in Sources */,
+				D605ACA02787C2900015D800 /* D1GradientLayer.swift in Sources */,
 				D63DB23825E9992600F6B323 /* UIImage+Extensions.swift in Sources */,
 				D63DB22D25E9991F00F6B323 /* Selectable.swift in Sources */,
 				D63DB28425E9999C00F6B323 /* Transitionable.swift in Sources */,
@@ -2898,6 +2909,7 @@
 				D63DB21225E998D700F6B323 /* Config.swift in Sources */,
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,
 				D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
+				D605AC9D27877F890015D800 /* MessageBubbleView.swift in Sources */,
 				D63DB21A25E998F000F6B323 /* Router.swift in Sources */,
 				D63DB23E25E9992900F6B323 /* UNNotification+Extensions.swift in Sources */,
 				D6AE0FAD267D037900C6B048 /* User+INPerson.swift in Sources */,

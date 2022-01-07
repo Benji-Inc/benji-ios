@@ -30,7 +30,7 @@ class MessageContentView: BaseView {
     static let bubbleTailLength: CGFloat = 12
 
     /// A speech bubble background view for the message.
-    let bubbleView = SpeechBubbleView(orientation: .down)
+    let bubbleView = MessageBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .white)
     private (set) var message: Messageable?
