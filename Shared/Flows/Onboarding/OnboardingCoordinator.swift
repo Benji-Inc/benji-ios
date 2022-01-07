@@ -34,35 +34,61 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
     }
 
     private func setInitialContent() {
-        guard let current = User.current(), let status = current.status else {
+        guard let status = User.current()?.status else {
+            // If there is no user, then they'll need to provide a phone number to create one.
             let welcomeVC = self.onboardingVC.welcomeVC
             self.onboardingVC.switchTo(.welcome(welcomeVC))
-
             return
         }
 
         let initialContent: OnboardingContent
-
         switch status {
-        case .active, .waitlist:
-            initialContent = .waitlist(self.onboardingVC.waitlistVC)
-        case .inactive:
-#if APPCLIP
-            initialContent = .waitlist(self.onboardingVC.waitlistVC)
-#else
-            if current.fullName.isEmpty {
-                initialContent = .name(self.onboardingVC.nameVC)
-            } else if current.smallImage.isNil {
-                initialContent = .photo(self.onboardingVC.photoVC)
-            } else {
-                initialContent = .name(self.onboardingVC.nameVC)
-            }
-#endif
         case .needsVerification:
-            initialContent = .phone(self.onboardingVC.phoneVC)
+            initialContent = .welcome(self.onboardingVC.welcomeVC)
+        case .inactive, .waitlist:
+            if let nextContent = self.getNextIncompleteOnboardingContent() {
+                initialContent = nextContent
+            } else {
+                initialContent = .welcome(self.onboardingVC.welcomeVC)
+            }
+        case .active:
+            self.finishFlow(with: ())
+            return
         }
 
         self.onboardingVC.switchTo(initialContent)
+    }
+
+    /// Returns the content for the first incompleted onboarding step in the onboarding sequence.
+    private func getNextIncompleteOnboardingContent() -> OnboardingContent? {
+        guard let current = User.current(), let status = current.status else {
+            // If there is no user, then they'll need to provide a phone number to create one.
+            return .phone(self.onboardingVC.phoneVC)
+        }
+
+        switch status {
+        case .needsVerification:
+            return .code(self.onboardingVC.codeVC)
+        case .waitlist:
+            if current.fullName.isEmpty {
+                return .name(self.onboardingVC.nameVC)
+            } else if current.smallImage.isNil {
+                return .photo(self.onboardingVC.photoVC)
+            } else {
+                return .waitlist(self.onboardingVC.waitlistVC)
+            }
+        case .inactive:
+            if current.fullName.isEmpty {
+                return .name(self.onboardingVC.nameVC)
+            } else if current.smallImage.isNil {
+                return .photo(self.onboardingVC.photoVC)
+            } else {
+                return nil
+            }
+        case .active:
+            // Active users don't need to do onboarding.
+            return nil
+        }
     }
 }
 
