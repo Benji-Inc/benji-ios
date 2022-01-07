@@ -98,7 +98,6 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    @MainActor
     func showLogOutAlert() {
         let alert = UIAlertController(title: "🙀",
                                       message: "Someone tripped over a 🐈 and ☠️ the mainframe.",

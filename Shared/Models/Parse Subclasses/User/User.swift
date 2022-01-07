@@ -32,10 +32,10 @@ enum UserKey: String {
 }
 
 enum UserStatus: String {
-    case active // Has completed onboarding and has full access to the app
-    case waitlist // Has verified phone number and is waiting for access to the app
-    case inactive // Has been given access to the full app but has not completed onboarding
-    case needsVerification // Has entered a phone number but not a verification code. 
+    case needsVerification // Has entered a phone number but not a verification code.
+    case inactive // Has verified but has not completed required onboarding
+    case waitlist // Has verified but has not being granted access to the full app
+    case active // Has verified and fully onboardied. Has full access to the app
 }
 
 enum FocusStatus: String {
@@ -87,7 +87,7 @@ final class User: PFUser {
     var status: UserStatus? {
         get {
             guard let string: String = self.getObject(for: .status) else { return nil }
-            return UserStatus.init(rawValue: string)
+            return UserStatus(rawValue: string)
         }
         set { self.setObject(for: .status, with: newValue?.rawValue) }
     }

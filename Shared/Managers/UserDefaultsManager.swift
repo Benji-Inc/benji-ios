@@ -13,7 +13,6 @@ class UserDefaultsManager {
     enum Key: String {
         case hasShownHomeSwipe
         case hasShownKeyboardInstructions
-        case fullName
     }
 
     static func update(key: Key, with value: Any) {

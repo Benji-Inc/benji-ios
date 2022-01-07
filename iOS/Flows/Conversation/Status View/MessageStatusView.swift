@@ -41,20 +41,25 @@ class MessageStatusView: BaseView {
 
     @MainActor
     func configure(for message: Messageable) {
-        self.messageController = ChatClient.shared.messageController(for: message)
         if let msg = self.messageController?.message {
             self.replyView.setReplies(for: msg)
             self.readView.configure(for: msg)
         }
+
+        // Anonymous users can't set messages as read, so hide the read view for them.
+        self.readView.isVisible = ChatUser.currentUserRole != .anonymous
+
         self.layoutNow()
     }
 
     func handleConsumption() {
-        if let message = self.messageController?.message,
-           !message.isFromCurrentUser,
-           !message.isConsumedByMe {
-            self.readView.beginConsumption(for: message)
-        }
+        guard ChatUser.currentUserRole != .anonymous else { return }
+
+        guard let message = self.messageController?.message,
+              !message.isFromCurrentUser,
+              !message.isConsumedByMe else { return }
+
+        self.readView.beginConsumption(for: message)
     }
 
     func resetConsumption() {
@@ -182,7 +187,6 @@ private class MessageReadView: MessageStatusContainer {
     }
 
     func beginConsumption(for message: Message) {
-
         guard message.canBeConsumed else { return }
 
         self.progressView.alpha = 0

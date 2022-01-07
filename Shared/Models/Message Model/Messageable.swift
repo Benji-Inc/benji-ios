@@ -9,8 +9,8 @@
 import Foundation
 
 enum MessageStatus: String {
-    case sent //Message was sent as a system message
-    case delivered //Message was successfully delivered by Twilio
+    case sent // Message was sent as a system message
+    case delivered // Message was successfully delivered by Twilio
     case unknown
     case error
 }

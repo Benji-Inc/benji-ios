@@ -21,7 +21,7 @@ extension Avatar {
     
     var fullName: String {
         if self.givenName.isEmpty && self.familyName.isEmpty {
-            return "Unkown"
+            return "Unknown"
         }
         return self.givenName + " " + self.familyName
     }

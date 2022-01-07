@@ -142,6 +142,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pinToSafeArea(.top, offset: .noOffset)
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
+        self.collectionView.height = self.view.height - self.collectionView.top
         self.collectionView.centerOnX()
         
         if self.scrollToLastItemOnLayout {
