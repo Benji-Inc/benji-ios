@@ -18,7 +18,9 @@ class MainCoordinator: Coordinator<Void> {
         super.start()
 
         SessionManager.shared.didReceiveInvalidSessionError = { [unowned self] _ in
-            self.showLogOutAlert()
+            Task.onMainActor {
+                self.showLogOutAlert()
+            }
         }
 
         LaunchManager.shared.delegate = self

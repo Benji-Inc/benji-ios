@@ -70,10 +70,10 @@ class MessageCell: UICollectionViewCell {
         }
         
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
-                                         brightness: messageLayoutAttributes.brightness, //TODO
+                                         textColor: messageLayoutAttributes.textColor,
+                                         brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
-
         self.detailView.height = MessageDetailView.height
         self.detailView.alpha = messageLayoutAttributes.detailAlpha
 

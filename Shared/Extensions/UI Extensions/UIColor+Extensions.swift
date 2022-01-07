@@ -29,6 +29,29 @@ extension UIColor {
     }
 }
 
+func lerp(_ normalized: CGFloat, color1: UIColor, color2: UIColor) -> UIColor {
+    var red1: CGFloat = 0
+    var green1: CGFloat = 0
+    var blue1: CGFloat = 0
+    var alpha1: CGFloat = 0
+
+    color1.getRed(&red1, green: &green1, blue: &blue1, alpha: &alpha1)
+
+    var red2: CGFloat = 0
+    var green2: CGFloat = 0
+    var blue2: CGFloat = 0
+    var alpha2: CGFloat = 0
+
+    color2.getRed(&red2, green: &green2, blue: &blue2, alpha: &alpha2)
+
+    let newRed = (1.0 - normalized) * red1 + normalized * red2
+    let newGreen = (1.0 - normalized) * green1 + normalized * green2
+    let newBlue = (1.0 - normalized) * blue1 + normalized * blue2
+    let newAlpha = (1.0 - normalized) * alpha1 + normalized * alpha2
+
+    return UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
+}
+
 extension CIColor {
 
     convenience init?(hex: String) {
