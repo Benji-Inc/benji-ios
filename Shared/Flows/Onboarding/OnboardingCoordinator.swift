@@ -21,7 +21,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
     }
 
     override func start() {
-        self.setInitialContent()
+        self.setInitialOnboardingContent()
         self.handle(deeplink: self.deepLink)
     }
 
@@ -33,24 +33,15 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         self.onboardingVC.updateUI()
     }
 
-    private func setInitialContent() {
-        guard let status = User.current()?.status else {
-            // If there is no user, then they'll need to provide a phone number to create one.
-            let welcomeVC = self.onboardingVC.welcomeVC
-            self.onboardingVC.switchTo(.welcome(welcomeVC))
-            return
-        }
+    // MARK: - Onboarding Flow Logic
+
+    private func setInitialOnboardingContent() {
+        let userStatus = User.current()?.status
 
         let initialContent: OnboardingContent
-        switch status {
-        case .needsVerification:
+        switch userStatus {
+        case .needsVerification, .inactive, .waitlist, .none:
             initialContent = .welcome(self.onboardingVC.welcomeVC)
-        case .inactive, .waitlist:
-            if let nextContent = self.getNextIncompleteOnboardingContent() {
-                initialContent = nextContent
-            } else {
-                initialContent = .welcome(self.onboardingVC.welcomeVC)
-            }
         case .active:
             self.finishFlow(with: ())
             return
@@ -92,24 +83,73 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
     }
 }
 
-extension OnboardingCoordinator: LaunchActivityHandler {
+extension OnboardingCoordinator: OnboardingViewControllerDelegate {
 
-    nonisolated func handle(launchActivity: LaunchActivity) {
-        Task.onMainActor {
-            self.onboardingVC.handle(launchActivity: launchActivity)
+    // MARK: - User Info Entry Flow
+
+    func onboardingViewControllerDidStartOnboarding(_ controller: OnboardingViewController) {
+        let phoneVC = self.onboardingVC.phoneVC
+        self.onboardingVC.switchTo(.phone(phoneVC))
+    }
+
+    func onboardingViewController(_ controller: OnboardingViewController, didEnter phoneNumber: PhoneNumber) {
+        let codeVC = self.onboardingVC.codeVC
+        codeVC.phoneNumber = phoneNumber
+        self.onboardingVC.switchTo(.code(codeVC))
+    }
+
+    func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController,
+                                               andReturnCID cid: String?) {
+
+        if let cid = cid {
+            Task {
+                try await self.saveInitialConversation(with: cid)
+            }
+        }
+
+        self.goToNextContentOrFinish()
+    }
+
+    private func saveInitialConversation(with conversationId: String?) async throws {
+        guard let id = conversationId else { return }
+        let object = InitialConveration()
+        object.conversationIdString = id
+        try await object.saveLocally()
+    }
+
+    func onboardingViewController(_ controller: OnboardingViewController, didEnterName name: String) {
+        Task {
+            do {
+                guard let user = User.current() else { return }
+                user.formatName(from: name)
+                try await user.saveLocalThenServer()
+
+                self.goToNextContentOrFinish()
+            } catch  {
+                logError(error)
+            }
         }
     }
-}
 
-extension OnboardingCoordinator: OnboardingViewControllerDelegate {
+    func onboardingViewControllerDidTakePhoto(_ controller: OnboardingViewController) {
+        self.goToNextContentOrFinish()
+    }
+
+    private func goToNextContentOrFinish() {
+        if let nextContent = self.getNextIncompleteOnboardingContent() {
+            self.onboardingVC.switchTo(nextContent)
+        } else if let user = User.current() {
+            self.activateUserThenShowPermissions(user: user)
+        }
+    }
     
-    nonisolated func onboardingViewController(_ controller: OnboardingViewController,
-                                              didOnboard user: User) {
+    func activateUserThenShowPermissions(user: User) {
         Task {
-            await controller.showLoading()
+            self.onboardingVC.showLoading()
+
             try await ActivateUser().makeRequest(andUpdate: [],
-                                                 viewsToIgnore: [controller.view])
-            await controller.hideLoading()
+                                                 viewsToIgnore: [self.onboardingVC.view])
+            await self.onboardingVC.hideLoading()
 
             await self.checkForPermissions()
         }
@@ -142,3 +182,13 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     }
 }
 
+// MARK: - Launch Activity Handling
+
+extension OnboardingCoordinator: LaunchActivityHandler {
+
+    nonisolated func handle(launchActivity: LaunchActivity) {
+        Task.onMainActor {
+            self.onboardingVC.handle(launchActivity: launchActivity)
+        }
+    }
+}

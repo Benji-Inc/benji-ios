@@ -11,12 +11,16 @@ import Parse
 import Lottie
 import Intents
 import Localization
+import PhoneNumberKit
 
+@MainActor
 protocol OnboardingViewControllerDelegate: AnyObject {
-//    func onboardingViewControllerDidStartOnboarding(_ controller: OnboardingViewController)
-//    func onboardingViewControllerDidEnterPhone(_ controller: OnboardingViewController)
-//    func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController)
-    func onboardingViewController(_ controller: OnboardingViewController, didOnboard user: User)
+    func onboardingViewControllerDidStartOnboarding(_ controller: OnboardingViewController)
+    func onboardingViewController(_ controller: OnboardingViewController, didEnter phoneNumber: PhoneNumber)
+    func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController,
+                                               andReturnCID conversationId: String?)
+    func onboardingViewController(_ controller: OnboardingViewController, didEnterName name: String)
+    func onboardingViewControllerDidTakePhoto(_ controller: OnboardingViewController)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>,
@@ -75,7 +79,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.welcomeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                self.switchTo(.phone(self.phoneVC))
+                self.delegate.onboardingViewControllerDidStartOnboarding(self)
             case .failure:
                 break
             }
@@ -84,8 +88,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let phone):
-                self.codeVC.phoneNumber = phone
-                self.switchTo(.code(self.codeVC))
+                self.delegate.onboardingViewController(self, didEnter: phone)
             case .failure(_):
                 break
             }
@@ -94,27 +97,17 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let conversationId):
-                Task {
-                    try await self.saveInitialConversation(with: conversationId)
-                }
-
-                guard let current = User.current() else { return }
-
-                switch current.status {
-                case .active:
-                    self.delegate.onboardingViewController(self, didOnboard: current)
-                case .needsVerification, .waitlist, .inactive, .none:
-                    self.switchTo(.name(self.nameVC))
-                }
+                self.delegate.onboardingViewControllerDidVerifyCode(self,
+                                                                    andReturnCID: conversationId)
             case .failure(_):
-                self.switchTo(.waitlist(self.waitlistVC))
+                break
             }
         }
 
         self.nameVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let name):
-                self.handleNameSuccess(for: name)
+                self.delegate.onboardingViewController(self, didEnterName: name)
             case .failure(_):
                 break
             }
@@ -131,8 +124,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                guard let user = User.current() else { return }
-                self.delegate.onboardingViewController(self, didOnboard: user)
+                self.delegate.onboardingViewControllerDidTakePhoto(self)
             case .failure(_):
                 break
             }
@@ -150,43 +142,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.loadingAnimationView.size = CGSize(width: 18, height: 18)
         self.loadingAnimationView.centerOnXAndY()
-    }
-
-    // MARK: - Onboarding Step Completion Handling
-
-    private func saveInitialConversation(with conversationId: String?) async throws {
-        guard let id = conversationId else { return }
-        let object = InitialConveration()
-        object.conversationIdString = id
-        try await object.saveLocally()
-    }
-
-    private func handleNameSuccess(for name: String) {
-        Task {
-            guard let user = User.current() else { return }
-            user.formatName(from: name)
-            try await user.saveLocalThenServer()
-
-            switch user.status {
-            case .none, .needsVerification:
-                self.switchTo(.phone(self.phoneVC))
-            case .inactive:
-#if APPCLIP
-                // The user can't activate their account in an app clip
-                self.currentContent = .waitlist(self.waitlistVC)
-#else
-                if user.isOnboarded {
-                    self.delegate.onboardingViewController(self, didOnboard: User.current()!)
-                } else {
-                    self.switchTo(.photo(self.photoVC))
-                }
-#endif
-            case .waitlist:
-                self.switchTo(.waitlist(self.waitlistVC))
-            case .active:
-                self.delegate.onboardingViewController(self, didOnboard: user)
-            }
-        }
     }
 
     // MARK: - SwitchableContentViewController Overrides
@@ -297,18 +252,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.loadingBlur.removeFromSuperview()
                 continuation.resume(returning: ())
             }
-        }
-    }
-
-    private func showLoading(user: User) {
-        self.loadingBlur.removeFromSuperview()
-        self.view.addSubview(self.loadingBlur)
-        self.view.layoutNow()
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.loadingBlur.showBlur(true)
-        } completion: { completed in
-            self.loadingAnimationView.play()
-            self.delegate.onboardingViewController(self, didOnboard: user)
         }
     }
 }
