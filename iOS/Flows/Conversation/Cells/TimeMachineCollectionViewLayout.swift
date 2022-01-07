@@ -60,7 +60,14 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// Keypoints used to gradually shrink down items as they move away.
     var scalingKeyPoints: [CGFloat] = [1, 0.84, 0.65, 0.4]
     /// The amount of vertical space between the tops of adjacent items.
-    var spacingKeyPoints: [CGFloat] = [0, 8, 16, 20]
+    var spacingKeyPoints: [CGFloat] {
+        switch self.uiState {
+        case .read:
+            return [0, 18, 22, 26]
+        case .write:
+            return [0, 8, 16, 20]
+        }
+    }
     /// Key points used for the gradually alpha out items further back in the message stack.
     var alphaKeyPoints: [CGFloat] = [1, 1, 1, 0]
     /// The maximum number of messages to show in each section's stack.

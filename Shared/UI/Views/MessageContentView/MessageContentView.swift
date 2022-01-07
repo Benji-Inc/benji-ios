@@ -127,10 +127,7 @@ class MessageContentView: BaseView {
         if self.state == .thread {
             self.textView.textAlignment = .left
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-
-            if self.textView.top < MessageContentView.padding.value {
-                self.textView.pin(.top, offset: MessageContentView.padding)
-            }
+            self.textView.centerOnY()
         } else if state == .expanded {
             if self.textView.numberOfLines > 1 {
                 self.textView.textAlignment = .left
@@ -143,7 +140,6 @@ class MessageContentView: BaseView {
                 self.textView.center = self.bubbleView.center
                 self.textView.center.y += self.bubbleView.tailLength.half
             }
-
         } else if self.textView.numberOfLines > 1 {
             self.textView.textAlignment = .left
             self.textView.pin(.left, offset: MessageContentView.padding)
