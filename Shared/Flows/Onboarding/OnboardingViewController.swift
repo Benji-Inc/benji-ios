@@ -23,7 +23,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         return .fade
     }
 
-    lazy var welcomeVC = newWelcomeViewController()
+    lazy var welcomeVC = WelcomeViewController()
     lazy var phoneVC = PhoneViewController()
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
@@ -66,7 +66,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
         
         Task {
-            try await self.updateInvitor(with: newWelcomeViewController.benjiId)
+            try await self.updateInvitor(with: WelcomeViewController.benjiId)
         }
 
         self.welcomeVC.onDidComplete = { [unowned self] result in

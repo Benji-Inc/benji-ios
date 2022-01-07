@@ -12,7 +12,7 @@ import Localization
 
 enum OnboardingContent: Switchable {
 
-    case welcome(newWelcomeViewController)
+    case welcome(WelcomeViewController)
     case phone(PhoneViewController)
     case code(CodeViewController)
     case name(NameViewController)
