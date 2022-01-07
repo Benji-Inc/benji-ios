@@ -26,7 +26,7 @@ class MessageTextView: TextView {
 
     func setText(with message: Messageable) {
         self.setText(message.kind.text)
-        let textColor: ThemeColor = message.isFromCurrentUser ? .red : .white
+        let textColor: ThemeColor = message.isFromCurrentUser ? .D1 : .white
         self.setTextColor(textColor)
     }
 

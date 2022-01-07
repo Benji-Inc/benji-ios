@@ -90,6 +90,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.showShadow(withOffset: 8)
+        self.inputContainerView.bubbleColor = ThemeColor.B1.color
 
         self.inputTypeContainer.addSubview(self.emotionView)
         self.emotionView.configure(for: self.currentEmotion)
@@ -282,7 +283,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                                     context: self.currentContext,
                                     emotion: self.currentEmotion,
                                     previousMessage: self.editableMessage)
-
         return object.isSendable
     }
 
