@@ -108,7 +108,7 @@ class MessageContentView: BaseView {
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
         self.textView.textColor = textColor
-        self.bubbleView.bubbleColor = color.color(withBrightness: brightness)
+        self.bubbleView.bubbleColor = color.withAlphaComponent(brightness)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
     }

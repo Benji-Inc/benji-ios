@@ -36,7 +36,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     var frontmostBrightness: CGFloat = 1
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
     var backmostBrightness: CGFloat {
-        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
+        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.2
     }
     
     var messageContentState: MessageContentView.State = .collapsed

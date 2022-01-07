@@ -26,12 +26,7 @@ class MessageBubbleView: SpeechBubbleView {
     
     func configure(with message: Messageable) {
         CATransaction.begin()
-        
-        if message.isFromCurrentUser {
-            self.gradientLayer.updateColors(with: [.D4TopLeft, .D4BottomRight])
-        } else {
-            self.gradientLayer.updateColors(with: [.L4TopLeft, .L4BottomRight])
-        }
+        self.gradientLayer.updateColors(with: [.D4TopLeft, .D4BottomRight])
         CATransaction.commit()
     }
     
