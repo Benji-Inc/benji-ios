@@ -61,7 +61,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         case .needsVerification:
             return .code(self.onboardingVC.codeVC)
         case .waitlist:
-            if current.fullName.isEmpty {
+            if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
                 return .photo(self.onboardingVC.photoVC)
@@ -69,7 +69,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
                 return .waitlist(self.onboardingVC.waitlistVC)
             }
         case .inactive:
-            if current.fullName.isEmpty {
+            if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
                 return .photo(self.onboardingVC.photoVC)
