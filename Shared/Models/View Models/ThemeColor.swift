@@ -20,6 +20,8 @@ enum ThemeColor: String, CaseIterable {
     case D6
     case D6withAlpha
     case L1
+    case T1
+    case T2
     case black
 
     case background
@@ -65,6 +67,10 @@ enum ThemeColor: String, CaseIterable {
             return ThemeColor.D6.color.withAlphaComponent(0.2)
         case .L1:
             return UIColor(named: "L1")!
+        case .T1:
+            return UIColor(named: "T1")!
+        case .T2:
+            return UIColor(named: "T2")!
         case .black:
             return UIColor(named: "BLACK")!
         }
