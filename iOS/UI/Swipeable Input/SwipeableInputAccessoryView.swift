@@ -53,7 +53,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
-    lazy var inputManager = InputTypeManager.init(with: CollectionView(layout: InputTypeCollectionViewLayout()))
 
     static var inputTypeMaxHeight: CGFloat = 20
 
@@ -119,18 +118,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     private func setupHandlers() {
         self.updateInputType(with: .keyboard)
-
-//        self.inputManager
-//            .$selectedItems
-//            .removeDuplicates()
-//            .mainSink { items in
-//                guard let first = items.first else { return }
-//                if let ip = self.inputManager.dataSource.indexPath(for: first) {
-//                    self.inputManager.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
-//                }
-//
-//                self.updateInputType(with: first)
-//            }.store(in: &self.cancellables)
 
         KeyboardManager.shared.$willKeyboardShow
             .filter({ willShow in

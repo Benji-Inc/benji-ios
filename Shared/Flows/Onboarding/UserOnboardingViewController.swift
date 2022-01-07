@@ -21,7 +21,6 @@ class UserOnboardingViewController: ViewController {
         super.initializeViews()
 
         self.avatarView.isHidden = true 
-        self.view.set(backgroundColor: .background)
 
         self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.avatarView)
@@ -91,7 +90,6 @@ class OnboardingMessageTextView: TextView {
         self.textAlignment = .center
         self.textContainer.lineBreakMode = .byWordWrapping
         self.isEditable = false
-        self.linkTextAttributes = [.foregroundColor: ThemeColor.lightGray.color, .underlineStyle: 0]
         self.lineSpacing = 2
     }
 }

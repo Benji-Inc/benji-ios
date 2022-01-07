@@ -156,7 +156,7 @@ class TextView: UITextView {
         self.textColor = textColor.color
     }
 
-    func set(placeholder: Localized, color: ThemeColor = .white) {
+    func set(placeholder: Localized, color: ThemeColor = .T1withAlpha) {
         var styleAttributes = StringStyle(font: .regular, color: color).attributes
         let centeredParagraphStyle = NSMutableParagraphStyle()
         centeredParagraphStyle.alignment = .center
