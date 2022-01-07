@@ -106,7 +106,7 @@ private class MessageReadView: MessageStatusContainer {
         self.addSubview(self.label)
 
         self.progressView.width = 1
-        self.progressView.set(backgroundColor: .white)
+        self.progressView.set(backgroundColor: .T1)
         self.progressView.alpha = 0
     }
 

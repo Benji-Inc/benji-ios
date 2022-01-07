@@ -84,8 +84,8 @@ class ThemeButton: UIButton, Statusable {
             highlightedString.addAttribute(.font, value: FontType.regularBold.font)
             highlightedString.addAttribute(.kern, value: CGFloat(2))
 
-            normalString.addAttribute(.foregroundColor, value: ThemeColor.white.color)
-            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.white.color)
+            normalString.addAttribute(.foregroundColor, value: ThemeColor.T1.color)
+            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.T1.color)
             if color != .clear {
                 self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
             }

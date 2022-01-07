@@ -57,7 +57,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         }
 
         self.view.addSubview(self.reservationButton)
-        self.reservationButton.set(style: .normal(color: .white, text: "RSVP"))
+        self.reservationButton.set(style: .normal(color: .T1, text: "RSVP"))
         self.reservationButton.didSelect { [unowned self] in
             self.state = .reservationInput
         }

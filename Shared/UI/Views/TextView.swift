@@ -101,7 +101,7 @@ class TextView: UITextView {
     }
 
     convenience init() {
-        self.init(frame: .zero, font: .smallBold, textColor: .white, textContainer: nil)
+        self.init(frame: .zero, font: .smallBold, textColor: .T1, textContainer: nil)
     }
 
     func initializeViews() {

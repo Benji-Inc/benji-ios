@@ -32,7 +32,7 @@ class MessageContentView: BaseView {
     /// A speech bubble background view for the message.
     let bubbleView = MessageBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
-    let textView = MessageTextView(font: .regular, textColor: .white)
+    let textView = MessageTextView(font: .regular, textColor: .T1)
     private (set) var message: Messageable?
 
     let authorView = AvatarView()

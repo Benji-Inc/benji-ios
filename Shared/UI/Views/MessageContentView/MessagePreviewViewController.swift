@@ -32,7 +32,7 @@ class MessagePreviewViewController: ViewController {
         self.view.addSubview(self.content)
 
         self.content.state = .expanded
-        self.content.configureBackground(color: .white, brightness: 1.0, showBubbleTail: false, tailOrientation: .up)
+        self.content.configureBackground(color: .BG, brightness: 1.0, showBubbleTail: false, tailOrientation: .up)
         self.content.configure(with: self.message)
 
         let maxWidth = Theme.getPaddedWidth(with: window.width)

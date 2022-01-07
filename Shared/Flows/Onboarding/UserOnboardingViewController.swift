@@ -29,7 +29,7 @@ class UserOnboardingViewController: ViewController {
         }
 
         self.view.addSubview(self.messageContent)
-        self.messageContent.configureBackground(color: .white,
+        self.messageContent.configureBackground(color: .T1,
                                                 brightness: 1.0,
                                                 showBubbleTail: true,
                                                 tailOrientation: .up)

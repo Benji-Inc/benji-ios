@@ -15,11 +15,10 @@ class UserStatusView: BaseView {
     
     override func initializeSubviews() {
         self.contentMode = .scaleAspectFill
-        self.set(backgroundColor: .clear)
         
         self.addSubview(self.imageView)
         
-        self.set(backgroundColor: .white)
+        self.set(backgroundColor: .B1withAlpha)
         self.layer.cornerRadius = Theme.innerCornerRadius
         self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
         self.layer.borderWidth = 0.25

@@ -88,7 +88,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     private func beginTyping() {
         self.pulseLayer.removeAllAnimations()
-        self.pulseLayer.strokeColor = ThemeColor.white.color.cgColor
+        self.pulseLayer.strokeColor = ThemeColor.D6.color.cgColor
         
         let scale = CABasicAnimation(keyPath: "transform.scale")
         scale.toValue = 1.2

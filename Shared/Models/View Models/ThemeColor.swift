@@ -11,6 +11,7 @@ import UIKit
 
 enum ThemeColor: String, CaseIterable {
     
+    case BG
     case B1
     case B1withAlpha
     case B2
@@ -27,19 +28,18 @@ enum ThemeColor: String, CaseIterable {
     case T2
     case black
 
-    case white
     case clear
     case red
 
     var color: UIColor {
         switch self {
-        case .white:
-            return UIColor(named: "WHITE")!
+            
         case .clear:
             return UIColor(named: "CLEAR")!
         case .red:
             return UIColor(named: "RED")!
-            
+        case .BG:
+            return UIColor(named: "BG")!
         case .B1withAlpha:
             return ThemeColor.B1.color.withAlphaComponent(0.3)
         case .B1:

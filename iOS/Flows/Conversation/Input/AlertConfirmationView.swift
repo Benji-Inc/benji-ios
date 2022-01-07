@@ -17,7 +17,7 @@ class AlertConfirmationView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .white)
+        self.set(backgroundColor: .B1)
 
         self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 

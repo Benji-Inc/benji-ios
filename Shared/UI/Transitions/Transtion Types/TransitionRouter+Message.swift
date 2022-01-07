@@ -75,7 +75,6 @@ extension TransitionRouter {
         Task {
             async let first: () = UIView.awaitSpringAnimation(with: .slow, animations: {
                 snapshot.frame = finalFrame
-                snapshot.bubbleView.bubbleColor = ThemeColor.white.color
                 threadVC.blurView.showBlur(true)
                 self.toVC.view.alpha = 1
             })

@@ -83,7 +83,7 @@ class SpeechBubbleView: BaseView {
 
         super.init(coder: aDecoder)
 
-        self.bubbleColor = ThemeColor.white.color
+        self.bubbleColor = ThemeColor.T1.color
     }
 
     override func initializeSubviews() {

@@ -111,7 +111,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func updateButton() {
-        self.button.set(style: .normal(color: .white, text: self.getButtonTitle()))
+        self.button.set(style: .normal(color: .B1, text: self.getButtonTitle()))
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.showButton = self.selectedItems.count > 0
             self.view.layoutNow()

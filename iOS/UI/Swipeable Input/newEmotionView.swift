@@ -21,7 +21,7 @@ struct EmojiContainer: View {
                     Text(self.emoji).fontType(.small)
                 }
             ).frame(width: 20, height: 20, alignment: .center)
-            .color(.white, alpha: 0.1)
+            .color(.T1, alpha: 0.1)
     }
 }
 

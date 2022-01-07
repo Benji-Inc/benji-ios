@@ -45,7 +45,7 @@ class ConnectionRequestView: BaseView {
             }
         }
         self.containerView.addSubview(self.declineButton)
-        self.declineButton.set(style: .normal(color: .white, text: "Decline"))
+        self.declineButton.set(style: .normal(color: .T1, text: "Decline"))
         self.declineButton.didSelect { [unowned self] in
             guard let from = self.currentItem?.from else { return }
             Task {
