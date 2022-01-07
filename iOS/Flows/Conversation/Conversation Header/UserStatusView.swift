@@ -21,10 +21,10 @@ class UserStatusView: BaseView {
         
         self.set(backgroundColor: .white)
         self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.border.color.cgColor
+        self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
         self.layer.borderWidth = 0.25
         
-        self.tintColor = ThemeColor.darkGray.color
+        self.tintColor = ThemeColor.B1withAlpha.color
         
         self.transform = CGAffineTransform.init(scaleX: 0.8, y: 0.8)
         self.alpha = 0.0

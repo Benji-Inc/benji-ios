@@ -19,7 +19,7 @@ class AvatarView: DisplayableImageView {
         }
     }
 
-    private let label = ThemeLabel(font: .regularBold, textColor: .textColor)
+    private let label = ThemeLabel(font: .regularBold)
 
     // MARK: - Initializers
 

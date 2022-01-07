@@ -22,20 +22,16 @@ enum ThemeColor: String, CaseIterable {
     case L1
     case black
 
-    case border
     case background
     case darkGray
     case gray
     case lightGray
-    case textColor
     case white
     case clear
     case red
 
     var color: UIColor {
         switch self {
-        case .border:
-            return UIColor(named: "BORDER")!
         case .background:
             return UIColor(named: "BACKGROUND")!
         case .darkGray:
@@ -44,8 +40,6 @@ enum ThemeColor: String, CaseIterable {
             return UIColor(named: "GRAY")!
         case .lightGray:
             return UIColor(named: "LIGHTGRAY")!
-        case .textColor:
-            return UIColor(named: "TEXTCOLOR")!
         case .white:
             return UIColor(named: "WHITE")!
         case .clear:

@@ -101,7 +101,7 @@ class TextView: UITextView {
     }
 
     convenience init() {
-        self.init(frame: .zero, font: .smallBold, textColor: .textColor, textContainer: nil)
+        self.init(frame: .zero, font: .smallBold, textColor: .white, textContainer: nil)
     }
 
     func initializeViews() {
@@ -156,7 +156,7 @@ class TextView: UITextView {
         self.textColor = textColor.color
     }
 
-    func set(placeholder: Localized, color: ThemeColor = .textColor) {
+    func set(placeholder: Localized, color: ThemeColor = .white) {
         var styleAttributes = StringStyle(font: .regular, color: color).attributes
         let centeredParagraphStyle = NSMutableParagraphStyle()
         centeredParagraphStyle.alignment = .center

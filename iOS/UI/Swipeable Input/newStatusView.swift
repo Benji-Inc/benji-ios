@@ -17,14 +17,14 @@ struct newReadView: View {
             Spacer.length(.short)
             Text("Read")
                 .fontType(.small)
-                .color(.textColor)
+                .color(.white)
             Spacer.length(.short)
             Image("checkmark-double")
                 .color(.white)
             Spacer.length(.short)
         }.background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                .stroke(.border, alpha: 0.3, width: 0.25)
+                .stroke(.white, alpha: 0.3, width: 0.25)
                 .frame(height: 20, alignment: .center)
                 .background(
                     RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
@@ -43,7 +43,7 @@ struct newReplyView: View {
             Spacer.length(.short)
             Text("Replies")
                 .fontType(.small)
-                .color(.textColor)
+                .color(.white)
             Spacer.length(.short)
             Text("1")
                 .fontType(.xtraSmall)
@@ -51,7 +51,7 @@ struct newReplyView: View {
             Spacer.length(.short)
         }.background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                .stroke(.border, alpha: 0.3, width: 0.25)
+                .stroke(.white, alpha: 0.3, width: 0.25)
                 .frame(height: 20, alignment: .center)
                 .background(
                     RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
