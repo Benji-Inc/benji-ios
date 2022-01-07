@@ -59,16 +59,8 @@
 		C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */; };
 		D605AC8427861C9A0015D800 /* BackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */; };
 		D605AC8527861C9A0015D800 /* BackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */; };
-		D605AC87278624560015D800 /* D1GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC86278624560015D800 /* D1GradientView.swift */; };
-		D605AC88278624560015D800 /* D1GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC86278624560015D800 /* D1GradientView.swift */; };
-		D605AC90278624EB0015D800 /* L1GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC8F278624EB0015D800 /* L1GradientView.swift */; };
-		D605AC91278624EB0015D800 /* L1GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC8F278624EB0015D800 /* L1GradientView.swift */; };
-		D605AC99278625400015D800 /* L5GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC98278625400015D800 /* L5GradientView.swift */; };
-		D605AC9A278625400015D800 /* L5GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC98278625400015D800 /* L5GradientView.swift */; };
 		D605AC9C27877F890015D800 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9B27877F890015D800 /* MessageBubbleView.swift */; };
 		D605AC9D27877F890015D800 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9B27877F890015D800 /* MessageBubbleView.swift */; };
-		D605AC9F2787C2900015D800 /* D1GradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9E2787C2900015D800 /* D1GradientLayer.swift */; };
-		D605ACA02787C2900015D800 /* D1GradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9E2787C2900015D800 /* D1GradientLayer.swift */; };
 		D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
 		D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE39236F44A8004FA89A /* User+Extensions.swift */; };
@@ -726,11 +718,7 @@
 		B593A943CC5530E87AD88F88 /* Pods-Notification Service.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notification Service.release.xcconfig"; path = "Pods/Target Support Files/Pods-Notification Service/Pods-Notification Service.release.xcconfig"; sourceTree = "<group>"; };
 		B92BA452D2C2DB45DD711F86 /* Pods_AppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundGradientView.swift; sourceTree = "<group>"; };
-		D605AC86278624560015D800 /* D1GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = D1GradientView.swift; sourceTree = "<group>"; };
-		D605AC8F278624EB0015D800 /* L1GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L1GradientView.swift; sourceTree = "<group>"; };
-		D605AC98278625400015D800 /* L5GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L5GradientView.swift; sourceTree = "<group>"; };
 		D605AC9B27877F890015D800 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
-		D605AC9E2787C2900015D800 /* D1GradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = D1GradientLayer.swift; sourceTree = "<group>"; };
 		D6090E552377CB2F00833DA7 /* Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messageable.swift; sourceTree = "<group>"; };
 		D609AE35236F3F81004FA89A /* User+Objectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Objectable.swift"; sourceTree = "<group>"; };
 		D609AE39236F44A8004FA89A /* User+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Extensions.swift"; sourceTree = "<group>"; };
@@ -1698,10 +1686,6 @@
 			children = (
 				D684840922CD48D000362AC3 /* GradientView.swift */,
 				D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */,
-				D605AC86278624560015D800 /* D1GradientView.swift */,
-				D605AC8F278624EB0015D800 /* L1GradientView.swift */,
-				D605AC98278625400015D800 /* L5GradientView.swift */,
-				D605AC9E2787C2900015D800 /* D1GradientLayer.swift */,
 			);
 			path = Gradients;
 			sourceTree = "<group>";
@@ -2440,7 +2424,6 @@
 				D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
-				D605AC90278624EB0015D800 /* L1GradientView.swift in Sources */,
 				D687595C2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
@@ -2503,18 +2486,15 @@
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
 				D62D16322736F60400C542CE /* ToastErrorView.swift in Sources */,
-				D605AC87278624560015D800 /* D1GradientView.swift in Sources */,
 				D6E974362752C47F00D95F08 /* ReactionType.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
-				D605AC9F2787C2900015D800 /* D1GradientLayer.swift in Sources */,
 				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,
 				80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
-				D605AC99278625400015D800 /* L5GradientView.swift in Sources */,
 				D63D63032486A9020037E046 /* ConversationInputAccessoryView.swift in Sources */,
 				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
 				D64C6A7E23294A8600DB7257 /* ConversationKey.swift in Sources */,
@@ -2744,8 +2724,6 @@
 				D63DB21625E998E200F6B323 /* AppDelegate.swift in Sources */,
 				D63DB24025E9993800F6B323 /* AvatarProfileViewController.swift in Sources */,
 				D63DB23C25E9992600F6B323 /* UIWindow+Extensions.swift in Sources */,
-				D605AC9A278625400015D800 /* L5GradientView.swift in Sources */,
-				D605ACA02787C2900015D800 /* D1GradientLayer.swift in Sources */,
 				D63DB23825E9992600F6B323 /* UIImage+Extensions.swift in Sources */,
 				D63DB22D25E9991F00F6B323 /* Selectable.swift in Sources */,
 				D63DB28425E9999C00F6B323 /* Transitionable.swift in Sources */,
@@ -2804,7 +2782,6 @@
 				D66AB0F4277A4991007A35D1 /* BoxView.swift in Sources */,
 				D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */,
 				D69B75FD264842D00007020D /* VideoView.swift in Sources */,
-				D605AC91278624EB0015D800 /* L1GradientView.swift in Sources */,
 				D63DB23725E9992600F6B323 /* UIView+Animations.swift in Sources */,
 				D6F7DEF826FBDD8600F72A5C /* UserOnboardingViewController.swift in Sources */,
 				801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
@@ -2838,7 +2815,6 @@
 				D63DB28825E999A100F6B323 /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D63DB26325E9997200F6B323 /* StringStyle.swift in Sources */,
 				D63DB25825E9995700F6B323 /* AnimationCycle.swift in Sources */,
-				D605AC88278624560015D800 /* D1GradientView.swift in Sources */,
 				D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
 				D6AD799B266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */,
