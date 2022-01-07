@@ -13,6 +13,9 @@ import Intents
 import Localization
 
 protocol OnboardingViewControllerDelegate: AnyObject {
+//    func onboardingViewControllerDidStartOnboarding(_ controller: OnboardingViewController)
+//    func onboardingViewControllerDidEnterPhone(_ controller: OnboardingViewController)
+//    func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController)
     func onboardingViewController(_ controller: OnboardingViewController, didOnboard user: User)
 }
 
@@ -27,8 +30,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var phoneVC = PhoneViewController()
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
-    lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
+    lazy var waitlistVC = WaitlistViewController()
 
     let loadingBlur = BlurView()
     let loadingAnimationView = AnimationView()
@@ -72,7 +75,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.welcomeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                self.current = .phone(self.phoneVC)
+                self.switchTo(.phone(self.phoneVC))
             case .failure:
                 break
             }
@@ -82,7 +85,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success(let phone):
                 self.codeVC.phoneNumber = phone
-                self.current = .code(self.codeVC)
+                self.switchTo(.code(self.codeVC))
             case .failure(_):
                 break
             }
@@ -101,10 +104,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 case .active:
                     self.delegate.onboardingViewController(self, didOnboard: current)
                 case .needsVerification, .waitlist, .inactive, .none:
-                    self.current = .name(self.nameVC)
+                    self.switchTo(.name(self.nameVC))
                 }
             case .failure(_):
-                self.current = .waitlist(self.waitlistVC)
+                self.switchTo(.waitlist(self.waitlistVC))
             }
         }
 
@@ -166,20 +169,20 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
             switch user.status {
             case .none, .needsVerification:
-                self.current = .phone(self.phoneVC)
+                self.switchTo(.phone(self.phoneVC))
             case .inactive:
 #if APPCLIP
                 // The user can't activate their account in an app clip
-                self.current = .waitlist(self.waitlistVC)
+                self.currentContent = .waitlist(self.waitlistVC)
 #else
                 if user.isOnboarded {
                     self.delegate.onboardingViewController(self, didOnboard: User.current()!)
                 } else {
-                    self.current = .photo(self.photoVC)
+                    self.switchTo(.photo(self.photoVC))
                 }
 #endif
             case .waitlist:
-                self.current = .waitlist(self.waitlistVC)
+                self.switchTo(.waitlist(self.waitlistVC))
             case .active:
                 self.delegate.onboardingViewController(self, didOnboard: user)
             }
@@ -189,36 +192,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     // MARK: - SwitchableContentViewController Overrides
 
     override func shouldShowLargeAvatar() -> Bool {
-        switch self.current {
+        switch self.currentContent {
         case .welcome, .phone, .code, .waitlist:
             return true
         case .name, .photo, .none:
             return false
-        }
-    }
-
-    override func getInitialContent() -> OnboardingContent {
-        guard let current = User.current(), let status = current.status else {
-            return .welcome(self.welcomeVC)
-        }
-
-        switch status {
-        case .active, .waitlist:
-            return .waitlist(self.waitlistVC)
-        case .inactive:
-#if APPCLIP
-            return .waitlist(self.waitlistVC)
-#else
-            if current.fullName.isEmpty {
-                return .name(self.nameVC)
-            } else if current.smallImage.isNil {
-                return .photo(self.photoVC)
-            } else {
-                return .name(self.nameVC)
-            }
-#endif
-        case .needsVerification:
-            return .welcome(self.welcomeVC)
         }
     }
 
@@ -231,30 +209,30 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func didSelectBackButton() {
         super.didSelectBackButton()
 
-        guard let content = self.current else { return }
+        guard let content = self.currentContent else { return }
         switch content {
         case .phone(_):
-            self.current = .welcome(self.welcomeVC)
+            self.switchTo(.welcome(self.welcomeVC))
         case .code(_):
-            self.current = .phone(self.phoneVC)
+            self.switchTo(.phone(self.phoneVC))
         case .photo(_):
-            self.current = .name(self.nameVC)
+            self.switchTo(.name(self.nameVC))
         default:
             break
         }
     }
 
     override func getMessage() -> Localized? {
-        guard let content = self.current else { return nil }
+        guard let content = self.currentContent else { return nil }
         return content.getDescription(with: self.invitor)
     }
 
     func handle(launchActivity: LaunchActivity) {
-        guard let content = self.current, case OnboardingContent.welcome = content else { return }
+        guard let content = self.currentContent, case OnboardingContent.welcome = content else { return }
 
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            self.current = .phone(self.phoneVC)
+            self.switchTo(.phone(self.phoneVC))
 
             delay(0.25) { [unowned self] in
                 self.phoneVC.textField.text = phoneNumber
@@ -268,7 +246,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 if let userId = reservation.createdBy?.objectId {
                     try await self.updateInvitor(with: userId)
                     await self.hideLoading()
-                    self.current = .phone(self.phoneVC)
+                    self.switchTo(.phone(self.phoneVC))
                 }
 
             }
@@ -279,7 +257,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 if let userId = pass.owner?.objectId {
                     try await self.updateInvitor(with: userId)
                     await self.hideLoading()
-                    self.current = .phone(self.phoneVC)
+                    self.switchTo(.phone(self.phoneVC))
                 }
             }
         }

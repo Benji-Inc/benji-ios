@@ -21,14 +21,48 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
     }
 
     override func start() {
+        self.setInitialContent()
         self.handle(deeplink: self.deepLink)
     }
 
     func handle(deeplink: DeepLinkable?) {
         guard let link = deeplink else { return }
+
         self.onboardingVC.reservationId = link.reservationId
         self.onboardingVC.passId = link.passId
         self.onboardingVC.updateUI()
+    }
+
+    private func setInitialContent() {
+        guard let current = User.current(), let status = current.status else {
+            let welcomeVC = self.onboardingVC.welcomeVC
+            self.onboardingVC.switchTo(.welcome(welcomeVC))
+
+            return
+        }
+
+        let initialContent: OnboardingContent
+
+        switch status {
+        case .active, .waitlist:
+            initialContent = .waitlist(self.onboardingVC.waitlistVC)
+        case .inactive:
+#if APPCLIP
+            initialContent = .waitlist(self.onboardingVC.waitlistVC)
+#else
+            if current.fullName.isEmpty {
+                initialContent = .name(self.onboardingVC.nameVC)
+            } else if current.smallImage.isNil {
+                initialContent = .photo(self.onboardingVC.photoVC)
+            } else {
+                initialContent = .name(self.onboardingVC.nameVC)
+            }
+#endif
+        case .needsVerification:
+            initialContent = .phone(self.onboardingVC.phoneVC)
+        }
+
+        self.onboardingVC.switchTo(initialContent)
     }
 }
 
@@ -54,6 +88,8 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             await self.checkForPermissions()
         }
     }
+
+    // MARK: - Permissions Flow
 
     @MainActor
     private func checkForPermissions() async {
