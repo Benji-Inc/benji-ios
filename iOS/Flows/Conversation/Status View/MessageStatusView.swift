@@ -41,6 +41,8 @@ class MessageStatusView: BaseView {
 
     @MainActor
     func configure(for message: Messageable) {
+        self.messageController = ChatClient.shared.messageController(for: message)
+        
         if let msg = self.messageController?.message {
             self.replyView.setReplies(for: msg)
             self.readView.configure(for: msg)
