@@ -12,7 +12,7 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
 
     /// The color of the background of the cell.
     var backgroundColor: UIColor = ThemeColor.D1.color
-    var textColor: UIColor = ThemeColor.T1.color
+    var textColor: UIColor = ThemeColor.T3.color
     /// How bright the background color is. 0 is black. 1 is full brightness of the given color
     var brightness: CGFloat = 1
     /// If true, the speechbubble tail should be shown.

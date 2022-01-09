@@ -119,7 +119,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                                               color2: unsaturatedColor)
 
             // Lerp text T1 and T2
-            let unsaturatedTextColor = ThemeColor.T1.color
+            let unsaturatedTextColor = ThemeColor.T3.color
             let saturatedTextColor = ThemeColor.T2.color
             attributes.textColor = lerp(normalizedFocusDistance,
                                         color1: unsaturatedTextColor,
