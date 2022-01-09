@@ -28,7 +28,7 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         self.containerView.addSubview(self.imageView)
         self.containerView.set(backgroundColor: .D6withAlpha)
         self.imageView.image = UIImage(systemName: "plus")
-        self.imageView.tintColor = ThemeColor.D6.color
+        self.imageView.tintColor = UIColor.white.withAlphaComponent(0.8)
         
         self.containerView.layer.borderColor = ThemeColor.D6.color.cgColor
         self.containerView.layer.borderWidth = 2
