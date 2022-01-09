@@ -113,10 +113,9 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
         guard let conversation = self.conversationController?.conversation else { return data }
 
-        let members = conversation.lastActiveMembers
-//        let members = conversation.lastActiveMembers.filter { member in
-//            return member.id != ChatClient.shared.currentUserId
-//        }
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
         
         data[.members] = members.compactMap({ user in
             guard let conversationController = self.conversationController else { return nil }
@@ -126,19 +125,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         })
                 
         data[.members]?.append(.add(conversation.cid))
-        
-        let cid1 = ChannelId(type: conversation.type, id: conversation.id + "1")
-        data[.members]?.append(.add(cid1))
-        let cid2 = ChannelId(type: conversation.type, id: conversation.id + "2")
-        data[.members]?.append(.add(cid2))
-        let cid3 = ChannelId(type: conversation.type, id: conversation.id + "3")
-        data[.members]?.append(.add(cid3))
-        let cid4 = ChannelId(type: conversation.type, id: conversation.id + "4")
-        data[.members]?.append(.add(cid4))
-        let cid5 = ChannelId(type: conversation.type, id: conversation.id + "5")
-        data[.members]?.append(.add(cid5))
-        let cid6 = ChannelId(type: conversation.type, id: conversation.id + "6")
-        data[.members]?.append(.add(cid6))
 
         return data
     }
