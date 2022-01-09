@@ -15,9 +15,9 @@ import UIKit
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
     
     lazy var membersVC = MembersViewController()
+    let menuImageView = UIImageView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .small)
-    let imageView = UIImageView(image: UIImage(systemName: "chevron.down"))
     
     private var state: ConversationUIState = .read
     
@@ -33,11 +33,14 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             self.view.addSubview(self.button)
         }
         
+        self.view.clipsToBounds = false
+        
+        self.view.addSubview(self.menuImageView)
+        self.menuImageView.image = UIImage(systemName: "ellipsis")
+        self.menuImageView.contentMode = .scaleAspectFit
+        self.menuImageView.tintColor = ThemeColor.B2.color
+        
         self.view.addSubview(self.topicLabel)
-        self.view.addSubview(self.imageView)
-        self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.D6.color
-        self.imageView.isVisible = false
         
         self.createMenu()
         
@@ -46,12 +49,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .mainSink { conversation in
                 guard let convo = conversation else {
                     self.topicLabel.isVisible = false
-                    self.imageView.isVisible = false
+                    self.menuImageView.isVisible = false
                     return
                 }
                 self.button.isVisible = convo.isOwnedByMe
                 self.topicLabel.setText(convo.title)
-                self.imageView.isVisible = true
+                self.menuImageView.isVisible = true
                 self.topicLabel.isVisible = true
                 
                 self.view.setNeedsLayout()
@@ -116,16 +119,17 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.membersVC.view.expandToSuperviewWidth()
         self.membersVC.view.pin(.bottom)
         
-        self.imageView.squaredSize = 10
-
-        self.topicLabel.setSize(withWidth: self.view.width)
-        self.topicLabel.centerX = self.view.centerX - self.imageView.halfWidth - 1
-        self.topicLabel.centerY = self.button.centerY
+        self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.topicLabel.centerOnX()
+        self.topicLabel.match(.bottom, to: .top, of: self.membersVC.view, offset: .negative(.standard))
         
-        self.imageView.match(.left, to: .right, of: self.topicLabel, offset: .custom(2))
-        self.imageView.centerY = self.topicLabel.centerY
+        self.menuImageView.height = 16
+        self.menuImageView.width = 20
+        self.menuImageView.pinToSafeAreaRight()
+        self.menuImageView.centerY = self.topicLabel.centerY
         
-        self.button.frame = self.topicLabel.frame
+        self.button.size = CGSize(width: 44, height: 44)
+        self.button.center = self.menuImageView.center
     }
     
     func update(for state: ConversationUIState) {
