@@ -27,7 +27,7 @@ class PlaceholderConversationCell: UICollectionViewCell, ConversationUIStateSett
 
     private func initializeViews() {
         self.contentView.addSubview(self.dropZoneView)
-        self.dropZoneView.setState(.newConversation, messageColor: .B1)
+        self.dropZoneView.setState(.newConversation, messageColor: .D1)
     }
 
     override func layoutSubviews() {

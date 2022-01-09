@@ -27,7 +27,7 @@ class DeliveryTypeView: BaseView {
         self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
         self.layer.borderWidth = 0.25
 
-        self.clipsToBounds = true
+        self.clipsToBounds = false
 
         self.button.showsMenuAsPrimaryAction = true
     }
@@ -49,7 +49,10 @@ class DeliveryTypeView: BaseView {
         self.pin(.right)
 
         self.label.centerOnXAndY()
-        self.button.expandToSuperviewSize()
+        
+        self.button.expandToSuperviewWidth()
+        self.button.height = 36
+        self.button.centerOnXAndY()
     }
 
     private func createMenu(for context: MessageContext) -> UIMenu {
