@@ -18,18 +18,25 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     let imageView = UIImageView()
     let containerView = BaseView()
     
+    let gradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight], startPoint: .topLeft, endPoint: .bottomRight)
+    
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.containerView)
         self.containerView.addSubview(self.imageView)
+        self.containerView.set(backgroundColor: .D6withAlpha)
         self.imageView.image = UIImage(systemName: "plus")
         self.imageView.tintColor = ThemeColor.D6.color
         
-        self.containerView.set(backgroundColor: .black)
+        self.containerView.layer.borderColor = ThemeColor.D6.color.cgColor
+        self.containerView.layer.borderWidth = 2
         self.containerView.layer.masksToBounds = true
         self.containerView.layer.cornerRadius = Theme.innerCornerRadius
+        
+        self.gradientLayer.opacity = 0.2
+        self.containerView.layer.addSublayer(self.gradientLayer)
     }
     
     func configure(with item: ChannelId) {}
@@ -42,5 +49,9 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         
         self.imageView.squaredSize = self.containerView.height * 0.5
         self.imageView.centerOnXAndY()
+        
+        CATransaction.begin()
+        self.gradientLayer.frame = self.containerView.bounds
+        CATransaction.commit()
     }
 }
