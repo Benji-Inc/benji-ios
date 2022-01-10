@@ -132,6 +132,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.blurView.expandToSuperviewSize()
 
         self.parentMessageView.pinToSafeAreaTop()
+        self.parentMessageView.top += 20
         self.parentMessageView.centerOnX()
 
         self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value

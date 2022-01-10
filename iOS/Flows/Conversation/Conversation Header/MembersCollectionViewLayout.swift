@@ -41,10 +41,9 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
                         let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
                         let transfrom = CGAffineTransform(scaleX: scale, y: scale)
                         item.transform = transfrom
-                        
+
                         let centerY: CGFloat = (item.bounds.height * scale).half
                         item.center = CGPoint(x: item.center.x, y: centerY)
-                        
                     }
                 }
 

@@ -13,7 +13,7 @@ class InitialMessageCell: UICollectionViewCell {
 
     var handleTopicTapped: CompletionOptional = nil
 
-    private(set) var label = ThemeLabel(font: .mediumBold)
+    private(set) var label = ThemeLabel(font: .regular)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,6 +41,7 @@ class InitialMessageCell: UICollectionViewCell {
 
         self.label.setSize(withWidth: self.width)
         self.label.centerOnXAndY()
+        self.label.center.y += MessageDetailView.height - Theme.ContentOffset.short.value
     }
     
     func configure(with conversation: Conversation) {

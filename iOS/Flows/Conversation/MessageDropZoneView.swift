@@ -62,7 +62,7 @@ class MessageDropZoneView: BaseView {
     func setColors(for messageColor: ThemeColor?) {
         guard let color = messageColor else {
             self.borderLayer.strokeColor = ThemeColor.B1.color.cgColor
-            self.sendTypeLabel.setTextColor(.T1)
+            self.sendTypeLabel.setTextColor(.T3)
             self.borderLayer.fillColor = ThemeColor.clear.color.cgColor
             return
         }
@@ -72,7 +72,7 @@ class MessageDropZoneView: BaseView {
             self.sendTypeLabel.setTextColor(color)
         } else {
             self.borderLayer.strokeColor = ThemeColor.B1.color.cgColor
-            self.sendTypeLabel.setTextColor(.T1)
+            self.sendTypeLabel.setTextColor(.T3)
         }
 
         self.borderLayer.fillColor = ThemeColor.clear.color.cgColor

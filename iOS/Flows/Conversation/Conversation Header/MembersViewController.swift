@@ -48,8 +48,8 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                 self.conversationController = ChatClient.shared.channelController(for: cid)
 
                 await self.loadData()
-            
                 self.subscribeToUpdates(for: conversation)
+                
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
     }
@@ -123,7 +123,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                                 conversationController: conversationController)
             return .member(member)
         })
-        
+                
         data[.members]?.append(.add(conversation.cid))
 
         return data

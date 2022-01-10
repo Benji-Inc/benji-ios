@@ -90,7 +90,7 @@ private class MessageStatusContainer: BaseView {
         self.set(backgroundColor: .B1withAlpha)
         self.layer.cornerRadius = Theme.innerCornerRadius
         self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
-        self.layer.borderWidth = 0.25
+        self.layer.borderWidth = 0.5
 
         self.clipsToBounds = true 
     }
@@ -240,7 +240,7 @@ private class MessageReadView: MessageStatusContainer {
 private class MessageReplyView: MessageStatusContainer {
 
     let label = ThemeLabel(font: .small)
-    let countLabel = ThemeLabel(font: .xtraSmall)
+    let countLabel = ThemeLabel(font: .small, textColor: .D6)
 
     override func initializeSubviews() {
         super.initializeSubviews()

@@ -24,16 +24,12 @@ class EmotionView: BaseView {
         super.initializeSubviews()
         
         self.addSubview(self.emojiContainer)
-        self.emojiContainer.set(backgroundColor: .B1withAlpha)
-        self.emojiContainer.layer.cornerRadius = Theme.innerCornerRadius
-        self.emojiContainer.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
-        self.emojiContainer.layer.borderWidth = 0.25
         self.emojiContainer.addSubview(self.emojiLabel)
         
         self.addSubview(self.label)
         self.addSubview(self.button)
         
-        self.clipsToBounds = true
+        self.clipsToBounds = false
         
         self.button.showsMenuAsPrimaryAction = true
     }
@@ -95,7 +91,9 @@ class EmotionView: BaseView {
         self.label.centerOnY()
         self.label.match(.left, to: .right, of: self.emojiContainer, offset: .short)
         
-        self.button.expandToSuperviewSize()
+        self.button.expandToSuperviewWidth()
+        self.button.height = 36
+        self.button.centerOnXAndY()
     }
     
     private func createMenu(for emotion: Emotion) -> UIMenu {
