@@ -119,14 +119,14 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.membersVC.view.expandToSuperviewWidth()
         self.membersVC.view.pin(.bottom)
         
-        self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.topicLabel.centerOnX()
-        self.topicLabel.match(.bottom, to: .top, of: self.membersVC.view, offset: .negative(.standard))
-        
         self.menuImageView.height = 16
         self.menuImageView.width = 20
         self.menuImageView.pinToSafeAreaRight()
-        self.menuImageView.centerY = self.topicLabel.centerY
+        self.menuImageView.pin(.top, offset: .custom(16))
+        
+        self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.topicLabel.centerOnX()
+        self.topicLabel.centerY = self.menuImageView.centerY
         
         self.button.size = CGSize(width: 44, height: 44)
         self.button.center = self.menuImageView.center
