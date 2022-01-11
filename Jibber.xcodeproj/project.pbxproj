@@ -383,6 +383,7 @@
 		D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072EB2730462F004657E7 /* MessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072EA2730462F004657E7 /* MessageDetailView.swift */; };
+		D682F02F278E09200016A24E /* ConversationHeaderViewController+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D68670092762D9AB00AD83A3 /* DeliveryTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */; };
@@ -871,6 +872,7 @@
 		D67CAFD927402993004FED29 /* InitialConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialConversation.swift; sourceTree = "<group>"; };
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
 		D68072EA2730462F004657E7 /* MessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailView.swift; sourceTree = "<group>"; };
+		D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationHeaderViewController+Menu.swift"; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTypeView.swift; sourceTree = "<group>"; };
@@ -1666,6 +1668,7 @@
 			isa = PBXGroup;
 			children = (
 				D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */,
+				D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */,
 				D627E4C9277B819A007B3286 /* MemberAddCell.swift */,
 				D6766C45274D50680046B449 /* MemberCell.swift */,
 				D6766C47274D50BF0046B449 /* MembersCollectionViewDataSource.swift */,
@@ -2604,6 +2607,7 @@
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				8028C9E9273ECB1200520465 /* ConversationListViewController.swift in Sources */,
+				D682F02F278E09200016A24E /* ConversationHeaderViewController+Menu.swift in Sources */,
 				D66A580525DD68F9001B3F64 /* PeopleCoordinator.swift in Sources */,
 				8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */,
 				D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,

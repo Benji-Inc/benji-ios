@@ -21,17 +21,14 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     
     private var state: ConversationUIState = .read
     
+    var didTapUpdateProfilePicture: CompletionOptional = nil 
     var didTapAddPeople: CompletionOptional = nil
     var didTapUpdateTopic: CompletionOptional = nil
-    
+        
     override func initializeViews() {
         super.initializeViews()
         
         self.addChild(viewController: self.membersVC)
-        
-        if !isRelease {
-            self.view.addSubview(self.button)
-        }
         
         self.view.clipsToBounds = false
         
@@ -39,11 +36,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.menuImageView.image = UIImage(systemName: "ellipsis")
         self.menuImageView.contentMode = .scaleAspectFit
         self.menuImageView.tintColor = ThemeColor.B2.color
+        self.view.addSubview(self.button)
         
         self.view.addSubview(self.topicLabel)
         
-        self.createMenu()
-        
+        self.button.showsMenuAsPrimaryAction = true
+                
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { conversation in
@@ -52,11 +50,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     self.menuImageView.isVisible = false
                     return
                 }
-                self.button.isVisible = convo.isOwnedByMe
                 self.topicLabel.setText(convo.title)
                 self.menuImageView.isVisible = true
                 self.topicLabel.isVisible = true
-                
+                self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
         
@@ -69,47 +66,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 self.didTapAddPeople?()
             }
         }.store(in: &self.cancellables)
-    }
-    
-    private func createMenu() {
-        let add = UIAction.init(title: "Add people",
-                                image: UIImage(systemName: "person.badge.plus")) { [unowned self] _ in
-            self.didTapAddPeople?()
-        }
-        
-        let topic = UIAction.init(title: "Update topic",
-                                  image: UIImage(systemName: "pencil")) { [unowned self] _ in
-            self.didTapUpdateTopic?()
-        }
-        
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
-        
-        let confirmDelete = UIAction(title: "Confirm",
-                                     image: UIImage(systemName: "trash"),
-                                     attributes: .destructive) { [unowned self] action in
-            Task {
-                let controller = ChatClient.shared.channelController(for: self.activeConversation!.cid)
-                do {
-                    try await controller.deleteChannel()
-                } catch {
-                    logError(error)
-                }
-            }.add(to: self.taskPool)
-        }
-        
-        let deleteMenu = UIMenu(title: "Delete Conversation",
-                                image: UIImage(systemName: "trash"),
-                                options: .destructive,
-                                children: [confirmDelete, neverMind])
-        
-        let menu = UIMenu(title: "Menu",
-                          image: UIImage(systemName: "ellipsis.circle"),
-                          identifier: nil,
-                          options: [],
-                          children: [topic, add, deleteMenu])
-        
-        self.button.showsMenuAsPrimaryAction = true
-        self.button.menu = menu
     }
     
     override func viewDidLayoutSubviews() {

@@ -53,6 +53,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.headerVC.didTapAddPeople = { [unowned self] in
             self.presentPeoplePicker()
         }
+        
+        self.conversationListVC.headerVC.didTapUpdateProfilePicture = { [unowned self] in
+            self.presentProfilePicture()
+        }
 
         self.conversationListVC.headerVC.didTapUpdateTopic = { [unowned self] in
             guard let conversation = self.activeConversation else {
@@ -115,6 +119,11 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
 
         self.router.present(coordinator, source: self.conversationListVC)
+    }
+    
+    func presentProfilePicture() {
+        let vc = ModalPhotoViewController()
+        self.router.present(vc, source: self.conversationListVC)
     }
 
     func presentPeoplePicker() {
@@ -222,5 +231,29 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.resignFirstResponder()
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
+    }
+}
+
+private class ModalPhotoViewController: PhotoViewController {
+    
+    private let gradientView = BackgroundGradientView()
+    
+    override func initializeViews() {
+        super.initializeViews()
+        
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        
+        self.view.insertSubview(self.gradientView, at: 0)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.gradientView.expandToSuperviewSize()
     }
 }
