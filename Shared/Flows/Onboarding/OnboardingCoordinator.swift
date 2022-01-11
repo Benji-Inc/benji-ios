@@ -15,7 +15,6 @@ import Intents
 class OnboardingCoordinator: PresentableCoordinator<Void> {
 
     private lazy var onboardingVC = OnboardingViewController(with: self)
-    private lazy var waitlistVC = WaitlistViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.onboardingVC

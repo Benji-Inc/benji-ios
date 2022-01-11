@@ -58,13 +58,18 @@ class MainCoordinator: Coordinator<Void> {
                                                     deepLink: self.deepLink)
             self.router.setRootModule(coordinator, animated: true)
             self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-                self.subscribeToUserUpdates()
 
-                #if IOS
-                Task {
-                    await self.runConversationListFlow()
-                }.add(to: self.taskPool)
-                #endif
+                if User.current()?.status == .waitlist {
+                    self.runWaitlistFlow()
+                } else {
+                    self.subscribeToUserUpdates()
+
+#if IOS
+                    Task {
+                        await self.runConversationListFlow()
+                    }.add(to: self.taskPool)
+#endif
+                }
             })
         }
     }
