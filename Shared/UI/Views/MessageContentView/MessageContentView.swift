@@ -132,8 +132,10 @@ class MessageContentView: BaseView {
             if self.textView.numberOfLines > 1 {
                 self.textView.textAlignment = .left
                 self.textView.pin(.left, offset: MessageContentView.padding)
-                let top = MessageContentView.padding.value + self.bubbleView.tailLength
-                self.textView.pin(.top, offset: .custom(top))
+                self.textView.centerOnY()
+                if self.bubbleView.orientation == .up {
+                    self.textView.centerY += self.bubbleView.tailLength.half
+                }
             } else {
                 self.textView.textAlignment = .center
                 self.textView.centerOnX()
