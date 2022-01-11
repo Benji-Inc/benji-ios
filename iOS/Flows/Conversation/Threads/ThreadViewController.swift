@@ -366,6 +366,7 @@ extension ThreadViewController {
 }
 
 extension ThreadViewController: TimeMachineCollectionViewLayoutDelegate {
+    
     func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
                                          updatedFrontmostItemAt indexPath: IndexPath) {
         self.topMostIndex = indexPath.row

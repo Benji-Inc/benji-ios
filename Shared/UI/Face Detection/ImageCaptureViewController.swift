@@ -77,7 +77,6 @@ class ImageCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
     }
 
     func configureCaptureSession() {
-
         // Define the capture device we want to use
         guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                    for: .video,

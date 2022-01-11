@@ -63,7 +63,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.view.addSubview(self.tapView)
 
         self.tapView.didSelect { [unowned self] in
-
             switch self.currentState {
             case .initial:
                 self.currentState = .scanEyesOpen
@@ -171,7 +170,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleFace(isDetected: Bool) {
-
         if isDetected {
             self.currentState = self.previousScanState
         }
