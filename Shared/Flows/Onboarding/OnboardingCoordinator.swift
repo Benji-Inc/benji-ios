@@ -14,7 +14,8 @@ import Intents
 
 class OnboardingCoordinator: PresentableCoordinator<Void> {
 
-    lazy var onboardingVC = OnboardingViewController(with: self)
+    private lazy var onboardingVC = OnboardingViewController(with: self)
+    private lazy var waitlistVC = WaitlistViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.onboardingVC
@@ -139,7 +140,12 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
         if let nextContent = self.getNextIncompleteOnboardingContent() {
             self.onboardingVC.switchTo(nextContent)
         } else if let user = User.current() {
-            self.activateUserThenShowPermissions(user: user)
+            switch user.status {
+            case .needsVerification, .waitlist, .none:
+                self.finishFlow(with: ())
+            case .inactive, .active:
+                self.activateUserThenShowPermissions(user: user)
+            }
         }
     }
     

@@ -53,6 +53,7 @@
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80BF68AF278D32B800BFE828 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF68AE278D32B800BFE828 /* WaitlistViewController.swift */; };
 		80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */; };
+		80BF68B4278D39E900BFE828 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF68B3278D39E900BFE828 /* WaitlistCoordinator.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
 		80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */; };
 		80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */; };
@@ -684,6 +685,7 @@
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80BF68AE278D32B800BFE828 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
+		80BF68B3278D39E900BFE828 /* WaitlistCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistCoordinator.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
 		80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryMessageSender.swift; sourceTree = "<group>"; };
 		80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -1079,6 +1081,15 @@
 				80251FF726F3D362006D7873 /* MessageController+Extensions.swift */,
 			);
 			path = "_Stream Temp";
+			sourceTree = "<group>";
+		};
+		80BF68B2278D39D100BFE828 /* Waitlist */ = {
+			isa = PBXGroup;
+			children = (
+				80BF68AE278D32B800BFE828 /* WaitlistViewController.swift */,
+				80BF68B3278D39E900BFE828 /* WaitlistCoordinator.swift */,
+			);
+			path = Waitlist;
 			sourceTree = "<group>";
 		};
 		80C43296271F41B9004A27A9 /* Message Model */ = {
@@ -1562,6 +1573,7 @@
 				D67896A122FF40AB0059BA75 /* Onboarding */,
 				D67A82D9230CCE290076152B /* Splash */,
 				D671E1ED2640297900BF2B8D /* Toast */,
+				80BF68B2278D39D100BFE828 /* Waitlist */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -1689,7 +1701,6 @@
 				D67896A822FF51170059BA75 /* PhoneViewController.swift */,
 				D67896AC22FF60190059BA75 /* TextInputViewController.swift */,
 				D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */,
-				80BF68AE278D32B800BFE828 /* WaitlistViewController.swift */,
 				D627E4CD277E0687007B3286 /* Welcome */,
 			);
 			path = Onboarding;
@@ -2416,6 +2427,7 @@
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */,
+				80BF68B4278D39E900BFE828 /* WaitlistCoordinator.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,

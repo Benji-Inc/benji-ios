@@ -46,6 +46,7 @@ class MainCoordinator: Coordinator<Void> {
         // Code your App Clip may access.
         self.handleAppClip(result: launchStatus)
         #endif
+
         self.subscribeToUserUpdates()
     }
 
@@ -68,6 +69,13 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
+    func runWaitlistFlow() {
+        let waitlistCoordinator = WaitlistCoordinator(router: self.router, deepLink: nil)
+        self.router.setRootModule(waitlistCoordinator)
+        self.addChildAndStart(waitlistCoordinator) { _ in
+
+        }
+    }
 
     func handle(deeplink: DeepLinkable) {
         guard let target = deeplink.deepLinkTarget else { return }

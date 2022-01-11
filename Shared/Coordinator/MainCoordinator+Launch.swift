@@ -18,14 +18,21 @@ extension MainCoordinator {
         case .success(let object):
             self.deepLink = object
 
-            if User.current().isNil {
+            guard let user = User.current() else {
                 self.runOnboardingFlow()
-            } else if let user = User.current(), !user.isOnboarded {
+                return
+            }
+
+            if !user.isOnboarded {
                 self.runOnboardingFlow()
-            } else {
+            } else if user.status == .active {
                 Task {
                     await self.runConversationListFlow()
                 }.add(to: self.taskPool)
+            } else if user.status == .waitlist {
+                self.runWaitlistFlow()
+            } else {
+                self.runOnboardingFlow()
             }
         case .failed(_):
             break
@@ -87,5 +94,3 @@ extension MainCoordinator {
     }
 }
 #endif
-
-
