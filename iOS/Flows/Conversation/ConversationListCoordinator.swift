@@ -123,6 +123,15 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     
     func presentProfilePicture() {
         let vc = ModalPhotoViewController()
+        
+        /// Because of how the People are presented, we need to properly reset the KeyboardManager.
+        vc.dismissHandlers.append { [unowned self] in
+            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
+            self.conversationListVC.becomeFirstResponder()
+        }
+        
+        KeyboardManager.shared.reset()
+        self.conversationListVC.resignFirstResponder()
         self.router.present(vc, source: self.conversationListVC)
     }
 
