@@ -66,38 +66,7 @@ class WaitlistViewController: DiffableCollectionViewController<MessageSequenceSe
         var data: [MessageSequenceSection: [MessageSequenceItem]] = [:]
 
         do {
-            if !ChatClient.isConnected {
-                try await ChatClient.connectAnonymousUser()
-            }
-
-            let conversationController
-            = ChatClient.shared.channelController(for: WelcomeViewController.cid,
-                                                     messageOrdering: .topToBottom)
-            self.conversationController = conversationController
-
-            // Ensure that we've synchronized the conversation controller with the backend.
-            if conversationController.channel.isNil {
-                try await conversationController.synchronize()
-            } else if let conversation = conversationController.channel, conversation.messages.isEmpty {
-                try await conversationController.synchronize()
-            }
-
-            try await conversationController.loadPreviousMessages()
-
-            // Put Benji's messages at the top, and all other messages below.
-            var benjiMessages: [MessageSequenceItem] = []
-            var otherMessages: [MessageSequenceItem] = []
-
-            conversationController.messages.forEach({ message in
-                if message.authorId == WelcomeViewController.benjiId {
-                    benjiMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
-                } else {
-                    otherMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
-                }
-            })
-
-            data[.topMessages] = benjiMessages
-            data[.bottomMessages] = otherMessages
+            // TODO: Get the wait list conversation and load its messages.
         } catch {
             logDebug(error.code.description)
         }
