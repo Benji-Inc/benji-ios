@@ -17,13 +17,13 @@ class WaitlistViewController: DiffableCollectionViewController<MessageSequenceSe
     private(set) var conversationController: ConversationController?
     static let cid = ChannelId(type: .custom("waitlist"), id: "waitlist-id")
 
-    lazy var conversationCollectionView = ConversationCollectionView()
+    let conversationCollectionView: ConversationCollectionView
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
         inputView.delegate = self.swipeInputDelegate
-        inputView.textView.restorationIdentifier = "list"
+        inputView.textView.restorationIdentifier = "waitlist"
         return inputView
     }()
     lazy var swipeInputDelegate
@@ -40,7 +40,8 @@ class WaitlistViewController: DiffableCollectionViewController<MessageSequenceSe
     }
 
     init() {
-        super.init(with: WelcomeCollectionView())
+        self.conversationCollectionView = ConversationCollectionView()
+        super.init(with: self.conversationCollectionView)
     }
 
     required init?(coder aDecoder: NSCoder) {
