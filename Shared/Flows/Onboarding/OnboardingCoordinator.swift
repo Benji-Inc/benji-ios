@@ -91,6 +91,34 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
         let phoneVC = self.onboardingVC.phoneVC
         self.onboardingVC.switchTo(.phone(phoneVC))
     }
+    
+    func onboardingViewControllerDidSelectRSVP(_ controller: OnboardingViewController) {
+
+        let alertController = UIAlertController(title: "Enter Code",
+                                                message: "Please enter the code you received.",
+                                                preferredStyle: .alert)
+        
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Code"
+        }
+        let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { alert -> Void in
+            if let textField = alertController.textFields?.first,
+               let text = textField.text,
+               !text.isEmpty {
+                controller.handle(launchActivity: .reservation(reservationId: text))
+            }
+        })
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (action : UIAlertAction!) -> Void in
+        
+        })
+
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+
+        controller.present(alertController, animated: true, completion: nil)
+    }
 
     func onboardingViewController(_ controller: OnboardingViewController, didEnter phoneNumber: PhoneNumber) {
         let codeVC = self.onboardingVC.codeVC
