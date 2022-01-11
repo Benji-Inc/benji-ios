@@ -66,7 +66,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
             } else if current.smallImage.isNil {
                 return .photo(self.onboardingVC.photoVC)
             } else {
-                return .waitlist(self.onboardingVC.waitlistVC)
+                return nil
             }
         case .inactive:
             if !current.fullName.isValidPersonName {

@@ -1,154 +1,140 @@
 //
 //  WaitlistViewController.swift
-//  Benji
+//  Jibber
 //
-//  Created by Benji Dodgson on 12/17/20.
-//  Copyright © 2020 Benjamin Dodgson. All rights reserved.
+//  Created by Martin Young on 1/10/22.
+//  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
+import StreamChat
 import Parse
-import StoreKit
-import ParseLiveQuery
-import Combine
-import Localization
 
-class WaitlistViewController: ViewController, Sizeable {
+class WaitlistViewController: DiffableCollectionViewController<MessageSequenceSection,
+                             MessageSequenceItem,
+                             MessageSequenceCollectionViewDataSource> {
 
-    enum State {
-        case initial
-        case onWaitlist(QuePositions)
-        case upgrade
-    }
+    private(set) var conversationController: ConversationController?
+    static let cid = ChannelId(type: .custom("waitlist"), id: "waitlist-id")
 
-    private let positionLabel = ThemeLabel(font: .small)
-    private let remainingLabel = ThemeLabel(font: .display)
+    lazy var conversationCollectionView = ConversationCollectionView()
 
-    private let queQuery = QuePositions.query()
-
-    @Published var state: State = .initial
-
-    lazy var skOverlay: SKOverlay = {
-        let config = SKOverlay.AppClipConfiguration(position: .bottom)
-        let overlay = SKOverlay(configuration: config)
-        overlay.delegate = self
-        return overlay
+    // Custom Input Accessory View
+    lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
+        let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
+        inputView.delegate = self.swipeInputDelegate
+        inputView.textView.restorationIdentifier = "list"
+        return inputView
     }()
+    lazy var swipeInputDelegate
+    = SwipeableInputAccessoryMessageSender(viewController: self,
+                                           collectionView: self.conversationCollectionView,
+                                           isConversationList: true)
 
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.view.addSubview(self.positionLabel)
-        self.view.addSubview(self.remainingLabel)
-
-        self.$state.mainSink { [unowned self] state in
-            self.update(for: state)
-        }.store(in: &self.cancellables)
-
-        Task {
-            let user = try? await User.getObject(with: User.current()?.objectId ?? "")
-
-            if let status = user?.status {
-                switch status {
-                case .active, .inactive:
-                    self.state = .upgrade
-                case .waitlist:
-                    if let que = try? await QuePositions.getFirstObject() {
-                        self.state = .onWaitlist(que)
-                    }
-                    self.subscribeToUpdates()
-                case .needsVerification:
-                    break
-                }
-            }
-        }.add(to: self.taskPool)
+    override var inputAccessoryView: UIView? {
+        return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil
     }
 
-    private func subscribeToUpdates() {
-        UserStore.shared.$userUpdated
-            .filter({ user in
-                return user?.isCurrentUser ?? false
-            }).mainSink { [unowned self] user in
-                guard let u = user else { return }
-                if u.status == .inactive || u.status == .active {
-                    self.state = .upgrade
-                }
-        }.store(in: &self.cancellables)
-
-        if let query = self.queQuery {
-            let subscription = Client.shared.subscribe(query)
-
-            subscription.handleEvent { [unowned self] query, event in
-                switch event {
-                case .entered(let u), .updated(let u):
-                    guard let que = u as? QuePositions else { return }
-                    self.state = .onWaitlist(que)
-                default:
-                    break
-                }
-            }
-        }
+    override var canBecomeFirstResponder: Bool {
+        return self.presentedViewController.isNil
     }
 
-    private func update(for state: State) {
-        switch state {
-        case .initial:
-            break
-        case .onWaitlist(let que):
-            self.loadWaitlist(for: que)
-        case .upgrade:
-            self.loadUpgrade()
-        }
+    init() {
+        super.init(with: WelcomeCollectionView())
     }
 
-    private func loadWaitlist(for que: QuePositions) {
-        guard let current = User.current(), current.status != .active else { return }
-
-        if let position = current.quePosition {
-
-            let positionString = LocalizedString(id: "", arguments: [String(position)], default: "Currently on #@(position)")
-            self.positionLabel.setText(positionString)
-
-            let remaining = (position + que.claimed) - que.max
-
-            self.remainingLabel.setText("#\(String(remaining))")
-            self.view.layoutNow()
-        }
-    }
-
-    private func loadUpgrade() {
-        self.remainingLabel.setText("")
-#if !NOTIFICATION
-        self.displayAppUpdateOverlay()
-#endif
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.remainingLabel.setSize(withWidth: self.view.width * 0.8)
-        self.remainingLabel.centerOnX()
-        self.remainingLabel.centerY = self.view.halfHeight
+        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.3))
+        self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
+        self.collectionView.height = self.view.height - self.collectionView.top
+        self.collectionView.centerOnX()
+    }
 
-        self.positionLabel.setSize(withWidth: self.view.width)
-        self.positionLabel.match(.top, to: .bottom, of: self.remainingLabel, offset: .xtraLong)
-        self.positionLabel.centerOnX()
+    // MARK: Data Loading
+
+    override func getAllSections() -> [MessageSequenceSection] {
+        return [.topMessages, .bottomMessages]
+    }
+
+    override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
+        var data: [MessageSequenceSection: [MessageSequenceItem]] = [:]
+
+        do {
+            if !ChatClient.isConnected {
+                try await ChatClient.connectAnonymousUser()
+            }
+
+            let conversationController
+            = ChatClient.shared.channelController(for: WelcomeViewController.cid,
+                                                     messageOrdering: .topToBottom)
+            self.conversationController = conversationController
+
+            // Ensure that we've synchronized the conversation controller with the backend.
+            if conversationController.channel.isNil {
+                try await conversationController.synchronize()
+            } else if let conversation = conversationController.channel, conversation.messages.isEmpty {
+                try await conversationController.synchronize()
+            }
+
+            try await conversationController.loadPreviousMessages()
+
+            // Put Benji's messages at the top, and all other messages below.
+            var benjiMessages: [MessageSequenceItem] = []
+            var otherMessages: [MessageSequenceItem] = []
+
+            conversationController.messages.forEach({ message in
+                if message.authorId == WelcomeViewController.benjiId {
+                    benjiMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
+                } else {
+                    otherMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
+                }
+            })
+
+            data[.topMessages] = benjiMessages
+            data[.bottomMessages] = otherMessages
+        } catch {
+            logDebug(error.code.description)
+        }
+
+        return data
     }
 }
 
-extension WaitlistViewController: SKOverlayDelegate {
+// MARK: - MessageSendingViewControllerType
 
-#if !NOTIFICATION
-    func displayAppUpdateOverlay() {
-        guard let window = UIWindow.topWindow(), let scene = window.windowScene else { return }
+extension WaitlistViewController: MessageSendingViewControllerType {
 
-        self.skOverlay.present(in: scene)
-    }
-#endif
-
-    func storeOverlayWillStartPresentation(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
+    func getCurrentMessageSequence() -> MessageSequence? {
+        return self.conversationController?.conversation
     }
 
-    func storeOverlayWillStartDismissal(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
+    func set(messageSequencePreparingToSend: MessageSequence?) {
+        if let messageSequencePreparingToSend = messageSequencePreparingToSend {
+            self.dataSource.shouldPrepareToSend = true
+            self.dataSource.set(messageSequence: messageSequencePreparingToSend)
+        }
+    }
+
+    func createNewConversation(_ sendable: Sendable) {
+        // New conversations can't be created in the waitlist
+        return
+    }
+
+    func sendMessage(_ message: Sendable) {
+        guard let conversationController = self.conversationController else { return }
+
+        Task {
+            do {
+                try await conversationController.createNewMessage(with: message)
+            } catch {
+                logError(error)
+            }
+        }.add(to: self.taskPool)
     }
 }

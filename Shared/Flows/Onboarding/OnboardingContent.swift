@@ -16,7 +16,6 @@ enum OnboardingContent: Switchable {
     case phone(PhoneViewController)
     case code(CodeViewController)
     case name(NameViewController)
-    case waitlist(WaitlistViewController)
     case photo(PhotoViewController)
 
     var viewController: UIViewController & Sizeable {
@@ -28,8 +27,6 @@ enum OnboardingContent: Switchable {
         case .code(let vc):
             return vc
         case .name(let vc):
-            return vc
-        case .waitlist(let vc):
             return vc
         case .photo(let vc):
             return vc
@@ -52,22 +49,6 @@ enum OnboardingContent: Switchable {
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "Confirm your name to use Jibber!")
-        case .waitlist(let vc):
-            switch vc.state {
-            case .initial:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Loading...")
-            case .onWaitlist(_):
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "You are on the list. Sit tight and we will let you know when a slot opens up.")
-            case .upgrade:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "You no longer have to wait! Tap the banner below to download the full app.")
-            }
-
         case .photo(let vc):
             switch vc.currentState {
             case .initial:

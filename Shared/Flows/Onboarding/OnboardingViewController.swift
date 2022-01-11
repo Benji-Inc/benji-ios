@@ -73,7 +73,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
         
         Task {
-            try await self.updateInvitor(with: WelcomeViewController.benjiId)
+            try await self.updateInvitor(userId: WelcomeViewController.benjiId)
         }
 
         self.welcomeVC.onDidComplete = { [unowned self] result in
@@ -129,10 +129,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 break
             }
         }
-
-        self.waitlistVC.$state.mainSink { [unowned self] _ in
-            self.updateUI()
-        }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -148,7 +144,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func shouldShowLargeAvatar() -> Bool {
         switch self.currentContent {
-        case .welcome, .phone, .code, .waitlist:
+        case .welcome, .phone, .code:
             return true
         case .name, .photo, .none:
             return false
@@ -199,7 +195,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 let reservation = try await Reservation.getObject(with: reservationId)
                 self.reservationId = reservationId
                 if let userId = reservation.createdBy?.objectId {
-                    try await self.updateInvitor(with: userId)
+                    try await self.updateInvitor(userId: userId)
                     await self.hideLoading()
                     self.switchTo(.phone(self.phoneVC))
                 }
@@ -210,7 +206,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 let pass = try await Pass.getObject(with: passId)
                 self.passId = passId
                 if let userId = pass.owner?.objectId {
-                    try await self.updateInvitor(with: userId)
+                    try await self.updateInvitor(userId: userId)
                     await self.hideLoading()
                     self.switchTo(.phone(self.phoneVC))
                 }
@@ -219,7 +215,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     @MainActor
-    func updateInvitor(with userId: String) async throws {
+    func updateInvitor(userId: String) async throws {
         let user = try await User.localThenNetworkQuery(for: userId)
         self.invitor = user
         self.avatarView.set(avatar: user)

@@ -32,15 +32,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     
     // CollectionView
     var collectionLayout: MessagesTimeMachineCollectionViewLayout {
-        return self.collectionView.collectionViewLayout as! MessagesTimeMachineCollectionViewLayout
+        return self.collectionView.conversationLayout
     }
-    
-    lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: MessagesTimeMachineCollectionViewLayout())
-        cv.keyboardDismissMode = .interactive
-        cv.showsVerticalScrollIndicator = false
-        return cv
-    }()
+    lazy var collectionView = ConversationCollectionView()
     
     private lazy var dataSource = MessageSequenceCollectionViewDataSource(collectionView: self.collectionView)
 
@@ -72,13 +66,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         super.init(frame: frame)
 
         self.collectionLayout.dataSource = self.dataSource
-
-        self.collectionView.decelerationRate = .fast
         self.collectionView.delegate = self
-        self.collectionView.set(backgroundColor: .clear)
 
-        // Allow message cells to scale in size without getting clipped.
-        self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
 
         self.dataSource.handleTappedMessage = { [unowned self] cid, messageID, content in
