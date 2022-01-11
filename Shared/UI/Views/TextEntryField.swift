@@ -11,6 +11,7 @@ import Localization
  
 class TextEntryField: BaseView, Sizeable {
 
+    private let speechBubble = SpeechBubbleView(orientation: .down)
     private(set) var textField: UITextField
     private let placeholder: Localized?
 
@@ -28,8 +29,11 @@ class TextEntryField: BaseView, Sizeable {
 
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.addSubview(self.speechBubble)
+        self.speechBubble.bubbleColor = ThemeColor.B1.color
 
-        self.set(backgroundColor: .B1)
+        self.set(backgroundColor: .clear)
 
         self.addSubview(self.textField)
 
@@ -40,10 +44,10 @@ class TextEntryField: BaseView, Sizeable {
 
         if let placeholder = self.placeholder {
             let attributed = AttributedString(placeholder,
-                                              fontType: .medium,
-                                              color: .T1)
+                                              fontType: .regular,
+                                              color: .T1withAlpha)
             self.textField.setPlaceholder(attributed: attributed)
-            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .T1withAlpha),
+            self.textField.setDefaultAttributes(style: StringStyle(font: .regular, color: .T1),
                                                 alignment: .center)
         }
 
@@ -55,12 +59,17 @@ class TextEntryField: BaseView, Sizeable {
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {
-
-        let maxWidth = width - Theme.ContentOffset.long.value.doubled
+        return 40 + self.speechBubble.tailLength + Theme.ContentOffset.long.value.doubled
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.speechBubble.expandToSuperviewSize()
+        
+        let maxWidth = self.width - Theme.ContentOffset.long.value.doubled
         self.textField.size = CGSize(width: maxWidth, height: 40)
         self.textField.pin(.left, offset: .long)
-        self.textField.pin(.top, offset: .standard)
-
-        return self.textField.bottom + Theme.ContentOffset.standard.value
+        self.textField.pin(.top, offset: .long)
     }
 }

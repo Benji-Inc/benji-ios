@@ -16,6 +16,7 @@ import PhoneNumberKit
 @MainActor
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingViewControllerDidStartOnboarding(_ controller: OnboardingViewController)
+    func onboardingViewControllerDidSelectRSVP(_ controller: OnboardingViewController)
     func onboardingViewController(_ controller: OnboardingViewController, didEnter phoneNumber: PhoneNumber)
     func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController,
                                                andReturnCID conversationId: String?)
@@ -78,8 +79,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.welcomeVC.onDidComplete = { [unowned self] result in
             switch result {
-            case .success:
-                self.delegate.onboardingViewControllerDidStartOnboarding(self)
+            case .success(let selection):
+                switch selection {
+                case .waitlist:
+                    self.delegate.onboardingViewControllerDidStartOnboarding(self)
+                case .rsvp:
+                    self.delegate.onboardingViewControllerDidSelectRSVP(self)
+                }
             case .failure:
                 break
             }

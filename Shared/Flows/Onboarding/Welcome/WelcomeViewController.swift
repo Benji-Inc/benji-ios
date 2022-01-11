@@ -16,11 +16,17 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
                              Sizeable,
                              Completable {
     
-    typealias ResultType = Void
+    typealias ResultType = SelectionType
     
-    var onDidComplete: ((Result<Void, Error>) -> Void)?
+    enum SelectionType {
+        case waitlist
+        case rsvp
+    }
     
-    let button = ThemeButton()
+    var onDidComplete: ((Result<SelectionType, Error>) -> Void)?
+    
+    let waitlistButton = ThemeButton()
+    let rsvpButton = ThemeButton()
     
     var welcomeCollectionView: WelcomeCollectionView {
         return self.collectionView as! WelcomeCollectionView
@@ -47,19 +53,29 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         self.view.addSubview(self.collectionView)
         self.collectionView.clipsToBounds = false
         
-        self.view.addSubview(self.button)
-        self.button.set(style: .normal(color: .B2, text: "Join the Waitlist"))
-        self.button.didSelect { [unowned self] in
-            self.onDidComplete?(.success(()))
+        self.view.addSubview(self.waitlistButton)
+        self.waitlistButton.set(style: .normal(color: .T1, text: "Join the Waitlist / Login"))
+        self.waitlistButton.didSelect { [unowned self] in
+            self.onDidComplete?(.success((.waitlist)))
+        }
+        
+        self.view.addSubview(self.rsvpButton)
+        self.rsvpButton.set(style: .normal(color: .B2, text: "Enter Code"))
+        self.rsvpButton.didSelect { [unowned self] in
+            self.onDidComplete?(.success((.rsvp)))
         }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.button.setSize(with: self.view.width)
-        self.button.pinToSafeAreaBottom()
-        self.button.centerOnX()
+        self.rsvpButton.setSize(with: self.view.width)
+        self.rsvpButton.pinToSafeAreaBottom()
+        self.rsvpButton.centerOnX()
+        
+        self.waitlistButton.setSize(with: self.view.width)
+        self.waitlistButton.match(.bottom, to: .top, of: self.rsvpButton, offset: .negative(.standard))
+        self.waitlistButton.centerOnX()
         
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pin(.top, offset: .custom(self.view.height * 0.3))

@@ -12,12 +12,7 @@ import Combine
 import Localization
 
 enum ButtonStyle {
-    case noborder(image: UIImage, color: ThemeColor)
-    case rounded(color: ThemeColor, text: Localized)
     case normal(color: ThemeColor, text: Localized)
-    case icon(image: UIImage, color: ThemeColor)
-    case shadow(image: UIImage, color: ThemeColor)
-    case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
 class ThemeButton: UIButton, Statusable {
@@ -58,17 +53,12 @@ class ThemeButton: UIButton, Statusable {
     }
 
     //Sets text font, color and background color
-    func set(style: ButtonStyle, casingType: StringCasing = .uppercase, alpha: CGFloat = 0.4) {
+    func set(style: ButtonStyle, casingType: StringCasing = .unchanged) {
         self.style = style
 
         switch style {
-        case .shadow(let image, let color):
-            self.defaultColor = color
-            self.setImage(image, for: .normal)
-            self.tintColor = color.color
-            self.showShadow(withOffset: 5)
-            
-        case .rounded(let color, let text), .normal(let color, let text):
+
+        case .normal(let color, let text):
             self.setImage(nil, for: .normal)
             self.defaultColor = color
 
@@ -77,20 +67,19 @@ class ThemeButton: UIButton, Statusable {
             localizedString = casingType.format(string: localizedString)
 
             let normalString = NSMutableAttributedString(string: localizedString)
-            normalString.addAttribute(.font, value: FontType.regularBold.font)
-            normalString.addAttribute(.kern, value: CGFloat(2))
+            normalString.addAttribute(.font, value: FontType.regular.font)
 
             let highlightedString = NSMutableAttributedString(string: localizedString)
-            highlightedString.addAttribute(.font, value: FontType.regularBold.font)
-            highlightedString.addAttribute(.kern, value: CGFloat(2))
+            highlightedString.addAttribute(.font, value: FontType.regular.font)
 
-            normalString.addAttribute(.foregroundColor, value: ThemeColor.T1.color)
-            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.T1.color)
+            normalString.addAttribute(.foregroundColor, value: ThemeColor.BG.color)
+            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.BG.color)
+            
             if color != .clear {
-                self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
+                self.setBackground(color: color.color, forUIControlState: .normal)
             }
 
-            self.setBackground(color: ThemeColor.clear.color, forUIControlState: .highlighted)
+            self.setBackground(color: color.color, forUIControlState: .highlighted)
 
             // Emojis wont show correctly with attributes
             if localizedString.getEmojiRanges().count > 0 {
@@ -100,33 +89,6 @@ class ThemeButton: UIButton, Statusable {
                 self.setAttributedTitle(normalString, for: .normal)
                 self.setAttributedTitle(highlightedString, for: .highlighted)
             }
-
-            if color != .clear {
-                self.layer.borderColor = color.color.cgColor
-                self.layer.borderWidth = 2
-            }
-
-        case .icon(let image, let color):
-            self.defaultColor = color
-            self.setImage(image, for: .normal)
-            self.tintColor = color.color
-            self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
-            self.setBackground(color: ThemeColor.clear.color, forUIControlState: .highlighted)
-            self.layer.borderColor = color.color.cgColor
-            self.layer.borderWidth = 2
-            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .normal)
-            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .highlighted)
-            
-        case .animation(let view, _):
-            self.addSubview(view)
-            view.expandToSuperviewSize()
-            break
-        case .noborder(let image, let color):
-            self.defaultColor = color
-            self.setImage(image, for: .normal)
-            self.tintColor = color.color
-            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .normal)
-            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .highlighted)
         }
 
         self.layer.cornerRadius = Theme.cornerRadius
@@ -146,18 +108,6 @@ class ThemeButton: UIButton, Statusable {
         self.errorLabel.setSize(withWidth: self.width - 40)
         self.errorLabel.textAlignment = .center
         self.errorLabel.centerOnXAndY()
-
-        if let style = self.style {
-            switch style {
-            case .animation(let view, let inset):
-                view.frame = CGRect(x: inset,
-                                    y: inset,
-                                    width: self.width - (inset * 2),
-                                    height: self.height - (inset * 2))
-            default:
-                break
-            }
-        }
     }
 
     func setBackground(color: UIColor, forUIControlState state: UIControl.State) {
@@ -167,7 +117,7 @@ class ThemeButton: UIButton, Statusable {
     }
 
     func setSize(with width: CGFloat) {
-        self.size = CGSize(width: width - Theme.contentOffset.doubled, height: Theme.buttonHeight)
+        self.size = CGSize(width: Theme.getPaddedWidth(with: width), height: Theme.buttonHeight)
     }
 
     func handleEvent(status: EventStatus) async {
