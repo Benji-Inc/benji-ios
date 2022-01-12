@@ -164,6 +164,14 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         snapshot.deleteAllItems()
         self.dataSource.apply(snapshot, animatingDifferences: false)
     }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        if let attributes = layoutAttributes as? ConversationsMessagesCellAttributes {
+            self.collectionView.isScrollEnabled = attributes.canScroll
+        }
+    }
 
     // MARK: - Update Subscriptions
 

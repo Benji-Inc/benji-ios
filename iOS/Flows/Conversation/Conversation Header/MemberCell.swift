@@ -37,7 +37,9 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         shape.lineWidth = 1.5
         shape.lineCap = .round
         shape.fillColor = UIColor.clear.cgColor
-        shape.cornerRadius = Theme.cornerRadius
+        shape.cornerRadius = Theme.innerCornerRadius
+        shape.borderColor = ThemeColor.D6.color.cgColor
+        shape.borderWidth = 2
         return shape
     }()
     
@@ -47,7 +49,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.avatarView)
         
-        self.layer.addSublayer(self.pulseLayer)
+        self.layer.insertSublayer(self.pulseLayer, at: 2)
         self.contentView.addSubview(self.statusView)
     }
 
