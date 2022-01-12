@@ -16,7 +16,7 @@ extension ChatClient {
 
     /// Returns true if the shared client is connected to the chat service.
     static var isConnected: Bool {
-        return self.shared.connectionStatus == .connected
+        return self.shared?.connectionStatus == .connected
     }
     
     static func connectAnonymousUser() async throws {
