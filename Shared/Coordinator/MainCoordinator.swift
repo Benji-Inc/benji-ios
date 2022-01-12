@@ -73,9 +73,11 @@ class MainCoordinator: Coordinator<Void> {
         // If ther user didn't finish onboarding, redirect them to onboarding
         if !user.isOnboarded {
             self.runOnboardingFlow()
+            return
         } else if user.status == .waitlist {
             // The user finished onboarding but is on the waitlist so don't proceed to the main app.
             self.runWaitlistFlow()
+            return
         }
 
         // As a final catch-all, make sure the user is fully activated.
@@ -112,34 +114,19 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     func runOnboardingFlow() {
-        if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator {
-            onboardingCoordinator.handle(deeplink: self.deepLink)
-        } else {
-            let coordinator = OnboardingCoordinator(router: self.router,
-                                                    deepLink: self.deepLink)
-            self.router.setRootModule(coordinator, animated: true)
-            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-                if User.current()?.status == .waitlist {
-                    self.runWaitlistFlow()
-                } else {
-                    self.subscribeToUserUpdates()
-
-#if IOS
-                    Task {
-                        await self.runConversationListFlow()
-                    }.add(to: self.taskPool)
-#endif
-                }
-            })
-        }
+        let coordinator = OnboardingCoordinator(router: self.router,
+                                                deepLink: self.deepLink)
+        self.router.setRootModule(coordinator, animated: true)
+        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+            // Attempt to take the user to the conversation screen after onboarding is complete.
+            self.handle(deeplink: DeepLinkObject(target: .conversation))
+        })
     }
 
     func runWaitlistFlow() {
         let waitlistCoordinator = WaitlistCoordinator(router: self.router, deepLink: nil)
         self.router.setRootModule(waitlistCoordinator)
-        self.addChildAndStart(waitlistCoordinator) { _ in
-
-        }
+        self.addChildAndStart(waitlistCoordinator) { _ in }
     }
 
     func showLogOutAlert() {

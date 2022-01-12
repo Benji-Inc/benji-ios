@@ -12,6 +12,10 @@ class LaunchCoordinator: PresentableCoordinator<LaunchStatus> {
 
     lazy var splashVC = SplashViewController()
 
+    override func toPresentable() -> DismissableVC {
+        return self.splashVC
+    }
+
     override func start() {
         super.start()
 

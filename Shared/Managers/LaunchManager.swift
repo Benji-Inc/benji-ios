@@ -23,7 +23,7 @@ protocol LaunchActivityHandler {
 }
 
 enum LaunchStatus {
-    case success(object: DeepLinkable?)
+    case success(deepLink: DeepLinkable?)
     case failed(error: ClientError?)
 }
 
@@ -34,8 +34,6 @@ protocol LaunchManagerDelegate: AnyObject {
 class LaunchManager {
     
     static let shared = LaunchManager()
-    
-    var finishedInitialFetch = false
     
     weak var delegate: LaunchManagerDelegate?
 
@@ -65,13 +63,13 @@ class LaunchManager {
 
     private func initializeUserData(with deeplink: DeepLinkable?) async -> LaunchStatus {
         guard let user = User.current() else {
-            return .success(object: deeplink)
+            return .success(deepLink: deeplink)
         }
 
 #if !APPCLIP && !NOTIFICATION
         return await self.getChatToken(for: user, deepLink: deeplink)
 #else
-        return .success(object: deeplink)
+        return .success(deepLink: deeplink)
 #endif
     }
     
@@ -108,11 +106,6 @@ extension LaunchManager {
 
 #if !APPCLIP && !NOTIFICATION
     func getChatToken(for user: User, deepLink: DeepLinkable?) async -> LaunchStatus {
-        // No need to get a new chat token if we're already connected.
-        guard !ChatClient.isConnected else {
-            return .success(object: deepLink)
-        }
-
         do {
             try await ChatClient.initialize(for: user)
             if let user = User.current(), user.isAuthenticated {
@@ -120,7 +113,8 @@ extension LaunchManager {
             }
 
             var link = deepLink
-            /// Used to load the initial conversation when a user has downloaded the full app from an app clip
+
+            // Used to load the initial conversation when a user has downloaded the full app from an app clip.
             if let initial = try? await InitialConveration.retrieve() {
                 if let cidString = initial.conversationIdString {
                     link?.conversationId = try? ConversationId(cid: cidString)
@@ -129,8 +123,7 @@ extension LaunchManager {
                 link?.deepLinkTarget = .conversation
             }
 
-            self.finishedInitialFetch = true
-            return .success(object: link)
+            return .success(deepLink: link)
         } catch {
             return .failed(error: ClientError.apiError(detail: error.localizedDescription))
         }

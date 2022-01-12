@@ -15,7 +15,8 @@ extension MainCoordinator {
 
     @MainActor
     func runConversationListFlow() async {
-        if !ChatClient.isConnected {
+        // Ensure that the chat client is initialized for the logged in user.
+        if !ChatClient.isConnected || ChatClient.shared.currentUserId != User.current()?.userObjectId {
             try? await ChatClient.initialize(for: User.current()!)
         }
 
