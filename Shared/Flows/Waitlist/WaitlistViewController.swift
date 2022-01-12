@@ -12,12 +12,18 @@ import Parse
 
 class WaitlistViewController: DiffableCollectionViewController<MessageSequenceSection,
                              MessageSequenceItem,
-                             MessageSequenceCollectionViewDataSource> {
+                             MessageSequenceCollectionViewDataSource>,
+                              TransitionableViewController {
+
+    // MARK: - Conversation
 
     private(set) var conversationController: ConversationController?
     static let cid = ChannelId(type: .custom("waitlist"), id: "waitlist-id")
 
+    // MARK: - Collection View
     let conversationCollectionView: ConversationCollectionView
+
+    // MARK: - Input
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -39,6 +45,14 @@ class WaitlistViewController: DiffableCollectionViewController<MessageSequenceSe
         return self.presentedViewController.isNil
     }
 
+    // MARK: - TransitionableViewController
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    // MARK: - Lifecycle
+
     init() {
         self.conversationCollectionView = ConversationCollectionView()
         super.init(with: self.conversationCollectionView)
@@ -48,12 +62,18 @@ class WaitlistViewController: DiffableCollectionViewController<MessageSequenceSe
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.conversationCollectionView.conversationLayout.dataSource = self.dataSource
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.3))
+        self.collectionView.pinToSafeAreaTop()
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
-        self.collectionView.height = self.view.height - self.collectionView.top
+        self.collectionView.expand(.bottom)
         self.collectionView.centerOnX()
     }
 
