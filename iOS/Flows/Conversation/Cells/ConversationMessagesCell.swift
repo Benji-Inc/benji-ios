@@ -247,7 +247,8 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath),
-              let cell = collectionView.cellForItem(at: indexPath) as? MessageCell else { return }
+              let cell = collectionView.cellForItem(at: indexPath) as? MessageCell,
+              cell.content.isUserInteractionEnabled else { return }
 
         switch item {
         case .message(cid: let cid, messageID: let messageID):
