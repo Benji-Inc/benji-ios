@@ -32,6 +32,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     let avatarView = AvatarView()
     let statusView = UserStatusView()
     
+    let shadowLayer = CAShapeLayer()
+
     lazy var pulseLayer: CAShapeLayer = {
         let shape = CAShapeLayer()
         shape.lineWidth = 1.5
@@ -51,6 +53,13 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         
         self.layer.insertSublayer(self.pulseLayer, at: 2)
         self.contentView.addSubview(self.statusView)
+        
+        self.contentView.layer.insertSublayer(self.shadowLayer, below: self.avatarView.layer)
+        
+        self.shadowLayer.shadowColor = ThemeColor.D6.color.cgColor
+        self.shadowLayer.shadowOpacity = 0.35
+        self.shadowLayer.shadowOffset = .zero
+        self.shadowLayer.shadowRadius = 10
     }
 
     func configure(with item: Member) {
@@ -86,6 +95,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.statusView.squaredSize = self.height * 0.45
         self.statusView.match(.right, to: .right, of: self.avatarView, offset: .short)
         self.statusView.match(.bottom, to: .bottom, of: self.avatarView, offset: .short)
+        
+        self.shadowLayer.shadowPath = UIBezierPath(rect: self.avatarView.frame).cgPath
     }
 
     private func beginTyping() {
