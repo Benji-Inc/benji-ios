@@ -52,7 +52,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.avatarView)
         
         self.layer.insertSublayer(self.pulseLayer, at: 2)
-        self.contentView.addSubview(self.statusView)
+        #warning("update the status view designs")
+        //self.contentView.addSubview(self.statusView)
         
         self.contentView.layer.insertSublayer(self.shadowLayer, below: self.avatarView.layer)
         
