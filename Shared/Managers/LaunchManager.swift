@@ -8,6 +8,9 @@
 
 import Foundation
 import Parse
+#if !APPCLIP && !NOTIFICATION
+import StreamChat
+#endif
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -99,4 +102,38 @@ class LaunchManager {
         }
         return true
     }
+}
+
+extension LaunchManager {
+
+#if !APPCLIP && !NOTIFICATION
+    func getChatToken(for user: User, deepLink: DeepLinkable?) async -> LaunchStatus {
+        // No need to get a new chat token if we're already connected.
+        guard !ChatClient.isConnected else {
+            return .success(object: deepLink)
+        }
+
+        do {
+            try await ChatClient.initialize(for: user)
+            if let user = User.current(), user.isAuthenticated {
+                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            }
+
+            var link = deepLink
+            /// Used to load the initial conversation when a user has downloaded the full app from an app clip
+            if let initial = try? await InitialConveration.retrieve() {
+                if let cidString = initial.conversationIdString {
+                    link?.conversationId = try? ConversationId(cid: cidString)
+                }
+
+                link?.deepLinkTarget = .conversation
+            }
+
+            self.finishedInitialFetch = true
+            return .success(object: link)
+        } catch {
+            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
+        }
+    }
+#endif
 }
