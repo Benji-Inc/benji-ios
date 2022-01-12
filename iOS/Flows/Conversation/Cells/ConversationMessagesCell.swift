@@ -164,6 +164,14 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         snapshot.deleteAllItems()
         self.dataSource.apply(snapshot, animatingDifferences: false)
     }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        if let attributes = layoutAttributes as? ConversationsMessagesCellAttributes {
+            self.collectionView.isScrollEnabled = attributes.canScroll
+        }
+    }
 
     // MARK: - Update Subscriptions
 
@@ -239,7 +247,8 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath),
-              let cell = collectionView.cellForItem(at: indexPath) as? MessageCell else { return }
+              let cell = collectionView.cellForItem(at: indexPath) as? MessageCell,
+              cell.content.isUserInteractionEnabled else { return }
 
         switch item {
         case .message(cid: let cid, messageID: let messageID):

@@ -32,20 +32,6 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: environment.container.contentSize.width.half, bottom: 0, trailing: environment.container.contentSize.width.half)
-                
-                section.visibleItemsInvalidationHandler = { (items, offset, environment) in
-                    items.forEach { item in
-                        let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
-                        let minScale: CGFloat = 0.75
-                        let maxScale: CGFloat = 1.0
-                        let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
-                        let transfrom = CGAffineTransform(scaleX: scale, y: scale)
-                        item.transform = transfrom
-
-                        let centerY: CGFloat = (item.bounds.height * scale).half
-                        item.center = CGPoint(x: item.center.x, y: centerY)
-                    }
-                }
 
                 return section
             }
@@ -55,5 +41,38 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
+    }
+    
+    override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        #warning("fix this layout")
+        return super.layoutAttributesForElements(in: rect)
+//        guard let attributes = super.layoutAttributesForElements(in: rect) else {
+//            return nil
+//        }
+//        return attributes.map({ attribute in
+//            let copy = attribute.copy() as! UICollectionViewLayoutAttributes
+//            return self.transformLayoutAttributes(copy)
+//        })
+    }
+    
+    private func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        guard let collectionView = self.collectionView else { return attributes }
+        
+        let size = attributes.size
+        let distanceFromCenter = abs((attributes.frame.centerX - collectionView.contentOffset.x) - collectionView.contentSize.width.half)
+        let minScale: CGFloat = 0.75
+        let maxScale: CGFloat = 1.0
+        let scale = max(maxScale - (distanceFromCenter / collectionView.contentSize.width), minScale)
+        let transfrom = CGAffineTransform(scaleX: scale, y: scale)
+        attributes.transform = transfrom
+
+        let centerY: CGFloat = (size.height * scale).half
+        attributes.center = CGPoint(x: attributes.center.x, y: centerY)
+
+        return attributes
     }
 }
