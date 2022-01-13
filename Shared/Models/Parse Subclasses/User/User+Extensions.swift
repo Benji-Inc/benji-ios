@@ -24,7 +24,12 @@ extension User: Avatar {
         if self.fullName.isEmpty {
             return false
         } else if self.smallImage.isNil {
+            /// Do not require simulators to have image. They can't take one.
+            #if TARGET_OS_SIMULATOR
+            return true
+            #else
             return false
+            #endif
         }
 
         return true 

@@ -74,7 +74,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
         
         Task {
-            try await self.updateInvitor(userId: WelcomeViewController.benjiId)
+            if let userid = PFConfig.current().adminUserId {
+                try await self.updateInvitor(userId: userid)
+            }
         }
 
         self.welcomeVC.onDidComplete = { [unowned self] result in

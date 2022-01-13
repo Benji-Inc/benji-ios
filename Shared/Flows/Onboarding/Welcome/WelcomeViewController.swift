@@ -34,9 +34,6 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     
     private(set) var conversationController: ConversationController?
     
-    static let cid = ChannelId(type: .custom("onboarding"), id: "BD-DA81E593-B9A6-4A03-B822-52D0C5A66B7C")
-    static let benjiId = "xGA45bkNmv"
-    
     init() {
         super.init(with: WelcomeCollectionView())
     }
@@ -97,9 +94,12 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             if !ChatClient.isConnected {
                 try await ChatClient.connectAnonymousUser()
             }
-
+            
+            guard let conversationId = PFConfig.current().welcomeConversationCID else { return data }
+            
+            let cid = ChannelId(type: .custom("onboarding"), id: conversationId)
             let conversationController
-            = ChatClient.shared.channelController(for: WelcomeViewController.cid,
+            = ChatClient.shared.channelController(for: cid,
                                                      messageOrdering: .topToBottom)
             self.conversationController = conversationController
 
@@ -117,10 +117,10 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             var otherMessages: [MessageSequenceItem] = []
             
             conversationController.messages.forEach({ message in
-                if message.authorId == WelcomeViewController.benjiId {
-                    benjiMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
+                if message.authorId == PFConfig.current().adminUserId {
+                    benjiMessages.append(MessageSequenceItem.message(cid: cid, messageID: message.id, showDetail: false))
                 } else {
-                    otherMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
+                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID: message.id, showDetail: false))
                 }
             })
             
