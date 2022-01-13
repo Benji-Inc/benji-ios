@@ -67,7 +67,7 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
         
         self.containerView.squaredSize = self.contentView.height
-        self.containerView.centerOnX()
+        self.containerView.centerOnXAndY()
         
         self.imageView.squaredSize = self.containerView.height * 0.5
         self.imageView.centerOnXAndY()

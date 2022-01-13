@@ -46,6 +46,9 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.avatarView.squaredSize = self.contentView.height
+        self.avatarView.centerOnXAndY()
 
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.avatarView)

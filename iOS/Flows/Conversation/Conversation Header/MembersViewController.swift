@@ -20,7 +20,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
-        cv.isScrollEnabled = true
+        cv.isScrollEnabled = false
         cv.showsHorizontalScrollIndicator = false
         super.init(with: cv)
     }
