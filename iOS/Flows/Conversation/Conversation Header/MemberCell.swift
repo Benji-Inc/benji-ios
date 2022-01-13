@@ -30,7 +30,6 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: Member?
 
     let avatarView = AvatarView()
-    let statusView = UserStatusView()
     
     let shadowLayer = CAShapeLayer()
 
@@ -93,9 +92,9 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.pulseLayer.path = UIBezierPath(roundedRect: self.avatarView.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.pulseLayer.position = self.avatarView.center
         
-        self.statusView.squaredSize = self.height * 0.45
-        self.statusView.match(.right, to: .right, of: self.avatarView, offset: .short)
-        self.statusView.match(.bottom, to: .bottom, of: self.avatarView, offset: .short)
+//        self.statusView.squaredSize = self.height * 0.45
+//        self.statusView.match(.right, to: .right, of: self.avatarView, offset: .short)
+//        self.statusView.match(.bottom, to: .bottom, of: self.avatarView, offset: .short)
         
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.avatarView.frame).cgPath
     }
@@ -131,9 +130,9 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         UserStore.shared.$userUpdated.filter { updatedUser in
             updatedUser?.objectId == user.userObjectId
         }.mainSink { updatedUser in
-            self.statusView.update(status: updatedUser?.focusStatus ?? .available)
+           // self.statusView.update(status: updatedUser?.focusStatus ?? .available)
         }.store(in: &self.cancellables)
         
-        self.statusView.update(status: user.focusStatus ?? .available)
+        //self.statusView.update(status: user.focusStatus ?? .available)
     }
 }
