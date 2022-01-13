@@ -9,6 +9,28 @@
 import Foundation
 import StreamChat
 
+class MemberGradientLayer: CAGradientLayer {
+    
+    override init() {
+        
+        let cgColors = [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0).cgColor]
+        
+        super.init()
+        self.startPoint = CAGradientLayer.Point.topLeft.point
+        self.endPoint = CAGradientLayer.Point.bottomRight.point
+        self.colors = cgColors
+        self.type = .axial
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(layer: Any) {
+        super.init()
+    }
+}
+
 class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     
     typealias ItemType = ChannelId
@@ -18,7 +40,7 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     let imageView = UIImageView()
     let containerView = BaseView()
     
-    let gradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight], startPoint: .topLeft, endPoint: .bottomRight)
+    let gradientLayer = MemberGradientLayer()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -26,11 +48,11 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.containerView)
         self.containerView.addSubview(self.imageView)
-        self.containerView.set(backgroundColor: .D6withAlpha)
+        self.containerView.set(backgroundColor: .B1)
         self.imageView.image = UIImage(systemName: "plus")
         self.imageView.tintColor = UIColor.white.withAlphaComponent(0.8)
         
-        self.containerView.layer.borderColor = ThemeColor.D6.color.cgColor
+        self.containerView.layer.borderColor = ThemeColor.B1.color.cgColor
         self.containerView.layer.borderWidth = 2
         self.containerView.layer.masksToBounds = true
         self.containerView.layer.cornerRadius = Theme.innerCornerRadius

@@ -38,7 +38,7 @@ class PermissionSwitchView: BaseView {
             case .focus:
                 return "Focus Status"
             case .notificaitons:
-                return "Notificaitons"
+                return "Notifications"
             }
         }
     }
