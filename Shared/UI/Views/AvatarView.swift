@@ -60,7 +60,7 @@ class AvatarView: DisplayableImageView {
         self.imageView.layer.masksToBounds = true
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius
-        self.imageView.set(backgroundColor: .T1)
+        self.imageView.set(backgroundColor: .B0)
     }
 
     // MARK: - Open setters

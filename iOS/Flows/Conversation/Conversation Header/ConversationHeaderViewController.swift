@@ -17,7 +17,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     lazy var membersVC = MembersViewController()
     let menuImageView = UIImageView()
     let button = ThemeButton()
-    let topicLabel = ThemeLabel(font: .small)
+    let topicLabel = ThemeLabel(font: .regular)
     
     private var state: ConversationUIState = .read
     

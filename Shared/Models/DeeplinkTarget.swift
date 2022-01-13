@@ -8,12 +8,11 @@
 
 import Foundation
 
-enum DeepLinkTarget : String, CaseIterable {
+enum DeepLinkTarget: String, CaseIterable {
     
     case home
     case login
     case conversation
-    case archive
     case reservation
 
     func diffIdentifier() -> NSObjectProtocol {

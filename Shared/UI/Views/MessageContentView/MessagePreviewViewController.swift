@@ -28,12 +28,11 @@ class MessagePreviewViewController: ViewController {
 
         guard let window = UIWindow.topWindow() else { return }
 
-        self.view.set(backgroundColor: .red)
         self.view.addSubview(self.content)
 
         self.content.state = .expanded
-        self.content.configureBackground(color: ThemeColor.BG.color,
-                                         textColor: ThemeColor.T1.color,
+        self.content.configureBackground(color: ThemeColor.L1.color,
+                                         textColor: ThemeColor.T2.color,
                                          brightness: 1.0,
                                          showBubbleTail: false,
                                          tailOrientation: .up)
