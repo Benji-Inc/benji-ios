@@ -125,6 +125,11 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         })
                 
         data[.members]?.append(.add(conversation.cid))
+        
+        for i in 0...20 {
+            let cid = ChannelId(type: .messaging, id: "\(i)")
+            data[.members]?.append(.add(cid))
+        }
 
         return data
     }

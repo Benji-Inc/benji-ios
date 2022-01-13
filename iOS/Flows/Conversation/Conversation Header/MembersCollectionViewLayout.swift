@@ -48,15 +48,31 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
     }
     
     override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        #warning("fix this layout")
-        return super.layoutAttributesForElements(in: rect)
-//        guard let attributes = super.layoutAttributesForElements(in: rect) else {
-//            return nil
-//        }
-//        return attributes.map({ attribute in
-//            let copy = attribute.copy() as! UICollectionViewLayoutAttributes
-//            return self.transformLayoutAttributes(copy)
-//        })
+        //#warning("fix this layout")
+        //return super.layoutAttributesForElements(in: rect)
+        guard let attributes = super.layoutAttributesForElements(in: rect) else {
+            return nil
+        }
+        return attributes.map({ attribute in
+            let copy = attribute.copy() as! UICollectionViewLayoutAttributes
+            return self.transformLayoutAttributes(copy)
+        })
+    }
+    
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath) else {
+            return nil
+        }
+        let copy = attributes.copy() as! UICollectionViewLayoutAttributes
+        return self.transformLayoutAttributes(copy)
+    }
+    
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath) else {
+            return nil
+        }
+        let copy = attributes.copy() as! UICollectionViewLayoutAttributes
+        return self.transformLayoutAttributes(copy)
     }
     
     private func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
