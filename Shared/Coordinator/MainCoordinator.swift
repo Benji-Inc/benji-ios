@@ -12,8 +12,6 @@ import Parse
 
 class MainCoordinator: Coordinator<Void> {
 
-    lazy var splashVC = SplashViewController()
-
     override func start() {
         super.start()
 
@@ -24,91 +22,111 @@ class MainCoordinator: Coordinator<Void> {
         }
 
         LaunchManager.shared.delegate = self
+        self.subscribeToUserUpdates()
         
-        #if IOS
+#if IOS
         UserNotificationManager.shared.delegate = self
         ToastScheduler.shared.delegate = self
-        #endif
+#endif
 
-        Task {
-            await self.runLaunchFlow()
-        }.add(to: self.taskPool)
+        self.runLaunchFlow()
     }
 
-    private func runLaunchFlow() async {
-        self.router.setRootModule(self.splashVC, animated: false)
+    private func runLaunchFlow() {
+        let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
+        self.router.setRootModule(launchCoordinator)
+        self.addChildAndStart(launchCoordinator) { [unowned self] launchStatus in
+#if IOS
+            self.handle(result: launchStatus)
+#elseif APPCLIP
+            // Code your App Clip may access.
+            self.handleAppClip(result: launchStatus)
+#endif
+        }
+    }
 
-        let launchStatus = await LaunchManager.shared.launchApp()
+    func handle(result: LaunchStatus) {
+        switch result {
+        case .success(let deepLink):
+            if let deepLink = deepLink {
+                self.handle(deeplink: deepLink)
+            } else {
+                self.handle(deeplink: DeepLinkObject(target: .conversation))
+            }
+        case .failed(_):
+            break
+        }
+    }
 
-        #if IOS
-        self.handle(result: launchStatus)
-        #elseif APPCLIP
-        // Code your App Clip may access.
-        self.handleAppClip(result: launchStatus)
-        #endif
+    func handle(deeplink: DeepLinkable) {
+        self.deepLink = deeplink
 
-        self.subscribeToUserUpdates()
+        // NOTE: Regardless of the deep link, the user needs to be created and activated to get
+        // to the whole app.
+
+        // If no user object has been created, allow the user to do so now.
+        guard let user = User.current(), user.isAuthenticated else {
+            self.runOnboardingFlow()
+            return
+        }
+
+        // If ther user didn't finish onboarding, redirect them to onboarding
+        if !user.isOnboarded {
+            self.runOnboardingFlow()
+            return
+        } else if user.status == .waitlist {
+            // The user finished onboarding but is on the waitlist so don't proceed to the main app.
+            self.runWaitlistFlow()
+            return
+        }
+
+        // As a final catch-all, make sure the user is fully activated.
+        guard user.status == .active else {
+            self.runOnboardingFlow()
+            return
+        }
+
+        // Clean up the deep link when we're done
+        defer {
+            self.deepLink = nil
+        }
+
+        guard let target = deeplink.deepLinkTarget else { return }
+
+        // Now attempt to handle the deeplink.
+        switch target {
+        case .home, .conversation:
+#if IOS
+            Task {
+                await self.runConversationListFlow()
+            }
+#endif
+        case .login:
+            self.runOnboardingFlow()
+        case .reservation:
+#if IOS
+            Task {
+                await self.runConversationListFlow()
+            }
+#endif
+            self.runOnboardingFlow()
+        }
     }
 
     func runOnboardingFlow() {
-        if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator {
-            onboardingCoordinator.handle(deeplink: self.deepLink)
-        } else {
-            let coordinator = OnboardingCoordinator(router: self.router,
-                                                    deepLink: self.deepLink)
-            self.router.setRootModule(coordinator, animated: true)
-            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-
-                if User.current()?.status == .waitlist {
-                    self.runWaitlistFlow()
-                } else {
-                    self.subscribeToUserUpdates()
-
-#if IOS
-                    Task {
-                        await self.runConversationListFlow()
-                    }.add(to: self.taskPool)
-#endif
-                }
-            })
-        }
+        let coordinator = OnboardingCoordinator(router: self.router,
+                                                deepLink: self.deepLink)
+        self.router.setRootModule(coordinator, animated: true)
+        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+            // Attempt to take the user to the conversation screen after onboarding is complete.
+            self.handle(deeplink: DeepLinkObject(target: .conversation))
+        })
     }
 
     func runWaitlistFlow() {
         let waitlistCoordinator = WaitlistCoordinator(router: self.router, deepLink: nil)
         self.router.setRootModule(waitlistCoordinator)
-        self.addChildAndStart(waitlistCoordinator) { _ in
-
-        }
-    }
-
-    func handle(deeplink: DeepLinkable) {
-        guard let target = deeplink.deepLinkTarget else { return }
-
-        self.deepLink = deeplink
-
-        switch target {
-        case .home, .conversation, .archive:
-            guard let user = User.current(), user.isAuthenticated else { return }
-            #if IOS
-
-            Task {
-                await self.runConversationListFlow()
-            }.add(to: self.taskPool)
-            #endif
-        case .login:
-            break
-        case .reservation:
-            if let user = User.current(), user.isAuthenticated {
-            #if IOS
-                Task {
-                    await self.runConversationListFlow()
-                }.add(to: self.taskPool)
-            #endif
-            } else {
-                self.runOnboardingFlow()
-            }
-        }
+        self.addChildAndStart(waitlistCoordinator) { _ in }
     }
 
     func showLogOutAlert() {
@@ -128,9 +146,9 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func logOut() {
-        #if IOS
+#if IOS
         self.logOutChat()
-        #endif
+#endif
         User.logOut()
         self.deepLink = nil
         self.removeChild()
@@ -143,10 +161,8 @@ extension MainCoordinator: UserNotificationManagerDelegate {
 
     nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
         Task.onMainActor {
-            self.deepLink = deeplink
             self.handle(deeplink: deeplink)
         }
     }
 }
 #endif
-

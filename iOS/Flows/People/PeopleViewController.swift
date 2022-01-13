@@ -25,8 +25,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     let blurView = BlurView()
 
-    let gradientView = GradientView(with: [ThemeColor.black.color.withAlphaComponent(1.0).cgColor,
-                                           ThemeColor.black.color.withAlphaComponent(0.0).cgColor],
+    let gradientView = GradientView(with: [ThemeColor.B0.color.withAlphaComponent(1.0).cgColor,
+                                           ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                     startPoint: .bottomCenter,
                                     endPoint: .topCenter)
     let button = ThemeButton()

@@ -64,10 +64,12 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     }
 
     private func isPhoneNumberValid() -> Bool {
-        if let phoneString = self.textField.text, phoneString.isValidPhoneNumber(for: self.phoneTextField.currentRegion) {
-            return true
-        }
-        return false
+        guard let phoneString = self.textField.text,
+              phoneString.isValidPhoneNumber(for: self.phoneTextField.currentRegion) else {
+                  return false
+              }
+
+        return true
     }
 
     private func sendCode(to phone: PhoneNumber, region: String) async {

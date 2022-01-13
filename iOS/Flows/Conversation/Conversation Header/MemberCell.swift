@@ -30,14 +30,17 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: Member?
 
     let avatarView = AvatarView()
-    let statusView = UserStatusView()
     
+    let shadowLayer = CAShapeLayer()
+
     lazy var pulseLayer: CAShapeLayer = {
         let shape = CAShapeLayer()
         shape.lineWidth = 1.5
         shape.lineCap = .round
         shape.fillColor = UIColor.clear.cgColor
-        shape.cornerRadius = Theme.cornerRadius
+        shape.cornerRadius = Theme.innerCornerRadius
+        shape.borderColor = ThemeColor.D6.color.cgColor
+        shape.borderWidth = 2
         return shape
     }()
     
@@ -47,8 +50,16 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.avatarView)
         
-        self.layer.addSublayer(self.pulseLayer)
-        self.contentView.addSubview(self.statusView)
+        self.layer.insertSublayer(self.pulseLayer, at: 2)
+        #warning("update the status view designs")
+        //self.contentView.addSubview(self.statusView)
+        
+        self.contentView.layer.insertSublayer(self.shadowLayer, below: self.avatarView.layer)
+        
+        self.shadowLayer.shadowColor = ThemeColor.D6.color.cgColor
+        self.shadowLayer.shadowOpacity = 0.35
+        self.shadowLayer.shadowOffset = .zero
+        self.shadowLayer.shadowRadius = 10
     }
 
     func configure(with item: Member) {
@@ -81,9 +92,11 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.pulseLayer.path = UIBezierPath(roundedRect: self.avatarView.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.pulseLayer.position = self.avatarView.center
         
-        self.statusView.squaredSize = self.height * 0.45
-        self.statusView.match(.right, to: .right, of: self.avatarView, offset: .short)
-        self.statusView.match(.bottom, to: .bottom, of: self.avatarView, offset: .short)
+//        self.statusView.squaredSize = self.height * 0.45
+//        self.statusView.match(.right, to: .right, of: self.avatarView, offset: .short)
+//        self.statusView.match(.bottom, to: .bottom, of: self.avatarView, offset: .short)
+        
+        self.shadowLayer.shadowPath = UIBezierPath(rect: self.avatarView.frame).cgPath
     }
 
     private func beginTyping() {
@@ -117,9 +130,9 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         UserStore.shared.$userUpdated.filter { updatedUser in
             updatedUser?.objectId == user.userObjectId
         }.mainSink { updatedUser in
-            self.statusView.update(status: updatedUser?.focusStatus ?? .available)
+           // self.statusView.update(status: updatedUser?.focusStatus ?? .available)
         }.store(in: &self.cancellables)
         
-        self.statusView.update(status: user.focusStatus ?? .available)
+        //self.statusView.update(status: user.focusStatus ?? .available)
     }
 }

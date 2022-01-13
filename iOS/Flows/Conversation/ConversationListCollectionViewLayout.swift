@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+
 protocol ConversationListCollectionViewLayoutDelegate: AnyObject {
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
                                               cidFor indexPath: IndexPath) -> ConversationId?
@@ -20,6 +22,12 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
     weak var delegate: ConversationListCollectionViewLayoutDelegate?
     private var previousCenteredCID: ConversationId?
+    
+    var sideItemAlpha: CGFloat = 0.3
+    
+    override class var layoutAttributesClass: AnyClass {
+        return ConversationsMessagesCellAttributes.self
+    }
 
     override init() {
         super.init()
@@ -33,8 +41,7 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         self.sendCenterUpdateEventIfNeeded(withContentOffset: newBounds.origin)
-
-        return super.shouldInvalidateLayout(forBoundsChange: newBounds)
+        return true
     }
 
     override func prepare() {
@@ -51,6 +58,36 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
         self.sectionInset = .zero
         self.minimumLineSpacing = Theme.ContentOffset.standard.value
+    }
+    
+    override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        guard let attributes = super.layoutAttributesForElements(in: rect) else {
+            return nil
+        }
+        return attributes.map({ attribute in
+            let copy = attribute.copy() as! ConversationsMessagesCellAttributes
+            return self.transformLayoutAttributes(copy)
+        })
+    }
+    
+    private func transformLayoutAttributes(_ attributes: ConversationsMessagesCellAttributes) -> UICollectionViewLayoutAttributes {
+        guard let collectionView = self.collectionView else { return attributes }
+        let isHorizontal = (self.scrollDirection == .horizontal)
+
+        let collectionCenter = isHorizontal ? collectionView.halfWidth : collectionView.halfHeight
+        let offset = isHorizontal ? collectionView.contentOffset.x : collectionView.contentOffset.y
+        let normalizedCenter = (isHorizontal ? attributes.center.x : attributes.center.y) - offset
+
+        let maxDistance = (isHorizontal ? self.itemSize.width : self.itemSize.height) + self.minimumLineSpacing
+        let distance = min(abs(collectionCenter - normalizedCenter), maxDistance)
+        let ratio = (maxDistance - distance)/maxDistance
+
+        let alpha = ratio * (1 - self.sideItemAlpha) + self.sideItemAlpha
+
+        attributes.alpha = alpha
+        attributes.canScroll = alpha == 1.0
+
+        return attributes
     }
 
     private func sendCenterUpdateEventIfNeeded(withContentOffset contentOffset: CGPoint) {

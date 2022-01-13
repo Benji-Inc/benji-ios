@@ -43,15 +43,17 @@ extension ConversationListViewController {
                 if let view = KeyboardManager.shared.inputAccessoryView as? SwipeableInputAccessoryView {
                     return view.textView.restorationIdentifier == self.messageInputAccessoryView.textView.restorationIdentifier
                 }
-                return false 
+                return false
             })
             .mainSink { [unowned self] willShow in
                 self.state = willShow ? .write : .read
             }.store(in: &self.cancellables)
 
-        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self] frame in
-            self.view.layoutNow()
-        }.store(in: &self.cancellables)
+        KeyboardManager.shared.$cachedKeyboardEndFrame
+            .removeDuplicates()
+            .mainSink { [unowned self] frame in
+                self.view.layoutNow()
+            }.store(in: &self.cancellables)
     }
 
     func subscribeToUpdates() {

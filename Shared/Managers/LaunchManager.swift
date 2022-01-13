@@ -8,6 +8,9 @@
 
 import Foundation
 import Parse
+#if !APPCLIP && !NOTIFICATION
+import StreamChat
+#endif
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -20,7 +23,7 @@ protocol LaunchActivityHandler {
 }
 
 enum LaunchStatus {
-    case success(object: DeepLinkable?)
+    case success(deepLink: DeepLinkable?)
     case failed(error: ClientError?)
 }
 
@@ -31,8 +34,6 @@ protocol LaunchManagerDelegate: AnyObject {
 class LaunchManager {
     
     static let shared = LaunchManager()
-    
-    var finishedInitialFetch = false
     
     weak var delegate: LaunchManagerDelegate?
 
@@ -62,13 +63,13 @@ class LaunchManager {
 
     private func initializeUserData(with deeplink: DeepLinkable?) async -> LaunchStatus {
         guard let user = User.current() else {
-            return .success(object: deeplink)
+            return .success(deepLink: deeplink)
         }
 
 #if !APPCLIP && !NOTIFICATION
         return await self.getChatToken(for: user, deepLink: deeplink)
 #else
-        return .success(object: deeplink)
+        return .success(deepLink: deeplink)
 #endif
     }
     
@@ -99,4 +100,33 @@ class LaunchManager {
         }
         return true
     }
+}
+
+extension LaunchManager {
+
+#if !APPCLIP && !NOTIFICATION
+    func getChatToken(for user: User, deepLink: DeepLinkable?) async -> LaunchStatus {
+        do {
+            try await ChatClient.initialize(for: user)
+            if let user = User.current(), user.isAuthenticated {
+                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            }
+
+            var link = deepLink
+
+            // Used to load the initial conversation when a user has downloaded the full app from an app clip.
+            if let initial = try? await InitialConveration.retrieve() {
+                if let cidString = initial.conversationIdString {
+                    link?.conversationId = try? ConversationId(cid: cidString)
+                }
+
+                link?.deepLinkTarget = .conversation
+            }
+
+            return .success(deepLink: link)
+        } catch {
+            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
+        }
+    }
+#endif
 }

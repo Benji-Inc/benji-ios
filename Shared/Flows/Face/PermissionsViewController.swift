@@ -67,7 +67,7 @@ class PermissionsViewController: DisclosureModalViewController {
         #endif
 
         self.contentView.addSubview(self.button)
-        self.button.set(style: .normal(color: .B1, text: "Done"))
+        self.button.set(style: .normal(color: .T1, text: "Done"))
         self.button.isUserInteractionEnabled = false
         self.button.alpha = 0.25
 
@@ -102,7 +102,8 @@ class PermissionsViewController: DisclosureModalViewController {
         } completion: { completed in
             self.titleLabel.setText(state.title)
             self.updateDescription(with: state.description)
-
+            self.view.setNeedsLayout()
+            
             UIView.animate(withDuration: 0.2) {
                 self.titleLabel.alpha = 1.0
                 self.descriptionLabel.alpha = 1.0

@@ -68,16 +68,8 @@ extension ConversationHeaderViewController {
                                 options: .destructive,
                                 children: [confirmHide, neverMind])
 
-        if let membership = conversation.membership {
-            
-            switch membership.memberRole {
-            case "admin", "owner":
-                children = [topic, add, updateProfile, deleteMenu, hideMenu]
-            case "member":
-                children = [updateProfile, hideMenu]
-            default:
-                break
-            }
+        if conversation.isOwnedByMe {
+            children = [topic, add, updateProfile, deleteMenu, hideMenu]
         } else {
             children = [updateProfile, hideMenu]
         }

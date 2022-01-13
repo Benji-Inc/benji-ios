@@ -16,8 +16,7 @@ extension ChatClient {
 
     /// Returns true if the shared client is connected to the chat service.
     static var isConnected: Bool {
-        guard let sharedClient = self.shared else { return false }
-        return sharedClient.connectionStatus == .connected
+        return self.shared?.connectionStatus == .connected
     }
     
     static func connectAnonymousUser() async throws {
@@ -66,7 +65,6 @@ extension ChatClient {
     }
 
     private func connectUser(with token: Token) async throws {
-
         let userId = User.current()?.userObjectId ?? String() as UserId
         var userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
         userInfo = UserInfo(id: userId,
@@ -117,21 +115,6 @@ extension ChatClient {
             }
         })
     }
-
-    /// Deletes the specified channel.
-    func deleteChannel(_ channel: ChatChannel) async throws {
-        let controller = self.channelController(for: channel.cid)
-        return try await withCheckedThrowingContinuation({ continuation in
-            controller.deleteChannel { error in
-                if let e = error {
-                    continuation.resume(throwing: e)
-                } else {
-                    continuation.resume(returning: ())
-                }
-            }
-        })
-    }
-
     func messageController(for messageable: Messageable) -> MessageController? {
         guard let msg = messageable as? Message else { return nil }
         return self.messageController(cid: msg.cid!, messageId: msg.id)

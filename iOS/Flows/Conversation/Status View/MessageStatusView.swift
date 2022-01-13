@@ -240,7 +240,7 @@ private class MessageReadView: MessageStatusContainer {
 private class MessageReplyView: MessageStatusContainer {
 
     let label = ThemeLabel(font: .small)
-    let countLabel = ThemeLabel(font: .small, textColor: .D6)
+    let countLabel = ThemeLabel(font: .small)
 
     override func initializeSubviews() {
         super.initializeSubviews()
