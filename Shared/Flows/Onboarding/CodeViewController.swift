@@ -59,7 +59,7 @@ class CodeViewController: TextInputViewController<String?> {
             
             try await User.become(withSessionToken: token)
             await self.button.handleEvent(status: .complete)
-            self.complete(with: .success((dict["channelId"])))
+            self.complete(with: .success((dict["conversationId"])))
         } catch {
             await self.button.handleEvent(status: .error(error.localizedDescription))
             self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))

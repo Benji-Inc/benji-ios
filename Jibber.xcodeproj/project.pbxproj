@@ -421,6 +421,7 @@
 		D68C0832272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
 		D68C0834272B6D9C0033C8AE /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AC22FF60190059BA75 /* TextInputViewController.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
+		D69565CC2790AE170063E802 /* MemberCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CB2790AE170063E802 /* MemberCellLayoutAttributes.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
@@ -892,6 +893,7 @@
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
 		D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDisclosureViewController.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		D69565CB2790AE170063E802 /* MemberCellLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCellLayoutAttributes.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
@@ -1672,6 +1674,7 @@
 				D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */,
 				D627E4C9277B819A007B3286 /* MemberAddCell.swift */,
 				D6766C45274D50680046B449 /* MemberCell.swift */,
+				D69565CB2790AE170063E802 /* MemberCellLayoutAttributes.swift */,
 				D6766C47274D50BF0046B449 /* MembersCollectionViewDataSource.swift */,
 				D6766C49274D50D40046B449 /* MembersCollectionViewLayout.swift */,
 				D6766C4B274D50F50046B449 /* MembersViewController.swift */,
@@ -2390,6 +2393,7 @@
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
+				D69565CC2790AE170063E802 /* MemberCellLayoutAttributes.swift in Sources */,
 				D66AB0F2277A46F2007A35D1 /* BoxView.swift in Sources */,
 				D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,

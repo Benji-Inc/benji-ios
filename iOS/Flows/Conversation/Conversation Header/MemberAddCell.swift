@@ -67,7 +67,7 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
         
         self.containerView.squaredSize = self.contentView.height
-        self.containerView.centerOnXAndY()
+        self.containerView.centerOnX()
         
         self.imageView.squaredSize = self.containerView.height * 0.5
         self.imageView.centerOnXAndY()
@@ -75,5 +75,11 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         CATransaction.begin()
         self.gradientLayer.frame = self.containerView.bounds
         CATransaction.commit()
+    }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        #warning("fix layout")
     }
 }

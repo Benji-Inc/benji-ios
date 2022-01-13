@@ -51,8 +51,6 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.avatarView)
         
         self.layer.insertSublayer(self.pulseLayer, at: 2)
-        #warning("update the status view designs")
-        //self.contentView.addSubview(self.statusView)
         
         self.contentView.layer.insertSublayer(self.shadowLayer, below: self.avatarView.layer)
         
@@ -84,17 +82,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        self.avatarView.setSize(for: self.contentView.height)
-        self.avatarView.centerOnXAndY()
         
         self.pulseLayer.frame = self.avatarView.bounds
         self.pulseLayer.path = UIBezierPath(roundedRect: self.avatarView.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.pulseLayer.position = self.avatarView.center
-        
-//        self.statusView.squaredSize = self.height * 0.45
-//        self.statusView.match(.right, to: .right, of: self.avatarView, offset: .short)
-//        self.statusView.match(.bottom, to: .bottom, of: self.avatarView, offset: .short)
         
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.avatarView.frame).cgPath
     }
@@ -127,12 +118,18 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     }
     
     private func subscribeToUpdates(for user: User) {
-        UserStore.shared.$userUpdated.filter { updatedUser in
-            updatedUser?.objectId == user.userObjectId
-        }.mainSink { updatedUser in
-           // self.statusView.update(status: updatedUser?.focusStatus ?? .available)
-        }.store(in: &self.cancellables)
+//        UserStore.shared.$userUpdated.filter { updatedUser in
+//            updatedUser?.objectId == user.userObjectId
+//        }.mainSink { updatedUser in
+//           // self.statusView.update(status: updatedUser?.focusStatus ?? .available)
+//        }.store(in: &self.cancellables)
+//        
+//        //self.statusView.update(status: user.focusStatus ?? .available)
+    }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
         
-        //self.statusView.update(status: user.focusStatus ?? .available)
+        #warning("fix layout")
     }
 }
