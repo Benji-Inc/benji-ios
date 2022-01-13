@@ -359,9 +359,11 @@ extension ThreadViewController {
 
         self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: true)
 
-        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self] frame in
-            self.view.layoutNow()
-        }.store(in: &self.cancellables)
+        KeyboardManager.shared.$cachedKeyboardEndFrame
+            .removeDuplicates()
+            .mainSink { [unowned self] frame in
+                self.view.layoutNow()
+            }.store(in: &self.cancellables)
     }
 }
 
