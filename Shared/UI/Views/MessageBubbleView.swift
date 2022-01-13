@@ -17,7 +17,7 @@ class MessageBubbleView: SpeechBubbleView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.backgroundLayer.fillColor = ThemeColor.BG.color.cgColor
+        self.backgroundLayer.fillColor = ThemeColor.B0.color.cgColor
         self.layer.insertSublayer(self.backgroundLayer, below: self.bubbleLayer)
         
         self.gradientLayer.opacity = 0.2

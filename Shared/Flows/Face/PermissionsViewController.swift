@@ -102,7 +102,8 @@ class PermissionsViewController: DisclosureModalViewController {
         } completion: { completed in
             self.titleLabel.setText(state.title)
             self.updateDescription(with: state.description)
-
+            self.view.setNeedsLayout()
+            
             UIView.animate(withDuration: 0.2) {
                 self.titleLabel.alpha = 1.0
                 self.descriptionLabel.alpha = 1.0

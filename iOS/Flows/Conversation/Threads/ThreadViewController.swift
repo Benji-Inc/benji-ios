@@ -95,6 +95,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     override func initializeViews() {
         super.initializeViews()
+        
+        self.view.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.5)
 
         self.modalPresentationStyle = .overCurrentContext
 
