@@ -19,7 +19,7 @@ struct SendCode: CloudFunction {
     let installationId: String
     
     func makeRequest(andUpdate statusables: [Statusable] = [],
-                          viewsToIgnore: [UIView] = []) async throws -> Any {
+                     viewsToIgnore: [UIView] = []) async throws -> Any {
 
         let phoneString = PhoneKit.shared.format(self.phoneNumber, toType: .e164)
         
@@ -28,10 +28,10 @@ struct SendCode: CloudFunction {
                       "region": self.region]
         
         let result = try await self.makeRequest(andUpdate: statusables,
-                                                     params: params,
-                                                     callName: "sendCode",
-                                                     delayInterval: 0.0,
-                                                     viewsToIgnore: viewsToIgnore)
+                                                params: params,
+                                                callName: "sendCode",
+                                                delayInterval: 0.0,
+                                                viewsToIgnore: viewsToIgnore)
         return result
     }
 }
@@ -55,18 +55,18 @@ struct VerifyCode: CloudFunction {
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
         
         let result = try await self.makeRequest(andUpdate: statusables,
-                                                     params: params,
-                                                     callName: "validateCode",
-                                                     viewsToIgnore: viewsToIgnore)
+                                                params: params,
+                                                callName: "validateCode",
+                                                viewsToIgnore: viewsToIgnore)
         
         if let dict = result as? [String: String],
            let token = dict["sessionToken"],
-            !token.isEmpty {
+           !token.isEmpty {
             return dict
         } else if let token = result as? String {
             var dict: [String: String] = [:]
             dict["sessionToken"] = token
-            return dict 
+            return dict
         } else {
             throw(ClientError.apiError(detail: "Verify code error"))
         }

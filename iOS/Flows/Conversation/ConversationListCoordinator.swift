@@ -12,6 +12,7 @@ import PhotosUI
 import Combine
 import StreamChat
 import Localization
+import Intents
 
 class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
 
@@ -68,6 +69,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                 return
             }
             self.presentConversationTitleAlert(for: conversation)
+        }
+
+        Task {
+            await self.checkForPermissions()
         }
     }
 
@@ -264,5 +269,28 @@ private class ModalPhotoViewController: PhotoViewController {
         super.viewDidLayoutSubviews()
         
         self.gradientView.expandToSuperviewSize()
+    }
+}
+
+// MARK: - Permissions
+
+extension ConversationListCoordinator {
+
+    @MainActor
+    func checkForPermissions() async {
+        if INFocusStatusCenter.default.authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+            self.presentPermissions()
+        }
+    }
+
+    @MainActor
+    private func presentPermissions() {
+        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: self.conversationListVC, animated: true)
+        }
+        self.router.present(coordinator, source: self.conversationListVC)
     }
 }
