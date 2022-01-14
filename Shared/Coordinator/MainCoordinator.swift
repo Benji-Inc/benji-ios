@@ -119,12 +119,6 @@ class MainCoordinator: Coordinator<Void> {
         })
     }
 
-//    func runWaitlistFlow() {
-//        let waitlistCoordinator = WaitlistCoordinator(router: self.router, deepLink: nil)
-//        self.router.setRootModule(waitlistCoordinator)
-//        self.addChildAndStart(waitlistCoordinator) { _ in }
-//    }
-
     func showLogOutAlert() {
         let alert = UIAlertController(title: "🙀",
                                       message: "Someone tripped over a 🐈 and ☠️ the mainframe.",
