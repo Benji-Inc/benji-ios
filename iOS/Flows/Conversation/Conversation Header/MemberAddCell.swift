@@ -76,4 +76,10 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         self.gradientLayer.frame = self.containerView.bounds
         CATransaction.commit()
     }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        #warning("fix layout")
+    }
 }
