@@ -175,7 +175,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         if self.collectionView.isTracking, self.topMostIndex == 0 {
             self.detailView.alpha = 0.0
             
-            KeyboardManager.shared.reset()
             self.resignFirstResponder()
         }
     }

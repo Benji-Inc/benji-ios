@@ -9,6 +9,26 @@
 import Foundation
 import Combine
 
+#if IOS
+extension UIResponder {
+
+    private weak static var currentFirstResponder: UIResponder?
+
+    static var firstReponder: UIResponder? {
+        UIResponder.currentFirstResponder = nil
+        UIApplication.shared.sendAction(#selector(findFirstResponder(sender:)),
+                                        to: nil,
+                                        from: nil,
+                                        for: nil)
+        return UIResponder.currentFirstResponder
+    }
+
+    @objc private  func findFirstResponder(sender: AnyObject) {
+        UIResponder.currentFirstResponder = self
+    }
+}
+#endif
+
 class KeyboardManager {
 
     /// Keyboard events that can happen. Translates directly to `UIKeyboard` notifications from UIKit.
@@ -34,19 +54,18 @@ class KeyboardManager {
         self.addKeyboardObservers()
     }
 
-    func reset() {
-        logDebug("RESET")
-        self.cachedKeyboardEndFrame = .zero
-        self.isKeyboardShowing = false
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-        self.cancellables.removeAll()
-    }
-
     private func addKeyboardObservers() {
+
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
             .mainSink { (notification) in
+#if IOS
+                if let responder = UIResponder.firstReponder,
+                   let inputAccessoryView = responder.inputAccessoryView {
+                    logDebug(inputAccessoryView)
+                }
+#endif
+
+
                 logDebug("keyboard will show")
                 self.currentEvent = .willShow(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
@@ -70,6 +89,7 @@ class KeyboardManager {
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)
             .mainSink { (notification) in
+                logDebug("keyboard did hide")
                 self.currentEvent = .didHide(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
 

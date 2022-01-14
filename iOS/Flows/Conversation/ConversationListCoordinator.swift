@@ -133,8 +133,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         vc.dismissHandlers.append { [unowned self] in
             self.conversationListVC.becomeFirstResponder()
         }
-        
-        KeyboardManager.shared.reset()
+
         self.conversationListVC.resignFirstResponder()
         self.router.present(vc, source: self.conversationListVC)
     }
@@ -158,9 +157,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                 self.add(connections: connections, to: conversation)
             }
         }
-        
-        /// We don't get a will disappear call on the list, so we have to call it here.
-        KeyboardManager.shared.reset()
+
         self.conversationListVC.resignFirstResponder()
         self.router.present(coordinator, source: self.conversationListVC)
     }
@@ -236,7 +233,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
         
-        KeyboardManager.shared.reset()
         self.conversationListVC.resignFirstResponder()
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
