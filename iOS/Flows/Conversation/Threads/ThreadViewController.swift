@@ -110,15 +110,17 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
         self.threadCollectionView.threadLayout.delegate = self
         
-        KeyboardManager.shared.$willKeyboardShow
-            .filter({ willShow in
-                if let view = KeyboardManager.shared.inputAccessoryView as? SwipeableInputAccessoryView {
-                    return view.textView.restorationIdentifier == self.messageInputAccessoryView.textView.restorationIdentifier
+        KeyboardManager.shared.$currentEvent
+            .mainSink { [weak self] currentEvent in
+                guard let `self` = self else { return }
+                switch currentEvent {
+                case .willShow:
+                    self.state = .write
+                case .willHide:
+                    self.state = .read
+                default:
+                    break
                 }
-                return false
-            })
-            .mainSink { [unowned self] willShow in
-                self.state = willShow ? .write : .read
             }.store(in: &self.cancellables)
         
         self.$state
@@ -163,7 +165,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.viewWillAppear(animated)
 
         self.detailView.alpha = 1.0
-        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
     }
 

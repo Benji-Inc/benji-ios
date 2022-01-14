@@ -11,21 +11,6 @@ import Combine
 
 class KeyboardManager {
 
-    static let shared = KeyboardManager()
-
-    private var cancellables = Set<AnyCancellable>()
-
-    @Published var currentEvent: KeyboardEvent = .none
-    // Includes the inputAccessoryViews size
-    @Published var cachedKeyboardEndFrame: CGRect = .zero
-    // Does not include the inputAccessoryViews size
-    @Published var isKeyboardShowing: Bool = false
-
-    // Does not include the inputAccessoryViews size
-    @Published var willKeyboardShow: Bool = false
-
-    private(set) weak var inputAccessoryView: UIView?
-
     /// Keyboard events that can happen. Translates directly to `UIKeyboard` notifications from UIKit.
     enum KeyboardEvent {
         case willShow(NotificationCenter.Publisher.Output)
@@ -37,10 +22,21 @@ class KeyboardManager {
         case none // No event has happened
     }
 
+    static let shared = KeyboardManager()
+
+    private var cancellables = Set<AnyCancellable>()
+
+    @Published var currentEvent: KeyboardEvent = .none
+    @Published var cachedKeyboardEndFrame: CGRect = .zero
+    var isKeyboardShowing: Bool = false
+
+    init() {
+        self.addKeyboardObservers()
+    }
+
     func reset() {
+        logDebug("RESET")
         self.cachedKeyboardEndFrame = .zero
-        self.inputAccessoryView = nil
-        self.willKeyboardShow = false
         self.isKeyboardShowing = false
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
@@ -48,46 +44,28 @@ class KeyboardManager {
         self.cancellables.removeAll()
     }
 
-    func addKeyboardObservers(with inputAccessoryView: UIView? = nil) {
-        self.inputAccessoryView = inputAccessoryView
-
+    private func addKeyboardObservers() {
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
             .mainSink { (notification) in
+                logDebug("keyboard will show")
                 self.currentEvent = .willShow(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
-
-                if let inputView = self.inputAccessoryView {
-                    let willShow = self.cachedKeyboardEndFrame.height > inputView.height
-                    self.willKeyboardShow = willShow
-                } else {
-                    self.willKeyboardShow = true
-                }
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)
             .mainSink { (notification) in
+                logDebug("keyboard did show")
                 self.currentEvent = .didShow(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
 
-                if let inputView = self.inputAccessoryView {
-                    let isShowing = self.cachedKeyboardEndFrame.height > inputView.height
-                    self.isKeyboardShowing = isShowing
-                } else {
-                    self.isKeyboardShowing = true
-                }
-
+                self.isKeyboardShowing = true
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
             .mainSink { (notification) in
+                logDebug("keyboard will hide")
                 self.currentEvent = .willHide(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
-                if let inputView = self.inputAccessoryView {
-                    let willShow = self.cachedKeyboardEndFrame.height > inputView.height
-                    self.willKeyboardShow = willShow
-                } else {
-                    self.willKeyboardShow = true
-                }
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)
@@ -95,13 +73,7 @@ class KeyboardManager {
                 self.currentEvent = .didHide(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
 
-                // For some reason the cached frame represents the superview in this scenario. 
-                if let inputView = self.inputAccessoryView {
-                    let isShowing = self.cachedKeyboardEndFrame.height > inputView.height
-                    self.isKeyboardShowing = isShowing
-                } else {
-                    self.isKeyboardShowing = false
-                }
+                self.isKeyboardShowing = false
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)

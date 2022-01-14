@@ -129,9 +129,8 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     func presentProfilePicture() {
         let vc = ModalPhotoViewController()
         
-        /// Because of how the People are presented, we need to properly reset the KeyboardManager.
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
         vc.dismissHandlers.append { [unowned self] in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         }
         
@@ -148,15 +147,13 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                             router: self.router,
                                             deepLink: self.deepLink)
         
-        /// Because of how the People are presented, we need to properly reset the KeyboardManager.
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         }
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                 self.conversationListVC.becomeFirstResponder()
                 self.add(connections: connections, to: conversation)
             }
@@ -225,7 +222,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                     self.conversationListVC.headerVC.topicLabel.setText(text)
                     self.conversationListVC.headerVC.view.layoutNow()
                     alertController.dismiss(animated: true, completion: {
-                        KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                         self.conversationListVC.becomeFirstResponder()
                     })
                 }
@@ -234,7 +230,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         })
 

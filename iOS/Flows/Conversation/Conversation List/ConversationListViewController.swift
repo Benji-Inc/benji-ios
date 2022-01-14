@@ -136,7 +136,6 @@ class ConversationListViewController: ViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
     }
 
