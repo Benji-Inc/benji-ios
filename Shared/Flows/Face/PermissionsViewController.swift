@@ -38,7 +38,7 @@ class PermissionsViewController: DisclosureModalViewController {
                 return HightlightedPhrase(text: "Allowing Notifications means you never miss out on what’s important. No noise.",
                                           highlightedWords: ["Notifications"])
             case .finished:
-                return HightlightedPhrase(text: "Now that you have Focus status and Notifications on, you are ready to Jibber!",
+                return HightlightedPhrase(text: "Now that you have Focus and Notifications on, you are ready to Jibber!",
                                           highlightedWords: ["Focus", "Notifications"])
             }
         }
@@ -102,7 +102,7 @@ class PermissionsViewController: DisclosureModalViewController {
         } completion: { completed in
             self.titleLabel.setText(state.title)
             self.updateDescription(with: state.description)
-            self.view.setNeedsLayout()
+            self.view.layoutNow()
             
             UIView.animate(withDuration: 0.2) {
                 self.titleLabel.alpha = 1.0

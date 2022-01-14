@@ -45,7 +45,7 @@ class DisclosureModalViewController: ViewController {
 
         self.blurView.expandToSuperviewSize()
 
-        let maxWidth = self.view.width - Theme.contentOffset.doubled
+        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
         self.titleLabel.setSize(withWidth: maxWidth)
         self.titleLabel.centerOnX()

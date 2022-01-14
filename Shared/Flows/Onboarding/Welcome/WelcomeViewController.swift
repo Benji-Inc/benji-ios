@@ -67,6 +67,10 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
+        if let convo = self.conversationController?.conversation {
+            self.didLoadConversation?(convo)
+        }
+        
         Task {
             await Task.sleep(seconds: 0.1)
             self.welcomeCollectionView.timeMachineLayout.prepare()
