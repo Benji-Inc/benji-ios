@@ -36,7 +36,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
     lazy var photoVC = PhotoViewController()
-    lazy var waitlistVC = WaitlistViewController()
 
     let loadingBlur = BlurView()
     let loadingAnimationView = AnimationView()
