@@ -189,10 +189,15 @@ class ConversationListViewController: ViewController {
             let conversation = ChatClient.shared.channelController(for: cid).conversation
             /// Sets the active conversation
             ConversationsManager.shared.activeConversation = conversation
-            let members = conversation.lastActiveMembers.filter { member in
-                return member.id != ChatClient.shared.currentUserId
+            
+            Task {
+                let members = conversation.lastActiveMembers.filter { member in
+                    return member.id != ChatClient.shared.currentUserId
+                }
+                let users = try await UserStore.shared.mapMembersToUsers(members: members)
+                self.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
             }
-            self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
+            
         } else {
             ConversationsManager.shared.activeConversation = nil
         }

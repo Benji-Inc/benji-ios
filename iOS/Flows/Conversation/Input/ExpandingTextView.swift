@@ -50,9 +50,11 @@ class ExpandingTextView: TextView {
 
         for (index, avatar) in avatars.enumerated() {
             if index < avatars.count - 1 {
-                placeholderText.append(String("\(avatar.givenName), "))
-            } else if index == avatars.count - 1 && avatars.count > 1 {
-                placeholderText.append(String("and \(avatar.givenName)"))
+                placeholderText.append(String("\(avatar.givenName)"))
+            } else if index == avatars.count - 1 && avatars.count == 2 {
+                placeholderText.append(String(" and \(avatar.givenName)"))
+            } else if index == avatars.count - 1 && avatars.count > 2 {
+                placeholderText.append(String(", and \(avatar.givenName)"))
             } else {
                 placeholderText.append(avatar.givenName)
             }

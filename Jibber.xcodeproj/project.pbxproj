@@ -381,6 +381,9 @@
 		D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072EB2730462F004657E7 /* MessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072EA2730462F004657E7 /* MessageDetailView.swift */; };
+		D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
+		D682B4162792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
+		D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		D682F02F278E09200016A24E /* ConversationHeaderViewController+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */; };
 		D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
@@ -419,9 +422,9 @@
 		D68C0832272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
 		D68C0834272B6D9C0033C8AE /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AC22FF60190059BA75 /* TextInputViewController.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
+		D69565CC2790AE170063E802 /* MemberCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CB2790AE170063E802 /* MemberCellLayoutAttributes.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
-		D69565CC2790AE170063E802 /* MemberCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CB2790AE170063E802 /* MemberCellLayoutAttributes.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
@@ -871,6 +874,7 @@
 		D67CAFD927402993004FED29 /* InitialConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialConversation.swift; sourceTree = "<group>"; };
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
 		D68072EA2730462F004657E7 /* MessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailView.swift; sourceTree = "<group>"; };
+		D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
 		D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationHeaderViewController+Menu.swift"; sourceTree = "<group>"; };
 		D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsMessagesCellAttributes.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -891,8 +895,8 @@
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
 		D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDisclosureViewController.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D69565CB2790AE170063E802 /* MemberCellLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCellLayoutAttributes.swift; sourceTree = "<group>"; };
+		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
@@ -1328,6 +1332,7 @@
 				D67896AE22FF62630059BA75 /* PhoneKit.swift */,
 				D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */,
 				D6D380C3257FC18300C562E8 /* Selectable.swift */,
+				D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */,
 				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
 				D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */,
 				807A7BC426C5B5A20023A71E /* Task+Extensions.swift */,
@@ -2491,6 +2496,7 @@
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D6CC148F276C1323005F617F /* newStatusView.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
+				D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
@@ -2743,6 +2749,7 @@
 				D6B95AF1272324AE00FBE66A /* ConnectionStore.swift in Sources */,
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
+				D682B4162792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
 				D63DB24325E9993F00F6B323 /* NameViewController.swift in Sources */,
 				D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */,
 				80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
@@ -2810,6 +2817,7 @@
 				D63DB29325E999B200F6B323 /* TextField.swift in Sources */,
 				D63DB29525E999B200F6B323 /* Button+Extensions.swift in Sources */,
 				D63DB26F25E9997F00F6B323 /* Statusable.swift in Sources */,
+				D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */,
 				8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,
