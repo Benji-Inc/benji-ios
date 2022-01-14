@@ -23,7 +23,7 @@ class ExpandingTextView: TextView {
         super.init(coder: aDecoder)
 
         self.font = FontType.regular.font
-        self.textColor = ThemeColor.T1.color
+        self.setTextColor(.T1)
     }
     
     override func initializeViews() {
@@ -61,7 +61,7 @@ class ExpandingTextView: TextView {
         }
 
         self.initialPlaceholder = placeholderText
-        self.set(placeholder: placeholderText, color: .T1withAlpha)
+        self.set(placeholder: placeholderText)
     }
 
     func setPlaceholder(for kind: MessageKind) {

@@ -52,7 +52,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         self.collectionView.clipsToBounds = false
         
         self.view.addSubview(self.waitlistButton)
-        self.waitlistButton.set(style: .normal(color: .T1, text: "Join the Waitlist / Login"))
+        self.waitlistButton.set(style: .normal(color: .T1, text: "Begin"))
         self.waitlistButton.didSelect { [unowned self] in
             self.onDidComplete?(.success((.waitlist)))
         }
