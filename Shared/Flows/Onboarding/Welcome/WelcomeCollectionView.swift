@@ -16,9 +16,9 @@ class WelcomeCollectionView: CollectionView {
     }
 
     init() {
-        super.init(layout: MessagesTimeMachineCollectionViewLayout())
-
-        self.timeMachineLayout.messageContentState = .collapsed
+        let layout = MessagesTimeMachineCollectionViewLayout()
+        layout.messageContentState = .collapsed
+        super.init(layout: layout)
         self.showsVerticalScrollIndicator = false
         self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true

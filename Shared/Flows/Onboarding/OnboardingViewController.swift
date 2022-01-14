@@ -36,7 +36,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
     lazy var photoVC = PhotoViewController()
-    lazy var waitlistVC = WaitlistViewController()
 
     let loadingBlur = BlurView()
     let loadingAnimationView = AnimationView()
@@ -73,8 +72,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
         
-        Task {
-            try await self.updateInvitor(userId: WelcomeViewController.benjiId)
+        
+        
+        self.welcomeVC.didLoadConversation = { [unowned self] conversation in
+            Task {
+                try await self.updateInvitor(userId: conversation.authorId)
+            }
         }
 
         self.welcomeVC.onDidComplete = { [unowned self] result in

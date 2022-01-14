@@ -23,6 +23,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         case rsvp
     }
     
+    var didLoadConversation: ((Conversation) -> Void)? 
     var onDidComplete: ((Result<SelectionType, Error>) -> Void)?
     
     let waitlistButton = ThemeButton()
@@ -33,9 +34,6 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     }
     
     private(set) var conversationController: ConversationController?
-    
-    static let cid = ChannelId(type: .custom("onboarding"), id: "BD-DA81E593-B9A6-4A03-B822-52D0C5A66B7C")
-    static let benjiId = "xGA45bkNmv"
     
     init() {
         super.init(with: WelcomeCollectionView())
@@ -66,6 +64,28 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         }
     }
     
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        if let convo = self.conversationController?.conversation {
+            self.didLoadConversation?(convo)
+        }
+        
+        Task {
+            await Task.sleep(seconds: 0.1)
+            self.welcomeCollectionView.timeMachineLayout.prepare()
+            let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
+        }.add(to: self.taskPool)
+    }
+    
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {
+        return AnimationCycle(inFromPosition: .inward,
+                              outToPosition: .inward,
+                              shouldConcatenate: true)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -78,7 +98,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         self.waitlistButton.centerOnX()
         
         self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.3))
+        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.25))
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.height = self.view.height - self.collectionView.top
         self.collectionView.centerOnX()
@@ -97,9 +117,12 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             if !ChatClient.isConnected {
                 try await ChatClient.connectAnonymousUser()
             }
-
+            
+            guard let conversationId = PFConfig.current().welcomeConversationCID else { return data }
+            
+            let cid = ChannelId(type: .custom("onboarding"), id: conversationId)
             let conversationController
-            = ChatClient.shared.channelController(for: WelcomeViewController.cid,
+            = ChatClient.shared.channelController(for: cid,
                                                      messageOrdering: .topToBottom)
             self.conversationController = conversationController
 
@@ -117,15 +140,19 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             var otherMessages: [MessageSequenceItem] = []
             
             conversationController.messages.forEach({ message in
-                if message.authorId == WelcomeViewController.benjiId {
-                    benjiMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
+                if message.authorId == PFConfig.current().adminUserId {
+                    benjiMessages.append(MessageSequenceItem.message(cid: cid,
+                                                                     messageID: message.id,
+                                                                     showDetail: false))
                 } else {
-                    otherMessages.append(MessageSequenceItem.message(cid: WelcomeViewController.cid, messageID: message.id))
+                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID:
+                                                                        message.id,
+                                                                     showDetail: false))
                 }
             })
             
-            data[.topMessages] = benjiMessages
-            data[.bottomMessages] = otherMessages
+            data[.topMessages] = benjiMessages.reversed()
+            data[.bottomMessages] = otherMessages.reversed()
         } catch {
             logDebug(error.code.description)
         }

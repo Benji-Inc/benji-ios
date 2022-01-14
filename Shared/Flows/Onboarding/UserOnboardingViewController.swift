@@ -59,7 +59,7 @@ class UserOnboardingViewController: ViewController {
         self.nameLabel.centerOnX()
         self.nameLabel.pinToSafeArea(.top, offset: .noOffset)
 
-        let height: CGFloat = self.shouldShowLargeAvatar() ? self.view.width * 0.4 : 60
+        let height: CGFloat = self.shouldShowLargeAvatar() ? self.view.width * 0.35 : 60
         self.avatarView.setSize(for: height)
         self.avatarView.centerOnX()
         self.avatarView.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)

@@ -58,6 +58,7 @@ class LaunchManager {
 #endif
 
         let launchStatus = await self.initializeUserData(with: nil)
+        try? await PFConfig.awaitConfig()
         return launchStatus
     }
 
