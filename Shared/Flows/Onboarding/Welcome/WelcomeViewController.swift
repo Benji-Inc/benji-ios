@@ -23,6 +23,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         case rsvp
     }
     
+    var didLoadConversation: ((Conversation) -> Void)? 
     var onDidComplete: ((Result<SelectionType, Error>) -> Void)?
     
     let waitlistButton = ThemeButton()
@@ -67,12 +68,12 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         super.collectionViewDataWasLoaded()
         
         Task {
-            await Task.sleep(seconds: 0.5)
+            await Task.sleep(seconds: 0.1)
             self.welcomeCollectionView.timeMachineLayout.prepare()
             let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
             self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
             self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
-        }
+        }.add(to: self.taskPool)
     }
     
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {

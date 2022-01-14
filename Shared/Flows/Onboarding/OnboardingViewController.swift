@@ -77,6 +77,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 try await self.updateInvitor(userId: userid)
             }
         }
+        
+        self.welcomeVC.didLoadConversation = { [unowned self] conversation in
+            self.nameLabel.setText(conversation.title)
+            self.view.layoutNow()
+        }
 
         self.welcomeVC.onDidComplete = { [unowned self] result in
             switch result {
