@@ -44,8 +44,6 @@ class MessageCell: UICollectionViewCell {
         self.detailView.expandToSuperviewWidth()
         self.content.expandToSuperviewWidth()
         
-        self.detailView.isHidden = self.shouldShowDetailBar
-
         self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
 
         if self.content.bubbleView.orientation == .down {
@@ -62,7 +60,8 @@ class MessageCell: UICollectionViewCell {
         if self.shouldShowDetailBar {
             self.detailView.configure(with: message)
         }
-
+        
+        self.detailView.isVisible = self.shouldShowDetailBar
         self.setNeedsLayout()
     }
 
