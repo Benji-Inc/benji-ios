@@ -106,7 +106,10 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             updatedItems.append(.loadMore)
         }
         updatedItems.append(contentsOf: conversationListController.conversations.asConversationCollectionItems)
-        updatedItems.append(.newConversation)
+        
+        if !User.isOnWaitlist {
+            updatedItems.append(.newConversation)
+        }
 
         snapshot.setItems(updatedItems, in: sectionID)
 

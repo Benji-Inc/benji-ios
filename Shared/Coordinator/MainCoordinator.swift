@@ -74,14 +74,10 @@ class MainCoordinator: Coordinator<Void> {
         if !user.isOnboarded {
             self.runOnboardingFlow()
             return
-        } else if user.status == .waitlist {
-            // The user finished onboarding but is on the waitlist so don't proceed to the main app.
-            self.runWaitlistFlow()
-            return
         }
 
         // As a final catch-all, make sure the user is fully activated.
-        guard user.status == .active else {
+        guard user.status == .active || user.status == .waitlist else {
             self.runOnboardingFlow()
             return
         }
@@ -123,11 +119,11 @@ class MainCoordinator: Coordinator<Void> {
         })
     }
 
-    func runWaitlistFlow() {
-        let waitlistCoordinator = WaitlistCoordinator(router: self.router, deepLink: nil)
-        self.router.setRootModule(waitlistCoordinator)
-        self.addChildAndStart(waitlistCoordinator) { _ in }
-    }
+//    func runWaitlistFlow() {
+//        let waitlistCoordinator = WaitlistCoordinator(router: self.router, deepLink: nil)
+//        self.router.setRootModule(waitlistCoordinator)
+//        self.addChildAndStart(waitlistCoordinator) { _ in }
+//    }
 
     func showLogOutAlert() {
         let alert = UIAlertController(title: "🙀",

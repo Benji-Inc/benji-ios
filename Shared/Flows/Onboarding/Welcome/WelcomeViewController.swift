@@ -63,6 +63,24 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         }
     }
     
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        Task {
+            await Task.sleep(seconds: 0.5)
+            self.welcomeCollectionView.timeMachineLayout.prepare()
+            let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
+        }
+    }
+    
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {
+        return AnimationCycle(inFromPosition: .inward,
+                              outToPosition: .inward,
+                              shouldConcatenate: true)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -75,7 +93,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         self.waitlistButton.centerOnX()
         
         self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.3))
+        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.25))
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.height = self.view.height - self.collectionView.top
         self.collectionView.centerOnX()
@@ -118,14 +136,18 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             
             conversationController.messages.forEach({ message in
                 if message.authorId == PFConfig.current().adminUserId {
-                    benjiMessages.append(MessageSequenceItem.message(cid: cid, messageID: message.id, showDetail: false))
+                    benjiMessages.append(MessageSequenceItem.message(cid: cid,
+                                                                     messageID: message.id,
+                                                                     showDetail: false))
                 } else {
-                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID: message.id, showDetail: false))
+                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID:
+                                                                        message.id,
+                                                                     showDetail: false))
                 }
             })
             
-            data[.topMessages] = benjiMessages
-            data[.bottomMessages] = otherMessages
+            data[.topMessages] = benjiMessages.reversed()
+            data[.bottomMessages] = otherMessages.reversed()
         } catch {
             logDebug(error.code.description)
         }

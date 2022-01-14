@@ -69,7 +69,11 @@ extension ConversationHeaderViewController {
                                 children: [confirmHide, neverMind])
 
         if conversation.isOwnedByMe {
-            children = [topic, add, updateProfile, deleteMenu, hideMenu]
+            if User.isOnWaitlist {
+                children = [topic, add, updateProfile]
+            } else {
+                children = [topic, add, updateProfile, deleteMenu, hideMenu]
+            }
         } else {
             children = [updateProfile, hideMenu]
         }

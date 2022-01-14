@@ -64,10 +64,10 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
             if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
-                #if TARGET_OS_SIMULATOR
-                return .photo(self.onboardingVC.photoVC)
+                #if !targetEnvironment(simulator)
+                return nil
                 #else
-                return nil 
+                return .photo(self.onboardingVC.photoVC)
                 #endif
             } else {
                 return nil
@@ -76,10 +76,10 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
             if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
-                #if TARGET_OS_SIMULATOR
-                return .photo(self.onboardingVC.photoVC)
-                #else
+                #if targetEnvironment(simulator)
                 return nil
+                #else
+                return .photo(self.onboardingVC.photoVC)
                 #endif
             } else {
                 return nil
