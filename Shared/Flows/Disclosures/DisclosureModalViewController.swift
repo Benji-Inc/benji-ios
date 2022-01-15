@@ -17,7 +17,7 @@ struct HightlightedPhrase {
 class DisclosureModalViewController: ViewController {
 
     private let blurView = BlurView()
-    let titleLabel = ThemeLabel(font: .display)
+    let titleLabel = ThemeLabel(font: .medium)
     let descriptionLabel = ThemeLabel(font: .regular)
     let contentView = BaseView()
 
@@ -49,11 +49,11 @@ class DisclosureModalViewController: ViewController {
 
         self.titleLabel.setSize(withWidth: maxWidth)
         self.titleLabel.centerOnX()
-        self.titleLabel.pinToSafeArea(.top, offset: .xtraLong)
+        self.titleLabel.pinToSafeArea(.top, offset: .custom(30))
 
         self.descriptionLabel.setSize(withWidth: maxWidth)
         self.descriptionLabel.centerOnX()
-        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .standard)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .custom(20))
 
         let contentHeight = self.view.height - (self.descriptionLabel.bottom + Theme.contentOffset) - self.view.safeAreaInsets.bottom
         self.contentView.size = CGSize(width: maxWidth, height: contentHeight)

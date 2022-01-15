@@ -58,7 +58,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         }
         
         self.view.addSubview(self.rsvpButton)
-        self.rsvpButton.set(style: .normal(color: .B2, text: "Enter Code"))
+        self.rsvpButton.set(style: .normal(color: .B2, text: "RSVP"))
         self.rsvpButton.didSelect { [unowned self] in
             self.onDidComplete?(.success((.rsvp)))
         }

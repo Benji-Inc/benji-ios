@@ -24,15 +24,6 @@ class PermissionSwitchView: BaseView {
         case focus
         case notificaitons
 
-        var image: UIImage {
-            switch self {
-            case .focus:
-                return UIImage(systemName: "moon.circle")!
-            case .notificaitons:
-                return UIImage(systemName: "bell.badge")!
-            }
-        }
-
         var text: Localized {
             switch self {
             case .focus:
@@ -48,7 +39,6 @@ class PermissionSwitchView: BaseView {
     }
 
     let type: PermissionType
-    private let imageView = DisplayableImageView()
     private let label = ThemeLabel(font: .smallBold)
     private(set) var  switchView = UISwitch()
     @Published var state: State = .hidden
@@ -73,10 +63,6 @@ class PermissionSwitchView: BaseView {
 
         self.alpha = 0 
 
-        self.addSubview(self.imageView)
-        self.imageView.displayable = self.type.image
-        self.imageView.tintColor = ThemeColor.T1.color
-
         self.addSubview(self.label)
         self.label.setText(self.type.text)
         self.addSubview(self.switchView)
@@ -96,16 +82,12 @@ class PermissionSwitchView: BaseView {
 
         self.roundCorners()
 
-        self.imageView.squaredSize = self.height - Theme.contentOffset
-        self.imageView.pin(.left, offset: .standard)
-        self.imageView.centerOnY()
-
         self.label.setSize(withWidth: self.width)
-        self.label.match(.left, to: .right, of: self.imageView, offset: .short)
+        self.label.pin(.left, offset: .long)
         self.label.centerOnY()
 
         self.switchView.centerOnY()
-        self.switchView.pin(.right, offset: .standard)
+        self.switchView.pin(.right, offset: .long)
     }
 
     private func updateUI(for state: State) {

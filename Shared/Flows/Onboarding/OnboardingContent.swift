@@ -34,13 +34,14 @@ enum OnboardingContent: Switchable {
     }
 
     func getDescription(with user: User?) -> Localized? {
+        #warning("add separate messageing for reservations/passes/waitlist")
         switch self {
         case .welcome(_):
             return nil
         case .phone(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Confirm your mobile so we can chat")
+                                   default: "Confirm your number so we can chat")
         case .code(_):
             return LocalizedString(id: "",
                                    arguments: [],
