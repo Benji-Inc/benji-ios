@@ -33,7 +33,7 @@ class ExpandingTextView: TextView {
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false
         self.keyboardType = .twitter
-        self.tintColor = ThemeColor.T1.color
+        self.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
 
         self.textContainerInset.left = Theme.ContentOffset.long.value
         self.textContainerInset.right = Theme.ContentOffset.long.value

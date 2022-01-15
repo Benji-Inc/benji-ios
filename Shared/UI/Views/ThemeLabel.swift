@@ -63,7 +63,7 @@ class ThemeLabel: UILabel {
         super.init(frame: frame)
 
         self.font = font.font
-        self.textColor = textColor.color
+        self.textColor = textColor.color.resolvedColor(with: self.traitCollection)
         self.initializeLabel()
     }
 
@@ -97,7 +97,7 @@ class ThemeLabel: UILabel {
     }
 
     func setTextColor(_ textColor: ThemeColor) {
-        self.textColor = textColor.color
+        self.textColor = textColor.color.resolvedColor(with: self.traitCollection)
     }
 
     func add(attributes: [NSAttributedString.Key : Any], to text: String) {
