@@ -13,7 +13,7 @@ import StreamChat
 class EmotionView: BaseView {
     
     let emojiContainer = BaseView()
-    let emojiLabel = ThemeLabel(font: .small)
+    let emojiLabel = ThemeLabel(font: .reactionEmoji)
     
     let label = ThemeLabel(font: .small)
     let button = ThemeButton()
@@ -63,7 +63,7 @@ class EmotionView: BaseView {
     }
     
     func configure(for emotion: Emotion) {
-        self.emojiLabel.text = emotion.emoji
+        self.emojiLabel.setText(emotion.emoji)
         self.label.setText(emotion.rawValue.firstCapitalized)
         self.button.menu = self.createMenu(for: emotion)
         self.layoutNow()
@@ -72,11 +72,10 @@ class EmotionView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        self.emojiLabel.setSize(withWidth: self.width)
         self.label.setSize(withWidth: 200)
         
         self.emojiContainer.height = 20
-        
-        self.emojiLabel.sizeToFit()
         self.emojiContainer.width = self.emojiLabel.width + Theme.ContentOffset.short.value.doubled
         self.emojiLabel.centerOnXAndY()
         

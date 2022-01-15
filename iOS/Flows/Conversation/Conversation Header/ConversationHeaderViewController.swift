@@ -35,7 +35,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.menuImageView)
         self.menuImageView.image = UIImage(systemName: "ellipsis")
         self.menuImageView.contentMode = .scaleAspectFit
-        self.menuImageView.tintColor = ThemeColor.B1.color
+        self.menuImageView.tintColor = ThemeColor.B2.color
         self.view.addSubview(self.button)
         
         self.view.addSubview(self.topicLabel)
