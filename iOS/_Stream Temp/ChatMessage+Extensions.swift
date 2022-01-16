@@ -76,6 +76,7 @@ extension Message: Messageable {
     func setToConsumed() async throws {
         let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
         try await controller.addReaction(with: .read)
+        UserNotificationManager.shared.handleRead(message: self)
     }
 
     func setToUnconsumed() async throws {
