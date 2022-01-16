@@ -299,6 +299,8 @@
 		D656EF4A2765A13100FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF492765A13100FF6E2C /* Localization */; };
 		D656EF4C2765A13600FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4B2765A13600FF6E2C /* Localization */; };
 		D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4D2765A13B00FF6E2C /* Localization */; };
+		D660C4C92793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
+		D660C4CA2793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
 		D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
 		D6617CEC26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
 		D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CEF26743DCF00439C06 /* SystemNotice.swift */; };
@@ -431,8 +433,6 @@
 		D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
-		D69B75FB264842D00007020D /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69B75FA264842D00007020D /* VideoView.swift */; };
-		D69B75FD264842D00007020D /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69B75FA264842D00007020D /* VideoView.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -813,6 +813,7 @@
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		D660C4C82793626700221F76 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		D6617CE926741C4500439C06 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
 		D6617CF426743DFE00439C06 /* Notice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
@@ -901,7 +902,6 @@
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		D69972FD25EAFC18000AEE6A /* NotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContent.entitlements; sourceTree = "<group>"; };
-		D69B75FA264842D00007020D /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderViewController.swift; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
@@ -1542,6 +1542,7 @@
 		D6637A2425A3A7A000A4A3B7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D660C4C82793626700221F76 /* AddView.swift */,
 				D66F0FE122C041AF00BA277D /* AvatarView.swift */,
 				D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */,
 				D61EC0E521D30EB300204BEE /* BaseView.swift */,
@@ -1549,8 +1550,8 @@
 				D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */,
 				D60C81492209360400A127A3 /* DisplayableImageView.swift */,
 				D67243E027861C2A004C0A52 /* Gradients */,
-				D6E974302752B4B000D95F08 /* MessageContentView */,
 				D605AC9B27877F890015D800 /* MessageBubbleView.swift */,
+				D6E974302752B4B000D95F08 /* MessageContentView */,
 				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */,
 				D6F733D923D37C6300FBC7BC /* TextEntryField.swift */,
@@ -1559,7 +1560,6 @@
 				D60C814522092F6B00A127A3 /* ThemeButton.swift */,
 				D61EC0E121D30E6000204BEE /* ThemeLabel.swift */,
 				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
-				D69B75FA264842D00007020D /* VideoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2573,6 +2573,7 @@
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* BaseView.swift in Sources */,
+				D660C4C92793626700221F76 /* AddView.swift in Sources */,
 				80FA868C26F111830053101B /* ChatMessage+Extensions.swift in Sources */,
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D67CAFDA27402993004FED29 /* InitialConversation.swift in Sources */,
@@ -2582,7 +2583,6 @@
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
-				D69B75FB264842D00007020D /* VideoView.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
@@ -2729,7 +2729,6 @@
 				D63DB23025E9991F00F6B323 /* String+Extensions.swift in Sources */,
 				D66AB0F4277A4991007A35D1 /* BoxView.swift in Sources */,
 				D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */,
-				D69B75FD264842D00007020D /* VideoView.swift in Sources */,
 				D63DB23725E9992600F6B323 /* UIView+Animations.swift in Sources */,
 				D6F7DEF826FBDD8600F72A5C /* UserOnboardingViewController.swift in Sources */,
 				801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
@@ -2817,6 +2816,7 @@
 				D63DB29325E999B200F6B323 /* TextField.swift in Sources */,
 				D63DB29525E999B200F6B323 /* Button+Extensions.swift in Sources */,
 				D63DB26F25E9997F00F6B323 /* Statusable.swift in Sources */,
+				D660C4CA2793626700221F76 /* AddView.swift in Sources */,
 				D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */,
 				8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,

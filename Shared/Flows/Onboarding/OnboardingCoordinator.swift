@@ -102,7 +102,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
     func onboardingViewControllerDidSelectRSVP(_ controller: OnboardingViewController) {
 
-        let alertController = UIAlertController(title: "Enter Code",
+        let alertController = UIAlertController(title: "RSVP",
                                                 message: "Please enter the code you received.",
                                                 preferredStyle: .alert)
         

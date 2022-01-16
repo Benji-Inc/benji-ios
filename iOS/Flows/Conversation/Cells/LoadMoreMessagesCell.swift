@@ -12,7 +12,7 @@ class LoadMoreMessagesCell: UICollectionViewCell {
 
     var handleLoadMoreMessages: CompletionOptional = nil
 
-    private(set) var label = ThemeLabel(font: .mediumBold)
+    private(set) var label = ThemeLabel(font: .regular, textColor: .T2)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,7 +28,7 @@ class LoadMoreMessagesCell: UICollectionViewCell {
         self.contentView.addSubview(self.label)
 
         self.label.textAlignment = .center
-        self.label.setText("LOAD MORE")
+        self.label.setText("Load more")
 
         self.contentView.didSelect { [unowned self] in
             self.handleLoadMoreMessages?()

@@ -41,13 +41,13 @@ class MessageDropZoneView: BaseView {
     func setState(_ state: State?, messageColor: ThemeColor?) {
         switch state {
         case .reply:
-            self.sendTypeLabel.setText("Drop new reply here")
+            self.sendTypeLabel.setText("Drop reply here")
             self.sendTypeLabel.isHidden = false
         case .newMessage:
-            self.sendTypeLabel.setText("Drop new message here")
+            self.sendTypeLabel.setText("Drop message here")
             self.sendTypeLabel.isHidden = false
         case .newConversation:
-            self.sendTypeLabel.setText("Start a new conversation here")
+            self.sendTypeLabel.setText("Drop message here")
             self.sendTypeLabel.isHidden = false
             self.set(backgroundColor: .clear)
         case .none:
