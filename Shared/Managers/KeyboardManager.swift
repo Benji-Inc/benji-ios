@@ -9,7 +9,6 @@
 import Foundation
 import Combine
 
-#if IOS
 extension UIResponder {
 
     private weak static var currentFirstResponder: UIResponder?
@@ -23,11 +22,11 @@ extension UIResponder {
         return UIResponder.currentFirstResponder
     }
 
-    @objc private  func findFirstResponder(sender: AnyObject) {
+    @objc private func findFirstResponder(sender: AnyObject) {
         UIResponder.currentFirstResponder = self
     }
 }
-#endif
+
 
 class KeyboardManager {
 
@@ -58,40 +57,38 @@ class KeyboardManager {
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
             .mainSink { (notification) in
-#if IOS
-                if let responder = UIResponder.firstReponder,
-                   let inputAccessoryView = responder.inputAccessoryView {
-                    logDebug(inputAccessoryView)
+                let inputAccessoryHeight = self.getInputAccessoryHeight()
+
+                if notification.keyboardEndFrame.height > inputAccessoryHeight {
+                    self.currentEvent = .willShow(notification)
+                    self.cachedKeyboardEndFrame = notification.keyboardEndFrame
+                    logDebug("keyboard will show")
                 }
-#endif
-
-
-                logDebug("keyboard will show")
-                self.currentEvent = .willShow(notification)
-                self.cachedKeyboardEndFrame = self.getFrame(for: notification)
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)
             .mainSink { (notification) in
-                logDebug("keyboard did show")
-                self.currentEvent = .didShow(notification)
-                self.cachedKeyboardEndFrame = self.getFrame(for: notification)
+                let inputAccessoryHeight = self.getInputAccessoryHeight()
 
-                self.isKeyboardShowing = true
+                if notification.keyboardEndFrame.height > inputAccessoryHeight {
+                    self.currentEvent = .didShow(notification)
+                    self.cachedKeyboardEndFrame = notification.keyboardEndFrame
+                    self.isKeyboardShowing = true
+
+                    logDebug("keyboard did show")
+                }
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
             .mainSink { (notification) in
-                logDebug("keyboard will hide")
                 self.currentEvent = .willHide(notification)
-                self.cachedKeyboardEndFrame = self.getFrame(for: notification)
+                self.cachedKeyboardEndFrame = notification.keyboardEndFrame
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)
             .mainSink { (notification) in
-                logDebug("keyboard did hide")
                 self.currentEvent = .didHide(notification)
-                self.cachedKeyboardEndFrame = self.getFrame(for: notification)
+                self.cachedKeyboardEndFrame = notification.keyboardEndFrame
 
                 self.isKeyboardShowing = false
             }.store(in: &self.cancellables)
@@ -99,18 +96,32 @@ class KeyboardManager {
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)
             .mainSink { (notification) in
                 self.currentEvent = .willChangeFrame(notification)
-                self.cachedKeyboardEndFrame = self.getFrame(for: notification)
+                self.cachedKeyboardEndFrame = notification.keyboardEndFrame
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidChangeFrameNotification)
             .mainSink { (notification) in
                 self.currentEvent = .didChangeFrame(notification)
-                self.cachedKeyboardEndFrame = self.getFrame(for: notification)
+                self.cachedKeyboardEndFrame = notification.keyboardEndFrame
             }.store(in: &self.cancellables)
     }
 
-    private func getFrame(for notification: NotificationCenter.Publisher.Output) -> CGRect {
-        let rect = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
+    private func getInputAccessoryHeight() -> CGFloat {
+        var inputAccessoryHeight: CGFloat = 0
+        if let responder = UIResponder.firstReponder,
+           let inputAccessoryView = responder.inputAccessoryView {
+
+            inputAccessoryHeight = inputAccessoryView.height
+        }
+
+        return inputAccessoryHeight
+    }
+}
+
+private extension NotificationCenter.Publisher.Output {
+
+    var keyboardEndFrame: CGRect {
+        let rect = self.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
         return rect
     }
 }

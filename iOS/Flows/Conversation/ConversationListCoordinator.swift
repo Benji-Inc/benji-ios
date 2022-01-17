@@ -282,7 +282,6 @@ extension ConversationListCoordinator {
         
         /// Because of how the Permissions are presented, we need to properly reset the KeyboardManager.
         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         }
         
@@ -290,7 +289,6 @@ extension ConversationListCoordinator {
             self.router.dismiss(source: self.conversationListVC, animated: true)
         }
         
-        KeyboardManager.shared.reset()
         self.conversationListVC.resignFirstResponder()
         self.router.present(coordinator, source: self.conversationListVC)
     }
