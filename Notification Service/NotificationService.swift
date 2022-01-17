@@ -157,9 +157,19 @@ class NotificationService: UNNotificationServiceExtension {
            let context = MessageContext.init(rawValue: string) {
             logDebug(context.rawValue)
             content.interruptionLevel = context.interruptionLevel
+            content.badge = self.getBadge(with: context)
         }
 
         await self.finalizeContent(content: content, contentHandler: contentHandler)
+    }
+    
+    func getBadge(with context: MessageContext) -> NSNumber {
+        guard let defaults = UserDefaults(suiteName: "group.Jibber"),
+              var count = defaults.value(forKey: "badgeNumber") as? Int else { return 0 }
+        
+        count += 1
+        defaults.set(count, forKey: "badgeNumber")
+        return count as NSNumber
     }
 
     private func finalizeContent(content: UNNotificationContent,

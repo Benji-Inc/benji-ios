@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
         return true
     }
 
@@ -29,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      continue userActivity: NSUserActivity,
                      restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return LaunchManager.shared.continueUser(activity: userActivity)
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        UserDefaults(suiteName: "group.Jibber")?.set(application.applicationIconBadgeNumber, forKey: "badgeNumber")
     }
 
 #if !APPCLIP
