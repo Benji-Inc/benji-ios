@@ -48,7 +48,7 @@ class InitialMessageCell: UICollectionViewCell {
         if conversation.title.isEmpty {
             self.label.setText("Add a topic")
         } else {
-            self.label.setText("Topic: \(conversation.title)")
+            self.label.setText("Edit: \(conversation.title)")
         }
         self.layoutNow()
     }

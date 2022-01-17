@@ -83,7 +83,7 @@ class TextView: UITextView {
         super.init(frame: frame, textContainer: textContainer)
 
         self.font = font.font
-        self.textColor = textColor.color
+        self.textColor = textColor.color.resolvedColor(with: self.traitCollection)
 
         self.initializeViews()
     }
@@ -94,7 +94,7 @@ class TextView: UITextView {
         super.init(coder: aDecoder)
 
         self.font = FontType.regularBold.font
-        self.textColor = UIColor.black
+        self.textColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
 
         self.initializeViews()
 
@@ -153,7 +153,7 @@ class TextView: UITextView {
     }
 
     func setTextColor(_ textColor: ThemeColor) {
-        self.textColor = textColor.color
+        self.textColor = textColor.color.resolvedColor(with: self.traitCollection)
     }
 
     func set(placeholder: Localized, color: ThemeColor = .T1withAlpha) {

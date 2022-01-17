@@ -14,6 +14,7 @@ class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
     let detailView = MessageDetailView()
+    var shouldShowDetailBar: Bool = true
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,7 +43,7 @@ class MessageCell: UICollectionViewCell {
 
         self.detailView.expandToSuperviewWidth()
         self.content.expandToSuperviewWidth()
-
+        
         self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
 
         if self.content.bubbleView.orientation == .down {
@@ -56,8 +57,11 @@ class MessageCell: UICollectionViewCell {
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
-        self.detailView.configure(with: message)
-
+        if self.shouldShowDetailBar {
+            self.detailView.configure(with: message)
+        }
+        
+        self.detailView.isVisible = self.shouldShowDetailBar
         self.setNeedsLayout()
     }
 
@@ -74,13 +78,15 @@ class MessageCell: UICollectionViewCell {
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
-        self.detailView.height = MessageDetailView.height
-        self.detailView.alpha = messageLayoutAttributes.detailAlpha
+        
 
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
-        self.detailView.updateReadStatus(shouldRead: messageLayoutAttributes.detailAlpha == 1.0)
+        self.detailView.height = MessageDetailView.height
+        self.detailView.alpha = messageLayoutAttributes.detailAlpha
+        let shouldRead = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+        self.detailView.updateReadStatus(shouldRead: shouldRead)
     }
 }
 

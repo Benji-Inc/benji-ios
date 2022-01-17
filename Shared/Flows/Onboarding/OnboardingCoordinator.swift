@@ -64,7 +64,11 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
             if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
+                #if targetEnvironment(simulator)
+                return nil
+                #else
                 return .photo(self.onboardingVC.photoVC)
+                #endif
             } else {
                 return nil
             }
@@ -72,7 +76,11 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
             if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
+                #if targetEnvironment(simulator)
+                return nil
+                #else
                 return .photo(self.onboardingVC.photoVC)
+                #endif
             } else {
                 return nil
             }
@@ -94,7 +102,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
     func onboardingViewControllerDidSelectRSVP(_ controller: OnboardingViewController) {
 
-        let alertController = UIAlertController(title: "Enter Code",
+        let alertController = UIAlertController(title: "RSVP",
                                                 message: "Please enter the code you received.",
                                                 preferredStyle: .alert)
         

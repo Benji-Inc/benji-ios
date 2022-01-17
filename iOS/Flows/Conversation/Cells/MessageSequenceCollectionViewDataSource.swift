@@ -21,7 +21,9 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 
     enum ItemType: Hashable {
-        case message(cid: ConversationId, messageID: MessageId)
+        case message(cid: ConversationId,
+                     messageID: MessageId,
+                     showDetail: Bool = true)
         case loadMore(cid: ConversationId)
         case placeholder
         case initial(cid: ConversationId)
@@ -32,6 +34,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
     var handleTopicTapped: ((ConversationId) -> Void)?
 
+    /// If true, show the detail bar for each message
+    var shouldShowDetailBar = true
     /// If true, push the bottom messages back to prepare for a new message.
     var shouldPrepareToSend = false
     /// If true, set up the messages to accomodate a drop zone being shown.
@@ -53,11 +57,12 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                               item: ItemType) -> UICollectionViewCell? {
 
         switch item {
-        case .message(cid: let cid, messageID: let messageID):
+        case .message(cid: let cid, messageID: let messageID, let showDetail):
             let messageCell
             = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                            for: indexPath,
-                                                           item: (cid, messageID, collectionView))
+                                                           item: (cid, messageID, showDetail, collectionView))
+            messageCell.shouldShowDetailBar = self.shouldShowDetailBar
             messageCell.content.handleEditMessage = { [unowned self] cid, messageID in
                 self.handleEditMessage?(cid, messageID)
             }
@@ -161,6 +166,7 @@ extension MessageSequenceCollectionViewDataSource {
     = UICollectionView.CellRegistration<MessageCell,
                                         (channelID: ChannelId,
                                          messageID: MessageId,
+                                         showDetail: Bool,
                                          collectionView: UICollectionView)>
     typealias LoadMoreCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, UICollectionView?>
@@ -174,6 +180,7 @@ extension MessageSequenceCollectionViewDataSource {
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
+            cell.shouldShowDetailBar = item.showDetail
             cell.configure(with: message)
         }
     }
@@ -208,7 +215,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
 
     private func getTimeMachineItem(forItem item: ItemType) -> TimeMachineLayoutItemType {
         switch item {
-        case .message(let channelID, let messageID):
+        case .message(let channelID, let messageID, _):
             let messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
             // If the item doesn't correspond to an actual message, then assume it's in the front.
             return messageController.message ?? TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude)

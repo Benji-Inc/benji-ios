@@ -21,6 +21,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
         cv.isScrollEnabled = false
+        cv.showsHorizontalScrollIndicator = false
         super.init(with: cv)
     }
 
@@ -88,7 +89,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersSectionType, MembersItemType>)
     -> AnimationCycle? {
-        
         var index: Int = 0
         if let user = self.initialTopMostAuthor,
            let controller = self.conversationController {
@@ -125,6 +125,12 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         })
                 
         data[.members]?.append(.add(conversation.cid))
+        
+        //Use for testing
+//        for i in 0...20 {
+//            let cid = ChannelId(type: .messaging, id: "\(i)")
+//            data[.members]?.append(.add(cid))
+//        }
 
         return data
     }

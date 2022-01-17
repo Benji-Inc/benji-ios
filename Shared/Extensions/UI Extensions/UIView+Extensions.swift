@@ -101,7 +101,7 @@ extension UIView: Selectable {
     }
 
     func set(backgroundColor: ThemeColor) {
-        self.backgroundColor = backgroundColor.color
+        self.backgroundColor = backgroundColor.color.resolvedColor(with: self.traitCollection)
     }
 
     func moveTo(_ x: CGFloat, _ y: CGFloat) {

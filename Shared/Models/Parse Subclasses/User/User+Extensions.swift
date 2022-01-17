@@ -19,12 +19,22 @@ extension User: Avatar {
     var image: UIImage? {
         return nil
     }
+    
+    static var isOnWaitlist: Bool {
+        guard let current = User.current() else { return false }
+        return current.status == .waitlist
+    }
 
     var isOnboarded: Bool {
         if self.fullName.isEmpty {
             return false
         } else if self.smallImage.isNil {
+            /// Do not require simulators to have image. They can't take one.
+            #if targetEnvironment(simulator)
+            return true
+            #else
             return false
+            #endif
         }
 
         return true 

@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import ParseLiveQuery
 import Parse
+import StreamChat
 
 class UserStore {
 
@@ -89,6 +90,12 @@ class UserStore {
                     }
                 }
             }
+        }
+    }
+    
+    func mapMembersToUsers(members: [ConversationMember]) async throws -> [User] {
+        return try await members.userIDs.concurrentMap { userId in
+            return await self.findUser(with: userId)!
         }
     }
     

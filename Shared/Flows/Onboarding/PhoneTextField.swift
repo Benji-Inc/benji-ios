@@ -11,6 +11,8 @@ import PhoneNumberKit
 import Lottie
 
 class PhoneTextField: PhoneNumberTextField {
+    
+    let padding = UIEdgeInsets(top: 0, left: -30 + Theme.ContentOffset.long.value, bottom: 0, right: 0)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,5 +38,17 @@ class PhoneTextField: PhoneNumberTextField {
                                    shouldChangeCharactersIn: range,
                                    replacementString: string)
         }
+    }
+    
+    override open func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: padding)
+    }
+    
+    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: padding)
+    }
+    
+    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.inset(by: padding)
     }
 }

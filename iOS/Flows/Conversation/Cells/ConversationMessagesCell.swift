@@ -251,7 +251,7 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
               cell.content.isUserInteractionEnabled else { return }
 
         switch item {
-        case .message(cid: let cid, messageID: let messageID):
+        case .message(cid: let cid, messageID: let messageID, _):
             self.handleTappedMessage?(cid, messageID, cell.content)
         case .loadMore, .placeholder, .initial:
             break
@@ -270,7 +270,7 @@ extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
         }
 
         switch item {
-        case .message(cid: let cid, messageID: let messageID):
+        case .message(cid: let cid, messageID: let messageID, _):
             let message = ChatClient.shared.message(cid: cid, id: messageID)
             self.incomingTopmostMessage = message
         case .loadMore, .placeholder, .initial:

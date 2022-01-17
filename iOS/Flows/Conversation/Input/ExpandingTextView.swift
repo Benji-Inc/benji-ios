@@ -23,7 +23,7 @@ class ExpandingTextView: TextView {
         super.init(coder: aDecoder)
 
         self.font = FontType.regular.font
-        self.textColor = ThemeColor.T1.color
+        self.setTextColor(.T1)
     }
     
     override func initializeViews() {
@@ -33,7 +33,7 @@ class ExpandingTextView: TextView {
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false
         self.keyboardType = .twitter
-        self.tintColor = ThemeColor.T1.color
+        self.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
 
         self.textContainerInset.left = Theme.ContentOffset.long.value
         self.textContainerInset.right = Theme.ContentOffset.long.value
@@ -50,16 +50,18 @@ class ExpandingTextView: TextView {
 
         for (index, avatar) in avatars.enumerated() {
             if index < avatars.count - 1 {
-                placeholderText.append(String("\(avatar.givenName), "))
-            } else if index == avatars.count - 1 && avatars.count > 1 {
-                placeholderText.append(String("and \(avatar.givenName)"))
+                placeholderText.append(String("\(avatar.givenName)"))
+            } else if index == avatars.count - 1 && avatars.count == 2 {
+                placeholderText.append(String(" and \(avatar.givenName)"))
+            } else if index == avatars.count - 1 && avatars.count > 2 {
+                placeholderText.append(String(", and \(avatar.givenName)"))
             } else {
                 placeholderText.append(avatar.givenName)
             }
         }
 
         self.initialPlaceholder = placeholderText
-        self.set(placeholder: placeholderText, color: .T1withAlpha)
+        self.set(placeholder: placeholderText)
     }
 
     func setPlaceholder(for kind: MessageKind) {
