@@ -57,10 +57,10 @@ class AvatarView: DisplayableImageView {
     private func prepareView() {
         self.insertSubview(self.label, aboveSubview: self.imageView)
         self.imageView.contentMode = .scaleAspectFill
-        self.imageView.layer.masksToBounds = true
-        self.imageView.clipsToBounds = true
-        self.imageView.layer.cornerRadius = Theme.innerCornerRadius
-        self.imageView.set(backgroundColor: .B0)
+        self.layer.masksToBounds = true
+        self.clipsToBounds = true
+        self.layer.cornerRadius = Theme.innerCornerRadius
+        self.set(backgroundColor: .B3)
     }
 
     // MARK: - Open setters

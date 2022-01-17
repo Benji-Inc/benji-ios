@@ -34,14 +34,13 @@ enum OnboardingContent: Switchable {
     }
 
     func getDescription(with user: User?) -> Localized? {
-        #warning("add separate messageing for reservations/passes/waitlist")
         switch self {
         case .welcome(_):
             return nil
         case .phone(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Confirm your number so we can chat")
+                                   default: "Confirm your number")
         case .code(_):
             return LocalizedString(id: "",
                                    arguments: [],
@@ -49,13 +48,13 @@ enum OnboardingContent: Switchable {
         case .name(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Confirm your name to use Jibber!")
+                                   default: "Jibber use's real names. What's yours?")
         case .photo(let vc):
             switch vc.currentState {
             case .initial:
                 return LocalizedString(id: "",
                                        arguments: [],
-                                       default: "Tap the screen so I can see you 😁")
+                                       default: "Tap the screen")
             case .scanEyesOpen:
                 return "Now smile and tap the screen."
             case .didCaptureEyesOpen:

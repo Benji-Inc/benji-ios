@@ -33,7 +33,10 @@ class TextEntryField: BaseView, Sizeable {
         self.addSubview(self.speechBubble)
         self.speechBubble.bubbleColor = ThemeColor.B1.color
 
+        self.showShadow(withOffset: 8)
+        
         self.set(backgroundColor: .clear)
+        
 
         self.addSubview(self.textField)
 
@@ -55,7 +58,7 @@ class TextEntryField: BaseView, Sizeable {
             tf.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
 
-        self.clipsToBounds = true
+        self.clipsToBounds = false
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {

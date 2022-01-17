@@ -19,7 +19,7 @@ class BoxView: PassThroughView {
         
         self.alpha = 0
         
-        self.backgroundColor = ThemeColor.T1.color.withAlphaComponent(0.6)
+        self.backgroundColor = ThemeColor.T3.color.withAlphaComponent(0.6)
                 
         // Fill rule set to exclude intersected paths
         self.maskLayer.fillRule = CAShapeLayerFillRule.evenOdd

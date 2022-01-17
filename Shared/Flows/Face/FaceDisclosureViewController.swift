@@ -18,14 +18,14 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         var title: Localized {
             switch self {
             case .smiling:
-                return "Let’s Review"
+                return "Success"
             }
         }
 
         var description: HightlightedPhrase {
             switch self {
             case .smiling:
-                return HightlightedPhrase(text: "Your smile tells everyone you are available and will recieve thier notifications.", highlightedWords: ["available"])
+                return HightlightedPhrase(text: "Looking good!\n\n😁", highlightedWords: [])
             }
         }
 
@@ -62,7 +62,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         self.button.isHidden = true
         self.contentView.addSubview(self.button)
-        self.button.set(style: .normal(color: .B0, text: "Got it"))
+        self.button.set(style: .normal(color: .B3, text: "Next"))
     }
 
     override func viewDidLayoutSubviews() {

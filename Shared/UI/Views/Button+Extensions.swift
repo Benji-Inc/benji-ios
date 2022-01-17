@@ -52,9 +52,6 @@ extension ThemeButton {
                 self.alphaOutAnimator.stopAnimation(true)
                 self.alphaInAnimator.stopAnimation(true)
                 self.alphaInAnimator.addAnimations { [unowned self] in
-                    if let color = self.defaultColor{
-                        self.setBackground(color: color.color.withAlphaComponent(0.4), forUIControlState: .normal)
-                    }
                     for view in self.subviews {
                         if let label = view as? UILabel {
                             // Don't show the error label while we're in the normal button state.
@@ -96,7 +93,6 @@ extension ThemeButton {
                     }
                 }
                 self.errorLabel.alpha = 1.0
-                self.setBackground(color: ThemeColor.B1.color.withAlphaComponent(0.4), forUIControlState: .normal)
             }) { (_) in
                 continuation.resume(returning: ())
             }

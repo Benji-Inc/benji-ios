@@ -72,14 +72,15 @@ class ThemeButton: UIButton, Statusable {
             let highlightedString = NSMutableAttributedString(string: localizedString)
             highlightedString.addAttribute(.font, value: FontType.regular.font)
 
-            normalString.addAttribute(.foregroundColor, value: ThemeColor.B0.color)
-            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.B0.color)
+            normalString.addAttribute(.foregroundColor, value: ThemeColor.B0.color.resolvedColor(with: self.traitCollection))
+            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.B0.color.resolvedColor(with: self.traitCollection))
             
             if color != .clear {
-                self.setBackground(color: color.color, forUIControlState: .normal)
+                self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
             }
 
-            self.setBackground(color: color.color, forUIControlState: .highlighted)
+            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
 
             // Emojis wont show correctly with attributes
             if localizedString.getEmojiRanges().count > 0 {
