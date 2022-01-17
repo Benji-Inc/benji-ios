@@ -24,6 +24,7 @@ class UserNotificationManager: NSObject {
     weak var delegate: UserNotificationManagerDelegate?
 
     private let center = UNUserNotificationCenter.current()
+    private var application: UIApplication?
 
     var cancellables = Set<AnyCancellable>()
 
@@ -44,6 +45,9 @@ class UserNotificationManager: NSObject {
     }
 
     func silentRegister(withApplication application: UIApplication) {
+        
+        self.application = application
+        
         Task {
             let settings = await self.getNotificationSettings()
 
@@ -66,6 +70,7 @@ class UserNotificationManager: NSObject {
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
                   application: UIApplication) async -> Bool {
 
+        self.application = application
         let granted = await self.requestAuthorization(with: options)
         if granted {
             await application.registerForRemoteNotifications()  // To update our token
@@ -90,37 +95,32 @@ class UserNotificationManager: NSObject {
             return false
         }
     }
-
-    func removeNonEssentialPendingNotifications() {
-        self.center.getPendingNotificationRequests { requests in
-
+    
+    func handleRead(message: Messageable) {
+        
+        self.center.getDeliveredNotifications { [unowned self] delivered in
             var identifiers: [String] = []
-
-            requests.forEach { request in
-                if let category = UserNotificationCategory(rawValue: request.content.categoryIdentifier) {
-                    if category != .connectionRequest {
-                        identifiers.append(request.identifier)
-                    }
-                } else {
-                    identifiers.append(request.identifier)
+            
+            var badgeCount = self.application?.applicationIconBadgeNumber ?? 0 
+            
+            delivered.forEach { note in
+                if note.request.identifier == message.id {
+                    identifiers.append(message.id)
+                }
+                
+                if message.context == .timeSensitive {
+                    badgeCount -= 1
                 }
             }
 
-            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
+            self.application?.applicationIconBadgeNumber = badgeCount
+            self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
         }
     }
 
     func removeAllPendingNotificationRequests() {
         self.center.removeAllPendingNotificationRequests()
     }
-
-#if !NOTIFICATION
-    func resetBadgeCount() {
-        let count = UIApplication.shared.applicationIconBadgeNumber
-        UIApplication.shared.applicationIconBadgeNumber = 0
-        UIApplication.shared.applicationIconBadgeNumber = count
-    }
-#endif
 
     func schedule(note: UNNotificationRequest) async {
         try? await self.center.add(note)
