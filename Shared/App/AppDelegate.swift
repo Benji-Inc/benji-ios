@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        UserDefaults(suiteName: "group.Jibber")?.set(application.applicationIconBadgeNumber, forKey: "badgeNumber")
+        UserDefaults(suiteName: Config.shared.environment.groupId)?.set(application.applicationIconBadgeNumber, forKey: "badgeNumber")
     }
 
 #if !APPCLIP

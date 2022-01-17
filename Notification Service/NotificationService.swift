@@ -49,7 +49,6 @@ class NotificationService: UNNotificationServiceExtension {
         if let contentHandler = self.contentHandler,
            let content = self.request?.content {
             Task {
-                logDebug("will expire")
                 await self.finalizeContent(content: content, contentHandler: contentHandler)
             }
         }
@@ -103,12 +102,10 @@ class NotificationService: UNNotificationServiceExtension {
 
         self.chatHandler = ChatRemoteNotificationHandler(client: client, content: content)
 
-        #warning("This doesnt work due to a bug. Always returns false.")
         let notification = self.chatHandler?.handleNotification { pushContentType in
             Task {
                 switch pushContentType {
                 case .message(let msg):
-                    logDebug("Did Recieve message")
                     if let conversation = msg.channel {
                         self.conversation = conversation
                         self.message = msg.message
@@ -155,7 +152,7 @@ class NotificationService: UNNotificationServiceExtension {
         if let value = self.message?.extraData["context"],
            case RawJSON.string(let string) = value,
            let context = MessageContext.init(rawValue: string) {
-            logDebug(context.rawValue)
+            
             content.interruptionLevel = context.interruptionLevel
             content.badge = self.getBadge(with: context)
         }
@@ -164,7 +161,7 @@ class NotificationService: UNNotificationServiceExtension {
     }
     
     func getBadge(with context: MessageContext) -> NSNumber {
-        guard let defaults = UserDefaults(suiteName: "group.Jibber"),
+        guard let defaults = UserDefaults(suiteName: Config.shared.environment.groupId),
               var count = defaults.value(forKey: "badgeNumber") as? Int else { return 0 }
         
         count += 1
