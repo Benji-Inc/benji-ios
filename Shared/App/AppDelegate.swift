@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        self.prepareCurrentUser()
+        
     }
 
     func application(_ application: UIApplication,
@@ -44,12 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 #endif
-
-    private func prepareCurrentUser() {
-#if !NOTIFICATION
-        UserNotificationManager.shared.resetBadgeCount()
-#endif
-    }
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

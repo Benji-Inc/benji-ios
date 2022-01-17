@@ -97,40 +97,24 @@ class UserNotificationManager: NSObject {
     }
     
     func handleRead(message: Messageable) {
-        Task {
-            
+        
+        self.center.getDeliveredNotifications { [unowned self] delivered in
             var identifiers: [String] = []
-            let delivered = await self.getDeliveredNotifications()
+            
+            var badgeCount = self.application?.applicationIconBadgeNumber ?? 0 
+            
             delivered.forEach { note in
                 if note.request.identifier == message.id {
                     identifiers.append(message.id)
                 }
-            }
-
-            self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
-        }
-    }
-    
-    func getDeliveredNotifications() async -> [UNNotification] {
-        return await self.center.deliveredNotifications()
-    }
-
-    func removeNonEssentialPendingNotifications() {
-        self.center.getPendingNotificationRequests { requests in
-
-            var identifiers: [String] = []
-
-            requests.forEach { request in
-                if let category = UserNotificationCategory(rawValue: request.content.categoryIdentifier) {
-                    if category != .connectionRequest {
-                        identifiers.append(request.identifier)
-                    }
-                } else {
-                    identifiers.append(request.identifier)
+                
+                if message.context == .timeSensitive {
+                    badgeCount -= 1
                 }
             }
 
-            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
+            self.application?.applicationIconBadgeNumber = badgeCount
+            self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
         }
     }
 
