@@ -99,22 +99,22 @@ class UserNotificationManager: NSObject {
     func handleRead(message: Messageable) {
         
         self.center.getDeliveredNotifications { [unowned self] delivered in
-            var identifiers: [String] = []
-            
-            var badgeCount = self.application?.applicationIconBadgeNumber ?? 0 
-            
-            delivered.forEach { note in
-                if note.request.identifier == message.id {
-                    identifiers.append(message.id)
+            Task.onMainActor {
+                var identifiers: [String] = []
+                var badgeCount = self.application?.applicationIconBadgeNumber ?? 0
+                delivered.forEach { note in
+                    if note.request.identifier == message.id {
+                        identifiers.append(message.id)
+                    }
+                    
+                    if message.context == .timeSensitive {
+                        badgeCount -= 1
+                    }
                 }
-                
-                if message.context == .timeSensitive {
-                    badgeCount -= 1
-                }
-            }
 
-            self.application?.applicationIconBadgeNumber = badgeCount
-            self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+                self.application?.applicationIconBadgeNumber = badgeCount
+                self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+            }
         }
     }
 
