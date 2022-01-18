@@ -69,7 +69,7 @@ struct VerifyCode: CloudFunction {
     }
 }
 
-struct ActivateUser: CloudFunction {
+struct FinalizeOnboarding: CloudFunction {
 
     typealias ReturnType = Any
     

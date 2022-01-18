@@ -188,8 +188,8 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
         Task {
             self.onboardingVC.showLoading()
 
-            try await ActivateUser(reservationId: self.onboardingVC.reservationId,
-                                   passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
+            try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
+                                         passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
                                                  viewsToIgnore: [self.onboardingVC.view])
             await self.onboardingVC.hideLoading()
 
