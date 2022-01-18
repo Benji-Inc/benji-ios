@@ -73,19 +73,12 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
                                            for: UIControl.Event.editingChanged)
         self.textEntry.textField.delegate = self
 
-        KeyboardManager.shared.$currentEvent.mainSink { [weak self] currentEvent in
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [weak self] _ in
             guard let `self` = self else { return }
-
-            switch currentEvent {
-            case .willShow(_):
-                UIView.animate(withDuration: 0.01) {
-                    self.view.setNeedsLayout()
-                }
-            default:
-                break
+            UIView.animate(withDuration: 0.01) {
+                self.view.setNeedsLayout()
             }
         }.store(in: &self.cancellables)
-
     }
 
     func didTapButton() {}
