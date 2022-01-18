@@ -42,16 +42,12 @@ struct VerifyCode: CloudFunction {
     let code: String
     let phoneNumber: PhoneNumber
     let installationId: String
-    let reservationId: String
-    let passId: String
 
     func makeRequest(andUpdate statusables: [Statusable] = [],
                      viewsToIgnore: [UIView] = []) async throws -> [String: String] {
         
         let params: [String: Any] = ["authCode": self.code,
                                      "installationId": self.installationId,
-                                     "passId": self.passId,
-                                     "reservationId": self.reservationId,
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
         
         let result = try await self.makeRequest(andUpdate: statusables,
@@ -76,13 +72,19 @@ struct VerifyCode: CloudFunction {
 struct ActivateUser: CloudFunction {
 
     typealias ReturnType = Any
+    
+    let reservationId: String
+    let passId: String
 
     @discardableResult
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
-
+        
+        let params: [String: Any] = ["passId": self.passId,
+                                     "reservationId": self.reservationId]
+        
         return try await self.makeRequest(andUpdate: statusables,
-                                          params: [:],
-                                          callName: "setActiveStatus",
+                                          params: params,
+                                          callName: "finalizeUserOnboarding",
                                           delayInterval: 0.0,
                                           viewsToIgnore: viewsToIgnore)
     }
