@@ -136,7 +136,6 @@ class ConversationListViewController: ViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
     }
 
@@ -158,7 +157,6 @@ class ConversationListViewController: ViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        KeyboardManager.shared.reset()
         self.resignFirstResponder()
     }
 

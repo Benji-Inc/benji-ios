@@ -129,13 +129,11 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     func presentProfilePicture() {
         let vc = ModalPhotoViewController()
         
-        /// Because of how the People are presented, we need to properly reset the KeyboardManager.
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
         vc.dismissHandlers.append { [unowned self] in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         }
-        
-        KeyboardManager.shared.reset()
+
         self.conversationListVC.resignFirstResponder()
         self.router.present(vc, source: self.conversationListVC)
     }
@@ -148,22 +146,18 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                             router: self.router,
                                             deepLink: self.deepLink)
         
-        /// Because of how the People are presented, we need to properly reset the KeyboardManager.
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         }
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                 self.conversationListVC.becomeFirstResponder()
                 self.add(connections: connections, to: conversation)
             }
         }
-        
-        /// We don't get a will disappear call on the list, so we have to call it here.
-        KeyboardManager.shared.reset()
+
         self.conversationListVC.resignFirstResponder()
         self.router.present(coordinator, source: self.conversationListVC)
     }
@@ -225,7 +219,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                     self.conversationListVC.headerVC.topicLabel.setText(text)
                     self.conversationListVC.headerVC.view.layoutNow()
                     alertController.dismiss(animated: true, completion: {
-                        KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                         self.conversationListVC.becomeFirstResponder()
                     })
                 }
@@ -234,14 +227,12 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         })
 
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
         
-        KeyboardManager.shared.reset()
         self.conversationListVC.resignFirstResponder()
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
@@ -291,7 +282,6 @@ extension ConversationListCoordinator {
         
         /// Because of how the Permissions are presented, we need to properly reset the KeyboardManager.
         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         }
         
@@ -299,7 +289,6 @@ extension ConversationListCoordinator {
             self.router.dismiss(source: self.conversationListVC, animated: true)
         }
         
-        KeyboardManager.shared.reset()
         self.conversationListVC.resignFirstResponder()
         self.router.present(coordinator, source: self.conversationListVC)
     }

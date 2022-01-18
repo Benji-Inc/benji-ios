@@ -38,21 +38,21 @@ extension ConversationListViewController {
     }
 
     func subscribeToKeyboardUpdates() {
-        KeyboardManager.shared.$willKeyboardShow
-            .filter({ willShow in
-                if let view = KeyboardManager.shared.inputAccessoryView as? SwipeableInputAccessoryView {
-                    return view.textView.restorationIdentifier == self.messageInputAccessoryView.textView.restorationIdentifier
-                }
-                return false
-            })
-            .mainSink { [unowned self] willShow in
-                self.state = willShow ? .write : .read
-            }.store(in: &self.cancellables)
+        KeyboardManager.shared
+            .$currentEvent
+            .mainSink { [weak self] currentEvent in
+                guard let `self` = self else { return }
 
-        KeyboardManager.shared.$cachedKeyboardEndFrame
-            .removeDuplicates()
-            .mainSink { [unowned self] frame in
-                self.view.layoutNow()
+                switch currentEvent {
+                case .willShow:
+                    self.state = .write
+                case .willHide:
+                    self.state = .read
+                case .didChangeFrame:
+                    self.view.layoutNow()
+                default:
+                    break
+                }
             }.store(in: &self.cancellables)
     }
 
