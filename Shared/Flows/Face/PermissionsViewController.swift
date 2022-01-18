@@ -67,9 +67,8 @@ class PermissionsViewController: DisclosureModalViewController {
         #endif
 
         self.contentView.addSubview(self.button)
-        self.button.set(style: .normal(color: .T1, text: "Done"))
+        self.button.set(style: .normal(color: .B3, text: "Done"))
         self.button.isUserInteractionEnabled = false
-        self.button.alpha = 0.25
 
         self.$state
             .removeDuplicates()
@@ -117,9 +116,6 @@ class PermissionsViewController: DisclosureModalViewController {
                     self.notificationSwitchView.state = .hidden
 
                     self.button.isUserInteractionEnabled = true
-                    UIView.animate(withDuration: 0.2) {
-                        self.button.alpha = 1.0
-                    }
                 }
             }
         }

@@ -176,8 +176,12 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             self.onboardingVC.switchTo(nextContent)
         } else if let user = User.current() {
             switch user.status {
-            case .needsVerification, .waitlist, .none:
+            case .needsVerification, .none:
                 self.finishFlow(with: ())
+            case .waitlist:
+                Task {
+                    await self.checkForPermissions()
+                }
             case .inactive, .active:
                 self.activateUserThenShowPermissions(user: user)
             }

@@ -75,6 +75,9 @@ class PermissionSwitchView: BaseView {
 
         self.layer.borderColor = ThemeColor.T1.color.cgColor
         self.layer.borderWidth = 2
+        
+        self.switchView.onTintColor = ThemeColor.D6.color
+        self.switchView.thumbTintColor = ThemeColor.L1.color
     }
 
     override func layoutSubviews() {
