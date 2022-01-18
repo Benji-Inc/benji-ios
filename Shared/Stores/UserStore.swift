@@ -94,9 +94,15 @@ class UserStore {
     }
     
     func mapMembersToUsers(members: [ConversationMember]) async throws -> [User] {
-        return try await members.userIDs.concurrentMap { userId in
-            return await self.findUser(with: userId)!
+        
+        var users: [User] = []
+        await members.userIDs.asyncForEach { userId in
+            if let user = await self.findUser(with: userId) {
+                users.append(user)
+            }
         }
+        
+        return users
     }
     
     func findUser(with objectID: String) async -> User? {
