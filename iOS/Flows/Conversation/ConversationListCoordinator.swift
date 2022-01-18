@@ -254,6 +254,8 @@ private class ModalPhotoViewController: PhotoViewController {
         }
         
         self.view.insertSubview(self.gradientView, at: 0)
+        
+        self.currentState = .scanEyesOpen
     }
     
     override func viewDidLayoutSubviews() {
