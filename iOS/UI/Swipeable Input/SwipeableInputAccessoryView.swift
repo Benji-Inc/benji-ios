@@ -118,43 +118,35 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     private func setupHandlers() {
         self.updateInputType(with: .keyboard)
-
-        KeyboardManager.shared.$willKeyboardShow
-            .filter({ willShow in
-                if let view = KeyboardManager.shared.inputAccessoryView as? SwipeableInputAccessoryView {
-                    return view.textView.restorationIdentifier == self.textView.restorationIdentifier
-                }
-                return KeyboardManager.shared.inputAccessoryView === self
-            })
-            .mainSink { willShow in
-                let shouldShow = willShow && self.textView.numberOfLines == 1
-                self.showInputTypes(shouldShow: shouldShow)
-
-            }.store(in: &self.cancellables)
-
-        KeyboardManager.shared.$currentEvent
-            .mainSink { [weak self] event in
+        
+        KeyboardManager.shared
+            .$currentEvent
+            .mainSink { [weak self] currentEvent in
                 guard let `self` = self else { return }
-                switch event {
+                
+                switch currentEvent {
+                case .willShow:
+                    let shouldShow = self.textView.numberOfLines == 1
+                    self.showInputTypes(shouldShow: shouldShow)
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 default:
                     break
                 }
             }.store(in: &self.cancellables)
-
+        
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
-            let shouldShow = self.textView.numberOfLines == 1 && KeyboardManager.shared.isKeyboardShowing && KeyboardManager.shared.inputAccessoryView === self
+            let shouldShow = self.textView.numberOfLines == 1 && KeyboardManager.shared.isKeyboardShowing
             self.showInputTypes(shouldShow: shouldShow)
         }.store(in: &self.cancellables)
-
+        
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {
                 self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
             }
         }
-
+        
         self.textView.confirmationView.button.didSelect { [unowned self] in
             self.didPressAlertCancel()
         }
