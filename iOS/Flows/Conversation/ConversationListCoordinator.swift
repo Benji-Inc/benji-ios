@@ -36,8 +36,8 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
          startingMessageId: MessageId?) {
 
         self.conversationMembers = conversationMembers
-        self.startingConversationID = startingConversationId
-        self.startMessageID = startingMessageId
+        self.startingConversationID = ChannelId(type: .messaging, id: "BD-250399B1-0117-4FA5-BE34-6903DD6E3CD7")//startingConversationId
+        self.startMessageID = "73151D4A-236D-4150-A805-94904A239743"//startingMessageId
 
         super.init(router: router, deepLink: deepLink)
     }

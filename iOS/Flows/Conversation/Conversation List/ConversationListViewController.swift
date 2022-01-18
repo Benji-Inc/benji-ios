@@ -260,11 +260,12 @@ class ConversationListViewController: ViewController {
         // Determine if this is a reply message or regular message. If it's a reply, select the parent
         // message so we can open the thread experience.
         if let parentMessageId = message.parentMessageId {
-            await messagesCell.scrollToMessage(with:  parentMessageId)
+            await messagesCell.scrollToMessage(with:  parentMessageId, animateSelection: true)
             self.selectedMessageView = messagesCell.getBottomFrontmostCell()?.content
             self.onSelectedMessage?(cid, parentMessageId, messageID)
         } else {
-            await messagesCell.scrollToMessage(with: messageID)
+            await messagesCell.scrollToMessage(with: messageID, animateSelection: true)
+            
         }
     }
 
