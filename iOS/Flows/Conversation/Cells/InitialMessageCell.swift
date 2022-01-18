@@ -8,12 +8,16 @@
 
 import Foundation
 import StreamChat
+import Combine
 
 class InitialMessageCell: UICollectionViewCell {
 
     var handleTopicTapped: CompletionOptional = nil
 
     private(set) var label = ThemeLabel(font: .regular)
+    
+    private var controller: ConversationController?
+    private var cancellables = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,12 +49,33 @@ class InitialMessageCell: UICollectionViewCell {
     }
     
     func configure(with conversation: Conversation) {
+        self.controller = ChatClient.shared.channelController(for: conversation.cid)
+        self.update(with: conversation)
+        self.subscribeToUpdates()
+    }
+    
+    private func update(with conversation: Conversation) {
         if conversation.title.isEmpty {
             self.label.setText("Add a topic")
         } else {
             self.label.setText("Edit: \(conversation.title)")
         }
         self.layoutNow()
+    }
+    
+    private func subscribeToUpdates() {
+        self.controller?
+            .channelChangePublisher
+            .mainSink { [unowned self] event in
+                switch event {
+                case .create(_):
+                    break
+                case .update(let conversation):
+                    self.update(with: conversation)
+                case .remove(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
     }
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -62,5 +87,13 @@ class InitialMessageCell: UICollectionViewCell {
         }
         
         self.label.alpha = messageLayoutAttributes.detailAlpha
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
     }
 }
