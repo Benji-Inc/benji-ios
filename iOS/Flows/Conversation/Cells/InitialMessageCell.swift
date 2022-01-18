@@ -55,10 +55,10 @@ class InitialMessageCell: UICollectionViewCell {
     }
     
     private func update(with conversation: Conversation) {
-        if conversation.title.isEmpty {
-            self.label.setText("Add a topic")
+        if let title = conversation.title {
+            self.label.setText("Edit: \(title)")
         } else {
-            self.label.setText("Edit: \(conversation.title)")
+            self.label.setText("Add a topic")
         }
         self.layoutNow()
     }

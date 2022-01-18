@@ -50,7 +50,8 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     self.menuImageView.isVisible = false
                     return
                 }
-                self.topicLabel.setText(convo.title)
+                
+                self.setTopic(for: convo)
                 self.menuImageView.isVisible = true
                 self.topicLabel.isVisible = true
                 self.updateMenu(with: convo)
@@ -86,6 +87,14 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.button.size = CGSize(width: 44, height: 44)
         self.button.center = self.menuImageView.center
+    }
+    
+    private func setTopic(for conversation: Conversation) {
+        if let title = conversation.title {
+            self.topicLabel.setText(title)
+        } else {
+            self.topicLabel.setText("No Topic")
+        }
     }
     
     func update(for state: ConversationUIState) {

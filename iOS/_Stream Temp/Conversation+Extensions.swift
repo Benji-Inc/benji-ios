@@ -25,15 +25,13 @@ extension Conversation {
         return self.createdBy?.id == ChatClient.shared.currentUserId
     }
 
-    var title: String {
+    var title: String? {
 
         if let friendlyName = self.name, !friendlyName.isEmpty {
             return localized(friendlyName.capitalized)
-        } else if self.isOwnedByMe {
-            return "Topic"
-        } else {
-            return "No Topic"
         }
+        
+        return nil 
     }
 
     var description: Localized {
