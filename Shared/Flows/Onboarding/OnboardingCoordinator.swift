@@ -179,21 +179,21 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             case .needsVerification, .none:
                 self.finishFlow(with: ())
             case .waitlist, .inactive, .active:
-                self.activateUserThenShowPermissions(user: user)
+                self.finalizeOnboarding(user: user)
             }
         }
     }
     
-    func activateUserThenShowPermissions(user: User) {
+    func finalizeOnboarding(user: User) {
         Task {
+            await self.checkForPermissions()
+
             self.onboardingVC.showLoading()
 
             try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
                                          passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
                                                  viewsToIgnore: [self.onboardingVC.view])
             await self.onboardingVC.hideLoading()
-
-            await self.checkForPermissions()
         }
     }
 

@@ -83,21 +83,8 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         switch target {
         case .conversation:
-            var cid: ConversationId?
             let messageID = deeplink.messageId
-    
-            if deeplink.conversationId.exists {
-                cid = deeplink.conversationId
-
-            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
-                guard let connection = ConnectionStore.shared.connections.first(where: { connection in
-                    return connection.objectId == connectionId
-                }), let identifier = connection.initialConversations.first else { break }
-
-                cid = try? ChannelId.init(cid: identifier)
-            }
-
-            guard let cid = cid else { break }
+            guard let cid = deeplink.conversationId else { break }
             Task {
                 await self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
             }.add(to: self.taskPool)
@@ -167,16 +154,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         let acceptedConnections = connections.filter { connection in
             return connection.status == .accepted
-        }
-
-        let pendingConnections = connections.filter { connection in
-            return connection.status == .invited || connection.status == .pending
-        }
-
-        for connection in pendingConnections {
-            let conversationID = controller.conversation.cid.id
-            connection.initialConversations.append(conversationID)
-            connection.saveEventually()
         }
 
         if !acceptedConnections.isEmpty {
