@@ -18,6 +18,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let menuImageView = UIImageView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .regular)
+    let pullView = PullView()
     
     private var state: ConversationUIState = .read
     
@@ -40,6 +41,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.view.addSubview(self.topicLabel)
         
+        self.view.addSubview(self.pullView)
+        self.pullView.isVisible = false 
+        
         self.button.showsMenuAsPrimaryAction = true
                 
         ConversationsManager.shared.$activeConversation
@@ -48,10 +52,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 guard let convo = conversation else {
                     self.topicLabel.isVisible = false
                     self.menuImageView.isVisible = false
+                    self.pullView.isVisible = false
                     return
                 }
                 
                 self.setTopic(for: convo)
+                self.pullView.isVisible = true
                 self.menuImageView.isVisible = true
                 self.topicLabel.isVisible = true
                 self.updateMenu(with: convo)
@@ -72,9 +78,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.pullView.centerOnX()
+        self.pullView.pin(.bottom)
+        
         self.membersVC.view.height = 43
         self.membersVC.view.expandToSuperviewWidth()
-        self.membersVC.view.pin(.bottom)
+        self.membersVC.view.match(.bottom, to: .top, of: self.pullView)
         
         self.menuImageView.height = 16
         self.menuImageView.width = 20
