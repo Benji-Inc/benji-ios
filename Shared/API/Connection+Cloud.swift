@@ -23,8 +23,8 @@ struct CreateConnection: CloudFunction {
         var params = ["to": self.to.objectId!,
                       "status": Connection.Status.invited.rawValue]
         
-        if let rsvp = self.reservation {
-            params = ["reservationId": rsvp.objectId!]
+        if let rsvp = self.reservation?.objectId {
+            params = ["reservationId": rsvp]
         }
 
         return try await self.makeRequest(andUpdate: statusables,
