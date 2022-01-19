@@ -20,7 +20,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
-        cv.isScrollEnabled = false
+        cv.isScrollEnabled = true
         cv.showsHorizontalScrollIndicator = false
         super.init(with: cv)
     }
@@ -97,9 +97,9 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             index = snapshot.indexOfItem(.member(member)) ?? 0
         }
 
-        return AnimationCycle(inFromPosition: .inward,
-                              outToPosition: .inward,
-                              shouldConcatenate: true,
+        return AnimationCycle(inFromPosition: nil,
+                              outToPosition: nil,
+                              shouldConcatenate: false,
                               scrollToIndexPath: IndexPath(row: index, section: 0))
     }
 
@@ -127,7 +127,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         data[.members]?.append(.add(conversation.cid))
         
         //Use for testing
-//        for i in 0...20 {
+//        for i in 0...10 {
 //            let cid = ChannelId(type: .messaging, id: "\(i)")
 //            data[.members]?.append(.add(cid))
 //        }

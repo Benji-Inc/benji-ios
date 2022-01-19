@@ -23,7 +23,7 @@ class MessageDropZoneView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.borderLayer.lineDashPattern = [3, 4]
+        self.borderLayer.lineDashPattern = [4, 6]
         self.borderLayer.lineWidth = 1
         self.layer.addSublayer(self.borderLayer)
         self.addSubview(self.sendTypeLabel)

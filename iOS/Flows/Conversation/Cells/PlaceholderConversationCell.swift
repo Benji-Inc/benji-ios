@@ -34,16 +34,22 @@ class PlaceholderConversationCell: UICollectionViewCell, ConversationUIStateSett
         super.layoutSubviews()
 
         self.dropZoneView.expandToSuperviewWidth()
-        self.dropZoneView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.standard.value
+        self.dropZoneView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.xtraLong.value
         self.dropZoneView.top = self.topOffset
     }
     
     func set(state: ConversationUIState) {
         Task {
-            self.topOffset = state == .write ? 172 : 306
+            self.topOffset = state == .write ? 176 : 310
             await UIView.awaitAnimation(with: .standard, animations: {
                 self.setNeedsLayout()
             })
         }
+    }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        self.alpha = 1.0
     }
 }

@@ -40,6 +40,8 @@ class PlaceholderMessageCell: UICollectionViewCell {
         }
         
         self.containerView.layer.cornerRadius = Theme.cornerRadius
+        self.containerView.clipsToBounds = true
+        
         self.containerView.set(backgroundColor: .L1)
     }
 
@@ -49,8 +51,8 @@ class PlaceholderMessageCell: UICollectionViewCell {
         self.containerView.expandToSuperviewWidth()
         self.containerView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.short.value
         
-        self.dropZoneView.height = self.containerView.height - Theme.ContentOffset.standard.value
-        self.dropZoneView.width = self.containerView.width - Theme.ContentOffset.standard.value
+        self.dropZoneView.height = self.containerView.height - Theme.ContentOffset.long.value
+        self.dropZoneView.width = self.containerView.width - Theme.ContentOffset.long.value
         
         self.dropZoneView.centerOnXAndY()
         

@@ -363,8 +363,10 @@ extension CollectionViewDataSource {
                collectionView: UICollectionView,
                animationCycle: AnimationCycle) async {
 
-        await collectionView.animateOut(position: animationCycle.outToPosition,
-                                        concatenate: animationCycle.shouldConcatenate)
+        if let out = animationCycle.outToPosition {
+            await collectionView.animateOut(position: out,
+                                            concatenate: animationCycle.shouldConcatenate)
+        }
 
         await self.applySnapshotUsingReloadData(snapshot)
 
@@ -383,7 +385,9 @@ extension CollectionViewDataSource {
             collectionView.contentOffset = scrollToOffset
         }
         
-        await collectionView.animateIn(position: animationCycle.inFromPosition,
-                                       concatenate: animationCycle.shouldConcatenate)
+        if let inFrom = animationCycle.inFromPosition {
+            await collectionView.animateIn(position: inFrom,
+                                           concatenate: animationCycle.shouldConcatenate)
+        }
     }
 }
