@@ -14,13 +14,18 @@ struct CreateConnection: CloudFunction {
     typealias ReturnType = Any
 
     var to: User
+    var reservation: Reservation?
 
     @discardableResult
     func makeRequest(andUpdate statusables: [Statusable],
                      viewsToIgnore: [UIView]) async throws -> Any {
 
-        let params = ["to": self.to.objectId!,
+        var params = ["to": self.to.objectId!,
                       "status": Connection.Status.invited.rawValue]
+        
+        if let rsvp = self.reservation?.objectId {
+            params = ["reservationId": rsvp]
+        }
 
         return try await self.makeRequest(andUpdate: statusables,
                                           params: params,

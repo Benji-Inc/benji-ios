@@ -42,13 +42,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     unowned let delegate: OnboardingViewControllerDelegate
 
-    var reservationId: String? {
+    var reservationId: String = "" {
         didSet {
             self.codeVC.reservationId = self.reservationId
         }
     }
 
-    var passId: String? {
+    var passId: String = "" {
         didSet {
             self.codeVC.passId = self.passId
         }

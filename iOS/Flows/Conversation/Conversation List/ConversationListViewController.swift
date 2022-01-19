@@ -15,7 +15,7 @@ enum ConversationUIState: String {
     case write // Keyboard IS shown
 
     var headerHeight: CGFloat {
-        return 87
+        return 131
     }
 }
 
@@ -130,7 +130,7 @@ class ConversationListViewController: ViewController {
         let value = -clamp(diff, 0, 70)
         self.collectionView.top += value
         
-        self.headerVC.view.alpha = self.collectionView.top < self.headerVC.view.bottom ? 0 : 1
+        self.headerVC.view.alpha = self.collectionView.top < self.headerVC.view.bottom - self.headerVC.membersVC.view.top ? 0 : 1
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -260,11 +260,12 @@ class ConversationListViewController: ViewController {
         // Determine if this is a reply message or regular message. If it's a reply, select the parent
         // message so we can open the thread experience.
         if let parentMessageId = message.parentMessageId {
-            await messagesCell.scrollToMessage(with:  parentMessageId)
+            await messagesCell.scrollToMessage(with:  parentMessageId, animateSelection: true)
             self.selectedMessageView = messagesCell.getBottomFrontmostCell()?.content
             self.onSelectedMessage?(cid, parentMessageId, messageID)
         } else {
-            await messagesCell.scrollToMessage(with: messageID)
+            await messagesCell.scrollToMessage(with: messageID, animateSelection: true)
+            
         }
     }
 

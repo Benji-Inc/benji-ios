@@ -28,8 +28,8 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
     func handle(deeplink: DeepLinkable?) {
         guard let link = deeplink else { return }
 
-        self.onboardingVC.reservationId = link.reservationId
-        self.onboardingVC.passId = link.passId
+        self.onboardingVC.reservationId = link.reservationId ?? ""
+        self.onboardingVC.passId = link.passId ?? ""
         self.onboardingVC.updateUI()
     }
 
@@ -178,25 +178,22 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             switch user.status {
             case .needsVerification, .none:
                 self.finishFlow(with: ())
-            case .waitlist:
-                Task {
-                    await self.checkForPermissions()
-                }
-            case .inactive, .active:
-                self.activateUserThenShowPermissions(user: user)
+            case .waitlist, .inactive, .active:
+                self.finalizeOnboarding(user: user)
             }
         }
     }
     
-    func activateUserThenShowPermissions(user: User) {
+    func finalizeOnboarding(user: User) {
         Task {
+            await self.checkForPermissions()
+
             self.onboardingVC.showLoading()
 
-            try await ActivateUser().makeRequest(andUpdate: [],
+            try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
+                                         passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
                                                  viewsToIgnore: [self.onboardingVC.view])
             await self.onboardingVC.hideLoading()
-
-            await self.checkForPermissions()
         }
     }
 

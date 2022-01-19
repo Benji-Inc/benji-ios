@@ -16,7 +16,7 @@ enum ReservationKey: String {
     case createdBy
     case isClaimed
     case contactId
-    case conversationId
+    case conversationCid
 }
 
 final class Reservation: PFObject, PFSubclassing {
@@ -37,9 +37,9 @@ final class Reservation: PFObject, PFSubclassing {
         return self.getObject(for: .createdBy)
     }
 
-    var conversationId: String? {
-        get { return self.getObject(for: .conversationId) }
-        set { self.setObject(for: .conversationId, with: newValue) }
+    var conversationCid: String? {
+        get { return self.getObject(for: .conversationCid) }
+        set { self.setObject(for: .conversationCid, with: newValue) }
     }
 
     var contactId: String? {

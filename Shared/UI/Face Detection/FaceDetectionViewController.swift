@@ -35,6 +35,8 @@ class FaceDetectionViewController: ImageCaptureViewController {
     }
 
     lazy var cameraView = MTKView()
+    
+    let orientation: CGImagePropertyOrientation = .left
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +69,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
         do {
             try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
                                              on: imageBuffer,
-                                             orientation: .leftMirrored)
+                                             orientation: self.orientation)
 
             // Get the pixel buffer that contains the mask image.
             guard let maskPixelBuffer =

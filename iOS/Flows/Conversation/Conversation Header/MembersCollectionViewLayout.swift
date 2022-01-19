@@ -51,42 +51,41 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
     }
     
     override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        #warning("fix layout")
-        return super.layoutAttributesForElements(in: rect)
-//        guard let attributes = super.layoutAttributesForElements(in: rect) as? [MemberCellLayoutAttributes] else {
-//            return nil
-//        }
-//        return attributes.map({ attribute in
-//            let copy = attribute.copy() as! MemberCellLayoutAttributes
-//            return self.transformLayoutAttributes(copy)
-//        })
+        guard let attributes = super.layoutAttributesForElements(in: rect) as? [MemberCellLayoutAttributes] else {
+            return nil
+        }
+        return attributes.map({ attribute in
+            let copy = attribute.copy() as! MemberCellLayoutAttributes
+            return self.transformLayoutAttributes(copy)
+        })
     }
 
-//    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-//        guard let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath) as? MemberCellLayoutAttributes else {
-//            return nil
-//        }
-//        let copy = attributes.copy() as! MemberCellLayoutAttributes
-//        return self.transformLayoutAttributes(copy)
-//    }
-//
-//    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-//        guard let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath) else {
-//            return nil
-//        }
-//        let copy = attributes.copy() as! MemberCellLayoutAttributes
-//        return self.transformLayoutAttributes(copy)
-//    }
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath) as? MemberCellLayoutAttributes else {
+            return nil
+        }
+        let copy = attributes.copy() as! MemberCellLayoutAttributes
+        return self.transformLayoutAttributes(copy)
+    }
+
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath) else {
+            return nil
+        }
+        let copy = attributes.copy() as! MemberCellLayoutAttributes
+        return self.transformLayoutAttributes(copy)
+    }
 
     private func transformLayoutAttributes(_ attributes: MemberCellLayoutAttributes) -> UICollectionViewLayoutAttributes {
         guard let collectionView = self.collectionView else { return attributes }
 
         let size = attributes.size
         attributes.size = CGSize(width: size.height, height: size.height)
-        let distanceFromCenter = abs((attributes.frame.centerX - collectionView.contentOffset.x) - collectionView.contentSize.width.half)
+        let contentWidth = collectionView.width - collectionView.contentInset.left - collectionView.contentInset.right
+        let distanceFromCenter = abs((attributes.frame.centerX - collectionView.contentOffset.x) - contentWidth.half)
         let minScale: CGFloat = 0.75
         let maxScale: CGFloat = 1.0
-        let scale = max(maxScale - (distanceFromCenter / collectionView.contentSize.width), minScale)
+        let scale = max(maxScale - (distanceFromCenter / contentWidth), minScale)
         let transfrom = CGAffineTransform(scaleX: scale, y: scale)
         attributes.transform = transfrom
         let centerY: CGFloat = (size.height * scale).half

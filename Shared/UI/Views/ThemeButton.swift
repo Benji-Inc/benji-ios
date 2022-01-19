@@ -72,8 +72,8 @@ class ThemeButton: UIButton, Statusable {
             let highlightedString = NSMutableAttributedString(string: localizedString)
             highlightedString.addAttribute(.font, value: FontType.regular.font)
 
-            normalString.addAttribute(.foregroundColor, value: ThemeColor.B0.color.resolvedColor(with: self.traitCollection))
-            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.B0.color.resolvedColor(with: self.traitCollection))
+            normalString.addAttribute(.foregroundColor, value: ThemeColor.T1.color.resolvedColor(with: self.traitCollection))
+            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.T1.color.resolvedColor(with: self.traitCollection))
             
             if color != .clear {
                 self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)

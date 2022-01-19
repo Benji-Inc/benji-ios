@@ -9,8 +9,8 @@
 import Foundation
 
 struct AnimationCycle {
-    var inFromPosition: AnimationPosition
-    var outToPosition: AnimationPosition
+    var inFromPosition: AnimationPosition?
+    var outToPosition: AnimationPosition?
     var shouldConcatenate: Bool
     var scrollToIndexPath: IndexPath?
     var scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally

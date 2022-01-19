@@ -32,6 +32,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private let startingReplyId: MessageId?
 
     private(set) var conversationController: ConversationController?
+    private let pullView = PullView()
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
@@ -104,6 +105,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.view.addSubview(self.parentMessageView)
         self.view.addSubview(self.detailView)
         self.detailView.alpha = 0
+        
+        self.view.addSubview(self.pullView)
 
         self.collectionView.clipsToBounds = false
 
@@ -134,9 +137,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.viewDidLayoutSubviews()
 
         self.blurView.expandToSuperviewSize()
+        
+        self.pullView.pinToSafeAreaTop()
+        self.pullView.centerOnX()
 
-        self.parentMessageView.pinToSafeAreaTop()
-        self.parentMessageView.top += 20
+        self.parentMessageView.match(.top, to: .bottom, of: self.pullView)
         self.parentMessageView.centerOnX()
 
         self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value
@@ -158,7 +163,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
             self.threadCollectionView.threadLayout.invalidateLayout()
         }
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -240,6 +244,10 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         if let msg = self.messageController.message {
             self.detailView.configure(with: msg)
         }
+        
+        if let replyId = self.startingReplyId {
+            self.animateReply(with: replyId)
+        }
     }
 
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection,
@@ -263,7 +271,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                               scrollToOffset: scrollToOffset)
     }
 
-    func scrollToMessage(with messageId: MessageId) {
+    func animateReply(with messageId: MessageId) {
         Task {
             let cid = self.messageController.cid
 
@@ -277,6 +285,16 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
+
+            if let cell = self.collectionView.cellForItem(at: messageIndexPath) {
+                await UIView.awaitAnimation(with: .fast, animations: {
+                    cell.transform = CGAffineTransform.init(scaleX: 1.05, y: 1.05)
+                })
+
+                await UIView.awaitAnimation(with: .fast, animations: {
+                    cell.transform = .identity
+                })
+            }
         }.add(to: self.taskPool)
     }
 }

@@ -48,7 +48,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private let animationView = AnimationView.with(animation: .faceScan)
     private var previousScanState: PhotoState = .scanEyesOpen
 
-    @Published private(set) var currentState: PhotoState = .initial
+    @Published var currentState: PhotoState = .initial
 
     override func initializeViews() {
         super.initializeViews()

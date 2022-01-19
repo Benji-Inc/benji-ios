@@ -18,6 +18,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let menuImageView = UIImageView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .regular)
+    let pullView = PullView()
     
     private var state: ConversationUIState = .read
     
@@ -40,6 +41,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.view.addSubview(self.topicLabel)
         
+        self.view.addSubview(self.pullView)
+        self.pullView.isVisible = false 
+        
         self.button.showsMenuAsPrimaryAction = true
                 
         ConversationsManager.shared.$activeConversation
@@ -48,9 +52,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 guard let convo = conversation else {
                     self.topicLabel.isVisible = false
                     self.menuImageView.isVisible = false
+                    self.pullView.isVisible = false
                     return
                 }
-                self.topicLabel.setText(convo.title)
+                
+                self.setTopic(for: convo)
+                self.pullView.isVisible = true
                 self.menuImageView.isVisible = true
                 self.topicLabel.isVisible = true
                 self.updateMenu(with: convo)
@@ -71,9 +78,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.pullView.centerOnX()
+        self.pullView.pin(.bottom)
+        
         self.membersVC.view.height = 43
         self.membersVC.view.expandToSuperviewWidth()
-        self.membersVC.view.pin(.bottom)
+        self.membersVC.view.match(.bottom, to: .top, of: self.pullView)
         
         self.menuImageView.height = 16
         self.menuImageView.width = 20
@@ -86,6 +96,14 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.button.size = CGSize(width: 44, height: 44)
         self.button.center = self.menuImageView.center
+    }
+    
+    private func setTopic(for conversation: Conversation) {
+        if let title = conversation.title {
+            self.topicLabel.setText(title)
+        } else {
+            self.topicLabel.setText("No Topic")
+        }
     }
     
     func update(for state: ConversationUIState) {

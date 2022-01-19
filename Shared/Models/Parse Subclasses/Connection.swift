@@ -13,8 +13,6 @@ enum ConnectionKey: String {
     case status
     case to
     case from
-    case conversationSid
-    case initialConversations
 }
 
 final class Connection: PFObject, PFSubclassing {
@@ -42,11 +40,6 @@ final class Connection: PFObject, PFSubclassing {
 
     var from: User? {
         return self.getObject(for: .from)
-    }
-
-    var initialConversations: [String] {
-        get { return self.getObject(for: .initialConversations) ?? [] }
-        set { self.setObject(for: .initialConversations, with: newValue) }
     }
 
     var nonMeUser: User? {

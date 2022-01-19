@@ -49,9 +49,7 @@ class CodeViewController: TextInputViewController<String?> {
             let installation = try await PFInstallation.getCurrent()
             let dict = try await VerifyCode(code: code,
                                             phoneNumber: phoneNumber,
-                                            installationId: installation.installationId,
-                                            reservationId: String(optional: self.reservationId),
-                                            passId: String(optional: self.passId))
+                                            installationId: installation.installationId)
                 .makeRequest()
 
             self.textField.resignFirstResponder()

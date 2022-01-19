@@ -38,7 +38,7 @@ extension FaceDetectionViewController {
         let color = ThemeColor.B3.ciColor
         
         // Create CIImage objects for the video frame and the segmentation mask.
-        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(.leftMirrored)
+        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(self.orientation)
         var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
 
         // Scale the mask image to fit the bounds of the video frame.
@@ -87,8 +87,14 @@ extension FaceDetectionViewController: MTKViewDelegate {
         
         // make sure the image is full screen
         let drawSize = self.cameraView.drawableSize
-        let scaleX = drawSize.width / ciImage.extent.width
-        let scaleY = drawSize.height / ciImage.extent.height
+        var scaleX = drawSize.width / ciImage.extent.width
+        var scaleY = drawSize.height / ciImage.extent.height
+        
+        if scaleX > scaleY {
+            scaleY = scaleX
+        } else {
+            scaleX = scaleY
+        }
 
         let newImage = ciImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
         //render into the metal texture
