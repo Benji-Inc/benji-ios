@@ -133,6 +133,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         vc.dismissHandlers.append { [unowned self] in
             self.conversationListVC.becomeFirstResponder()
         }
+        
+        vc.onDidComplete = { _ in
+            vc.dismiss(animated: true, completion: nil)
+        }
 
         self.conversationListVC.resignFirstResponder()
         self.router.present(vc, source: self.conversationListVC)
