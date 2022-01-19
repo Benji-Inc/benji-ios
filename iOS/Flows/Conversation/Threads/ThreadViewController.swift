@@ -32,6 +32,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private let startingReplyId: MessageId?
 
     private(set) var conversationController: ConversationController?
+    private let pullView = PullView()
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
@@ -104,6 +105,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.view.addSubview(self.parentMessageView)
         self.view.addSubview(self.detailView)
         self.detailView.alpha = 0
+        
+        self.view.addSubview(self.pullView)
 
         self.collectionView.clipsToBounds = false
 
@@ -134,9 +137,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.viewDidLayoutSubviews()
 
         self.blurView.expandToSuperviewSize()
+        
+        self.pullView.pinToSafeAreaTop()
+        self.pullView.centerOnX()
 
-        self.parentMessageView.pinToSafeAreaTop()
-        self.parentMessageView.top += 20
+        self.parentMessageView.match(.top, to: .bottom, of: self.pullView)
         self.parentMessageView.centerOnX()
 
         self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value
