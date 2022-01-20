@@ -60,18 +60,6 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         switch status {
         case .needsVerification:
             return .code(self.onboardingVC.codeVC)
-        case .waitlist:
-            if !current.fullName.isValidPersonName {
-                return .name(self.onboardingVC.nameVC)
-            } else if current.smallImage.isNil {
-                #if targetEnvironment(simulator)
-                return nil
-                #else
-                return .photo(self.onboardingVC.photoVC)
-                #endif
-            } else {
-                return nil
-            }
         case .inactive:
             if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
@@ -84,7 +72,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
             } else {
                 return nil
             }
-        case .active:
+        case .active, .waitlist:
             // Active users don't need to do onboarding.
             return nil
         }
@@ -176,9 +164,9 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             self.onboardingVC.switchTo(nextContent)
         } else if let user = User.current() {
             switch user.status {
-            case .needsVerification, .none:
+            case .needsVerification, .none, .inactive:
                 self.finishFlow(with: ())
-            case .waitlist, .inactive, .active:
+            case .waitlist, .active:
                 self.finalizeOnboarding(user: user)
             }
         }
@@ -186,41 +174,47 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
     func finalizeOnboarding(user: User) {
         Task {
-            await self.checkForPermissions()
-
+            
             self.onboardingVC.showLoading()
-
+            if await !self.hasNeededPermissions() {
+                await self.presentPermissions()
+            }
             try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
                                          passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
-                                                 viewsToIgnore: [self.onboardingVC.view])
+                                                                                       viewsToIgnore: [self.onboardingVC.view])
             await self.onboardingVC.hideLoading()
+            self.finishFlow(with: ())
         }
     }
 
     // MARK: - Permissions Flow
 
     @MainActor
-    private func checkForPermissions() async {
+    private func hasNeededPermissions() async -> Bool {
         if INFocusStatusCenter.default.authorizationStatus != .authorized {
-            self.presentPermissions()
+            return false
         } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
-            self.presentPermissions()
+            return false
         } else {
-            self.router.dismiss(source: self.onboardingVC, animated: true) {
-                self.finishFlow(with: ())
-            }
+            return true
         }
     }
 
     @MainActor
-    private func presentPermissions() {
-        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: self.onboardingVC, animated: true) {
-                self.finishFlow(with: ())
+    private func presentPermissions() async {
+        return await withCheckedContinuation { continuation in
+            let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+            
+            coordinator.toPresentable().dismissHandlers.append {
+                continuation.resume(returning: ())
             }
+            
+            self.addChildAndStart(coordinator) { [unowned self] result in
+                self.router.dismiss(source: self.onboardingVC, animated: true)
+            }
+            
+            self.router.present(coordinator, source: self.onboardingVC)
         }
-        self.router.present(coordinator, source: self.onboardingVC)
     }
 }
 
