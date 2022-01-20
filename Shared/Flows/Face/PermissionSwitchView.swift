@@ -39,7 +39,7 @@ class PermissionSwitchView: BaseView {
     }
 
     let type: PermissionType
-    private let label = ThemeLabel(font: .smallBold)
+    private let label = ThemeLabel(font: .small)
     private(set) var  switchView = UISwitch()
     @Published var state: State = .hidden
 
