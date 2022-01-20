@@ -60,18 +60,6 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         switch status {
         case .needsVerification:
             return .code(self.onboardingVC.codeVC)
-        case .waitlist:
-            if !current.fullName.isValidPersonName {
-                return .name(self.onboardingVC.nameVC)
-            } else if current.smallImage.isNil {
-                #if targetEnvironment(simulator)
-                return nil
-                #else
-                return .photo(self.onboardingVC.photoVC)
-                #endif
-            } else {
-                return nil
-            }
         case .inactive:
             if !current.fullName.isValidPersonName {
                 return .name(self.onboardingVC.nameVC)
@@ -84,7 +72,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
             } else {
                 return nil
             }
-        case .active:
+        case .active, .waitlist:
             // Active users don't need to do onboarding.
             return nil
         }
@@ -176,9 +164,9 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             self.onboardingVC.switchTo(nextContent)
         } else if let user = User.current() {
             switch user.status {
-            case .needsVerification, .none:
+            case .needsVerification, .none, .inactive:
                 self.finishFlow(with: ())
-            case .waitlist, .inactive, .active:
+            case .waitlist, .active:
                 self.finalizeOnboarding(user: user)
             }
         }
