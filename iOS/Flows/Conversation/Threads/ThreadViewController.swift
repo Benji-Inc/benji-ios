@@ -14,7 +14,6 @@ import StreamChat
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,
                             MessageSequenceCollectionViewDataSource>,
-                            CollectionViewInputHandler,
                             DismissInteractableController {
     
     let blurView = BlurView()
@@ -32,7 +31,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private let startingReplyId: MessageId?
 
     private(set) var conversationController: ConversationController?
-    private let pullView = PullView()
+    let pullView = PullView()
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
@@ -71,9 +70,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private(set) var topMostIndex: Int = 0
     
     @Published var state: ConversationUIState = .read
-    
-    /// If true we should scroll to the last item in the collection in layout subviews.
-    private var scrollToLastItemOnLayout: Bool = false
 
     init(channelID: ChannelId,
          messageID: MessageId,
@@ -154,37 +150,10 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.height = self.view.height - self.collectionView.top
         self.collectionView.centerOnX()
-        
-        if self.scrollToLastItemOnLayout {
-            self.scrollToLastItemOnLayout = false
-
-            self.threadCollectionView.threadLayout.prepare()
-            let maxOffset = self.threadCollectionView.threadLayout.maxZPosition
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
-            self.threadCollectionView.threadLayout.invalidateLayout()
-        }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.detailView.alpha = 1.0
-        self.becomeFirstResponder()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        /// Only reset when we are at the end of the stack.
-        if self.collectionView.isTracking, self.topMostIndex == 0 {
-            self.detailView.alpha = 0.0
-            
-            self.resignFirstResponder()
-        }
     }
     
     func updateUI(for state: ConversationUIState) {
-        guard self.presentedViewController.isNil else { return }
+        guard !self.isBeingOpen && !self.isBeingClosed else { return }
                         
         Task {
             await self.set(state: state)
@@ -198,11 +167,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         
         await UIView.awaitAnimation(with: .standard, animations: {
             self.threadCollectionView.threadLayout.finalizeLayoutTransition()
-        })
-        
-        await UIView.awaitAnimation(with: .fast, animations: {
-            self.scrollToLastItemOnLayout = true
-            self.view.setNeedsLayout()
         })
     }
 
@@ -265,8 +229,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         let layout = self.threadCollectionView.threadLayout
         let scrollToOffset = CGPoint(x: 0, y: layout.itemHeight * CGFloat(startMessageIndex))
-        return AnimationCycle(inFromPosition: .inward,
-                              outToPosition: .inward,
+        return AnimationCycle(inFromPosition: nil,
+                              outToPosition: nil,
                               shouldConcatenate: false,
                               scrollToOffset: scrollToOffset)
     }

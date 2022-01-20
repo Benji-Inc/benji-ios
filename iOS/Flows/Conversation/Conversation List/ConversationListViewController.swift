@@ -95,11 +95,12 @@ class ConversationListViewController: ViewController {
         self.collectionView.conversationLayout.delegate = self
 
         self.addChild(viewController: self.headerVC, toView: self.view)
-        self.subscribeToKeyboardUpdates()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        guard self.presentedViewController.isNil else { return }
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
@@ -144,12 +145,12 @@ class ConversationListViewController: ViewController {
 
         once(caller: self, token: "initializeCollectionView") {
             Task {
+                self.subscribeToUIUpdates()
                 self.setupInputHandlers()
-
                 // Initialize the datasource before listening for updates to ensure that the sections
                 // are set up.
                 await self.initializeDataSource()
-                self.subscribeToUpdates()
+                self.subscribeToConversationUpdates()
             }
         }
     }
@@ -164,7 +165,6 @@ class ConversationListViewController: ViewController {
         guard self.presentedViewController.isNil else { return }
 
         self.headerVC.update(for: state)
-        
         self.dataSource.uiState = state
         
         Task {
