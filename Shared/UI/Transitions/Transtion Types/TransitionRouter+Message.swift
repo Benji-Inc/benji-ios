@@ -93,6 +93,7 @@ extension TransitionRouter {
 
             let _: [()] = await [first, second, third]
 
+            threadVC.loadInitialData()
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }.add(to: self.taskPool)

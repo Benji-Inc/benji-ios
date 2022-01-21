@@ -26,8 +26,13 @@ class PanDismissInteractionController: UIPercentDrivenInteractiveTransition {
         super.init()
     }
 
-    func initialize(collectionView: UICollectionView) {
+    func handleCollectionViewPan(for collectionView: UICollectionView) {
         collectionView.panGestureRecognizer.addTarget(self, action: #selector(self.handle(pan:)))
+    }
+    
+    func handlePan(for view: UIView) {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(self.handle(pan:)))
+        view.addGestureRecognizer(pan)
     }
 
     @objc func handle(pan: UIPanGestureRecognizer) {
@@ -52,9 +57,6 @@ class PanDismissInteractionController: UIPercentDrivenInteractiveTransition {
             } else if let startY = self.panStartPoint?.y,
                       currentPoint.y > startY,
                       currentPoint.y - startY > self.dismissThreshold {
-                
-                logDebug("CurrentY: \(currentPoint.y)")
-                logDebug("StartY: \(startY)")
                 
                 // Only start dismissing the view controller if the pan drags far enough
                 self.interactionInProgress = true
@@ -101,8 +103,11 @@ class PanDismissInteractionController: UIPercentDrivenInteractiveTransition {
     }
 
     private func isReadyForDismissal(_ pan: UIPanGestureRecognizer) -> Bool {
-        guard let cv = pan.view as? UICollectionView else { return false }
-        return cv.contentOffset.y < self.dismissThreshold
+        if let cv = pan.view as? UICollectionView {
+            return cv.contentOffset.y < self.dismissThreshold
+        } else {
+            return true
+        }
     }
 }
 

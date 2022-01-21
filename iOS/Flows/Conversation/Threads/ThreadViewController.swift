@@ -106,7 +106,9 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.collectionView.clipsToBounds = false
 
-        self.dismissInteractionController.initialize(collectionView: self.collectionView)
+        self.dismissInteractionController.handleCollectionViewPan(for: self.collectionView)
+        self.dismissInteractionController.handlePan(for: self.parentMessageView)
+        self.dismissInteractionController.handlePan(for: self.pullView)
         self.threadCollectionView.threadLayout.delegate = self
         
         KeyboardManager.shared.$currentEvent

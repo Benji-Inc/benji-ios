@@ -64,6 +64,12 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.loadInitialData()
+    }
+    
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
