@@ -72,6 +72,12 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.updateButton()
         }.store(in: &self.cancellables)
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.loadInitialData()
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

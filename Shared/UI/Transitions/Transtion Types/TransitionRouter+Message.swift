@@ -88,10 +88,12 @@ extension TransitionRouter {
 
             async let third: () = UIView.awaitAnimation(with: .fast, delay: 0.25, animations: {
                 toView.alpha = 1
+                threadVC.detailView.alpha = 1.0
             })
 
             let _: [()] = await [first, second, third]
 
+            threadVC.loadInitialData()
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }.add(to: self.taskPool)

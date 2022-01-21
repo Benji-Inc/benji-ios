@@ -37,7 +37,14 @@ extension ConversationListViewController {
         }
     }
 
-    func subscribeToKeyboardUpdates() {
+    func subscribeToUIUpdates() {
+        
+        self.$state
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+                self.updateUI(for: state)
+            }.store(in: &self.cancellables)
+        
         KeyboardManager.shared
             .$currentEvent
             .mainSink { [weak self] currentEvent in
@@ -49,20 +56,15 @@ extension ConversationListViewController {
                 case .willHide:
                     self.state = .read
                 case .didChangeFrame:
-                    self.view.layoutNow()
+                    self.view.setNeedsLayout()
                 default:
                     break
                 }
             }.store(in: &self.cancellables)
     }
 
-    func subscribeToUpdates() {
-        self.$state
-            .removeDuplicates()
-            .mainSink { [unowned self] state in
-                self.updateUI(for: state)
-            }.store(in: &self.cancellables)
-        
+    func subscribeToConversationUpdates() {
+
         self.conversationListController
             .channelsChangesPublisher
             .mainSink { [unowned self] _ in
