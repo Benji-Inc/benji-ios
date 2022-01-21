@@ -35,10 +35,10 @@ class ExpandingTextView: TextView {
         self.keyboardType = .twitter
         self.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
 
-        self.textContainerInset.left = Theme.ContentOffset.long.value
-        self.textContainerInset.right = Theme.ContentOffset.long.value
-        self.textContainerInset.top = Theme.ContentOffset.long.value + 1
-        self.textContainerInset.bottom = Theme.ContentOffset.long.value
+//        self.textContainerInset.left = Theme.ContentOffset.long.value
+//        self.textContainerInset.right = Theme.ContentOffset.long.value
+//        self.textContainerInset.top = Theme.ContentOffset.long.value + 1
+//        self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
 
     func setPlaceholder(for avatars: [Avatar], isReply: Bool) {

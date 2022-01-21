@@ -45,6 +45,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     // MARK:  - Views
 
     @IBOutlet var speechBubble: SpeechBubbleView!
+    @IBOutlet var speechBubbleHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
     /// A button to handle taps and pan gestures.
