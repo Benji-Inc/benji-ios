@@ -115,9 +115,9 @@ class ConversationListViewController: ViewController {
 
         // If we're in the write mode, adjust the position of the subviews to
         // accomodate the text input, if necessary.
-        if self.state == .write {
-            self.setYOffsets()
-        }
+//        if self.state == .write {
+//            self.setYOffsets()
+//        }
     }
 
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input

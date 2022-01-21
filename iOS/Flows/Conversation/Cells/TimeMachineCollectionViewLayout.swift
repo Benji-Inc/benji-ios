@@ -379,7 +379,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             
         case .write:
             
-            let centerY = (contentRect.top + Theme.ContentOffset.xtraLong.value)
+            let centerY = (contentRect.top - 38)
             centerPoint = CGPoint(x: contentRect.midX, y: centerY)
             
             if section == 0 {
