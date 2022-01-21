@@ -83,10 +83,10 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="o5I-Cx-4HN"/>
-                <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="iQV-ts-qMa"/>
-                <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="ISn-9g-1kH"/>
+                <outlet property="inputDetailContainer" destination="vaX-xP-i7k" id="giO-LO-g1W"/>
+                <outlet property="inputDetailHeightConstraint" destination="W3f-8z-1Rm" id="vaI-zv-OAT"/>
                 <outlet property="overlayButton" destination="b2H-ok-H5y" id="78P-cH-BSH"/>
+                <outlet property="speechBubble" destination="VuQ-5S-h7F" id="aeh-7Y-c2M"/>
                 <outlet property="textView" destination="Ads-9e-WJh" id="T8m-mt-M46"/>
             </connections>
             <point key="canvasLocation" x="81.884057971014499" y="-57.589285714285708"/>

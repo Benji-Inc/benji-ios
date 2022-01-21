@@ -44,14 +44,14 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     // MARK:  - Views
 
-    @IBOutlet var inputContainerView: SpeechBubbleView!
+    @IBOutlet var speechBubble: SpeechBubbleView!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
 
-    @IBOutlet var inputTypeContainer: UIView!
-    @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var inputDetailContainer: UIView!
+    @IBOutlet var inputDetailHeightConstraint: NSLayoutConstraint!
 
 
     static var inputTypeMaxHeight: CGFloat = 20
@@ -88,16 +88,16 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
 
-        self.inputContainerView.showShadow(withOffset: 8)
-        self.inputContainerView.bubbleColor = ThemeColor.B1.color
+        self.speechBubble.showShadow(withOffset: 8)
+        self.speechBubble.bubbleColor = ThemeColor.B1.color
 
-        self.inputTypeContainer.addSubview(self.emotionView)
+        self.inputDetailContainer.addSubview(self.emotionView)
         self.emotionView.configure(for: self.currentEmotion)
         self.emotionView.didSelectEmotion = { [unowned self] emotion in
             self.currentEmotion = emotion
         }
         
-        self.inputTypeContainer.addSubview(self.deliveryTypeView)
+        self.inputDetailContainer.addSubview(self.deliveryTypeView)
         self.deliveryTypeView.configure(for: self.currentContext)
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
@@ -127,7 +127,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 switch currentEvent {
                 case .willShow:
                     let shouldShow = self.textView.numberOfLines == 1
-                    self.showInputTypes(shouldShow: shouldShow)
+                    self.showInputDetail(shouldShow: shouldShow)
+                case .willHide:
+                    self.showInputDetail(shouldShow: false)
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 default:
@@ -138,7 +140,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
             let shouldShow = self.textView.numberOfLines == 1 && KeyboardManager.shared.isKeyboardShowing
-            self.showInputTypes(shouldShow: shouldShow)
+            self.showInputDetail(shouldShow: shouldShow)
         }.store(in: &self.cancellables)
         
         self.overlayButton.didSelect { [unowned self] in
@@ -152,8 +154,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
     }
 
-    func showInputTypes(shouldShow: Bool) {
-        self.inputTypeHeightConstraint.constant = SwipeableInputAccessoryView.inputTypeMaxHeight
+    func showInputDetail(shouldShow: Bool) {
+        UIView.animate(withDuration: 0.1) {
+            self.inputDetailHeightConstraint.constant = shouldShow ?  SwipeableInputAccessoryView.inputTypeMaxHeight : 0
+            self.inputDetailContainer.alpha = shouldShow ? 1.0 : 0
+        }
     }
 
     // MARK: OVERRIDES
@@ -218,7 +223,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     func resetInputViews() {
         self.currentContext = .passive
         self.textView.reset()
-        self.inputContainerView.alpha = 1
+        self.speechBubble.alpha = 1
         self.textView.countView.isHidden = true
     }
 
@@ -232,7 +237,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     /// How far the preview view can be dragged up.
     private var maxYOffset: CGFloat {
         let additionalSpace = self.textView.height.half
-        return -(self.inputContainerView.top - self.dropZoneFrame.top + additionalSpace)
+        return -(self.speechBubble.top - self.dropZoneFrame.top + additionalSpace)
     }
 
     func handle(pan: UIPanGestureRecognizer) {
@@ -273,12 +278,12 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.sendable = object
 
         // Hide the input area. The preview view will take its place during the pan.
-        self.inputContainerView.alpha = 0
+        self.speechBubble.alpha = 0
 
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
                                               bubbleColor: self.currentContext.color.color)
-        self.previewView?.frame = self.inputContainerView.frame
+        self.previewView?.frame = self.speechBubble.frame
         self.previewView?.messageKind = self.currentMessageKind
         self.previewView?.showShadow(withOffset: 8)
         self.addSubview(self.previewView!)
@@ -322,7 +327,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     }
 
     private func handlePanFailed() {
-        self.inputContainerView.alpha = 1
+        self.speechBubble.alpha = 1
         self.previewView?.removeFromSuperview()
         self.delegate?.swipeableInputAccessory(self, didFinishSwipeSendingSendable: false)
     }
@@ -355,7 +360,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 guard let initialOrigin = self.initialPreviewOrigin else { return }
                 self.previewView?.origin = initialOrigin
             } completion: { completed in
-                self.inputContainerView.alpha = 1
+                self.speechBubble.alpha = 1
                 self.previewView?.removeFromSuperview()
             }
         }
