@@ -96,7 +96,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     
     var uiState: ConversationUIState = .read
-    
+        
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
@@ -350,6 +350,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                         scale: CGFloat) -> CGPoint {
         
         guard let collectionView = self.collectionView else { return .zero }
+        
         let contentRect = CGRect(x: collectionView.contentOffset.x,
                                  y: collectionView.contentOffset.y,
                                  width: collectionView.bounds.size.width,
@@ -359,7 +360,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         
         switch self.uiState {
         case .read:
-            centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + 100)
+            
+            let centerY = contentRect.top + 100
+            
+            centerPoint = CGPoint(x: contentRect.midX, y: centerY)
             
             if section == 0 {
                 centerPoint.y += self.itemHeight.half
@@ -374,7 +378,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             }
             
         case .write:
-            centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + Theme.ContentOffset.xtraLong.value)
+            
+            let centerY = (contentRect.top + Theme.ContentOffset.xtraLong.value)
+            centerPoint = CGPoint(x: contentRect.midX, y: centerY)
             
             if section == 0 {
                 centerPoint.y += self.itemHeight.half

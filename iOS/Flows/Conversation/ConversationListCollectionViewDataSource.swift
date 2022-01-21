@@ -160,8 +160,8 @@ extension ConversationListCollectionViewDataSource {
     }
 
     static func createNewConversationCellRegistration() -> NewConversationCellRegistration {
-        return NewConversationCellRegistration { cell, indexPath, itemIdentifier in
-            cell.set(state: itemIdentifier.uiState)
+        return NewConversationCellRegistration { cell, indexPath, item in
+            cell.set(state: item.uiState)
         }
     }
 }

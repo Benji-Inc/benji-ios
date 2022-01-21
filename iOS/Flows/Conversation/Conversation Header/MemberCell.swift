@@ -129,10 +129,4 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 //        
 //        //self.statusView.update(status: user.focusStatus ?? .available)
     }
-    
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        
-        #warning("fix layout")
-    }
 }

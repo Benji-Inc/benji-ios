@@ -32,10 +32,4 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         self.addView.squaredSize = self.contentView.height
         self.addView.centerOnXAndY()
     }
-    
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        
-        #warning("fix layout")
-    }
 }

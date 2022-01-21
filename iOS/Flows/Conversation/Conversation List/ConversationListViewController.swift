@@ -15,11 +15,13 @@ enum ConversationUIState: String {
     case write // Keyboard IS shown
 
     var headerHeight: CGFloat {
-        return 131
+        return 123
     }
 }
 
 class ConversationListViewController: ViewController {
+    
+    static let topOffset: CGFloat = 40
 
     // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
@@ -105,11 +107,11 @@ class ConversationListViewController: ViewController {
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
 
-        self.headerVC.view.pin(.top, offset: .custom(40))
+        self.headerVC.view.pin(.top, offset: .custom(ConversationListViewController.topOffset))
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.top = self.headerVC.view.bottom
-        self.collectionView.height = self.view.height - ConversationUIState.write.headerHeight
+        self.collectionView.height = self.view.height - self.headerVC.view.bottom
 
         // If we're in the write mode, adjust the position of the subviews to
         // accomodate the text input, if necessary.
@@ -127,11 +129,15 @@ class ConversationListViewController: ViewController {
         let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds,
                                                from: self.messageInputAccessoryView)
 
-        let diff = cellFrame.bottom - accessoryFrame.top
-        let value = -clamp(diff, 0, 70)
-        self.collectionView.top += value
+        let diff = (cellFrame.bottom) - accessoryFrame.top
+        let value = -clamp(diff, 0, self.headerVC.view.height)
         
-        self.headerVC.view.alpha = self.collectionView.top < self.headerVC.view.bottom - self.headerVC.membersVC.view.top ? 0 : 1
+        self.collectionView.top += value
+
+        let hideMembers = self.collectionView.top < self.headerVC.view.bottom - self.headerVC.membersVC.view.height - self.headerVC.pullView.height
+        let hidePull = self.collectionView.top < self.headerVC.view.bottom - self.headerVC.pullView.height
+        self.headerVC.membersVC.view.alpha = hideMembers ? 0 : 1
+        self.headerVC.pullView.alpha = hidePull ? 0: 1
     }
 
     override func viewWillAppear(_ animated: Bool) {

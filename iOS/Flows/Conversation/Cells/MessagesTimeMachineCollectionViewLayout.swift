@@ -164,6 +164,12 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     private var deletedIndexPaths: Set<IndexPath> = []
     /// How much to adjust the proposed scroll offset.
     private var scrollOffset: CGFloat = 0
+    
+    override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
+        super.prepare(forAnimatedBoundsChange: oldBounds)
+        
+        self.shouldScrollToEnd = true
+    }
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
