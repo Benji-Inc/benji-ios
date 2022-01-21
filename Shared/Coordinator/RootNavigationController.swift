@@ -16,6 +16,7 @@ class RootNavigationController: NavigationController, UINavigationControllerDele
     override func initializeViews() {
         super.initializeViews()
         
+        self.view.set(backgroundColor: .white)
         self.view.insertSubview(self.gradientView, at: 0)
     }
 

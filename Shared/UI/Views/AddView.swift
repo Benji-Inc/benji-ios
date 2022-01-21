@@ -12,7 +12,7 @@ private class AddGradientLayer: CAGradientLayer {
     
     override init() {
         
-        let cgColors = [ThemeColor.B3.color.cgColor, ThemeColor.B3.color.withAlphaComponent(0).cgColor]
+        let cgColors = [ThemeColor.B3.color.cgColor, ThemeColor.gray.color.cgColor]
         
         super.init()
         self.startPoint = CAGradientLayer.Point.topLeft.point
@@ -40,17 +40,15 @@ class AddView: BaseView {
         super.initializeSubviews()
         
         self.addSubview(self.imageView)
-        self.set(backgroundColor: .B4)
         self.imageView.image = UIImage(systemName: "plus")
         self.imageView.tintColor = UIColor.white.withAlphaComponent(0.8)
         
-        self.layer.borderColor = ThemeColor.B4.color.cgColor
+        self.layer.borderColor = ThemeColor.gray.color.cgColor
         self.layer.borderWidth = 2
         self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.innerCornerRadius
         
-        self.gradientLayer.opacity = 0.2
-        self.layer.insertSublayer(self.gradientLayer, at: 2)
+        self.layer.insertSublayer(self.gradientLayer, at: 0)
     }
     
     override func layoutSubviews() {

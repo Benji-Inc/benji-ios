@@ -29,13 +29,19 @@ enum ThemeColor: String, CaseIterable {
     case T1withAlpha
     case T2
     case T3
-
+    
+    case white
     case clear
     case red
+    case gray
 
     var color: UIColor {
         switch self {
             
+        case .gray:
+            return UIColor(named: "GRAY")!
+        case .white:
+            return UIColor(named: "WHITE")!
         case .clear:
             return UIColor(named: "CLEAR")!
         case .red:
