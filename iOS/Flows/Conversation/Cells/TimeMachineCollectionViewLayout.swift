@@ -96,6 +96,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     
     var uiState: ConversationUIState = .read
+    private var isTransitioning: Bool = false
         
     // MARK: - UICollectionViewLayout Overrides
 
@@ -118,9 +119,21 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         
         if collectionView.isTracking || collectionView.isDecelerating {
             return true
+        } else if self.isTransitioning {
+            return true
         } else {
-            return false 
+            return false
         }
+    }
+    
+    override func prepareForTransition(to newLayout: UICollectionViewLayout) {
+        super.prepareForTransition(to: newLayout)
+        self.isTransitioning = true
+    }
+    
+    override func finalizeLayoutTransition() {
+        super.finalizeLayoutTransition()
+        self.isTransitioning = false
     }
 
     override func invalidationContext(forBoundsChange newBounds: CGRect)

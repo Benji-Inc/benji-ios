@@ -110,6 +110,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             self.router.dismiss(source: self.conversationListVC)
         }
 
+        self.conversationListVC.updateUI(for: .read)
         self.router.present(coordinator, source: self.conversationListVC)
     }
     
