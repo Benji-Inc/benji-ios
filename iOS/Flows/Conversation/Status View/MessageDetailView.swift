@@ -12,7 +12,7 @@ import Combine
 
 class MessageDetailView: BaseView {
 
-    static let height: CGFloat = 20
+    static let height: CGFloat = 25
 
     let statusView = MessageStatusView()
     let emotionView = EmotionView()

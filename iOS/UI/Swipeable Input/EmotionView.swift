@@ -75,11 +75,11 @@ class EmotionView: BaseView {
         self.emojiLabel.setSize(withWidth: self.width)
         self.label.setSize(withWidth: 200)
         
-        self.emojiContainer.height = 20
+        self.emojiContainer.expandToSuperviewHeight()
         self.emojiContainer.width = self.emojiLabel.width + Theme.ContentOffset.short.value.doubled
         self.emojiLabel.centerOnXAndY()
         
-        self.height = 20
+        self.height = MessageDetailView.height 
         self.width = self.emojiContainer.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.short.value.doubled
         
         self.pin(.left)
