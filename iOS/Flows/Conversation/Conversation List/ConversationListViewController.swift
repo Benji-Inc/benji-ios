@@ -15,7 +15,7 @@ enum ConversationUIState: String {
     case write // Keyboard IS shown
 
     var headerHeight: CGFloat {
-        return 123
+        return 106
     }
 }
 
@@ -95,6 +95,7 @@ class ConversationListViewController: ViewController {
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.conversationLayout.delegate = self
+
 
         self.addChild(viewController: self.headerVC, toView: self.view)
     }

@@ -29,20 +29,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: Member?
 
-    let avatarView = AvatarView()
-    
-    let shadowLayer = CAShapeLayer()
-
-    lazy var pulseLayer: CAShapeLayer = {
-        let shape = CAShapeLayer()
-        shape.lineWidth = 1.5
-        shape.lineCap = .round
-        shape.fillColor = UIColor.clear.cgColor
-        shape.cornerRadius = Theme.innerCornerRadius
-        shape.borderColor = ThemeColor.D6.color.cgColor
-        shape.borderWidth = 2
-        return shape
-    }()
+    let avatarView = BorderedAvatarView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -52,15 +39,6 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.avatarView)
-        
-        self.layer.insertSublayer(self.pulseLayer, at: 2)
-        
-        self.contentView.layer.insertSublayer(self.shadowLayer, below: self.avatarView.layer)
-        
-        self.shadowLayer.shadowColor = ThemeColor.D6.color.cgColor
-        self.shadowLayer.shadowOpacity = 0.35
-        self.shadowLayer.shadowOffset = .zero
-        self.shadowLayer.shadowRadius = 10
     }
 
     func configure(with item: Member) {
@@ -77,47 +55,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         if typingUsers.contains(where: { typingUser in
             typingUser.userObjectId == item.displayable.value.userObjectId
         }) {
-            self.beginTyping()
+            self.avatarView.beginTyping()
         } else {
-            self.endTyping()
+            self.avatarView.endTyping()
         }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.pulseLayer.frame = self.avatarView.bounds
-        self.pulseLayer.path = UIBezierPath(roundedRect: self.avatarView.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
-        self.pulseLayer.position = self.avatarView.center
-        
-        self.shadowLayer.shadowPath = UIBezierPath(rect: self.avatarView.frame).cgPath
-    }
-
-    private func beginTyping() {
-        self.pulseLayer.removeAllAnimations()
-        self.pulseLayer.strokeColor = ThemeColor.D6.color.cgColor
-        
-        let scale = CABasicAnimation(keyPath: "transform.scale")
-        scale.toValue = 1.2
-        scale.fromValue = 1.0
-        
-        let fade = CABasicAnimation(keyPath: "opacity")
-        fade.toValue = 1.0
-        fade.fromValue = 0.35
-        
-        let group = CAAnimationGroup()
-        group.animations = [scale, fade]
-        group.duration = 1
-        group.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        group.autoreverses = true
-        group.repeatCount = .infinity
-        
-        self.pulseLayer.add(group, forKey: "pulsing")
-    }
-
-    private func endTyping() {
-        self.pulseLayer.strokeColor = ThemeColor.clear.color.cgColor
-        self.pulseLayer.removeAllAnimations()
     }
     
     private func subscribeToUpdates(for user: User) {

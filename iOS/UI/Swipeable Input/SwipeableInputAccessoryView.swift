@@ -28,6 +28,9 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     /// The accessory view finished its swipe interaction.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didFinishSwipeSendingSendable didSend: Bool)
+    
+    /// The avatar view in the accessory was tapped.
+    func swipeableInputAccessoryDidTapAvatar(_ view: SwipeableInputAccessoryView)
 }
 
 class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, ActiveConversationable {
@@ -51,6 +54,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
     @IBOutlet var countView: CharacterCountView!
+    @IBOutlet var avatarView: BorderedAvatarView!
 
 
     @IBOutlet var inputTypeContainer: UIView!
@@ -58,6 +62,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     static var minHeight: CGFloat = 76
     static var inputTypeMaxHeight: CGFloat = 25
+    static var inputTypeAvatarHeight: CGFloat = 56
 
     // MARK: - Message State
 
@@ -95,20 +100,27 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.inputContainerView.bubbleColor = ThemeColor.B1.color
 
         self.inputTypeContainer.addSubview(self.emotionView)
+        self.emotionView.alpha = 0
         self.emotionView.configure(for: self.currentEmotion)
         self.emotionView.didSelectEmotion = { [unowned self] emotion in
             self.currentEmotion = emotion
         }
         
         self.inputTypeContainer.addSubview(self.deliveryTypeView)
+        self.deliveryTypeView.alpha = 0
         self.deliveryTypeView.configure(for: self.currentContext)
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
         }
-        self.inputTypeContainer.alpha = 0
         
         self.inputContainerView.addSubview(self.countView)
         self.countView.isHidden = true
+        
+        self.avatarView.set(avatar: User.current()!)
+        
+        self.avatarView.didSelect { [unowned self] in
+            self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
+        }
 
         self.setupGestures()
         self.setupHandlers()
@@ -178,8 +190,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     func showDetail(shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputTypeHeightConstraint.constant = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 0
-            self.inputTypeContainer.alpha = shouldShow ? 1.0 : 0.0
+            self.inputTypeHeightConstraint.constant = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : SwipeableInputAccessoryView.inputTypeAvatarHeight
+            
+            self.emotionView.alpha = shouldShow ? 1.0 : 0.0
+            self.deliveryTypeView.alpha = shouldShow ? 1.0 : 0.0
+            self.avatarView.alpha = shouldShow ? 0.0 : 1.0
         }
     }
 

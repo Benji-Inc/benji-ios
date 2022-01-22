@@ -22,7 +22,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     
     private var state: ConversationUIState = .read
     
-    var didTapUpdateProfilePicture: CompletionOptional = nil 
     var didTapAddPeople: CompletionOptional = nil
     var didTapUpdateTopic: CompletionOptional = nil
         
