@@ -97,6 +97,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     
     var uiState: ConversationUIState = .read
     private var isTransitioning: Bool = false
+    private var isPreparingForUpdates = false 
         
     // MARK: - UICollectionViewLayout Overrides
 
@@ -121,9 +122,23 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return true
         } else if self.isTransitioning {
             return true
+        } else if self.isPreparingForUpdates {
+            return true
         } else {
             return false
         }
+    }
+    
+    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        super.prepare(forCollectionViewUpdates: updateItems)
+        
+        self.isPreparingForUpdates = true
+    }
+    
+    override func finalizeCollectionViewUpdates() {
+        super.finalizeCollectionViewUpdates()
+        
+        self.isPreparingForUpdates = false
     }
     
     override func prepareForTransition(to newLayout: UICollectionViewLayout) {
