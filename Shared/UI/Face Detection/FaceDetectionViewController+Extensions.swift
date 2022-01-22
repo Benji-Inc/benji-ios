@@ -48,11 +48,10 @@ extension FaceDetectionViewController {
 
         let solidColor = CIImage(color: color).cropped(to: maskImage.extent)
 
-        let filter = CIFilter(name: "CIColorMonochrome")
+        // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
+        
+        let filter = CIFilter(name: "CIPhotoEffectMono")
         filter?.setValue(originalImage, forKey: "inputImage")
-        // set a gray value for the tint color
-        filter?.setValue(CIColor(red: 0.7, green: 0.7, blue: 0.7), forKey: "inputColor")
-        filter?.setValue(1.0, forKey: "inputIntensity")
 
         guard let bwImage = filter?.outputImage else { return }
 
