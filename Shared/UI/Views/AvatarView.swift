@@ -21,18 +21,6 @@ class AvatarView: DisplayableImageView {
 
     private let label = ThemeLabel(font: .regularBold)
 
-    // MARK: - Initializers
-
-    override init() {
-        super.init()
-        self.prepareView()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.prepareView()
-    }
-
     private func setImageFrom(initials: String?) {
         guard let initials = initials else {
             self.label.text = nil
@@ -53,14 +41,16 @@ class AvatarView: DisplayableImageView {
     func setSize(for height: CGFloat) {
         self.size = self.getSize(for: height)
     }
-
-    private func prepareView() {
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
         self.insertSubview(self.label, aboveSubview: self.imageView)
         self.imageView.contentMode = .scaleAspectFill
-        self.layer.masksToBounds = true
-        self.clipsToBounds = true
-        self.layer.cornerRadius = Theme.innerCornerRadius
-        self.set(backgroundColor: .B3)
+        self.imageView.layer.masksToBounds = true
+        self.imageView.clipsToBounds = true
+        self.imageView.layer.cornerRadius = Theme.innerCornerRadius
+        self.imageView.set(backgroundColor: .B3)
     }
 
     // MARK: - Open setters

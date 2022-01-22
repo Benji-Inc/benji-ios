@@ -21,7 +21,7 @@ protocol MessageSendingCollectionViewType: CollectionView {
 }
 
 class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate {
-
+    
     /// The type of message send method that the conversation VC is prepped for.
     private enum SendMode {
         /// The message will be sent to currently centered message.
@@ -33,6 +33,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     let viewController: MessageSendingViewControllerType
     let collectionView: MessageSendingCollectionViewType
     let isConversationList: Bool
+    
+    var didTapAvatar: CompletionOptional = nil
 
     private var contentContainer: UIView? {
         return self.collectionView.superview
@@ -159,5 +161,9 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
                 return .newConversation
             }
         }
+    }
+    
+    func swipeableInputAccessoryDidTapAvatar(_ view: SwipeableInputAccessoryView) {
+        self.didTapAvatar?()
     }
 }

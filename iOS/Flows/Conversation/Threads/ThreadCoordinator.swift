@@ -34,4 +34,28 @@ class ThreadCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.threadVC
     }
+    
+    override func start() {
+        super.start()
+        
+        self.threadVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
+            self.presentProfilePicture()
+        }
+    }
+    
+    func presentProfilePicture() {
+        let vc = ModalPhotoViewController()
+        
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
+        vc.dismissHandlers.append { [unowned self] in
+            self.threadVC.becomeFirstResponder()
+        }
+        
+        vc.onDidComplete = { _ in
+            vc.dismiss(animated: true, completion: nil)
+        }
+
+        self.threadVC.resignFirstResponder()
+        self.router.present(vc, source: self.threadVC)
+    }
 }

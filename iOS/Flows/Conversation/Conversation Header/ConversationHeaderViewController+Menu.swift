@@ -15,11 +15,6 @@ extension ConversationHeaderViewController {
         
         var children: [UIMenuElement] = []
         
-        let updateProfile = UIAction.init(title: "Update profile picture",
-                                image: UIImage(systemName: "person.crop.square")) { [unowned self] _ in
-            self.didTapUpdateProfilePicture?()
-        }
-        
         let add = UIAction.init(title: "Add people",
                                 image: UIImage(systemName: "person.badge.plus")) { [unowned self] _ in
             self.didTapAddPeople?()
@@ -65,18 +60,18 @@ extension ConversationHeaderViewController {
         
         let hideMenu = UIMenu(title: "Hide Conversation",
                                 image: UIImage(systemName: "eye.slash"),
-                                options: .destructive,
+                                options: [],
                                 children: [confirmHide, neverMind])
 
         if conversation.isOwnedByMe {
             /// Don't allow the waitlist user to delete/hide conversations. No way to create new ones.
             if User.isOnWaitlist {
-                children = [topic, add, updateProfile]
+                children = [topic, add]
             } else {
-                children = [topic, add, updateProfile, deleteMenu, hideMenu]
+                children = [topic, add, hideMenu, deleteMenu]
             }
         } else {
-            children = [updateProfile, hideMenu]
+            children = [hideMenu]
         }
         
         self.button.menu = UIMenu(title: "Menu",

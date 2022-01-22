@@ -55,7 +55,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             self.presentPeoplePicker()
         }
         
-        self.conversationListVC.headerVC.didTapUpdateProfilePicture = { [unowned self] in
+        self.conversationListVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfilePicture()
         }
 
@@ -218,32 +218,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.resignFirstResponder()
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
-    }
-}
-
-private class ModalPhotoViewController: PhotoViewController {
-    
-    private let gradientView = BackgroundGradientView()
-    
-    override func initializeViews() {
-        super.initializeViews()
-        
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-        }
-        
-        self.view.insertSubview(self.gradientView, at: 0)
-        
-        self.currentState = .scanEyesOpen
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.gradientView.expandToSuperviewSize()
     }
 }
 
