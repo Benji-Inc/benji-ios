@@ -81,7 +81,7 @@ class EmotionView: BaseView {
         self.pin(.left)
         
         self.label.centerOnY()
-        self.label.match(.left, to: .right, of: self.emojiLabel, offset: .short)
+        self.label.match(.left, to: .right, of: self.emojiLabel, offset: .standard)
         self.emojiLabel.center.y = self.label.center.y
 
         self.button.expandToSuperviewWidth()
