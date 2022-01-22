@@ -39,12 +39,8 @@ class PlaceholderConversationCell: UICollectionViewCell, ConversationUIStateSett
     }
     
     func set(state: ConversationUIState) {
-        Task {
-            self.topOffset = state == .write ? 118 : 306
-            await UIView.awaitAnimation(with: .fast, animations: {
-                self.setNeedsLayout()
-            })
-        }
+        self.topOffset = state == .write ? 134 : 286
+        self.setNeedsLayout()
     }
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

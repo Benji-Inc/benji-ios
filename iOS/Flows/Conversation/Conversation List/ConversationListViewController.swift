@@ -112,32 +112,6 @@ class ConversationListViewController: ViewController {
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.top = self.headerVC.view.bottom
         self.collectionView.height = self.view.height - self.headerVC.view.bottom
-
-        // If we're in the write mode, adjust the position of the subviews to
-        // accomodate the text input, if necessary.
-//        if self.state == .write {
-//            self.setYOffsets()
-//        }
-    }
-
-    /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
-    /// and message drop zone don't overlap.
-    private func setYOffsets() {
-        guard let cell = self.collectionView.getBottomFrontmostCell() else { return }
-
-        let cellFrame = self.view.convert(cell.bounds, from: cell)
-        let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds,
-                                               from: self.messageInputAccessoryView)
-
-        let diff = (cellFrame.bottom) - accessoryFrame.top
-        let value = -clamp(diff, 0, self.headerVC.view.height)
-        
-        self.collectionView.top += value
-
-        let hideMembers = self.collectionView.top < self.headerVC.view.bottom - self.headerVC.membersVC.view.height - self.headerVC.pullView.height
-        let hidePull = self.collectionView.top < self.headerVC.view.bottom - self.headerVC.pullView.height
-        self.headerVC.membersVC.view.alpha = hideMembers ? 0 : 1
-        self.headerVC.pullView.alpha = hidePull ? 0: 1
     }
 
     override func viewWillAppear(_ animated: Bool) {

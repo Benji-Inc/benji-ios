@@ -45,6 +45,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     // MARK:  - Views
 
     @IBOutlet var inputContainerView: SpeechBubbleView!
+    @IBOutlet var inputHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
     /// A button to handle taps and pan gestures.
@@ -102,6 +103,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
         }
+        self.inputTypeContainer.alpha = 0
 
         self.setupGestures()
         self.setupHandlers()
@@ -139,7 +141,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
-            
         }.store(in: &self.cancellables)
         
         self.overlayButton.didSelect { [unowned self] in

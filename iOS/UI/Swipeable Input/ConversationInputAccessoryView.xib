@@ -45,7 +45,7 @@
                             <constraints>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="3E0-AT-Kum"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
-                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="90" id="7Po-qb-mxR"/>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="76" id="7Po-qb-mxR"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="centerY" secondItem="VuQ-5S-h7F" secondAttribute="centerY" constant="-6" id="V3R-UO-izT"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="fhu-x1-1GA"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="jJa-qV-wJv"/>
@@ -84,6 +84,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="o5I-Cx-4HN"/>
+                <outlet property="inputHeightConstraint" destination="7Po-qb-mxR" id="WXH-5N-l52"/>
                 <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="iQV-ts-qMa"/>
                 <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="ISn-9g-1kH"/>
                 <outlet property="overlayButton" destination="b2H-ok-H5y" id="78P-cH-BSH"/>

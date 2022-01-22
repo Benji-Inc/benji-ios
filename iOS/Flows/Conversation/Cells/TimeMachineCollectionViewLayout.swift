@@ -114,7 +114,13 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         // The positions of the items need to be recalculated for every change to the bounds.
-        return true
+        guard let collectionView = self.collectionView else { return false }
+        
+        if collectionView.isTracking || collectionView.isDecelerating {
+            return true
+        } else {
+            return false 
+        }
     }
 
     override func invalidationContext(forBoundsChange newBounds: CGRect)
@@ -379,7 +385,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             
         case .write:
             
-            let centerY = (contentRect.top - 38)
+            let centerY = (contentRect.top)
             centerPoint = CGPoint(x: contentRect.midX, y: centerY)
             
             if section == 0 {
