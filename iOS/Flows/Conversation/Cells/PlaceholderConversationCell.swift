@@ -39,7 +39,7 @@ class PlaceholderConversationCell: UICollectionViewCell, ConversationUIStateSett
     }
     
     func set(state: ConversationUIState) {
-        self.topOffset = state == .write ? 134 : 286
+        self.topOffset = state == .write ? 142 : 291
         self.setNeedsLayout()
     }
     

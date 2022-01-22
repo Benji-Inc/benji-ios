@@ -10,12 +10,12 @@ import Foundation
 
 class ThreadCollectionView: CollectionView {
 
-    var threadLayout: MessagesTimeMachineCollectionViewLayout {
-        return self.collectionViewLayout as! MessagesTimeMachineCollectionViewLayout
+    var threadLayout: ThreadTimeMachineCollectionViewLayout {
+        return self.collectionViewLayout as! ThreadTimeMachineCollectionViewLayout
     }
 
     init() {
-        super.init(layout: MessagesTimeMachineCollectionViewLayout())
+        super.init(layout: ThreadTimeMachineCollectionViewLayout())
 
         self.threadLayout.messageContentState = .thread 
         self.showsVerticalScrollIndicator = false
@@ -43,3 +43,59 @@ extension ThreadCollectionView: MessageSendingCollectionViewType {
         return .zero
     }
 }
+
+class ThreadTimeMachineCollectionViewLayout: MessagesTimeMachineCollectionViewLayout {
+    
+    override func getCenterPoint(for section: SectionIndex,
+                        withYOffset yOffset: CGFloat,
+                        scale: CGFloat) -> CGPoint {
+
+        guard let collectionView = self.collectionView else { return .zero }
+
+        let contentRect = CGRect(x: collectionView.contentOffset.x,
+                                 y: collectionView.contentOffset.y,
+                                 width: collectionView.bounds.size.width,
+                                 height: collectionView.bounds.size.height)
+
+        var centerPoint: CGPoint = .zero
+
+        switch self.uiState {
+        case .read:
+
+            let centerY = contentRect.top + 100
+
+            centerPoint = CGPoint(x: contentRect.midX, y: centerY)
+
+            if section == 0 {
+                centerPoint.y += self.itemHeight.half
+                centerPoint.y += yOffset
+                centerPoint.y += self.itemHeight.doubled * (1-scale)
+                centerPoint.y -= 100 - Theme.ContentOffset.short.value
+            } else {
+                centerPoint.y += 50
+                centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
+                centerPoint.y -= yOffset
+                centerPoint.y -= self.itemHeight.doubled * (1-scale)
+            }
+
+        case .write:
+
+            let centerY = (contentRect.top + MessageContentView.standardHeight.doubled)
+            centerPoint = CGPoint(x: contentRect.midX, y: centerY)
+
+            if section == 0 {
+                centerPoint.y += self.itemHeight.half
+                centerPoint.y += yOffset
+                centerPoint.y += self.itemHeight.half * (1-scale)
+            } else {
+                centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
+                centerPoint.y -= yOffset
+                centerPoint.y -= self.itemHeight.half * (1-scale)
+            }
+        }
+
+        return centerPoint
+    }
+}
+
+

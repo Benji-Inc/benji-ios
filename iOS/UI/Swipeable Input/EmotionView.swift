@@ -12,7 +12,6 @@ import StreamChat
 
 class EmotionView: BaseView {
     
-    let emojiContainer = BaseView()
     let emojiLabel = ThemeLabel(font: .reactionEmoji)
     
     let label = ThemeLabel(font: .small)
@@ -23,8 +22,7 @@ class EmotionView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.addSubview(self.emojiContainer)
-        self.emojiContainer.addSubview(self.emojiLabel)
+        self.addSubview(self.emojiLabel)
         
         self.addSubview(self.label)
         self.addSubview(self.button)
@@ -72,24 +70,20 @@ class EmotionView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.emojiLabel.setSize(withWidth: self.width)
+        self.emojiLabel.setSize(withWidth: 200)
         self.label.setSize(withWidth: 200)
         
-        self.emojiContainer.height = 20
-        self.emojiContainer.width = self.emojiLabel.width + Theme.ContentOffset.short.value.doubled
-        self.emojiLabel.centerOnXAndY()
+        self.emojiLabel.pin(.left)
         
-        self.height = 20
-        self.width = self.emojiContainer.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.short.value.doubled
+        self.height = MessageDetailView.height
+        self.width = self.emojiLabel.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.short.value.doubled
         
         self.pin(.left)
         
-        self.emojiContainer.pin(.left)
-        self.emojiContainer.pin(.top)
-        
         self.label.centerOnY()
-        self.label.match(.left, to: .right, of: self.emojiContainer, offset: .short)
-        
+        self.label.match(.left, to: .right, of: self.emojiLabel, offset: .standard)
+        self.emojiLabel.center.y = self.label.center.y
+
         self.button.expandToSuperviewWidth()
         self.button.height = 36
         self.button.centerOnXAndY()

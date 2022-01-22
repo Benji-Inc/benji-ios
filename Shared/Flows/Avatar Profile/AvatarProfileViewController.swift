@@ -12,7 +12,6 @@ import Combine
 class AvatarProfileViewController: ViewController {
 
     private let avatarView = AvatarView()
-    private let handleLabel = ThemeLabel(font: .small)
     private let nameLabel = ThemeLabel(font: .mediumBold)
     private let vibrancyView = VibrancyView()
 
@@ -34,13 +33,17 @@ class AvatarProfileViewController: ViewController {
         self.view.set(backgroundColor: .clear)
         self.view.addSubview(self.vibrancyView)
         self.view.addSubview(self.avatarView)
-        self.view.addSubview(self.handleLabel)
         self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.chatButton)
 
+        if let objectId = self.avatar.userObjectId {
+            Task {
+                let user = await UserStore.shared.findUser(with: objectId)
+                self.nameLabel.setText(user?.fullName)
+                self.view.layoutNow()
+            }.add(to: self.taskPool)
+        }
         self.avatarView.set(avatar: self.avatar)
-        self.nameLabel.setText(self.avatar.fullName)
-        self.handleLabel.setText(self.avatar.handle)
 
         self.preferredContentSize = CGSize(width: 300, height: 300)
     }
@@ -59,9 +62,5 @@ class AvatarProfileViewController: ViewController {
         self.nameLabel.setSize(withWidth: maxWidth)
         self.nameLabel.centerOnX()
         self.nameLabel.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
-
-        self.handleLabel.setSize(withWidth: maxWidth)
-        self.handleLabel.centerOnX()
-        self.handleLabel.match(.top, to: .bottom, of: self.nameLabel, offset: .short)
     }
 }

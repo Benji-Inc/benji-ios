@@ -57,7 +57,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
     static var minHeight: CGFloat = 76
-    static var inputTypeMaxHeight: CGFloat = 20
+    static var inputTypeMaxHeight: CGFloat = 25
 
     // MARK: - Message State
 
