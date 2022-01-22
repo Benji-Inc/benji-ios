@@ -115,7 +115,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        // The positions of the items need to be recalculated for every change to the bounds.
+        // The positions of the items need to be recalculated for the following scenarios.
         guard let collectionView = self.collectionView else { return false }
         
         if collectionView.isTracking || collectionView.isDecelerating {
@@ -131,13 +131,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
-        
         self.isPreparingForUpdates = true
     }
     
     override func finalizeCollectionViewUpdates() {
         super.finalizeCollectionViewUpdates()
-        
         self.isPreparingForUpdates = false
     }
     
