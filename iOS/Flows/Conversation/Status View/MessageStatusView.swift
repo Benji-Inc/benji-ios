@@ -82,7 +82,8 @@ class MessageStatusView: BaseView {
 private class MessageStatusContainer: BaseView {
 
     let maxWidth: CGFloat = 200
-    let minWidth: CGFloat = 20
+    let minWidth: CGFloat = 25
+    let padding = Theme.ContentOffset.standard
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -122,19 +123,19 @@ private class MessageReadView: MessageStatusContainer {
 
         self.imageView.squaredSize = 18
 
-        let maxWidth = self.maxWidth - Theme.ContentOffset.short.value.doubled - self.imageView.width
+        let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
         self.label.setSize(withWidth: maxWidth)
-        self.label.pin(.left, offset: .short)
+        self.label.pin(.left, offset: self.padding)
         self.label.centerOnY()
 
-        self.imageView.match(.left, to: .right, of: self.label, offset: .short)
+        self.imageView.match(.left, to: .right, of: self.label, offset: self.padding)
         self.imageView.centerOnY()
 
         let width: CGFloat
         if self.imageView.image.isNil {
-            width = (Theme.ContentOffset.short.value * 2) + self.label.width
+            width = (self.padding.value * 2) + self.label.width
         } else {
-            width = (Theme.ContentOffset.short.value * 3) + self.imageView.width + self.label.width
+            width = (self.padding.value * 3) + self.imageView.width + self.label.width
         }
         self.width = clamp(width, self.minWidth, self.maxWidth)
 
@@ -239,13 +240,11 @@ private class MessageReadView: MessageStatusContainer {
 
 private class MessageReplyView: MessageStatusContainer {
 
-    let label = ThemeLabel(font: .small)
     let countLabel = ThemeLabel(font: .small)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.label)
         self.addSubview(self.countLabel)
     }
 
@@ -253,26 +252,17 @@ private class MessageReplyView: MessageStatusContainer {
         super.layoutSubviews()
 
         self.countLabel.setSize(withWidth: self.maxWidth)
-        self.countLabel.centerOnY()
 
         if self.countLabel.text.isNil {
             self.width = 0
         } else {
-            self.label.setSize(withWidth: self.maxWidth - (Theme.ContentOffset.short.value * 3))
-            let offset = (Theme.ContentOffset.short.value * 2) + self.countLabel.width
-            self.label.centerOnY()
-
-            let width = (Theme.ContentOffset.short.value * 3) + self.countLabel.width + self.label.width
-            self.width = clamp(width, self.minWidth, self.maxWidth)
-
-            /// Must set the pin after the width has been set due to it being right aligned
-            self.label.pin(.right, offset: .custom(offset))
-            self.countLabel.pin(.right, offset: .short)
+            self.width = self.minWidth
         }
+        
+        self.countLabel.centerOnXAndY()
     }
 
     func setReplies(for message: Message) {
-        self.label.setText(self.getReplies(for: message))
         if message.replyCount > 0 {
             self.countLabel.setText("\(message.replyCount)")
         } else {
@@ -283,16 +273,7 @@ private class MessageReplyView: MessageStatusContainer {
         }
     }
 
-    private func getReplies(for message: Message) -> Localized? {
-        if message.replyCount == 0 {
-            return nil
-        } else {
-            return "Replies"
-        }
-    }
-
     func reset() {
-        self.label.text = nil
         self.countLabel.text = nil
     }
 }
