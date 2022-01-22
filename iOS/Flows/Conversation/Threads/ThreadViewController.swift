@@ -166,9 +166,10 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private func set(state: ConversationUIState) async {
         self.threadCollectionView.threadLayout.uiState = state
         self.threadCollectionView.threadLayout.prepareForTransition(to: self.threadCollectionView.threadLayout)
-        
+        self.scrollToLastItemOnLayout = true
         await UIView.awaitAnimation(with: .standard, animations: {
             self.threadCollectionView.threadLayout.finalizeLayoutTransition()
+            self.view.layoutNow()
         })
     }
 
@@ -279,7 +280,7 @@ extension ThreadViewController: MessageSendingViewControllerType {
         self.dataSource.shouldPrepareToSend = messageSequencePreparingToSend.exists
 
         guard let message = self.messageController.message else { return }
-        self.dataSource.set(messageSequence: message)
+        self.dataSource.set(messageSequence: message, showInitial: false)
     }
 
     func sendMessage(_ message: Sendable) {
