@@ -45,15 +45,18 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     // MARK:  - Views
 
     @IBOutlet var inputContainerView: SpeechBubbleView!
+    @IBOutlet var inputHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
+    @IBOutlet var countView: CharacterCountView!
+
 
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
-
+    static var minHeight: CGFloat = 76
     static var inputTypeMaxHeight: CGFloat = 20
 
     // MARK: - Message State
@@ -102,6 +105,10 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
         }
+        self.inputTypeContainer.alpha = 0
+        
+        self.inputContainerView.addSubview(self.countView)
+        self.countView.isHidden = true
 
         self.setupGestures()
         self.setupHandlers()
@@ -127,7 +134,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 switch currentEvent {
                 case .willShow:
                     let shouldShow = self.textView.numberOfLines == 1
-                    self.showInputTypes(shouldShow: shouldShow)
+                    self.showDetail(shouldShow: shouldShow)
+                case .willHide:
+                    self.showDetail(shouldShow: false)
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 default:
@@ -137,8 +146,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
-            let shouldShow = self.textView.numberOfLines == 1 && KeyboardManager.shared.isKeyboardShowing
-            self.showInputTypes(shouldShow: shouldShow)
+            self.updateHeight(with: self.textView.numberOfLines)
+            self.countView.update(with: text.count, max: self.textView.maxLength)
         }.store(in: &self.cancellables)
         
         self.overlayButton.didSelect { [unowned self] in
@@ -151,9 +160,27 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.didPressAlertCancel()
         }
     }
+    
+    func updateHeight(with numberOfLines: Int) {
+        var new: CGFloat = SwipeableInputAccessoryView.minHeight
+        
+        if numberOfLines > 2 {
+            new = self.textView.height + self.inputTypeContainer.height
+        }
+        
+        guard new != self.inputHeightConstraint.constant else { return }
+                
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.inputHeightConstraint.constant = new
+            self.setNeedsLayout()
+        }
+    }
 
-    func showInputTypes(shouldShow: Bool) {
-        self.inputTypeHeightConstraint.constant = SwipeableInputAccessoryView.inputTypeMaxHeight
+    func showDetail(shouldShow: Bool) {
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.inputTypeHeightConstraint.constant = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 0
+            self.inputTypeContainer.alpha = shouldShow ? 1.0 : 0.0
+        }
     }
 
     // MARK: OVERRIDES
@@ -219,7 +246,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.currentContext = .passive
         self.textView.reset()
         self.inputContainerView.alpha = 1
-        self.textView.countView.isHidden = true
+        self.countView.isHidden = true
     }
 
     // MARK: - Pan Gesture Handling

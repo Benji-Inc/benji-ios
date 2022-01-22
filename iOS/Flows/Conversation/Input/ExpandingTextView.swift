@@ -28,6 +28,8 @@ class ExpandingTextView: TextView {
     
     override func initializeViews() {
         super.initializeViews()
+        
+        self.maxLength = 140
 
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainer.heightTracksTextView = true

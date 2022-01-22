@@ -96,6 +96,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     
     var uiState: ConversationUIState = .read
+    private var isTransitioning: Bool = false
+    private var isPreparingForUpdates = false 
         
     // MARK: - UICollectionViewLayout Overrides
 
@@ -113,8 +115,38 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        // The positions of the items need to be recalculated for every change to the bounds.
-        return true
+        // The positions of the items need to be recalculated for the following scenarios.
+        guard let collectionView = self.collectionView else { return false }
+        
+        if collectionView.isTracking || collectionView.isDecelerating {
+            return true
+        } else if self.isTransitioning {
+            return true
+        } else if self.isPreparingForUpdates {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        super.prepare(forCollectionViewUpdates: updateItems)
+        self.isPreparingForUpdates = true
+    }
+    
+    override func finalizeCollectionViewUpdates() {
+        super.finalizeCollectionViewUpdates()
+        self.isPreparingForUpdates = false
+    }
+    
+    override func prepareForTransition(to newLayout: UICollectionViewLayout) {
+        super.prepareForTransition(to: newLayout)
+        self.isTransitioning = true
+    }
+    
+    override func finalizeLayoutTransition() {
+        super.finalizeLayoutTransition()
+        self.isTransitioning = false
     }
 
     override func invalidationContext(forBoundsChange newBounds: CGRect)
@@ -379,7 +411,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             
         case .write:
             
-            let centerY = (contentRect.top + Theme.ContentOffset.xtraLong.value)
+            let centerY = (contentRect.top)
             centerPoint = CGPoint(x: contentRect.midX, y: centerY)
             
             if section == 0 {

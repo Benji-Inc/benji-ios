@@ -21,7 +21,7 @@ class ConversationCollectionView: CollectionView {
         self.clipsToBounds = false
         self.set(backgroundColor: .clear)
 
-        self.conversationLayout.messageContentState = .expanded
+        self.conversationLayout.messageContentState = .collapsed
 
         self.showsVerticalScrollIndicator = false
         self.keyboardDismissMode = .interactive

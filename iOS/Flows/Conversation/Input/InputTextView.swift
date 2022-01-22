@@ -37,18 +37,10 @@ enum InputType {
 
 class InputTextView: ExpandingTextView {
 
-    lazy var countView = CharacterCountView()
     lazy var confirmationView = AlertConfirmationView()
 
     private(set) var currentInputType: InputType?
     @Published var inputText: String = ""
-
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.addSubview(self.countView)
-        self.countView.isHidden = true
-    }
 
     func updateInputView(type: InputType, becomeFirstResponder: Bool = true) {
         defer {
@@ -76,14 +68,5 @@ class InputTextView: ExpandingTextView {
         super.textDidChange()
 
         self.inputText = self.text
-        self.countView.update(with: self.text.count, max: self.maxLength)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.countView.size = CGSize(width: 70, height: 20)
-        self.countView.right = self.width - 5
-        self.countView.bottom = self.height - 5
     }
 }

@@ -26,7 +26,7 @@ class PullView: BaseView {
         self.imageView.width = 20
         self.imageView.centerOnXAndY()
         
-        self.height = 34
+        self.height = 24
         self.width = 44
     }
 }
