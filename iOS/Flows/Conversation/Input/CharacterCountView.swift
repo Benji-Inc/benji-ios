@@ -16,15 +16,13 @@ class CharacterCountView: BaseView {
         super.initializeSubviews()
 
         self.addSubview(self.label)
-        self.label.textAlignment = .center
+        self.label.textAlignment = .right
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.label.expandToSuperviewSize()
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = 4
     }
 
     func update(with count: Int, max: Int) {

@@ -50,11 +50,13 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     @IBOutlet var textView: InputTextView!
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
+    @IBOutlet var countView: CharacterCountView!
+
 
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
-
+    static var minHeight: CGFloat = 76
     static var inputTypeMaxHeight: CGFloat = 20
 
     // MARK: - Message State
@@ -104,6 +106,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.currentContext = context
         }
         self.inputTypeContainer.alpha = 0
+        
+        self.inputContainerView.addSubview(self.countView)
+        self.countView.isHidden = true
 
         self.setupGestures()
         self.setupHandlers()
@@ -141,6 +146,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
+            self.updateHeight(with: self.textView.numberOfLines)
+            self.countView.update(with: text.count, max: self.textView.maxLength)
         }.store(in: &self.cancellables)
         
         self.overlayButton.didSelect { [unowned self] in
@@ -151,6 +158,21 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         
         self.textView.confirmationView.button.didSelect { [unowned self] in
             self.didPressAlertCancel()
+        }
+    }
+    
+    func updateHeight(with numberOfLines: Int) {
+        var new: CGFloat = SwipeableInputAccessoryView.minHeight
+        
+        if numberOfLines > 2 {
+            new = self.textView.height + self.inputTypeContainer.height
+        }
+        
+        guard new != self.inputHeightConstraint.constant else { return }
+                
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.inputHeightConstraint.constant = new
+            self.setNeedsLayout()
         }
     }
 
@@ -224,7 +246,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.currentContext = .passive
         self.textView.reset()
         self.inputContainerView.alpha = 1
-        self.textView.countView.isHidden = true
+        self.countView.isHidden = true
     }
 
     // MARK: - Pan Gesture Handling

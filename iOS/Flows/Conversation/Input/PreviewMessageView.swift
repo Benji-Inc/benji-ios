@@ -62,6 +62,6 @@ class PreviewMessageView: SpeechBubbleView {
         
         self.textView.setSize(withMaxWidth: self.width)
         self.textView.centerOnX()
-        self.textView.match(.top, to: .bottom, of: self.imageView)
+        self.textView.center.y = self.halfHeight - 6
     }
 }
