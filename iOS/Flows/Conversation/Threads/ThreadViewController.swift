@@ -123,11 +123,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                 self.updateUI(for: state)
             }.store(in: &self.cancellables)
     }
-    
-//    override func loadInitialData() {
-//        self.scrollToLastItemOnLayout = true
-//        super.loadInitialData()
-//    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -219,6 +214,9 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         if let replyId = self.startingReplyId {
             self.animateReply(with: replyId)
         }
+        
+        self.scrollToLastItemOnLayout = true
+        self.view.layoutNow()
     }
 
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection,
