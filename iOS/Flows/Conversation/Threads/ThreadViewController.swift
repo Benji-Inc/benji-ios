@@ -20,6 +20,9 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     let parentMessageView = MessageContentView()
     let detailView = MessageDetailView()
     
+    /// If true we should scroll to the last item in the collection in layout subviews.
+    private var scrollToLastItemOnLayout: Bool = true
+    
     private let threadCollectionView = ThreadCollectionView()
 
     /// A controller for the message that all the replies in this thread are responding to.
@@ -32,13 +35,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     private(set) var conversationController: ConversationController?
     let pullView = PullView()
-
-    var collectionViewBottomInset: CGFloat = 0 {
-        didSet {
-            self.collectionView.contentInset.bottom = self.collectionViewBottomInset
-            self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
-        }
-    }
 
     var indexPathForEditing: IndexPath?
 
@@ -66,9 +62,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
 
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
-    
-    private(set) var topMostIndex: Int = 0
-    
+        
     @Published var state: ConversationUIState = .read
 
     init(channelID: ChannelId,
@@ -109,7 +103,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.dismissInteractionController.handleCollectionViewPan(for: self.collectionView)
         self.dismissInteractionController.handlePan(for: self.parentMessageView)
         self.dismissInteractionController.handlePan(for: self.pullView)
-        self.threadCollectionView.threadLayout.delegate = self
         
         KeyboardManager.shared.$currentEvent
             .mainSink { [weak self] currentEvent in
@@ -130,6 +123,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                 self.updateUI(for: state)
             }.store(in: &self.cancellables)
     }
+    
+//    override func loadInitialData() {
+//        self.scrollToLastItemOnLayout = true
+//        super.loadInitialData()
+//    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -147,11 +145,18 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
         self.detailView.centerOnX()
 
-        self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pinToSafeArea(.top, offset: .noOffset)
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.height = self.view.height - self.collectionView.top
         self.collectionView.centerOnX()
+        
+        if self.scrollToLastItemOnLayout {
+            self.scrollToLastItemOnLayout = false
+            self.threadCollectionView.threadLayout.prepare()
+            let maxOffset = self.threadCollectionView.threadLayout.maxZPosition
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
+            self.threadCollectionView.threadLayout.invalidateLayout()
+        }
     }
     
     func updateUI(for state: ConversationUIState) {
@@ -344,19 +349,5 @@ extension ThreadViewController {
         } ?? []
 
         self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: true)
-
-        KeyboardManager.shared.$cachedKeyboardEndFrame
-            .removeDuplicates()
-            .mainSink { [unowned self] frame in
-                self.view.layoutNow()
-            }.store(in: &self.cancellables)
-    }
-}
-
-extension ThreadViewController: TimeMachineCollectionViewLayoutDelegate {
-    
-    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
-                                         updatedFrontmostItemAt indexPath: IndexPath) {
-        self.topMostIndex = indexPath.row
     }
 }
