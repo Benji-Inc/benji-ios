@@ -10,13 +10,19 @@ import Foundation
 
 class PullView: BaseView {
     
-    private let imageView = UIImageView(image: UIImage(named: "pullbar"))
+    private let imageView = UIImageView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
+        
+        if self.traitCollection.userInterfaceStyle == .dark {
+            self.imageView.image = UIImage(named: "pullbar")
+        } else {
+            self.imageView.image = UIImage(named: "pullbar_light")
+        }
     }
     
     override func layoutSubviews() {
