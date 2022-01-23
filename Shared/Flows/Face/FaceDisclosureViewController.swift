@@ -25,7 +25,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         var description: HightlightedPhrase {
             switch self {
             case .smiling:
-                return HightlightedPhrase(text: "Looking good!\n\n😁", highlightedWords: [])
+                return HightlightedPhrase(text: "😁 Looking good!", highlightedWords: [])
             }
         }
 
@@ -62,7 +62,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         self.button.isHidden = true
         self.contentView.addSubview(self.button)
-        self.button.set(style: .normal(color: .B3, text: "Next"))
+        self.button.set(style: .normal(color: .B0, text: "Next"))
     }
 
     override func viewDidLayoutSubviews() {

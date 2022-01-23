@@ -27,10 +27,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     var onDidComplete: ((Result<Void, Error>) -> Void)?
 
-    private let errorView = ErrorView()
+    let errorView = ErrorView()
     private var errorOffset: CGFloat = -100
 
-    private lazy var cameraVC = FaceDetectionViewController()
+    lazy var cameraVC = FaceDetectionViewController()
 
     private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
         let vc = FaceDisclosureViewController(with: .smiling)
@@ -123,7 +123,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         super.viewDidLayoutSubviews()
 
         self.animationView.size = CGSize(width: 140, height: 140)
-        self.animationView.centerOnXAndY()
+        self.animationView.centerOnX()
+        self.animationView.centerY = self.view.centerY * 0.95
 
         self.errorView.bottom = self.view.height - self.errorOffset
         
@@ -174,7 +175,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.currentState = self.previousScanState
         }
 
-        self.animateError(with: "Jibber can't detect your face.", show: !isDetected)
+        self.animateError(with: "No face detected.", show: !isDetected)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.cameraVC.cameraView.alpha = isDetected ? 1.0 : 0.25
@@ -184,7 +185,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleNotSmiling() {
-        self.animateError(with: "Jibber doesn't see you smiling.", show: true)
+        self.animateError(with: "Don't forget to smile.", show: true)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.cameraVC.cameraView.alpha = 0.5
@@ -273,7 +274,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 }
 
-private class ErrorView: BaseView {
+class ErrorView: BaseView {
 
     let label = ThemeLabel(font: .smallBold, textColor: .red)
     private let blurView = BlurView()
