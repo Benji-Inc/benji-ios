@@ -106,7 +106,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
                 switch self.currentState {
                 case .scanEyesOpen, .error:
-                    logDebug(faceDetected)
                     self.handleFace(isDetected: faceDetected)
                 default:
                     break
