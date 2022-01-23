@@ -117,6 +117,14 @@ class UserNotificationManager: NSObject {
             }
         }
     }
+    
+    func getDeliveredNotifications() async -> [UNNotification] {
+        return await withCheckedContinuation({ continuation in
+            self.center.getDeliveredNotifications { notifications in
+                continuation.resume(returning: notifications)
+            }
+        })
+    }
 
     func removeAllPendingNotificationRequests() {
         self.center.removeAllPendingNotificationRequests()

@@ -86,7 +86,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                     self.animateError(with: nil, show: false)
                     Task {
                         await self.updateUser(with: image)
-                    }
+                    }.add(to: self.taskPool)
                 } else {
                     self.handleNotSmiling()
                 }
@@ -106,6 +106,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
                 switch self.currentState {
                 case .scanEyesOpen, .error:
+                    logDebug(faceDetected)
                     self.handleFace(isDetected: faceDetected)
                 default:
                     break
@@ -148,7 +149,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         case .finish:
             Task {
                 await self.handleFinishState()
-            }
+            }.add(to: self.taskPool)
         }
 
         self.view.layoutNow()
