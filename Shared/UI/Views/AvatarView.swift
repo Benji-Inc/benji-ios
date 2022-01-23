@@ -81,12 +81,17 @@ class AvatarView: DisplayableImageView {
         }
     }
     
-    private func subscribeToUpdates(for user: User) {
+    func subscribeToUpdates(for user: User) {
         UserStore.shared.$userUpdated.filter { updatedUser in
             updatedUser?.objectId == user.userObjectId
-        }.mainSink { updatedUser in
-            self.displayable = updatedUser
+        }.mainSink { [unowned self] updatedUser in
+            guard let user = updatedUser else { return }
+            self.didRecieveUpdateFor(user: user)
         }.store(in: &self.cancellables)
+    }
+    
+    func didRecieveUpdateFor(user: User) {
+        self.displayable = user
     }
 
     override func layoutSubviews() {
