@@ -25,7 +25,7 @@ class ConnectionCell: PersonCell, ManageableCell {
     @MainActor
     func loadData(for user: User) async {
         guard let userWithData = try? await user.retrieveDataIfNeeded() else { return }
-        self.titleLabel.setText(userWithData.givenName)
+        self.titleLabel.setText(userWithData.fullName)
         self.layoutNow()
     }
 }

@@ -71,6 +71,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.includeConnections = includeConnections
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
         cv.keyboardDismissMode = .interactive
+        cv.isScrollEnabled = true 
         super.init(with: cv)
     }
 
@@ -113,7 +114,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         let rightItem = UIBarButtonItem(title: "Cancel", image: nil, primaryAction: cancel, menu: nil)
         rightItem.tintColor = ThemeColor.D1.color
         let search = UISearchController(searchResultsController: nil)
-        search.delegate = self
         search.searchBar.delegate = self
         search.searchBar.tintColor = ThemeColor.D1.color
         self.navigationItem.searchController = search

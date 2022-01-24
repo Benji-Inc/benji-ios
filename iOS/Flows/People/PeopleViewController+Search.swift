@@ -8,25 +8,18 @@
 
 import Foundation
 
-extension PeopleViewController: UISearchControllerDelegate {
-    
-}
-
 extension PeopleViewController: UISearchBarDelegate {
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        
-    }
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        
-    }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
+        self.performQuery(with: searchText)
+    }
+    
+    func performQuery(with filter: String?) {
+//        let mountains = mountainsController.filteredMountains(with: filter).sorted { $0.name < $1.name }
+//
+//        var snapshot = NSDiffableDataSourceSnapshot<Section, MountainsController.Mountain>()
+//        //snapshot.appendSections([.main])
+//        snapshot.appendItems(mountains)
+//        self.dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
