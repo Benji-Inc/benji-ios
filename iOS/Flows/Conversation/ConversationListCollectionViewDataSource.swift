@@ -24,6 +24,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         case conversation(ConversationId)
         case loadMore
         case newConversation
+        case upsell
     }
 
     var handleSelectedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -31,6 +32,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleTopicTapped: ((ConversationId) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
+    var handleCreateGroupSelected: CompletionOptional = nil
 
     /// The conversation ID of the conversation that is preparing to send, if any.
     private var conversationPreparingToSend: ConversationId?
@@ -42,6 +44,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     = ConversationListCollectionViewDataSource.createLoadMoreCellRegistration()
     private let newConversationCellRegistration
     = ConversationListCollectionViewDataSource.createNewConversationCellRegistration()
+    private let invitationUpsellCellRegistration
+    = ConversationListCollectionViewDataSource.createInvitationUpsellCellRegistration()
     
     var uiState: ConversationUIState = .read
 
@@ -82,6 +86,15 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
                                                            for: indexPath,
                                                            item: self)
             return newConversationCell
+        case .upsell:
+            let cell
+            = collectionView.dequeueConfiguredReusableCell(using: self.invitationUpsellCellRegistration,
+                                                           for: indexPath,
+                                                           item: self)
+            cell.didSelectCreate = { [unowned self] in
+                self.handleCreateGroupSelected?()
+            }
+            return cell
         }
     }
 
@@ -111,6 +124,9 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             /// Don't allow waitlist users to create new conversations.
             updatedItems.append(.newConversation)
         }
+        //else {
+            updatedItems.append(.upsell)
+        //}
 
         snapshot.setItems(updatedItems, in: sectionID)
 
@@ -139,6 +155,9 @@ extension ConversationListCollectionViewDataSource {
 
     typealias NewConversationCellRegistration
     = UICollectionView.CellRegistration<PlaceholderConversationCell, ConversationListCollectionViewDataSource>
+    
+    typealias InvitationUpsellCellRegistration
+    = UICollectionView.CellRegistration<InvitationUpsellCell, ConversationListCollectionViewDataSource>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
@@ -161,6 +180,12 @@ extension ConversationListCollectionViewDataSource {
 
     static func createNewConversationCellRegistration() -> NewConversationCellRegistration {
         return NewConversationCellRegistration { cell, indexPath, item in
+            cell.set(state: item.uiState)
+        }
+    }
+    
+    static func createInvitationUpsellCellRegistration() -> InvitationUpsellCellRegistration {
+        return InvitationUpsellCellRegistration { cell, indexPath, item in
             cell.set(state: item.uiState)
         }
     }

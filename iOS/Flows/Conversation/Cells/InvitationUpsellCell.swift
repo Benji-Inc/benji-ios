@@ -10,13 +10,13 @@ import Foundation
 
 class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
 
-    let gradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight], startPoint: .topLeft, endPoint: .bottomRight)
     let button = ThemeButton()
     let label = ThemeLabel(font: .medium, textColor: .T3)
     let subTitle = ThemeLabel(font: .regular, textColor: .T3)
     let container = BaseView()
     
     var didSelectCreate: CompletionOptional = nil
+    var heightMultiplier: CGFloat = 0.75
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,30 +31,36 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
     private func initializeViews() {
         self.contentView.addSubview(self.container)
         
-        self.container.layer.insertSublayer(self.gradientLayer, at: 0)
+        self.container.set(backgroundColor: .D1)
+        self.container.roundCorners()
         self.container.addSubview(self.button)
-        self.button.set(style: .normal(color: .white, text: "Create Circle"))
+        self.button.set(style: .custom(color: .white, textColor: .T2, text: "Add"))
         self.button.didSelect { [unowned self] in
             self.didSelectCreate?()
         }
-        
+
         self.container.addSubview(self.label)
-        self.label.setText("Invite friends or family to join you on Jibber, to move to the front of the waitlist.")
+        self.label.textAlignment = .center
+        self.label.setText("Add your friends or family, to move to the front of the waitlist.")
         self.container.addSubview(self.subTitle)
-        self.subTitle.setText("Up to 10 in a group.\nLarger groups get in first.")
+        self.subTitle.alpha = 0.5
+        self.subTitle.textAlignment = .center
+        self.subTitle.setText("Larger groups get in first.")
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.container.expandToSuperviewSize()
-        self.gradientLayer.frame = self.container.bounds
-        
-        let padding = Theme.ContentOffset.long.value.doubled
+        self.container.expandToSuperviewWidth()
+        self.container.height = self.contentView.height * self.heightMultiplier
+        self.container.pin(.top)
+                
+        let padding = Theme.ContentOffset.xtraLong.value.doubled
         
         self.button.height = Theme.buttonHeight
         self.button.width = self.container.width - padding
         self.button.centerOnX()
+        self.button.pin(.bottom, offset: .xtraLong)
         
         self.label.setSize(withWidth: self.container.width - padding)
         self.label.centerOnX()
@@ -66,8 +72,11 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
     }
     
     func set(state: ConversationUIState) {
-        //self.topOffset = state == .write ? 142 : 291
-        self.setNeedsLayout()
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.heightMultiplier = state == .write ? 0.35 : 0.75
+            self.subTitle.alpha = state == .write ? 0.0 : 0.5
+            self.setNeedsLayout()
+        }
     }
     
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

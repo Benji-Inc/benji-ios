@@ -35,6 +35,10 @@ extension ConversationListViewController {
         self.dataSource.handleTopicTapped = { [unowned self] _ in
             self.headerVC.didTapUpdateTopic?()
         }
+        
+        self.dataSource.handleCreateGroupSelected = { [unowned self] in
+            logDebug("Create tapped")
+        }
     }
 
     func subscribeToUIUpdates() {
