@@ -123,10 +123,9 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         if !User.isOnWaitlist {
             /// Don't allow waitlist users to create new conversations.
             updatedItems.append(.newConversation)
-        }
-        //else {
+        } else {
             updatedItems.append(.upsell)
-        //}
+        }
 
         snapshot.setItems(updatedItems, in: sectionID)
 
