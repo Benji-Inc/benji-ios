@@ -164,9 +164,9 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             self.onboardingVC.switchTo(nextContent)
         } else if let user = User.current() {
             switch user.status {
-            case .needsVerification, .none, .inactive:
+            case .needsVerification, .none:
                 self.finishFlow(with: ())
-            case .waitlist, .active:
+            case .inactive, .waitlist, .active:
                 self.finalizeOnboarding(user: user)
             }
         }
