@@ -91,7 +91,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A cache of all the sort values for each item.
     private(set) var itemSortValues: [IndexPath : Double] = [:]
-    /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
+    /// A dictionary of z ranges for all the items. A z-range represents the range that each item will be frontmost in its section
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     

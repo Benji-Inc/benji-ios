@@ -93,12 +93,12 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         var backgroundBrightness: CGFloat
         if normalizedZOffset < 0 {
-            // Dark the item as it moves away
+            // Darken the item as it moves away
             backgroundBrightness = lerp(abs(normalizedZOffset),
                                         start: self.frontmostBrightness,
                                         end: self.backmostBrightness)
         } else {
-            // Items should be at full when at the front of the stack.
+            // Items should be at full brightness when at the front of the stack.
             backgroundBrightness = self.frontmostBrightness
         }
 
@@ -118,7 +118,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                                               color1: saturatedColor,
                                               color2: unsaturatedColor)
 
-            // Lerp text T1 and T2
+            // Lerp text between T1 and T2
             let unsaturatedTextColor = ThemeColor.T3.color
             let saturatedTextColor = ThemeColor.T2.color
             attributes.textColor = lerp(normalizedFocusDistance,

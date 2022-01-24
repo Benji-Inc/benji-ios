@@ -78,7 +78,6 @@ class MessageCell: UICollectionViewCell {
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
-        
 
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
