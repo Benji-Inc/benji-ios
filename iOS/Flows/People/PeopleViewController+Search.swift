@@ -8,6 +8,10 @@
 
 import Foundation
 
+extension PeopleViewController: UISearchControllerDelegate {
+    
+}
+
 extension PeopleViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

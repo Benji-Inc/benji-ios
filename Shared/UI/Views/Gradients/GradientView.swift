@@ -76,6 +76,8 @@ class GradientView: PassThroughView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        CATransaction.begin()
         self.gradient.frame = self.bounds
+        CATransaction.commit()
     }
 }

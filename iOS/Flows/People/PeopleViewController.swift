@@ -12,22 +12,44 @@ import Contacts
 import UIKit
 import Localization
 
-private class SearchBar: UISearchBar {
+class PeopleSearchViewController: NavigationController {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initializeViews()
+    lazy var peopleVC = PeopleViewController(includeConnections: true)
+    private let backgroundView = BackgroundGradientView()
+    
+    override func loadView() {
+        self.view = self.backgroundView
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func initializeViews() {
-        self.tintColor = ThemeColor.D6.color
-        self.isTranslucent = false
+    override func initializeViews() {
+        super.initializeViews()
+                
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.medium(), .large()]
+        }
+                
+        self.viewControllers.append(self.peopleVC)
     }
 }
+
+//private class SearchBar: UISearchBar {
+//
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        self.initializeViews()
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//
+//    func initializeViews() {
+//        self.tintColor = ThemeColor.D6.color
+//        self.isTranslucent = false
+//    }
+//}
 
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
@@ -40,14 +62,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private let includeConnections: Bool
     private(set) var reservations: [Reservation] = []
     
-    private let backgroundView = BackgroundGradientView()
-
     let button = ThemeButton()
     private let loadingView = InvitationLoadingView()
     private var showButton: Bool = false
     
-    private let searchBar = SearchBar()
-
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
@@ -69,21 +87,13 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
-        }
+        
+        self.setupNavigationBar()
     
         self.dataSource.headerTitle = self.getHeaderTitle()
         self.dataSource.headerDescription = self.getHeaderDescription()
 
         self.view.addSubview(self.button)
-        
-        self.view.addSubview(self.searchBar)
-        self.searchBar.delegate = self
 
         self.button.didSelect { [unowned self] in
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
@@ -94,17 +104,34 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         }.store(in: &self.cancellables)
     }
     
+    private func setupNavigationBar() {
+        self.navigationItem.title = "Contacts"
+
+        let leftItem = UIBarButtonItem(title: "Groups", image: nil, primaryAction: nil, menu: nil)
+        leftItem.tintColor = ThemeColor.D1.color
+        
+        let cancel = UIAction { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
+        let rightItem = UIBarButtonItem(title: "Cancel", image: nil, primaryAction: cancel, menu: nil)
+        rightItem.tintColor = ThemeColor.D1.color
+        let search = UISearchController(searchResultsController: nil)
+        search.delegate = self
+        search.searchBar.delegate = self
+        self.navigationItem.searchController = search
+        
+        self.navigationItem.leftBarButtonItem = leftItem
+        self.navigationItem.rightBarButtonItem = rightItem
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.loadInitialData()
+        //self.loadInitialData()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        self.searchBar.sizeToFit()
-        self.searchBar.pin(.top)
 
         self.backgroundView.expandToSuperviewSize()
         self.loadingView.expandToSuperviewSize()

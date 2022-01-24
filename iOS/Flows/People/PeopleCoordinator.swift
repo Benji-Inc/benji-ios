@@ -11,7 +11,7 @@ import StreamChat
 import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<[Connection]> {
-    
+    lazy var peopleSearchVC = PeopleSearchViewController()
     lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
 
     var messageComposer: MessageComposerViewController?
@@ -37,7 +37,7 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     }
 
     override func toPresentable() -> DismissableVC {
-        return self.peopleVC
+        return self.peopleSearchVC
     }
 
     override func start() {
