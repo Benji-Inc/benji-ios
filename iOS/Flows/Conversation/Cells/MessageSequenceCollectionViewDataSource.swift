@@ -98,8 +98,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     /// The message sequence should be ordered newest to oldest.
     func set(messageSequence: MessageSequence,
              itemsToReconfigure: [ItemType] = [],
-             showLoadMore: Bool = false,
-             showInitial: Bool = true) {
+             showLoadMore: Bool = false) {
 
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
@@ -135,7 +134,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         
         if showLoadMore {
             userMessageItems.insert(.loadMore(cid: cid), at: 0)
-        } else if showInitial {
+        } else {
             otherMessageItems.insert(.initial(cid: cid), at: 0)
         }
         
