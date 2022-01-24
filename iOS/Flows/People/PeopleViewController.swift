@@ -15,11 +15,6 @@ import Localization
 class PeopleSearchViewController: NavigationController {
     
     lazy var peopleVC = PeopleViewController(includeConnections: true)
-    private let backgroundView = BackgroundGradientView()
-    
-    override func loadView() {
-        self.view = self.backgroundView
-    }
     
     override func initializeViews() {
         super.initializeViews()
@@ -66,6 +61,12 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private let loadingView = InvitationLoadingView()
     private var showButton: Bool = false
     
+    private let backgroundView = BackgroundGradientView()
+    
+    override func loadView() {
+        self.view = self.backgroundView
+    }
+    
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
@@ -79,10 +80,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     required init(collectionView: UICollectionView) {
         fatalError("init(collectionView:) has not been implemented")
-    }
-    
-    override func loadView() {
-        self.view = self.backgroundView
     }
 
     override func initializeViews() {
@@ -118,6 +115,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         let search = UISearchController(searchResultsController: nil)
         search.delegate = self
         search.searchBar.delegate = self
+        search.searchBar.tintColor = ThemeColor.D1.color
         self.navigationItem.searchController = search
         
         self.navigationItem.leftBarButtonItem = leftItem
@@ -127,13 +125,12 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.loadInitialData()
+        self.loadInitialData()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.backgroundView.expandToSuperviewSize()
         self.loadingView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)

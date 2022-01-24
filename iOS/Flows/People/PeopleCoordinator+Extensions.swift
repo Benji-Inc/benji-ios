@@ -22,7 +22,7 @@ extension PeopleCoordinator {
     private func showContacts() {
         self.inviteIndex = 0
         self.contactsVC.delegate = self
-        self.router.present(self.contactsVC, source: self.peopleVC)
+        self.router.present(self.contactsVC, source: self.peopleSearchVC.peopleVC)
     }
 
     private func showSentAlert(for avatar: Avatar) {
@@ -59,13 +59,13 @@ extension PeopleCoordinator {
     
     @MainActor
     func finish() async {
-        await self.peopleVC.finishInviting()
+        await self.peopleSearchVC.peopleVC.finishInviting()
         self.finishFlow(with: self.selectedConnections)
     }
 
     func invite(contact: Contact, with reservation: Reservation) {
         Task {
-            await self.peopleVC.showLoading(for: contact)
+            await self.peopleSearchVC.peopleVC.showLoading(for: contact)
             await self.findUser(with: contact.cnContact, for: reservation)
         }.add(to: self.taskPool)
     }

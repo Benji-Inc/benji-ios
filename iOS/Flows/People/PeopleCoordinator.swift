@@ -12,7 +12,6 @@ import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     lazy var peopleSearchVC = PeopleSearchViewController()
-    lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
 
     var messageComposer: MessageComposerViewController?
     lazy var contactsVC = ContactsViewController()
@@ -43,7 +42,7 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     override func start() {
         super.start()
 
-        self.peopleVC.delegate = self
+        self.peopleSearchVC.peopleVC.delegate = self
     }
 }
 
