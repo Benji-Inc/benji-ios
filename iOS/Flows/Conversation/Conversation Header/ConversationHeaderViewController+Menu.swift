@@ -62,16 +62,35 @@ extension ConversationHeaderViewController {
                                 image: UIImage(systemName: "eye.slash"),
                                 options: [],
                                 children: [confirmHide, neverMind])
+        
+        let confirmLeave = UIAction(title: "Leave Conversation",
+                                     image: UIImage(systemName: "eye.slash"),
+                                     attributes: .destructive) { [unowned self] action in
+            Task {
+                let controller = ChatClient.shared.channelController(for: self.activeConversation!.cid)
+                do {
+                    let user = User.current()!.objectId!
+                    try await controller.removeMembers(userIds: Set.init([user]))
+                } catch {
+                    logError(error)
+                }
+            }.add(to: self.taskPool)
+        }
+        
+        let leaveMenu = UIMenu(title: "Leave Conversation",
+                                image: UIImage(systemName: "hand.wave"),
+                                options: [],
+                                children: [confirmLeave, neverMind])
 
         if conversation.isOwnedByMe {
             /// Don't allow the waitlist user to delete/hide conversations. No way to create new ones.
             if User.isOnWaitlist {
                 children = [topic, add]
             } else {
-                children = [topic, add, hideMenu, deleteMenu]
+                children = [topic, add, leaveMenu, hideMenu, deleteMenu]
             }
         } else {
-            children = [hideMenu]
+            children = [leaveMenu, hideMenu]
         }
         
         self.button.menu = UIMenu(title: "Menu",
