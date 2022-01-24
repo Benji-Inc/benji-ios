@@ -70,6 +70,8 @@
 		D605AC8527861C9A0015D800 /* BackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */; };
 		D605AC9C27877F890015D800 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9B27877F890015D800 /* MessageBubbleView.swift */; };
 		D605AC9D27877F890015D800 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605AC9B27877F890015D800 /* MessageBubbleView.swift */; };
+		D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6079702279F442B000D0715 /* PeopleViewController+Search.swift */; };
+		D6079705279F574E000D0715 /* PersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6079704279F574E000D0715 /* PersonCell.swift */; };
 		D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
 		D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE39236F44A8004FA89A /* User+Extensions.swift */; };
@@ -711,6 +713,8 @@
 		B92BA452D2C2DB45DD711F86 /* Pods_AppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundGradientView.swift; sourceTree = "<group>"; };
 		D605AC9B27877F890015D800 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
+		D6079702279F442B000D0715 /* PeopleViewController+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PeopleViewController+Search.swift"; sourceTree = "<group>"; };
+		D6079704279F574E000D0715 /* PersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCell.swift; sourceTree = "<group>"; };
 		D6090E552377CB2F00833DA7 /* Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messageable.swift; sourceTree = "<group>"; };
 		D609AE35236F3F81004FA89A /* User+Objectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Objectable.swift"; sourceTree = "<group>"; };
 		D609AE39236F44A8004FA89A /* User+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Extensions.swift"; sourceTree = "<group>"; };
@@ -1722,6 +1726,8 @@
 				D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */,
 				D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */,
 				D66A580625DD691A001B3F64 /* PeopleViewController.swift */,
+				D6079702279F442B000D0715 /* PeopleViewController+Search.swift */,
+				D6079704279F574E000D0715 /* PersonCell.swift */,
 			);
 			path = People;
 			sourceTree = "<group>";
@@ -2423,6 +2429,7 @@
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
 				80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */,
+				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */,
@@ -2582,6 +2589,7 @@
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
+				D6079705279F574E000D0715 /* PersonCell.swift in Sources */,
 				D6E9746E2757356C00D95F08 /* MessageStatusView.swift in Sources */,
 				D678EC2426F530850071DB0D /* Circle.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,

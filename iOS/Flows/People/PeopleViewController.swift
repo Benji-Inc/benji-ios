@@ -12,6 +12,23 @@ import Contacts
 import UIKit
 import Localization
 
+private class SearchBar: UISearchBar {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.initializeViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initializeViews() {
+        self.tintColor = ThemeColor.D6.color
+        self.isTranslucent = false
+    }
+}
+
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
 }
@@ -28,10 +45,14 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     let button = ThemeButton()
     private let loadingView = InvitationLoadingView()
     private var showButton: Bool = false
+    
+    private let searchBar = SearchBar()
 
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
-        super.init(with: CollectionView(layout: PeopleCollectionViewLayout()))
+        let cv = CollectionView(layout: PeopleCollectionViewLayout())
+        cv.keyboardDismissMode = .interactive
+        super.init(with: cv)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -40,6 +61,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     required init(collectionView: UICollectionView) {
         fatalError("init(collectionView:) has not been implemented")
+    }
+    
+    override func loadView() {
+        self.view = self.backgroundView
     }
 
     override func initializeViews() {
@@ -51,13 +76,14 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
         }
-
-        self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
-
+    
         self.dataSource.headerTitle = self.getHeaderTitle()
         self.dataSource.headerDescription = self.getHeaderDescription()
 
         self.view.addSubview(self.button)
+        
+        self.view.addSubview(self.searchBar)
+        self.searchBar.delegate = self
 
         self.button.didSelect { [unowned self] in
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
@@ -76,6 +102,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.searchBar.sizeToFit()
+        self.searchBar.pin(.top)
 
         self.backgroundView.expandToSuperviewSize()
         self.loadingView.expandToSuperviewSize()

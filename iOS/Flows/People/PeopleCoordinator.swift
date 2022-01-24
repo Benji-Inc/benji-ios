@@ -11,7 +11,7 @@ import StreamChat
 import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<[Connection]> {
-
+    
     lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
 
     var messageComposer: MessageComposerViewController?

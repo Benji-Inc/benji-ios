@@ -9,49 +9,23 @@
 import Foundation
 import Lottie
 
-class ConnectionCell: CollectionViewManagerCell, ManageableCell {
+class ConnectionCell: PersonCell, ManageableCell {
     typealias ItemType = Connection
 
-    private let avatarView = AvatarView()
-    private let titleLabel = ThemeLabel(font: .regularBold)
-
     var currentItem: Connection?
-
-    override func initializeSubviews() {
-        super.initializeSubviews()
-
-        self.contentView.addSubview(self.avatarView)
-        self.contentView.addSubview(self.titleLabel)
-        self.titleLabel.textAlignment = .center
-    }
 
     func configure(with item: Connection) {
         guard let nonMeUser = item.nonMeUser else { return }
 
         Task {
-            do {
-                let userWithData = try await nonMeUser.retrieveDataIfNeeded()
-
-                Task.onMainActor {
-                    self.avatarView.set(avatar: userWithData)
-                    self.titleLabel.setText(userWithData.givenName)
-                    self.layoutNow()
-                }
-            } catch {
-                logError(error)
-            }
+            await self.loadData(for: nonMeUser)
         }
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.avatarView.setSize(for: self.contentView.width)
-        self.avatarView.pin(.top)
-        self.avatarView.centerOnX()
-
-        self.titleLabel.setSize(withWidth: self.contentView.width)
-        self.titleLabel.match(.top, to: .bottom, of: self.avatarView, offset: .short)
-        self.titleLabel.centerOnX()
+    
+    @MainActor
+    func loadData(for user: User) async {
+        guard let userWithData = try? await user.retrieveDataIfNeeded() else { return }
+        self.titleLabel.setText(userWithData.givenName)
+        self.layoutNow()
     }
 }
