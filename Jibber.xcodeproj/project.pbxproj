@@ -487,7 +487,6 @@
 		D6B00D3C2796480D00DF07B1 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D6B00D3B2796480D00DF07B1 /* loading.json */; };
 		D6B00D3D2796480D00DF07B1 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D6B00D3B2796480D00DF07B1 /* loading.json */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
-		D6B3329525DDB9E300211044 /* PeopleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329425DDB9E300211044 /* PeopleHeaderView.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6B95AEF272324AE00FBE66A /* ConnectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AEE272324AE00FBE66A /* ConnectionStore.swift */; };
@@ -932,7 +931,6 @@
 		D6AE0FAA267D037900C6B048 /* User+INPerson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+INPerson.swift"; sourceTree = "<group>"; };
 		D6B00D3B2796480D00DF07B1 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
-		D6B3329425DDB9E300211044 /* PeopleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleHeaderView.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6B95AEE272324AE00FBE66A /* ConnectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStore.swift; sourceTree = "<group>"; };
@@ -1723,7 +1721,6 @@
 				D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */,
 				D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */,
 				D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */,
-				D6B3329425DDB9E300211044 /* PeopleHeaderView.swift */,
 				D66A580625DD691A001B3F64 /* PeopleViewController.swift */,
 			);
 			path = People;
@@ -2509,7 +2506,6 @@
 				8098CC61270F8A2300636484 /* ConversationListCollectionView.swift in Sources */,
 				D627E4CA277B819A007B3286 /* MemberAddCell.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
-				D6B3329525DDB9E300211044 /* PeopleHeaderView.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */,

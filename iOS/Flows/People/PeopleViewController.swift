@@ -22,13 +22,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     private let includeConnections: Bool
     private(set) var reservations: [Reservation] = []
+    
+    private let backgroundView = BackgroundGradientView()
 
-    let blurView = BlurView()
-
-    let gradientView = GradientView(with: [ThemeColor.B0.color.withAlphaComponent(1.0).cgColor,
-                                           ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                    startPoint: .bottomCenter,
-                                    endPoint: .topCenter)
     let button = ThemeButton()
     private let loadingView = InvitationLoadingView()
     private var showButton: Bool = false
@@ -56,12 +52,11 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             sheet.prefersGrabberVisible = true
         }
 
-        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+        self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
 
         self.dataSource.headerTitle = self.getHeaderTitle()
         self.dataSource.headerDescription = self.getHeaderDescription()
 
-        self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
 
         self.button.didSelect { [unowned self] in
@@ -82,7 +77,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.blurView.expandToSuperviewSize()
+        self.backgroundView.expandToSuperviewSize()
         self.loadingView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
@@ -93,10 +88,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         } else {
             self.button.top = self.view.height
         }
-        
-        self.gradientView.expandToSuperviewWidth()
-        self.gradientView.height = (self.view.height - self.button.top) + Theme.ContentOffset.xtraLong.value
-        self.gradientView.pin(.bottom)
     }
 
     func showLoading(for contact: Contact) async {
