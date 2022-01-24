@@ -11,9 +11,12 @@ import Foundation
 class ModalPhotoViewController: PhotoViewController {
     
     private let gradientView = BackgroundGradientView()
+    private let label = ThemeLabel(font: .small, textColor: .B3)
     
     override func initializeViews() {
         super.initializeViews()
+        
+        self.view.set(backgroundColor: .B3)
         
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
@@ -23,6 +26,13 @@ class ModalPhotoViewController: PhotoViewController {
         }
         
         self.view.insertSubview(self.gradientView, at: 0)
+        self.view.insertSubview(self.label, belowSubview: self.errorView)
+        
+        self.label.setText("Smile then tap")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         self.currentState = .scanEyesOpen
     }
@@ -31,5 +41,10 @@ class ModalPhotoViewController: PhotoViewController {
         super.viewDidLayoutSubviews()
         
         self.gradientView.expandToSuperviewSize()
+        
+        self.label.setSize(withWidth: self.view.width)
+        let offset = ((self.view.width * 0.9) * 0.5) + Theme.ContentOffset.long.value
+        self.label.center.y = (self.view.halfHeight * 0.95) - offset
+        self.label.centerOnX()
     }
 }

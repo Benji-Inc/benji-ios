@@ -55,8 +55,4 @@ class NavigationController: UINavigationController, Dismissable {
     /// Called right after this VC's view is removed from the view hierarchy due to a dismiss/pop call or removed as a child view controller.
     /// This will only be called once in the VC's lifecycle unless it presented and dismissed again.
     func viewWasDismissed() { }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
 }

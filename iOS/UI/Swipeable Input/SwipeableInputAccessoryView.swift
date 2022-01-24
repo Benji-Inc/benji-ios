@@ -176,7 +176,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     func updateHeight(with numberOfLines: Int) {
         var new: CGFloat = SwipeableInputAccessoryView.minHeight
         
-        if numberOfLines > 2 {
+        if numberOfLines > 3 {
             new = self.textView.height + self.inputTypeContainer.height
         }
         

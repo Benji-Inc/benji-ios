@@ -178,6 +178,7 @@ class ConversationListViewController: ViewController {
             }
             
         } else {
+            self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
             ConversationsManager.shared.activeConversation = nil
         }
     }

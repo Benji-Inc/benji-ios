@@ -39,7 +39,7 @@ extension Date {
 
     static var monthDayYear: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d, yyyy"
+        formatter.dateFormat = "MMMM d, yyyy"
         return formatter
     }
 

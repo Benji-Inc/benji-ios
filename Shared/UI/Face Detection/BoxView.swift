@@ -19,7 +19,7 @@ class BoxView: PassThroughView {
         
         self.alpha = 0
         
-        self.backgroundColor = ThemeColor.T3.color.withAlphaComponent(0.6)
+        self.backgroundColor = ThemeColor.white.color.withAlphaComponent(0.6)
                 
         // Fill rule set to exclude intersected paths
         self.maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
@@ -32,7 +32,7 @@ class BoxView: PassThroughView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let boxSize = CGSize(width: self.width * 0.9, height: self.width * 0.95)
+        let boxSize = CGSize(width: self.width * 0.9, height: self.width * 0.9)
 
         // Create a path with the rectangle in it.
         let path = UIBezierPath(rect: self.bounds)

@@ -13,7 +13,7 @@ import StreamChat
 
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,
-                            MessageSequenceCollectionViewDataSource>,
+                            RepliesSequenceCollectionViewDataSource>,
                             DismissInteractableController {
     
     let blurView = BlurView()
@@ -280,7 +280,7 @@ extension ThreadViewController: MessageSendingViewControllerType {
         self.dataSource.shouldPrepareToSend = messageSequencePreparingToSend.exists
 
         guard let message = self.messageController.message else { return }
-        self.dataSource.set(messageSequence: message, showInitial: false)
+        self.dataSource.set(messageSequence: message)
     }
 
     func sendMessage(_ message: Sendable) {

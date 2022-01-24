@@ -18,7 +18,7 @@ class BorderedAvatarView: AvatarView {
         shape.lineCap = .round
         shape.fillColor = UIColor.clear.cgColor
         shape.cornerRadius = Theme.innerCornerRadius
-        shape.borderColor = ThemeColor.D6.color.cgColor
+        shape.borderColor = ThemeColor.gray.color.cgColor
         shape.borderWidth = 2
         return shape
     }()
@@ -31,7 +31,7 @@ class BorderedAvatarView: AvatarView {
         self.layer.insertSublayer(self.pulseLayer, at: 2)
         self.layer.insertSublayer(self.shadowLayer, at: 0)
         
-        self.shadowLayer.shadowColor = ThemeColor.D6.color.cgColor
+        self.shadowLayer.shadowColor = ThemeColor.gray.color.cgColor
         self.shadowLayer.shadowOpacity = 0.35
         self.shadowLayer.shadowOffset = .zero
         self.shadowLayer.shadowRadius = 10
@@ -47,9 +47,29 @@ class BorderedAvatarView: AvatarView {
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
     }
     
+    override func subscribeToUpdates(for user: User) {
+        super.subscribeToUpdates(for: user)
+        self.setColors(for: user)
+    }
+    
+    override func didRecieveUpdateFor(user: User) {
+        super.didRecieveUpdateFor(user: user)
+        self.setColors(for: user)
+    }
+    
+    private func setColors(for user: User) {
+        let isAvailable = user.focusStatus == .available
+        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.gray.color.cgColor
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.pulseLayer.borderColor = color
+            self.shadowLayer.shadowColor = color 
+        }
+    }
+    
     func beginTyping() {
         self.pulseLayer.removeAllAnimations()
-        self.pulseLayer.strokeColor = ThemeColor.D6.color.cgColor
+        self.pulseLayer.strokeColor = self.pulseLayer.borderColor
         
         let scale = CABasicAnimation(keyPath: "transform.scale")
         scale.toValue = 1.2

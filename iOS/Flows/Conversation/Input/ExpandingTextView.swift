@@ -47,7 +47,7 @@ class ExpandingTextView: TextView {
         var placeholderText = isReply ? "Reply to" : "Message "
 
         if avatars.isEmpty {
-            placeholderText = isReply ? "Reply" : "Message"
+            placeholderText = isReply ? "Add Reply" : "Message Someone"
         }
 
         for (index, avatar) in avatars.enumerated() {

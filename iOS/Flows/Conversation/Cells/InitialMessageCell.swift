@@ -15,6 +15,7 @@ class InitialMessageCell: UICollectionViewCell {
     var handleTopicTapped: CompletionOptional = nil
 
     private(set) var label = ThemeLabel(font: .regular)
+    private let borderView = BaseView()
     
     private var controller: ConversationController?
     private var cancellables = Set<AnyCancellable>()
@@ -30,7 +31,13 @@ class InitialMessageCell: UICollectionViewCell {
     }
 
     private func initializeViews() {
-        self.contentView.addSubview(self.label)
+        
+        self.contentView.addSubview(self.borderView)
+        self.borderView.addSubview(self.label)
+        
+        self.borderView.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
+        self.borderView.layer.borderWidth = 1
+        self.borderView.layer.cornerRadius = Theme.cornerRadius
 
         self.label.alpha = 0
         self.label.textAlignment = .center
@@ -42,10 +49,13 @@ class InitialMessageCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.borderView.expandToSuperviewWidth()
+        self.borderView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.short.value
+        self.borderView.pin(.bottom)
 
-        self.label.setSize(withWidth: self.width)
+        self.label.setSize(withWidth: self.borderView.width - Theme.ContentOffset.standard.value.doubled)
         self.label.centerOnXAndY()
-        self.label.center.y += MessageDetailView.height - Theme.ContentOffset.short.value
     }
     
     func configure(with conversation: Conversation) {
@@ -55,11 +65,21 @@ class InitialMessageCell: UICollectionViewCell {
     }
     
     private func update(with conversation: Conversation) {
-        if let title = conversation.title {
-            self.label.setText("Edit: \(title)")
+        if conversation.isOwnedByMe {
+            if let title = conversation.title {
+                self.label.setText("Tap to edit: \(title)")
+            } else {
+                self.label.setText("Tap to add a topic")
+            }
         } else {
-            self.label.setText("Add a topic")
+            let dateString = Date.monthDayYear.string(from: conversation.createdAt)
+            if let title = conversation.title {
+                self.label.setText("\(title.capitalized) was created on:\n\(dateString)")
+            } else {
+                self.label.setText("This conversation was created on:\n\(dateString)")
+            }
         }
+        
         self.layoutNow()
     }
     
