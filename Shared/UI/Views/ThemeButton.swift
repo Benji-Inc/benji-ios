@@ -13,6 +13,7 @@ import Localization
 
 enum ButtonStyle {
     case normal(color: ThemeColor, text: Localized)
+    case custom(color: ThemeColor, textColor: ThemeColor, text: Localized)
 }
 
 class ThemeButton: UIButton, Statusable {
@@ -57,7 +58,39 @@ class ThemeButton: UIButton, Statusable {
         self.style = style
 
         switch style {
+        case .custom(let color, let textColor, let text):
+            self.setImage(nil, for: .normal)
+            self.defaultColor = color
 
+            var localizedString = localized(text)
+
+            localizedString = casingType.format(string: localizedString)
+
+            let normalString = NSMutableAttributedString(string: localizedString)
+            normalString.addAttribute(.font, value: FontType.regular.font)
+
+            let highlightedString = NSMutableAttributedString(string: localizedString)
+            highlightedString.addAttribute(.font, value: FontType.regular.font)
+
+            normalString.addAttribute(.foregroundColor, value: textColor.color.resolvedColor(with: self.traitCollection))
+            highlightedString.addAttribute(.foregroundColor, value: textColor.color.resolvedColor(with: self.traitCollection))
+    
+            
+            if color != .clear {
+                self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
+            }
+
+            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
+
+            // Emojis wont show correctly with attributes
+            if localizedString.getEmojiRanges().count > 0 {
+                self.setTitle(localizedString, for: .normal)
+                self.setTitle(localizedString, for: .highlighted)
+            } else {
+                self.setAttributedTitle(normalString, for: .normal)
+                self.setAttributedTitle(highlightedString, for: .highlighted)
+            }
         case .normal(let color, let text):
             self.setImage(nil, for: .normal)
             self.defaultColor = color
