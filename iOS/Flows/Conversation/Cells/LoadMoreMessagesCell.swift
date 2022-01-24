@@ -12,7 +12,7 @@ class LoadMoreMessagesCell: UICollectionViewCell {
 
     var handleLoadMoreMessages: CompletionOptional = nil
 
-    private(set) var label = ThemeLabel(font: .regular, textColor: .T2)
+    private(set) var label = ThemeLabel(font: .regular, textColor: .T1)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
