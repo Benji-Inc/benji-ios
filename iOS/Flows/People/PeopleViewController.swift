@@ -184,20 +184,16 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         Task {
             self.reservations = await Reservation.getAllUnclaimed()
             
-            let contacts: [Person] = await ContactsManger.shared.fetchContacts().map({ contact in
-                let reservation = self.reservations.first { reservation in
-                    return reservation.contactId == contact.identifier
-                }
-                
-                return Person(withContact: contact, reservation: reservation)
+            let contacts = await ContactsManger.shared.fetchContacts().compactMap({ contact in
+                return Person(withContact: contact)
             })
             
             self.allPeople.append(contentsOf: contacts)
-            
+
             let contactItems: [PeopleCollectionViewDataSource.ItemType] = contacts.map { person in
                 return .person(person)
             }
-            
+
             await self.dataSource.appendItems(contactItems, toSection: .people)
             
         }.add(to: self.taskPool)

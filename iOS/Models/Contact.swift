@@ -26,15 +26,12 @@ struct Person: Avatar, Hashable {
     var connection: Connection?
     
     var cnContact: CNContact?
-    var pendingReservation: Reservation?
-    var phoneNumber: String?
     
-    init(withContact contact: CNContact, reservation: Reservation? = nil) {
+    init(withContact contact: CNContact) {
         self.image = contact.image
         self.cnContact = contact
-        self.pendingReservation = reservation
-        let phone = contact.findBestPhoneNumber().phone?.stringValue ?? ""
-        self.phoneNumber = PartialFormatter().formatPartial(phone)
+//        let phone = contact.findBestPhoneNumber().phone?.stringValue ?? ""
+//        self.phoneNumber = PartialFormatter().formatPartial(phone)
         self.givenName = contact.givenName
         self.familyName = contact.familyName
     }
