@@ -46,7 +46,9 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
     }
 
-    func update(isSelected: Bool) {}
+    func update(isSelected: Bool) {
+        guard isSelected != self.isSelected else { return }
+    }
 
     func reset() {
         self.cancellables.forEach { cancellable in

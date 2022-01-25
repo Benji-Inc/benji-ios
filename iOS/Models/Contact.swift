@@ -29,10 +29,7 @@ struct Person: Avatar, Hashable {
     var pendingReservation: Reservation?
     var phoneNumber: String?
     
-    init(with contact: CNContact,
-         reservation: Reservation? = nil,
-         highlightText: String?) {
-        
+    init(withContact contact: CNContact, reservation: Reservation? = nil) {
         self.image = contact.image
         self.cnContact = contact
         self.pendingReservation = reservation
@@ -40,15 +37,24 @@ struct Person: Avatar, Hashable {
         self.phoneNumber = PartialFormatter().formatPartial(phone)
         self.givenName = contact.givenName
         self.familyName = contact.familyName
-        self.highlightText = highlightText
     }
     
-    init(with connection: Connection, highlightText: String?) {
+    init(withConnection connection: Connection) {
         self.connection = connection
         self.userObjectId = connection.nonMeUser?.userObjectId
         /// We may not have a user data at this point. 
         self.givenName = ""
         self.familyName = ""
-        self.highlightText = highlightText
+    }
+    
+    mutating func updateHighlight(text: String?) {
+        self.highlightText = text
+    }
+    
+    func contains(_ filter: String?) -> Bool {
+        guard let filterText = filter else { return true }
+        if filterText.isEmpty { return true }
+        let lowercasedFilter = filterText.lowercased()
+        return self.fullName.lowercased().contains(lowercasedFilter)
     }
 }

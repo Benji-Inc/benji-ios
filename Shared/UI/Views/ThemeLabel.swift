@@ -43,12 +43,10 @@ class ThemeLabel: UILabel {
     }
 
     /// The string attributes to apply to any text given this label's assigned font and font color.
-    private var attributes: [NSAttributedString.Key : Any] {
+    private var defaultAttributes: [NSAttributedString.Key : Any] {
         let font = self.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
-        let textColor = self.textColor ?? ThemeColor.T1.color
         return [NSAttributedString.Key.font: font,
-                NSAttributedString.Key.kern: self.kerning,
-                NSAttributedString.Key.foregroundColor: textColor]
+                NSAttributedString.Key.kern: self.kerning]
     }
 
     // MARK: Lifecycle
@@ -101,10 +99,12 @@ class ThemeLabel: UILabel {
     }
 
     func add(attributes: [NSAttributedString.Key : Any], to text: String) {
-        guard let existingText = self.attributedText, let range = existingText.string.range(of: text) else {
-            return
-        }
+        guard let existingText = self.attributedText else { return }
         
+        let lowercased = existingText.string.lowercased()
+        
+        guard let range = lowercased.range(of: text.lowercased()) else { return }
+                
         let attributedString = NSMutableAttributedString(existingText)
         attributedString.addAttributes(attributes, range: range.nsRange(text))
         super.attributedText = attributedString
@@ -112,11 +112,13 @@ class ThemeLabel: UILabel {
 
     private func setTextWithAttributes(_ newText: String) {
         let string = self.stringCasing.format(string: newText)
+        
+        let attributes = self.attributedText?.attributes(at: 0, effectiveRange: nil) ?? self.defaultAttributes
 
         // Create an attributed string and add attributes to the entire range.
         let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(self.attributes, range: NSRange(location: 0,
-                                                                       length: attributedString.length))
+        attributedString.addAttributes(attributes, range: NSRange(location: 0,
+                                                                  length: attributedString.length))
 
         super.attributedText = attributedString
     }

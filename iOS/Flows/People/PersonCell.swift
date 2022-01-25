@@ -34,24 +34,38 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: Person) {
         if let user = item.connection?.nonMeUser {
             Task {
-                await self.loadData(for: user)
+                await self.loadData(for: user, highlightText: item.highlightText)
             }.add(to: self.taskPool)
         } else {
             self.buttonTitleLabel.setText("Invite")
-            self.titleLabel.setText(item.fullName)
-            self.layoutNow()
+            self.updateName(for: item, highlightText: item.highlightText)
         }
     }
     
     @MainActor
-    func loadData(for user: User) async {
+    func loadData(for user: User, highlightText: String?) async {
         guard let userWithData = try? await user.retrieveDataIfNeeded(), !Task.isCancelled else { return }
-        self.titleLabel.setText(userWithData.fullName)
+        
+        self.updateName(for: userWithData, highlightText: highlightText)
         self.buttonTitleLabel.setText("Add")
+        self.layoutNow()
+    }
+    
+    private func updateName(for avatar: Avatar, highlightText: String?) {
+        self.titleLabel.setText(avatar.fullName)
+        
+        if let highlightText = highlightText {
+            let attributes: [NSAttributedString.Key : Any] = [.font: FontType.systemBold.font,
+                                                              .foregroundColor: ThemeColor.D6.color]
+            self.titleLabel.add(attributes: attributes, to: highlightText)
+        }
+
         self.layoutNow()
     }
 
     override func update(isSelected: Bool) {
+        super.update(isSelected: isSelected)
+        
         if let person = self.currentItem {
             if let _ = person.connection {
                 if isSelected {
@@ -69,7 +83,6 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.titleLabel.setTextColor(isSelected ? .D1 : .T1)
             self.buttonTitleLabel.setTextColor(isSelected ? .D1 : .T1)
             self.setNeedsLayout()
         }
@@ -95,6 +108,6 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         super.prepareForReuse()
         
         self.buttonTitleLabel.text = nil
-        self.titleLabel.text = nil 
+        self.titleLabel.text = nil
     }
 }

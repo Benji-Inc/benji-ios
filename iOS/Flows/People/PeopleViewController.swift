@@ -27,7 +27,6 @@ class PeopleSearchViewController: NavigationController {
         }
                 
         self.setViewControllers([self.peopleVC], animated: false)
-        //self.viewControllers.append(self.peopleVC)
     }
 }
 
@@ -47,6 +46,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private var showButton: Bool = true
     
     private let backgroundView = BackgroundGradientView()
+    private(set) var allPeople: [Person] = []
 
     override func loadView() {
         self.view = self.backgroundView
@@ -173,30 +173,30 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
 
         if self.includeConnections {
-            do {
-                data[.people] = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
-                    return !connection.nonMeUser.isNil
-                }.map({ connection in
-                    let person = Person(with: connection, highlightText: nil)
-                    return .person(person)
-                })
-            } catch {
-                print(error)
+            if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
+                return !connection.nonMeUser.isNil
+            }).map({ connection in
+                return Person(withConnection: connection)
+            }) {
+                self.allPeople.append(contentsOf: connections)
             }
         }
 
         self.reservations = await Reservation.getAllUnclaimed()
 
-        let contacts: [PeopleCollectionViewDataSource.ItemType] = await ContactsManger.shared.fetchContacts().map({ contact in
+        let contacts: [Person] = await ContactsManger.shared.fetchContacts().map({ contact in
             let reservation = self.reservations.first { reservation in
                 return reservation.contactId == contact.identifier
             }
 
-            let item = Person(with: contact, reservation: reservation, highlightText: nil)
-            return .person(item)
+            return Person(withContact: contact, reservation: reservation)
         })
         
-        data[.people]?.append(contentsOf: contacts)
+        self.allPeople.append(contentsOf: contacts)
+        
+        data[.people] = self.allPeople.compactMap({ person in
+            return .person(person)
+        })
 
         return data
     }

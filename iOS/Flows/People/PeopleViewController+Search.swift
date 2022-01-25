@@ -15,11 +15,29 @@ extension PeopleViewController: UISearchBarDelegate {
     }
     
     func performQuery(with filter: String?) {
-//        let mountains = mountainsController.filteredMountains(with: filter).sorted { $0.name < $1.name }
-//
-//        var snapshot = NSDiffableDataSourceSnapshot<Section, MountainsController.Mountain>()
-//        //snapshot.appendSections([.main])
-//        snapshot.appendItems(mountains)
-//        self.dataSource.apply(snapshot, animatingDifferences: true)
+        
+        let filtered: [PeopleCollectionViewDataSource.ItemType] = self.filtered(people: self.allPeople, filter: filter).sorted { lhs, rhs in
+            lhs.familyName < rhs.familyName
+        }.map { person in
+            var copy = person
+            copy.updateHighlight(text: filter)
+            return .person(copy)
+        }
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(filtered, in: .people)
+        self.dataSource.apply(snapshot)
+    }
+    
+    func filtered(people: [Person], filter: String? = nil, limit: Int? = nil) -> [Person] {
+        let filtered = people.filter { person in
+            person.contains(filter)
+        }
+        
+        if let limit = limit {
+            return Array(filtered.prefix(through: limit))
+        } else {
+            return filtered
+        }
     }
 }
