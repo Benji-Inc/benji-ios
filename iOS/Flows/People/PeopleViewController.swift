@@ -29,23 +29,6 @@ class PeopleSearchViewController: NavigationController {
     }
 }
 
-//private class SearchBar: UISearchBar {
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        self.initializeViews()
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//    func initializeViews() {
-//        self.tintColor = ThemeColor.D6.color
-//        self.isTranslucent = false
-//    }
-//}
-
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
 }
@@ -87,9 +70,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         super.initializeViews()
         
         self.setupNavigationBar()
-    
-        self.dataSource.headerTitle = self.getHeaderTitle()
-        self.dataSource.headerDescription = self.getHeaderDescription()
 
         self.view.addSubview(self.button)
 
@@ -143,14 +123,14 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         }
     }
 
-    func showLoading(for contact: Contact) async {
+    func showLoading(for person: Person) async {
 
         if self.loadingView.superview.isNil {
             self.view.addSubview(self.loadingView)
             self.view.layoutNow()
-            await self.loadingView.initiateLoading(with: contact)
+            await self.loadingView.initiateLoading(with: person)
         } else {
-            await self.loadingView.update(contact: contact)
+            await self.loadingView.update(person: person)
         }
     }
 
@@ -192,29 +172,36 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
         if self.includeConnections {
             do {
-                data[.connections] = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
+                data[.people] = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
                     return !connection.nonMeUser.isNil
                 }.map({ connection in
-                    return .connection(connection)
+                    let person = Person(with: connection, highlightText: nil)
+                    return .person(person)
                 })
             } catch {
                 print(error)
             }
-        } else {
-            data[.connections] = []
         }
 
         self.reservations = await Reservation.getAllUnclaimed()
 
-        data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
+        let contacts: [PeopleCollectionViewDataSource.ItemType] = await ContactsManger.shared.fetchContacts().map({ contact in
             let reservation = self.reservations.first { reservation in
                 return reservation.contactId == contact.identifier
             }
 
-            let item = Contact(with: contact, reservation: reservation)
-            return .contact(item)
+            let item = Person(with: contact, reservation: reservation, highlightText: nil)
+            return .person(item)
         })
+        
+        data[.people]?.append(contentsOf: contacts)
 
         return data
+    }
+}
+
+extension PeopleViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

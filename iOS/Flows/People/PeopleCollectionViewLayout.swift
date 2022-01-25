@@ -27,7 +27,7 @@ class PeopleCollectionViewLayout: UICollectionViewCompositionalLayout {
 
             // Section
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: padding, bottom: 0, trailing: padding)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: padding, bottom: 120, trailing: padding)
 
             return section
 

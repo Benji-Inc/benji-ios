@@ -45,9 +45,9 @@ extension PeopleCoordinator {
     }
 
     func updateInvitation() {
-        if let contact = self.contactsToInvite[safe: self.inviteIndex],
+        if let person = self.peopleToInvite[safe: self.inviteIndex],
            let rsvp = self.reservations[safe: self.inviteIndex] {
-            self.invite(contact: contact, with: rsvp)
+            self.invite(person: person, with: rsvp)
         } else {
             Task {
                 await self.finish()
@@ -63,16 +63,16 @@ extension PeopleCoordinator {
         self.finishFlow(with: self.selectedConnections)
     }
 
-    func invite(contact: Contact, with reservation: Reservation) {
+    func invite(person: Person, with reservation: Reservation) {
         Task {
-            await self.peopleSearchVC.peopleVC.showLoading(for: contact)
-            await self.findUser(with: contact.cnContact, for: reservation)
+            await self.peopleSearchVC.peopleVC.showLoading(for: person)
+            await self.findUser(with: person.cnContact, for: reservation)
         }.add(to: self.taskPool)
     }
 
-    func findUser(with contact: CNContact, for reservation: Reservation) async {
+    func findUser(with contact: CNContact?, for reservation: Reservation) async {
         // Search for user with phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
+        guard let phone = contact?.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
 
         do {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
@@ -82,11 +82,11 @@ extension PeopleCoordinator {
             try await reservation.saveLocalThenServer()
             try await self.showReservationAlert(for: matchingUser, reservation: reservation)
         } catch {
-            if reservation.contactId == contact.identifier {
+            if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
                 reservation.conversationCid = self.conversationID?.description ?? String()
             } else {
-                reservation.contactId = contact.identifier
+                reservation.contactId = contact?.identifier
                 _ = try? await reservation.saveLocalThenServer()
                 self.sendText(with: reservation.message, phone: phone)
                 reservation.conversationCid = self.conversationID?.description ?? String()

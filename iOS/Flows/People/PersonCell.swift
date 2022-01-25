@@ -10,7 +10,11 @@ import Foundation
 import Contacts
 import PhoneNumberKit
 
-class PersonCell: CollectionViewManagerCell {
+class PersonCell: CollectionViewManagerCell, ManageableCell {
+    
+    var currentItem: Person?
+    
+    typealias ItemType = Person
 
     let titleLabel = ThemeLabel(font: .system)
 
@@ -18,6 +22,24 @@ class PersonCell: CollectionViewManagerCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.titleLabel)
+    }
+    
+    func configure(with item: Person) {
+        if let user = item.connection?.nonMeUser {
+            Task {
+                await self.loadData(for: user)
+            }
+        } else {
+            self.titleLabel.setText(item.fullName)
+            self.layoutNow()
+        }
+    }
+    
+    @MainActor
+    func loadData(for user: User) async {
+        guard let userWithData = try? await user.retrieveDataIfNeeded() else { return }
+        self.titleLabel.setText(userWithData.fullName)
+        self.layoutNow()
     }
 
     override func update(isSelected: Bool) {

@@ -18,7 +18,7 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
 
     var selectedContact: CNContact?
     var reservations: [Reservation] = []
-    var contactsToInvite: [Contact] = []
+    var peopleToInvite: [Person] = []
     var inviteIndex: Int = 0
     let conversationID: ConversationId?
 
@@ -54,14 +54,19 @@ extension PeopleCoordinator: PeopleViewControllerDelegate {
 
             self.reservations = controller.reservations
 
-            self.contactsToInvite = items.compactMap({ item in
+            self.peopleToInvite = items.compactMap({ item in
                 switch item {
-                case .connection(let connection):
-                    self.selectedConnections.append(connection)
-                    return nil
-                case .contact(let contact):
-                    return contact
+                case .person(let person):
+                    if let _ = person.cnContact {
+                        return person
+                    } else if let connection = person.connection {
+                        self.selectedConnections.append(connection)
+                    } else {
+                        return nil
+                    }
                 }
+                
+                return nil
             })
 
             self.updateInvitation()

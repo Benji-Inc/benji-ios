@@ -28,10 +28,10 @@ class InvitationLoadingView: BaseView {
     }
 
     @MainActor
-    func initiateLoading(with contact: Contact) async {
+    func initiateLoading(with person: Person) async {
 
         self.resetAllViews()
-        self.set(contact: contact)
+        self.set(person: person)
 
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
@@ -55,9 +55,9 @@ class InvitationLoadingView: BaseView {
     }
 
     @MainActor
-    func update(contact: Contact) async {
+    func update(person: Person) async {
 
-        self.set(contact: contact)
+        self.set(person: person)
 
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
@@ -87,10 +87,10 @@ class InvitationLoadingView: BaseView {
         }
     }
 
-    private func set(contact: Contact) {
+    private func set(person: Person) {
         self.avatarView.reset()
-        self.avatarView.set(avatar: contact)
-        let text = LocalizedString(id: "", arguments: [contact.fullName], default: "Preparing message for: @(contact)")
+        self.avatarView.set(avatar: person)
+        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Preparing message for: @(contact)")
         self.label.setText(text)
         self.layoutNow()
     }
