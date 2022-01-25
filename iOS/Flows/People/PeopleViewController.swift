@@ -108,6 +108,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         super.viewDidLoad()
         
         self.loadInitialData()
+        
+        self.dataSource.didSelectAddContacts = { [unowned self] in
+            self.loadContacts()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -143,8 +147,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func updateButton() {
-        self.button.set(style: .normal(color: .white, text: self.getButtonTitle()))
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
+        self.button.set(style: .custom(color: .white, textColor: .B3, text: self.getButtonTitle()))
+        UIView.animate(withDuration: Theme.animationDurationFast) {
             self.showButton = self.selectedItems.count > 0
             self.view.layoutNow()
         }
