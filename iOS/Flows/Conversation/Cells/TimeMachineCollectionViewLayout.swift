@@ -53,7 +53,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
+    var itemHeight: CGFloat
+    = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
