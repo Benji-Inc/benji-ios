@@ -14,7 +14,7 @@ class MessageBubbleView: SpeechBubbleView {
     let backgroundLayer = CAShapeLayer()
     let darkGradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight],
                                       startPoint: .topLeft, endPoint: .bottomRight)
-    let lightGradientLayer = GradientLayer(with: [.D4TopLeft, .L4BottomRight],
+    let lightGradientLayer = GradientLayer(with: [.L4TopLeft, .L4BottomRight],
                                            startPoint: .topLeft, endPoint: .bottomRight)
     
     override func initializeSubviews() {
