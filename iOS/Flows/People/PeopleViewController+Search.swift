@@ -14,6 +14,16 @@ extension PeopleViewController: UISearchBarDelegate {
         self.performQuery(with: searchText)
     }
     
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        var snapshot = self.dataSource.snapshot()
+        let items: [PeopleCollectionViewDataSource.ItemType] = self.allPeople.map { person in
+            return .person(person)
+        }
+        
+        snapshot.setItems(items, in: .people)
+        self.dataSource.apply(snapshot)
+    }
+    
     func performQuery(with filter: String?) {
         
         let filtered: [PeopleCollectionViewDataSource.ItemType] = self.filtered(people: self.allPeople, filter: filter).sorted { lhs, rhs in

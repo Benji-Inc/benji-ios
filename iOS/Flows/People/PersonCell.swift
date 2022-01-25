@@ -32,23 +32,15 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     }
     
     func configure(with item: Person) {
-        if let user = item.connection?.nonMeUser {
-            Task {
-                await self.loadData(for: user, highlightText: item.highlightText)
-            }.add(to: self.taskPool)
+        if let connection = item.connection {
+            if let user = connection.nonMeUser, user.isDataAvailable {
+                self.updateName(for: user, highlightText: item.highlightText)
+            }
+            self.buttonTitleLabel.setText("Add")
         } else {
             self.buttonTitleLabel.setText("Invite")
             self.updateName(for: item, highlightText: item.highlightText)
         }
-    }
-    
-    @MainActor
-    func loadData(for user: User, highlightText: String?) async {
-        guard let userWithData = try? await user.retrieveDataIfNeeded(), !Task.isCancelled else { return }
-        
-        self.updateName(for: userWithData, highlightText: highlightText)
-        self.buttonTitleLabel.setText("Add")
-        self.layoutNow()
     }
     
     private func updateName(for avatar: Avatar, highlightText: String?) {

@@ -42,9 +42,15 @@ struct Person: Avatar, Hashable {
     init(withConnection connection: Connection) {
         self.connection = connection
         self.userObjectId = connection.nonMeUser?.userObjectId
-        /// We may not have a user data at this point. 
-        self.givenName = ""
-        self.familyName = ""
+        /// We may not have a user data at this point.
+        
+        if let user = connection.nonMeUser, user.isDataAvailable {
+            self.givenName = user.givenName
+            self.familyName = user.familyName
+        } else {
+            self.givenName = ""
+            self.familyName = ""
+        }
     }
     
     mutating func updateHighlight(text: String?) {

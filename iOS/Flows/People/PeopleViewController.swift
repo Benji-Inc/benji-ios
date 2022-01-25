@@ -175,10 +175,14 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         if self.includeConnections {
             if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
                 return !connection.nonMeUser.isNil
-            }).map({ connection in
-                return Person(withConnection: connection)
+            }), let _ = try? await connections.asyncMap({ connection in
+                return try await connection.nonMeUser!.retrieveDataIfNeeded()
             }) {
-                self.allPeople.append(contentsOf: connections)
+                let connectedPeople = connections.map { connection in
+                    return Person(withConnection: connection)
+                }
+                
+                self.allPeople.append(contentsOf: connectedPeople)
             }
         }
 
