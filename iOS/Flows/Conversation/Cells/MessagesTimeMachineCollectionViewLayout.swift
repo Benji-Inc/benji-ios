@@ -107,6 +107,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         // The section with the most recent item should be saturated in color
 
         let focusAmount = self.getFocusAmount(forSection: indexPath.section)
+        attributes.sectionFocusAmount = focusAmount
 
         // Figure out how saturated the color should be.
         // Lerp between D1 to L1

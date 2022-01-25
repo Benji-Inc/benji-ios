@@ -95,7 +95,7 @@ class MessageContentView: BaseView {
         #endif
 
         self.authorView.set(avatar: message.avatar)
-        
+
         self.setNeedsLayout()
     }
 
@@ -103,6 +103,7 @@ class MessageContentView: BaseView {
     func configureBackground(color: UIColor,
                              textColor: UIColor,
                              brightness: CGFloat,
+                             focusAmount: CGFloat,
                              showBubbleTail: Bool,
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
@@ -110,6 +111,18 @@ class MessageContentView: BaseView {
         self.bubbleView.bubbleColor = color.withAlphaComponent(brightness)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
+
+        // NOTE: Changes to the gradient layer need to be applied immediately without animation.
+        // https://stackoverflow.com/questions/5833488/how-to-disable-calayer-implicit-animations
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+
+        self.bubbleView.lightGradientLayer.opacity
+        = Float(1 - focusAmount) * 0.2 * Float(1 - brightness)
+        self.bubbleView.darkGradientLayer.opacity
+        = Float(focusAmount) * 0.2 * Float(1 - brightness)
+
+        CATransaction.commit()
     }
 
     override func layoutSubviews() {

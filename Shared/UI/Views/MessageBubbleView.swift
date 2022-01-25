@@ -23,8 +23,7 @@ class MessageBubbleView: SpeechBubbleView {
         self.backgroundLayer.fillColor = ThemeColor.B0.color.cgColor
         self.layer.insertSublayer(self.backgroundLayer, below: self.bubbleLayer)
 
-        #warning("put this back to 0.2")
-        self.darkGradientLayer.opacity = 1
+        self.darkGradientLayer.opacity = 0.2
         self.layer.insertSublayer(self.darkGradientLayer, above: self.bubbleLayer)
 
         self.lightGradientLayer.opacity = 0
