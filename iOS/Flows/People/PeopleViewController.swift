@@ -167,6 +167,37 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func getAllSections() -> [PeopleCollectionViewDataSource.SectionType] {
         return PeopleCollectionViewDataSource.SectionType.allCases
     }
+    
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        if ContactsManger.shared.hasPermissions {
+            self.loadContacts()
+        }
+    }
+    
+    private func loadContacts() {
+        Task {
+            self.reservations = await Reservation.getAllUnclaimed()
+            
+            let contacts: [Person] = await ContactsManger.shared.fetchContacts().map({ contact in
+                let reservation = self.reservations.first { reservation in
+                    return reservation.contactId == contact.identifier
+                }
+                
+                return Person(withContact: contact, reservation: reservation)
+            })
+            
+            self.allPeople.append(contentsOf: contacts)
+            
+            let contactItems: [PeopleCollectionViewDataSource.ItemType] = contacts.map { person in
+                return .person(person)
+            }
+            
+            await self.dataSource.appendItems(contactItems, toSection: .people)
+            
+        }.add(to: self.taskPool)
+    }
 
     override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
 
@@ -185,18 +216,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
                 self.allPeople.append(contentsOf: connectedPeople)
             }
         }
-
-        self.reservations = await Reservation.getAllUnclaimed()
-
-        let contacts: [Person] = await ContactsManger.shared.fetchContacts().map({ contact in
-            let reservation = self.reservations.first { reservation in
-                return reservation.contactId == contact.identifier
-            }
-
-            return Person(withContact: contact, reservation: reservation)
-        })
-        
-        self.allPeople.append(contentsOf: contacts)
         
         data[.people] = self.allPeople.compactMap({ person in
             return .person(person)

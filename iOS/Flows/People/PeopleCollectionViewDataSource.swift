@@ -22,8 +22,10 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
     }
 
     private let personConfig = ManageableCellRegistration<PersonCell>().provider
+    private let footerConfig = ManageableFooterRegistration<PeopleFooterView>().provider
     
-
+    var didSelectAddContacts: CompletionOptional = nil
+    
     // MARK: - Cell Dequeueing
 
     override func dequeueCell(with collectionView: UICollectionView,
@@ -37,5 +39,17 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
                                                                 for: indexPath,
                                                                 item: person)
         }
+    }
+    
+    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+                                           section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+        let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+        footer.button.isHidden = ContactsManger.shared.hasPermissions
+        footer.label.isHidden = ContactsManger.shared.hasPermissions
+        footer.didSelectButton = { [unowned self] in
+            self.didSelectAddContacts?()
+        }
+        return footer
     }
 }

@@ -14,6 +14,20 @@ class ContactsManger {
 
     static let shared = ContactsManger()
     private let store = CNContactStore()
+    
+    private var fetchedContacts: [CNContact] = []
+    
+    init() {
+        if self.hasPermissions {
+            Task {
+                self.fetchedContacts = await self.fetchContacts()
+            }
+        }
+    }
+    
+    var hasPermissions: Bool {
+        return CNContactStore.authorizationStatus(for: .contacts) == .authorized
+    }
 
     enum ContactPredicateType {
         case name(String)
@@ -21,7 +35,7 @@ class ContactsManger {
         case email(String)
         case identifier(String)
     }
-
+    
     func searchForContact(with predicateType: ContactPredicateType) -> [CNContact] {
         let predicate: NSPredicate
 
@@ -47,6 +61,9 @@ class ContactsManger {
     }
 
     func fetchContacts() async -> [CNContact] {
+        if !self.fetchedContacts.isEmpty {
+            return self.fetchedContacts
+        }
             // 1.
         do {
             if try await self.store.requestAccess(for: .contacts) {
@@ -64,6 +81,9 @@ class ContactsManger {
                             contacts.append(contact)
                         }
                     })
+                    
+                    self.fetchedContacts = contacts
+                    
                     return contacts
                 } catch let error {
                     print("Failed to enumerate contact", error)

@@ -54,6 +54,8 @@ class LaunchManager {
             Task {
                 await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             }
+            // Pre - load contacts 
+            _ = ContactsManger.shared
         }
 #endif
 

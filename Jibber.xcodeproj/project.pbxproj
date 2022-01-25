@@ -118,6 +118,7 @@
 		D61EC0F921D317AB00204BEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
 		D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
+		D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */; };
 		D6265ECE279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6265ECD279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift */; };
 		D6265ED0279F13A40020BD26 /* InvitationUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */; };
 		D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4C7277A9129007B3286 /* InitialMessageCell.swift */; };
@@ -751,6 +752,7 @@
 		D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
 		D61EC0F621D316F100204BEE /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		D61EC0F821D317AB00204BEE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleFooterView.swift; sourceTree = "<group>"; };
 		D6265ECD279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesSequenceCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationUpsellCell.swift; sourceTree = "<group>"; };
 		D627E4C7277A9129007B3286 /* InitialMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialMessageCell.swift; sourceTree = "<group>"; };
@@ -1719,6 +1721,7 @@
 				D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */,
 				D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */,
 				D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */,
+				D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */,
 				D66A580625DD691A001B3F64 /* PeopleViewController.swift */,
 				D6079702279F442B000D0715 /* PeopleViewController+Search.swift */,
 				D6079704279F574E000D0715 /* PersonCell.swift */,
@@ -2424,6 +2427,7 @@
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
 				80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */,
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
+				D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */,
