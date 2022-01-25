@@ -139,9 +139,9 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     /// Returns a value between 0 and 1 denoting how far away the section is from being in focus. "In focus" means that its frontmost item
     /// is in focus.
-    /// 0 means that one of the section's items is fully in focus, or were are between two items that are both partially in focus.
-    /// 1 means all items in the section are completely not in focus.
-    func normalizedZDistanceFromCurrentPosition(toSection section: SectionIndex) -> CGFloat {
+    /// 0 means that no item in the section is even partially in focus.
+    /// 1 means at least one item in the section is fully in focus, or we are between two items that are both partially in focus.
+    func getFocusAmount(forSection section: SectionIndex) -> CGFloat {
         let focusPositionsInSection: [CGFloat] = self.itemFocusPositions
             .compactMap { (key: IndexPath, focusPosition: CGFloat) in
                 if key.section == section {
@@ -150,13 +150,13 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                 return nil
         }
 
-        var normalizedDistance: CGFloat = 1
+        var normalizedDistance: CGFloat = 0
 
         for focusPosition in focusPositionsInSection {
             let itemDistance = abs(focusPosition - self.zPosition)
             let normalizedItemDistance = itemDistance/self.itemHeight
             if normalizedItemDistance < 1 {
-                normalizedDistance -= 1 - normalizedItemDistance
+                normalizedDistance += 1 - normalizedItemDistance
             }
         }
 
