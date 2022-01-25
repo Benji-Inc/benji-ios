@@ -28,6 +28,13 @@ class PeopleSearchViewController: NavigationController {
                 
         self.setViewControllers([self.peopleVC], animated: false)
     }
+    
+    func showLargeDetent() {
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.large()]
+        }
+    }
 }
 
 protocol PeopleViewControllerDelegate: AnyObject {
@@ -82,6 +89,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.$selectedItems.mainSink { _ in
             self.updateButton()
         }.store(in: &self.cancellables)
+        
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { _ in
+            self.view.setNeedsLayout()
+        }.store(in: &self.cancellables)
     }
     
     private func setupNavigationBar() {
@@ -123,7 +134,13 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.button.centerOnX()
         
         if self.showButton {
-            self.button.pinToSafeAreaBottom()
+            
+            if KeyboardManager.shared.isKeyboardShowing {
+                let keyboardHeight = KeyboardManager.shared.cachedKeyboardEndFrame.height
+                self.button.bottom = self.view.height - keyboardHeight - Theme.ContentOffset.standard.value
+            } else {
+                self.button.pinToSafeAreaBottom()
+            }
         } else {
             self.button.top = self.view.height
         }

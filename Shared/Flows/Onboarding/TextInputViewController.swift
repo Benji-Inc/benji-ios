@@ -14,7 +14,7 @@ class TextFieldToolBar: UIToolbar {
     init(button: UIBarButtonItem) {
         super.init(frame: .init(origin: .zero,
                                 size: CGSize(width: UIScreen.main.bounds.width,
-                                             height: Theme.buttonHeight + Theme.contentOffset)))
+                                             height: Theme.buttonHeight + Theme.ContentOffset.standard.value.doubled)))
         self.setItems([button], animated: false)
         self.isTranslucent = true
         self.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)

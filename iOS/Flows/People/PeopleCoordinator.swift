@@ -49,27 +49,28 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
 extension PeopleCoordinator: PeopleViewControllerDelegate {
 
     nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
-
+        
         Task.onMainActor {
-
-            self.reservations = controller.reservations
-
-            self.peopleToInvite = items.compactMap({ item in
-                switch item {
-                case .person(let person):
-                    if let _ = person.cnContact {
-                        return person
-                    } else if let connection = person.connection {
-                        self.selectedConnections.append(connection)
-                    } else {
-                        return nil
-                    }
-                }
-                
-                return nil
-            })
-
-            self.updateInvitation()
+        
+            self.peopleSearchVC.showLargeDetent()
+//            self.reservations = controller.reservations
+//
+//            self.peopleToInvite = items.compactMap({ item in
+//                switch item {
+//                case .person(let person):
+//                    if let _ = person.cnContact {
+//                        return person
+//                    } else if let connection = person.connection {
+//                        self.selectedConnections.append(connection)
+//                    } else {
+//                        return nil
+//                    }
+//                }
+//                
+//                return nil
+//            })
+//
+//            self.updateInvitation()
         }
     }
 }
