@@ -36,7 +36,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
             self.buttonTitleLabel.setText("Add")
             Task {
                 await self.loadData(for: user)
-            }
+            }.add(to: self.taskPool)
         } else {
             self.buttonTitleLabel.setText("Invite")
             self.titleLabel.setText(item.fullName)
@@ -46,7 +46,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     
     @MainActor
     func loadData(for user: User) async {
-        guard let userWithData = try? await user.retrieveDataIfNeeded() else { return }
+        guard let userWithData = try? await user.retrieveDataIfNeeded(), !Task.isCancelled else { return }
         self.titleLabel.setText(userWithData.fullName)
         self.layoutNow()
     }
@@ -67,6 +67,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
                 }
             }
         }
+        
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.titleLabel.setTextColor(isSelected ? .D1 : .T1)
             self.buttonTitleLabel.setTextColor(isSelected ? .D1 : .T1)
@@ -88,5 +89,12 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         self.lineView.height = 1
         self.lineView.expandToSuperviewWidth()
         self.lineView.pin(.bottom)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.buttonTitleLabel.text = nil
+        self.titleLabel.text = nil 
     }
 }
