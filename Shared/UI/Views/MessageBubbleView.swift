@@ -12,29 +12,30 @@ class MessageBubbleView: SpeechBubbleView {
     
     let shapeMask = CAShapeLayer()
     let backgroundLayer = CAShapeLayer()
-    let gradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight], startPoint: .topLeft, endPoint: .bottomRight)
+    let darkGradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight],
+                                      startPoint: .topLeft, endPoint: .bottomRight)
+    let lightGradientLayer = GradientLayer(with: [.L4TopLeft, .L4BottomRight],
+                                           startPoint: .topLeft, endPoint: .bottomRight)
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.backgroundLayer.fillColor = ThemeColor.B0.color.cgColor
         self.layer.insertSublayer(self.backgroundLayer, below: self.bubbleLayer)
-        
-        self.gradientLayer.opacity = 0.2
-        self.layer.insertSublayer(self.gradientLayer, above: self.bubbleLayer)
-    }
-    
-    func configure(with message: Messageable) {
-        CATransaction.begin()
-        self.gradientLayer.updateColors(with: [.D4TopLeft, .D4BottomRight])
-        CATransaction.commit()
+
+        self.darkGradientLayer.opacity = 0.2
+        self.layer.insertSublayer(self.darkGradientLayer, above: self.bubbleLayer)
+
+        self.lightGradientLayer.opacity = 0
+        self.layer.insertSublayer(self.lightGradientLayer, above: self.bubbleLayer)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         CATransaction.begin()
-        self.gradientLayer.frame = self.bubbleLayer.bounds
+        self.darkGradientLayer.frame = self.bubbleLayer.bounds
+        self.lightGradientLayer.frame = self.bubbleLayer.bounds
         self.backgroundLayer.frame = self.bubbleLayer.bounds
         CATransaction.commit()
     }
@@ -45,7 +46,8 @@ class MessageBubbleView: SpeechBubbleView {
         self.shapeMask.path = path
         
         self.backgroundLayer.path = path
-        self.gradientLayer.mask = self.shapeMask
+        self.darkGradientLayer.mask = self.shapeMask
+        self.lightGradientLayer.mask = self.shapeMask
         
         return path
     }

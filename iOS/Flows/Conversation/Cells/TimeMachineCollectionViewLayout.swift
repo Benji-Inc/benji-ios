@@ -53,7 +53,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
+    var itemHeight: CGFloat
+    = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
@@ -91,7 +92,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A cache of all the sort values for each item.
     private(set) var itemSortValues: [IndexPath : Double] = [:]
-    /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
+    /// A dictionary of z ranges for all the items. A z-range represents the range that each item will be frontmost in its section
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     
