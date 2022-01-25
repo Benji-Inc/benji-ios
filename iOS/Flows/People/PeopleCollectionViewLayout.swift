@@ -15,7 +15,6 @@ class PeopleCollectionViewLayout: UICollectionViewCompositionalLayout {
         config.scrollDirection = .vertical
 
         super.init(sectionProvider: { sectionIndex, environment in
-            let padding = Theme.ContentOffset.xtraLong.value
             // Item
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -27,7 +26,7 @@ class PeopleCollectionViewLayout: UICollectionViewCompositionalLayout {
 
             // Section
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: padding, bottom: 120, trailing: padding)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 120, trailing: 0)
 
             return section
 

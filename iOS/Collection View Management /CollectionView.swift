@@ -12,6 +12,7 @@ import Lottie
 class CollectionView: UICollectionView {
 
     let animationView = AnimationView.with(animation: .loading)
+    private let backView = BaseView()
 
     init(layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)
@@ -24,15 +25,16 @@ class CollectionView: UICollectionView {
     }
 
     func initializeViews() {
-        let backView = BaseView()
-        backView.set(backgroundColor: .clear)
-        self.backgroundView = backView
-        backView.addSubview(self.animationView)
+        self.backView.set(backgroundColor: .clear)
+        self.backgroundView = self.backView
+        self.backView.addSubview(self.animationView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
+        self.backView.expandToSuperviewSize()
+        
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.centerOnXAndY()
     }
