@@ -64,24 +64,23 @@ class MainCoordinator: Coordinator<Void> {
         // NOTE: Regardless of the deep link, the user needs to be created and activated to get
         // to the whole app.
 
-        #warning("restore this")
-//        // If no user object has been created, allow the user to do so now.
-//        guard let user = User.current(), user.isAuthenticated else {
-//            self.runOnboardingFlow()
-//            return
-//        }
-//
-//        // If ther user didn't finish onboarding, redirect them to onboarding
-//        if !user.isOnboarded {
-//            self.runOnboardingFlow()
-//            return
-//        }
-//
-//        // As a final catch-all, make sure the user is fully activated.
-//        guard user.status == .active || user.status == .waitlist else {
-//            self.runOnboardingFlow()
-//            return
-//        }
+        // If no user object has been created, allow the user to do so now.
+        guard let user = User.current(), user.isAuthenticated else {
+            self.runOnboardingFlow()
+            return
+        }
+
+        // If ther user didn't finish onboarding, redirect them to onboarding
+        if !user.isOnboarded {
+            self.runOnboardingFlow()
+            return
+        }
+
+        // As a final catch-all, make sure the user is fully activated.
+        guard user.status == .active || user.status == .waitlist else {
+            self.runOnboardingFlow()
+            return
+        }
 
         // Clean up the deep link when we're done
         defer {
