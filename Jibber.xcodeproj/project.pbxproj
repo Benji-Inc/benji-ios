@@ -1858,8 +1858,9 @@
 			children = (
 				D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */,
 				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
-				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
 				D63D63022486A9020037E046 /* ConversationInputAccessoryView.swift */,
+				8020DD92272C81FB00D5BA04 /* ConversationInputAccessoryView.xib */,
+				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
 				D61592DF24FC195D00B63412 /* InputTextView.swift */,
 				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 			);
@@ -1878,13 +1879,12 @@
 		D6BEDE4A2625D738009BA131 /* Swipeable Input */ = {
 			isa = PBXGroup;
 			children = (
-				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
-				8020DD92272C81FB00D5BA04 /* ConversationInputAccessoryView.xib */,
 				D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */,
 				D6FE05212767B2BC00137EEA /* EmotionView.swift */,
 				D6CC1481276BE808005F617F /* newEmotionView.swift */,
-				D6CC148E276C1323005F617F /* newStatusView.swift */,
 				D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */,
+				D6CC148E276C1323005F617F /* newStatusView.swift */,
+				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";

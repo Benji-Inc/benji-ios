@@ -56,7 +56,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     @IBOutlet var countView: CharacterCountView!
     @IBOutlet var avatarView: BorderedAvatarView!
 
-
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
@@ -267,15 +266,10 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     // MARK: - Pan Gesture Handling
 
     private var previewView: PreviewMessageView?
-    /// The origin of the preview view when the pan started.
-    private var initialPreviewOrigin: CGPoint?
+    /// The center point of the preview view when the pan started.
+    private var initialPreviewCenter: CGPoint?
     /// How far the preview view can be dragged left or right.
     private let maxXOffset: CGFloat = 40
-    /// How far the preview view can be dragged up.
-    private var maxYOffset: CGFloat {
-        let additionalSpace = self.textView.height.half
-        return -(self.inputContainerView.top - self.dropZoneFrame.top + additionalSpace)
-    }
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
@@ -325,7 +319,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.previewView?.showShadow(withOffset: 8)
         self.addSubview(self.previewView!)
 
-        self.initialPreviewOrigin = self.previewView?.origin
+        self.initialPreviewCenter = self.previewView?.center
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.deliveryTypeView.alpha = 0.0
@@ -372,12 +366,29 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     /// Updates the position of the preview view based on the provided pan gesture offset. This function ensures that preview view's origin
     /// is kept within bounds defined by max X and Y offset.
     private func updatePreviewViewPosition(withOffset panOffset: CGPoint) {
-        guard let initialPosition = self.initialPreviewOrigin,
+        guard let initialCenter = self.initialPreviewCenter,
               let previewView = self.previewView else { return }
 
         let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
-        let offsetY = clamp(panOffset.y, self.maxYOffset, 0)
-        previewView.origin = initialPosition + CGPoint(x: offsetX, y: offsetY)
+
+        var previewCenter = initialCenter + CGPoint(x: offsetX, y: panOffset.y)
+
+
+        // As the user drags further up, gravitate the preview view toward the drop zone
+
+        let dropZoneCenter = self.dropZoneFrame.center
+        var gravityVector = CGPoint(x: dropZoneCenter.x - previewCenter.x,
+                                    y: dropZoneCenter.y - previewCenter.y)
+
+
+        let gravityFactor = 1 - clamp(abs(gravityVector.y)/80, 0, 1)
+        gravityVector = gravityVector * gravityFactor
+
+        logDebug(gravityFactor)
+        previewCenter = CGPoint(x: previewCenter.x + gravityVector.x,
+                                y: previewCenter.y + gravityVector.y)
+
+        previewView.center = previewCenter
     }
 
     private func resetPreviewAndInputViews(didSend: Bool) {
@@ -394,8 +405,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             // If the user didn't swipe far enough to send a message, animate the preview view back
             // to where it started, then reveal the text view to allow for input again.
             UIView.animate(withDuration: Theme.animationDurationStandard) {
-                guard let initialOrigin = self.initialPreviewOrigin else { return }
-                self.previewView?.origin = initialOrigin
+                guard let initialOrigin = self.initialPreviewCenter else { return }
+                self.previewView?.center = initialOrigin
             } completion: { completed in
                 self.inputContainerView.alpha = 1
                 self.previewView?.removeFromSuperview()
