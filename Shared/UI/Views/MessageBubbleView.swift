@@ -35,6 +35,7 @@ class MessageBubbleView: SpeechBubbleView {
         
         CATransaction.begin()
         self.darkGradientLayer.frame = self.bubbleLayer.bounds
+        self.lightGradientLayer.frame = self.bubbleLayer.bounds
         self.backgroundLayer.frame = self.bubbleLayer.bounds
         CATransaction.commit()
     }
@@ -46,6 +47,7 @@ class MessageBubbleView: SpeechBubbleView {
         
         self.backgroundLayer.path = path
         self.darkGradientLayer.mask = self.shapeMask
+        self.lightGradientLayer.mask = self.shapeMask
         
         return path
     }
