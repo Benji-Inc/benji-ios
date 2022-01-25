@@ -25,6 +25,8 @@ class InvitationLoadingView: BaseView {
         self.addSubview(self.label)
         self.label.textAlignment = .center
         self.addSubview(self.progressView)
+        
+        self.progressView.progressTintColor = ThemeColor.D6.color
     }
 
     @MainActor
@@ -90,7 +92,7 @@ class InvitationLoadingView: BaseView {
     private func set(person: Person) {
         self.avatarView.reset()
         self.avatarView.set(avatar: person)
-        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Preparing message for: @(contact)")
+        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Preparing message for:\n@(contact)")
         self.label.setText(text)
         self.layoutNow()
     }

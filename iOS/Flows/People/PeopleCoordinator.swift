@@ -11,13 +11,12 @@ import StreamChat
 import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<[Connection]> {
-    lazy var peopleSearchVC = PeopleSearchViewController()
+    lazy var peopleNavController = PeopleNavigationController()
     
     var messageComposer: MessageComposerViewController?
     lazy var contactsVC = ContactsViewController()
 
     var selectedContact: CNContact?
-    var reservations: [Reservation] = []
     var peopleToInvite: [Person] = []
     var inviteIndex: Int = 0
     let conversationID: ConversationId?
@@ -36,13 +35,13 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     }
 
     override func toPresentable() -> DismissableVC {
-        return self.peopleSearchVC
+        return self.peopleNavController
     }
 
     override func start() {
         super.start()
 
-        self.peopleSearchVC.peopleVC.delegate = self
+        self.peopleNavController.peopleVC.delegate = self
     }
 }
 
@@ -52,25 +51,24 @@ extension PeopleCoordinator: PeopleViewControllerDelegate {
         
         Task.onMainActor {
         
-            self.peopleSearchVC.showLargeDetent()
-//            self.reservations = controller.reservations
-//
-//            self.peopleToInvite = items.compactMap({ item in
-//                switch item {
-//                case .person(let person):
-//                    if let _ = person.cnContact {
-//                        return person
-//                    } else if let connection = person.connection {
-//                        self.selectedConnections.append(connection)
-//                    } else {
-//                        return nil
-//                    }
-//                }
-//                
-//                return nil
-//            })
-//
-//            self.updateInvitation()
+            self.peopleNavController.prepareForInvitations()
+
+            self.peopleToInvite = items.compactMap({ item in
+                switch item {
+                case .person(let person):
+                    if let _ = person.cnContact {
+                        return person
+                    } else if let connection = person.connection {
+                        self.selectedConnections.append(connection)
+                    } else {
+                        return nil
+                    }
+                }
+                
+                return nil
+            })
+
+            self.updateInvitation()
         }
     }
 }

@@ -12,7 +12,7 @@ import Contacts
 import UIKit
 import Localization
 
-class PeopleSearchViewController: NavigationController {
+class PeopleNavigationController: NavigationController {
     
     lazy var peopleVC = PeopleViewController(includeConnections: true)
     
@@ -29,11 +29,13 @@ class PeopleSearchViewController: NavigationController {
         self.setViewControllers([self.peopleVC], animated: false)
     }
     
-    func showLargeDetent() {
+    func prepareForInvitations() {
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.large()]
         }
+        
+        self.setNavigationBarHidden(true, animated: true)
     }
 }
 

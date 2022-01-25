@@ -22,7 +22,7 @@ extension PeopleCoordinator {
     private func showContacts() {
         self.inviteIndex = 0
         self.contactsVC.delegate = self
-        self.router.present(self.contactsVC, source: self.peopleSearchVC.peopleVC)
+        self.router.present(self.contactsVC, source: self.peopleNavController.peopleVC)
     }
 
     private func showSentAlert(for avatar: Avatar) {
@@ -46,7 +46,7 @@ extension PeopleCoordinator {
 
     func updateInvitation() {
         if let person = self.peopleToInvite[safe: self.inviteIndex],
-           let rsvp = self.reservations[safe: self.inviteIndex] {
+           let rsvp = self.peopleNavController.peopleVC.reservations[safe: self.inviteIndex] {
             self.invite(person: person, with: rsvp)
         } else {
             Task {
@@ -59,13 +59,13 @@ extension PeopleCoordinator {
     
     @MainActor
     func finish() async {
-        await self.peopleSearchVC.peopleVC.finishInviting()
+        await self.peopleNavController.peopleVC.finishInviting()
         self.finishFlow(with: self.selectedConnections)
     }
 
     func invite(person: Person, with reservation: Reservation) {
         Task {
-            await self.peopleSearchVC.peopleVC.showLoading(for: person)
+            await self.peopleNavController.peopleVC.showLoading(for: person)
             await self.findUser(with: person.cnContact, for: reservation)
         }.add(to: self.taskPool)
     }
