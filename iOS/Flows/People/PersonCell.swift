@@ -33,7 +33,6 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     
     func configure(with item: Person) {
         if let user = item.connection?.nonMeUser {
-            self.buttonTitleLabel.setText("Add")
             Task {
                 await self.loadData(for: user)
             }.add(to: self.taskPool)
@@ -48,6 +47,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     func loadData(for user: User) async {
         guard let userWithData = try? await user.retrieveDataIfNeeded(), !Task.isCancelled else { return }
         self.titleLabel.setText(userWithData.fullName)
+        self.buttonTitleLabel.setText("Add")
         self.layoutNow()
     }
 
