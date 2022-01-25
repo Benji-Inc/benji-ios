@@ -23,6 +23,7 @@ class PeopleSearchViewController: NavigationController {
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium(), .large()]
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
                 
         self.viewControllers.append(self.peopleVC)
@@ -68,6 +69,13 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     override func initializeViews() {
         super.initializeViews()
+        
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+        }
         
         self.setupNavigationBar()
 
@@ -197,11 +205,5 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         data[.people]?.append(contentsOf: contacts)
 
         return data
-    }
-}
-
-extension PeopleViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
 }
