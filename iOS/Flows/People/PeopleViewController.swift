@@ -26,7 +26,8 @@ class PeopleSearchViewController: NavigationController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
                 
-        self.viewControllers.append(self.peopleVC)
+        self.setViewControllers([self.peopleVC], animated: false)
+        //self.viewControllers.append(self.peopleVC)
     }
 }
 
@@ -43,10 +44,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     
     let button = ThemeButton()
     private let loadingView = InvitationLoadingView()
-    private var showButton: Bool = false
+    private var showButton: Bool = true
     
     private let backgroundView = BackgroundGradientView()
-    
+
     override func loadView() {
         self.view = self.backgroundView
     }
@@ -69,7 +70,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     override func initializeViews() {
         super.initializeViews()
-        
+                
         self.setupNavigationBar()
 
         self.view.addSubview(self.button)

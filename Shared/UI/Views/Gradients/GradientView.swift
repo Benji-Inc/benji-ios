@@ -44,7 +44,7 @@ class GradientLayer: CAGradientLayer {
     }
 }
 
-class GradientView: PassThroughView {
+class GradientView: BaseView {
 
     private lazy var gradient = CAGradientLayer(start: self.start,
                                                 end: self.end,

@@ -12,7 +12,7 @@ import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     lazy var peopleSearchVC = PeopleSearchViewController()
-
+    
     var messageComposer: MessageComposerViewController?
     lazy var contactsVC = ContactsViewController()
 
