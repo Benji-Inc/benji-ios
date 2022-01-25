@@ -50,9 +50,7 @@ extension PeopleCoordinator: PeopleViewControllerDelegate {
     nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
         
         Task.onMainActor {
-        
             self.peopleNavController.prepareForInvitations()
-
             self.peopleToInvite = items.compactMap({ item in
                 switch item {
                 case .person(let person):

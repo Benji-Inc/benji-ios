@@ -12,33 +12,6 @@ import Contacts
 import UIKit
 import Localization
 
-class PeopleNavigationController: NavigationController {
-    
-    lazy var peopleVC = PeopleViewController(includeConnections: true)
-    
-    override func initializeViews() {
-        super.initializeViews()
-                
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        }
-                
-        self.setViewControllers([self.peopleVC], animated: false)
-    }
-    
-    func prepareForInvitations() {
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
-        }
-        
-        self.setNavigationBarHidden(true, animated: true)
-    }
-}
-
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
 }

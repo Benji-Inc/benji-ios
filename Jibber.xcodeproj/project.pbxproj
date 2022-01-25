@@ -119,6 +119,7 @@
 		D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */; };
+		D6222E5F27A0C5FC001806D6 /* PeopleNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222E5E27A0C5FC001806D6 /* PeopleNavigationController.swift */; };
 		D6265ECE279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6265ECD279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift */; };
 		D6265ED0279F13A40020BD26 /* InvitationUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */; };
 		D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4C7277A9129007B3286 /* InitialMessageCell.swift */; };
@@ -753,6 +754,7 @@
 		D61EC0F621D316F100204BEE /* ThemeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColor.swift; sourceTree = "<group>"; };
 		D61EC0F821D317AB00204BEE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleFooterView.swift; sourceTree = "<group>"; };
+		D6222E5E27A0C5FC001806D6 /* PeopleNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleNavigationController.swift; sourceTree = "<group>"; };
 		D6265ECD279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesSequenceCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationUpsellCell.swift; sourceTree = "<group>"; };
 		D627E4C7277A9129007B3286 /* InitialMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialMessageCell.swift; sourceTree = "<group>"; };
@@ -1722,6 +1724,7 @@
 				D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */,
 				D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */,
 				D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */,
+				D6222E5E27A0C5FC001806D6 /* PeopleNavigationController.swift */,
 				D66A580625DD691A001B3F64 /* PeopleViewController.swift */,
 				D6079702279F442B000D0715 /* PeopleViewController+Search.swift */,
 				D6079704279F574E000D0715 /* PersonCell.swift */,
@@ -2512,6 +2515,7 @@
 				D627E4CA277B819A007B3286 /* MemberAddCell.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
+				D6222E5F27A0C5FC001806D6 /* PeopleNavigationController.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */,
 				807E98E9273497610076889C /* UIColor+Extensions.swift in Sources */,
