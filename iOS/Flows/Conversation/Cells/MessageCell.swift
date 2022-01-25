@@ -79,6 +79,11 @@ class MessageCell: UICollectionViewCell {
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
 
+        self.content.bubbleView.lightGradientLayer.opacity
+        = Float(1 - messageLayoutAttributes.sectionFocusAmount)
+        self.content.bubbleView.darkGradientLayer.opacity
+        = Float(messageLayoutAttributes.sectionFocusAmount)
+
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 

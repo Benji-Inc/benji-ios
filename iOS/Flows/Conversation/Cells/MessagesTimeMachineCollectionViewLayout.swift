@@ -125,6 +125,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                                         color2: saturatedTextColor)
         }
 
+        attributes.sectionFocusAmount = self.getFocusAmount(forSection: indexPath.section)
         attributes.brightness = backgroundBrightness
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
@@ -137,8 +138,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
-    /// Returns a value between 0 and 1 denoting how far away the section is from being in focus. "In focus" means that its frontmost item
-    /// is in focus.
+    /// Returns a value between 0 and 1 denoting how in focus a section is. "In focus" means that its frontmost item is in focus.
     /// 0 means that no item in the section is even partially in focus.
     /// 1 means at least one item in the section is fully in focus, or we are between two items that are both partially in focus.
     func getFocusAmount(forSection section: SectionIndex) -> CGFloat {

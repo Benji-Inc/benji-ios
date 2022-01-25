@@ -96,7 +96,6 @@ class MessageContentView: BaseView {
 
         self.authorView.set(avatar: message.avatar)
         
-        self.bubbleView.configure(with: message)
         self.setNeedsLayout()
     }
 
