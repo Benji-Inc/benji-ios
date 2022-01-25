@@ -70,13 +70,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func initializeViews() {
         super.initializeViews()
         
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        }
-        
         self.setupNavigationBar()
 
         self.view.addSubview(self.button)
