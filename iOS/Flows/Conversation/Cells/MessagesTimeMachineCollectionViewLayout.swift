@@ -104,28 +104,25 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         let detailAlpha = 1 - abs(normalizedZOffset) / 0.2
         let textViewAlpha = 1 - abs(normalizedZOffset) / 0.8
 
-        // The most recent visible item should be saturated color.
-        if let itemFocusPosition = self.itemFocusPositions[indexPath] {
-            var normalizedFocusDistance = abs(itemFocusPosition - self.zPosition)/self.itemHeight.half
-            normalizedFocusDistance = clamp(normalizedFocusDistance, 0, 1)
+        // The section with the most recent item should be saturated in color
 
-            // Figure out how saturated the color should be.
-            // Lerp between D1 to L1
-            let saturatedColor = ThemeColor.D1.color
-            let unsaturatedColor = ThemeColor.L1.color
-            attributes.backgroundColor = lerp(normalizedFocusDistance,
-                                              color1: saturatedColor,
-                                              color2: unsaturatedColor)
+        let focusAmount = self.getFocusAmount(forSection: indexPath.section)
 
-            // Lerp text between T1 and T2
-            let unsaturatedTextColor = ThemeColor.T3.color
-            let saturatedTextColor = ThemeColor.T2.color
-            attributes.textColor = lerp(normalizedFocusDistance,
-                                        color1: unsaturatedTextColor,
-                                        color2: saturatedTextColor)
-        }
+        // Figure out how saturated the color should be.
+        // Lerp between D1 to L1
+        let unsaturatedColor = ThemeColor.L1.color
+        let saturatedColor = ThemeColor.D1.color
+        attributes.backgroundColor = lerp(focusAmount,
+                                          color1: unsaturatedColor,
+                                          color2: saturatedColor)
 
-        attributes.sectionFocusAmount = self.getFocusAmount(forSection: indexPath.section)
+        // Lerp text between T1 and T2
+        let saturatedTextColor = ThemeColor.T2.color
+        let unsaturatedTextColor = ThemeColor.T3.color
+        attributes.textColor = lerp(focusAmount,
+                                    color1: saturatedTextColor,
+                                    color2: unsaturatedTextColor)
+
         attributes.brightness = backgroundBrightness
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
