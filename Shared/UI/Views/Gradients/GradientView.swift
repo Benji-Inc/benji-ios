@@ -44,7 +44,7 @@ class GradientLayer: CAGradientLayer {
     }
 }
 
-class GradientView: PassThroughView {
+class GradientView: BaseView {
 
     private lazy var gradient = CAGradientLayer(start: self.start,
                                                 end: self.end,
@@ -76,6 +76,8 @@ class GradientView: PassThroughView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        CATransaction.begin()
         self.gradient.frame = self.bounds
+        CATransaction.commit()
     }
 }

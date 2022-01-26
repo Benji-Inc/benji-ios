@@ -30,6 +30,7 @@ struct ManageableHeaderRegistration<Header: UICollectionReusableView> {
 class CollectionViewManagerCell: UICollectionViewListCell {
 
     var cancellables = Set<AnyCancellable>()
+    var taskPool = TaskPool()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,7 +46,9 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
     }
 
-    func update(isSelected: Bool) {}
+    func update(isSelected: Bool) {
+        guard isSelected != self.isSelected else { return }
+    }
 
     func reset() {
         self.cancellables.forEach { cancellable in
@@ -62,5 +65,13 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
         // Apply the background configuration to the cell.
         self.backgroundConfiguration = backgroundConfig
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
+        }
     }
 }

@@ -15,49 +15,24 @@ class PeopleCollectionViewLayout: UICollectionViewCompositionalLayout {
         config.scrollDirection = .vertical
 
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = PeopleCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            // Item
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 
-            switch sectionType {
-            case .connections:
-                // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .absolute(160))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                let inset = Theme.ContentOffset.standard.value
-                item.contentInsets = NSDirectionalEdgeInsets(top: inset,
-                                                             leading: inset,
-                                                             bottom: inset,
-                                                             trailing: inset)
+            // Group
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(44))
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
-                // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(160))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            
+            let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
+            let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+            section.boundarySupplementaryItems = [footerItem]
 
-                // Section
-                let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset, leading: Theme.contentOffset, bottom: Theme.contentOffset, trailing: Theme.contentOffset)
-
-                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(120))
-                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-                section.boundarySupplementaryItems = [headerItem]
-
-                return section
-
-            case .contacts:
-                // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(90))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0)
-
-                // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(100))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-                // Section
-                let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset, leading: Theme.contentOffset, bottom: 120, trailing: Theme.contentOffset)
-
-                return section
-            }
+            return section
 
         }, configuration: config)
     }

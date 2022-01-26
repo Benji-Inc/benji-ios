@@ -11,15 +11,13 @@ import StreamChat
 import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<[Connection]> {
-
-    lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
-
+    lazy var peopleNavController = PeopleNavigationController()
+    
     var messageComposer: MessageComposerViewController?
     lazy var contactsVC = ContactsViewController()
 
     var selectedContact: CNContact?
-    var reservations: [Reservation] = []
-    var contactsToInvite: [Contact] = []
+    var peopleToInvite: [Person] = []
     var inviteIndex: Int = 0
     let conversationID: ConversationId?
 
@@ -37,32 +35,35 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     }
 
     override func toPresentable() -> DismissableVC {
-        return self.peopleVC
+        return self.peopleNavController
     }
 
     override func start() {
         super.start()
 
-        self.peopleVC.delegate = self
+        self.peopleNavController.peopleVC.delegate = self
     }
 }
 
 extension PeopleCoordinator: PeopleViewControllerDelegate {
 
     nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
-
+        
         Task.onMainActor {
-
-            self.reservations = controller.reservations
-
-            self.contactsToInvite = items.compactMap({ item in
+            self.peopleNavController.prepareForInvitations()
+            self.peopleToInvite = items.compactMap({ item in
                 switch item {
-                case .connection(let connection):
-                    self.selectedConnections.append(connection)
-                    return nil
-                case .contact(let contact):
-                    return contact
+                case .person(let person):
+                    if let _ = person.cnContact {
+                        return person
+                    } else if let connection = person.connection {
+                        self.selectedConnections.append(connection)
+                    } else {
+                        return nil
+                    }
                 }
+                
+                return nil
             })
 
             self.updateInvitation()

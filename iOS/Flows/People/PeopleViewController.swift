@@ -22,20 +22,24 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     private let includeConnections: Bool
     private(set) var reservations: [Reservation] = []
-
-    let blurView = BlurView()
-
-    let gradientView = GradientView(with: [ThemeColor.B0.color.withAlphaComponent(1.0).cgColor,
-                                           ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                    startPoint: .bottomCenter,
-                                    endPoint: .topCenter)
+    
     let button = ThemeButton()
     private let loadingView = InvitationLoadingView()
-    private var showButton: Bool = false
+    private var showButton: Bool = true
+    
+    private let backgroundView = BackgroundGradientView()
+    private(set) var allPeople: [Person] = []
 
+    override func loadView() {
+        self.view = self.backgroundView
+    }
+    
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
-        super.init(with: CollectionView(layout: PeopleCollectionViewLayout()))
+        let cv = CollectionView(layout: PeopleCollectionViewLayout())
+        cv.keyboardDismissMode = .interactive
+        cv.isScrollEnabled = true 
+        super.init(with: cv)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -48,20 +52,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     override func initializeViews() {
         super.initializeViews()
+                
+        self.setupNavigationBar()
 
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
-        }
-
-        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
-
-        self.dataSource.headerTitle = self.getHeaderTitle()
-        self.dataSource.headerDescription = self.getHeaderDescription()
-
-        self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
 
         self.button.didSelect { [unowned self] in
@@ -71,42 +64,71 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.$selectedItems.mainSink { _ in
             self.updateButton()
         }.store(in: &self.cancellables)
+        
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { _ in
+            self.view.setNeedsLayout()
+        }.store(in: &self.cancellables)
+    }
+    
+    private func setupNavigationBar() {
+        self.navigationItem.title = "Contacts"
+
+        let leftItem = UIBarButtonItem(title: "Groups", image: nil, primaryAction: nil, menu: nil)
+        leftItem.tintColor = ThemeColor.D1.color
+        
+        let cancel = UIAction { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
+        let rightItem = UIBarButtonItem(title: "Cancel", image: nil, primaryAction: cancel, menu: nil)
+        rightItem.tintColor = ThemeColor.D1.color
+        let search = UISearchController(searchResultsController: nil)
+        search.searchBar.delegate = self
+        search.searchBar.tintColor = ThemeColor.D1.color
+        self.navigationItem.searchController = search
+        
+        self.navigationItem.leftBarButtonItem = leftItem
+        self.navigationItem.rightBarButtonItem = rightItem
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.loadInitialData()
+        
+        self.dataSource.didSelectAddContacts = { [unowned self] in
+            self.loadContacts()
+        }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.blurView.expandToSuperviewSize()
         self.loadingView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
         
         if self.showButton {
-            self.button.pinToSafeAreaBottom()
+            
+            if KeyboardManager.shared.isKeyboardShowing {
+                let keyboardHeight = KeyboardManager.shared.cachedKeyboardEndFrame.height
+                self.button.bottom = self.view.height - keyboardHeight - Theme.ContentOffset.standard.value
+            } else {
+                self.button.pinToSafeAreaBottom()
+            }
         } else {
             self.button.top = self.view.height
         }
-        
-        self.gradientView.expandToSuperviewWidth()
-        self.gradientView.height = (self.view.height - self.button.top) + Theme.ContentOffset.xtraLong.value
-        self.gradientView.pin(.bottom)
     }
 
-    func showLoading(for contact: Contact) async {
+    func showLoading(for person: Person) async {
 
         if self.loadingView.superview.isNil {
             self.view.addSubview(self.loadingView)
             self.view.layoutNow()
-            await self.loadingView.initiateLoading(with: contact)
+            await self.loadingView.initiateLoading(with: person)
         } else {
-            await self.loadingView.update(contact: contact)
+            await self.loadingView.update(person: person)
         }
     }
 
@@ -117,8 +139,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func updateButton() {
-        self.button.set(style: .normal(color: .B1, text: self.getButtonTitle()))
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
+        self.button.set(style: .custom(color: .white, textColor: .B3, text: self.getButtonTitle()))
+        UIView.animate(withDuration: Theme.animationDurationFast) {
             self.showButton = self.selectedItems.count > 0
             self.view.layoutNow()
         }
@@ -133,7 +155,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func getButtonTitle() -> Localized {
-        return "Add \(self.selectedItems.count)"
+        return "Add \(self.selectedItems.count) people"
     }
 
     // MARK: Data Loading
@@ -141,34 +163,54 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func getAllSections() -> [PeopleCollectionViewDataSource.SectionType] {
         return PeopleCollectionViewDataSource.SectionType.allCases
     }
+    
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        if ContactsManger.shared.hasPermissions {
+            self.loadContacts()
+        }
+    }
+    
+    private func loadContacts() {
+        Task {
+            self.reservations = await Reservation.getAllUnclaimed()
+            
+            let contacts = await ContactsManger.shared.fetchContacts().compactMap({ contact in
+                return Person(withContact: contact)
+            })
+            
+            self.allPeople.append(contentsOf: contacts)
+
+            let contactItems: [PeopleCollectionViewDataSource.ItemType] = contacts.map { person in
+                return .person(person)
+            }
+
+            await self.dataSource.appendItems(contactItems, toSection: .people)
+            
+        }.add(to: self.taskPool)
+    }
 
     override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
 
         var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
 
         if self.includeConnections {
-            do {
-                data[.connections] = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
-                    return !connection.nonMeUser.isNil
-                }.map({ connection in
-                    return .connection(connection)
-                })
-            } catch {
-                print(error)
+            if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
+                return !connection.nonMeUser.isNil
+            }), let _ = try? await connections.asyncMap({ connection in
+                return try await connection.nonMeUser!.retrieveDataIfNeeded()
+            }) {
+                let connectedPeople = connections.map { connection in
+                    return Person(withConnection: connection)
+                }
+                
+                self.allPeople.append(contentsOf: connectedPeople)
             }
-        } else {
-            data[.connections] = []
         }
-
-        self.reservations = await Reservation.getAllUnclaimed()
-
-        data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
-            let reservation = self.reservations.first { reservation in
-                return reservation.contactId == contact.identifier
-            }
-
-            let item = Contact(with: contact, reservation: reservation)
-            return .contact(item)
+        
+        data[.people] = self.allPeople.compactMap({ person in
+            return .person(person)
         })
 
         return data

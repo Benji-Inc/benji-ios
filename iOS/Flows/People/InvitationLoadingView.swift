@@ -13,25 +13,25 @@ import Localization
 class InvitationLoadingView: BaseView {
 
     let blurView = BlurView()
-    let avatarView = AvatarView()
-    let label = ThemeLabel(font: .small)
+    let label = ThemeLabel(font: .regular)
     let progressView = UIProgressView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.addSubview(self.blurView)
-        self.addSubview(self.avatarView)
         self.addSubview(self.label)
         self.label.textAlignment = .center
         self.addSubview(self.progressView)
+        
+        self.progressView.progressTintColor = ThemeColor.D6.color
     }
 
     @MainActor
-    func initiateLoading(with contact: Contact) async {
+    func initiateLoading(with person: Person) async {
 
         self.resetAllViews()
-        self.set(contact: contact)
+        self.set(person: person)
 
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
@@ -39,8 +39,6 @@ class InvitationLoadingView: BaseView {
             }
 
             UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                self.avatarView.alpha = 1.0
-                self.avatarView.transform = .identity
                 self.label.alpha = 1.0
                 self.label.transform = .identity
                 self.progressView.alpha = 1.0
@@ -55,9 +53,9 @@ class InvitationLoadingView: BaseView {
     }
 
     @MainActor
-    func update(contact: Contact) async {
+    func update(person: Person) async {
 
-        self.set(contact: contact)
+        self.set(person: person)
 
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
@@ -65,7 +63,6 @@ class InvitationLoadingView: BaseView {
             }
 
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                self.avatarView.alpha = 1.0
                 self.label.alpha = 1.0
                 self.progressView.alpha = 1.0
             }
@@ -87,11 +84,11 @@ class InvitationLoadingView: BaseView {
         }
     }
 
-    private func set(contact: Contact) {
-        self.avatarView.reset()
-        self.avatarView.set(avatar: contact)
-        let text = LocalizedString(id: "", arguments: [contact.fullName], default: "Preparing message for: @(contact)")
+    private func set(person: Person) {
+        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Preparing message for\n\n\n@(contact)")
         self.label.setText(text)
+        self.label.add(attributes: [.foregroundColor: ThemeColor.D6.color,
+                                    .font: FontType.regularBold.font], to: person.fullName)
         self.layoutNow()
     }
 
@@ -101,7 +98,6 @@ class InvitationLoadingView: BaseView {
     }
 
     private func resetAnimation() {
-        self.avatarView.alpha = 0
         self.label.alpha = 0
         self.progressView.alpha = 0
         self.progressView.progress = 0.0
@@ -112,13 +108,9 @@ class InvitationLoadingView: BaseView {
 
         self.blurView.expandToSuperviewSize()
 
-        self.avatarView.setSize(for: 100)
-        self.avatarView.centerOnX()
-        self.avatarView.centerY = self.height * 0.4
-
         self.label.setSize(withWidth: self.width - Theme.contentOffset.doubled)
         self.label.centerOnX()
-        self.label.match(.top, to: .bottom, of: self.avatarView, offset: .xtraLong)
+        self.label.centerY = self.height * 0.4
 
         self.progressView.width = self.halfWidth
         self.progressView.match(.top, to: .bottom, of: self.label, offset: .standard)

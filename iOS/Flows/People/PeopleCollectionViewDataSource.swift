@@ -14,23 +14,18 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
                                        PeopleCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
-        case connections
-        case contacts
+        case people
     }
 
     enum ItemType: Hashable {
-        case connection(Connection)
-        case contact(Contact)
+        case person(Person)
     }
 
-    var headerTitle: Localized = ""
-    var headerDescription: Localized = ""
-
-    private let connectionConfig = ManageableCellRegistration<ConnectionCell>().provider
-    private let contactConfig = ManageableCellRegistration<ContactCell>().provider
-    private let headerConfig = UICollectionView.SupplementaryRegistration
-    <PeopleHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
-
+    private let personConfig = ManageableCellRegistration<PersonCell>().provider
+    private let footerConfig = ManageableFooterRegistration<PeopleFooterView>().provider
+    
+    var didSelectAddContacts: CompletionOptional = nil
+    
     // MARK: - Cell Dequeueing
 
     override func dequeueCell(with collectionView: UICollectionView,
@@ -39,30 +34,22 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
                               item: ItemType) -> UICollectionViewCell? {
 
         switch item {
-        case .connection(let connection):
-            return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig,
+        case .person(let person):
+            return collectionView.dequeueConfiguredReusableCell(using: self.personConfig,
                                                                 for: indexPath,
-                                                                item: connection)
-
-        case .contact(let contact):
-            return collectionView.dequeueConfiguredReusableCell(using: self.contactConfig,
-                                                                for: indexPath,
-                                                                item: contact)
+                                                                item: person)
         }
     }
-
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String, section: SectionType,
+    
+    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+                                           section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
-
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            header.titleLabel.setText(self.headerTitle)
-            header.descriptionLabel.setText(self.headerDescription)
-            return header 
-        default: 
-            return nil
+        let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+        footer.button.isHidden = ContactsManger.shared.hasPermissions
+        footer.label.isHidden = ContactsManger.shared.hasPermissions
+        footer.didSelectButton = { [unowned self] in
+            self.didSelectAddContacts?()
         }
+        return footer
     }
 }
