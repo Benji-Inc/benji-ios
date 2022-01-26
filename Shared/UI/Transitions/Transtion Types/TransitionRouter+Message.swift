@@ -33,7 +33,7 @@ extension TransitionRouter {
 
         if let message = fromView.message {
             snapshot.configure(with: message)
-            snapshot.bubbleView.bubbleColor = fromView.bubbleView.bubbleColor
+            snapshot.bubbleView.setBubbleColor(fromView.bubbleView.bubbleColor, animated: false)
             snapshot.bubbleView.tailLength = 0
             snapshot.bubbleView.orientation = fromView.bubbleView.orientation
             snapshot.state = fromView.state
@@ -41,7 +41,7 @@ extension TransitionRouter {
             snapshot.authorView.alpha = 0 
 
             toView.configure(with: message)
-            toView.bubbleView.bubbleColor = ThemeColor.L1.color
+            toView.bubbleView.setBubbleColor(ThemeColor.L1.color, animated: false)
             toView.textView.setTextColor(.T2)
             toView.bubbleView.tailLength = 0
             toView.bubbleView.orientation = fromView.bubbleView.orientation
@@ -76,7 +76,7 @@ extension TransitionRouter {
         Task {
             async let first: () = UIView.awaitSpringAnimation(with: .slow, animations: {
                 snapshot.frame = finalFrame
-                snapshot.bubbleView.bubbleColor = ThemeColor.L1.color
+                snapshot.bubbleView.setBubbleColor(ThemeColor.L1.color, animated: false)
                 snapshot.textView.setTextColor(.T2)
                 threadVC.blurView.showBlur(true)
                 self.toVC.view.alpha = 1
@@ -111,7 +111,7 @@ extension TransitionRouter {
 
         if let message = fromView.message {
             snapshot.configure(with: message)
-            snapshot.bubbleView.bubbleColor = fromView.bubbleView.bubbleColor
+            snapshot.bubbleView.setBubbleColor(fromView.bubbleView.bubbleColor, animated: false)
             snapshot.bubbleView.tailLength = fromView.bubbleView.tailLength
             snapshot.bubbleView.orientation = fromView.bubbleView.orientation
         }
@@ -133,7 +133,7 @@ extension TransitionRouter {
                 threadVC.blurView.showBlur(false)
                 self.fromVC.view.alpha = 0
                 snapshot.frame = finalFrame
-                snapshot.bubbleView.bubbleColor = toView.bubbleView.bubbleColor
+                snapshot.bubbleView.setBubbleColor(toView.bubbleView.bubbleColor, animated: false)
             })
             toView.isHidden = false
             snapshot.removeFromSuperview()

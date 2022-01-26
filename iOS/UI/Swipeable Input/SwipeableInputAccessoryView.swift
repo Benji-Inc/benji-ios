@@ -96,7 +96,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.showShadow(withOffset: 8)
-        self.inputContainerView.bubbleColor = ThemeColor.B1.color
+        self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false) 
 
         self.inputTypeContainer.addSubview(self.emotionView)
         self.emotionView.alpha = 0
@@ -402,10 +402,14 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
         if distanceToDropZone < self.dropZoneFrame.height * 0.5 {
             if !self.isPreviewInDropZone {
+                previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
                 self.impactFeedback.impactOccurred()
             }
             self.isPreviewInDropZone = true
         } else {
+            if self.isPreviewInDropZone {
+                previewView.setBubbleColor(ThemeColor.B1.color, animated: true)
+            }
             self.isPreviewInDropZone = false
         }
     }
