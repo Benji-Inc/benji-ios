@@ -70,6 +70,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             }
             self.presentConversationTitleAlert(for: conversation)
         }
+        
+        self.conversationListVC.dataSource.handleCreateGroupSelected = { [unowned self] in
+            self.presentCircle()
+        }
 
         Task {
             await self.checkForPermissions()
@@ -92,6 +96,17 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         default:
             break
         }
+    }
+    
+    func presentCircle() {
+        self.removeChild()
+        let coordinator = CircleCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] _ in
+            self.router.dismiss(source: self.conversationListVC)
+        }
+
+        self.conversationListVC.updateUI(for: .read)
+        self.router.present(coordinator, source: self.conversationListVC)
     }
 
     func presentThread(for channelId: ChannelId,

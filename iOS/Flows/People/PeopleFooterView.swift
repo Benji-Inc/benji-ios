@@ -27,7 +27,7 @@ class PeopleFooterView: UICollectionReusableView {
     
     func initializeViews() {
         self.addSubview(self.label)
-        self.label.setText("Some text about adding Contact Permissions")
+        self.label.setText("Choose people from your Address Book")
         self.label.textAlignment = .center
         self.label.alpha = 0.6
         

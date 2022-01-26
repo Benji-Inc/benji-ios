@@ -549,6 +549,8 @@
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
+		D6DEC3ED27A1D9520072D9D0 /* CircleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */; };
+		D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
@@ -981,6 +983,8 @@
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleViewController.swift; sourceTree = "<group>"; };
+		D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCoordinator.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
 		D6E974352752C47F00D95F08 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
@@ -1911,8 +1915,9 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				D687F3C426FE4BC6000E4734 /* People */,
+				D6DEC3EB27A1D9370072D9D0 /* Circles */,
 				D6432BF122D8282E0016001A /* Conversation */,
+				D687F3C426FE4BC6000E4734 /* People */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
 			);
 			path = Flows;
@@ -1938,6 +1943,15 @@
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
 			);
 			path = "UI Extensions";
+			sourceTree = "<group>";
+		};
+		D6DEC3EB27A1D9370072D9D0 /* Circles */ = {
+			isa = PBXGroup;
+			children = (
+				D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */,
+				D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */,
+			);
+			path = Circles;
 			sourceTree = "<group>";
 		};
 		D6E65F17237791450061AA67 /* Collection View Management  */ = {
@@ -2428,6 +2442,7 @@
 				D6D1460721D552B100CD8CE4 /* Character+Extensions.swift in Sources */,
 				D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D6A6691D271A44FB0001D218 /* Pass.swift in Sources */,
+				D6DEC3ED27A1D9520072D9D0 /* CircleViewController.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				8043F53F276BC05D0036FAC8 /* PlaceholderConversationCell.swift in Sources */,
 				D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
@@ -2665,6 +2680,7 @@
 				D6B95AF3272324BD00FBE66A /* UserStore.swift in Sources */,
 				D64C323E270391AE004BC1BD /* Contact.swift in Sources */,
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
+				D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */,
 				80616E3526EAD2F300C077BA /* DataController+Async.swift in Sources */,
