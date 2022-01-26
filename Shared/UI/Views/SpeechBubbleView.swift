@@ -33,13 +33,6 @@ class SpeechBubbleView: BaseView {
             guard let cgColor = self.bubbleLayer.fillColor else { return nil }
             return UIColor(cgColor: cgColor)
         }
-        set {
-            // CALayers are implicitly animated. Disable animations so the color changes immediately.
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            self.bubbleLayer.fillColor = newValue?.cgColor
-            CATransaction.commit()
-        }
     }
 
     /// The distance from the base of the tail to the point.
@@ -71,7 +64,7 @@ class SpeechBubbleView: BaseView {
 
         super.init()
 
-        self.bubbleColor = bubbleColor
+        self.setBubbleColor(ThemeColor.B1.color, animated: false)
     }
 
     convenience init(orientation: TailOrientation, bubbleColor: ThemeColor) {
@@ -83,7 +76,7 @@ class SpeechBubbleView: BaseView {
 
         super.init(coder: aDecoder)
 
-        self.bubbleColor = ThemeColor.B1.color
+        self.setBubbleColor(ThemeColor.B1.color, animated: false)
     }
 
     override func initializeSubviews() {
@@ -116,6 +109,15 @@ class SpeechBubbleView: BaseView {
         self.bubbleLayer.path = self.updateBubblePath()
         self.bubbleLayer.frame = self.bounds
 
+        CATransaction.commit()
+    }
+
+    func setBubbleColor(_ color: UIColor?, animated: Bool) {
+        // CALayers are implicitly animated.
+        // If specified, disable animations so the color changes immediately.
+        CATransaction.begin()
+        CATransaction.setDisableActions(!animated)
+        self.bubbleLayer.fillColor = color?.cgColor
         CATransaction.commit()
     }
 
