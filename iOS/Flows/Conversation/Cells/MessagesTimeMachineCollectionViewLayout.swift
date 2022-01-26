@@ -90,41 +90,39 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             return attributes
         }
 
-
         var backgroundBrightness: CGFloat
         if normalizedZOffset < 0 {
-            // Dark the item as it moves away
+            // Darken the item as it moves away
             backgroundBrightness = lerp(abs(normalizedZOffset),
                                         start: self.frontmostBrightness,
                                         end: self.backmostBrightness)
         } else {
-            // Items should be at full when at the front of the stack.
+            // Items should be at full brightness when at the front of the stack.
             backgroundBrightness = self.frontmostBrightness
         }
 
         let detailAlpha = 1 - abs(normalizedZOffset) / 0.2
         let textViewAlpha = 1 - abs(normalizedZOffset) / 0.8
 
-        // The most recent visible item should be saturated color.
-        if let itemFocusPosition = self.itemFocusPositions[indexPath] {
-            var normalizedFocusDistance = abs(itemFocusPosition - self.zPosition)/self.itemHeight.half
-            normalizedFocusDistance = clamp(normalizedFocusDistance, 0, 1)
+        // The section with the most recent item should be saturated in color
 
-            // Figure out how saturated the color should be.
-            // Lerp between D1 to L1
-            let saturatedColor = ThemeColor.D1.color
-            let unsaturatedColor = ThemeColor.L1.color
-            attributes.backgroundColor = lerp(normalizedFocusDistance,
-                                              color1: saturatedColor,
-                                              color2: unsaturatedColor)
+        let focusAmount = self.getFocusAmount(forSection: indexPath.section)
+        attributes.sectionFocusAmount = focusAmount
 
-            // Lerp text T1 and T2
-            let unsaturatedTextColor = ThemeColor.T3.color
-            let saturatedTextColor = ThemeColor.T2.color
-            attributes.textColor = lerp(normalizedFocusDistance,
-                                        color1: unsaturatedTextColor,
-                                        color2: saturatedTextColor)
-        }
+        // Figure out how saturated the color should be.
+        // Lerp between D1 to L1
+        let unsaturatedColor = ThemeColor.L1.color
+        let saturatedColor = ThemeColor.D1.color
+        attributes.backgroundColor = lerp(focusAmount,
+                                          color1: unsaturatedColor,
+                                          color2: saturatedColor)
+
+        // Lerp text between T1 and T2
+        let saturatedTextColor = ThemeColor.T2.color
+        let unsaturatedTextColor = ThemeColor.T3.color
+        attributes.textColor = lerp(focusAmount,
+                                    color1: saturatedTextColor,
+                                    color2: unsaturatedTextColor)
 
         attributes.brightness = backgroundBrightness
         attributes.shouldShowTail = indexPath.section == 0
@@ -137,6 +135,31 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     // MARK: - Attribute Helpers
+
+    /// Returns a value between 0 and 1 denoting how in focus a section is. "In focus" means that its frontmost item is in focus.
+    /// 0 means that no item in the section is even partially in focus.
+    /// 1 means at least one item in the section is fully in focus, or we are between two items that are both partially in focus.
+    func getFocusAmount(forSection section: SectionIndex) -> CGFloat {
+        let focusPositionsInSection: [CGFloat] = self.itemFocusPositions
+            .compactMap { (key: IndexPath, focusPosition: CGFloat) in
+                if key.section == section {
+                    return focusPosition
+                }
+                return nil
+        }
+
+        var normalizedDistance: CGFloat = 0
+
+        for focusPosition in focusPositionsInSection {
+            let itemDistance = abs(focusPosition - self.zPosition)
+            let normalizedItemDistance = itemDistance/self.itemHeight
+            if normalizedItemDistance < 1 {
+                normalizedDistance += 1 - normalizedItemDistance
+            }
+        }
+
+        return normalizedDistance
+    }
 
     func getBottomFrontmostCell() -> MessageCell? {
         guard let ip = self.getFrontmostIndexPath(in: 1),

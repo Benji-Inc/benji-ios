@@ -166,7 +166,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             switch user.status {
             case .needsVerification, .none:
                 self.finishFlow(with: ())
-            case .waitlist, .active, .inactive:
+            case .inactive, .waitlist, .active:
                 self.finalizeOnboarding(user: user)
             }
         }

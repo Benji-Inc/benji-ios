@@ -33,7 +33,8 @@ class MessagePreviewViewController: ViewController {
         self.content.state = .expanded
         self.content.configureBackground(color: ThemeColor.L1.color,
                                          textColor: ThemeColor.T2.color,
-                                         brightness: 1.0,
+                                         brightness: 1,
+                                         focusAmount: 1,
                                          showBubbleTail: false,
                                          tailOrientation: .up)
         self.content.configure(with: self.message)
