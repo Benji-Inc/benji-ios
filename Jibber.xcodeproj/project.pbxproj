@@ -553,6 +553,7 @@
 		D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */; };
 		D6DEC3F127A1DDB70072D9D0 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */; };
 		D6DEC3F327A1DEE60072D9D0 /* CircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */; };
+		D6DEC3F527A20E410072D9D0 /* EmptyCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
@@ -989,6 +990,7 @@
 		D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCoordinator.swift; sourceTree = "<group>"; };
 		D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAvatarView.swift; sourceTree = "<group>"; };
+		D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCircleView.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
 		D6E974352752C47F00D95F08 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
@@ -1956,6 +1958,7 @@
 				D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */,
 				D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */,
 				D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */,
+				D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */,
 			);
 			path = Circles;
 			sourceTree = "<group>";
@@ -2400,6 +2403,7 @@
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
 				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */,
+				D6DEC3F527A20E410072D9D0 /* EmptyCircleView.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				8015CA7726F3D907000F3C60 /* ConversationMessagesCell.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
