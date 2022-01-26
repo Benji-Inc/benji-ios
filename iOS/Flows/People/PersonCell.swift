@@ -17,7 +17,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Person
 
     let titleLabel = ThemeLabel(font: .system)
-    let buttonTitleLabel = ThemeLabel(font: .systemBold)
+    let buttonTitleLabel = ThemeLabel(font: .systemBold, textColor: .D1)
     let lineView = BaseView()
 
     override func initializeSubviews() {
@@ -32,13 +32,19 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     }
     
     func configure(with item: Person) {
+        self.currentItem = item
+        
         if let connection = item.connection {
             if let user = connection.nonMeUser, user.isDataAvailable {
                 self.updateName(for: user, highlightText: item.highlightText)
             }
             self.buttonTitleLabel.setText("Add")
+            self.titleLabel.setTextColor(.D1)
+            self.buttonTitleLabel.setTextColor(.D1)
         } else {
+            self.titleLabel.setTextColor(.T1)
             self.buttonTitleLabel.setText("Invite")
+            self.buttonTitleLabel.setTextColor(.T1)
             self.updateName(for: item, highlightText: item.highlightText)
         }
     }
@@ -58,6 +64,8 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     override func update(isSelected: Bool) {
         super.update(isSelected: isSelected)
         
+        var color: ThemeColor = isSelected ? .D1 : .T1
+        
         if let person = self.currentItem {
             if let _ = person.connection {
                 if isSelected {
@@ -65,6 +73,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
                 } else {
                     self.buttonTitleLabel.setText("Add")
                 }
+                color = .D1
             } else {
                 if isSelected {
                     self.buttonTitleLabel.setText("Added")
@@ -75,7 +84,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.buttonTitleLabel.setTextColor(isSelected ? .D1 : .T1)
+            self.buttonTitleLabel.setTextColor(color)
             self.setNeedsLayout()
         }
     }
