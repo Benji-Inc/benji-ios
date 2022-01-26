@@ -10,12 +10,18 @@ import Foundation
 
 class CircleViewController: ViewController {
     
+    let backgroundGradient = BackgroundGradientView()
     let label = ThemeLabel(font: .regularBold)
+    
+    override func loadView() {
+        self.view = self.backgroundGradient
+    }
     
     override func initializeViews() {
         super.initializeViews()
         
         self.view.addSubview(self.label)
+        self.label.setText("This is some text")
     }
     
     override func viewDidLayoutSubviews() {
