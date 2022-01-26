@@ -85,7 +85,7 @@ class InvitationLoadingView: BaseView {
     }
 
     private func set(person: Person) {
-        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Preparing message for:\n\n\n@(contact)")
+        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Preparing message for\n\n\n@(contact)")
         self.label.setText(text)
         self.label.add(attributes: [.foregroundColor: ThemeColor.D6.color,
                                     .font: FontType.regularBold.font], to: person.fullName)
