@@ -10,7 +10,14 @@ import Foundation
 
 class BorderedAvatarView: AvatarView {
     
-    let shadowLayer = CAShapeLayer()
+    lazy var shadowLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.shadowColor = ThemeColor.gray.color.cgColor
+        layer.shadowOpacity = 0.35
+        layer.shadowOffset = .zero
+        layer.shadowRadius = 10
+        return layer 
+    }()
 
     lazy var pulseLayer: CAShapeLayer = {
         let shape = CAShapeLayer()
@@ -30,11 +37,6 @@ class BorderedAvatarView: AvatarView {
         
         self.layer.insertSublayer(self.pulseLayer, at: 2)
         self.layer.insertSublayer(self.shadowLayer, at: 0)
-        
-        self.shadowLayer.shadowColor = ThemeColor.gray.color.cgColor
-        self.shadowLayer.shadowOpacity = 0.35
-        self.shadowLayer.shadowOffset = .zero
-        self.shadowLayer.shadowRadius = 10
     }
     
     override func layoutSubviews() {

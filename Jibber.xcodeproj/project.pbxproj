@@ -554,6 +554,7 @@
 		D6DEC3F127A1DDB70072D9D0 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */; };
 		D6DEC3F327A1DEE60072D9D0 /* CircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */; };
 		D6DEC3F527A20E410072D9D0 /* EmptyCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */; };
+		D6DEC3F727A212940072D9D0 /* InitialsCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
@@ -991,6 +992,7 @@
 		D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAvatarView.swift; sourceTree = "<group>"; };
 		D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCircleView.swift; sourceTree = "<group>"; };
+		D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsCircleView.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
 		D6E974352752C47F00D95F08 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
@@ -1959,6 +1961,7 @@
 				D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */,
 				D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */,
 				D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */,
+				D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */,
 			);
 			path = Circles;
 			sourceTree = "<group>";
@@ -2644,6 +2647,7 @@
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				8028C9E9273ECB1200520465 /* ConversationListViewController.swift in Sources */,
+				D6DEC3F727A212940072D9D0 /* InitialsCircleView.swift in Sources */,
 				D682F02F278E09200016A24E /* ConversationHeaderViewController+Menu.swift in Sources */,
 				D66A580525DD68F9001B3F64 /* PeopleCoordinator.swift in Sources */,
 				8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */,

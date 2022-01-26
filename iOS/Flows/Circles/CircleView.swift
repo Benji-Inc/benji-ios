@@ -12,13 +12,14 @@ import Combine
 class CircleView: BaseView {
     
     let emptyView = EmptyCircleView()
+    let initialsView = InitialsCircleView()
     let avatarView = CircleAvatarView()
     var cancellables = Set<AnyCancellable>()
     
     enum State {
         case empty
-        case contact
-        case connection
+        case initials
+        case user
     }
     
     @Published var uiState: State = .empty
@@ -35,6 +36,7 @@ class CircleView: BaseView {
         self.avatarView.isHidden = true 
         
         self.addSubview(self.emptyView)
+        self.addSubview(self.initialsView)
         self.addSubview(self.avatarView)
         self.clipsToBounds = false
         
@@ -43,26 +45,32 @@ class CircleView: BaseView {
         }.store(in: &self.cancellables)
         
         self.clipsToBounds = false
+        
+        self.uiState = .initials
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         self.avatarView.expandToSuperviewSize()
+        self.initialsView.expandToSuperviewSize()
         self.emptyView.expandToSuperviewSize()
     }
     
     private func handle(state: State) {
         switch state {
         case .empty:
-            // update border to be dashed lines
-            break
-        case .contact:
-            // update border to reflect focus and show initials
-            break
-        case .connection:
-            // update border to reflect focus and show image
-            break
+            self.emptyView.isHidden = false
+            self.avatarView.isHidden = true
+            self.initialsView.isHidden = true
+        case .initials:
+            self.emptyView.isHidden = true
+            self.avatarView.isHidden = true
+            self.initialsView.isHidden = false
+        case .user:
+            self.emptyView.isHidden = true
+            self.avatarView.isHidden = false
+            self.initialsView.isHidden = true
         }
     }
 }
