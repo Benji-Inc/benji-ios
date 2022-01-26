@@ -373,20 +373,22 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         var previewCenter = initialCenter + CGPoint(x: offsetX, y: panOffset.y)
 
-
-        // As the user drags further up, gravitate the preview view toward the drop zone
-
+        // As the user drags further up, gravitate the preview view toward the drop zone.
         let dropZoneCenter = self.dropZoneFrame.center
-        var gravityVector = CGPoint(x: dropZoneCenter.x - previewCenter.x,
-                                    y: dropZoneCenter.y - previewCenter.y)
+        // Range along y axis from the drop zone center within which we start gravitating the preview
+        let yGravityRange: CGFloat = self.dropZoneFrame.height
 
+        // Vector pointing from the current preview center to the drop zone center.
+        var gravityVector = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter)
+        // The closer to the drop zone, the stronger the gravity should be.
+        let gravityFactor = lerpClamped(abs(previewCenter.y - dropZoneCenter.y)/yGravityRange,
+                                        keyPoints: [1, 0.95, 0.85, 0.7, 0])
+        gravityVector = CGVector(dx: gravityVector.dx * gravityFactor * 0.5,
+                                 dy: gravityVector.dy * gravityFactor)
 
-        let gravityFactor = 1 - clamp(abs(gravityVector.y)/80, 0, 1)
-        gravityVector = gravityVector * gravityFactor
-
-        logDebug(gravityFactor)
-        previewCenter = CGPoint(x: previewCenter.x + gravityVector.x,
-                                y: previewCenter.y + gravityVector.y)
+        // Adjust the preview's center with the gravity vector.
+        previewCenter = CGPoint(x: previewCenter.x + gravityVector.dx,
+                                y: previewCenter.y + gravityVector.dy)
 
         previewView.center = previewCenter
     }

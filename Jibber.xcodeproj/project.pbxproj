@@ -25,6 +25,8 @@
 		802C448A26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		802C448C26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */; };
+		8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8041FB0C27A0C2BB00FEBD78 /* CGVector+Extensions.swift */; };
+		8041FB0E27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8041FB0C27A0C2BB00FEBD78 /* CGVector+Extensions.swift */; };
 		8043F53F276BC05D0036FAC8 /* PlaceholderConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */; };
 		80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */; };
 		804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804E5859276D484900700923 /* PlaceholderMessageCell.swift */; };
@@ -666,6 +668,7 @@
 		8028C9E8273ECB1200520465 /* ConversationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListViewController.swift; sourceTree = "<group>"; };
 		802C448926CC76CC00A333A4 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTimeMachineCollectionViewLayout.swift; sourceTree = "<group>"; };
+		8041FB0C27A0C2BB00FEBD78 /* CGVector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extensions.swift"; sourceTree = "<group>"; };
 		8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderConversationCell.swift; sourceTree = "<group>"; };
 		80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequenceCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		804E5859276D484900700923 /* PlaceholderMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderMessageCell.swift; sourceTree = "<group>"; };
@@ -1406,6 +1409,7 @@
 			isa = PBXGroup;
 			children = (
 				D642735D22C90C820088256B /* CGPoint+Extensions.swift */,
+				8041FB0C27A0C2BB00FEBD78 /* CGVector+Extensions.swift */,
 				D642736B22C98FA00088256B /* MathFunctions.swift */,
 			);
 			path = "Math Extensions";
@@ -2370,6 +2374,7 @@
 				8070E750271747DE004873D9 /* MessageDropZoneView.swift in Sources */,
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
+				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
 				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
@@ -2812,6 +2817,7 @@
 				D63DB26225E9997200F6B323 /* FontType.swift in Sources */,
 				D6A6691F271A44FB0001D218 /* Pass.swift in Sources */,
 				D63DB29325E999B200F6B323 /* TextField.swift in Sources */,
+				8041FB0E27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
 				D63DB29525E999B200F6B323 /* Button+Extensions.swift in Sources */,
 				D63DB26F25E9997F00F6B323 /* Statusable.swift in Sources */,
 				D660C4CA2793626700221F76 /* AddView.swift in Sources */,
