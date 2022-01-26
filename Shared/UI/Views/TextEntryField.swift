@@ -31,7 +31,7 @@ class TextEntryField: BaseView, Sizeable {
         super.initializeSubviews()
         
         self.addSubview(self.speechBubble)
-        self.speechBubble.bubbleColor = ThemeColor.B1.color
+        self.speechBubble.setBubbleColor(ThemeColor.B1.color, animated: false)
 
         self.showShadow(withOffset: 8)
         
