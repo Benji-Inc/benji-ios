@@ -270,6 +270,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     private var initialPreviewCenter: CGPoint?
     /// How far the preview view can be dragged left or right.
     private let maxXOffset: CGFloat = 40
+    /// If true, the preview view is currently in the drop zone.
+    private var isPreviewInDropZone = false
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
@@ -381,6 +383,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         // Vector pointing from the current preview center to the drop zone center.
         var gravityVector = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter)
+
         // The closer to the drop zone, the stronger the gravity should be.
         let gravityFactorX = lerpClamped(abs(previewCenter.x - dropZoneCenter.x)/xGravityRange,
                                          keyPoints: [1, 0.95, 0.85, 0.5, 0])
@@ -394,6 +397,17 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                                 y: previewCenter.y + gravityVector.dy)
 
         previewView.center = previewCenter
+
+        // Provide haptic feedback when the message is ready to send.
+        let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
+        if distanceToDropZone < self.dropZoneFrame.height * 0.5 {
+            if !self.isPreviewInDropZone {
+                self.impactFeedback.impactOccurred()
+            }
+            self.isPreviewInDropZone = true
+        } else {
+            self.isPreviewInDropZone = false
+        }
     }
 
     private func resetPreviewAndInputViews(didSend: Bool) {
