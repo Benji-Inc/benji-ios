@@ -12,7 +12,6 @@ import PhotosUI
 import Combine
 import StreamChat
 import Localization
-import Intents
 
 class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
 
@@ -233,36 +232,5 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.resignFirstResponder()
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
-    }
-}
-
-// MARK: - Permissions
-
-extension ConversationListCoordinator {
-
-    @MainActor
-    func checkForPermissions() async {
-        if INFocusStatusCenter.default.authorizationStatus != .authorized {
-            self.presentPermissions()
-        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
-            self.presentPermissions()
-        }
-    }
-
-    @MainActor
-    private func presentPermissions() {
-        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-        
-        /// Because of how the Permissions are presented, we need to properly reset the KeyboardManager.
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            self.conversationListVC.becomeFirstResponder()
-        }
-        
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: self.conversationListVC, animated: true)
-        }
-        
-        self.conversationListVC.resignFirstResponder()
-        self.router.present(coordinator, source: self.conversationListVC)
     }
 }

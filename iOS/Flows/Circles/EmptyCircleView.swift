@@ -21,7 +21,7 @@ class EmptyCircleView: BaseView {
     
     lazy var circleLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
-        layer.fillColor = ThemeColor.B3.color.cgColor
+        layer.fillColor = ThemeColor.B3.color.withAlphaComponent(0.5).cgColor
         return layer
     }()
     
@@ -30,14 +30,14 @@ class EmptyCircleView: BaseView {
         layer.lineDashPattern = [4, 8]
         layer.lineWidth = 1.5
         layer.strokeColor = ThemeColor.D6.color.cgColor
-        layer.fillColor = ThemeColor.B3.color.cgColor
+        layer.fillColor = ThemeColor.clear.color.cgColor
         return layer
     }()
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.clipsToBounds = false 
+        self.clipsToBounds = false
         
         self.layer.addSublayer(self.shadowLayer)
         self.layer.addSublayer(self.circleLayer)

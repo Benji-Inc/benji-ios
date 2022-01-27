@@ -46,7 +46,7 @@ class CircleView: BaseView {
         
         self.clipsToBounds = false
         
-        self.uiState = .initials
+        self.uiState = .empty
     }
     
     override func layoutSubviews() {

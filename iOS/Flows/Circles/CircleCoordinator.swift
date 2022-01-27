@@ -21,4 +21,25 @@ class CircleCoordinator: PresentableCoordinator<Void> {
 
        
     }
+    
+    func presentPeoplePicker() {
+
+        self.removeChild()
+        let coordinator = PeopleCoordinator(conversationID: nil,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
+        
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
+        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+        }
+
+        self.addChildAndStart(coordinator) { [unowned self] connections in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                //self.conversationListVC.becomeFirstResponder()
+                //self.add(connections: connections, to: conversation)
+            }
+        }
+
+        self.router.present(coordinator, source: self.circleVC)
+    }
 }
