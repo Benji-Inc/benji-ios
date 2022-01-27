@@ -32,6 +32,7 @@
 		804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804E5859276D484900700923 /* PlaceholderMessageCell.swift */; };
 		8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052574027441EAC00B6DC23 /* Filter+Extensions.swift */; };
 		8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */; };
+		80536B5E27A249D00094B81C /* SwipeInputPanGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */; };
 		805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8059AD4B27851162004330DC /* ChatUser+Extensions.swift */; };
 		80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
@@ -54,6 +55,8 @@
 		809EDC6C273ECEF000597473 /* ConversationListViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */; };
 		80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */; };
 		80A36AF3278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */; };
+		80ADAA0227A31F0B0043B830 /* swipeUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 80ADAA0127A31F0B0043B830 /* swipeUp.json */; };
+		80ADAA0327A31F0B0043B830 /* swipeUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 80ADAA0127A31F0B0043B830 /* swipeUp.json */; };
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
@@ -679,6 +682,7 @@
 		804E5859276D484900700923 /* PlaceholderMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderMessageCell.swift; sourceTree = "<group>"; };
 		8052574027441EAC00B6DC23 /* Filter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Filter+Extensions.swift"; sourceTree = "<group>"; };
 		8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageCellLayoutAttributes.swift; sourceTree = "<group>"; };
+		80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInputPanGestureHandler.swift; sourceTree = "<group>"; };
 		805881552743008D0004F2EA /* ConversationMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationMember+Extensions.swift"; sourceTree = "<group>"; };
 		8059AD4B27851162004330DC /* ChatUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatUser+Extensions.swift"; sourceTree = "<group>"; };
 		80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatClient+Extensions.swift"; sourceTree = "<group>"; };
@@ -697,6 +701,7 @@
 		809EDC69273ECBC300597473 /* ConversationListController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListController+Extensions.swift"; sourceTree = "<group>"; };
 		809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListViewController+Extensions.swift"; sourceTree = "<group>"; };
 		80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
+		80ADAA0127A31F0B0043B830 /* swipeUp.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = swipeUp.json; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
@@ -1608,10 +1613,11 @@
 		D668893023F2741500FD2764 /* Animations */ = {
 			isa = PBXGroup;
 			children = (
-				D6B00D3B2796480D00DF07B1 /* loading.json */,
 				D640328D25AF3CA500139396 /* checkbox.json */,
 				D640328C25AF3CA500139396 /* error.json */,
 				D640328A25AF3CA500139396 /* face_scan.json */,
+				D6B00D3B2796480D00DF07B1 /* loading.json */,
+				80ADAA0127A31F0B0043B830 /* swipeUp.json */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -1900,6 +1906,7 @@
 				D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */,
 				D6CC148E276C1323005F617F /* newStatusView.swift */,
 				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
+				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
@@ -2201,6 +2208,7 @@
 				D640329425AF3CA500139396 /* error.json in Resources */,
 				D640329025AF3CA500139396 /* face_scan.json in Resources */,
 				D640329625AF3CA500139396 /* checkbox.json in Resources */,
+				80ADAA0227A31F0B0043B830 /* swipeUp.json in Resources */,
 				D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6B00D3C2796480D00DF07B1 /* loading.json in Resources */,
 				8020DD93272C81FB00D5BA04 /* ConversationInputAccessoryView.xib in Resources */,
@@ -2224,6 +2232,7 @@
 				D6FA273F2767A67300315528 /* Localization in Resources */,
 				D63DB27925E9998A00F6B323 /* face_scan.json in Resources */,
 				D6B00D3D2796480D00DF07B1 /* loading.json in Resources */,
+				80ADAA0327A31F0B0043B830 /* swipeUp.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2500,6 +2509,7 @@
 				D6D1502921D6085200CD8CE4 /* ResourceObject.swift in Sources */,
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
+				80536B5E27A249D00094B81C /* SwipeInputPanGestureHandler.swift in Sources */,
 				D615534E2745C1C900B08459 /* MessageContentView.swift in Sources */,
 				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
 				D6CC1485276BEF5B005F617F /* Text+Extensions.swift in Sources */,
