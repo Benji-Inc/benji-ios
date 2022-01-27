@@ -47,8 +47,8 @@ class CircleCollectionViewLayout: UICollectionViewLayout {
                 self.itemLayoutAttributes = (0..<itemCount).map({ (index) -> UICollectionViewLayoutAttributes in
                     let angleStep: CGFloat = 2.0 * CGFloat.pi / CGFloat(itemCount)
                     var position = self.layoutCircleFrame.center
-                    position.x += self.layoutCircleFrame.size.innerRadius * cos(angleStep * CGFloat(index))
-                    position.y += self.layoutCircleFrame.size.innerRadius * sin(angleStep * CGFloat(index))
+                    position.x += self.layoutCircleFrame.size.innerRadius * cos(-CGFloat.pi.half + angleStep * CGFloat(index))
+                    position.y += self.layoutCircleFrame.size.innerRadius * sin(-CGFloat.pi.half + angleStep * CGFloat(index))
                     let indexPath = IndexPath(item: index, section: section)
                     let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
                     attributes.frame = CGRect(center: position, size: itemSize)

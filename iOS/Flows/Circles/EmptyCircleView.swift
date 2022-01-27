@@ -13,7 +13,7 @@ class EmptyCircleView: BaseView {
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.shadowColor = ThemeColor.B3.color.cgColor
-        layer.shadowOpacity = 1.0
+        layer.shadowOpacity = 0.35
         layer.shadowOffset = .zero
         layer.shadowRadius = 6
         return layer

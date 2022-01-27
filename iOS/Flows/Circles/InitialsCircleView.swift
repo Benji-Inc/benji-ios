@@ -16,7 +16,7 @@ class InitialsCircleView: BaseView {
     lazy var circleLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.shadowColor = ThemeColor.D6.color.cgColor
-        layer.shadowOpacity = 1.0
+        layer.shadowOpacity = 0.35
         layer.shadowOffset = .zero
         layer.shadowRadius = 6
         layer.fillColor = ThemeColor.B3.color.cgColor

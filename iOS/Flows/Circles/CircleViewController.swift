@@ -44,7 +44,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.collectionView.animationView.isHidden = true
         
         self.view.addSubview(self.label)
-        self.label.setText("Add people by tapping on any circle.")
+        self.label.setText("Add people by tapping on any empty circle.")
         self.label.textAlignment = .center
         
         self.view.addSubview(self.remainingLabel)
@@ -139,16 +139,16 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         var allItems: [CircleItemType] = []
         var itemCount: Int = 0
         
-        let limit = circle.limit - 1
+        let limit = circle.limit
         
-        for i in 0...limit {
+        for i in 0..<limit {
             if let user = circle.users[safe: i] {
                 allItems.append(.item(CircleItem(position: i, user: user)))
                 itemCount += 1
             }
         }
         
-        for i in 0...limit {
+        for i in 0..<limit {
             if let contactId = circle.invitedContacts[safe: i],
                       let contact = ContactsManger.shared.searchForContact(with: .identifier(contactId)).first {
                 allItems.append(.item(CircleItem(position: i, contact: contact)))
@@ -156,11 +156,11 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
             }
         }
         
-        for i in itemCount - 1...limit {
+        for i in itemCount..<limit {
             allItems.append(.item(CircleItem(position: i)))
         }
         
-        let remaining = limit - itemCount
+        let remaining = circle.limit - itemCount
         
         self.updateRemaining(with: remaining)
 

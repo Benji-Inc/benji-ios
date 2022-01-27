@@ -44,7 +44,7 @@ final class Circle: PFObject, PFSubclassing {
     }
     
     var limit: Int {
-        get { self.getObject(for: .limit) ?? 10 }
+        get { self.getObject(for: .limit) ?? 9 }
     }
     
     var theme: Theme {
