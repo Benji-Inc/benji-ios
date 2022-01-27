@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Contacts
 
 class InitialsCircleView: BaseView {
     
@@ -45,7 +46,11 @@ class InitialsCircleView: BaseView {
         self.layer.insertSublayer(self.borderLayer, at: 2)
         
         self.addSubview(self.label)
-        self.label.setText("BD")
+    }
+    
+    func configure(with contact: CNContact) {
+        self.label.setText(contact.initials)
+        self.layoutNow()
     }
     
     override func layoutSubviews() {

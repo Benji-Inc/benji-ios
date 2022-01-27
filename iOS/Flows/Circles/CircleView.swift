@@ -57,6 +57,18 @@ class CircleView: BaseView {
         self.emptyView.expandToSuperviewSize()
     }
     
+    func configure(with item: CircleItem) {
+        if let user = item.user {
+            self.avatarView.set(avatar: user)
+            self.uiState = .user
+        } else if let contact = item.contact {
+            self.initialsView.configure(with: contact)
+            self.uiState = .initials
+        } else {
+            self.uiState = .empty 
+        }
+    }
+    
     private func handle(state: State) {
         switch state {
         case .empty:

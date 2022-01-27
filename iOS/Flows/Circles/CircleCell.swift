@@ -21,7 +21,7 @@ class CircleCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: CircleItem) {
-        
+        self.circleView.configure(with: item)
     }
     
     override func layoutSubviews() {

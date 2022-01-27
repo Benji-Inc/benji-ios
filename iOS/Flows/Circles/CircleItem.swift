@@ -45,5 +45,9 @@ struct CircleItem: Avatar, Hashable {
     
     var position: Int 
     var user: User?
-    var contact: CNContact? 
+    var contact: CNContact?
+    
+    var canAdd: Bool {
+        return self.user.isNil && self.contact.isNil 
+    }
 }

@@ -24,8 +24,13 @@ class CircleCoordinator: PresentableCoordinator<Void> {
         }
         
         self.circleVC.$selectedItems.mainSink { [unowned self] items in
-            guard !items.isEmpty else { return }
-            self.presentPeoplePicker()
+            guard let itemType = items.first else { return }
+            switch itemType {
+            case .item(let circleItem):
+                if circleItem.canAdd {
+                    self.presentPeoplePicker()
+                }
+            }
         }.store(in: &self.cancellables)
     }
     
