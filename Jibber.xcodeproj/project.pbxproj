@@ -554,6 +554,7 @@
 		D6DEC3F727A212940072D9D0 /* InitialsCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */; };
 		D6DEC3F927A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */; };
 		D6DEC3FE27A220170072D9D0 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FD27A220170072D9D0 /* ContactsViewController.swift */; };
+		D6DEC40027A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
@@ -991,6 +992,7 @@
 		D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsCircleView.swift; sourceTree = "<group>"; };
 		D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Permissions.swift"; sourceTree = "<group>"; };
 		D6DEC3FD27A220170072D9D0 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
+		D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
 		D6E974352752C47F00D95F08 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
@@ -1448,6 +1450,7 @@
 				80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */,
 				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
 				D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */,
+				D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */,
 				D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				8070E74F271747DE004873D9 /* MessageDropZoneView.swift */,
@@ -2472,6 +2475,7 @@
 				D62D16322736F60400C542CE /* ToastErrorView.swift in Sources */,
 				D6E974362752C47F00D95F08 /* ReactionType.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
+				D6DEC40027A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
