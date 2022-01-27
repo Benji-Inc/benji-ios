@@ -37,7 +37,7 @@ class CircleCollectionViewLayout: UICollectionViewLayout {
         self.layoutCircleFrame = CGRect(origin: .zero, size: collectionViewContentSize)
             .inset(by: layoutInsets)
             .insetBy(dx: itemSize.width / 2.0, dy: itemSize.height / 2.0)
-            .offsetBy(dx: collectionView.contentOffset.x, dy: collectionView.contentOffset.y)
+            .offsetBy(dx: collectionView.contentOffset.x, dy: collectionView.contentOffset.y - 50)
             .insetBy(dx: -collectionView.contentOffset.x, dy: -collectionView.contentOffset.y)
         
         for section in 0..<collectionView.numberOfSections {

@@ -16,6 +16,8 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     let label = ThemeLabel(font: .regular)
     let remainingLabel = ThemeLabel(font: .small)
     
+    let circleNameLabel = ThemeLabel(font: .regular)
+    
     let pullView = PullView()
         
     init() {
@@ -48,6 +50,9 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.remainingLabel.alpha = 0.6
         
         self.view.addSubview(self.pullView)
+        self.view.addSubview(self.circleNameLabel)
+        
+        self.circleNameLabel.setText("Circle Name")
     }
     
     override func viewDidLoad() {
@@ -59,18 +64,23 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.circleNameLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.circleNameLabel.pinToSafeAreaTop()
+        self.circleNameLabel.centerOnX()
+        
         self.collectionView.width = self.view.width * 1.4
         self.collectionView.centerOnX()
         
         self.label.setSize(withWidth: self.view.halfWidth)
         self.label.centerOnXAndY()
+        self.label.centerY -= 50
         
         self.remainingLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.remainingLabel.centerOnX()
         self.remainingLabel.match(.top, to: .bottom, of: self.label, offset: .standard)
         
         self.pullView.centerOnX()
-        self.pullView.centerY = self.view.height * 0.85
+        self.pullView.centerY = (self.view.height * 0.85) - 50
     }
     
     override func getAllSections() -> [CircleSectionType] {
