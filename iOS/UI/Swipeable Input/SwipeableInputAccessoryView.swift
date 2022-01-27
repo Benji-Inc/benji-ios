@@ -122,8 +122,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
 
         self.swipeHintView.set(backgroundColor: .clear)
-        self.swipeHintView.animation = Animation.named(MicroAnimation.arrowUpWWhite.rawValue)
+        self.swipeHintView.animation = Animation.named(MicroAnimation.swipeUp.rawValue)
         self.swipeHintView.loopMode = .repeat(2.0)
+        self.swipeHintView.contentMode = .scaleAspectFill
 
         self.setupGestures()
         self.setupHandlers()

@@ -32,10 +32,6 @@
 		804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804E5859276D484900700923 /* PlaceholderMessageCell.swift */; };
 		8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052574027441EAC00B6DC23 /* Filter+Extensions.swift */; };
 		8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */; };
-		80536B5827A23ECF0094B81C /* arrowUpBlack.json in Resources */ = {isa = PBXBuildFile; fileRef = 80536B5727A23ECF0094B81C /* arrowUpBlack.json */; };
-		80536B5927A23ECF0094B81C /* arrowUpBlack.json in Resources */ = {isa = PBXBuildFile; fileRef = 80536B5727A23ECF0094B81C /* arrowUpBlack.json */; };
-		80536B5B27A243C90094B81C /* arrowUpWhite.json in Resources */ = {isa = PBXBuildFile; fileRef = 80536B5A27A243C90094B81C /* arrowUpWhite.json */; };
-		80536B5C27A243C90094B81C /* arrowUpWhite.json in Resources */ = {isa = PBXBuildFile; fileRef = 80536B5A27A243C90094B81C /* arrowUpWhite.json */; };
 		80536B5E27A249D00094B81C /* SwipeInputPanGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */; };
 		805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8059AD4B27851162004330DC /* ChatUser+Extensions.swift */; };
@@ -59,6 +55,8 @@
 		809EDC6C273ECEF000597473 /* ConversationListViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */; };
 		80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */; };
 		80A36AF3278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */; };
+		80ADAA0227A31F0B0043B830 /* swipeUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 80ADAA0127A31F0B0043B830 /* swipeUp.json */; };
+		80ADAA0327A31F0B0043B830 /* swipeUp.json in Resources */ = {isa = PBXBuildFile; fileRef = 80ADAA0127A31F0B0043B830 /* swipeUp.json */; };
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
@@ -680,8 +678,6 @@
 		804E5859276D484900700923 /* PlaceholderMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderMessageCell.swift; sourceTree = "<group>"; };
 		8052574027441EAC00B6DC23 /* Filter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Filter+Extensions.swift"; sourceTree = "<group>"; };
 		8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageCellLayoutAttributes.swift; sourceTree = "<group>"; };
-		80536B5727A23ECF0094B81C /* arrowUpBlack.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = arrowUpBlack.json; sourceTree = "<group>"; };
-		80536B5A27A243C90094B81C /* arrowUpWhite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = arrowUpWhite.json; sourceTree = "<group>"; };
 		80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInputPanGestureHandler.swift; sourceTree = "<group>"; };
 		805881552743008D0004F2EA /* ConversationMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationMember+Extensions.swift"; sourceTree = "<group>"; };
 		8059AD4B27851162004330DC /* ChatUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatUser+Extensions.swift"; sourceTree = "<group>"; };
@@ -701,6 +697,7 @@
 		809EDC69273ECBC300597473 /* ConversationListController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListController+Extensions.swift"; sourceTree = "<group>"; };
 		809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListViewController+Extensions.swift"; sourceTree = "<group>"; };
 		80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
+		80ADAA0127A31F0B0043B830 /* swipeUp.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = swipeUp.json; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
@@ -1608,12 +1605,11 @@
 		D668893023F2741500FD2764 /* Animations */ = {
 			isa = PBXGroup;
 			children = (
-				80536B5A27A243C90094B81C /* arrowUpWhite.json */,
-				80536B5727A23ECF0094B81C /* arrowUpBlack.json */,
 				D640328D25AF3CA500139396 /* checkbox.json */,
 				D640328C25AF3CA500139396 /* error.json */,
 				D640328A25AF3CA500139396 /* face_scan.json */,
 				D6B00D3B2796480D00DF07B1 /* loading.json */,
+				80ADAA0127A31F0B0043B830 /* swipeUp.json */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -2192,10 +2188,9 @@
 				D640329425AF3CA500139396 /* error.json in Resources */,
 				D640329025AF3CA500139396 /* face_scan.json in Resources */,
 				D640329625AF3CA500139396 /* checkbox.json in Resources */,
-				80536B5827A23ECF0094B81C /* arrowUpBlack.json in Resources */,
+				80ADAA0227A31F0B0043B830 /* swipeUp.json in Resources */,
 				D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6B00D3C2796480D00DF07B1 /* loading.json in Resources */,
-				80536B5B27A243C90094B81C /* arrowUpWhite.json in Resources */,
 				8020DD93272C81FB00D5BA04 /* ConversationInputAccessoryView.xib in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
 				D6E974642756DAFF00D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
@@ -2210,15 +2205,14 @@
 			files = (
 				D63DB27525E9998A00F6B323 /* error.json in Resources */,
 				D63DB27825E9998A00F6B323 /* checkbox.json in Resources */,
-				80536B5927A23ECF0094B81C /* arrowUpBlack.json in Resources */,
 				D63DB20125E968C300F6B323 /* MainInterface.storyboard in Resources */,
 				D6E974602756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6E974662756DB0000D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D63DB27B25E9998D00F6B323 /* Assets.xcassets in Resources */,
 				D6FA273F2767A67300315528 /* Localization in Resources */,
 				D63DB27925E9998A00F6B323 /* face_scan.json in Resources */,
-				80536B5C27A243C90094B81C /* arrowUpWhite.json in Resources */,
 				D6B00D3D2796480D00DF07B1 /* loading.json in Resources */,
+				80ADAA0327A31F0B0043B830 /* swipeUp.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
