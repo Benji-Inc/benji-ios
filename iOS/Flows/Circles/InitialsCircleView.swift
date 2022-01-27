@@ -10,25 +10,29 @@ import Foundation
 
 class InitialsCircleView: BaseView {
     
-    let label = ThemeLabel(font: .mediumBold)
+    let label = ThemeLabel(font: .display)
     
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
-        layer.shadowColor = ThemeColor.B3.color.cgColor
+        layer.shadowColor = ThemeColor.D6.color.cgColor
         layer.shadowOpacity = 1.0
         layer.shadowOffset = .zero
         layer.shadowRadius = 10
         return layer
     }()
 
-    lazy var pulseLayer: CAShapeLayer = {
-        let shape = CAShapeLayer()
-        shape.lineWidth = 1.5
-        shape.lineCap = .round
-        shape.fillColor = UIColor.clear.cgColor
-        shape.borderColor = ThemeColor.D6.color.cgColor
-        shape.borderWidth = 2
-        return shape
+    lazy var circleLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.fillColor = ThemeColor.B3.color.cgColor
+        return layer
+    }()
+    
+    lazy var borderLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.borderColor = ThemeColor.D6.color.cgColor
+        layer.strokeColor = ThemeColor.D6.color.cgColor
+        layer.borderWidth = 1.5
+        return layer
     }()
 
     override func initializeSubviews() {
@@ -36,8 +40,9 @@ class InitialsCircleView: BaseView {
         
         self.clipsToBounds = false
         
-        self.layer.insertSublayer(self.pulseLayer, at: 1)
         self.layer.insertSublayer(self.shadowLayer, at: 0)
+        self.layer.insertSublayer(self.circleLayer, at: 1)
+        self.layer.insertSublayer(self.borderLayer, at: 2)
         
         self.addSubview(self.label)
         self.label.setText("BD")
@@ -45,16 +50,12 @@ class InitialsCircleView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.makeRound()
-        
+                
         self.label.setSize(withWidth: self.width)
         self.label.centerOnXAndY()
         
-        self.pulseLayer.frame = self.bounds
-        self.pulseLayer.path = UIBezierPath(ovalIn: self.bounds).cgPath
-        self.pulseLayer.position = self.center
-        
         self.shadowLayer.shadowPath = UIBezierPath(ovalIn: self.bounds).cgPath
+        self.circleLayer.path = UIBezierPath(ovalIn: self.bounds).cgPath
+        self.borderLayer.path = UIBezierPath(ovalIn: self.bounds).cgPath
     }
 }
