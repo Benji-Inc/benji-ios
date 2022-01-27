@@ -9,6 +9,9 @@
 import Foundation
 
 enum MicroAnimation: String {
+
+    case arrowUpBlack = "arrowUpBlack"
+    case arrowUpWWhite = "arrowUpWhite"
     case checkbox = "checkbox"
     case error = "error"
     case faceScan = "face_scan"

@@ -9,11 +9,9 @@
 import Foundation
 import Lottie
 import Combine
-import UIKit
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool)
-
     /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
     /// The accessory view updated the position of the sendable's preview view's position.
@@ -58,6 +56,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
+
+    private var swipeHintView = AnimationView.with(animation: .arrowUpBlack)
 
     static var minHeight: CGFloat = 76
     static var inputTypeMaxHeight: CGFloat = 25
@@ -121,6 +121,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
         }
 
+        self.swipeHintView.backgroundColor = .red
+        self.swipeHintView.loopMode = .loop
+        self.swipeHintView.play()
+        self.inputContainerView.addSubview(self.swipeHintView)
+
         self.setupGestures()
         self.setupHandlers()
     }
@@ -130,6 +135,10 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         self.emotionView.pin(.left)
         self.deliveryTypeView.pin(.right)
+
+        self.swipeHintView.size = CGSize(width: 32, height: 32)
+        self.swipeHintView.pin(.right)
+        self.swipeHintView.centerOnY()
     }
 
     // MARK: PRIVATE
