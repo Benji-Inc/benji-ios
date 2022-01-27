@@ -17,6 +17,8 @@ class SwipeInputPanGestureHandler {
         self.inputView = inputView
     }
 
+    /// An object to give the user touch feedback when performing certain actions.
+    private var impactFeedback = UIImpactFeedbackGenerator(style: .rigid)
     private var previewView: PreviewMessageView?
     /// The center point of the preview view when the pan started.
     private var initialPreviewCenter: CGPoint?
@@ -152,12 +154,12 @@ class SwipeInputPanGestureHandler {
 
         previewView.center = previewCenter
 
-        // Provide haptic feedback when the message is ready to send.
+        // Provide haptic and visual feedback when the message is ready to send.
         let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
         if distanceToDropZone < self.inputView.dropZoneFrame.height * 0.5 {
             if !self.isPreviewInDropZone {
                 previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
-                self.inputView.impactFeedback.impactOccurred()
+                self.impactFeedback.impactOccurred()
             }
             self.isPreviewInDropZone = true
         } else {
@@ -170,7 +172,7 @@ class SwipeInputPanGestureHandler {
 
     private func resetPreviewAndInputViews(didSend: Bool) {
         if didSend {
-            self.inputView.impactFeedback.impactOccurred()
+            self.impactFeedback.impactOccurred()
             UIView.animate(withDuration: Theme.animationDurationStandard) {
                 self.previewView?.alpha = 0
             } completion: { completed in

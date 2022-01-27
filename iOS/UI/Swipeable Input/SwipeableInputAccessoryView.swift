@@ -40,9 +40,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     /// The rough area that we need to drag and drop messages to send them.
     var dropZoneFrame: CGRect = .zero
 
-    /// An object to give the user touch feedback when performing certain actions.
-    var impactFeedback = UIImpactFeedbackGenerator(style: .rigid)
-
     // MARK:  - Views
 
     @IBOutlet var inputContainerView: SpeechBubbleView!
@@ -58,7 +55,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
     /// A view that shows a hint animation for how to swipe up a message.
-    private var swipeHintView = AnimationView.with(animation: .arrowUpBlack)
+    @IBOutlet var swipeHintView: AnimationView!
 
     private lazy var panGestureHandler = SwipeInputPanGestureHandler(inputView: self)
 
@@ -99,7 +96,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.showShadow(withOffset: 8)
-        self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false) 
+        self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
 
         self.inputTypeContainer.addSubview(self.emotionView)
         self.emotionView.alpha = 0
@@ -124,10 +121,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
         }
 
-        self.swipeHintView.backgroundColor = .red
-        self.swipeHintView.loopMode = .loop
-        self.swipeHintView.play()
-        self.inputContainerView.addSubview(self.swipeHintView)
+        self.swipeHintView.set(backgroundColor: .clear)
+        self.swipeHintView.animation = Animation.named(MicroAnimation.arrowUpWWhite.rawValue)
+        self.swipeHintView.loopMode = .repeat(2.0)
 
         self.setupGestures()
         self.setupHandlers()
@@ -158,12 +154,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 case .willShow:
                     let shouldShow = self.textView.numberOfLines == 1
                     self.showDetail(shouldShow: shouldShow)
-                    self.inputContainerView.setBubbleColor(ThemeColor.L1.color, animated: true)
-                    self.textView.setTextColor(.T2)
                 case .willHide:
                     self.showDetail(shouldShow: false)
-                    self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: true)
-                    self.textView.setTextColor(.T1)
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 default:
@@ -196,7 +188,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
         
         guard new != self.inputHeightConstraint.constant else { return }
-                
+
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputHeightConstraint.constant = new
             self.setNeedsLayout()
