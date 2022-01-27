@@ -57,7 +57,7 @@ class AvatarView: DisplayableImageView {
 
     func set(avatar: Avatar) {
         Task {
-            if let user = avatar as? User {
+            if let user = avatar as? User, user.isDataAvailable {
                 self.subscribeToUpdates(for: user)
             } else if let userId = avatar.userObjectId,
                       let user = await UserStore.shared.findUser(with: userId) {

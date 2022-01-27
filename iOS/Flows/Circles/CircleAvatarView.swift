@@ -13,11 +13,10 @@ class CircleAvatarView: BorderedAvatarView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-                
-        self.pulseLayer.frame = self.bounds
-        self.pulseLayer.path = UIBezierPath(ovalIn: self.bounds).cgPath
-        self.pulseLayer.position = self.imageView.center
         
+        self.imageView.makeRound()
+                        
+        self.pulseLayer.path = UIBezierPath(ovalIn: self.bounds).cgPath
         self.shadowLayer.shadowPath = UIBezierPath(ovalIn: self.bounds).cgPath
     }
 }

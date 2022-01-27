@@ -60,6 +60,7 @@ final class Circle: PFObject, PFSubclassing {
 
     var users: [User] {
         get { self.getObject(for: .users) ?? [] }
+        set { self.setObject(for: .users, with: newValue) }
     }
     
     var invitedContacts: [String] {

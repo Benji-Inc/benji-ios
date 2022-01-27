@@ -60,8 +60,29 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.loadCircle()
+        
+//        Task {
+//
+//            let circle = Circle()
+//            circle.owner = User.current()
+//            circle.invitedContacts = ["8145B0B5-A062-467D-AF46-41D1DBD6E836:ABPerson", "C554E0F8-B6A6-428F-8767-17FEF4958D20:ABPerson"]
+//            circle.name = "My Favorites"
+//
+//            if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
+//                return !connection.nonMeUser.isNil
+//            }), let users = try? await connections.asyncMap({ connection in
+//                return try await connection.nonMeUser!.retrieveDataIfNeeded()
+//            }) {
+//                circle.users = users
+//            }
+//
+//            if let circle = try? await circle.saveToServer() {
+//                self.circle = circle
+//                self.loadInitialData()
+//            }
+//        }.add(to: self.taskPool)
     }
     
     private func loadCircle() {
@@ -124,13 +145,19 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
             if let user = circle.users[safe: i] {
                 allItems.append(.item(CircleItem(position: i, user: user)))
                 itemCount += 1
-            } else if let contactId = circle.invitedContacts[safe: i],
+            }
+        }
+        
+        for i in 0...limit {
+            if let contactId = circle.invitedContacts[safe: i],
                       let contact = ContactsManger.shared.searchForContact(with: .identifier(contactId)).first {
                 allItems.append(.item(CircleItem(position: i, contact: contact)))
                 itemCount += 1
-            } else {
-                allItems.append(.item(CircleItem(position: i)))
             }
+        }
+        
+        for i in itemCount - 1...limit {
+            allItems.append(.item(CircleItem(position: i)))
         }
         
         let remaining = limit - itemCount
