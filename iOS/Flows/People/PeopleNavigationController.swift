@@ -10,7 +10,7 @@ import Foundation
 
 class PeopleNavigationController: NavigationController {
     
-    lazy var peopleVC = PeopleViewController(includeConnections: true)
+    lazy var peopleVC = PeopleViewController()
     
     override func initializeViews() {
         super.initializeViews()

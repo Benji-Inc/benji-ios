@@ -20,7 +20,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     weak var delegate: PeopleViewControllerDelegate?
 
-    private let includeConnections: Bool
     private(set) var reservations: [Reservation] = []
     
     let button = ThemeButton()
@@ -34,8 +33,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.view = self.backgroundView
     }
     
-    init(includeConnections: Bool = true) {
-        self.includeConnections = includeConnections
+    init() {
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
         cv.keyboardDismissMode = .interactive
         cv.isScrollEnabled = true 
@@ -195,18 +193,16 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
         var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
 
-        if self.includeConnections {
-            if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
-                return !connection.nonMeUser.isNil
-            }), let _ = try? await connections.asyncMap({ connection in
-                return try await connection.nonMeUser!.retrieveDataIfNeeded()
-            }) {
-                let connectedPeople = connections.map { connection in
-                    return Person(withConnection: connection)
-                }
-                
-                self.allPeople.append(contentsOf: connectedPeople)
+        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
+            return !connection.nonMeUser.isNil
+        }), let _ = try? await connections.asyncMap({ connection in
+            return try await connection.nonMeUser!.retrieveDataIfNeeded()
+        }) {
+            let connectedPeople = connections.map { connection in
+                return Person(withConnection: connection)
             }
+            
+            self.allPeople.append(contentsOf: connectedPeople)
         }
         
         data[.people] = self.allPeople.compactMap({ person in

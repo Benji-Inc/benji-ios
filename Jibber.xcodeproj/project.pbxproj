@@ -552,7 +552,6 @@
 		D6DEC3F527A20E410072D9D0 /* EmptyCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */; };
 		D6DEC3F727A212940072D9D0 /* InitialsCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */; };
 		D6DEC3F927A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */; };
-		D6DEC3FE27A220170072D9D0 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FD27A220170072D9D0 /* ContactsViewController.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* CircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* CircleCell.swift */; };
 		D6DEC40427A22F660072D9D0 /* CircleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40327A22F660072D9D0 /* CircleCollectionViewDataSource.swift */; };
@@ -993,7 +992,6 @@
 		D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCircleView.swift; sourceTree = "<group>"; };
 		D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsCircleView.swift; sourceTree = "<group>"; };
 		D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Permissions.swift"; sourceTree = "<group>"; };
-		D6DEC3FD27A220170072D9D0 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* CircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCell.swift; sourceTree = "<group>"; };
 		D6DEC40327A22F660072D9D0 /* CircleCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -1739,7 +1737,6 @@
 		D687F3C426FE4BC6000E4734 /* People */ = {
 			isa = PBXGroup;
 			children = (
-				D6DEC3FD27A220170072D9D0 /* ContactsViewController.swift */,
 				D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */,
 				D64C324127039646004BC1BD /* MessageComposerViewController.swift */,
 				D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */,
@@ -2407,7 +2404,6 @@
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
 				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */,
-				D6DEC3FE27A220170072D9D0 /* ContactsViewController.swift in Sources */,
 				D6DEC3F527A20E410072D9D0 /* EmptyCircleView.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				8015CA7726F3D907000F3C60 /* ConversationMessagesCell.swift in Sources */,

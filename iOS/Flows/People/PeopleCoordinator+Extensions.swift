@@ -19,12 +19,6 @@ extension PeopleCoordinator {
         }
     }
 
-    private func showContacts() {
-        self.inviteIndex = 0
-        self.contactsVC.delegate = self
-        self.router.present(self.contactsVC, source: self.peopleNavController.peopleVC)
-    }
-
     private func showSentAlert(for avatar: Avatar) {
         let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         Task {

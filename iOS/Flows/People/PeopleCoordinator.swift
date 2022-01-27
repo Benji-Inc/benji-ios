@@ -14,23 +14,19 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     lazy var peopleNavController = PeopleNavigationController()
     
     var messageComposer: MessageComposerViewController?
-    lazy var contactsVC = ContactsViewController()
 
     var selectedContact: CNContact?
     var peopleToInvite: [Person] = []
     var inviteIndex: Int = 0
     let conversationID: ConversationId?
 
-    private let includeConnections: Bool
     var selectedConnections: [Connection] = []
 
-    init(includeConnections: Bool = true,
-         conversationID: ConversationId?,
+    init(conversationID: ConversationId?,
          router: Router,
          deepLink: DeepLinkable?) {
 
         self.conversationID = conversationID
-        self.includeConnections = includeConnections
         super.init(router: router, deepLink: deepLink)
     }
 
