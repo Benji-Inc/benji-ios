@@ -67,6 +67,9 @@ class SwipeInputPanGestureHandler {
         // Hide the input area. The preview view will take its place during the pan.
         self.inputView.inputContainerView.alpha = 0
 
+        // Stop any swipe hint animations if they're playing.
+        self.inputView.updateSwipeHint(shouldPlay: false)
+
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
                                               bubbleColor: self.inputView.currentContext.color.color)

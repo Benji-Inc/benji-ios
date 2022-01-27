@@ -235,7 +235,28 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             break
         }
 
+        self.updateSwipeHint(shouldPlay: !text.isEmpty)
+
         self.delegate?.swipeableInputAccessory(self, swipeIsEnabled: !text.isEmpty)
+    }
+
+    var swipeHintTask: Task<Void, Never>?
+    func updateSwipeHint(shouldPlay: Bool) {
+        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
+        self.swipeHintTask?.cancel()
+
+        self.swipeHintView.stop()
+        if shouldPlay {
+            self.swipeHintTask = Task {
+                // Wait 2 seconds before playing the hint
+                await Task.snooze(seconds: 2)
+
+                // Don't play the hint if the user started more typing.
+                guard !Task.isCancelled else { return }
+
+                self.swipeHintView.play()
+            }
+        }
     }
 
     func getDataTypes(from text: String) -> [NSTextCheckingResult]? {
