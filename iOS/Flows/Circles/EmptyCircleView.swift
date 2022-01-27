@@ -15,7 +15,7 @@ class EmptyCircleView: BaseView {
         layer.shadowColor = ThemeColor.B3.color.cgColor
         layer.shadowOpacity = 1.0
         layer.shadowOffset = .zero
-        layer.shadowRadius = 10
+        layer.shadowRadius = 6
         return layer
     }()
     
@@ -28,7 +28,7 @@ class EmptyCircleView: BaseView {
     lazy var dashedLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.lineDashPattern = [4, 8]
-        layer.lineWidth = 1.5
+        layer.lineWidth = 2
         layer.strokeColor = ThemeColor.D6.color.cgColor
         layer.fillColor = ThemeColor.clear.color.cgColor
         return layer

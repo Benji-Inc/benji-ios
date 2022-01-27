@@ -124,7 +124,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.remainingLabel.match(.top, to: .bottom, of: self.label, offset: .standard)
         
         self.pullView.centerOnX()
-        self.pullView.centerY = (self.view.height * 0.85) - 50
+        self.pullView.centerY = (self.view.height * 0.9) - 50
     }
     
     override func getAllSections() -> [CircleSectionType] {

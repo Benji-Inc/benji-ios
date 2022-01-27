@@ -10,13 +10,18 @@ import Foundation
 import Combine
 
 class CircleAvatarView: BorderedAvatarView {
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.shadowLayer.opacity = 1.0
+    }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         
         self.imageView.makeRound()
-                        
-        self.pulseLayer.path = UIBezierPath(ovalIn: self.bounds).cgPath
+        self.pulseLayer.cornerRadius = self.halfHeight
         self.shadowLayer.shadowPath = UIBezierPath(ovalIn: self.bounds).cgPath
     }
 }
