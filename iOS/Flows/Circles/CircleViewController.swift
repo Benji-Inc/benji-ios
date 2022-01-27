@@ -20,6 +20,8 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     let button = ThemeButton()
     
     let pullView = PullView()
+    
+    var circle: Circle?
         
     init() {
         let cv = CollectionView(layout: CircleCollectionViewLayout())
@@ -46,7 +48,6 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.label.textAlignment = .center
         
         self.view.addSubview(self.remainingLabel)
-        self.remainingLabel.setText("7 remaining")
         self.remainingLabel.textAlignment = .center
         self.remainingLabel.alpha = 0.6
         
@@ -59,10 +60,26 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.loadInitialData()
+
+        self.loadCircle()
     }
     
+    private func loadCircle() {
+        guard let query = Circle.query() else { return }
+        query.whereKey("owner", equalTo: User.current()!)
+        query.getFirstObjectInBackground { [unowned self] object, error in
+            if let circle = object as? Circle {
+                self.circle = circle
+                self.loadInitialData()
+            }
+        }
+    }
+    
+    func updateRemaining(with amount: Int) {
+        self.remainingLabel.setText("\(amount) remaining")
+        self.view.layoutNow()
+    }
+        
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -96,13 +113,31 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     override func retrieveDataForSnapshot() async -> [CircleSectionType : [CircleItemType]] {
         var data: [CircleSectionType: [CircleItemType]] = [:]
         
-        var items: [CircleItemType] = []
-        
-        for i in 0...9 {
-            items.append(.item(i))
-        }
+        guard let circle = self.circle else { return data }
 
-        data[.circle] = items
+        var allItems: [CircleItemType] = []
+        var itemCount: Int = 0
+        
+        let limit = circle.limit - 1
+        
+        for i in 0...limit {
+            if let user = circle.users[safe: i] {
+                allItems.append(.item(CircleItem(position: i, user: user)))
+                itemCount += 1
+            } else if let contactId = circle.invitedContacts[safe: i],
+                      let contact = ContactsManger.shared.searchForContact(with: .identifier(contactId)).first {
+                allItems.append(.item(CircleItem(position: i, contact: contact)))
+                itemCount += 1
+            } else {
+                allItems.append(.item(CircleItem(position: i)))
+            }
+        }
+        
+        let remaining = limit - itemCount
+        
+        self.updateRemaining(with: remaining)
+
+        data[.circle] = allItems
         
         return data
     }

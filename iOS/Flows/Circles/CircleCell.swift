@@ -9,8 +9,8 @@
 import Foundation
 
 class CircleCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = Int
-    var currentItem: Int?
+    typealias ItemType = CircleItem
+    var currentItem: CircleItem?
     
     private let circleView = CircleView()
     
@@ -20,7 +20,7 @@ class CircleCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.circleView)
     }
 
-    func configure(with item: Int) {
+    func configure(with item: CircleItem) {
         
     }
     

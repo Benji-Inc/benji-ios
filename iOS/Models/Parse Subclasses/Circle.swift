@@ -58,13 +58,18 @@ final class Circle: PFObject, PFSubclassing {
         }
     }
 
-    var users: [User]? {
-        get { self.getObject(for: .users) }
+    var users: [User] {
+        get { self.getObject(for: .users) ?? [] }
     }
     
     var invitedContacts: [String] {
         get { self.getObject(for: .invitedContacts) ?? [] }
         set { self.setObject(for: .invitedContacts, with: newValue) }
+    }
+    
+    func add(user: User) async throws {
+        self.addUniqueObject(user, forKey: CircleKey.users.rawValue)
+        try await self.saveToServer()
     }
 }
 

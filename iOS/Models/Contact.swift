@@ -30,8 +30,6 @@ struct Person: Avatar, Hashable {
     init(withContact contact: CNContact) {
         self.image = contact.image
         self.cnContact = contact
-//        let phone = contact.findBestPhoneNumber().phone?.stringValue ?? ""
-//        self.phoneNumber = PartialFormatter().formatPartial(phone)
         self.givenName = contact.givenName
         self.familyName = contact.familyName
     }

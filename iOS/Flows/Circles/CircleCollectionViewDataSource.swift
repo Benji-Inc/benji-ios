@@ -19,7 +19,7 @@ class CircleCollectionViewDataSource: CollectionViewDataSource<CircleSectionType
     }
 
     enum ItemType: Hashable {
-        case item(Int)
+        case item(CircleItem)
     }
 
     private let config = ManageableCellRegistration<CircleCell>().provider
