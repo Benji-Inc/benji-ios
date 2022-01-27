@@ -19,7 +19,10 @@ class CircleCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-       
+        self.circleVC.$selectedItems.mainSink { [unowned self] items in
+            guard !items.isEmpty else { return }
+            self.presentPeoplePicker()
+        }.store(in: &self.cancellables)
     }
     
     func presentPeoplePicker() {
@@ -29,17 +32,16 @@ class CircleCoordinator: PresentableCoordinator<Void> {
                                             router: self.router,
                                             deepLink: self.deepLink)
         
-        // Because of how the People are presented, we need to properly reset the KeyboardManager.
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-        }
-
         self.addChildAndStart(coordinator) { [unowned self] connections in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                //self.conversationListVC.becomeFirstResponder()
-                //self.add(connections: connections, to: conversation)
+                self.updateCircle(with: connections)
             }
         }
 
         self.router.present(coordinator, source: self.circleVC)
+    }
+    
+    func updateCircle(with connections: [Connection]) {
+        
     }
 }

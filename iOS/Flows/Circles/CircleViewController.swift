@@ -8,12 +8,26 @@
 
 import Foundation
 
-class CircleViewController: ViewController {
+class CircleViewController: DiffableCollectionViewController<CircleSectionType,
+                            CircleItemType,
+                            CircleCollectionViewDataSource> {
     
     let backgroundGradient = BackgroundGradientView()
     let label = ThemeLabel(font: .regular)
     let remainingLabel = ThemeLabel(font: .small)
-    let circleView = CircleView()
+    
+    let pullView = PullView()
+        
+    init() {
+        let cv = CollectionView(layout: CircleCollectionViewLayout())
+        cv.isScrollEnabled = false
+        cv.showsHorizontalScrollIndicator = false
+        super.init(with: cv)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         self.view = self.backgroundGradient
@@ -22,28 +36,58 @@ class CircleViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
         
+        self.collectionView.animationView.isHidden = true
+        
         self.view.addSubview(self.label)
         self.label.setText("Add people by tapping on any circle.")
+        self.label.textAlignment = .center
         
         self.view.addSubview(self.remainingLabel)
         self.remainingLabel.setText("7 remaining")
+        self.remainingLabel.textAlignment = .center
         self.remainingLabel.alpha = 0.6
         
-        self.view.addSubview(self.circleView)
+        self.view.addSubview(self.pullView)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.loadInitialData()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.collectionView.width = self.view.width * 1.4
+        self.collectionView.centerOnX()
+        
+        self.label.setSize(withWidth: self.view.halfWidth)
         self.label.centerOnXAndY()
         
         self.remainingLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.remainingLabel.centerOnX()
         self.remainingLabel.match(.top, to: .bottom, of: self.label, offset: .standard)
         
-        self.circleView.squaredSize = 100
-        self.circleView.pin(.top, offset: .xtraLong)
-        self.circleView.centerOnX()
+        self.pullView.centerOnX()
+        self.pullView.centerY = self.view.height * 0.85
+    }
+    
+    override func getAllSections() -> [CircleSectionType] {
+        return [.circle]
+    }
+    
+    override func retrieveDataForSnapshot() async -> [CircleSectionType : [CircleItemType]] {
+        var data: [CircleSectionType: [CircleItemType]] = [:]
+        
+        var items: [CircleItemType] = []
+        
+        for i in 0...9 {
+            items.append(.item(i))
+        }
+
+        data[.circle] = items
+        
+        return data
     }
 }
