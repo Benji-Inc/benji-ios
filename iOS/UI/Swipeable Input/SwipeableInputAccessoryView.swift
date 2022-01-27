@@ -134,10 +134,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         self.emotionView.pin(.left)
         self.deliveryTypeView.pin(.right)
-
-        self.swipeHintView.size = CGSize(width: 32, height: 32)
-        self.swipeHintView.pin(.right)
-        self.swipeHintView.centerOnY()
     }
 
     // MARK: PRIVATE
