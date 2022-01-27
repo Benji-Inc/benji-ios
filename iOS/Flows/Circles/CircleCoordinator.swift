@@ -9,20 +9,20 @@
 import Foundation
 
 class CircleCoordinator: PresentableCoordinator<Void> {
-
+    
     lazy var circleVC = CircleViewController()
-
+    
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.circleVC
     }
-
+    
     override func start() {
         super.start()
         
-        self.circleVC.circleNameLabel.didSelect { [unowned self] in 
+        self.circleVC.button.didSelect { [unowned self] in
             self.presentCircleTitleAlert()
         }
-
+        
         self.circleVC.$selectedItems.mainSink { [unowned self] items in
             guard !items.isEmpty else { return }
             self.presentPeoplePicker()
@@ -30,7 +30,7 @@ class CircleCoordinator: PresentableCoordinator<Void> {
     }
     
     func presentPeoplePicker() {
-
+        
         self.removeChild()
         let coordinator = PeopleCoordinator(conversationID: nil,
                                             router: self.router,
@@ -41,7 +41,7 @@ class CircleCoordinator: PresentableCoordinator<Void> {
                 self.updateCircle(with: connections)
             }
         }
-
+        
         self.router.present(coordinator, source: self.circleVC)
     }
     
@@ -50,7 +50,7 @@ class CircleCoordinator: PresentableCoordinator<Void> {
     }
     
     func presentCircleTitleAlert() {
-
+        
         let alertController = UIAlertController(title: "Update Circle Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Name"
@@ -59,20 +59,19 @@ class CircleCoordinator: PresentableCoordinator<Void> {
             if let textField = alertController.textFields?.first,
                let text = textField.text,
                !text.isEmpty {
-
-//                controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
-//                    //self.conversationListVC.headerVC.topicLabel.setText(text)
-//                    //self.conversationListVC.headerVC.view.layoutNow()
-//                    alertController.dismiss(animated: true, completion: {
-//                    })
-//                }
+                
+                self.circleVC.circleNameLabel.setText(text)
+                self.circleVC.view.layoutNow()
+                
+                alertController.dismiss(animated: true, completion: {
+                })
             }
         })
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
         })
-
+        
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
         

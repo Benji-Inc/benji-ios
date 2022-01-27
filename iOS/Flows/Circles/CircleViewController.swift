@@ -17,6 +17,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     let remainingLabel = ThemeLabel(font: .small)
     
     let circleNameLabel = ThemeLabel(font: .regular)
+    let button = ThemeButton()
     
     let pullView = PullView()
         
@@ -51,6 +52,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         
         self.view.addSubview(self.pullView)
         self.view.addSubview(self.circleNameLabel)
+        self.view.addSubview(self.button)
         
         self.circleNameLabel.setText("Circle Name")
     }
@@ -67,6 +69,10 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.circleNameLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.circleNameLabel.pinToSafeAreaTop()
         self.circleNameLabel.centerOnX()
+        
+        self.button.height = 44
+        self.button.width = self.circleNameLabel.width
+        self.button.center = self.circleNameLabel.center
         
         self.collectionView.width = self.view.width * 1.4
         self.collectionView.centerOnX()

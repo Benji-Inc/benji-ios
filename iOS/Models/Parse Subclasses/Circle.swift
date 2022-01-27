@@ -10,30 +10,61 @@ import Foundation
 import Parse
 
 enum CircleKey: String {
+    case owner
     case users
-    case type
+    case name
+    case theme
+    case invitedContacts
+    case limit
 }
 
 final class Circle: PFObject, PFSubclassing {
-
-    enum CircleType: String {
-        case inner = "INNER"
-        case outer = "OUTER"
+    
+    enum Theme: String {
+        case eggplant
+        case squash
+        case gum
+        case mint
+        case saltwater
+        case elderberry
     }
 
     static func parseClassName() -> String {
         return String(describing: self)
     }
-
-    var type: CircleType? {
+    
+    var owner: User? {
+        get { self.getObject(for: .owner) }
+        set { self.setObject(for: .owner, with: newValue) }
+    }
+    
+    var name: String? {
+        get { self.getObject(for: .name) }
+        set { self.setObject(for: .name, with: newValue)}
+    }
+    
+    var limit: Int {
+        get { self.getObject(for: .limit) ?? 10 }
+    }
+    
+    var theme: Theme {
         get {
-            guard let value: String = self.getObject(for: .type), let t = CircleType(rawValue: value) else { return nil }
-            return t
+            guard let themeString: String = self.getObject(for: .theme),
+                  let theme = Theme(rawValue: themeString) else { return .eggplant }
+                  return theme
+        }
+        set {
+            self.setObject(for: .theme, with: newValue.rawValue)
         }
     }
 
     var users: [User]? {
         get { self.getObject(for: .users) }
+    }
+    
+    var invitedContacts: [String] {
+        get { self.getObject(for: .invitedContacts) ?? [] }
+        set { self.setObject(for: .invitedContacts, with: newValue) }
     }
 }
 
