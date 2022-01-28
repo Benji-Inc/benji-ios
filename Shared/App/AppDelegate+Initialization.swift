@@ -18,7 +18,6 @@ extension AppDelegate {
     }
 
     func initializeMainCoordinator(with rootNavController: RootNavigationController) {
-        
         let router = Router(navController: rootNavController)
         self.mainCoordinator = MainCoordinator(router: router, deepLink: nil)
         self.mainCoordinator?.start()

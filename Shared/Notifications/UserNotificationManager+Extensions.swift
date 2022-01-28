@@ -11,14 +11,21 @@ import UserNotifications
 
 extension UserNotificationManager: UNUserNotificationCenterDelegate {
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+
         guard notification.request.content.categoryIdentifier != "message.new" else { return [] }
+
         return [.banner, .list, .sound, .badge]
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        
-        if let action = UserNotificationAction.init(rawValue: response.actionIdentifier) {
+    // NOTE: This delegate function seems to get called off the main thread some times which causes a
+    // crash when bringing the app out of the background.
+    @MainActor
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse) async {
+
+        if let action = UserNotificationAction(rawValue: response.actionIdentifier) {
             self.handle(action: action, for: response)
         } else if let target = response.notification.deepLinkTarget {
             var deepLink = DeepLinkObject(target: target)
@@ -27,7 +34,8 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
         }
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {}
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                openSettingsFor notification: UNNotification?) {}
 
     private func handle(action: UserNotificationAction, for response: UNNotificationResponse) {
         switch action {

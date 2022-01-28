@@ -31,26 +31,21 @@ class ConnectionStore {
         }
     }
 
-    init() {
-        Task {
-            await self.getConnections()
-        }
-    }
-
-    private func getConnections() async {
-
+    func initialize() async {
         do {
-            self.connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
+            self.connections
+            = try await GetAllConnections().makeRequest(andUpdate: [],
+                                                        viewsToIgnore: []).filter { (connection) -> Bool in
                 return !connection.nonMeUser.isNil
             }
 
-            self.subscibeToUpdates()
+            self.subscribeToUpdates()
         } catch {
-            print(error)
+            logError(error)
         }
     }
 
-    private func subscibeToUpdates() {
+    private func subscribeToUpdates() {
         self.isReady = true
 
         Client.shared.shouldPrintWebSocketLog = false
