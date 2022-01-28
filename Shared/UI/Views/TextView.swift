@@ -122,18 +122,18 @@ class TextView: UITextView {
         self.set(backgroundColor: .clear)
 
         NotificationCenter.default.publisher(for: UITextView.textDidChangeNotification)
-            .mainSink { (text) in
+            .mainSink { [unowned self] (text) in
                 self.textDidChange()
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UITextView.textDidBeginEditingNotification)
-            .mainSink { (text) in
+            .mainSink { [unowned self] (text) in
                 self.textViewDidBeginEditing()
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UITextView.textDidEndEditingNotification)
-            .mainSink { (text) in
-                self.textDidEndEditing()
+            .mainSink { [unowned self] (text) in
+                self.textViewDidEndEditing()
             }.store(in: &self.cancellables)
     }
 
@@ -190,7 +190,7 @@ class TextView: UITextView {
     }
 
     // Trim white space and new line characters when end editing.
-    func textDidEndEditing() {
+    func textViewDidEndEditing() {
         if self.trimWhiteSpaceWhenEndEditing {
             self.text = self.text?.trimmingCharacters(in: .whitespacesAndNewlines)
             self.setNeedsDisplay()
