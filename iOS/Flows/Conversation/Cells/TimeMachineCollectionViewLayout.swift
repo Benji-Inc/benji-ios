@@ -237,10 +237,25 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return attributes
         }
 
-        // All items are positioned relative to the frontmost item in their section.
-        guard let itemZRange = self.itemZRanges[indexPath] else { return nil }
+        let normalizedZOffset = self.getNormalizedZOffsetForItem(at: indexPath, givenZPosition: self.zPosition)
 
-        let vectorToCurrentZ = itemZRange.vector(to: self.zPosition)
+        if normalizedZOffset == 0 {
+            self.delegate?.timeMachineCollectionViewLayout(self, updatedFrontmostItemAt: indexPath)
+        }
+
+        guard (-1...1).contains(normalizedZOffset) else { return nil }
+        
+        return self.layoutAttributesForItemAt(indexPath: indexPath,
+                                              withNormalizedZOffset: normalizedZOffset)
+    }
+
+    final func getNormalizedZOffsetForItem(at indexPath: IndexPath, givenZPosition zPosition: CGFloat)
+    -> CGFloat {
+
+        // All items are positioned relative to the frontmost item in their section.
+        guard let itemZRange = self.itemZRanges[indexPath] else { return -1 }
+
+        let vectorToCurrentZ = itemZRange.vector(to: zPosition)
 
         let normalizedZOffset: CGFloat
 
@@ -255,14 +270,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             normalizedZOffset = 0
         }
 
-        if normalizedZOffset == 0 {
-            self.delegate?.timeMachineCollectionViewLayout(self, updatedFrontmostItemAt: indexPath)
-        }
-
-        guard (-1...1).contains(normalizedZOffset) else { return nil }
-        
-        return self.layoutAttributesForItemAt(indexPath: indexPath,
-                                              withNormalizedZOffset: normalizedZOffset)
+        return normalizedZOffset
     }
 
     /// Returns the UICollectionViewLayoutAttributes for the item at the given indexPath configured with the specified normalized Z Offset.
