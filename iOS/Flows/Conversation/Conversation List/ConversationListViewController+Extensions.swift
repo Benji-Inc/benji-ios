@@ -85,7 +85,9 @@ extension ConversationListViewController {
             }
         }.store(in: &self.cancellables)
         
-        ConversationsManager.shared.$activeConversation.mainSink { conversation in
+        ConversationsManager.shared.$activeConversation.mainSink { [weak self] conversation in
+            guard let `self` = self else { return }
+
             if let convo = conversation,
                let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
                 self.subscribeToTopMessageUpdates(for: convo, cell: cell)
