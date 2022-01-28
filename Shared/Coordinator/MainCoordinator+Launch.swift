@@ -13,17 +13,17 @@ import StreamChat
 extension MainCoordinator {
 
     @MainActor
-    func runConversationListFlow() async {
+    func runConversationListFlow(with deepLink: DeepLinkable?) async {
         // Ensure that the chat client is initialized for the logged in user.
         if !ChatClient.isConnected || ChatClient.shared.currentUserId != User.current()?.userObjectId {
             try? await ChatClient.initialize(for: User.current()!)
         }
 
-        let startingCID = self.deepLink?.conversationId
-        let startingMessageId = self.deepLink?.messageId
+        let startingCID = deepLink?.conversationId
+        let startingMessageId = deepLink?.messageId
 
         let coordinator = ConversationListCoordinator(router: self.router,
-                                                      deepLink: self.deepLink,
+                                                      deepLink: deepLink,
                                                       conversationMembers: [],
                                                       startingConversationId: startingCID,
                                                       startingMessageId: startingMessageId)
