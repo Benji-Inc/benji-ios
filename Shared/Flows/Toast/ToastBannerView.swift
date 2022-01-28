@@ -10,6 +10,8 @@ import Foundation
 import Localization
 
 class ToastBannerView: ToastView {
+    
+    private let minimumHeight: CGFloat = Theme.ContentOffset.standard.value.doubled + 44
 
     private let blurView = BlurView()
     private let titleLabel = ThemeLabel(font: .regular, textColor: .T1)
@@ -181,14 +183,14 @@ class ToastBannerView: ToastView {
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
         self.descriptionLabel.match(.left, to: .right, of: self.imageView, offset: .standard)
         self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .short)
-        if self.descriptionLabel.height > 84 {
-            self.descriptionLabel.height = 84
+        if self.descriptionLabel.height > self.minimumHeight {
+            self.descriptionLabel.height = self.minimumHeight
         }
 
         if let height = self.maxHeight {
             self.height = height
-        } else if self.descriptionLabel.bottom + Theme.ContentOffset.standard.value < 84 {
-            self.height = 84
+        } else if self.descriptionLabel.bottom + Theme.ContentOffset.standard.value < self.minimumHeight {
+            self.height = self.minimumHeight
         } else {
             self.height = self.descriptionLabel.bottom + Theme.ContentOffset.standard.value
         }
