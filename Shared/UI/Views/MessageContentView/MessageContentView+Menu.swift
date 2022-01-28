@@ -87,7 +87,7 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             menuElements.append(viewReplies)
         }
 
-        return UIMenu.init(title: "From: \(message.avatar.fullName)",
+        return UIMenu.init(title: "From: \(message.author.parseUser?.fullName ?? "Unkown")",
                            image: nil,
                            identifier: nil,
                            options: [],
