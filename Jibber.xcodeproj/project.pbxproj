@@ -41,7 +41,6 @@
 		80632D9427853D2600D3A65B /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
 		806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */; };
 		806DA16A27307FA400843C4E /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806DA16927307FA400843C4E /* MessageCell.swift */; };
-		8070E750271747DE004873D9 /* MessageDropZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8070E74F271747DE004873D9 /* MessageDropZoneView.swift */; };
 		807A7BC526C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
 		807A7BC726C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
 		807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
@@ -694,7 +693,6 @@
 		80632D92278534E600D3A65B /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeMachineCollectionViewLayout.swift; sourceTree = "<group>"; };
 		806DA16927307FA400843C4E /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
-		8070E74F271747DE004873D9 /* MessageDropZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDropZoneView.swift; sourceTree = "<group>"; };
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
 		807E98E8273497610076889C /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
@@ -1462,7 +1460,6 @@
 				D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */,
 				D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
-				8070E74F271747DE004873D9 /* MessageDropZoneView.swift */,
 				D6E9746C2757353800D95F08 /* Status View */,
 				80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */,
 			);
@@ -2407,7 +2404,6 @@
 			files = (
 				D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */,
 				D6CC1482276BE808005F617F /* newEmotionView.swift in Sources */,
-				8070E750271747DE004873D9 /* MessageDropZoneView.swift in Sources */,
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
