@@ -51,6 +51,7 @@ class LaunchManager {
 #if !NOTIFICATION
         // Silently register for notifications every launch.
         if let user = User.current(), user.isAuthenticated {
+            _ = try? await user.fetchInBackground()
             Task {
                 await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             }
