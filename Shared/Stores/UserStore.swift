@@ -33,12 +33,8 @@ class UserStore {
         }
     }
 
-    init() {
-        self.initialize()
-    }
-
-    private func initialize() {
-        ConnectionStore.shared.$isReady.mainSink { isReady in
+    func initialize() {
+        ConnectionStore.shared.$isReady.mainSink { [unowned self] isReady in
             if isReady {
                 onceEver(token: "userStoreSubscribe") {
                     Task {
@@ -50,7 +46,6 @@ class UserStore {
     }
 
     private func subscribeToUpdates() async {
-
         var unfetchedUserIds = ConnectionStore.shared.connections.compactMap { connection in
             return connection.nonMeUser?.objectId
         }
@@ -69,7 +64,6 @@ class UserStore {
         }
 
         self.queries.forEach { query in
-
             let subscription = Client.shared.subscribe(query)
 
             subscription.handleEvent { query, event in
@@ -94,7 +88,6 @@ class UserStore {
     }
     
     func mapMembersToUsers(members: [ConversationMember]) async throws -> [User] {
-        
         var users: [User] = []
         await members.userIDs.asyncForEach { userId in
             if let user = await self.findUser(with: userId) {
