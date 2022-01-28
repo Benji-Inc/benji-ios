@@ -16,21 +16,14 @@ extension PeopleCoordinator {
     private func showSentToast() {
         Task {
             await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: UIImage(systemName: "envelope")!, title: "RSVP Sent", description: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you.", deepLink: nil))
-        }
-    }
-
-    private func showContacts() {
-        self.inviteIndex = 0
-        self.contactsVC.delegate = self
-        self.router.present(self.contactsVC, source: self.peopleNavController.peopleVC)
+        }.add(to: self.taskPool)
     }
 
     private func showSentAlert(for avatar: Avatar) {
         let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         Task {
             await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: avatar, title: "RSVP Sent", description: text, deepLink: nil))
-        }
-
+        }.add(to: self.taskPool)
     }
 
     private func sendText(with message: String?, phone: String) {
@@ -44,14 +37,26 @@ extension PeopleCoordinator {
         }
     }
 
-    func updateInvitation() {
-        if let person = self.peopleToInvite[safe: self.inviteIndex],
-           let rsvp = self.peopleNavController.peopleVC.reservations[safe: self.inviteIndex] {
-            self.invite(person: person, with: rsvp)
-        } else {
-            Task {
+    @MainActor
+    func updateInvitation() async {
+
+        if let person = self.peopleToInvite[safe: self.inviteIndex] {
+            if let connection = try? await person.connection?.retrieveDataIfNeeded(),
+                connection.status == .accepted,
+                let user = connection.nonMeUser {
+                
+                self.showSentAlert(for: user)
+                self.invitedPeople.append(person)
+                self.inviteIndex += 1
+
+                await self.updateInvitation()
+            } else if let rsvp = self.peopleNavController.peopleVC.reservations[safe: self.inviteIndex] {
+                self.invite(person: person, with: rsvp)
+            } else {
                 await self.finish()
-            }.add(to: self.taskPool)
+            }
+        } else {
+            await self.finish()
         }
 
         self.inviteIndex += 1
@@ -60,7 +65,7 @@ extension PeopleCoordinator {
     @MainActor
     func finish() async {
         await self.peopleNavController.peopleVC.finishInviting()
-        self.finishFlow(with: self.selectedConnections)
+        self.finishFlow(with: self.invitedPeople)
     }
 
     func invite(person: Person, with reservation: Reservation) {
@@ -78,23 +83,20 @@ extension PeopleCoordinator {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
             // Ensure that the reservation metadata is prepared before we show the reservation
             try await reservation.prepareMetadata(andUpdate: [])
-            reservation.conversationCid = self.conversationID?.description ?? String()
             try await reservation.saveLocalThenServer()
-            try await self.showReservationAlert(for: matchingUser, reservation: reservation)
+            try await self.showConnectionAlert(for: matchingUser)
         } catch {
             if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
-                reservation.conversationCid = self.conversationID?.description ?? String()
             } else {
                 reservation.contactId = contact?.identifier
                 _ = try? await reservation.saveLocalThenServer()
                 self.sendText(with: reservation.message, phone: phone)
-                reservation.conversationCid = self.conversationID?.description ?? String()
             }
         }
     }
 
-    func showReservationAlert(for user: User, reservation: Reservation) {
+    func showConnectionAlert(for user: User) {
         let title = LocalizedString(id: "", arguments: [user.fullName], default: "Connect with @(name)?")
         let titleText = localized(title)
 
@@ -109,7 +111,7 @@ extension PeopleCoordinator {
         }
 
         let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
-            self.createConnection(with: user, reservation: reservation)
+            self.createConnection(with: user)
         }
 
         alert.addAction(cancel)
@@ -118,14 +120,16 @@ extension PeopleCoordinator {
         self.router.topmostViewController.present(alert, animated: true, completion: nil)
     }
 
-    func createConnection(with user: User, reservation: Reservation) {
+    func createConnection(with user: User) {
         Task {
             do {
-                let value = try await CreateConnection(to: user, reservation: reservation).makeRequest(andUpdate: [], viewsToIgnore: [])
+                let value = try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
                 if let connection = value as? Connection {
-                    self.selectedConnections.append(connection)
+                    let person = Person(withConnection: connection)
+                    self.invitedPeople.append(person)
                 }
                 self.showSentAlert(for: user)
+                await self.updateInvitation()
             } catch {
                 print(error)
             }
@@ -140,14 +144,28 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
         switch result {
         case .cancelled, .failed:
             controller.dismiss(animated: true) {
-                self.updateInvitation()
+                Task {
+                    await self.updateInvitation()
+                }.add(to: self.taskPool)
             }
         case .sent:
             controller.dismiss(animated: true) {
-                if let contact = self.selectedContact {
-                    self.showSentAlert(for: contact)
-                    self.updateInvitation()
+                if let phone = controller.recipients?.first, let person = self.peopleToInvite.first(where: { person in
+                    if let c = person.cnContact, let phoneString = c.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
+                        phone == phoneString {
+                        return true
+                    } else {
+                        return false
+                    }
+                }), let contact = person.cnContact {
+                    let person = Person(withContact: contact)
+                    self.invitedPeople.append(person)
+                    self.showSentAlert(for: person)
                 }
+                
+                Task {
+                    await self.updateInvitation()
+                }.add(to: self.taskPool)
             }
         @unknown default:
             break

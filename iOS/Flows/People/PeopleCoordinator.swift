@@ -10,29 +10,15 @@ import Foundation
 import StreamChat
 import Contacts
 
-class PeopleCoordinator: PresentableCoordinator<[Connection]> {
+class PeopleCoordinator: PresentableCoordinator<[Person]> {
     lazy var peopleNavController = PeopleNavigationController()
     
     var messageComposer: MessageComposerViewController?
-    lazy var contactsVC = ContactsViewController()
 
-    var selectedContact: CNContact?
     var peopleToInvite: [Person] = []
+    var invitedPeople: [Person] = []
+    
     var inviteIndex: Int = 0
-    let conversationID: ConversationId?
-
-    private let includeConnections: Bool
-    var selectedConnections: [Connection] = []
-
-    init(includeConnections: Bool = true,
-         conversationID: ConversationId?,
-         router: Router,
-         deepLink: DeepLinkable?) {
-
-        self.conversationID = conversationID
-        self.includeConnections = includeConnections
-        super.init(router: router, deepLink: deepLink)
-    }
 
     override func toPresentable() -> DismissableVC {
         return self.peopleNavController
@@ -47,26 +33,21 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
 
 extension PeopleCoordinator: PeopleViewControllerDelegate {
 
-    nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
+    nonisolated func peopleView(_ controller: PeopleViewController,
+                                didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
         
         Task.onMainActor {
-            self.peopleNavController.prepareForInvitations()
             self.peopleToInvite = items.compactMap({ item in
                 switch item {
                 case .person(let person):
-                    if let _ = person.cnContact {
-                        return person
-                    } else if let connection = person.connection {
-                        self.selectedConnections.append(connection)
-                    } else {
-                        return nil
-                    }
+                    return person 
                 }
-                
-                return nil
             })
-
-            self.updateInvitation()
+            self.peopleNavController.prepareForInvitations()
+            
+            Task {
+                await self.updateInvitation()
+            }.add(to: self.taskPool)
         }
     }
 }

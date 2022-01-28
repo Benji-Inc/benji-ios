@@ -12,9 +12,9 @@ import Localization
 class ToastBannerView: ToastView {
 
     private let blurView = BlurView()
-    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .T1)
-    private let descriptionLabel = ThemeLabel(font: .smallBold, textColor: .T1)
-    private let imageView = AvatarView()
+    private let titleLabel = ThemeLabel(font: .regular, textColor: .T1)
+    private let descriptionLabel = ThemeLabel(font: .small, textColor: .T1)
+    private let imageView = BorderedAvatarView()
 
     let leftAnimator = UIViewPropertyAnimator(duration: 0.35,
                                               dampingRatio: 0.9,
@@ -153,9 +153,9 @@ class ToastBannerView: ToastView {
         self.blurView.expandToSuperviewSize()
         self.blurView.roundCorners()
 
-        self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
-        self.imageView.left = Theme.contentOffset.half
-        self.imageView.top = Theme.contentOffset.half
+        self.imageView.setSize(for: 44)
+        self.imageView.pin(.left, offset: .standard)
+        self.imageView.pin(.top, offset: .standard)
 
         if self.imageView.displayable is UIImage {
             self.imageView.layer.borderColor = ThemeColor.clear.color.cgColor
@@ -169,7 +169,7 @@ class ToastBannerView: ToastView {
 
         let maxTitleWidth: CGFloat
         if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-            maxTitleWidth = self.width - (self.imageView.right + Theme.contentOffset)
+            maxTitleWidth = self.width - (self.imageView.right + Theme.ContentOffset.standard.value.doubled)
         } else {
             maxTitleWidth = (self.width * Theme.iPadPortraitWidthRatio) - (self.imageView.right + 22)
         }
@@ -187,10 +187,10 @@ class ToastBannerView: ToastView {
 
         if let height = self.maxHeight {
             self.height = height
-        } else if self.descriptionLabel.bottom + Theme.contentOffset.half < 84 {
+        } else if self.descriptionLabel.bottom + Theme.ContentOffset.standard.value < 84 {
             self.height = 84
         } else {
-            self.height = self.descriptionLabel.bottom + Theme.contentOffset.half
+            self.height = self.descriptionLabel.bottom + Theme.ContentOffset.standard.value
         }
     }
 }

@@ -10,17 +10,23 @@ import Foundation
 
 class BorderedAvatarView: AvatarView {
     
-    let shadowLayer = CAShapeLayer()
+    lazy var shadowLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.shadowColor = ThemeColor.gray.color.cgColor
+        layer.shadowOpacity = 0.35
+        layer.shadowOffset = .zero
+        layer.shadowRadius = 6
+        return layer 
+    }()
 
     lazy var pulseLayer: CAShapeLayer = {
-        let shape = CAShapeLayer()
-        shape.lineWidth = 1.5
-        shape.lineCap = .round
-        shape.fillColor = UIColor.clear.cgColor
-        shape.cornerRadius = Theme.innerCornerRadius
-        shape.borderColor = ThemeColor.gray.color.cgColor
-        shape.borderWidth = 2
-        return shape
+        let layer = CAShapeLayer()
+        layer.lineWidth = 2
+        layer.lineCap = .round
+        layer.fillColor = UIColor.clear.cgColor
+        layer.borderColor = ThemeColor.gray.color.cgColor
+        layer.borderWidth = 2
+        return layer
     }()
 
     override func initializeSubviews() {
@@ -28,22 +34,16 @@ class BorderedAvatarView: AvatarView {
         
         self.clipsToBounds = false 
         
-        self.layer.insertSublayer(self.pulseLayer, at: 2)
         self.layer.insertSublayer(self.shadowLayer, at: 0)
-        
-        self.shadowLayer.shadowColor = ThemeColor.gray.color.cgColor
-        self.shadowLayer.shadowOpacity = 0.35
-        self.shadowLayer.shadowOffset = .zero
-        self.shadowLayer.shadowRadius = 10
+        self.layer.insertSublayer(self.pulseLayer, at: 2)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         self.pulseLayer.frame = self.bounds
+        self.pulseLayer.cornerRadius = Theme.innerCornerRadius
         self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
-        self.pulseLayer.position = self.imageView.center
-        
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
     }
     

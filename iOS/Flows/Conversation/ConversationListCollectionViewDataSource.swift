@@ -126,7 +126,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         } else {
             updatedItems.append(.upsell)
         }
-
+      
         snapshot.setItems(updatedItems, in: sectionID)
 
         return snapshot
