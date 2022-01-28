@@ -21,8 +21,6 @@ enum ConversationUIState: String {
 
 class ConversationListViewController: ViewController {
     
-    static let topOffset: CGFloat = 40
-
     // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
@@ -96,7 +94,6 @@ class ConversationListViewController: ViewController {
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.conversationLayout.delegate = self
 
-
         self.addChild(viewController: self.headerVC, toView: self.view)
     }
 
@@ -107,8 +104,12 @@ class ConversationListViewController: ViewController {
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
-
-        self.headerVC.view.pin(.top, offset: .custom(ConversationListViewController.topOffset))
+        
+        if ScreenSize.current.rawValue <= ScreenSize.phoneMedium.rawValue {
+            self.headerVC.view.pin(.top, offset: .short)
+        } else {
+            self.headerVC.view.pinToSafeArea(.top, offset: .noOffset)
+        }
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.top = self.headerVC.view.bottom

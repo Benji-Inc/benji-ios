@@ -368,7 +368,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         
         switch self.uiState {
         case .read:
-            let centerY = contentRect.top + 100
+            let additionalYOffset =  MessageContentView.bubbleHeight + Theme.ContentOffset.long.value
+            let centerY = contentRect.top + additionalYOffset
             
             centerPoint = CGPoint(x: contentRect.midX, y: centerY)
             
@@ -392,7 +393,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 centerPoint.y += self.itemHeight.half
                 centerPoint.y += yOffset
                 centerPoint.y += self.itemHeight.half * (1-scale)
+                centerPoint.y -= 21 - Theme.ContentOffset.short.value
             } else {
+                if ScreenSize.current.rawValue <= ScreenSize.phoneMedium.rawValue {
+                    centerPoint.y -= 25
+                }
                 centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
                 centerPoint.y -= yOffset
                 centerPoint.y -= self.itemHeight.half * (1-scale)
