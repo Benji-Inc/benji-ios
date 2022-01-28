@@ -9,11 +9,9 @@
 import Foundation
 import Lottie
 import Combine
-import UIKit
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool)
-
     /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
     /// The accessory view updated the position of the sendable's preview view's position.
@@ -42,9 +40,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     /// The rough area that we need to drag and drop messages to send them.
     var dropZoneFrame: CGRect = .zero
 
-    /// An object to give the user touch feedback when performing certain actions.
-    var impactFeedback = UIImpactFeedbackGenerator(style: .rigid)
-
     // MARK:  - Views
 
     @IBOutlet var inputContainerView: SpeechBubbleView!
@@ -58,6 +53,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
+
+    /// A view that shows a hint animation for how to swipe up a message.
+    @IBOutlet var swipeHintView: AnimationView!
+
+    private lazy var panGestureHandler = SwipeInputPanGestureHandler(inputView: self)
 
     static var minHeight: CGFloat = 76
     static var inputTypeMaxHeight: CGFloat = 25
@@ -75,9 +75,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
-    private var sendable: SendableObject?
-    private let deliveryTypeView = DeliveryTypeView()
-    private let emotionView = EmotionView()
+    var sendable: SendableObject?
+    let deliveryTypeView = DeliveryTypeView()
+    let emotionView = EmotionView()
 
     var cancellables = Set<AnyCancellable>()
 
@@ -96,7 +96,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.showShadow(withOffset: 8)
-        self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false) 
+        self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
 
         self.inputTypeContainer.addSubview(self.emotionView)
         self.emotionView.alpha = 0
@@ -120,6 +120,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.avatarView.didSelect { [unowned self] in
             self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
         }
+
+        self.swipeHintView.set(backgroundColor: .clear)
+        self.swipeHintView.animation = Animation.named(MicroAnimation.swipeUp.rawValue)
+        self.swipeHintView.loopMode = .repeat(2.0)
+        self.swipeHintView.contentMode = .scaleAspectFill
 
         self.setupGestures()
         self.setupHandlers()
@@ -180,7 +185,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
         
         guard new != self.inputHeightConstraint.constant else { return }
-                
+
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputHeightConstraint.constant = new
             self.setNeedsLayout()
@@ -201,7 +206,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     func setupGestures() {
         let panRecognizer = PanGestureRecognizer { [unowned self] (recognizer) in
-            self.handle(pan: recognizer)
+            self.panGestureHandler.handle(pan: recognizer)
         }
         panRecognizer.delegate = self
         self.overlayButton.addGestureRecognizer(panRecognizer)
@@ -227,7 +232,28 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             break
         }
 
+        self.updateSwipeHint(shouldPlay: !text.isEmpty)
+
         self.delegate?.swipeableInputAccessory(self, swipeIsEnabled: !text.isEmpty)
+    }
+
+    var swipeHintTask: Task<Void, Never>?
+    func updateSwipeHint(shouldPlay: Bool) {
+        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
+        self.swipeHintTask?.cancel()
+
+        self.swipeHintView.stop()
+        if shouldPlay {
+            self.swipeHintTask = Task {
+                // Wait 2 seconds before playing the hint
+                await Task.snooze(seconds: 2)
+
+                // Don't play the hint if the user started more typing.
+                guard !Task.isCancelled else { return }
+
+                self.swipeHintView.play()
+            }
+        }
     }
 
     func getDataTypes(from text: String) -> [NSTextCheckingResult]? {
@@ -261,185 +287,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.textView.reset()
         self.inputContainerView.alpha = 1
         self.countView.isHidden = true
-    }
-
-    // MARK: - Pan Gesture Handling
-
-    private var previewView: PreviewMessageView?
-    /// The center point of the preview view when the pan started.
-    private var initialPreviewCenter: CGPoint?
-    /// How far the preview view can be dragged left or right.
-    private let maxXOffset: CGFloat = 40
-    /// If true, the preview view is currently in the drop zone.
-    private var isPreviewInDropZone = false
-
-    func handle(pan: UIPanGestureRecognizer) {
-        guard self.shouldHandlePan() else { return }
-
-        let panOffset = pan.translation(in: nil)
-
-        switch pan.state {
-        case .possible:
-            break
-        case .began:
-            self.handlePanBegan()
-        case .changed:
-            self.handlePanChanged(withOffset: panOffset)
-        case .ended:
-            self.handlePanEnded(withOffset: panOffset)
-        case .cancelled, .failed:
-            self.handlePanFailed()
-        @unknown default:
-            break
-        }
-    }
-
-    private func shouldHandlePan() -> Bool {
-        // Only handle pans if the user has input a sendable message.
-        let object = SendableObject(kind: self.currentMessageKind,
-                                    context: self.currentContext,
-                                    emotion: self.currentEmotion,
-                                    previousMessage: self.editableMessage)
-        return object.isSendable
-    }
-
-    private func handlePanBegan() {
-        let object = SendableObject(kind: self.currentMessageKind,
-                                    context: self.currentContext,
-                                    emotion: self.currentEmotion,
-                                    previousMessage: self.editableMessage)
-        self.sendable = object
-
-        // Hide the input area. The preview view will take its place during the pan.
-        self.inputContainerView.alpha = 0
-
-        // Initialize the preview view for the user to drag up the screen.
-        self.previewView = PreviewMessageView(orientation: .down,
-                                              bubbleColor: self.currentContext.color.color)
-        self.previewView?.frame = self.inputContainerView.frame
-        self.previewView?.messageKind = self.currentMessageKind
-        self.previewView?.showShadow(withOffset: 8)
-        self.addSubview(self.previewView!)
-
-        self.initialPreviewCenter = self.previewView?.center
-
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.deliveryTypeView.alpha = 0.0
-            self.emotionView.alpha = 0.0
-        }
-        self.delegate?.swipeableInputAccessoryDidBeginSwipe(self)
-    }
-
-    private func handlePanChanged(withOffset panOffset: CGPoint) {
-        self.updatePreviewViewPosition(withOffset: panOffset)
-
-        guard let sendable = self.sendable, let previewView = self.previewView else { return }
-
-        self.delegate?.swipeableInputAccessory(self,
-                                               didUpdatePreviewFrame: previewView.frame,
-                                               for: sendable)
-    }
-
-    private func handlePanEnded(withOffset panOffset: CGPoint) {
-        self.updatePreviewViewPosition(withOffset: panOffset)
-
-        var sendableWillBeSent = false
-
-        if let sendable = self.sendable,
-           let previewView = self.previewView,
-           let delegate = self.delegate {
-
-            sendableWillBeSent = delegate.swipeableInputAccessory(self,
-                                                                  triggeredSendFor: sendable,
-                                                                  withPreviewFrame: previewView.frame)
-        }
-
-        self.resetPreviewAndInputViews(didSend: sendableWillBeSent)
-
-        self.delegate?.swipeableInputAccessory(self, didFinishSwipeSendingSendable: sendableWillBeSent)
-    }
-
-    private func handlePanFailed() {
-        self.inputContainerView.alpha = 1
-        self.previewView?.removeFromSuperview()
-        self.delegate?.swipeableInputAccessory(self, didFinishSwipeSendingSendable: false)
-    }
-
-    /// Updates the position of the preview view based on the provided pan gesture offset. This function ensures that preview view's origin
-    /// is kept within bounds defined by max X and Y offset.
-    private func updatePreviewViewPosition(withOffset panOffset: CGPoint) {
-        guard let initialCenter = self.initialPreviewCenter,
-              let previewView = self.previewView else { return }
-
-        let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
-
-        var previewCenter = initialCenter + CGPoint(x: offsetX, y: panOffset.y)
-
-        // As the user drags further up, gravitate the preview view toward the drop zone.
-        let dropZoneCenter = self.dropZoneFrame.center
-        let xGravityRange: CGFloat = 30
-        // Range along y axis from the drop zone center within which we start gravitating the preview
-        let yGravityRange: CGFloat = self.dropZoneFrame.height
-
-        // Vector pointing from the current preview center to the drop zone center.
-        var gravityVector = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter)
-
-        // The closer to the drop zone, the stronger the gravity should be.
-        let gravityFactorX = lerpClamped(abs(previewCenter.x - dropZoneCenter.x)/xGravityRange,
-                                         keyPoints: [1, 0.95, 0.85, 0.5, 0])
-        let gravityFactorY = lerpClamped(abs(previewCenter.y - dropZoneCenter.y)/yGravityRange,
-                                        keyPoints: [1, 0.95, 0.85, 0.7, 0])
-        gravityVector = CGVector(dx: gravityVector.dx * gravityFactorX,
-                                 dy: gravityVector.dy * gravityFactorY)
-
-        // Adjust the preview's center with the gravity vector.
-        previewCenter = CGPoint(x: previewCenter.x + gravityVector.dx,
-                                y: previewCenter.y + gravityVector.dy)
-
-        previewView.center = previewCenter
-
-        // Provide haptic feedback when the message is ready to send.
-        let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
-        if distanceToDropZone < self.dropZoneFrame.height * 0.5 {
-            if !self.isPreviewInDropZone {
-                previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
-                self.impactFeedback.impactOccurred()
-            }
-            self.isPreviewInDropZone = true
-        } else {
-            if self.isPreviewInDropZone {
-                previewView.setBubbleColor(ThemeColor.B1.color, animated: true)
-            }
-            self.isPreviewInDropZone = false
-        }
-    }
-
-    private func resetPreviewAndInputViews(didSend: Bool) {
-        if didSend {
-            self.impactFeedback.impactOccurred()
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.previewView?.alpha = 0
-            } completion: { completed in
-                self.previewView?.removeFromSuperview()
-            }
-
-            self.resetInputViews()
-        } else {
-            // If the user didn't swipe far enough to send a message, animate the preview view back
-            // to where it started, then reveal the text view to allow for input again.
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                guard let initialOrigin = self.initialPreviewCenter else { return }
-                self.previewView?.center = initialOrigin
-            } completion: { completed in
-                self.inputContainerView.alpha = 1
-                self.previewView?.removeFromSuperview()
-            }
-        }
-        
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.deliveryTypeView.alpha = 1.0
-            self.emotionView.alpha = 1.0
-        }
     }
 
     // MARK: - UIGestureRecognizerDelegate

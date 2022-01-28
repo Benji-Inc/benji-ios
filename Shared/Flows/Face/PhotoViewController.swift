@@ -156,7 +156,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleInitialState() {
-
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDurationStandard, animations: {
                 self.animationView.alpha = 1

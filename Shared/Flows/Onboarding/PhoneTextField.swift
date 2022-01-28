@@ -8,7 +8,6 @@
 
 import Foundation
 import PhoneNumberKit
-import Lottie
 
 class PhoneTextField: PhoneNumberTextField {
     
@@ -29,7 +28,10 @@ class PhoneTextField: PhoneNumberTextField {
         super.init(coder: aDecoder)
     }
 
-    override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    override func textField(_ textField: UITextField,
+                            shouldChangeCharactersIn range: NSRange,
+                            replacementString string: String) -> Bool {
+
         // This allows for the case when a user autocompletes a phone number:
         if range == NSRange(location: 0, length: 0), string == "" {
             return true
