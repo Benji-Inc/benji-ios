@@ -89,7 +89,7 @@ class ConversationListViewController: ViewController {
 
     override func initializeViews() {
         super.initializeViews()
-
+        
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.conversationLayout.delegate = self
