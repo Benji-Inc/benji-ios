@@ -10,7 +10,15 @@ import Foundation
 
 class CircleCoordinator: PresentableCoordinator<Void> {
     
-    lazy var circleVC = CircleViewController()
+    let circleVC: CircleViewController
+    
+    init(with cirlce: Circle,
+         router: Router,
+         deepLink: DeepLinkable?) {
+        
+        self.circleVC = CircleViewController(with: cirlce)
+        super.init(router: router, deepLink: deepLink)
+    }
     
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.circleVC
@@ -37,26 +45,28 @@ class CircleCoordinator: PresentableCoordinator<Void> {
     func presentPeoplePicker() {
         
         self.removeChild()
-        let coordinator = PeopleCoordinator(conversationID: nil,
-                                            router: self.router,
-                                            deepLink: self.deepLink)
+        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         
-        self.addChildAndStart(coordinator) { [unowned self] connections in
+        self.addChildAndStart(coordinator) { [unowned self] people in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.updateCircle(with: connections)
+                self.updateCircle(with: people)
             }
         }
         
         self.router.present(coordinator, source: self.circleVC)
     }
     
-    func updateCircle(with connections: [Connection]) {
-        
+    func updateCircle(with people: [Person]) {
+        Task {
+           let updated = try await self.circleVC.circle.add(people: people)
+            self.circleVC.update(with: updated)
+            /// Need to update the circle
+        }
     }
     
     func presentCircleTitleAlert() {
         
-        let alertController = UIAlertController(title: "Update Circle Name", message: "", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Name"
         }

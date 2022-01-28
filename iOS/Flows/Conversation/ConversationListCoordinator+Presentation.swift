@@ -13,8 +13,16 @@ import Localization
 extension ConversationListCoordinator {
     
     func presentCircle() {
-        let coordinator = CircleCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator)
+        guard let query = Circle.query() else { return }
+        query.whereKey("owner", equalTo: User.current()!)
+        query.getFirstObjectInBackground { [unowned self] object, error in
+            if let circle = object as? Circle {
+                let coordinator = CircleCoordinator(with: circle,
+                                                    router: self.router,
+                                                    deepLink: self.deepLink)
+                self.present(coordinator)
+            }
+        }
     }
 
     func presentThread(for channelId: ChannelId,
@@ -47,13 +55,9 @@ extension ConversationListCoordinator {
 
     func presentPeoplePicker() {
         guard let conversation = self.activeConversation else { return }
-
-        let coordinator = PeopleCoordinator(conversationID: conversation.cid,
-                                            router: self.router,
-                                            deepLink: self.deepLink)
-        
-        self.present(coordinator) { [unowned self] connections in
-            self.add(connections: connections, to: conversation)
+        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator) { [unowned self] people in
+            self.add(people: people, to: conversation)
         }
     }
     
@@ -77,20 +81,22 @@ extension ConversationListCoordinator {
         self.router.present(coordinator, source: self.conversationListVC)
     }
     
-    func add(connections: [Connection], to conversation: Conversation) {
+    func add(people: [Person], to conversation: Conversation) {
         let controller = ChatClient.shared.channelController(for: conversation.cid)
 
-        let acceptedConnections = connections.filter { connection in
+        let accepted = people.compactMap { person in
+            return person.connection
+        }.filter { connection in
             return connection.status == .accepted
         }
 
-        if !acceptedConnections.isEmpty {
-            let members = acceptedConnections.compactMap { connection in
+        if !accepted.isEmpty {
+            let members = accepted.compactMap { connection in
                 return connection.nonMeUser?.objectId
             }
             controller.addMembers(userIds: Set(members)) { error in
                 if error.isNil {
-                    self.showPeopleAddedToast(for: acceptedConnections)
+                    self.showPeopleAddedToast(for: accepted)
                 }
             }
         }

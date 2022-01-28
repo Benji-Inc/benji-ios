@@ -68,9 +68,25 @@ final class Circle: PFObject, PFSubclassing {
         set { self.setObject(for: .invitedContacts, with: newValue) }
     }
     
-    func add(user: User) async throws {
-        self.addUniqueObject(user, forKey: CircleKey.users.rawValue)
-        try await self.saveToServer()
+    func add(people: [Person]) async throws -> Self {
+        
+        let users: [User] = people.compactMap { person in
+            return person.connection?.nonMeUser
+        }
+        
+        if !users.isEmpty {
+            self.addUniqueObjects(from: users, forKey: CircleKey.users.rawValue)
+        }
+        
+        let contacts: [String] = people.compactMap { person in
+            return person.cnContact?.identifier
+        }
+        
+        if !contacts.isEmpty {
+            self.addUniqueObjects(from: contacts, forKey: CircleKey.invitedContacts.rawValue)
+        }
+        
+        return try await self.saveToServer()
     }
 }
 

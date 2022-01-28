@@ -16,15 +16,14 @@ extension PeopleCoordinator {
     private func showSentToast() {
         Task {
             await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: UIImage(systemName: "envelope")!, title: "RSVP Sent", description: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you.", deepLink: nil))
-        }
+        }.add(to: self.taskPool)
     }
 
     private func showSentAlert(for avatar: Avatar) {
         let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         Task {
             await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: avatar, title: "RSVP Sent", description: text, deepLink: nil))
-        }
-
+        }.add(to: self.taskPool)
     }
 
     private func sendText(with message: String?, phone: String) {
@@ -54,7 +53,7 @@ extension PeopleCoordinator {
     @MainActor
     func finish() async {
         await self.peopleNavController.peopleVC.finishInviting()
-        self.finishFlow(with: self.selectedConnections)
+        self.finishFlow(with: self.invitedPeople)
     }
 
     func invite(person: Person, with reservation: Reservation) {
@@ -72,18 +71,15 @@ extension PeopleCoordinator {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
             // Ensure that the reservation metadata is prepared before we show the reservation
             try await reservation.prepareMetadata(andUpdate: [])
-            reservation.conversationCid = self.conversationID?.description ?? String()
             try await reservation.saveLocalThenServer()
             try await self.showReservationAlert(for: matchingUser, reservation: reservation)
         } catch {
             if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
-                reservation.conversationCid = self.conversationID?.description ?? String()
             } else {
                 reservation.contactId = contact?.identifier
                 _ = try? await reservation.saveLocalThenServer()
                 self.sendText(with: reservation.message, phone: phone)
-                reservation.conversationCid = self.conversationID?.description ?? String()
             }
         }
     }
@@ -117,7 +113,8 @@ extension PeopleCoordinator {
             do {
                 let value = try await CreateConnection(to: user, reservation: reservation).makeRequest(andUpdate: [], viewsToIgnore: [])
                 if let connection = value as? Connection {
-                    self.selectedConnections.append(connection)
+                    let person = Person(withConnection: connection)
+                    self.invitedPeople.append(person)
                 }
                 self.showSentAlert(for: user)
             } catch {
@@ -138,10 +135,20 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
             }
         case .sent:
             controller.dismiss(animated: true) {
-                if let contact = self.selectedContact {
-                    self.showSentAlert(for: contact)
-                    self.updateInvitation()
+                if let phone = controller.recipients?.first, let person = self.peopleToInvite.first(where: { person in
+                    if let c = person.cnContact, let phoneString = c.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
+                        phone == phoneString {
+                        return true
+                    } else {
+                        return false
+                    }
+                }), let contact = person.cnContact {
+                    let person = Person(withContact: contact)
+                    self.invitedPeople.append(person)
+                    self.showSentAlert(for: person)
                 }
+                
+                self.updateInvitation()
             }
         @unknown default:
             break

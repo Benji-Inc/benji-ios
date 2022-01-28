@@ -21,9 +21,10 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     
     let pullView = PullView()
     
-    var circle: Circle?
+    private(set) var circle: Circle
         
-    init() {
+    init(with circle: Circle) {
+        self.circle = circle 
         let cv = CollectionView(layout: CircleCollectionViewLayout())
         cv.isScrollEnabled = false
         cv.showsHorizontalScrollIndicator = false
@@ -61,39 +62,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.loadCircle()
-        
-//        Task {
-//
-//            let circle = Circle()
-//            circle.owner = User.current()
-//            circle.invitedContacts = ["8145B0B5-A062-467D-AF46-41D1DBD6E836:ABPerson", "C554E0F8-B6A6-428F-8767-17FEF4958D20:ABPerson"]
-//            circle.name = "My Favorites"
-//
-//            if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
-//                return !connection.nonMeUser.isNil
-//            }), let users = try? await connections.asyncMap({ connection in
-//                return try await connection.nonMeUser!.retrieveDataIfNeeded()
-//            }) {
-//                circle.users = users
-//            }
-//
-//            if let circle = try? await circle.saveToServer() {
-//                self.circle = circle
-//                self.loadInitialData()
-//            }
-//        }.add(to: self.taskPool)
-    }
-    
-    private func loadCircle() {
-        guard let query = Circle.query() else { return }
-        query.whereKey("owner", equalTo: User.current()!)
-        query.getFirstObjectInBackground { [unowned self] object, error in
-            if let circle = object as? Circle {
-                self.circle = circle
-                self.loadInitialData()
-            }
-        }
+        self.loadInitialData()
     }
     
     func updateRemaining(with amount: Int) {
@@ -133,23 +102,26 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     
     override func retrieveDataForSnapshot() async -> [CircleSectionType : [CircleItemType]] {
         var data: [CircleSectionType: [CircleItemType]] = [:]
+        data[.circle] = self.getAllItems()
+        return data
+    }
+    
+    func getAllItems() -> [CircleItemType] {
         
-        guard let circle = self.circle else { return data }
-
         var allItems: [CircleItemType] = []
         var itemCount: Int = 0
         
-        let limit = circle.limit
+        let limit = self.circle.limit
         
         for i in 0..<limit {
-            if let user = circle.users[safe: i] {
+            if let user = self.circle.users[safe: i] {
                 allItems.append(.item(CircleItem(position: i, user: user)))
                 itemCount += 1
             }
         }
         
         for i in 0..<limit {
-            if let contactId = circle.invitedContacts[safe: i],
+            if let contactId = self.circle.invitedContacts[safe: i],
                       let contact = ContactsManger.shared.searchForContact(with: .identifier(contactId)).first {
                 allItems.append(.item(CircleItem(position: i, contact: contact)))
                 itemCount += 1
@@ -160,12 +132,16 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
             allItems.append(.item(CircleItem(position: i)))
         }
         
-        let remaining = circle.limit - itemCount
+        let remaining = self.circle.limit - itemCount
         
         self.updateRemaining(with: remaining)
-
-        data[.circle] = allItems
         
-        return data
+        return allItems
+    }
+    
+    @MainActor
+    func update(with circle: Circle) {
+        self.circle = circle
+        self.dataSource.reconfigureItems(self.getAllItems())
     }
 }
