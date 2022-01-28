@@ -40,7 +40,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.view.addSubview(self.topicLabel)
         
-        self.view.addSubview(self.pullView)
+        if !isRelease {
+            self.view.addSubview(self.pullView)
+        }
+        
         self.pullView.isVisible = false 
         
         self.button.showsMenuAsPrimaryAction = true
