@@ -65,10 +65,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         self.conversationController?.memberEventPublisher.mainSink(receiveValue: { [unowned self] event in
             switch event as MemberEvent {
             case let event as MemberAddedEvent:
-                guard let conversationController = self.conversationController else { return }
-                let member = Member(displayable: AnyHashableDisplayable.init(event.member),
-                                    conversationController: conversationController)
-                self.dataSource.appendItems([.member(member)], toSection: .members)
+                self.add(member: event.member)
             case let event as MemberRemovedEvent:
                 guard let conversationController = self.conversationController else { return }
                 let member = Member(displayable: AnyHashableDisplayable.init(event.user),
@@ -83,6 +80,14 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                 break
             }
         }).store(in: &self.cancellables)
+    }
+    
+    func add(member: ChatChannelMember) {
+        guard let conversationController = self.conversationController else { return }
+
+        let member = Member(displayable: AnyHashableDisplayable.init(member),
+                            conversationController: conversationController)
+        self.dataSource.appendItems([.member(member)], toSection: .members)
     }
 
     // MARK: Data Loading

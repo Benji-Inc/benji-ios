@@ -12,14 +12,8 @@ import MessageUI
 import Localization
 
 extension PeopleCoordinator {
-    
-    private func showSentToast() {
-        Task {
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: UIImage(systemName: "envelope")!, title: "RSVP Sent", description: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you.", deepLink: nil))
-        }.add(to: self.taskPool)
-    }
 
-    private func showSentAlert(for avatar: Avatar) {
+    private func showSentTextToast(for avatar: Avatar) {
         let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         Task {
             await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: avatar, title: "RSVP Sent", description: text, deepLink: nil))
@@ -42,10 +36,8 @@ extension PeopleCoordinator {
 
         if let person = self.peopleToInvite[safe: self.inviteIndex] {
             if let connection = try? await person.connection?.retrieveDataIfNeeded(),
-                connection.status == .accepted,
-                let user = connection.nonMeUser {
-                
-                self.showSentAlert(for: user)
+                connection.status == .accepted {
+            
                 self.invitedPeople.append(person)
                 self.inviteIndex += 1
 
@@ -128,7 +120,6 @@ extension PeopleCoordinator {
                     let person = Person(withConnection: connection)
                     self.invitedPeople.append(person)
                 }
-                self.showSentAlert(for: user)
                 await self.updateInvitation()
             } catch {
                 print(error)
@@ -160,7 +151,7 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
                 }), let contact = person.cnContact {
                     let person = Person(withContact: contact)
                     self.invitedPeople.append(person)
-                    self.showSentAlert(for: person)
+                    self.showSentTextToast(for: person)
                 }
                 
                 Task {
