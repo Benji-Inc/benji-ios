@@ -143,8 +143,8 @@ class ConversationListViewController: ViewController {
         self.resignFirstResponder()
     }
 
-    func updateUI(for state: ConversationUIState) {
-        guard self.presentedViewController.isNil else { return }
+    func updateUI(for state: ConversationUIState, forceLayout: Bool = false) {
+        guard self.presentedViewController.isNil || forceLayout else { return }
 
         self.headerVC.update(for: state)
         self.dataSource.uiState = state

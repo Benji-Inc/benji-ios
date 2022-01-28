@@ -16,7 +16,7 @@ class CharacterCountView: BaseView {
         super.initializeSubviews()
 
         self.addSubview(self.label)
-        self.label.textAlignment = .right
+        self.label.textAlignment = .center
     }
 
     override func layoutSubviews() {
@@ -27,13 +27,15 @@ class CharacterCountView: BaseView {
 
     func update(with count: Int, max: Int) {
         if count >= max {
-            self.isHidden = false
+            self.alpha = 1.0
             self.label.setText(self.getText(from: count, max: max))
+            self.label.setTextColor(.red)
         } else if count >= max - 20 {
-            self.isHidden = false
+            self.alpha = 1.0
             self.label.setText(self.getText(from: count, max: max))
+            self.label.setTextColor(.T1)
         } else {
-            self.isHidden = true
+            self.alpha = 0.0
         }
     }
 

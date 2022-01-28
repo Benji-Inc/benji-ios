@@ -78,6 +78,7 @@ extension ConversationListCoordinator {
         }
         
         self.conversationListVC.resignFirstResponder()
+        self.conversationListVC.updateUI(for: .read, forceLayout: true)
         self.router.present(coordinator, source: self.conversationListVC)
     }
     

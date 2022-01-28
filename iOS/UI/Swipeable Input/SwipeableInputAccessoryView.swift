@@ -111,10 +111,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
         }
-        
-        self.inputContainerView.addSubview(self.countView)
-        self.countView.isHidden = true
-        
+                
         self.avatarView.set(avatar: User.current()!)
         
         self.avatarView.didSelect { [unowned self] in
@@ -149,8 +146,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 
                 switch currentEvent {
                 case .willShow:
-                    let shouldShow = self.textView.numberOfLines == 1
-                    self.showDetail(shouldShow: shouldShow)
+                    self.showDetail(shouldShow: true)
                 case .willHide:
                     self.showDetail(shouldShow: false)
                 case .didHide:
@@ -199,6 +195,12 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.emotionView.alpha = shouldShow ? 1.0 : 0.0
             self.deliveryTypeView.alpha = shouldShow ? 1.0 : 0.0
             self.avatarView.alpha = shouldShow ? 0.0 : 1.0
+            
+            if shouldShow {
+                self.countView.update(with: self.textView.text.count, max: self.textView.maxLength)
+            } else {
+                self.countView.alpha = 0.0
+            }
         }
     }
 
