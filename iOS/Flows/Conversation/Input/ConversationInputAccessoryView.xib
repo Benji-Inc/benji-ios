@@ -26,14 +26,6 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
                             <rect key="frame" x="32" y="8" width="273" height="131"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TRK-Tt-Z8M" customClass="CharacterCountView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="210" y="95" width="55" height="20"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="20" id="cx4-iQ-KNi"/>
-                                        <constraint firstAttribute="width" constant="55" id="spT-zI-BhJ"/>
-                                    </constraints>
-                                </view>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="43" width="273" height="33"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -55,8 +47,6 @@
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="3E0-AT-Kum"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="76" id="7Po-qb-mxR"/>
-                                <constraint firstAttribute="trailing" secondItem="TRK-Tt-Z8M" secondAttribute="trailing" constant="8" id="IPd-nK-9ah"/>
-                                <constraint firstAttribute="bottom" secondItem="TRK-Tt-Z8M" secondAttribute="bottom" constant="16" id="PfJ-Lc-WLn"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="centerY" secondItem="VuQ-5S-h7F" secondAttribute="centerY" constant="-6" id="V3R-UO-izT"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="fhu-x1-1GA"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="jJa-qV-wJv"/>
@@ -67,6 +57,14 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vaX-xP-i7k">
                             <rect key="frame" x="36" y="135" width="265" height="56"/>
                             <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TRK-Tt-Z8M" customClass="CharacterCountView" customModule="Jibber" customModuleProvider="target">
+                                    <rect key="frame" x="105" y="4" width="55" height="20"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="20" id="1Xf-ck-M2V"/>
+                                        <constraint firstAttribute="width" constant="55" id="KDy-gd-pQb"/>
+                                    </constraints>
+                                </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdi-8g-wyi" customClass="BorderedAvatarView" customModule="Jibber" customModuleProvider="target">
                                     <rect key="frame" x="111" y="13" width="43" height="43"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -80,6 +78,8 @@
                             <constraints>
                                 <constraint firstItem="sdi-8g-wyi" firstAttribute="centerX" secondItem="vaX-xP-i7k" secondAttribute="centerX" id="1pK-1k-imY"/>
                                 <constraint firstAttribute="height" constant="56" id="W3f-8z-1Rm"/>
+                                <constraint firstItem="TRK-Tt-Z8M" firstAttribute="centerX" secondItem="vaX-xP-i7k" secondAttribute="centerX" id="he9-Ii-tUo"/>
+                                <constraint firstItem="TRK-Tt-Z8M" firstAttribute="top" secondItem="vaX-xP-i7k" secondAttribute="top" constant="4" id="njY-vN-VFg"/>
                                 <constraint firstAttribute="bottom" secondItem="sdi-8g-wyi" secondAttribute="bottom" id="pTd-MF-aKN"/>
                             </constraints>
                         </view>
@@ -129,9 +129,6 @@
             <point key="canvasLocation" x="81.884057971014499" y="-35.825892857142854"/>
         </view>
     </objects>
-    <designables>
-        <designable name="KZz-F4-Lq2"/>
-    </designables>
     <resources>
         <namedColor name="RED">
             <color red="0.92900002002716064" green="0.29399999976158142" blue="0.29800000786781311" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
