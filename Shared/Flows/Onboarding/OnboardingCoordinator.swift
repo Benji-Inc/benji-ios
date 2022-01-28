@@ -164,9 +164,9 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             self.onboardingVC.switchTo(nextContent)
         } else if let user = User.current() {
             switch user.status {
-            case .needsVerification, .none:
+            case .needsVerification, .none, .active:
                 self.finishFlow(with: ())
-            case .inactive, .waitlist, .active:
+            case .inactive, .waitlist:
                 self.finalizeOnboarding(user: user)
             }
         }
@@ -174,14 +174,18 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
     func finalizeOnboarding(user: User) {
         Task {
-            
             self.onboardingVC.showLoading()
             if await !self.hasNeededPermissions() {
                 await self.presentPermissions()
             }
-            try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
-                                         passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
-                                                                                       viewsToIgnore: [self.onboardingVC.view])
+            do {
+                try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
+                                             passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
+                                                                                           viewsToIgnore: [self.onboardingVC.view])
+            } catch {
+                logError(error)
+            }
+            
             await self.onboardingVC.hideLoading()
             self.finishFlow(with: ())
         }
