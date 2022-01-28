@@ -72,7 +72,7 @@ extension PeopleCoordinator {
             // Ensure that the reservation metadata is prepared before we show the reservation
             try await reservation.prepareMetadata(andUpdate: [])
             try await reservation.saveLocalThenServer()
-            try await self.showReservationAlert(for: matchingUser, reservation: reservation)
+            try await self.showConnectionAlert(for: matchingUser)
         } catch {
             if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
@@ -84,7 +84,7 @@ extension PeopleCoordinator {
         }
     }
 
-    func showReservationAlert(for user: User, reservation: Reservation) {
+    func showConnectionAlert(for user: User) {
         let title = LocalizedString(id: "", arguments: [user.fullName], default: "Connect with @(name)?")
         let titleText = localized(title)
 
@@ -99,7 +99,7 @@ extension PeopleCoordinator {
         }
 
         let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
-            self.createConnection(with: user, reservation: reservation)
+            self.createConnection(with: user)
         }
 
         alert.addAction(cancel)
@@ -108,10 +108,10 @@ extension PeopleCoordinator {
         self.router.topmostViewController.present(alert, animated: true, completion: nil)
     }
 
-    func createConnection(with user: User, reservation: Reservation) {
+    func createConnection(with user: User) {
         Task {
             do {
-                let value = try await CreateConnection(to: user, reservation: reservation).makeRequest(andUpdate: [], viewsToIgnore: [])
+                let value = try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
                 if let connection = value as? Connection {
                     let person = Person(withConnection: connection)
                     self.invitedPeople.append(person)

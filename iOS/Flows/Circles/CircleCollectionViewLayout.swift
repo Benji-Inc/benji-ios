@@ -13,7 +13,8 @@ class CircleCollectionViewLayout: UICollectionViewLayout {
     // MARK: Getting the Collection View Information
     
     override var collectionViewContentSize: CGSize {
-        return collectionView?.bounds.size ?? .zero
+        guard let cv = self.collectionView else { return .zero }
+        return cv.bounds.size
     }
     
     // MARK: Invalidating the Layout

@@ -60,7 +60,6 @@ class CircleCoordinator: PresentableCoordinator<Void> {
         Task {
            let updated = try await self.circleVC.circle.add(people: people)
             self.circleVC.update(with: updated)
-            /// Need to update the circle
         }
     }
     
@@ -75,10 +74,13 @@ class CircleCoordinator: PresentableCoordinator<Void> {
                let text = textField.text,
                !text.isEmpty {
                 
-                self.circleVC.circleNameLabel.setText(text)
-                self.circleVC.view.layoutNow()
-                
                 alertController.dismiss(animated: true, completion: {
+                    Task {
+                        self.circleVC.circle.name = text
+                        try await self.circleVC.circle.saveToServer()
+                        self.circleVC.circleNameLabel.setText(text)
+                        self.circleVC.view.layoutNow()
+                    }
                 })
             }
         })

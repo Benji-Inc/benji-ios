@@ -37,6 +37,12 @@ extension PeopleCoordinator: PeopleViewControllerDelegate {
                                 didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
         
         Task.onMainActor {
+            self.peopleToInvite = items.compactMap({ item in
+                switch item {
+                case .person(let person):
+                    return person 
+                }
+            })
             self.peopleNavController.prepareForInvitations()
             self.updateInvitation()
         }

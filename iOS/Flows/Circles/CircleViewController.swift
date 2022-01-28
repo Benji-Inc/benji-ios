@@ -56,7 +56,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.view.addSubview(self.circleNameLabel)
         self.view.addSubview(self.button)
         
-        self.circleNameLabel.setText("Circle Name")
+        self.circleNameLabel.setText(self.circle.name)
     }
     
     override func viewDidLoad() {
@@ -142,6 +142,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     @MainActor
     func update(with circle: Circle) {
         self.circle = circle
+        self.circleNameLabel.setText(self.circle.name)
         self.dataSource.reconfigureItems(self.getAllItems())
     }
 }
