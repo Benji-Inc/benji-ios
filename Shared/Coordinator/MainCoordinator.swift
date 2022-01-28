@@ -66,19 +66,19 @@ class MainCoordinator: Coordinator<Void> {
 
         // If no user object has been created, allow the user to do so now.
         guard let user = User.current(), user.isAuthenticated else {
-            self.runOnboardingFlow()
+            self.runOnboardingFlow(with: deeplink)
             return
         }
 
         // If ther user didn't finish onboarding, redirect them to onboarding
         if !user.isOnboarded {
-            self.runOnboardingFlow()
+            self.runOnboardingFlow(with: deeplink)
             return
         }
 
         // As a final catch-all, make sure the user is fully activated.
         guard user.status == .active || user.status == .waitlist else {
-            self.runOnboardingFlow()
+            self.runOnboardingFlow(with: deeplink)
             return
         }
 
@@ -94,24 +94,24 @@ class MainCoordinator: Coordinator<Void> {
         case .home, .conversation:
 #if IOS
             Task {
-                await self.runConversationListFlow()
+                await self.runConversationListFlow(with: deeplink)
             }
 #endif
         case .login:
-            self.runOnboardingFlow()
+            self.runOnboardingFlow(with: deeplink)
         case .reservation:
 #if IOS
             Task {
-                await self.runConversationListFlow()
+                await self.runConversationListFlow(with: deeplink)
             }
 #endif
-            self.runOnboardingFlow()
+            self.runOnboardingFlow(with: deeplink)
         }
     }
 
-    func runOnboardingFlow() {
+    func runOnboardingFlow(with deepLink: DeepLinkable?) {
         let coordinator = OnboardingCoordinator(router: self.router,
-                                                deepLink: self.deepLink)
+                                                deepLink: deepLink)
         self.router.setRootModule(coordinator, animated: true)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             // Attempt to take the user to the conversation screen after onboarding is complete.
@@ -142,7 +142,7 @@ class MainCoordinator: Coordinator<Void> {
         User.logOut()
         self.deepLink = nil
         self.removeChild()
-        self.runOnboardingFlow()
+        self.runOnboardingFlow(with: nil)
     }
 }
 
