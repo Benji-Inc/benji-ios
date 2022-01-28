@@ -129,6 +129,9 @@
             <point key="canvasLocation" x="81.884057971014499" y="-35.825892857142854"/>
         </view>
     </objects>
+    <designables>
+        <designable name="KZz-F4-Lq2"/>
+    </designables>
     <resources>
         <namedColor name="RED">
             <color red="0.92900002002716064" green="0.29399999976158142" blue="0.29800000786781311" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
