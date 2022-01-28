@@ -30,8 +30,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         case newConversation
     }
 
-    let viewController: MessageSendingViewControllerType
-    let collectionView: MessageSendingCollectionViewType
+    unowned let viewController: MessageSendingViewControllerType
+    unowned let collectionView: MessageSendingCollectionViewType
     let isConversationList: Bool
     
     var didTapAvatar: CompletionOptional = nil
