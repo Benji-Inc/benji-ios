@@ -236,7 +236,8 @@ extension UIView {
     }
 
     func pinToSafeAreaTop() {
-        self.pinToSafeArea(.top, offset: .xtraLong)
+        let offset: Theme.ContentOffset = ScreenSize.current == .phoneSmall ? .noOffset : .xtraLong
+        self.pinToSafeArea(.top, offset: offset)
     }
 
     func pinToSafeAreaBottom() {

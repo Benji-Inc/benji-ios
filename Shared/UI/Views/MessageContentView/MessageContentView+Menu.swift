@@ -69,11 +69,11 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
 
         var menuElements: [UIMenuElement] = []
 
-        if message.isFromCurrentUser {
+        if !isRelease, message.isFromCurrentUser {
             menuElements.append(deleteMenu)
         }
 
-        if message.isFromCurrentUser {
+        if !isRelease, message.isFromCurrentUser {
             menuElements.append(edit)
         }
 
@@ -83,37 +83,11 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             menuElements.append(read)
         }
 
-        let children: [UIAction] = ReactionType.allCases.filter({ type in
-            return type != .read 
-        }).compactMap { type in
-            return UIAction.init(title: type.emoji,
-                                 subtitle: nil,
-                                 image: nil,
-                                 identifier: nil,
-                                 discoverabilityTitle: nil,
-                                 attributes: []) { [unowned self] _ in
-                Task {
-                    let controller = ChatClient.shared.messageController(cid: cid, messageId: message.id)
-                    do {
-                        try await controller.addReaction(with: type)
-                    } catch {
-                        logError(error)
-                    }
-                }.add(to: self.taskPool)
-            }
-        }
-
-        let reactionsMenu = UIMenu(title: "Add Reaction",
-                                image: UIImage(systemName: "face.smile"),
-                                children: children)
-
-        menuElements.append(reactionsMenu)
-
         if message.parentMessageId.isNil {
             menuElements.append(viewReplies)
         }
 
-        return UIMenu.init(title: "From: \(message.avatar.fullName)",
+        return UIMenu.init(title: "From: \(message.author.parseUser?.fullName ?? "Unkown")",
                            image: nil,
                            identifier: nil,
                            options: [],
