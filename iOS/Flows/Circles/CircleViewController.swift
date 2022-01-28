@@ -81,9 +81,6 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.button.width = self.circleNameLabel.width
         self.button.center = self.circleNameLabel.center
         
-//        self.collectionView.width = self.view.width * 1.4
-//        self.collectionView.centerOnX()
-        
         self.label.setSize(withWidth: self.view.halfWidth)
         self.label.centerOnXAndY()
         self.label.centerY -= 50
