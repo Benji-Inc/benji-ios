@@ -44,7 +44,10 @@ extension PeopleCoordinator: PeopleViewControllerDelegate {
                 }
             })
             self.peopleNavController.prepareForInvitations()
-            self.updateInvitation()
+            
+            Task {
+                await self.updateInvitation()
+            }.add(to: self.taskPool)
         }
     }
 }

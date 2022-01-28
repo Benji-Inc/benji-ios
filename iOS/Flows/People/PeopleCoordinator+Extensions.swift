@@ -37,14 +37,26 @@ extension PeopleCoordinator {
         }
     }
 
-    func updateInvitation() {
-        if let person = self.peopleToInvite[safe: self.inviteIndex],
-           let rsvp = self.peopleNavController.peopleVC.reservations[safe: self.inviteIndex] {
-            self.invite(person: person, with: rsvp)
-        } else {
-            Task {
+    @MainActor
+    func updateInvitation() async {
+
+        if let person = self.peopleToInvite[safe: self.inviteIndex] {
+            if let connection = try? await person.connection?.retrieveDataIfNeeded(),
+                connection.status == .accepted,
+                let user = connection.nonMeUser {
+                
+                self.showSentAlert(for: user)
+                self.invitedPeople.append(person)
+                self.inviteIndex += 1
+
+                await self.updateInvitation()
+            } else if let rsvp = self.peopleNavController.peopleVC.reservations[safe: self.inviteIndex] {
+                self.invite(person: person, with: rsvp)
+            } else {
                 await self.finish()
-            }.add(to: self.taskPool)
+            }
+        } else {
+            await self.finish()
         }
 
         self.inviteIndex += 1
@@ -117,7 +129,7 @@ extension PeopleCoordinator {
                     self.invitedPeople.append(person)
                 }
                 self.showSentAlert(for: user)
-                self.updateInvitation()
+                await self.updateInvitation()
             } catch {
                 print(error)
             }
@@ -132,7 +144,9 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
         switch result {
         case .cancelled, .failed:
             controller.dismiss(animated: true) {
-                self.updateInvitation()
+                Task {
+                    await self.updateInvitation()
+                }.add(to: self.taskPool)
             }
         case .sent:
             controller.dismiss(animated: true) {
@@ -149,7 +163,9 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
                     self.showSentAlert(for: person)
                 }
                 
-                self.updateInvitation()
+                Task {
+                    await self.updateInvitation()
+                }.add(to: self.taskPool)
             }
         @unknown default:
             break
