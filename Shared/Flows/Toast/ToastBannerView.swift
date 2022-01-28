@@ -125,7 +125,7 @@ class ToastBannerView: ToastView {
         switch state {
         case .hidden:
             self.width =  (60 * 0.74) + (Theme.contentOffset)
-            self.maxHeight = 84
+            self.maxHeight = self.minimumHeight
             self.centerOnX()
         case .left:
             if UIScreen.main.isSmallerThan(screenSize: .tablet) {

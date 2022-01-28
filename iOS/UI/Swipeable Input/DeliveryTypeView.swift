@@ -44,7 +44,7 @@ class DeliveryTypeView: BaseView {
         self.label.setSize(withWidth: 200)
 
         self.height = MessageDetailView.height
-        self.width = self.label.width + Theme.ContentOffset.short.value.doubled
+        self.width = self.label.width + Theme.ContentOffset.standard.value.doubled
 
         self.pin(.right)
 
