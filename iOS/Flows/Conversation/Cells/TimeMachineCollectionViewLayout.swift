@@ -97,8 +97,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
     
     var uiState: ConversationUIState = .read
-    private var isTransitioning: Bool = false
-    private var isPreparingForUpdates = false 
         
     // MARK: - UICollectionViewLayout Overrides
 
@@ -116,38 +114,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        // The positions of the items need to be recalculated for the following scenarios.
-        guard let collectionView = self.collectionView else { return false }
-        
-        if collectionView.isTracking || collectionView.isDecelerating {
-            return true
-        } else if self.isTransitioning {
-            return true
-        } else if self.isPreparingForUpdates {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-        super.prepare(forCollectionViewUpdates: updateItems)
-        self.isPreparingForUpdates = true
-    }
-    
-    override func finalizeCollectionViewUpdates() {
-        super.finalizeCollectionViewUpdates()
-        self.isPreparingForUpdates = false
-    }
-    
-    override func prepareForTransition(to newLayout: UICollectionViewLayout) {
-        super.prepareForTransition(to: newLayout)
-        self.isTransitioning = true
-    }
-    
-    override func finalizeLayoutTransition() {
-        super.finalizeLayoutTransition()
-        self.isTransitioning = false
+        return true
     }
 
     override func invalidationContext(forBoundsChange newBounds: CGRect)
@@ -393,7 +360,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         
         switch self.uiState {
         case .read:
-            
             let centerY = contentRect.top + 100
             
             centerPoint = CGPoint(x: contentRect.midX, y: centerY)
@@ -411,7 +377,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             }
             
         case .write:
-            
             let centerY = (contentRect.top)
             centerPoint = CGPoint(x: contentRect.midX, y: centerY)
             
@@ -441,6 +406,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return newOffset
     }
 }
+
+// MARK: - Helper Functions
 
 extension TimeMachineCollectionViewLayout {
 

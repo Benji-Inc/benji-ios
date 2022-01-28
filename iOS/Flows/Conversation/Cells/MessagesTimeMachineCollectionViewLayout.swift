@@ -187,6 +187,10 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     private var deletedIndexPaths: Set<IndexPath> = []
     /// How much to adjust the proposed scroll offset.
     private var scrollOffset: CGFloat = 0
+    /// The z position before update animations started
+    private var initialZPosition: CGFloat = 0
+    /// Items that are "disappearing"
+    private var disappearingIndexPaths: Set<IndexPath> = []
     
     override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
         super.prepare(forAnimatedBoundsChange: oldBounds)
@@ -196,6 +200,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
+
+        self.initialZPosition = self.zPosition
 
         guard let collectionView = self.collectionView,
               let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
@@ -243,6 +249,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         self.shouldScrollToEnd = false
         self.deletedIndexPaths.removeAll()
+        self.disappearingIndexPaths.removeAll()
+        self.initialZPosition = 0
         self.scrollOffset = 0
     }
 
@@ -256,11 +264,28 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
-        // Items that are just moving are marked as "deleted" by the collection view.
+
+        self.disappearingIndexPaths.insert(itemIndexPath)
+        // Items that are just moving are marked as "disappearing"" by the collection view.
         // Only animate changes to items that are actually being deleted otherwise weird animation issues
         // will arise.
         guard self.deletedIndexPaths.contains(itemIndexPath) else { return nil }
 
         return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+    }
+
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+
+        if !self.disappearingIndexPaths.contains(itemIndexPath) {
+            let newAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
+                                                               withNormalizedZOffset: -1)
+            
+            newAttributes?.center.y +=  self.initialZPosition - self.zPosition
+            return newAttributes
+        }
+        return attributes
     }
 }
