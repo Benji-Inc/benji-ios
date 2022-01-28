@@ -117,6 +117,7 @@ extension PeopleCoordinator {
                     self.invitedPeople.append(person)
                 }
                 self.showSentAlert(for: user)
+                self.updateInvitation()
             } catch {
                 print(error)
             }

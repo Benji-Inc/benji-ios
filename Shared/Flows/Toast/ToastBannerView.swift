@@ -12,8 +12,8 @@ import Localization
 class ToastBannerView: ToastView {
 
     private let blurView = BlurView()
-    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .T1)
-    private let descriptionLabel = ThemeLabel(font: .smallBold, textColor: .T1)
+    private let titleLabel = ThemeLabel(font: .regular, textColor: .T1)
+    private let descriptionLabel = ThemeLabel(font: .small, textColor: .T1)
     private let imageView = AvatarView()
 
     let leftAnimator = UIViewPropertyAnimator(duration: 0.35,

@@ -143,6 +143,9 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
     func update(with circle: Circle) {
         self.circle = circle
         self.circleNameLabel.setText(self.circle.name)
-        self.dataSource.reconfigureItems(self.getAllItems())
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(self.getAllItems(), in: .circle)
+        self.dataSource.apply(snapshot)
     }
 }
