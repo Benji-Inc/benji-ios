@@ -184,6 +184,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
+    private var insertedIndexPaths: Set<IndexPath> = []
     private var deletedIndexPaths: Set<IndexPath> = []
     /// How much to adjust the proposed scroll offset.
     private var scrollOffset: CGFloat = 0
@@ -210,6 +211,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
+
+                self.insertedIndexPaths.insert(indexPath)
 
                 if let insertSortValue = self.itemSortValues[indexPath],
                    let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
@@ -248,6 +251,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         super.finalizeCollectionViewUpdates()
 
         self.shouldScrollToEnd = false
+        self.insertedIndexPaths.removeAll()
         self.deletedIndexPaths.removeAll()
         self.indexPathsVisibleBeforeAnimation.removeAll()
         self.initialZPosition = 0
@@ -286,7 +290,11 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
-        if !self.indexPathsVisibleBeforeAnimation.contains(itemIndexPath) {
+        // Determine if this item existed before, but was not visible. If so, we need
+        // to modify it's attributes to make it appear properly.
+        if !self.indexPathsVisibleBeforeAnimation.contains(itemIndexPath),
+           !self.insertedIndexPaths.contains(itemIndexPath) {
+            
             var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
                                                                      givenZPosition: self.initialZPosition)
             normalizedZOffset = clamp(normalizedZOffset, -1, 1)
