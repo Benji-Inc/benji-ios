@@ -189,8 +189,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     private var scrollOffset: CGFloat = 0
     /// The z position before update animations started
     private var initialZPosition: CGFloat = 0
-    /// Items that are "disappearing"
-    private var disappearingIndexPaths: Set<IndexPath> = []
+    /// Items that that were visible before the animation started.
+    private var indexPathsVisibleBeforeAnimation: Set<IndexPath> = []
     
     override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
         super.prepare(forAnimatedBoundsChange: oldBounds)
@@ -249,7 +249,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         self.shouldScrollToEnd = false
         self.deletedIndexPaths.removeAll()
-        self.disappearingIndexPaths.removeAll()
+        self.indexPathsVisibleBeforeAnimation.removeAll()
         self.initialZPosition = 0
         self.scrollOffset = 0
     }
@@ -262,10 +262,15 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffset)
     }
 
+    /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
+    /// Per the docs:  "For each element on screen before the invalidation, finalLayoutAttributesForDisappearingXXX will be called..."
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
 
-        self.disappearingIndexPaths.insert(itemIndexPath)
+        // Remember which items were visible before the animation started so we don't attempt to modify
+        // their animations later.
+        self.indexPathsVisibleBeforeAnimation.insert(itemIndexPath)
+
         // Items that are just moving are marked as "disappearing"" by the collection view.
         // Only animate changes to items that are actually being deleted otherwise weird animation issues
         // will arise.
@@ -274,18 +279,25 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
     }
 
+    /// NOTE: "Appearing" does not mean the item wasn't visible before the animation.
+    /// Per the docs: "For each element on screen after the invalidation, initialLayoutAttributesForAppearingXXX will be called..."
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
 
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
-        if !self.disappearingIndexPaths.contains(itemIndexPath) {
-            let newAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
-                                                               withNormalizedZOffset: -1)
-            
-            newAttributes?.center.y +=  self.initialZPosition - self.zPosition
-            return newAttributes
+        if !self.indexPathsVisibleBeforeAnimation.contains(itemIndexPath) {
+            var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
+                                                                     givenZPosition: self.initialZPosition)
+            normalizedZOffset = clamp(normalizedZOffset, -1, 1)
+            let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
+                                                                    withNormalizedZOffset: normalizedZOffset)
+
+            modifiedAttributes?.center.y += self.initialZPosition - self.zPosition
+
+            return modifiedAttributes
         }
+
         return attributes
     }
 }
