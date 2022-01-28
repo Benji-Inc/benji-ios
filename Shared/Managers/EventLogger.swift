@@ -15,17 +15,4 @@ class EventLogger {
         let eventLog = EventLog(eventType: name)
         eventLog.saveEventually()
     }
-
-    static func trackRemoteNotification(userInfo: [AnyHashable : Any]) {
-        let eventLog = EventLog(eventType: "notification.remote")
-
-        var payload: [String : Any] = [:]
-        for kvp in userInfo {
-            guard let key = kvp.key as? String else { break }
-            payload[key] = kvp.value
-        }
-        eventLog.payload = payload
-
-        eventLog.saveEventually()
-    }
 }
