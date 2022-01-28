@@ -19,6 +19,9 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
         return [.banner, .list, .sound, .badge]
     }
 
+    // NOTE: This delegate function seems to get called off the main thread some times which causes a
+    // crash when bringing the app out of the background.
+    @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse) async {
 
