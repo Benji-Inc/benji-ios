@@ -30,18 +30,18 @@ class DisplayableImageView: BaseView {
 
     let animationView = AnimationView()
 
+    var displayableTask: Task<Void, Never>?
+
     var displayable: ImageDisplayable? {
         didSet {
-            guard let displayable = self.displayable else { return }
+            self.displayableTask?.cancel()
 
-            Task {
-                await self.updateImageView(with: displayable)
-            }.add(to: self.taskPool)
+            let displayableRef = self.displayable
+
+            self.displayableTask = Task {
+                await self.updateImageView(with: displayableRef)
+            }
         }
-    }
-
-    deinit {
-        self.reset()
     }
 
     override func initializeSubviews() {
@@ -62,7 +62,7 @@ class DisplayableImageView: BaseView {
             case .initial:
                 self.animationView.reset()
                 self.animationView.stop()
-                self.blurView.showBlur(false)
+                self.blurView.showBlur(true)
             case .loading:
                 UIView.animate(withDuration: 0.2) {
                     self.blurView.showBlur(true)
@@ -97,34 +97,35 @@ class DisplayableImageView: BaseView {
         super.layoutSubviews()
 
         self.imageView.expandToSuperviewSize()
+
         self.blurView.expandToSuperviewSize()
+        self.blurView.layer.cornerRadius = Theme.innerCornerRadius
 
         self.animationView.squaredSize = 20
         self.animationView.centerOnXAndY()
     }
 
-    func updateImageView(with displayable: ImageDisplayable) async {
-        if let photo = displayable.image {
-            await self.showResult(for: photo)
-        } else if let objectID = displayable.userObjectId {
+    private func updateImageView(with displayable: ImageDisplayable?) async {
+        if let photo = displayable?.image {
+            await self.set(image: photo, state: .success)
+        } else if let objectID = displayable?.userObjectId {
             let foundUser = await UserStore.shared.findUser(with: objectID)
             if let user = foundUser {
-                self.downloadAndSetImage(for: user)
+                await self.downloadAndSetImage(for: user)
             }
         } else if let file = displayable as? PFFileObject {
             await self.downloadAndSet(file: file)
+        } else {
+            await self.set(image: nil, state: .initial)
         }
     }
 
-    private func downloadAndSetImage(for user: User) {
-        Task {
-            if let file = user.smallImage {
-               await self.downloadAndSet(file: file)
-           }
-        }.add(to: self.taskPool)
+    private func downloadAndSetImage(for user: User) async {
+        guard let file = user.smallImage else { return }
+
+        await self.downloadAndSet(file: file)
     }
 
-    @MainActor
     private func downloadAndSet(file: PFFileObject) async {
         do {
             if !file.isDataAvailable {
@@ -139,32 +140,19 @@ class DisplayableImageView: BaseView {
 
             guard !Task.isCancelled else { return }
 
-            await self.showResult(for: image)
+            await self.set(image: image, state: image.exists ? .success : .error)
         } catch {
             guard !Task.isCancelled else { return }
-            await self.showResult(for: nil)
+
+            await self.set(image: nil, state: .error)
         }
-    }
-
-    func reset() {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-
-        //TODO: Figure out why this crashes when presenting thread
-//        Task {
-//            await self.taskPool.cancelAndRemoveAll()
-//        }
-
-        self.displayable = nil
-        self.animationView.stop()
-        self.blurView.showBlur(true)
     }
 
     @MainActor
-    func showResult(for image: UIImage?) async {
-        self.state = image.isNil ? .error : .success
+    private func set(image: UIImage?, state: State) async {
+        self.state = state
         self.imageView.image = await image?.byPreparingForDisplay()
+
         self.setNeedsLayout()
     }
 }

@@ -11,6 +11,7 @@ import StreamChat
 import Lottie
 
 struct Member: Hashable {
+    
     var displayable: AnyHashableDisplayable
     var conversationController: ConversationController
 
@@ -43,7 +44,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     func configure(with item: Member) {
         self.avatarView.set(avatar: item.displayable.value)
-        
+
         Task {
             if let userId = item.displayable.value.userObjectId,
                let user = await UserStore.shared.findUser(with: userId) {
@@ -59,6 +60,12 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         } else {
             self.avatarView.endTyping()
         }
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.avatarView.set(avatar: nil)
     }
     
     private func subscribeToUpdates(for user: User) {
