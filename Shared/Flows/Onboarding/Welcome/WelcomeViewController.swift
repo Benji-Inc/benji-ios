@@ -52,14 +52,14 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         self.collectionView.clipsToBounds = false
         
         self.view.addSubview(self.waitlistButton)
-        self.waitlistButton.set(style: .custom(color: .B5, textColor: .T4, text: "Begin"))
+        self.waitlistButton.set(style: .custom(color: .D1, textColor: .white, text: "Begin"))
         self.waitlistButton.didSelect { [unowned self] in
             self.onDidComplete?(.success((.waitlist)))
         }
         
         if !isRelease {
             self.view.addSubview(self.rsvpButton)
-            self.rsvpButton.set(style: .normal(color: .B3, text: "RSVP"))
+            self.rsvpButton.set(style: .custom(color: .B5, textColor: .T4, text: "RSVP"))
             self.rsvpButton.didSelect { [unowned self] in
                 self.onDidComplete?(.success((.rsvp)))
             }
