@@ -97,7 +97,10 @@ final class User: PFUser {
             guard let string: String = self.getObject(for: .focusStatus) else { return nil }
             return FocusStatus(rawValue: string)
         }
-        set { self.setObject(for: .focusStatus, with: newValue?.rawValue) }
+        set {
+            self.smallImage?.clearCachedDataInBackground()
+            self.setObject(for: .focusStatus, with: newValue?.rawValue)
+        }
     }
 
     var connectionPreferences: [ConnectionPreference] {

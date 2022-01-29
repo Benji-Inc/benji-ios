@@ -58,6 +58,7 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
         self.sectionInset = .zero
         self.minimumLineSpacing = Theme.ContentOffset.standard.value
+        self.sendCenterUpdateEventIfNeeded(withContentOffset: collectionView.contentOffset)
     }
     
     override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {

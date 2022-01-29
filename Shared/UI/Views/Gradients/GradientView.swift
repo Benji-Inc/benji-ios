@@ -64,9 +64,7 @@ class GradientView: BaseView {
         
         super.init()
 
-        self.set(backgroundColor: .clear)
-
-        self.layer.addSublayer(self.gradient)
+        self.layer.insertSublayer(self.gradient, at: 1)
     }
 
     required init?(coder aDecoder: NSCoder) {

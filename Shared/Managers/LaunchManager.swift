@@ -48,18 +48,19 @@ class LaunchManager {
             }))
         }
 
-        // Initialize the stores.
-        UserStore.shared.initialize()
-        await ConnectionStore.shared.initialize()
-
 #if !NOTIFICATION
         // Silently register for notifications every launch.
         if let user = User.current(), user.isAuthenticated {
             // Ensure that the user object is up to date.
             _ = try? await user.fetchInBackground()
-            Task {
-                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-            }
+            
+            async let first : () = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            // Initialize the stores.
+            async let second : () = ConnectionStore.shared.initialize()
+            let _: [()] = await [first, second]
+            
+            UserStore.shared.initialize()
+
             // Pre-load contacts
             _ = ContactsManger.shared
         }

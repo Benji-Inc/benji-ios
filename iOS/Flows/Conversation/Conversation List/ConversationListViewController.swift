@@ -302,7 +302,6 @@ extension ConversationListViewController: ConversationListCollectionViewLayoutDe
 
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
                                               didUpdateCentered cid: ConversationId?) {
-
         self.update(withCenteredConversation: cid)
     }
 }
