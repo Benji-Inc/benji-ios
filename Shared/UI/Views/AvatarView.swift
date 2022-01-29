@@ -51,12 +51,17 @@ class AvatarView: DisplayableImageView {
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius
         self.imageView.set(backgroundColor: .B3)
+
+        let interaction = UIContextMenuInteraction(delegate: self)
+        self.addInteraction(interaction)
     }
 
     // MARK: - Open setters
 
-    func set(avatar: Avatar) {
+    func set(avatar: Avatar?) {
         Task {
+            guard let avatar = avatar else { return }
+
             if let user = avatar as? User, user.isDataAvailable {
                 self.subscribeToUpdates(for: user)
             } else if let userId = avatar.userObjectId,
@@ -66,19 +71,8 @@ class AvatarView: DisplayableImageView {
         }.add(to: self.taskPool)
         
         self.avatar = avatar
-        let interaction = UIContextMenuInteraction(delegate: self)
-        self.addInteraction(interaction)
-        
+
         self.displayable = avatar
-    }
-    
-    override func showResult(for image: UIImage?) async {
-        await super.showResult(for: image)
-        
-        if image.isNil, let avatar = self.avatar {
-            self.initials = avatar.initials
-            self.blurView.effect = nil
-        }
     }
     
     func subscribeToUpdates(for user: User) {
@@ -98,13 +92,6 @@ class AvatarView: DisplayableImageView {
         super.layoutSubviews()
 
         self.label.expandToSuperviewSize()
-    }
-
-    override func reset() {
-        super.reset()
-
-        self.initials = nil
-        self.blurView.showBlur(false)
     }
 }
 

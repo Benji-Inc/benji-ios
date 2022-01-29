@@ -10,7 +10,8 @@ import Foundation
 
 extension AvatarView: AvatarContextDelegate {
     
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         guard let avatar = self.avatar else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil) { () -> UIViewController? in
@@ -20,10 +21,9 @@ extension AvatarView: AvatarContextDelegate {
         }
     }
 
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willEndFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                willEndFor configuration: UIContextMenuConfiguration,
+                                animator: UIContextMenuInteractionAnimating?) {
 
-        animator?.addCompletion {
-            
-        }
     }
 }
