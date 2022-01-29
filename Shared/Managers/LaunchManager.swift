@@ -53,13 +53,11 @@ class LaunchManager {
         if let user = User.current(), user.isAuthenticated {
             // Ensure that the user object is up to date.
             _ = try? await user.fetchInBackground()
-            Task {
-                async let first : () = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-                // Initialize the stores.
-                async let second : () = ConnectionStore.shared.initialize()
-                
-                let _: [()] = await [first, second]
-            }
+            
+            async let first : () = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            // Initialize the stores.
+            async let second : () = ConnectionStore.shared.initialize()
+            let _: [()] = await [first, second]
             
             UserStore.shared.initialize()
 
