@@ -90,7 +90,7 @@ extension ConversationHeaderViewController {
                 children = [topic, add, leaveMenu, hideMenu, deleteMenu]
             }
         } else {
-            children = [leaveMenu, hideMenu]
+            children = [topic, leaveMenu, hideMenu]
         }
         
         self.button.menu = UIMenu(title: "Menu",
