@@ -20,7 +20,7 @@ extension ConversationHeaderViewController {
             self.didTapAddPeople?()
         }
 
-        let topic = UIAction.init(title: "Update topic",
+        let topic = UIAction.init(title: "Update Group Name",
                                   image: UIImage(systemName: "pencil")) { [unowned self] _ in
             self.didTapUpdateTopic?()
         }
