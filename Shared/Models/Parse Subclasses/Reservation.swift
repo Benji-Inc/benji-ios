@@ -128,10 +128,11 @@ extension Reservation: UIActivityItemSource {
             let _: Void = try await withCheckedThrowingContinuation { continuation in
                 let metadataProvider = LPMetadataProvider()
 
-                let domainURL = "https://joinjibber.com"
-                if let objectId = self.objectId {
-                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
-                }
+                let domainURL = "https://testflight.apple.com/join/YnJTwvSL"
+//                let domainURL = "https://joinjibber.com"
+//                if let objectId = self.objectId {
+//                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
+//                }
 
                 if let url = URL(string: domainURL) {
                     metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
