@@ -56,6 +56,11 @@ class DiffableCollectionViewController<SectionType: Hashable,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.layoutCollectionView(self.collectionView)
+    }
+
+    /// Subclasses should override this function if they don't want the collection view to be full screen.
+    func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.expandToSuperviewSize()
     }
 
