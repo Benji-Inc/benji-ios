@@ -92,7 +92,7 @@ extension Selectable where Self: UIView {
             self.removeGestureRecognizer(tapRecognizer)
         }
         
-        let tapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] in
+        let tapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] _ in
             self.selectionImpact?.impactOccurred()
             completion?()
         }
@@ -108,7 +108,7 @@ extension Selectable where Self: UIView {
             self.removeGestureRecognizer(tapRecognizer)
         }
         
-        let tapRecognizer = TapGestureRecognizer(taps: 2) { [unowned self] in
+        let tapRecognizer = TapGestureRecognizer(taps: 2) { [unowned self] _ in
             self.selectionImpact?.impactOccurred()
             completion?()
         }
@@ -117,10 +117,10 @@ extension Selectable where Self: UIView {
     }
 }
 
-private class TapGestureRecognizer: UITapGestureRecognizer {
-    private var action: () -> Void
+class TapGestureRecognizer: UITapGestureRecognizer {
+    private var action: (UITapGestureRecognizer) -> Void
 
-    init(taps: Int = 1, action: @escaping () -> Void) {
+    init(taps: Int = 1, action: @escaping (UITapGestureRecognizer) -> Void) {
         self.action = action
         super.init(target: nil, action: nil)
         self.numberOfTapsRequired = taps
@@ -128,7 +128,7 @@ private class TapGestureRecognizer: UITapGestureRecognizer {
     }
 
     @objc private func execute() {
-        self.action()
+        self.action(self)
     }
 }
 

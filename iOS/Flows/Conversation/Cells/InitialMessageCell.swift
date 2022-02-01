@@ -69,7 +69,7 @@ class InitialMessageCell: UICollectionViewCell {
             if let title = conversation.title {
                 self.label.setText("Tap to edit: \(title)")
             } else {
-                self.label.setText("Tap to add a topic")
+                self.label.setText("Tap to add a group name")
             }
         } else {
             let dateString = Date.monthDayYear.string(from: conversation.createdAt)

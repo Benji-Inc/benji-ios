@@ -63,10 +63,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                 logDebug("Unable to change topic because no conversation is selected.")
                 return
             }
-            guard conversation.isOwnedByMe else {
-                logDebug("Unable to change topic because conversation is not owned by user.")
-                return
-            }
+
             self.presentConversationTitleAlert(for: conversation)
         }
         
@@ -76,7 +73,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         Task {
             await self.checkForPermissions()
-        }
+        }.add(to: self.taskPool)
     }
 
     func handle(deeplink: DeepLinkable) {

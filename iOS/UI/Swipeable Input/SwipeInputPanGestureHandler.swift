@@ -84,7 +84,22 @@ class SwipeInputPanGestureHandler {
             self.inputView.deliveryTypeView.alpha = 0.0
             self.inputView.emotionView.alpha = 0.0
         }
+        
+        self.animatePreviewScale(shouldScale: true)
+        
         self.inputView.delegate?.swipeableInputAccessoryDidBeginSwipe(self.inputView)
+    }
+    
+    private func animatePreviewScale(shouldScale: Bool, completion: CompletionOptional = nil) {
+        let transform: CGAffineTransform = shouldScale ? CGAffineTransform(scaleX: 0.97, y: 0.97) : .identity
+        UIView.animate(withDuration: Theme.animationDurationFast,
+                       delay: 0.0,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 5, options: .curveEaseInOut) {
+            self.previewView?.transform = transform
+        } completion: { _ in
+            completion?()
+        }
     }
 
     private func handlePanChanged(withOffset panOffset: CGPoint) {
@@ -161,12 +176,14 @@ class SwipeInputPanGestureHandler {
         let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
         if distanceToDropZone < self.inputView.dropZoneFrame.height * 0.5 {
             if !self.isPreviewInDropZone {
+                self.animatePreviewScale(shouldScale: false)
                 previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
                 self.impactFeedback.impactOccurred()
             }
             self.isPreviewInDropZone = true
         } else {
             if self.isPreviewInDropZone {
+                self.animatePreviewScale(shouldScale: true)
                 previewView.setBubbleColor(ThemeColor.B1.color, animated: true)
             }
             self.isPreviewInDropZone = false
@@ -176,22 +193,30 @@ class SwipeInputPanGestureHandler {
     private func resetPreviewAndInputViews(didSend: Bool) {
         if didSend {
             self.impactFeedback.impactOccurred()
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.previewView?.alpha = 0
-            } completion: { completed in
-                self.previewView?.removeFromSuperview()
+            self.animatePreviewScale(shouldScale: false) { [unowned self] in
+                UIView.animate(withDuration: Theme.animationDurationStandard) {
+                    self.previewView?.alpha = 0
+                } completion: { completed in
+                    self.previewView?.removeFromSuperview()
+                    self.inputView.resetInputViews()
+                }
             }
-
-            self.inputView.resetInputViews()
+            
         } else {
             // If the user didn't swipe far enough to send a message, animate the preview view back
             // to where it started, then reveal the text view to allow for input again.
+            self.inputView.inputContainerView.layer.shadowOpacity = 0.0
             UIView.animate(withDuration: Theme.animationDurationStandard) {
                 guard let initialOrigin = self.initialPreviewCenter else { return }
                 self.previewView?.center = initialOrigin
+                self.previewView?.transform = .identity
             } completion: { completed in
-                self.inputView.inputContainerView.alpha = 1
-                self.previewView?.removeFromSuperview()
+                UIView.animate(withDuration: Theme.animationDurationStandard) {
+                    self.inputView.inputContainerView.alpha = 1
+                } completion: { completed in
+                    self.inputView.inputContainerView.layer.shadowOpacity = 0.3
+                    self.previewView?.removeFromSuperview()
+                }
             }
         }
 
