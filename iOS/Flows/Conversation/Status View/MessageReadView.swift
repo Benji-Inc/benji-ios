@@ -46,7 +46,8 @@ class MessageReadView: MessageStatusContainer {
         self.progressView.set(backgroundColor: .T1)
         self.progressView.alpha = 0
         
-        self.$state.mainSink { [unowned self] state in
+        self.$state.mainSink { [weak self] state in
+            guard let `self` = self else { return }
             self.handle(state: state)
         }.store(in: &self.cancellables)
     }
@@ -92,24 +93,6 @@ class MessageReadView: MessageStatusContainer {
             self.width = clamp(width, self.minWidth, self.maxWidth)
         }
 
-//        self.imageView.squaredSize = 18
-//
-//        let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
-//        self.label.setSize(withWidth: maxWidth)
-//        self.label.pin(.left, offset: self.padding)
-//        self.label.centerOnY()
-//
-//        self.imageView.match(.left, to: .right, of: self.label, offset: self.padding)
-//        self.imageView.centerOnY()
-//
-//        let width: CGFloat
-//        if self.imageView.image.isNil {
-//            width = (self.padding.value * 2) + self.label.width
-//        } else {
-//            width = (self.padding.value * 3) + self.imageView.width + self.label.width
-//        }
-//        self.width = clamp(width, self.minWidth, self.maxWidth)
-
         self.progressView.expandToSuperviewHeight()
         self.progressView.pin(.left)
     }
@@ -118,16 +101,14 @@ class MessageReadView: MessageStatusContainer {
     
     @MainActor
     func configure(for message: Message) {
+        
+        /// Need to reset each time or will crash.
+        self.state = .initial
 
         if message.isConsumed {
             self.state = .readCollapsed(message)
         } else if !message.isConsumed, message.localState.isNil {
             self.state = .delivered
-//            if message.isFromCurrentUser {
-//                self.label.setText("Delivered \(message.context.displayName)")
-//            } else {
-//                self.label.setText("Reading")
-//            }
         } else if let state = message.localState {
             switch state {
             case .pendingSync, .syncing:
@@ -196,20 +177,33 @@ class MessageReadView: MessageStatusContainer {
     
     private func handleSyncing() {
         self.label.setText("Syncing")
+        self.imageView.image = nil
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.setNeedsLayout()
+        }
     }
     
     private func handleSending() {
         self.label.setText("Sending")
+        self.imageView.image = nil
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.setNeedsLayout()
+        }
     }
     
     private func handleDelivered() {
+        self.label.setText("")
         self.imageView.image = UIImage(named: "checkmark")
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.setNeedsLayout()
+        }
     }
     
     private func handleReading(with message: Message) {
         self.label.setText("Reading")
+        self.imageView.image = nil
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.layoutNow()
+            self.setNeedsLayout()
         } completion: { _ in
             self.handleConsumption(with: message)
         }
@@ -251,13 +245,24 @@ class MessageReadView: MessageStatusContainer {
     private func handleReadCollapsed(with message: Message) {
         self.label.setText("")
         self.imageView.image = UIImage(named: "checkmark-double")
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.setNeedsLayout()
+        }
     }
     
     private func handleRead(with text: String) {
-        
+        self.label.setText(text)
+        self.imageView.image = UIImage(named: "checkmark-double")
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.setNeedsLayout()
+        }
     }
     
     private func handleError(with text: String) {
         self.label.setText(text)
+        self.imageView.image = nil
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.setNeedsLayout()
+        }
     }
 }
