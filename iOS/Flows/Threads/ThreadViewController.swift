@@ -213,7 +213,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         }
         
         if let replyId = self.startingReplyId {
-            self.animateReply(with: replyId)
+            self.animateToReply(with: replyId)
         }
         
         self.scrollToLastItemOnLayout = true
@@ -241,7 +241,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                               scrollToOffset: scrollToOffset)
     }
 
-    func animateReply(with messageId: MessageId) {
+    func animateToReply(with messageId: MessageId) {
         Task {
             let cid = self.messageController.cid
 
