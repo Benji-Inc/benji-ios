@@ -59,6 +59,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
         self.layoutCollectionView(self.collectionView)
     }
 
+    /// Subclasses should override this function if they don't want the collection view to be full screen.
     func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.expandToSuperviewSize()
     }
@@ -131,10 +132,6 @@ class DiffableCollectionViewController<SectionType: Hashable,
     }
 
     //MARK: CollectionViewDelegate
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        logDebug("did scroll to "+scrollView.contentOffset.y.description)
-    }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
