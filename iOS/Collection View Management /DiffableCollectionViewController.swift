@@ -56,6 +56,10 @@ class DiffableCollectionViewController<SectionType: Hashable,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.layoutCollectionView(self.collectionView)
+    }
+
+    func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.expandToSuperviewSize()
     }
 
@@ -127,6 +131,10 @@ class DiffableCollectionViewController<SectionType: Hashable,
     }
 
     //MARK: CollectionViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        logDebug("did scroll to "+scrollView.contentOffset.y.description)
+    }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {

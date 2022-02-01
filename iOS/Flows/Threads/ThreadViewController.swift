@@ -139,17 +139,19 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.detailView.height = MessageDetailView.height
         self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
         self.detailView.centerOnX()
+    }
 
-        self.collectionView.pinToSafeArea(.top, offset: .noOffset)
-        self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
-        self.collectionView.height = self.view.height - self.collectionView.top
-        self.collectionView.centerOnX()
-        
+    override func layoutCollectionView(_ collectionView: UICollectionView) {
+        collectionView.pinToSafeArea(.top, offset: .noOffset)
+        collectionView.width = Theme.getPaddedWidth(with: self.view.width)
+        collectionView.expand(.bottom, padding: self.view.safeAreaInsets.bottom)
+        collectionView.centerOnX()
+
         if self.scrollToLastItemOnLayout {
             self.scrollToLastItemOnLayout = false
             self.threadCollectionView.threadLayout.prepare()
             let maxOffset = self.threadCollectionView.threadLayout.maxZPosition
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
+            self.threadCollectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
             self.threadCollectionView.threadLayout.invalidateLayout()
         }
     }
@@ -207,7 +209,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.subscribeToUpdates()
 
-        /// Setting this here fixes issue with recursion during presentation.
+        // Setting this here fixes issue with recursion during presentation.
         if let msg = self.messageController.message {
             self.detailView.configure(with: msg)
         }
