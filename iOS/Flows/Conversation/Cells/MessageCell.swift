@@ -85,8 +85,8 @@ class MessageCell: UICollectionViewCell {
 
         self.detailView.height = MessageDetailView.height
         self.detailView.alpha = messageLayoutAttributes.detailAlpha
-        let shouldRead = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-        self.detailView.updateReadStatus(shouldRead: shouldRead)
+        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+        self.detailView.handleTopMessage(isAtTop: isAtTop)
     }
 }
 

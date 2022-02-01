@@ -16,6 +16,7 @@ class MessageDetailView: BaseView {
 
     let statusView = MessageStatusView()
     let emotionView = EmotionView()
+    private var isAtTop: Bool = false
 
     private var hasLoadedMessage: Message?
 
@@ -38,13 +39,17 @@ class MessageDetailView: BaseView {
         self.statusView.configure(for: message)
         self.layoutNow()
     }
-
-    func updateReadStatus(shouldRead: Bool) {
-        if shouldRead {
+    
+    func handleTopMessage(isAtTop: Bool) {
+        guard self.isAtTop != isAtTop else { return }
+        
+        if isAtTop {
             self.statusView.handleConsumption()
         } else {
             self.statusView.resetConsumption()
         }
+        
+        self.isAtTop = isAtTop
     }
 
     override func layoutSubviews() {

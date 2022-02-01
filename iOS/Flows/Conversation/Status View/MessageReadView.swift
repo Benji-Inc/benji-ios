@@ -39,11 +39,10 @@ class MessageReadView: MessageStatusContainer {
         self.addSubview(self.progressView)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.red.color
         self.addSubview(self.label)
 
         self.progressView.width = 1
-        self.progressView.set(backgroundColor: .T1)
+        self.progressView.set(backgroundColor: .D6withAlpha)
         self.progressView.alpha = 0
         
         self.$state.mainSink { [weak self] state in
@@ -135,13 +134,23 @@ class MessageReadView: MessageStatusContainer {
     }
     
     func beginConsumption(for message: Message) {
-        guard message.canBeConsumed else { return }
+        guard message.canBeConsumed else {
+            self.showRead(with: message)
+            return
+        }
         self.state = .reading(message)
     }
     
+    func showRead(with message: Message) {
+        guard let messageDate = message.lastReadAt else { return }
+        let dateString = Date.hourMinuteTimeOfDay.string(from: messageDate)
+        self.state = .read(dateString)
+    }
+        
     // Private
     
     private func handle(state: State) {
+                
         switch state {
         case .initial:
             self.handleInitial()
@@ -169,7 +178,6 @@ class MessageReadView: MessageStatusContainer {
         }
 
         self.label.text = nil
-        self.imageView.image = nil
 
         self.progressView.alpha = 0
         self.progressView.width = 0
@@ -177,33 +185,25 @@ class MessageReadView: MessageStatusContainer {
     
     private func handleSyncing() {
         self.label.setText("Syncing")
-        self.imageView.image = nil
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.setNeedsLayout()
-        }
+        self.layoutNow()
     }
     
     private func handleSending() {
         self.label.setText("Sending")
-        self.imageView.image = nil
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.setNeedsLayout()
-        }
+        self.layoutNow()
     }
     
     private func handleDelivered() {
         self.label.setText("")
         self.imageView.image = UIImage(named: "checkmark")
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.setNeedsLayout()
-        }
+        self.layoutNow()
     }
     
     private func handleReading(with message: Message) {
         self.label.setText("Reading")
-        self.imageView.image = nil
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.setNeedsLayout()
+        self.imageView.image = UIImage(named: "checkmark")
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.layoutNow()
         } completion: { _ in
             self.handleConsumption(with: message)
         }
@@ -245,24 +245,17 @@ class MessageReadView: MessageStatusContainer {
     private func handleReadCollapsed(with message: Message) {
         self.label.setText("")
         self.imageView.image = UIImage(named: "checkmark-double")
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.setNeedsLayout()
-        }
+        self.layoutNow()
     }
     
     private func handleRead(with text: String) {
         self.label.setText(text)
         self.imageView.image = UIImage(named: "checkmark-double")
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.setNeedsLayout()
-        }
+        self.layoutNow()
     }
     
     private func handleError(with text: String) {
         self.label.setText(text)
-        self.imageView.image = nil
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.setNeedsLayout()
-        }
+        self.layoutNow()
     }
 }

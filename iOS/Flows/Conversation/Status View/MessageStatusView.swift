@@ -55,13 +55,18 @@ class MessageStatusView: BaseView {
     }
 
     func handleConsumption() {
-        guard ChatUser.currentUserRole != .anonymous else { return }
+        guard ChatUser.currentUserRole != .anonymous,
+        let message = self.messageController?.message else { return }
 
-        guard let message = self.messageController?.message,
-              !message.isFromCurrentUser,
-              !message.isConsumedByMe else { return }
-
-        self.readView.beginConsumption(for: message)
+        self.readView.state = .initial
+        
+        if !message.isFromCurrentUser,
+           !message.isConsumedByMe {
+            self.readView.beginConsumption(for: message)
+        } else {
+            self.resetConsumption()
+            self.readView.showRead(with: message)
+        }
     }
 
     func resetConsumption() {

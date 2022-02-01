@@ -45,6 +45,17 @@ extension Message: Messageable {
         }
         return .passive
     }
+    
+    var lastReadAt: Date? {
+        let reads = self.latestReactions.filter { reaction in
+            guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
+            return type == .read
+        }.sorted { lhs, rhs in
+            return lhs.createdAt < rhs.createdAt
+        }
+        
+        return reads.first?.createdAt
+    }
 
     var hasBeenConsumedBy: [Avatar] {
         let reads = self.latestReactions.filter { reaction in

@@ -154,6 +154,7 @@ class TextView: UITextView {
 
     func setTextColor(_ textColor: ThemeColor) {
         self.textColor = textColor.color.resolvedColor(with: self.traitCollection)
+        self.linkTextAttributes = [.foregroundColor: self.textColor!.withAlphaComponent(0.5), .underlineStyle: 0]
     }
 
     func set(placeholder: Localized, color: ThemeColor = .T1withAlpha) {
