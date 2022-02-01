@@ -15,9 +15,10 @@ class MessageReadView: MessageStatusContainer {
     enum State {
         case initial
         case sending
-        case sent
-        case reading
-        case readCollapsed
+        case syncing
+        case delivered
+        case reading(Message)
+        case readCollapsed(Message)
         case read(String)
         case error(String)
     }
@@ -58,6 +59,25 @@ class MessageReadView: MessageStatusContainer {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        switch self.state {
+        case .initial:
+            break
+        case .syncing:
+            break
+        case .sending:
+            break
+        case .delivered:
+            break
+        case .reading(_):
+            break
+        case .readCollapsed(_):
+            break
+        case .read(_):
+            break
+        case .error(_):
+            break
+        }
 
         self.imageView.squaredSize = 18
 
@@ -81,80 +101,26 @@ class MessageReadView: MessageStatusContainer {
         self.progressView.pin(.left)
     }
     
-    func handle(state: State) {
-        switch state {
-        case .initial:
-            break
-        case .sending:
-            break
-        case .sent:
-            break
-        case .reading:
-            break
-        case .readCollapsed:
-            break
-        case .read(let message):
-            break
-        case .error(let message):
-            break
-        }
-    }
-    
-    private func handleInitial() {
-        
-    }
-    
-    private func handleSending() {
-        
-    }
-    
-    private func handleSent() {
-        
-    }
-    
-    private func handleReading() {
-        
-    }
-    
-    private func handleReadCollapsed() {
-        
-    }
-    
-    private func handleRead(with message: String) {
-        
-    }
-    
-    private func handleError(with message: String) {
-        
-    }
-
     @MainActor
     func configure(for message: Message) {
-        self.reset()
 
         if message.isConsumed {
-            if !message.isFromCurrentUser {
-                self.label.setText("Read")
-                self.imageView.image = UIImage(named: "checkmark-double")
-            } else if !message.isConsumedByMe {
-                self.label.setText("Read")
-                self.imageView.image = UIImage(named: "checkmark-double")
-            }
+            self.state = .readCollapsed(message)
         } else if !message.isConsumed, message.localState.isNil {
-            if message.isFromCurrentUser {
-                self.label.setText("Delivered \(message.context.displayName)")
-            } else {
-                self.label.setText("Reading")
-            }
-            self.imageView.image = UIImage(named: "checkmark")
+            self.state = .delivered
+//            if message.isFromCurrentUser {
+//                self.label.setText("Delivered \(message.context.displayName)")
+//            } else {
+//                self.label.setText("Reading")
+//            }
         } else if let state = message.localState {
             switch state {
             case .pendingSync, .syncing:
-                self.label.setText("Syncing")
+                self.state = .syncing
             case .syncingFailed, .sendingFailed:
-                self.label.setText("Error")
+                self.state = .error("Error")
             case .pendingSend, .sending:
-                self.label.setText("Sending")
+                self.state = .sending
                 Task {
                     await Task.snooze(seconds: 0.1)
                     guard !Task.isCancelled else { return }
@@ -168,10 +134,71 @@ class MessageReadView: MessageStatusContainer {
                 break
             }
         } else {
-            self.label.setText("Error")
+            self.state = .error("Error")
         }
+    }
+    
+    func handle(state: State) {
+        switch state {
+        case .initial:
+            self.handleInitial()
+        case .syncing:
+            self.handleSyncing()
+        case .sending:
+            self.handleSending()
+        case .delivered:
+            self.handleDelivered()
+        case .reading(let message):
+            self.handleReading(with: message)
+        case .readCollapsed(let message):
+            self.handleReadCollapsed(with: message)
+        case .read(let text):
+            self.handleRead(with: text)
+        case .error(let text):
+            self.handleError(with: text)
+        }
+    }
+    
+    private func handleInitial() {
+        if let animator = self.animator, animator.isRunning {
+            animator.stopAnimation(true)
+            animator.finishAnimation(at: .start)
+        }
+
+        self.label.text = nil
+        self.imageView.image = nil
+
+        self.progressView.alpha = 0
+        self.progressView.width = 0
+    }
+    
+    private func handleSyncing() {
+        self.label.setText("Syncing")
+    }
+    
+    private func handleSending() {
+        self.label.setText("Sending")
+    }
+    
+    private func handleDelivered() {
+        self.imageView.image = UIImage(named: "checkmark")
+    }
+    
+    private func handleReading(with message: Message) {
         
-        self.layoutNow()
+    }
+    
+    private func handleReadCollapsed(with message: Message) {
+        self.label.setText("")
+        self.imageView.image = UIImage(named: "checkmark-double")
+    }
+    
+    private func handleRead(with text: String) {
+        
+    }
+    
+    private func handleError(with text: String) {
+        self.label.setText(text)
     }
 
     func beginConsumption(for message: Message) {
@@ -207,18 +234,5 @@ class MessageReadView: MessageStatusContainer {
                 logError(error)
             }
         }.add(to: self.taskPool)
-    }
-
-    func reset() {
-        if let animator = self.animator, animator.isRunning {
-            animator.stopAnimation(true)
-            animator.finishAnimation(at: .start)
-        }
-
-        self.label.text = nil
-        self.imageView.image = nil
-
-        self.progressView.alpha = 0
-        self.progressView.width = 0
     }
 }
