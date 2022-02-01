@@ -62,44 +62,59 @@ class MessageReadView: MessageStatusContainer {
         
         switch self.state {
         case .initial:
-            break
-        case .syncing:
-            break
-        case .sending:
-            break
-        case .delivered:
-            break
-        case .reading(_):
-            break
-        case .readCollapsed(_):
-            break
+            self.width = 0
+        case .syncing, .sending, .reading, .error(_):
+            // text, no image
+            let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
+            self.label.setSize(withWidth: maxWidth)
+            self.label.pin(.left, offset: self.padding)
+            self.label.centerOnY()
+            let width = (self.padding.value * 2) + self.label.width
+            self.width = clamp(width, self.minWidth, self.maxWidth)
+        case .delivered, .readCollapsed(_):
+            // no text, image
+            self.label.width = 0
+            self.imageView.squaredSize = 15
+            self.imageView.centerOnXAndY()
+            self.width = self.minWidth
         case .read(_):
-            break
-        case .error(_):
-            break
+            self.imageView.squaredSize = 15
+            
+            let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
+            self.label.setSize(withWidth: maxWidth)
+            self.label.pin(.left, offset: self.padding)
+            self.label.centerOnY()
+            
+            self.imageView.match(.left, to: .right, of: self.label, offset: self.padding)
+            self.imageView.centerOnY()
+            
+            let width = (self.padding.value * 3) + self.imageView.width + self.label.width
+            self.width = clamp(width, self.minWidth, self.maxWidth)
         }
 
-        self.imageView.squaredSize = 18
-
-        let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
-        self.label.setSize(withWidth: maxWidth)
-        self.label.pin(.left, offset: self.padding)
-        self.label.centerOnY()
-
-        self.imageView.match(.left, to: .right, of: self.label, offset: self.padding)
-        self.imageView.centerOnY()
-
-        let width: CGFloat
-        if self.imageView.image.isNil {
-            width = (self.padding.value * 2) + self.label.width
-        } else {
-            width = (self.padding.value * 3) + self.imageView.width + self.label.width
-        }
-        self.width = clamp(width, self.minWidth, self.maxWidth)
+//        self.imageView.squaredSize = 18
+//
+//        let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
+//        self.label.setSize(withWidth: maxWidth)
+//        self.label.pin(.left, offset: self.padding)
+//        self.label.centerOnY()
+//
+//        self.imageView.match(.left, to: .right, of: self.label, offset: self.padding)
+//        self.imageView.centerOnY()
+//
+//        let width: CGFloat
+//        if self.imageView.image.isNil {
+//            width = (self.padding.value * 2) + self.label.width
+//        } else {
+//            width = (self.padding.value * 3) + self.imageView.width + self.label.width
+//        }
+//        self.width = clamp(width, self.minWidth, self.maxWidth)
 
         self.progressView.expandToSuperviewHeight()
         self.progressView.pin(.left)
     }
+    
+    // Public
     
     @MainActor
     func configure(for message: Message) {
@@ -129,16 +144,23 @@ class MessageReadView: MessageStatusContainer {
                     }
                 }.add(to: self.taskPool)
             case .deleting:
-                break
+                self.state = .error("Deleting")
             case .deletingFailed:
-                break
+                self.state = .error("Error")
             }
         } else {
             self.state = .error("Error")
         }
     }
     
-    func handle(state: State) {
+    func beginConsumption(for message: Message) {
+        guard message.canBeConsumed else { return }
+        self.state = .reading(message)
+    }
+    
+    // Private
+    
+    private func handle(state: State) {
         switch state {
         case .initial:
             self.handleInitial()
@@ -185,25 +207,15 @@ class MessageReadView: MessageStatusContainer {
     }
     
     private func handleReading(with message: Message) {
-        
+        self.label.setText("Reading")
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.layoutNow()
+        } completion: { _ in
+            self.handleConsumption(with: message)
+        }
     }
     
-    private func handleReadCollapsed(with message: Message) {
-        self.label.setText("")
-        self.imageView.image = UIImage(named: "checkmark-double")
-    }
-    
-    private func handleRead(with text: String) {
-        
-    }
-    
-    private func handleError(with text: String) {
-        self.label.setText(text)
-    }
-
-    func beginConsumption(for message: Message) {
-        guard message.canBeConsumed else { return }
-
+    private func handleConsumption(with message: Message) {
         self.progressView.alpha = 0
         self.progressView.width = 0
 
@@ -234,5 +246,18 @@ class MessageReadView: MessageStatusContainer {
                 logError(error)
             }
         }.add(to: self.taskPool)
+    }
+    
+    private func handleReadCollapsed(with message: Message) {
+        self.label.setText("")
+        self.imageView.image = UIImage(named: "checkmark-double")
+    }
+    
+    private func handleRead(with text: String) {
+        
+    }
+    
+    private func handleError(with text: String) {
+        self.label.setText(text)
     }
 }

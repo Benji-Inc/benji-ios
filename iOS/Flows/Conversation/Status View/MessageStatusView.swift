@@ -73,7 +73,7 @@ class MessageStatusView: BaseView {
     }
 
     func reset() {
-        self.readView.reset()
+        self.readView.state = .initial
         self.replyView.reset()
         self.layoutNow()
     }
