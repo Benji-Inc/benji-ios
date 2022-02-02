@@ -304,6 +304,8 @@
 		D656EF4A2765A13100FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF492765A13100FF6E2C /* Localization */; };
 		D656EF4C2765A13600FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4B2765A13600FF6E2C /* Localization */; };
 		D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4D2765A13B00FF6E2C /* Localization */; };
+		D65D460527A9FE620019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
+		D65D460627A9FEA00019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D65D460027A9B09D0019301C /* MessageReadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D45FF27A9B09D0019301C /* MessageReadView.swift */; };
 		D65D460227A9B1400019301C /* MessageStatusContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460127A9B1400019301C /* MessageStatusContainer.swift */; };
 		D65D460427A9B1960019301C /* MessageReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460327A9B1960019301C /* MessageReplyView.swift */; };
@@ -2951,6 +2953,7 @@
 				D6AE0FA4267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
+				D65D460527A9FE620019301C /* Notice.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
 				D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */,
 				D66ED45D267D4B4000332BA3 /* Array+Extensions.swift in Sources */,
@@ -2973,6 +2976,7 @@
 				D66ED45B267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0FEF267D2CBA00C6B048 /* Objectable.swift in Sources */,
 				D6AE0FA5267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
+				D65D460627A9FEA00019301C /* Notice.swift in Sources */,
 				D6AE0FA1267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6166C902732FFD00013E803 /* Logger.swift in Sources */,
 				D66ED45E267D4B4000332BA3 /* Array+Extensions.swift in Sources */,

@@ -41,13 +41,9 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
 
         Task {
             do {
-//                if currentUser.focusStatus != newStatus, !isFocused {
-//                    if isFocused {
-//                        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ["focusTimeAvailable"])
-//                    } else {
-//                        try? await UNUserNotificationCenter.current().add(self.createIsAvailableRequest(for: currentUser))
-//                    }
-//                }
+                if currentUser.focusStatus != newStatus, !isFocused {
+                    self.getUnreadMessagesNotice()
+                }
 
                 currentUser.focusStatus = newStatus
                 try await currentUser.saveLocalThenServer()
@@ -60,14 +56,41 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
             }
         }
     }
+    
+    func getUnreadMessagesNotice() {
+        guard let query = Notice.query() else { return }
+        query.whereKey("type", equalTo: Notice.NoticeType.unreadMessages.rawValue)
+        do {
+            if let notice = try? query.getFirstObject() as? Notice {
+                self.scheduleUnreadMessagesNote(with: notice)
+            }
+        }
+    }
 
-    private func createIsAvailableRequest(for user: User) -> UNNotificationRequest {
+    private func scheduleUnreadMessagesNote(with notice: Notice) {
         let content = UNMutableNotificationContent()
-        content.title = "Available"
-        content.body = "You are now available to chat."
-        let request = UNNotificationRequest(identifier: "focusTimeAvailable",
+        let count = notice.unreadMessageIds.count
+        
+        logDebug(count)
+        var title: String = ""
+        var body: String = ""
+        if count == 1 {
+            title = "\(count) Unread Message"
+            body = "You have \(count) unread message since your last vist."
+        } else if count > 1 {
+            title = "\(count) Unread Messages"
+            body = "You have \(count) unread messages."
+        } else {
+            title = "All caught up"
+            body = "You have 0 unread messages since your last visit."
+        }
+        content.title = title
+        content.body = body
+        content.interruptionLevel = .timeSensitive
+        let request = UNNotificationRequest(identifier: "unreadMessagesNotice",
                                             content: content,
                                             trigger: nil)
-        return request
+        
+        UNUserNotificationCenter.current().add(request)
     }
 }
