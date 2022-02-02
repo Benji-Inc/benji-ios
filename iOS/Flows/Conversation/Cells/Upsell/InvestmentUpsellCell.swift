@@ -28,9 +28,17 @@ class InvestmentUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
     private func initializeViews() {
         self.contentView.addSubview(self.content)
         
-        self.content.configure(with: "Do you want to invest in Jibber.",
-                               subtitle: "Open to everyone, even you.",
-                               buttonTitle: "Learn More")
+        if let email = User.current()?.email {
+            self.content.configure(with: "Thank your for showing interest in becoming an investor in Jibber!",
+                                   subtitle: "We will get in touch soon using: \(email).",
+                                   buttonTitle: "Update Email")
+            
+        } else {
+            self.content.configure(with: "Do you want to invest in Jibber?",
+                                   subtitle: "Open to everyone, even you.",
+                                   buttonTitle: "Learn More")
+        }
+        
         self.content.button.didSelect { [unowned self] in
             self.didTapInvest?()
         }
@@ -50,11 +58,5 @@ class InvestmentUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
             self.content.subTitle.alpha = state == .write ? 0.0 : 0.5
             self.setNeedsLayout()
         }
-    }
-    
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        
-        self.alpha = 1.0
     }
 }

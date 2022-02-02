@@ -152,7 +152,7 @@ extension ConversationListCoordinator {
     
     func presentEmailAlert() {
 
-        let alertController = UIAlertController(title: "Add Email", message: "We will follow up with you using the email provided.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Invest in Jibber", message: "We will follow up with you using the email provided.", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.textContentType = .emailAddress
             textField.placeholder = "Email"
@@ -162,12 +162,13 @@ extension ConversationListCoordinator {
                let text = textField.text,
                !text.isEmpty {
 
-//                Task {
-//                    User.current()?.email = text
-//                    try await User.current()?.saveToServer()
-//                }
+                Task {
+                    User.current()?.email = text
+                    try await User.current()?.saveToServer()
+                }
                 
                 alertController.dismiss(animated: true, completion: {
+                    self.conversationListVC.dataSource.reloadItems([.invest])
                     self.conversationListVC.becomeFirstResponder()
                 })
             }

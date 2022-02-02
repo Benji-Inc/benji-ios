@@ -12,7 +12,7 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
 
     let content = UpsellContentView()
     
-    var didSelectCreate: CompletionOptional = nil
+    var didSelectAddPeople: CompletionOptional = nil
     var heightMultiplier: CGFloat = 0.75
 
     override init(frame: CGRect) {
@@ -32,7 +32,7 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
                                subtitle: "Up to 10 in a group chat.",
                                buttonTitle: "Choose People")
         self.content.button.didSelect { [unowned self] in
-            self.didSelectCreate?()
+            self.didSelectAddPeople?()
         }
     }
     
@@ -50,11 +50,5 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
             self.content.subTitle.alpha = state == .write ? 0.0 : 0.5
             self.setNeedsLayout()
         }
-    }
-    
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        
-        self.alpha = 1.0
     }
 }

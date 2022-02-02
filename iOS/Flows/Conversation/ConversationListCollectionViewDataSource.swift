@@ -95,7 +95,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             = collectionView.dequeueConfiguredReusableCell(using: self.invitationUpsellCellRegistration,
                                                            for: indexPath,
                                                            item: self)
-            cell.didSelectCreate = { [unowned self] in
+            cell.didSelectAddPeople = { [unowned self] in
                 self.handleAddPeopleSelected?()
             }
             return cell
