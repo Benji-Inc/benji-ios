@@ -1,18 +1,18 @@
 //
-//  InvitationUpsellCell.swift
+//  InvestmentUpsellCell.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 1/24/22.
+//  Created by Benji Dodgson on 2/2/22.
 //  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
+class InvestmentUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
 
     let content = UpsellContentView()
     
-    var didSelectCreate: CompletionOptional = nil
+    var didTapInvest: CompletionOptional = nil
     var heightMultiplier: CGFloat = 0.75
 
     override init(frame: CGRect) {
@@ -28,11 +28,11 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
     private func initializeViews() {
         self.contentView.addSubview(self.content)
         
-        self.content.configure(with: "Who do you want to Jibber with?",
-                               subtitle: "Up to 10 in a group chat.",
-                               buttonTitle: "Choose People")
+        self.content.configure(with: "Do you want to invest in Jibber.",
+                               subtitle: "Open to everyone, even you.",
+                               buttonTitle: "Learn More")
         self.content.button.didSelect { [unowned self] in
-            self.didSelectCreate?()
+            self.didTapInvest?()
         }
     }
     
