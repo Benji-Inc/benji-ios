@@ -52,8 +52,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         }
 
         let detailAlpha = 1 - abs(normalizedZOffset) / 0.2
-        let textViewAlpha = 1 - abs(normalizedZOffset) / 0.8
-
         // The section with the most recent item should be saturated in color
 
         let focusAmount = self.getFocusAmount(forSection: indexPath.section)
