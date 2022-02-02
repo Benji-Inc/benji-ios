@@ -92,7 +92,7 @@ class SwipeInputPanGestureHandler {
     
     private func animatePreviewScale(shouldScale: Bool, completion: CompletionOptional = nil) {
         let transform: CGAffineTransform = shouldScale ? CGAffineTransform(scaleX: 0.97, y: 0.97) : .identity
-        UIView.animate(withDuration: Theme.animationDurationFast,
+        UIView.animate(withDuration: Theme.animationDurationStandard,
                        delay: 0.0,
                        usingSpringWithDamping: 0.5,
                        initialSpringVelocity: 5, options: .curveEaseInOut) {

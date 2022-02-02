@@ -207,7 +207,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     // MARK: OVERRIDES
 
     func setupGestures() {
-        let panRecognizer = PanGestureRecognizer { [unowned self] (recognizer) in
+        let panRecognizer = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
             self.panGestureHandler.handle(pan: recognizer)
         }
         panRecognizer.delegate = self

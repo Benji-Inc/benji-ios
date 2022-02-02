@@ -145,3 +145,27 @@ class PanGestureRecognizer: UIPanGestureRecognizer {
         self.action(self)
     }
 }
+
+class SwipeGestureRecognizer: UIPanGestureRecognizer {
+    private var action: (UIPanGestureRecognizer) -> Void
+    private var textView: UITextView
+
+    init(textView: UITextView, action: @escaping (UIPanGestureRecognizer) -> Void) {
+        self.action = action
+        self.textView = textView
+        super.init(target: nil, action: nil)
+        self.addTarget(self, action: #selector(execute))
+    }
+
+    @objc private func execute() {
+        self.action(self)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesBegan(touches, with: event)
+        
+        if self.textView.isFirstResponder {
+            self.state = .began
+        }
+    }
+}

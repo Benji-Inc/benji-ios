@@ -98,6 +98,10 @@ extension ConversationListCoordinator {
             controller.addMembers(userIds: Set(members)) { error in
                 if error.isNil {
                     self.showPeopleAddedToast(for: accepted)
+                    Task {
+                        try await controller.synchronize()
+                        await self.conversationListVC.headerVC.membersVC.loadData()
+                    }
                 }
             }
         }
@@ -165,12 +169,14 @@ extension ConversationListCoordinator {
                 Task {
                     User.current()?.email = text
                     try await User.current()?.saveToServer()
+                    
+                    Task.onMainActor {
+                        alertController.dismiss(animated: true, completion: {
+                            self.conversationListVC.dataSource.reloadItems([.invest])
+                            self.conversationListVC.becomeFirstResponder()
+                        })
+                    }
                 }
-                
-                alertController.dismiss(animated: true, completion: {
-                    self.conversationListVC.dataSource.reloadItems([.invest])
-                    self.conversationListVC.becomeFirstResponder()
-                })
             }
         })
 

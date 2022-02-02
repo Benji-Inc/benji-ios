@@ -68,8 +68,12 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
         
         self.conversationListVC.dataSource.handleAddPeopleSelected = { [unowned self] in
-            // Create convo first?
-            self.presentPeoplePicker()
+            Task {
+                try await self.createNewConversation()
+                Task.onMainActor {
+                    self.presentPeoplePicker()
+                }
+            }
         }
         
         self.conversationListVC.dataSource.handleInvestmentSelected = { [unowned self] in
@@ -97,5 +101,23 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         default:
             break
         }
+    }
+    
+    func createNewConversation() async throws {
+        let username = User.current()?.initials ?? ""
+        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
+        let userIDs = Set([User.current()!.objectId!])
+        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                 name: nil,
+                                                                 imageURL: nil,
+                                                                 team: nil,
+                                                                 members: userIDs,
+                                                                 isCurrentUserMember: true,
+                                                                 messageOrdering: .bottomToTop,
+                                                                 invites: [],
+                                                                 extraData: [:])
+        
+        try await controller.synchronize()
+        ConversationsManager.shared.activeConversation = controller.conversation
     }
 }
