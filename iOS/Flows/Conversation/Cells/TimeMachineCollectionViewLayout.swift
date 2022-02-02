@@ -354,15 +354,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
-    func getMostRecentItemContentOffset() -> CGPoint? {
-        guard let mostRecentIndex = self.itemZRanges.max(by: { kvp1, kvp2 in
-            return kvp1.value.lowerBound < kvp2.value.lowerBound
-        })?.key else { return nil }
-
-        guard let upperBound = self.itemZRanges[mostRecentIndex]?.upperBound else { return nil }
-        return CGPoint(x: 0, y: upperBound)
-    }
-
     func getItemCenterPoint(in section: SectionIndex,
                             withYOffset yOffset: CGFloat,
                             scale: CGFloat) -> CGPoint {
@@ -389,7 +380,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return centerPoint
     }
 
-    // MARK: - Content Offset/Animation Handling
+    // MARK: - Update Animation Handling
 
     private var insertedIndexPaths: Set<IndexPath> = []
     private var deletedIndexPaths: Set<IndexPath> = []
@@ -435,16 +426,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
     }
 
-    override func finalizeCollectionViewUpdates() {
-        super.finalizeCollectionViewUpdates()
-
-        self.insertedIndexPaths.removeAll()
-        self.deletedIndexPaths.removeAll()
-        self.indexPathsVisibleBeforeAnimation.removeAll()
-        self.zPositionBeforeAnimation = 0
-        self.scrollOffsetAdjustment = 0
-    }
-
     /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
     /// Per the docs:  "For each element on screen before the invalidation, finalLayoutAttributesForDisappearingXXX will be called..."
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
@@ -488,6 +469,18 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return attributes
     }
 
+    override func finalizeCollectionViewUpdates() {
+        super.finalizeCollectionViewUpdates()
+
+        self.insertedIndexPaths.removeAll()
+        self.deletedIndexPaths.removeAll()
+        self.indexPathsVisibleBeforeAnimation.removeAll()
+        self.zPositionBeforeAnimation = 0
+        self.scrollOffsetAdjustment = 0
+    }
+
+    // MARK: - Scroll Content Offset Handling
+
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment)
     }
@@ -495,7 +488,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
                                       withScrollingVelocity velocity: CGPoint) -> CGPoint {
 
-        // When finished scrolling, always settle on a cell in a centered position.
+        // When finished scrolling, always settle on a cell in a focused position.
         var newOffset = proposedContentOffset
         newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)

@@ -132,7 +132,16 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return frame
     }
 
-    // MARK: - Content Offset Handling/Custom Animations
+    private func getMostRecentItemContentOffset() -> CGPoint? {
+        guard let mostRecentIndex = self.itemZRanges.max(by: { kvp1, kvp2 in
+            return kvp1.value.lowerBound < kvp2.value.lowerBound
+        })?.key else { return nil }
+
+        guard let upperBound = self.itemZRanges[mostRecentIndex]?.upperBound else { return nil }
+        return CGPoint(x: 0, y: upperBound)
+    }
+
+    // MARK: - Content Offset and Update Animation Handling
 
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
