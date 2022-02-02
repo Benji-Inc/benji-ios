@@ -93,17 +93,4 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         
         UNUserNotificationCenter.current().add(request)
     }
-    
-    private func testNote() {
-        let content = UNMutableNotificationContent()
-        
-        content.title = "title"
-        content.body = "Body"
-        content.interruptionLevel = .timeSensitive
-        let request = UNNotificationRequest(identifier: "someText",
-                                            content: content,
-                                            trigger: nil)
-        
-        UNUserNotificationCenter.current().add(request)
-    }
 }
