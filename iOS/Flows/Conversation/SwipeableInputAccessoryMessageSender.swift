@@ -137,30 +137,31 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
-        guard self.isConversationList else { return .message }
-
-        guard let contentContainer = self.contentContainer else {
-            return .message
-        }
-
-        switch self.currentSendMode {
-        case .message, .none:
-            // If we're in the message mode, switch to newConversation when the user
-            // has dragged far enough to the right.
-            if frame.right > contentContainer.width - 10 {
-                return .newConversation
-            } else {
-                return .message
-            }
-        case .newConversation:
-            // If we're in newConversation mode, switch to newMessage mode when the user drags
-            // far enough to the left.
-            if frame.left < 10 {
-                return .message
-            } else {
-                return .newConversation
-            }
-        }
+        return .message
+//        guard self.isConversationList else { return .message }
+//
+//        guard let contentContainer = self.contentContainer else {
+//            return .message
+//        }
+//
+//        switch self.currentSendMode {
+//        case .message, .none:
+//            // If we're in the message mode, switch to newConversation when the user
+//            // has dragged far enough to the right.
+//            if frame.right > contentContainer.width - 10 {
+//                return .newConversation
+//            } else {
+//                return .message
+//            }
+//        case .newConversation:
+//            // If we're in newConversation mode, switch to newMessage mode when the user drags
+//            // far enough to the left.
+//            if frame.left < 10 {
+//                return .message
+//            } else {
+//                return .newConversation
+//            }
+//        }
     }
     
     func swipeableInputAccessoryDidTapAvatar(_ view: SwipeableInputAccessoryView) {
