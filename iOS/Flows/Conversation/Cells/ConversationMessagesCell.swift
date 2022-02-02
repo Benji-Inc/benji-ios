@@ -114,7 +114,13 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     func set(state: ConversationUIState) {
         self.configureCollectionLayout(for: state)
 
-        self.dataSource.reconfigureAllItems()
+        Task {
+            await self.dataSource.reconfigureAllItems()
+            if state == .write {
+                let maxOffset = self.collectionLayout.maxZPosition
+                self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            }
+        }
     }
 
     private func configureCollectionLayout(for state: ConversationUIState) {
