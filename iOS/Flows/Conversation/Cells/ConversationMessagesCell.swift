@@ -65,6 +65,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.configureCollectionLayout(for: .read)
         self.collectionLayout.dataSource = self.dataSource
         self.collectionView.delegate = self
 
@@ -111,26 +112,32 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
     
     func set(state: ConversationUIState) {
-        self.collectionLayout.itemHeight
-        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
-
-        switch state {
-        case .read:
-            self.collectionLayout.spacingKeyPoints = [0, 18, 22, 26]
-        case .write:
-            self.collectionLayout.secondSectionBottomY = 260
-            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
-        }
-
+        self.configureCollectionLayout(for: state)
         Task {
             await UIView.awaitAnimation(with: .standard, animations: {
                 self.collectionLayout.invalidateLayout()
             })
 
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.scrollToLastItemOnLayout = true
-                self.setNeedsLayout()
-            })
+            if state == .write {
+                await UIView.awaitAnimation(with: .standard, animations: {
+                    self.scrollToLastItemOnLayout = true
+                    self.setNeedsLayout()
+                })
+            }
+        }
+    }
+
+    private func configureCollectionLayout(for state: ConversationUIState) {
+        self.collectionLayout.itemHeight
+        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
+
+        switch state {
+        case .read:
+            self.collectionLayout.secondSectionBottomY = 390
+            self.collectionLayout.spacingKeyPoints = [0, 40, 74, 86]
+        case .write:
+            self.collectionLayout.secondSectionBottomY = 260
+            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
     }
 

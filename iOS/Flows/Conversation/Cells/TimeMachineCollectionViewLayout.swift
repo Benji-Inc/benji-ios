@@ -360,11 +360,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         if section == 0 {
             centerPoint.y += self.firstSectionTopY + self.itemHeight.half
-            centerPoint.y += self.itemHeight.half * (1-scale)
+            centerPoint.y += self.itemHeight.half - self.itemHeight.half * scale
             centerPoint.y += yOffset
         } else {
             centerPoint.y += self.secondSectionBottomY - self.itemHeight.half
-            centerPoint.y -= self.itemHeight.half * (1-scale)
+            centerPoint.y -= self.itemHeight.half - self.itemHeight.half * scale
             centerPoint.y -= yOffset
         }
         
