@@ -118,9 +118,9 @@ extension ConversationListCoordinator {
     func presentConversationTitleAlert(for conversation: Conversation) {
         let controller = ChatClient.shared.channelController(for: conversation.cid)
 
-        let alertController = UIAlertController(title: "Update Topic", message: "", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
-            textField.placeholder = "Topic"
+            textField.placeholder = "Name"
         }
         let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { [unowned self] alert -> Void in
             if let textField = alertController.textFields?.first,
@@ -134,6 +134,43 @@ extension ConversationListCoordinator {
                         self.conversationListVC.becomeFirstResponder()
                     })
                 }
+            }
+        })
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (action : UIAlertAction!) -> Void in
+            self.conversationListVC.becomeFirstResponder()
+        })
+
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        
+        self.conversationListVC.resignFirstResponder()
+
+        self.conversationListVC.present(alertController, animated: true, completion: nil)
+    }
+    
+    func presentEmailAlert() {
+
+        let alertController = UIAlertController(title: "Invest in Jibber", message: "We will follow up with you using the email provided.", preferredStyle: .alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.textContentType = .emailAddress
+            textField.placeholder = "Email"
+        }
+        let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { [unowned self] alert -> Void in
+            if let textField = alertController.textFields?.first,
+               let text = textField.text,
+               !text.isEmpty {
+
+                Task {
+                    User.current()?.email = text
+                    try await User.current()?.saveToServer()
+                }
+                
+                alertController.dismiss(animated: true, completion: {
+                    self.conversationListVC.dataSource.reloadItems([.invest])
+                    self.conversationListVC.becomeFirstResponder()
+                })
             }
         })
 

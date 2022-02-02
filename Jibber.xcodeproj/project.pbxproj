@@ -84,6 +84,8 @@
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
+		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
+		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
 		D61316B0273C859700DC782B /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
 		D61316B1273C85A200DC782B /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D61316B2273C85D000DC782B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
@@ -742,6 +744,8 @@
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
+		D6129F9D27AB21720058811C /* UpsellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsellContentView.swift; sourceTree = "<group>"; };
+		D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestmentUpsellCell.swift; sourceTree = "<group>"; };
 		D61553492745737300B08459 /* ThreadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCoordinator.swift; sourceTree = "<group>"; };
 		D615534B27458CEA00B08459 /* MessageSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequence.swift; sourceTree = "<group>"; };
 		D615534D2745C1C900B08459 /* MessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentView.swift; sourceTree = "<group>"; };
@@ -1175,6 +1179,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D6129F9F27AB23650058811C /* Upsell */ = {
+			isa = PBXGroup;
+			children = (
+				D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */,
+				D6129F9D27AB21720058811C /* UpsellContentView.swift */,
+				D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */,
+			);
+			path = Upsell;
+			sourceTree = "<group>";
+		};
 		D61553602746E60400B08459 /* Transtion Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -1385,7 +1399,7 @@
 				8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */,
 				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
-				D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */,
+				D6129F9F27AB23650058811C /* Upsell */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
@@ -2607,6 +2621,7 @@
 				D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */,
 				D6E9743C2755568D00D95F08 /* MessageContentView+Read.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
+				D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */,
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
@@ -2626,6 +2641,7 @@
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
+				D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */,
 				D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,

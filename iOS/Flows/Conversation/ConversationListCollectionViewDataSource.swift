@@ -25,6 +25,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         case loadMore
         case newConversation
         case upsell
+        case invest
     }
 
     var handleSelectedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -32,7 +33,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleTopicTapped: ((ConversationId) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
-    var handleCreateGroupSelected: CompletionOptional = nil
+    var handleAddPeopleSelected: CompletionOptional = nil
+    var handleInvestmentSelected: CompletionOptional = nil
 
     /// The conversation ID of the conversation that is preparing to send, if any.
     private var conversationPreparingToSend: ConversationId?
@@ -46,6 +48,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     = ConversationListCollectionViewDataSource.createNewConversationCellRegistration()
     private let invitationUpsellCellRegistration
     = ConversationListCollectionViewDataSource.createInvitationUpsellCellRegistration()
+    private let investmentUpsellCellRegistration
+    = ConversationListCollectionViewDataSource.createInvestmentUpsellCellRegistration()
     
     var uiState: ConversationUIState = .read
 
@@ -91,8 +95,17 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             = collectionView.dequeueConfiguredReusableCell(using: self.invitationUpsellCellRegistration,
                                                            for: indexPath,
                                                            item: self)
-            cell.didSelectCreate = { [unowned self] in
-                self.handleCreateGroupSelected?()
+            cell.didSelectAddPeople = { [unowned self] in
+                self.handleAddPeopleSelected?()
+            }
+            return cell
+        case .invest:
+            let cell
+            = collectionView.dequeueConfiguredReusableCell(using: self.investmentUpsellCellRegistration,
+                                                           for: indexPath,
+                                                           item: self)
+            cell.didTapInvest = { [unowned self] in
+                self.handleInvestmentSelected?()
             }
             return cell
         }
@@ -130,7 +143,9 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
 //            }
 //        }
         
-        updatedItems.append(.newConversation)
+        //updatedItems.append(.newConversation)
+        updatedItems.append(.upsell)
+        updatedItems.append(.invest)
       
         snapshot.setItems(updatedItems, in: sectionID)
 
@@ -162,6 +177,9 @@ extension ConversationListCollectionViewDataSource {
     
     typealias InvitationUpsellCellRegistration
     = UICollectionView.CellRegistration<InvitationUpsellCell, ConversationListCollectionViewDataSource>
+    
+    typealias InvestmentUpsellCellRegistration
+    = UICollectionView.CellRegistration<InvestmentUpsellCell, ConversationListCollectionViewDataSource>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
@@ -190,6 +208,12 @@ extension ConversationListCollectionViewDataSource {
     
     static func createInvitationUpsellCellRegistration() -> InvitationUpsellCellRegistration {
         return InvitationUpsellCellRegistration { cell, indexPath, item in
+            cell.set(state: item.uiState)
+        }
+    }
+    
+    static func createInvestmentUpsellCellRegistration() -> InvestmentUpsellCellRegistration {
+        return InvestmentUpsellCellRegistration { cell, indexPath, item in
             cell.set(state: item.uiState)
         }
     }

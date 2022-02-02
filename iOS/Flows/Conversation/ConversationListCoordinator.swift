@@ -67,8 +67,13 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             self.presentConversationTitleAlert(for: conversation)
         }
         
-        self.conversationListVC.dataSource.handleCreateGroupSelected = { [unowned self] in
-            self.presentCircle()
+        self.conversationListVC.dataSource.handleAddPeopleSelected = { [unowned self] in
+            // Create convo first?
+            self.presentPeoplePicker()
+        }
+        
+        self.conversationListVC.dataSource.handleInvestmentSelected = { [unowned self] in
+            self.presentEmailAlert() 
         }
 
         Task {

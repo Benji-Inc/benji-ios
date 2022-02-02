@@ -282,7 +282,7 @@ extension ConversationListViewController: ConversationListCollectionViewLayoutDe
         switch item {
         case .conversation(let cid):
             return cid
-        case .loadMore, .newConversation, .none, .upsell:
+        case .loadMore, .newConversation, .none, .upsell, .invest:
             return nil
         }
     }
