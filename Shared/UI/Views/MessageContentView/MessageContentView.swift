@@ -20,8 +20,7 @@ class MessageContentView: BaseView {
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     #endif
 
-    /// Sizing
-
+    // Sizing
     static let bubbleHeight: CGFloat = 68
     static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
     static let padding = Theme.ContentOffset.long
