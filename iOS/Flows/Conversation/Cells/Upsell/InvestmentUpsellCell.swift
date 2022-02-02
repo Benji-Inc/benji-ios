@@ -30,7 +30,7 @@ class InvestmentUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
         
         if let email = User.current()?.email {
             self.content.configure(with: "Thank your for showing interest in becoming an investor in Jibber!",
-                                   subtitle: "We will get in touch soon using: \(email).",
+                                   subtitle: "We will get in touch soon.\n \(email)",
                                    buttonTitle: "Update Email")
             
         } else {
