@@ -98,6 +98,10 @@ extension ConversationListCoordinator {
             controller.addMembers(userIds: Set(members)) { error in
                 if error.isNil {
                     self.showPeopleAddedToast(for: accepted)
+                    Task {
+                        try await controller.synchronize()
+                        await self.conversationListVC.headerVC.membersVC.loadData()
+                    }
                 }
             }
         }
