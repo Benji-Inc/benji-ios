@@ -6,9 +6,7 @@
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
-import Foundation
 import UIKit
-import StreamChat
 
 /// A subclass of the TimeMachineLayout used to display messages.
 /// In addition to normal time machine functionality, this class also adjusts the color, brightness and other message specific attributes
