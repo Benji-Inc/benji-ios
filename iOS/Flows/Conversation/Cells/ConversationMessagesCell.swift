@@ -113,18 +113,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     
     func set(state: ConversationUIState) {
         self.configureCollectionLayout(for: state)
-        Task {
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.collectionLayout.invalidateLayout()
-            })
 
-            if state == .write {
-                await UIView.awaitAnimation(with: .standard, animations: {
-                    self.scrollToLastItemOnLayout = true
-                    self.setNeedsLayout()
-                })
-            }
-        }
+        self.dataSource.reconfigureAllItems()
     }
 
     private func configureCollectionLayout(for state: ConversationUIState) {
