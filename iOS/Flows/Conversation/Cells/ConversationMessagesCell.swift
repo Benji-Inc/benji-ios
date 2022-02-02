@@ -38,9 +38,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     
     private lazy var dataSource = MessageSequenceCollectionViewDataSource(collectionView: self.collectionView)
 
-    /// If true we should scroll to the last item in the collection in layout subviews.
-    private var scrollToLastItemOnLayout: Bool = false
-
     /// The conversation containing all the messages.
     var conversation: Conversation? {
         return self.conversationController?.conversation
@@ -58,7 +55,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
     /// A set of the current event subscriptions. Should be cleared out when the cell is reused.
     private var subscriptions = Set<AnyCancellable>()
-    private var taskPool = TaskPool()
+    /// A reference to the current task that scrolls to a specific message
+    private var scrollToMessageTask: Task<Void, Never>?
+    /// If true we should scroll to the last item in the collection in layout subviews.
+    private var scrollToLastItemOnLayout: Bool = false
 
     // MARK: - Lifecycle
 
@@ -107,33 +107,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             self.collectionLayout.prepare()
             let maxOffset = self.collectionLayout.maxZPosition
             self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
-            self.collectionLayout.invalidateLayout()
-        }
-    }
-    
-    func set(state: ConversationUIState) {
-        self.configureCollectionLayout(for: state)
-
-        Task {
-            await self.dataSource.reconfigureAllItems()
-            if state == .write {
-                let maxOffset = self.collectionLayout.maxZPosition
-                self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
-            }
-        }
-    }
-
-    private func configureCollectionLayout(for state: ConversationUIState) {
-        self.collectionLayout.itemHeight
-        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
-
-        switch state {
-        case .read:
-            self.collectionLayout.secondSectionBottomY = 390
-            self.collectionLayout.spacingKeyPoints = [0, 40, 74, 86]
-        case .write:
-            self.collectionLayout.secondSectionBottomY = 260
-            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
     }
 
@@ -163,17 +136,41 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.dataSource.shouldPrepareToSend = isPreparedToSend
     }
 
+    func set(state: ConversationUIState) {
+        self.configureCollectionLayout(for: state)
+
+        Task {
+            await self.dataSource.reconfigureAllItems()
+            if state == .write {
+                let maxOffset = self.collectionLayout.maxZPosition
+                self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            }
+        }
+    }
+
+    private func configureCollectionLayout(for state: ConversationUIState) {
+        self.collectionLayout.itemHeight
+        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
+
+        switch state {
+        case .read:
+            self.collectionLayout.secondSectionBottomY = 390
+            self.collectionLayout.spacingKeyPoints = [0, 40, 74, 86]
+        case .write:
+            self.collectionLayout.secondSectionBottomY = 260
+            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
+        }
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
 
         self.dataSource.shouldPrepareToSend = false
 
         self.subscriptions.removeAll()
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
+        self.scrollToMessageTask?.cancel()
 
-        // Remove all the items so the next message has a blank slate to work with.
+        // Remove all the items so the next conversation loaded has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
         snapshot.deleteAllItems()
         self.dataSource.apply(snapshot, animatingDifferences: false)
@@ -183,7 +180,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         super.apply(layoutAttributes)
         
         if let attributes = layoutAttributes as? ConversationsMessagesCellAttributes {
-            self.collectionView.isScrollEnabled = attributes.canScroll
+            self.collectionView.isUserInteractionEnabled = attributes.canScroll
         }
     }
 
@@ -241,7 +238,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                 })
             }
         }
-        task.add(to: self.taskPool)
+        self.scrollToMessageTask = task
 
         await task.value
     }
