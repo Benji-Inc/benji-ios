@@ -111,14 +111,25 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
     
     func set(state: ConversationUIState) {
-        self.collectionLayout.uiState = state
-        self.collectionLayout.prepareForTransition(to: self.collectionLayout)
-        
+        self.collectionLayout.itemHeight
+        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
+
+        switch state {
+        case .read:
+            self.collectionLayout.spacingKeyPoints = [0, 18, 22, 26]
+        case .write:
+            self.collectionLayout.secondSectionBottomY = 260
+            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
+        }
+
         Task {
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.collectionLayout.invalidateLayout()
+            })
+
             await UIView.awaitAnimation(with: .standard, animations: {
                 self.scrollToLastItemOnLayout = true
                 self.setNeedsLayout()
-                self.collectionLayout.finalizeLayoutTransition()
             })
         }
     }

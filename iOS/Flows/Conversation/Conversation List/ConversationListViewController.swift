@@ -112,7 +112,7 @@ class ConversationListViewController: ViewController {
         }
 
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.top = self.headerVC.view.bottom
+        self.collectionView.top = self.headerVC.view.bottom - Theme.contentOffset
         self.collectionView.height = self.view.height - self.headerVC.view.bottom
     }
 

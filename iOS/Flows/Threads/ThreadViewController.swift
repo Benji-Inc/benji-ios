@@ -166,7 +166,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     
     @MainActor
     private func set(state: ConversationUIState) async {
-        self.threadCollectionView.threadLayout.uiState = state
         self.threadCollectionView.threadLayout.prepareForTransition(to: self.threadCollectionView.threadLayout)
         self.scrollToLastItemOnLayout = true
         await UIView.awaitAnimation(with: .standard, animations: {

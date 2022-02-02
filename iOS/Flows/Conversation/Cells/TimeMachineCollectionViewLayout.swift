@@ -53,21 +53,14 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat
-    = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
-        didSet { self.invalidateLayout() }
-    }
+    var itemHeight: CGFloat = 100
     /// Keypoints used to gradually shrink down items as they move away.
     var scalingKeyPoints: [CGFloat] = [1, 0.84, 0.65, 0.4]
     /// The amount of vertical space between the tops of adjacent items.
-    var spacingKeyPoints: [CGFloat] {
-        switch self.uiState {
-        case .read:
-            return [0, 18, 22, 26]
-        case .write:
-            return [0, 8, 16, 20]
-        }
-    }
+    var spacingKeyPoints: [CGFloat] = [0, 8, 16, 20]
+    var firstSectionTopY: CGFloat = 0
+    var secondSectionBottomY: CGFloat = 300
+
     /// Key points used for the gradually alpha out items further back in the message stack.
     var alphaKeyPoints: [CGFloat] = [1, 1, 1, 0]
     /// The maximum number of messages to show in each section's stack.
@@ -95,9 +88,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// A dictionary of z ranges for all the items. A z-range represents the range that each item will be frontmost in its section
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
-    
-    var uiState: ConversationUIState = .read
-        
+
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
@@ -107,7 +98,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
             var height = clamp((itemCount - 1), min: 0) * self.itemHeight
 
-            // Plus 1 ensures that we will still receive the pan gesture, regardless of content size
+            // Adding 1 ensures that we will still receive the pan gesture if the content height is less than
+            // the height of the collection view.
             height += collectionView.bounds.height + 1
             return CGSize(width: collectionView.bounds.width, height: height)
         }
@@ -311,9 +303,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.zIndex = indexPath.item
         attributes.bounds.size = CGSize(width: collectionView.width, height: self.itemHeight)
 
-        let centerPoint = self.getCenterPoint(for: indexPath.section,
-                                                 withYOffset: yOffset,
-                                                 scale: scale)
+        let centerPoint = self.getItemCenterPoint(in: indexPath.section,
+                                                  withYOffset: yOffset,
+                                                  scale: scale)
         attributes.center = centerPoint
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
@@ -353,9 +345,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return CGPoint(x: 0, y: upperBound)
     }
 
-    func getCenterPoint(for section: SectionIndex,
-                        withYOffset yOffset: CGFloat,
-                        scale: CGFloat) -> CGPoint {
+    func getItemCenterPoint(in section: SectionIndex,
+                            withYOffset yOffset: CGFloat,
+                            scale: CGFloat) -> CGPoint {
         
         guard let collectionView = self.collectionView else { return .zero }
         
@@ -363,45 +355,17 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                  y: collectionView.contentOffset.y,
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
-        
-        var centerPoint: CGPoint = .zero
-        
-        switch self.uiState {
-        case .read:
-            let additionalYOffset =  MessageContentView.bubbleHeight + Theme.ContentOffset.long.value
-            let centerY = contentRect.top + additionalYOffset
-            
-            centerPoint = CGPoint(x: contentRect.midX, y: centerY)
-            
-            if section == 0 {
-                centerPoint.y += self.itemHeight.half
-                centerPoint.y += yOffset
-                centerPoint.y += self.itemHeight.doubled * (1-scale)
-                centerPoint.y -= 100 - Theme.ContentOffset.short.value
-            } else {
-                centerPoint.y += 50
-                centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
-                centerPoint.y -= yOffset
-                centerPoint.y -= self.itemHeight.doubled * (1-scale)
-            }
-            
-        case .write:
-            let centerY = (contentRect.top)
-            centerPoint = CGPoint(x: contentRect.midX, y: centerY)
-            
-            if section == 0 {
-                centerPoint.y += self.itemHeight.half
-                centerPoint.y += yOffset
-                centerPoint.y += self.itemHeight.half * (1-scale)
-                centerPoint.y -= 21 - Theme.ContentOffset.short.value
-            } else {
-                if ScreenSize.current.rawValue <= ScreenSize.phoneMedium.rawValue {
-                    centerPoint.y -= 25
-                }
-                centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
-                centerPoint.y -= yOffset
-                centerPoint.y -= self.itemHeight.half * (1-scale)
-            }
+
+        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top)
+
+        if section == 0 {
+            centerPoint.y += self.firstSectionTopY + self.itemHeight.half
+            centerPoint.y += self.itemHeight.half * (1-scale)
+            centerPoint.y += yOffset
+        } else {
+            centerPoint.y += self.secondSectionBottomY - self.itemHeight.half
+            centerPoint.y -= self.itemHeight.half * (1-scale)
+            centerPoint.y -= yOffset
         }
         
         return centerPoint
