@@ -89,6 +89,13 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
 
+    // MARK: - Private State Management
+
+    /// The sort value of the focused right before the most recent invalidation.
+    /// This can be used to keep the focused item in place when items are inserted before it.
+    private var sortValueOfFocusedItemBeforeInvalidation: Double?
+    private var sortValuesBeforeInvalidation: [IndexPath : Double] = [:]
+
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
@@ -136,6 +143,17 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         if customContext.shouldRecalculateZRanges {
+            // Before we recalculate the z ranges, save the sort value of the current focused item.
+            if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
+                return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
+            })?.key {
+                self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
+            } else {
+                self.sortValueOfFocusedItemBeforeInvalidation = nil
+            }
+
+            self.sortValuesBeforeInvalidation = self.itemSortValues
+
             self.itemSortValues.removeAll()
             self.itemFocusPositions.removeAll()
             self.itemZRanges.removeAll()
@@ -336,15 +354,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
-    func getMostRecentItemContentOffset() -> CGPoint? {
-        guard let mostRecentIndex = self.itemZRanges.max(by: { kvp1, kvp2 in
-            return kvp1.value.lowerBound < kvp2.value.lowerBound
-        })?.key else { return nil }
-
-        guard let upperBound = self.itemZRanges[mostRecentIndex]?.upperBound else { return nil }
-        return CGPoint(x: 0, y: upperBound)
-    }
-
     func getItemCenterPoint(in section: SectionIndex,
                             withYOffset yOffset: CGFloat,
                             scale: CGFloat) -> CGPoint {
@@ -371,12 +380,136 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return centerPoint
     }
 
-    // MARK: - Content Offset Handling
+    // MARK: - Update Animation Handling
+
+    /// Sort values of items that are being inserted.
+    private var insertedSortValues: Set<Double> = []
+    /// Sort values of items that are being deleted.
+    private var deletedSortValues: Set<Double> = []
+    /// Items that that were visible before the animation started.
+    private var sortValuesVisibleBeforeAnimation: Set<Double> = []
+    /// How much to adjust the proposed scroll offset.
+    private var scrollOffsetAdjustment: CGFloat = 0
+    /// The z position before update animations started
+    private var zPositionBeforeAnimation: CGFloat = 0
+
+    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        super.prepare(forCollectionViewUpdates: updateItems)
+
+        self.zPositionBeforeAnimation = self.zPosition
+
+        for update in updateItems {
+            switch update.updateAction {
+            case .insert:
+                guard let indexPath = update.indexPathAfterUpdate else { break }
+                guard let insertedSortValue = self.itemSortValues[indexPath] else { break }
+
+                self.insertedSortValues.insert(insertedSortValue)
+
+                if let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
+                   insertedSortValue < previousFocusedSortValue {
+                    self.scrollOffsetAdjustment += self.itemHeight
+                }
+
+            case .delete:
+                guard let indexPath = update.indexPathBeforeUpdate else { break }
+                guard let deletedSortValue = self.sortValuesBeforeInvalidation[indexPath] else { break }
+
+                self.deletedSortValues.insert(deletedSortValue)
+
+                if let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
+                   deletedSortValue < previousFocusedSortValue {
+                    self.scrollOffsetAdjustment -= self.itemHeight
+                }
+            case .reload, .move, .none:
+                break
+            @unknown default:
+                break
+            }
+        }
+    }
+
+    /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
+    /// Per the docs:  "For each element on screen before the invalidation, finalLayoutAttributesForDisappearingXXX will be called..."
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        // Remember which items were visible before the animation started so we don't attempt to modify
+        // their animations later.
+        if let sortValue = self.sortValuesBeforeInvalidation[itemIndexPath] {
+            self.sortValuesVisibleBeforeAnimation.insert(sortValue)
+
+            // Items that are just moving are marked as "disappearing"" by the collection view.
+            // Only animate changes to items that are actually being deleted otherwise weird animation issues
+            // will arise.
+            guard self.deletedSortValues.contains(sortValue) else { return nil }
+        }
+
+        return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+    }
+
+    /// NOTE: "Appearing" does not mean the item wasn't visible before the animation.
+    /// Per the docs: "For each element on screen after the invalidation, initialLayoutAttributesForAppearingXXX will be called..."
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+
+        // Don't modify the attributes of items that were visible before the animation started.
+        guard let appearingSortValue = self.itemSortValues[itemIndexPath],
+            !self.sortValuesVisibleBeforeAnimation.contains(appearingSortValue) else { return attributes }
+
+        // Items moving into visibility
+        // If the item existed before (wasn't just inserted), but was not visible,
+        // modify it's attributes to make it appear properly.
+        if !self.insertedSortValues.contains(appearingSortValue) {
+            var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
+                                                                     givenZPosition: self.zPositionBeforeAnimation)
+            normalizedZOffset = clamp(normalizedZOffset, -1, 1)
+            let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
+                                                                    withNormalizedZOffset: normalizedZOffset)
+
+            modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
+
+            return modifiedAttributes
+        }
+
+        // Items being inserted
+        var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
+                                                                 givenZPosition: self.zPosition)
+        if normalizedZOffset <= 0 {
+            normalizedZOffset = -1
+        } else {
+            normalizedZOffset = 1
+        }
+        let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
+                                                                withNormalizedZOffset: normalizedZOffset)
+
+        modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
+
+        return modifiedAttributes
+    }
+
+    override func finalizeCollectionViewUpdates() {
+        super.finalizeCollectionViewUpdates()
+
+        self.insertedSortValues.removeAll()
+        self.deletedSortValues.removeAll()
+        self.sortValuesVisibleBeforeAnimation.removeAll()
+        self.zPositionBeforeAnimation = 0
+        self.scrollOffsetAdjustment = 0
+    }
+
+    // MARK: - Scroll Content Offset Handling
+
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment)
+    }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
                                       withScrollingVelocity velocity: CGPoint) -> CGPoint {
 
-        // When finished scrolling, always settle on a cell in a centered position.
+        // When finished scrolling, always settle on a cell in a focused position.
         var newOffset = proposedContentOffset
         newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)

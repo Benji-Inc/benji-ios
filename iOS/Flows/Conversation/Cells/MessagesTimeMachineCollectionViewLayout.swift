@@ -6,24 +6,12 @@
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
-import Foundation
 import UIKit
-import StreamChat
-
-class MessagesTimeMachineCollectionViewLayoutInvalidationContext:
-    TimeMachineCollectionViewLayoutInvalidationContext {
-
-    var shouldRecalculateSortValues = true
-}
 
 /// A subclass of the TimeMachineLayout used to display messages.
 /// In addition to normal time machine functionality, this class also adjusts the color, brightness and other message specific attributes
 /// as the items move along the z axis.
 class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
-
-    override class var invalidationContextClass: AnyClass {
-        return MessagesTimeMachineCollectionViewLayoutInvalidationContext.self
-    }
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationMessageCellLayoutAttributes.self
@@ -31,8 +19,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Layout Configuration
 
-    #warning("Can this be removed?")
-    var layoutForDropZone: Bool = false
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
     var frontmostBrightness: CGFloat = 1
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
@@ -41,45 +27,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
     
     var messageContentState: MessageContentView.State = .collapsed
-    
-    /// The sort value of the focused right before the most recent invalidation.
-    /// This can be used to keep the focused item in place when items are inserted before it.
-    private var sortValueOfFocusedItemBeforeInvalidation: Double?
-    private var sortValuesBeforeInvalidation: [IndexPath : Double] = [:]
-
-    override func invalidationContext(forBoundsChange newBounds: CGRect)
-    -> UICollectionViewLayoutInvalidationContext {
-
-        let invalidationContext = super.invalidationContext(forBoundsChange: newBounds)
-
-        if let messagesInvalidationContext
-            = invalidationContext as? MessagesTimeMachineCollectionViewLayoutInvalidationContext {
-
-            // There's no need to recalculate the sort values if the data is not changing.
-            messagesInvalidationContext.shouldRecalculateSortValues = false
-        }
-
-        return invalidationContext
-    }
-
-    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
-        if let invalidationContext = context as? MessagesTimeMachineCollectionViewLayoutInvalidationContext,
-           invalidationContext.shouldRecalculateSortValues {
-
-            // Find the the current focused item
-            if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
-                return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
-            })?.key {
-                self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
-            } else {
-                self.sortValueOfFocusedItemBeforeInvalidation = nil
-            }
-
-            self.sortValuesBeforeInvalidation = self.itemSortValues
-        }
-
-        super.invalidateLayout(with: context)
-    }
 
     override func layoutAttributesForItemAt(indexPath: IndexPath,
                                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
@@ -103,8 +50,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         }
 
         let detailAlpha = 1 - abs(normalizedZOffset) / 0.2
-        let textViewAlpha = 1 - abs(normalizedZOffset) / 0.8
-
         // The section with the most recent item should be saturated in color
 
         let focusAmount = self.getFocusAmount(forSection: indexPath.section)
@@ -129,7 +74,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
         attributes.detailAlpha = detailAlpha
-        attributes.messageContentAlpha = self.layoutForDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
         attributes.state = self.messageContentState
 
         return attributes
@@ -181,23 +125,22 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return frame
     }
 
-    // MARK: - Content Offset Handling/Custom Animations
+    private func getMostRecentItemContentOffset() -> CGPoint? {
+        guard let mostRecentIndex = self.itemZRanges.max(by: { kvp1, kvp2 in
+            return kvp1.value.lowerBound < kvp2.value.lowerBound
+        })?.key else { return nil }
+
+        guard let upperBound = self.itemZRanges[mostRecentIndex]?.upperBound else { return nil }
+        return CGPoint(x: 0, y: upperBound)
+    }
+
+    // MARK: - Content Offset and Update Animation Handling
 
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
-    private var insertedIndexPaths: Set<IndexPath> = []
-    private var deletedIndexPaths: Set<IndexPath> = []
-    /// How much to adjust the proposed scroll offset.
-    private var scrollOffset: CGFloat = 0
-    /// The z position before update animations started
-    private var initialZPosition: CGFloat = 0
-    /// Items that that were visible before the animation started.
-    private var indexPathsVisibleBeforeAnimation: Set<IndexPath> = []
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
-
-        self.initialZPosition = self.zPosition
 
         guard let collectionView = self.collectionView,
               let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
@@ -206,14 +149,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
-
-                self.insertedIndexPaths.insert(indexPath)
-
-                if let insertSortValue = self.itemSortValues[indexPath],
-                   let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
-                   insertSortValue < previousFocusedSortValue {
-                    self.scrollOffset += self.itemHeight
-                }
 
                 let isScrolledToMostRecent
                 = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
@@ -225,16 +160,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                 if isMostRecentInBottomSection || isScrolledToMostRecent {
                     self.shouldScrollToEnd = true
                 }
-            case .delete:
-                guard let indexPath = update.indexPathBeforeUpdate else { break }
-                self.deletedIndexPaths.insert(indexPath)
-
-                if let deleteSortValue = self.sortValuesBeforeInvalidation[indexPath],
-                   let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
-                    deleteSortValue < previousFocusedSortValue {
-                    self.scrollOffset -= self.itemHeight
-                }
-            case .reload, .move, .none:
+            case .delete, .reload, .move, .none:
                 break
             @unknown default:
                 break
@@ -246,11 +172,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         super.finalizeCollectionViewUpdates()
 
         self.shouldScrollToEnd = false
-        self.insertedIndexPaths.removeAll()
-        self.deletedIndexPaths.removeAll()
-        self.indexPathsVisibleBeforeAnimation.removeAll()
-        self.initialZPosition = 0
-        self.scrollOffset = 0
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
@@ -258,49 +179,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             return mostRecentOffset
         }
 
-        return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffset)
-    }
-
-    /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
-    /// Per the docs:  "For each element on screen before the invalidation, finalLayoutAttributesForDisappearingXXX will be called..."
-    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        // Remember which items were visible before the animation started so we don't attempt to modify
-        // their animations later.
-        self.indexPathsVisibleBeforeAnimation.insert(itemIndexPath)
-
-        // Items that are just moving are marked as "disappearing"" by the collection view.
-        // Only animate changes to items that are actually being deleted otherwise weird animation issues
-        // will arise.
-        guard self.deletedIndexPaths.contains(itemIndexPath) else { return nil }
-
-        return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
-    }
-
-    /// NOTE: "Appearing" does not mean the item wasn't visible before the animation.
-    /// Per the docs: "For each element on screen after the invalidation, initialLayoutAttributesForAppearingXXX will be called..."
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-
-        // Determine if this item existed before, but was not visible. If so, we need
-        // to modify it's attributes to make it appear properly.
-        if !self.indexPathsVisibleBeforeAnimation.contains(itemIndexPath),
-           !self.insertedIndexPaths.contains(itemIndexPath) {
-            
-            var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
-                                                                     givenZPosition: self.initialZPosition)
-            normalizedZOffset = clamp(normalizedZOffset, -1, 1)
-            let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
-                                                                    withNormalizedZOffset: normalizedZOffset)
-
-            modifiedAttributes?.center.y += self.initialZPosition - self.zPosition
-
-            return modifiedAttributes
-        }
-
-        return attributes
+        return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
     }
 }

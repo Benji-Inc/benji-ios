@@ -168,7 +168,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             data[.topMessages] = benjiMessages.reversed()
             data[.bottomMessages] = otherMessages.reversed()
         } catch {
-            logDebug(error.code.description)
+            logError(error)
         }
         
         return data
