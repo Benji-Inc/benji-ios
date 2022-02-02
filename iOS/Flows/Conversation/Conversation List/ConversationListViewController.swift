@@ -112,7 +112,7 @@ class ConversationListViewController: ViewController {
         }
 
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.top = self.headerVC.view.bottom
+        self.collectionView.top = self.headerVC.view.bottom - Theme.contentOffset
         self.collectionView.height = self.view.height - self.headerVC.view.bottom
     }
 
@@ -148,26 +148,14 @@ class ConversationListViewController: ViewController {
 
         self.headerVC.update(for: state)
         self.dataSource.uiState = state
-        
-        Task {
-            self.collectionView.visibleCells.forEach { cell in
-                if let settable = cell as? ConversationUIStateSettable {
-                    settable.set(state: state)
-                }
-            }
-            
-            await self.dataSource.reconfigureAllItems()
-            
-            await UIView.awaitAnimation(with: .fast, animations: {
-                self.view.layoutNow()
-            })
-        }.add(to: self.taskPool)
+
+        self.dataSource.reconfigureAllItems()
     }
 
     func update(withCenteredConversation cid: ConversationId?) {
         if let cid = cid {
             let conversation = ChatClient.shared.channelController(for: cid).conversation
-            /// Sets the active conversation
+            // Sets the active conversation
             ConversationsManager.shared.activeConversation = conversation
             
             Task {
@@ -177,7 +165,6 @@ class ConversationListViewController: ViewController {
                 let users = try await UserStore.shared.mapMembersToUsers(members: members)
                 self.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
             }
-            
         } else {
             self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
             ConversationsManager.shared.activeConversation = nil

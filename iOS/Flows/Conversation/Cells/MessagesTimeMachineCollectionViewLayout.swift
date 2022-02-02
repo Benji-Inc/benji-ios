@@ -31,6 +31,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Layout Configuration
 
+    #warning("Can this be removed?")
     var layoutForDropZone: Bool = false
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
     var frontmostBrightness: CGFloat = 1
@@ -170,7 +171,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     func getDropZoneFrame() -> CGRect {
-        let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
+        let center = self.getItemCenterPoint(in: 1, withYOffset: 0, scale: 1)
         let padding = Theme.ContentOffset.short.value.doubled
         var frame = CGRect(x: padding.half,
                            y: 0,
@@ -192,12 +193,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     private var initialZPosition: CGFloat = 0
     /// Items that that were visible before the animation started.
     private var indexPathsVisibleBeforeAnimation: Set<IndexPath> = []
-    
-    override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
-        super.prepare(forAnimatedBoundsChange: oldBounds)
-        
-        self.shouldScrollToEnd = true
-    }
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)

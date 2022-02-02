@@ -65,6 +65,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.configureCollectionLayout(for: .read)
         self.collectionLayout.dataSource = self.dataSource
         self.collectionView.delegate = self
 
@@ -111,15 +112,28 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
     
     func set(state: ConversationUIState) {
-        self.collectionLayout.uiState = state
-        self.collectionLayout.prepareForTransition(to: self.collectionLayout)
-        
+        self.configureCollectionLayout(for: state)
+
         Task {
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.scrollToLastItemOnLayout = true
-                self.setNeedsLayout()
-                self.collectionLayout.finalizeLayoutTransition()
-            })
+            await self.dataSource.reconfigureAllItems()
+            if state == .write {
+                let maxOffset = self.collectionLayout.maxZPosition
+                self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            }
+        }
+    }
+
+    private func configureCollectionLayout(for state: ConversationUIState) {
+        self.collectionLayout.itemHeight
+        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
+
+        switch state {
+        case .read:
+            self.collectionLayout.secondSectionBottomY = 390
+            self.collectionLayout.spacingKeyPoints = [0, 40, 74, 86]
+        case .write:
+            self.collectionLayout.secondSectionBottomY = 260
+            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
     }
 
