@@ -253,10 +253,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         return self.collectionView.convert(dropZoneFrame, to: targetView)
     }
 
-    func setDropZone(isShowing: Bool) {
-        self.collectionLayout.layoutForDropZone = isShowing
-    }
-
     func getBottomFrontmostCell() -> MessageCell? {
         return self.collectionLayout.getBottomFrontmostCell()
     }
