@@ -193,12 +193,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     private var initialZPosition: CGFloat = 0
     /// Items that that were visible before the animation started.
     private var indexPathsVisibleBeforeAnimation: Set<IndexPath> = []
-    
-    override func prepare(forAnimatedBoundsChange oldBounds: CGRect) {
-        super.prepare(forAnimatedBoundsChange: oldBounds)
-        
-        self.shouldScrollToEnd = true
-    }
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
