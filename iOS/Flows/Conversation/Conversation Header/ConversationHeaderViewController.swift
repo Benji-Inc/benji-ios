@@ -92,7 +92,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         if let title = conversation.title {
             self.topicLabel.setText(title)
         } else {
-            self.topicLabel.setText("No Topic")
+            self.topicLabel.setText("No Group Name")
         }
     }
     

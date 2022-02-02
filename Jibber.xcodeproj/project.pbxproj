@@ -306,6 +306,9 @@
 		D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4D2765A13B00FF6E2C /* Localization */; };
 		D65D460527A9FE620019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D65D460627A9FEA00019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
+		D65D460027A9B09D0019301C /* MessageReadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D45FF27A9B09D0019301C /* MessageReadView.swift */; };
+		D65D460227A9B1400019301C /* MessageStatusContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460127A9B1400019301C /* MessageStatusContainer.swift */; };
+		D65D460427A9B1960019301C /* MessageReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460327A9B1960019301C /* MessageReplyView.swift */; };
 		D660C4C92793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
 		D660C4CA2793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
 		D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
@@ -835,6 +838,9 @@
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		D65D45FF27A9B09D0019301C /* MessageReadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReadView.swift; sourceTree = "<group>"; };
+		D65D460127A9B1400019301C /* MessageStatusContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStatusContainer.swift; sourceTree = "<group>"; };
+		D65D460327A9B1960019301C /* MessageReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReplyView.swift; sourceTree = "<group>"; };
 		D660C4C82793626700221F76 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		D6617CE926741C4500439C06 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
@@ -1998,8 +2004,11 @@
 		D6E9746C2757353800D95F08 /* Status View */ = {
 			isa = PBXGroup;
 			children = (
-				D6E9746D2757356C00D95F08 /* MessageStatusView.swift */,
 				D68072EA2730462F004657E7 /* MessageDetailView.swift */,
+				D65D45FF27A9B09D0019301C /* MessageReadView.swift */,
+				D65D460127A9B1400019301C /* MessageStatusContainer.swift */,
+				D6E9746D2757356C00D95F08 /* MessageStatusView.swift */,
+				D65D460327A9B1960019301C /* MessageReplyView.swift */,
 			);
 			path = "Status View";
 			sourceTree = "<group>";
@@ -2536,6 +2545,7 @@
 				D6DEC40A27A319DB0072D9D0 /* CircleItem.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
+				D65D460427A9B1960019301C /* MessageReplyView.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationListCoordinator.swift in Sources */,
 				D6B95AEF272324AE00FBE66A /* ConnectionStore.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
@@ -2687,6 +2697,7 @@
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
+				D65D460227A9B1400019301C /* MessageStatusContainer.swift in Sources */,
 				8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
@@ -2701,6 +2712,7 @@
 				D6CC148B276BFDC1005F617F /* Color+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ThreadViewController.swift in Sources */,
+				D65D460027A9B09D0019301C /* MessageReadView.swift in Sources */,
 				D6B95AF3272324BD00FBE66A /* UserStore.swift in Sources */,
 				D64C323E270391AE004BC1BD /* Contact.swift in Sources */,
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,

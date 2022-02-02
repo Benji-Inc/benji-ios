@@ -19,7 +19,6 @@ class ThreadCollectionView: CollectionView {
 
         self.threadLayout.messageContentState = .thread 
         self.showsVerticalScrollIndicator = false
-        self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true
         self.decelerationRate = .fast
     }

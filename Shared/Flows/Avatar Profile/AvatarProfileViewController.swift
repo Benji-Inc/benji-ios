@@ -13,9 +13,9 @@ class AvatarProfileViewController: ViewController {
 
     private let avatarView = BorderedAvatarView()
     private let nameLabel = ThemeLabel(font: .mediumBold)
+    private let focusLabel = ThemeLabel(font: .regular)
     private let vibrancyView = VibrancyView()
 
-    private let chatButton = ThemeButton()
     private let avatar: Avatar
 
     init(with avatar: Avatar) {
@@ -34,12 +34,13 @@ class AvatarProfileViewController: ViewController {
         self.view.addSubview(self.vibrancyView)
         self.view.addSubview(self.avatarView)
         self.view.addSubview(self.nameLabel)
-        self.view.addSubview(self.chatButton)
+        self.view.addSubview(self.focusLabel)
 
         if let objectId = self.avatar.userObjectId {
             Task {
                 let user = await UserStore.shared.findUser(with: objectId)
                 self.nameLabel.setText(user?.fullName)
+                self.focusLabel.setText(user?.focusStatus?.rawValue)
                 self.view.layoutNow()
             }.add(to: self.taskPool)
         }
@@ -62,5 +63,9 @@ class AvatarProfileViewController: ViewController {
         self.nameLabel.setSize(withWidth: maxWidth)
         self.nameLabel.centerOnX()
         self.nameLabel.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
+        
+        self.focusLabel.setSize(withWidth: maxWidth)
+        self.focusLabel.centerOnX()
+        self.focusLabel.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)
     }
 }

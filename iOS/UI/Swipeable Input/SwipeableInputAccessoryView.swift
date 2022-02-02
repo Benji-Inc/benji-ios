@@ -221,11 +221,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         switch self.currentMessageKind {
         case .text(_):
-            if let types = self.getDataTypes(from: text), let first = types.first, let url = first.url {
-                self.currentMessageKind = .link(url)
-            } else {
+//            if let types = self.getDataTypes(from: text), let first = types.first, let url = first.url {
+//                self.currentMessageKind = .link(url)
+//            } else {
                 self.currentMessageKind = .text(text)
-            }
+ //           }
         case .photo(photo: let photo, _):
             self.currentMessageKind = .photo(photo: photo, body: text)
         case .video(video: let video, _):

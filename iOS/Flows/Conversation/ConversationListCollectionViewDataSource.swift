@@ -120,14 +120,17 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         }
         updatedItems.append(contentsOf: conversationListController.conversations.asConversationCollectionItems)
         
-        if !isRelease {
-            if !User.isOnWaitlist {
-                // Don't allow waitlist users to create new conversations.
-                updatedItems.append(.newConversation)
-            } else {
-                updatedItems.append(.upsell)
-            }
-        }
+//        if !isRelease {
+//            if !User.isOnWaitlist {
+//                // Don't allow waitlist users to create new conversations.
+//                updatedItems.append(.newConversation)
+//            }
+//            else {
+//                updatedItems.append(.upsell)
+//            }
+//        }
+        
+        updatedItems.append(.newConversation)
       
         snapshot.setItems(updatedItems, in: sectionID)
 

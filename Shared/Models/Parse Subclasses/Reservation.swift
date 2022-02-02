@@ -106,7 +106,7 @@ extension Reservation: UIActivityItemSource {
 
     var message: String? {
         guard let link = self.link else { return nil }
-        return "RSVP code: \(String(optional: self.objectId))\nClaim your RSVP by tapping 👇\n\(link)"
+        return "RSVP code: \(String(optional: self.objectId))\nClaim your RSVP by tapping 👇\n\(link), and then entering the code."
     }
 
     var reminderMessage: String? {
@@ -128,10 +128,11 @@ extension Reservation: UIActivityItemSource {
             let _: Void = try await withCheckedThrowingContinuation { continuation in
                 let metadataProvider = LPMetadataProvider()
 
-                let domainURL = "https://joinjibber.com"
-                if let objectId = self.objectId {
-                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
-                }
+                let domainURL = "https://testflight.apple.com/join/YnJTwvSL"
+//                let domainURL = "https://joinjibber.com"
+//                if let objectId = self.objectId {
+//                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
+//                }
 
                 if let url = URL(string: domainURL) {
                     metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
