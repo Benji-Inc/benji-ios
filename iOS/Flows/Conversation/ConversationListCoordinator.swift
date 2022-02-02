@@ -76,7 +76,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         Task {
             await self.checkForPermissions()
-        }
+        }.add(to: self.taskPool)
     }
 
     func handle(deeplink: DeepLinkable) {

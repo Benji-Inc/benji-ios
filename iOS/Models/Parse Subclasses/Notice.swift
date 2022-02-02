@@ -23,6 +23,7 @@ final class Notice: PFObject, PFSubclassing {
         case connectionRequest = "CONNECTION_REQUEST"
         case connectionConfirmed = "CONNECTION_CONFIRMED"
         case messageRead = "MESSAGE_READ"
+        case unreadMessages = "UNREAD_MESSAGES"
         case system
         case rsvps
     }
@@ -48,6 +49,10 @@ final class Notice: PFObject, PFSubclassing {
 
     var body: String? {
         get { self.getObject(for: .body) }
+    }
+    
+    var unreadMessageIds: [String] {
+        get { self.attributes?["unreadMessageIds"] as? [String] ?? [] }
     }
 }
 
