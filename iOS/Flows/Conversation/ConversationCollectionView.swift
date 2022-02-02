@@ -24,7 +24,6 @@ class ConversationCollectionView: CollectionView {
         self.conversationLayout.messageContentState = .collapsed
 
         self.showsVerticalScrollIndicator = false
-        self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true
         self.decelerationRate = .fast
     }

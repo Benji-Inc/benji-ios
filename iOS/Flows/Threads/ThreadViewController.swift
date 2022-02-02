@@ -99,6 +99,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.view.addSubview(self.pullView)
 
         self.collectionView.clipsToBounds = false
+        self.configureCollectionLayout(for: .read)
 
         self.dismissInteractionController.handleCollectionViewPan(for: self.collectionView)
         self.dismissInteractionController.handlePan(for: self.parentMessageView)
@@ -158,20 +159,31 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     
     func updateUI(for state: ConversationUIState) {
         guard !self.isBeingOpen && !self.isBeingClosed else { return }
-                        
+
+        self.configureCollectionLayout(for: state)
+
         Task {
-            await self.set(state: state)
-        }.add(to: self.taskPool)
+            await self.dataSource.reconfigureAllItems()
+            if state == .write {
+                let maxOffset = self.threadCollectionView.threadLayout.maxZPosition
+                self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            }
+        }
     }
-    
-    @MainActor
-    private func set(state: ConversationUIState) async {
-        self.threadCollectionView.threadLayout.prepareForTransition(to: self.threadCollectionView.threadLayout)
-        self.scrollToLastItemOnLayout = true
-        await UIView.awaitAnimation(with: .standard, animations: {
-            self.threadCollectionView.threadLayout.finalizeLayoutTransition()
-            self.view.layoutNow()
-        })
+
+    private func configureCollectionLayout(for state: ConversationUIState) {
+        let threadLayout = self.threadCollectionView.threadLayout
+        threadLayout.itemHeight
+        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
+
+        switch state {
+        case .read:
+            threadLayout.secondSectionBottomY = 350
+            threadLayout.spacingKeyPoints = [0, 40, 74, 86]
+        case .write:
+            threadLayout.secondSectionBottomY = 300
+            threadLayout.spacingKeyPoints = [0, 8, 16, 20]
+        }
     }
 
     // MARK: Data Loading
