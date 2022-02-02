@@ -78,7 +78,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
         attributes.detailAlpha = detailAlpha
-        attributes.messageContentAlpha = self.layoutForDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
         attributes.state = self.messageContentState
 
         return attributes
