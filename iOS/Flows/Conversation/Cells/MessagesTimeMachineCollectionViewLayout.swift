@@ -28,14 +28,32 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     
     var messageContentState: MessageContentView.State = .collapsed
     
+    override func prepare() {
+        super.prepare()
+        
+        self.register(CenterDectorationView.self, forDecorationViewOfKind: "decoration")
+    }
+    
     override func layoutAttributesForDecorationView(ofKind elementKind: String,
                                                     at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attributes = super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
         switch elementKind {
         case "decoration":
-            return nil
+            attributes?.bounds.size.height = 20
+            attributes?.center = self.getCenterOfItems()
+            return attributes
         default:
-            return nil
+            return attributes
         }
+    }
+    
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        var all = super.layoutAttributesForElements(in: rect)
+        if let decorationAttributes = self.layoutAttributesForDecorationView(ofKind: "decoration", at: IndexPath(item: 0, section: 0)) {
+            all?.append(decorationAttributes)
+        }
+        
+        return all
     }
 
     override func layoutAttributesForItemAt(indexPath: IndexPath,

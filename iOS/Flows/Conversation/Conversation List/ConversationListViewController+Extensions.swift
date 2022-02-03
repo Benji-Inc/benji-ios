@@ -13,7 +13,7 @@ extension ConversationListViewController {
 
     func setupInputHandlers() {
         
-        self.collectionView.didSelect { [unowned self] in
+        self.collectionView.backView.didSelect { [unowned self] in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
             } else {

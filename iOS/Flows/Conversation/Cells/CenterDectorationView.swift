@@ -27,6 +27,7 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.set(backgroundColor: .red)
         
         self.imageView.squaredSize = self.height
         self.imageView.centerOnXAndY()

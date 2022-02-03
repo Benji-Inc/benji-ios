@@ -80,7 +80,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         }
         
         Task {
-            await Task.sleep(seconds: 0.1)
+            await Task.sleep(seconds: 0.2)
             self.welcomeCollectionView.timeMachineLayout.prepare()
             let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
             self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
@@ -153,7 +153,11 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             var benjiMessages: [MessageSequenceItem] = []
             var otherMessages: [MessageSequenceItem] = []
             
-            conversationController.messages.forEach({ message in
+            let allMessages = conversationController.messages.filter { message in
+                return !message.isDeleted
+            }
+            
+            allMessages.forEach({ message in
                 if message.authorId == PFConfig.current().adminUserId {
                     benjiMessages.append(MessageSequenceItem.message(cid: cid,
                                                                      messageID: message.id,
