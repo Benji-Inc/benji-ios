@@ -60,6 +60,9 @@ class MessageReadView: MessageStatusContainer {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        self.imageView.squaredSize = 15
+        self.label.height = 20
+        
         switch self.state {
         case .initial:
             self.width = 0
@@ -74,12 +77,10 @@ class MessageReadView: MessageStatusContainer {
         case .delivered, .readCollapsed(_):
             // no text, image
             self.label.width = 0
-            self.imageView.squaredSize = 15
-            self.imageView.centerOnXAndY()
+            self.imageView.centerOnY()
+            self.imageView.center.x = self.halfWidth
             self.width = self.minWidth
         case .read(_):
-            self.imageView.squaredSize = 15
-            
             let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
             self.label.setSize(withWidth: maxWidth)
             self.label.pin(.left, offset: self.padding)
@@ -178,6 +179,8 @@ class MessageReadView: MessageStatusContainer {
         }
 
         self.label.text = nil
+        self.label.alpha = 0
+        self.imageView.alpha = 0
 
         self.progressView.alpha = 0
         self.progressView.width = 0
@@ -185,23 +188,31 @@ class MessageReadView: MessageStatusContainer {
     
     private func handleSyncing() {
         self.label.setText("Syncing")
+        self.label.alpha = 1.0
+        self.imageView.alpha = 0.0
         self.layoutNow()
     }
     
     private func handleSending() {
         self.label.setText("Sending")
+        self.label.alpha = 1.0
+        self.imageView.alpha = 0.0
         self.layoutNow()
     }
     
     private func handleDelivered() {
         self.label.setText("")
         self.imageView.image = UIImage(named: "checkmark")
+        self.label.alpha = 0.0
+        self.imageView.alpha = 1.0
         self.layoutNow()
     }
     
     private func handleReading(with message: Message) {
         self.label.setText("Reading")
         self.imageView.image = UIImage(named: "checkmark")
+        self.label.alpha = 1.0
+        self.imageView.alpha = 1.0
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.layoutNow()
         } completion: { _ in
@@ -245,17 +256,23 @@ class MessageReadView: MessageStatusContainer {
     private func handleReadCollapsed(with message: Message) {
         self.label.setText("")
         self.imageView.image = UIImage(named: "checkmark-double")
+        self.label.alpha = 0.0
+        self.imageView.alpha = 1.0
         self.layoutNow()
     }
     
     private func handleRead(with text: String) {
         self.label.setText(text)
         self.imageView.image = UIImage(named: "checkmark-double")
+        self.label.alpha = 1.0
+        self.imageView.alpha = 1.0
         self.layoutNow()
     }
     
     private func handleError(with text: String) {
         self.label.setText(text)
+        self.label.alpha = 1.0
+        self.imageView.alpha = 0.0
         self.layoutNow()
     }
 }
