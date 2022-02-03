@@ -51,6 +51,10 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     private let investmentUpsellCellRegistration
     = ConversationListCollectionViewDataSource.createInvestmentUpsellCellRegistration()
     
+    // Decoration registration
+    private let centerDecorationViewRegistration
+    = ConversationListCollectionViewDataSource.createInvestmentUpsellCellRegistration()
+    
     var uiState: ConversationUIState = .read
 
     override func dequeueCell(with collectionView: UICollectionView,
@@ -169,6 +173,9 @@ extension ConversationListCollectionViewDataSource {
     
     typealias InvestmentUpsellCellRegistration
     = UICollectionView.CellRegistration<InvestmentUpsellCell, ConversationListCollectionViewDataSource>
+    
+    typealias CenterDecorationViewRegistration
+    = UICollectionView.SupplementaryRegistration<CenterDectorationView>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
@@ -204,6 +211,12 @@ extension ConversationListCollectionViewDataSource {
     static func createInvestmentUpsellCellRegistration() -> InvestmentUpsellCellRegistration {
         return InvestmentUpsellCellRegistration { cell, indexPath, item in
             cell.set(state: item.uiState)
+        }
+    }
+    
+    static func createCenterDecorationViewRegistration() -> CenterDecorationViewRegistration {
+        return CenterDecorationViewRegistration(elementKind: "decoration") { view, kind, indexPath  in
+
         }
     }
 }

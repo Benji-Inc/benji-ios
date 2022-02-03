@@ -86,6 +86,7 @@
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
+		D6129FA327AC5F510058811C /* CenterDectorationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA227AC5F510058811C /* CenterDectorationView.swift */; };
 		D61316B0273C859700DC782B /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
 		D61316B1273C85A200DC782B /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D61316B2273C85D000DC782B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
@@ -746,6 +747,7 @@
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
 		D6129F9D27AB21720058811C /* UpsellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsellContentView.swift; sourceTree = "<group>"; };
 		D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestmentUpsellCell.swift; sourceTree = "<group>"; };
+		D6129FA227AC5F510058811C /* CenterDectorationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterDectorationView.swift; sourceTree = "<group>"; };
 		D61553492745737300B08459 /* ThreadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCoordinator.swift; sourceTree = "<group>"; };
 		D615534B27458CEA00B08459 /* MessageSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequence.swift; sourceTree = "<group>"; };
 		D615534D2745C1C900B08459 /* MessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentView.swift; sourceTree = "<group>"; };
@@ -1407,6 +1409,7 @@
 				8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */,
 				804E5859276D484900700923 /* PlaceholderMessageCell.swift */,
 				806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */,
+				D6129FA227AC5F510058811C /* CenterDectorationView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2441,6 +2444,7 @@
 				D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */,
 				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
+				D6129FA327AC5F510058811C /* CenterDectorationView.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D687595C2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */,

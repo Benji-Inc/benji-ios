@@ -334,9 +334,11 @@ extension ThreadViewController {
             // TODO
         }
 
-        self.collectionView.onDoubleTap { [unowned self] in
+        self.collectionView.didSelect { [unowned self] in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
+            } else {
+                self.messageInputAccessoryView.textView.becomeFirstResponder()
             }
         }
 

@@ -27,6 +27,16 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
     
     var messageContentState: MessageContentView.State = .collapsed
+    
+    override func layoutAttributesForDecorationView(ofKind elementKind: String,
+                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        switch elementKind {
+        case "decoration":
+            return nil
+        default:
+            return nil
+        }
+    }
 
     override func layoutAttributesForItemAt(indexPath: IndexPath,
                                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
@@ -166,6 +176,13 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                 break
             }
         }
+    }
+    
+    func getCenterOfItems() -> CGPoint {
+        let topCenter = self.getItemCenterPoint(in: 0, withYOffset: 0, scale: 1.0)
+        let bottomCenter = self.getItemCenterPoint(in: 1, withYOffset: 0, scale: 1.0)
+        let center = CGPoint(x: topCenter.x, y: (topCenter.y + bottomCenter.y) / 2)
+        return center
     }
 
     override func finalizeCollectionViewUpdates() {
