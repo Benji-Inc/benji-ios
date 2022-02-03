@@ -14,7 +14,7 @@ class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
     let detailView = newMessageDetailView()
-    lazy var detailVC = UIHostingController(rootView: self.detailView)
+    lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
     override init(frame: CGRect) {
@@ -34,7 +34,7 @@ class MessageCell: UICollectionViewCell {
     override func didMoveToWindow() {
         super.didMoveToWindow()
 
-        self.parentViewController()?.addChild(viewController: self.detailVC, toView: self)
+        self.parentViewController()?.addChild(viewController: self.detailVC, toView: self.contentView)
     }
 
     override func layoutSubviews() {
