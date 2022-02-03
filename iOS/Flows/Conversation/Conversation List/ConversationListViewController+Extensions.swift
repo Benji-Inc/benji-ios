@@ -12,14 +12,6 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
-        
-        self.collectionView.backView.didSelect { [unowned self] in
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
-            } else {
-                self.messageInputAccessoryView.textView.becomeFirstResponder()
-            }
-        }
 
         self.dataSource.handleSelectedMessage = { [unowned self] (cid, messageID, view) in
             self.selectedMessageView = view
@@ -36,6 +28,14 @@ extension ConversationListViewController {
         
         self.dataSource.handleTopicTapped = { [unowned self] _ in
             self.headerVC.didTapUpdateTopic?()
+        }
+        
+        self.dataSource.handleCollectionViewTapped = {
+            if self.messageInputAccessoryView.textView.isFirstResponder {
+                self.messageInputAccessoryView.textView.resignFirstResponder()
+            } else {
+                self.messageInputAccessoryView.textView.becomeFirstResponder()
+            }
         }
     }
 
