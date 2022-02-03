@@ -44,22 +44,29 @@ class ExpandingTextView: TextView {
     }
 
     func setPlaceholder(for avatars: [Avatar], isReply: Bool) {
-        var placeholderText = isReply ? "Reply to" : "Message "
+        var placeholderText = isReply ? "Reply to " : "Message "
 
         if avatars.isEmpty {
             placeholderText = isReply ? "Add Reply" : "Message Someone"
         }
-
-        for (index, avatar) in avatars.enumerated() {
-            if index < avatars.count - 1 {
-                placeholderText.append(String("\(avatar.givenName)"))
-            } else if index == avatars.count - 1 && avatars.count == 2 {
-                placeholderText.append(String(" and \(avatar.givenName)"))
-            } else if index == avatars.count - 1 && avatars.count > 2 {
-                placeholderText.append(String(", and \(avatar.givenName)"))
-            } else {
+        
+        switch avatars.count {
+        case 1:
+            if let avatar = avatars[safe: 0] {
                 placeholderText.append(avatar.givenName)
             }
+        case 2:
+            if let avatar1 = avatars[safe: 0], let avatar2 = avatars[safe: 1] {
+                placeholderText.append("\(avatar1.givenName) and \(avatar2.givenName)")
+            }
+        case 3:
+            if let avatar1 = avatars[safe: 0],
+               let avatar2 = avatars[safe: 1],
+               let avatar3 = avatars[safe: 2] {
+                placeholderText.append("\(avatar1.givenName), \(avatar2.givenName), and \(avatar3.givenName)")
+            }
+        default:
+            placeholderText.append("\(avatars.count) people")
         }
 
         self.initialPlaceholder = placeholderText
