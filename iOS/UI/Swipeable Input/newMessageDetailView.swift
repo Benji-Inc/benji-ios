@@ -25,10 +25,21 @@ struct newMessageDetailView: View {
     func configure(with message: Messageable) {
         self.message = message
     }
+
+//    func configure(with message: Messageable) {
+//        self.emotionView.configure(for: message)
+//        self.statusView.configure(for: message)
+//
+//    }
+//
+//    func update(with message: Messageable) {
+//        self.emotionView.configure(for: message)
+//        self.statusView.configure(for: message)
+//    }
 }
 
 struct newMessageDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        newMessageDetailView().preferredColorScheme(.light)
+        newMessageDetailView().preferredColorScheme(.dark)
     }
 }

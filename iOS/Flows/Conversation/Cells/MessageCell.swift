@@ -13,7 +13,8 @@ import SwiftUI
 class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
-    let detailView = MessageDetailView()
+    let detailView = newMessageDetailView()
+    lazy var detailVC = UIHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
     override init(frame: CGRect) {
@@ -28,29 +29,28 @@ class MessageCell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
-        self.contentView.addSubview(self.detailView)
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        //let host = UIHostingController(rootView: ())
-        //self.parentViewController()?.addChild(viewController: host, toView: <#T##UIView?#>)
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+
+        self.parentViewController()?.addChild(viewController: self.detailVC, toView: self)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.detailView.expandToSuperviewWidth()
+        self.detailVC.view.expandToSuperviewWidth()
         self.content.expandToSuperviewWidth()
         
-        self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
+        self.content.height
+        = self.bounds.height - (self.detailVC.view.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
 
         if self.content.bubbleView.orientation == .down {
             self.content.pin(.top)
-            self.detailView.pin(.bottom)
+            self.detailVC.view.pin(.bottom)
         } else if self.content.bubbleView.orientation == .up {
-            self.detailView.pin(.top)
+            self.detailVC.view.pin(.top)
             self.content.pin(.bottom)
         }
     }
@@ -61,7 +61,7 @@ class MessageCell: UICollectionViewCell {
             self.detailView.configure(with: message)
         }
         
-        self.detailView.isVisible = self.shouldShowDetailBar
+        self.detailVC.view.isVisible = self.shouldShowDetailBar
         self.setNeedsLayout()
     }
 
@@ -83,10 +83,10 @@ class MessageCell: UICollectionViewCell {
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
-        self.detailView.height = MessageDetailView.height
-        self.detailView.alpha = messageLayoutAttributes.detailAlpha
-        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-        self.detailView.handleTopMessage(isAtTop: isAtTop)
+        self.detailVC.view.height = MessageDetailView.height
+        self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
+//        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+//        self.detailView.handleTopMessage(isAtTop: isAtTop)
     }
 }
 
