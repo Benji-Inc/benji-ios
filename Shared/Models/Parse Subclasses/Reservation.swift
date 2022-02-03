@@ -129,6 +129,7 @@ extension Reservation: UIActivityItemSource {
                 let metadataProvider = LPMetadataProvider()
 
                 let domainURL = "https://testflight.apple.com/join/YnJTwvSL"
+                self.link = domainURL
 //                let domainURL = "https://joinjibber.com"
 //                if let objectId = self.objectId {
 //                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
