@@ -66,7 +66,9 @@ class ExpandingTextView: TextView {
                 placeholderText.append("\(avatar1.givenName), \(avatar2.givenName), and \(avatar3.givenName)")
             }
         default:
-            placeholderText.append("\(avatars.count) people")
+            if !avatars.isEmpty {
+                placeholderText.append("\(avatars.count) people")
+            }
         }
 
         self.initialPlaceholder = placeholderText
