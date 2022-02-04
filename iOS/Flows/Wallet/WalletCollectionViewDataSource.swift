@@ -43,6 +43,7 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         guard kind == UICollectionView.elementKindSectionHeader else { return nil }
         let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+        header.configure(with: self.itemIdentifiers(in: .wallet))
         return header
     }
 }
