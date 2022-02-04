@@ -9,7 +9,7 @@
 import Foundation
 
 class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettable {
-    
+    static let kind = "decoration"
     let imageView = UIImageView()
     
     override init(frame: CGRect) {
