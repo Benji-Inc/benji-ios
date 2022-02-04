@@ -12,6 +12,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     
     private let backgroundView = BackgroundGradientView()
     
+    
     init() {
         super.init(with: WelcomeCollectionView())
     }
@@ -24,6 +25,10 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         fatalError("init(collectionView:) has not been implemented")
     }
     
+    override func loadView() {
+        self.view = self.backgroundView
+    }
+    
     override func initializeViews() {
         super.initializeViews()
         
@@ -31,22 +36,14 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
-        
-        self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         self.loadInitialData()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.backgroundView.expandToSuperviewSize()
     }
 
     // MARK: Data Loading
