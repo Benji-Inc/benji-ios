@@ -13,6 +13,7 @@ class MessagePreviewViewController: ViewController {
     let message: Messageable
 
     private let content = MessageContentView()
+    private let readView = MessageReadView()
 
     init(with message: Messageable) {
         self.message = message
@@ -29,6 +30,7 @@ class MessagePreviewViewController: ViewController {
         guard let window = UIWindow.topWindow() else { return }
 
         self.view.addSubview(self.content)
+        self.view.addSubview(self.readView)
 
         self.content.state = .expanded
         self.content.configureBackground(color: ThemeColor.L1.color,
@@ -38,6 +40,10 @@ class MessagePreviewViewController: ViewController {
                                          showBubbleTail: false,
                                          tailOrientation: .up)
         self.content.configure(with: self.message)
+        
+        if let msg = self.message as? Message {
+            self.readView.configure(for: msg)
+        }
 
         let maxWidth = Theme.getPaddedWidth(with: window.width)
         var size = self.content.getSize(for: .expanded, with: maxWidth)
@@ -49,8 +55,10 @@ class MessagePreviewViewController: ViewController {
         if size.height < MessageContentView.bubbleHeight {
             size.height = MessageContentView.bubbleHeight
         }
+        
+        size.height += 25 + Theme.ContentOffset.standard.value.doubled
 
-        self.content.size = size
+        self.content.size.width = size.width
 
         self.preferredContentSize = size 
     }
@@ -58,7 +66,15 @@ class MessagePreviewViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        guard let window = UIWindow.topWindow() else { return }
+
+        self.content.size = self.content.getSize(for: .expanded, with: self.view.width)
+        self.content.width = self.view.width
         self.content.centerOnX()
-        self.content.pin(.bottom)
+        self.content.pin(.top)
+        
+        self.readView.height = 25
+        self.readView.match(.top, to: .bottom, of: self.content, offset: .standard)
+        self.readView.pin(.left, offset: .standard)
     }
 }

@@ -31,6 +31,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleSelectedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     var handleTopicTapped: ((ConversationId) -> Void)?
+    var handleCollectionViewTapped: CompletionOptional = nil 
     
     var handleLoadMoreMessages: CompletionOptional = nil
     var handleAddPeopleSelected: CompletionOptional = nil
@@ -72,6 +73,9 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             }
             conversationCell.handleTopicTapped = { [unowned self] cid in
                 self.handleTopicTapped?(cid)
+            }
+            conversationCell.handleCollectionViewTapped = { [unowned self] in
+                self.handleCollectionViewTapped?()
             }
 
             return conversationCell

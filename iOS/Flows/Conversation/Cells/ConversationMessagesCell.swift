@@ -24,6 +24,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     var handleTopicTapped: ((ConversationId) -> Void)?
+    var handleCollectionViewTapped: CompletionOptional = nil 
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
@@ -70,6 +71,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.collectionView.delegate = self
 
         self.contentView.addSubview(self.collectionView)
+        
+        self.collectionView.backView.didSelect { [unowned self] in
+            self.handleCollectionViewTapped?()
+        }
 
         self.dataSource.handleTappedMessage = { [unowned self] cid, messageID, content in
             self.handleTappedMessage?(cid, messageID, content)
@@ -160,6 +165,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             self.collectionLayout.secondSectionBottomY = 260
             self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
+        
+        self.collectionLayout.uiState = state
     }
 
     override func prepareForReuse() {
