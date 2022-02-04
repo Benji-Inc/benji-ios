@@ -83,7 +83,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             await Task.sleep(seconds: 0.2)
             self.welcomeCollectionView.timeMachineLayout.prepare()
             let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
             self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
         }.add(to: self.taskPool)
     }
