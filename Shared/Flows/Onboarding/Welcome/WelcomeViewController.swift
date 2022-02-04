@@ -127,55 +127,53 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
         var data: [MessageSequenceSection: [MessageSequenceItem]] = [:]
         
-//        do {
-//            if !ChatClient.isConnected {
-//                try await ChatClient.connectAnonymousUser()
-//            }
-//            
-//            guard let conversationId = PFConfig.current().welcomeConversationCID else { return data }
-//            logDebug(conversationId)
-//            let cid = ChannelId(type: .custom("onboarding"), id: conversationId)
-//            let conversationController
-//            = ChatClient.shared.channelController(for: cid,
-//                                                     messageOrdering: .topToBottom)
-//            
-//            logDebug(cid.description)
-//            self.conversationController = conversationController
-//
-//            // Ensure that we've synchronized the conversation controller with the backend.
-//            if conversationController.channel.isNil {
-//                try await conversationController.synchronize()
-//            } else if let conversation = conversationController.channel, conversation.messages.isEmpty {
-//                try await conversationController.synchronize()
-//            }
-//            
-//            try await conversationController.loadPreviousMessages()
-//
-//            // Put Benji's messages at the top, and all other messages below.
-//            var benjiMessages: [MessageSequenceItem] = []
-//            var otherMessages: [MessageSequenceItem] = []
-//            
-//            let allMessages = conversationController.messages.filter { message in
-//                return !message.isDeleted
-//            }
-//            
-//            allMessages.forEach({ message in
-//                if message.authorId == PFConfig.current().adminUserId {
-//                    benjiMessages.append(MessageSequenceItem.message(cid: cid,
-//                                                                     messageID: message.id,
-//                                                                     showDetail: false))
-//                } else {
-//                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID:
-//                                                                        message.id,
-//                                                                     showDetail: false))
-//                }
-//            })
-//            
-//            data[.topMessages] = benjiMessages.reversed()
-//            data[.bottomMessages] = otherMessages.reversed()
-//        } catch {
-//            logError(error)
-//        }
+        do {
+            if !ChatClient.isConnected {
+                try await ChatClient.connectAnonymousUser()
+            }
+
+            guard let conversationId = PFConfig.current().welcomeConversationCID else { return data }
+            let cid = ChannelId(type: .custom("onboarding"), id: conversationId)
+            let conversationController
+            = ChatClient.shared.channelController(for: cid,
+                                                     messageOrdering: .topToBottom)
+
+            self.conversationController = conversationController
+
+            // Ensure that we've synchronized the conversation controller with the backend.
+            if conversationController.channel.isNil {
+                try await conversationController.synchronize()
+            } else if let conversation = conversationController.channel, conversation.messages.isEmpty {
+                try await conversationController.synchronize()
+            }
+
+            try await conversationController.loadPreviousMessages()
+
+            // Put Benji's messages at the top, and all other messages below.
+            var benjiMessages: [MessageSequenceItem] = []
+            var otherMessages: [MessageSequenceItem] = []
+
+            let allMessages = conversationController.messages.filter { message in
+                return !message.isDeleted
+            }
+
+            allMessages.forEach({ message in
+                if message.authorId == PFConfig.current().adminUserId {
+                    benjiMessages.append(MessageSequenceItem.message(cid: cid,
+                                                                     messageID: message.id,
+                                                                     showDetail: false))
+                } else {
+                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID:
+                                                                        message.id,
+                                                                     showDetail: false))
+                }
+            })
+
+            data[.topMessages] = benjiMessages.reversed()
+            data[.bottomMessages] = otherMessages.reversed()
+        } catch {
+            logError(error)
+        }
         
         return data
     }

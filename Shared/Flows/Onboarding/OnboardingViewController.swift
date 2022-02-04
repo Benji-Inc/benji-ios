@@ -76,7 +76,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         
         self.welcomeVC.didLoadConversation = { [unowned self] conversation in
             Task {
-                try await self.updateInvitor(userId: conversation.authorId)
+                guard let adminId = PFConfig.current().adminUserId else { return }
+                try await self.updateInvitor(userId: adminId)
             }
         }
 
