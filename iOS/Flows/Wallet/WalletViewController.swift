@@ -11,10 +11,6 @@ import Foundation
 class WalletViewController: DiffableCollectionViewController<WalletCollectionViewDataSource.SectionType, WalletCollectionViewDataSource.ItemType, WalletCollectionViewDataSource> {
     
     private let backgroundView = BackgroundGradientView()
-
-    override func loadView() {
-        self.view = self.backgroundView
-    }
     
     init() {
         super.init(with: WelcomeCollectionView())
@@ -37,6 +33,20 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
         }
+        
+        self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.loadInitialData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.backgroundView.expandToSuperviewSize()
     }
 
     // MARK: Data Loading
@@ -48,22 +58,12 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     override func retrieveDataForSnapshot() async -> [WalletCollectionViewDataSource.SectionType: [WalletCollectionViewDataSource.ItemType]] {
 
         var data: [WalletCollectionViewDataSource.SectionType: [WalletCollectionViewDataSource.ItemType]] = [:]
-
-//        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
-//            return !connection.nonMeUser.isNil
-//        }), let _ = try? await connections.asyncMap({ connection in
-//            return try await connection.nonMeUser!.retrieveDataIfNeeded()
-//        }) {
-//            let connectedPeople = connections.map { connection in
-//                return Person(withConnection: connection)
-//            }
-//
-//            self.allPeople.append(contentsOf: connectedPeople)
-//        }
-//
-//        data[.people] = self.allPeople.compactMap({ person in
-//            return .person(person)
-//        })
+        
+        guard let transactions = try? await Transaction.fetchAll() else { return data }
+        
+        data[.wallet] = transactions.compactMap({ transaction in
+            return .transaction(transaction)
+        })
 
         return data
     }

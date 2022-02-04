@@ -12,7 +12,7 @@ import Parse
 enum TrasactionKey: String {
     case to
     case from
-    case description
+    case note
     case amount
 }
 
@@ -35,6 +35,32 @@ final class Transaction: PFObject, PFSubclassing {
     var amount: Int {
         get { self.getObject(for: .amount) ?? 0 }
     }
+    
+    var note: String {
+        get { self.getObject(for: .note) ?? "" }
+        set { self.setObject(for: .note, with: newValue) }
+    }
+    
+//    static func fetchAllTransactions() async throws -> [Transaction] {
+//        let objects: [Self] = try await withCheckedThrowingContinuation { continuation in
+//            guard let query = self.query() else {
+//                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
+//                return
+//            }
+//            query.whereKey("to", equalTo: User.current()!)
+//            query.findObjectsInBackground { objects, error in
+//                if let objs = objects as? [Self] {
+//                    continuation.resume(returning: objs)
+//                } else if let e = error {
+//                    continuation.resume(throwing: e)
+//                } else {
+//                    continuation.resume(returning: [])
+//                }
+//            }
+//        }
+//
+//        return objects
+//    }
 }
 
 extension Transaction: Objectable {

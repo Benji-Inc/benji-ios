@@ -13,6 +13,12 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: Transaction?
     
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.contentView.set(backgroundColor: .red)
+    }
+    
     func configure(with item: Transaction) {
         
     }
