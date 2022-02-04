@@ -14,12 +14,19 @@ struct newMessageDetailView: View {
     
     var body: some View {
         HStack {
+            Spacer().frame(width: Theme.ContentOffset.standard.value)
+
             newEmotionView(emotion: .bored)
-                .frame(alignment: .leading)
+                .background(.green)
+
             Spacer()
+
             newStatusView()
-                .frame(alignment: .trailing)
-        }
+                .background(.indigo)
+
+            Spacer()
+                .frame(width: Theme.ContentOffset.standard.value)
+        }.background(.red)
     }
     
     func configure(with message: Messageable) {

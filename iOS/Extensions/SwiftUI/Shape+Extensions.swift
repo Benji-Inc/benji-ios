@@ -18,4 +18,12 @@ extension Shape {
     func stroke(_ color: ThemeColor, alpha: CGFloat = 1.0, width: CGFloat = 1) -> some View {
         self.stroke(Color(color.color.withAlphaComponent(alpha)), lineWidth: width)
     }
+
+    func fill(color: ThemeColor,
+              strokeColor: ThemeColor,
+              lineWidth: CGFloat) -> some View {
+
+        self.stroke(Color(color.color), lineWidth: lineWidth)
+            .background(self.fill(Color(color.color)))
+    }
 }

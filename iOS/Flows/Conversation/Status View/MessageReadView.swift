@@ -101,8 +101,7 @@ class MessageReadView: MessageStatusContainer {
     
     @MainActor
     func configure(for message: Message) {
-        
-        /// Need to reset each time or will crash.
+        // Need to reset each time or will crash.
         self.state = .initial
 
         if message.isConsumed {
