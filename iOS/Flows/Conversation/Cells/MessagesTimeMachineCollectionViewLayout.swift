@@ -41,7 +41,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         
         self.decorationAttributes = DecorationViewLayoutAttributes.init(forDecorationViewOfKind: "decoration", with: IndexPath(item: 0, section: 0))
         self.decorationAttributes?.bounds.size = CGSize(width: self.collectionView?.width ?? .zero,
-                                                        height: 20)
+                                                        height: 14)
     }
     
     override func layoutAttributesForDecorationView(ofKind elementKind: String,
