@@ -192,4 +192,8 @@ extension ConversationListCoordinator {
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
     }
+    
+    func showWallet() {
+        
+    }
 }

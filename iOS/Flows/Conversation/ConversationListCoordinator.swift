@@ -49,6 +49,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                   messageId: messageId,
                                   startingReplyId: replyId)
         }
+        
+        self.conversationListVC.headerVC.jibImageView.didSelect { [unowned self] in
+            self.showWallet() 
+        }
 
         self.conversationListVC.headerVC.didTapAddPeople = { [unowned self] in
             self.presentPeoplePicker()

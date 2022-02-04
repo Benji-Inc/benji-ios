@@ -88,6 +88,12 @@
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
 		D6129FA327AC5F510058811C /* CenterDectorationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA227AC5F510058811C /* CenterDectorationView.swift */; };
 		D6129FA527ACAA4A0058811C /* DecorationViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA427ACAA4A0058811C /* DecorationViewLayoutAttributes.swift */; };
+		D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA727ADC5F50058811C /* WalletCoordinator.swift */; };
+		D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA927ADC6030058811C /* WalletViewController.swift */; };
+		D6129FAC27ADC61F0058811C /* WalletHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */; };
+		D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAD27ADC6410058811C /* TransactionCell.swift */; };
+		D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAF27ADC6530058811C /* WalletCollectionView.swift */; };
+		D6129FB227ADC6680058811C /* WalletCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */; };
 		D61316B0273C859700DC782B /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
 		D61316B1273C85A200DC782B /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D61316B2273C85D000DC782B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
@@ -750,6 +756,12 @@
 		D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestmentUpsellCell.swift; sourceTree = "<group>"; };
 		D6129FA227AC5F510058811C /* CenterDectorationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterDectorationView.swift; sourceTree = "<group>"; };
 		D6129FA427ACAA4A0058811C /* DecorationViewLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationViewLayoutAttributes.swift; sourceTree = "<group>"; };
+		D6129FA727ADC5F50058811C /* WalletCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCoordinator.swift; sourceTree = "<group>"; };
+		D6129FA927ADC6030058811C /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderView.swift; sourceTree = "<group>"; };
+		D6129FAD27ADC6410058811C /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
+		D6129FAF27ADC6530058811C /* WalletCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCollectionView.swift; sourceTree = "<group>"; };
+		D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D61553492745737300B08459 /* ThreadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCoordinator.swift; sourceTree = "<group>"; };
 		D615534B27458CEA00B08459 /* MessageSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequence.swift; sourceTree = "<group>"; };
 		D615534D2745C1C900B08459 /* MessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentView.swift; sourceTree = "<group>"; };
@@ -1191,6 +1203,19 @@
 				D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */,
 			);
 			path = Upsell;
+			sourceTree = "<group>";
+		};
+		D6129FA627ADC5E70058811C /* Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
+				D6129FAF27ADC6530058811C /* WalletCollectionView.swift */,
+				D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */,
+				D6129FA727ADC5F50058811C /* WalletCoordinator.swift */,
+				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
+				D6129FA927ADC6030058811C /* WalletViewController.swift */,
+			);
+			path = Wallet;
 			sourceTree = "<group>";
 		};
 		D61553602746E60400B08459 /* Transtion Types */ = {
@@ -1949,6 +1974,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D6129FA627ADC5E70058811C /* Wallet */,
 				D6DEC3EB27A1D9370072D9D0 /* Circles */,
 				D6432BF122D8282E0016001A /* Conversation */,
 				D687F3C426FE4BC6000E4734 /* People */,
@@ -2435,6 +2461,7 @@
 			files = (
 				D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */,
 				D6CC1482276BE808005F617F /* newEmotionView.swift in Sources */,
+				D6129FAC27ADC61F0058811C /* WalletHeaderView.swift in Sources */,
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
@@ -2445,6 +2472,7 @@
 				8015CA7726F3D907000F3C60 /* ConversationMessagesCell.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
 				D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */,
+				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
 				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				D6129FA327AC5F510058811C /* CenterDectorationView.swift in Sources */,
@@ -2552,6 +2580,7 @@
 				D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */,
 				80632D93278534E600D3A65B /* EventLogger.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
+				D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */,
 				D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */,
@@ -2634,6 +2663,7 @@
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
+				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6766C46274D50680046B449 /* MemberCell.swift in Sources */,
@@ -2725,6 +2755,7 @@
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
+				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D68670092762D9AB00AD83A3 /* DeliveryTypeView.swift in Sources */,
 				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
@@ -2742,6 +2773,7 @@
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
+				D6129FB227ADC6680058811C /* WalletCollectionViewDataSource.swift in Sources */,
 				805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */,
 				80616E3526EAD2F300C077BA /* DataController+Async.swift in Sources */,
 			);
