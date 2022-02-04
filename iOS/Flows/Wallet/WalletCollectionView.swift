@@ -7,3 +7,14 @@
 //
 
 import Foundation
+
+class WalletCollectionView: CollectionView {
+    
+    init() {
+        super.init(layout: WalletCollectionViewLayout())
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

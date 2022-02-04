@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+class WalletCoordinator: PresentableCoordinator<Void> {
+    
+    lazy var walletVC = WalletViewController()
+
+    override func toPresentable() -> DismissableVC {
+        return self.walletVC
+    }
+}

@@ -7,3 +7,13 @@
 //
 
 import Foundation
+
+class TransactionCell: CollectionViewManagerCell, ManageableCell {
+    typealias ItemType = Transaction
+    
+    var currentItem: Transaction?
+    
+    func configure(with item: Transaction) {
+        
+    }
+}

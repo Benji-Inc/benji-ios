@@ -94,6 +94,8 @@
 		D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAD27ADC6410058811C /* TransactionCell.swift */; };
 		D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAF27ADC6530058811C /* WalletCollectionView.swift */; };
 		D6129FB227ADC6680058811C /* WalletCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */; };
+		D6129FB427ADC72E0058811C /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FB327ADC72E0058811C /* Transaction.swift */; };
+		D6129FB627ADC9CF0058811C /* WalletCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */; };
 		D61316B0273C859700DC782B /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
 		D61316B1273C85A200DC782B /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D61316B2273C85D000DC782B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
@@ -762,6 +764,8 @@
 		D6129FAD27ADC6410058811C /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
 		D6129FAF27ADC6530058811C /* WalletCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCollectionView.swift; sourceTree = "<group>"; };
 		D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D6129FB327ADC72E0058811C /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D61553492745737300B08459 /* ThreadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCoordinator.swift; sourceTree = "<group>"; };
 		D615534B27458CEA00B08459 /* MessageSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequence.swift; sourceTree = "<group>"; };
 		D615534D2745C1C900B08459 /* MessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentView.swift; sourceTree = "<group>"; };
@@ -1211,6 +1215,7 @@
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
 				D6129FAF27ADC6530058811C /* WalletCollectionView.swift */,
 				D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */,
+				D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */,
 				D6129FA727ADC5F50058811C /* WalletCoordinator.swift */,
 				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
 				D6129FA927ADC6030058811C /* WalletViewController.swift */,
@@ -1524,6 +1529,7 @@
 			children = (
 				D6617CF426743DFE00439C06 /* Notice.swift */,
 				D678EC2326F530850071DB0D /* Circle.swift */,
+				D6129FB327ADC72E0058811C /* Transaction.swift */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -2605,6 +2611,7 @@
 				D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
+				D6129FB427ADC72E0058811C /* Transaction.swift in Sources */,
 				D6265ED0279F13A40020BD26 /* InvitationUpsellCell.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
@@ -2741,6 +2748,7 @@
 				D6CC1489276BFA89005F617F /* Shape+Extensions.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D605AC8427861C9A0015D800 /* BackgroundGradientView.swift in Sources */,
+				D6129FB627ADC9CF0058811C /* WalletCollectionViewLayout.swift in Sources */,
 				D6C20128276CFDAC0085B187 /* newMessageDetailView.swift in Sources */,
 				D62ED57C279CB96E00F7C08A /* ModalPhotoViewController.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
