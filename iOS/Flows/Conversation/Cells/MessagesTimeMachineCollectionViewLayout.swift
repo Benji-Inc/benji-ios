@@ -16,7 +16,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     override class var layoutAttributesClass: AnyClass {
         return ConversationMessageCellLayoutAttributes.self
     }
-
+    
     // MARK: - Layout Configuration
 
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
@@ -27,23 +27,36 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
     
     var messageContentState: MessageContentView.State = .collapsed
+    var decorationAttributes: DecorationViewLayoutAttributes?
+    var uiState: ConversationUIState = .read
     
+    override func initializeLayout() {
+        super.initializeLayout()
+        
+        self.register(CenterDectorationView.self, forDecorationViewOfKind: "decoration")
+    }
+        
     override func prepare() {
         super.prepare()
         
-        self.register(CenterDectorationView.self, forDecorationViewOfKind: "decoration")
+        self.decorationAttributes = DecorationViewLayoutAttributes.init(forDecorationViewOfKind: "decoration", with: IndexPath(item: 0, section: 0))
+        self.decorationAttributes?.bounds.size = CGSize(width: self.collectionView?.width ?? .zero,
+                                                        height: 20)
     }
     
     override func layoutAttributesForDecorationView(ofKind elementKind: String,
                                                     at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        let attributes = super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
         switch elementKind {
         case "decoration":
-            attributes?.bounds.size.height = 20
-            attributes?.center = self.getCenterOfItems()
-            return attributes
+            if self.sectionCount > 0 {
+                self.decorationAttributes?.center = self.getCenterOfItems()
+                self.decorationAttributes?.state = self.uiState
+                return self.decorationAttributes
+            } else {
+                return super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
+            }
         default:
-            return attributes
+            return super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
         }
     }
     

@@ -23,22 +23,34 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
     
     func initializeSubviews() {
         self.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.set(backgroundColor: .red)
         
-        self.imageView.squaredSize = self.height
+        self.imageView.squaredSize = 14
         self.imageView.centerOnXAndY()
     }
     
     func set(state: ConversationUIState) {
         switch state {
         case .read:
-            self.imageView.image = UIImage(named: "collapse")
+            self.imageView.image = UIImage(named: "Collapse")
         case .write:
-            self.imageView.image = UIImage(named: "expand")
+            self.imageView.image = UIImage(named: "Expand")
         }
+    }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        if let attributes = layoutAttributes as? DecorationViewLayoutAttributes {
+            self.set(state: attributes.state)
+        }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return false
     }
 }

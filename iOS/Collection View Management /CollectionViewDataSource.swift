@@ -31,7 +31,7 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
                                     section: section,
                                     item: itemIdentifier)
         })
-
+        
         self.diffableDataSource.supplementaryViewProvider =
         { (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
             guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }

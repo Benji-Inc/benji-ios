@@ -51,10 +51,6 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     = MessageSequenceCollectionViewDataSource.createPlaceholderMessageCellRegistration()
     private let initialCellRegistration
     = MessageSequenceCollectionViewDataSource.createInitialCellRegistration()
-    
-    // Decoration registration
-    private let centerDecorationViewRegistration
-    = MessageSequenceCollectionViewDataSource.createCenterDecorationViewRegistration()
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -97,21 +93,6 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                 self.handleTopicTapped?(conversationID)
             }
             return cell
-        }
-    }
-    
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String,
-                                           section: SectionType,
-                                           indexPath: IndexPath) -> UICollectionReusableView? {
-        
-        if kind == "decoration" {
-            let view = collectionView.dequeueConfiguredReusableSupplementary(using: self.centerDecorationViewRegistration,
-                                                                             for: indexPath)
-            view.set(state: .read)
-            return view
-        } else {
-            return nil
         }
     }
 
@@ -195,9 +176,6 @@ extension MessageSequenceCollectionViewDataSource {
     = UICollectionView.CellRegistration<PlaceholderMessageCell, UICollectionView?>
     typealias InitialMessageCellRegistration
     = UICollectionView.CellRegistration<InitialMessageCell, (channelID: ChannelId, UICollectionView?)>
-    
-    typealias CenterDecorationViewRegistration
-    = UICollectionView.SupplementaryRegistration<CenterDectorationView>
 
     static func createMessageCellRegistration() -> MessageCellRegistration {
         return MessageCellRegistration { cell, indexPath, item in
@@ -221,12 +199,6 @@ extension MessageSequenceCollectionViewDataSource {
         return InitialMessageCellRegistration { cell, indexPath, item in
             let controller = ChatClient.shared.channelController(for: item.channelID)
             cell.configure(with: controller.conversation)
-        }
-    }
-    
-    static func createCenterDecorationViewRegistration() -> CenterDecorationViewRegistration {
-        return CenterDecorationViewRegistration(elementKind: "decoration") { view, kind, indexPath in
-
         }
     }
 }

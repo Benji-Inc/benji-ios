@@ -165,6 +165,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             self.collectionLayout.secondSectionBottomY = 260
             self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
+        
+        self.collectionLayout.uiState = state
     }
 
     override func prepareForReuse() {
