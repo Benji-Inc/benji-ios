@@ -20,7 +20,7 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
     }
 
     private let transactionConfig = ManageableCellRegistration<TransactionCell>().provider
-    private let headerConfig = ManageableFooterRegistration<WalletHeaderView>().provider
+    private let headerConfig = ManageableHeaderRegistration<WalletHeaderView>().provider
         
     // MARK: - Cell Dequeueing
 
@@ -37,9 +37,11 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
         }
     }
     
-    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
+        guard kind == UICollectionView.elementKindSectionHeader else { return nil }
         let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
         return header
     }

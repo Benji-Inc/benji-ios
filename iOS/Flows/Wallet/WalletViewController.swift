@@ -8,13 +8,31 @@
 
 import Foundation
 
-class WalletViewController: DiffableCollectionViewController<WalletCollectionViewDataSource.SectionType, WalletCollectionViewDataSource.ItemType, WalletCollectionViewDataSource> {
-    
+//class WalletViewController: ViewController {
+//
+//    override func initializeViews() {
+//        super.initializeViews()
+//
+//        self.view.set(backgroundColor: .red)
+//
+//        self.modalPresentationStyle = .popover
+//        if let pop = self.popoverPresentationController {
+//            let sheet = pop.adaptiveSheetPresentationController
+//            sheet.detents = [.medium(), .large()]
+//            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+//        }
+//
+//    }
+//}
+
+class WalletViewController: DiffableCollectionViewController<WalletCollectionViewDataSource.SectionType,
+                            WalletCollectionViewDataSource.ItemType,
+                            WalletCollectionViewDataSource> {
+
     private let backgroundView = BackgroundGradientView()
-    
-    
+
     init() {
-        super.init(with: WelcomeCollectionView())
+        super.init(with: WalletCollectionView())
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -24,25 +42,26 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     required init(collectionView: UICollectionView) {
         fatalError("init(collectionView:) has not been implemented")
     }
-    
+
     override func loadView() {
         self.view = self.backgroundView
     }
-    
+
     override func initializeViews() {
         super.initializeViews()
-        
+
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true 
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         self.loadInitialData()
     }
 
@@ -55,9 +74,9 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     override func retrieveDataForSnapshot() async -> [WalletCollectionViewDataSource.SectionType: [WalletCollectionViewDataSource.ItemType]] {
 
         var data: [WalletCollectionViewDataSource.SectionType: [WalletCollectionViewDataSource.ItemType]] = [:]
-        
+
         guard let transactions = try? await Transaction.fetchAll() else { return data }
-        
+
         data[.wallet] = transactions.compactMap({ transaction in
             return .transaction(transaction)
         })
