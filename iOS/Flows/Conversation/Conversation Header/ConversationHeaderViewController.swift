@@ -40,6 +40,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.view.addSubview(self.jibImageView)
         self.jibImageView.contentMode = .scaleAspectFit
+        self.jibImageView.isUserInteractionEnabled = true 
         
         self.view.addSubview(self.topicLabel)
         

@@ -194,6 +194,7 @@ extension ConversationListCoordinator {
     }
     
     func showWallet() {
-        
+        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator, finishedHandler: nil)
     }
 }
