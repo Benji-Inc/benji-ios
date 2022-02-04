@@ -15,18 +15,25 @@ struct newReadView: View {
     var body: some View {
         HStack {
             Spacer.length(.short)
+
             Text("12:34 PM")
                 .fontType(.small)
                 .color(.T1)
+
             Spacer.length(.short)
+
             Image("checkmark-double")
                 .color(.T1)
+
             Spacer.length(.short)
-        }.background(
+        }
+        .frame(minHeight: 15, idealHeight: 25, maxHeight: 25)
+        .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
                       strokeColor: .D6withAlpha,
-                      lineWidth: 1)
+                      lineWidth: 0.5)
+
         )
     }
 }
@@ -42,13 +49,14 @@ struct newReplyView: View {
                 .fontType(.small)
                 .color(.T1)
             Spacer.length(.short)
-        }.background(
+        }
+        .frame(minHeight: 15, idealHeight: 25, maxHeight: 25)
+        .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                .stroke(.T1, alpha: 0.3, width: 0.25)
-                .background(
-                    RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                        .color(.T1, alpha: 0.1)
-                )
+                .fill(color: .B1withAlpha,
+                      strokeColor: .D6withAlpha,
+                      lineWidth: 0.5)
+
         )
     }
 }
@@ -63,6 +71,7 @@ struct newStatusView: View {
             Spacer.length(.short)
             newReplyView()
         }
+//        .background(.orange)
     }
 }
 

@@ -34,15 +34,19 @@ class MessageCell: UICollectionViewCell {
     override func didMoveToWindow() {
         super.didMoveToWindow()
 
-        self.parentViewController()?.addChild(viewController: self.detailVC, toView: self.contentView)
+        if self.detailVC.parent.isNil {
+            self.parentViewController()?.addChild(viewController: self.detailVC,
+                                                  toView: self.contentView)
+        }
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.detailVC.view.expandToSuperviewWidth()
+        self.detailVC.view.height = 25
+
         self.content.expandToSuperviewWidth()
-        
         self.content.height
         = self.bounds.height - (self.detailVC.view.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
 

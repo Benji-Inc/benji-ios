@@ -22,11 +22,14 @@ struct newMessageDetailView: View {
             Spacer()
 
             newStatusView()
-                .background(.indigo)
+                .padding(.vertical, 0.0)
 
             Spacer()
                 .frame(width: Theme.ContentOffset.standard.value)
-        }.background(.red)
+        }
+        .frame(height: 50)
+        .background(.red)
+
     }
     
     func configure(with message: Messageable) {

@@ -14,6 +14,12 @@ import SwiftUI
 /// For some reason, embedded SwiftUI Views set the their containing NavController's nav bar to visible regardless of the navigationBarHidden state.
 class NavBarIgnoringHostingController<Content>: UIHostingController<Content> where Content: View {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.set(backgroundColor: .clear)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         let wasNavigationBarHidden = self.navigationController?.isNavigationBarHidden
 
