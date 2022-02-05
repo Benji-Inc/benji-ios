@@ -18,6 +18,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let menuImageView = UIImageView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .regular)
+    let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
     
     private var state: ConversationUIState = .read
     
@@ -36,6 +37,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.menuImageView.contentMode = .scaleAspectFit
         self.menuImageView.tintColor = ThemeColor.B2.color
         self.view.addSubview(self.button)
+        
+        self.view.addSubview(self.jibImageView)
+        self.jibImageView.contentMode = .scaleAspectFit
+        self.jibImageView.isUserInteractionEnabled = true 
         
         self.view.addSubview(self.topicLabel)
         
@@ -86,6 +91,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.button.size = CGSize(width: 44, height: 44)
         self.button.center = self.menuImageView.center
+        
+        self.jibImageView.squaredSize = 44
+        self.jibImageView.pin(.left, offset: .custom(6))
+        self.jibImageView.centerY = self.menuImageView.centerY
     }
     
     private func setTopic(for conversation: Conversation) {

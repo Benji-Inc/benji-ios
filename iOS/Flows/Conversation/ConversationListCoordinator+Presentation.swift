@@ -192,4 +192,9 @@ extension ConversationListCoordinator {
 
         self.conversationListVC.present(alertController, animated: true, completion: nil)
     }
+    
+    func showWallet() {
+        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator, finishedHandler: nil)
+    }
 }
