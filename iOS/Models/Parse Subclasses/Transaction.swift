@@ -41,26 +41,26 @@ final class Transaction: PFObject, PFSubclassing {
         set { self.setObject(for: .note, with: newValue) }
     }
     
-//    static func fetchAllTransactions() async throws -> [Transaction] {
-//        let objects: [Self] = try await withCheckedThrowingContinuation { continuation in
-//            guard let query = self.query() else {
-//                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
-//                return
-//            }
-//            query.whereKey("to", equalTo: User.current()!)
-//            query.findObjectsInBackground { objects, error in
-//                if let objs = objects as? [Self] {
-//                    continuation.resume(returning: objs)
-//                } else if let e = error {
-//                    continuation.resume(throwing: e)
-//                } else {
-//                    continuation.resume(returning: [])
-//                }
-//            }
-//        }
-//
-//        return objects
-//    }
+    static func fetchAllTransactions() async throws -> [Transaction] {
+        let objects: [Transaction] = try await withCheckedThrowingContinuation { continuation in
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
+                return
+            }
+            query.whereKey("to", equalTo: User.current()!)
+            query.findObjectsInBackground { objects, error in
+                if let objs = objects as? [Transaction] {
+                    continuation.resume(returning: objs)
+                } else if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: [])
+                }
+            }
+        }
+
+        return objects
+    }
 }
 
 extension Transaction: Objectable {

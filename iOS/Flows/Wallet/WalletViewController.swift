@@ -75,7 +75,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
 
         var data: [WalletCollectionViewDataSource.SectionType: [WalletCollectionViewDataSource.ItemType]] = [:]
 
-        guard let transactions = try? await Transaction.fetchAll() else { return data }
+        guard let transactions = try? await Transaction.fetchAllTransactions() else { return data }
 
         data[.wallet] = transactions.compactMap({ transaction in
             return .transaction(transaction)
