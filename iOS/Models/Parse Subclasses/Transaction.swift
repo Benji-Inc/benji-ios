@@ -32,7 +32,7 @@ final class Transaction: PFObject, PFSubclassing {
         set { self.setObject(for: .from, with: newValue)}
     }
     
-    var amount: Int {
+    var amount: Double {
         get { self.getObject(for: .amount) ?? 0 }
     }
     

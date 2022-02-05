@@ -36,11 +36,39 @@ class WalletHeaderView: UICollectionReusableView {
     }
     
     func configure(with transactions: [WalletCollectionViewDataSource.ItemType]) {
-        
         self.topLeftDetailView.configure(with: "Jibs", subtitle: "Reward Credits")
-        self.bottomLeftDetailView.configure(with: "Jibber", subtitle: "Member since 2022")
-        self.topRightDetailView.configure(with: "0.0", subtitle: "Total Earnings")
-        self.bottomRightDetailView.configure(with: "$0.00", subtitle: "Credit Balance")
+        Task {
+            guard let user = try? await User.current()?.retrieveDataIfNeeded(),
+            let createdAt = user.createdAt else { return }
+            
+            let dateString = Date.monthYear.string(from: createdAt)
+            self.bottomLeftDetailView.configure(with: "Jibber", subtitle: "Member since \(dateString)")
+
+            if let total = try? await self.calculateEarnings(for: transactions) {
+                self.topRightDetailView.configure(with: "\(total)", subtitle: "Total Earnings")
+            } else {
+                self.topRightDetailView.configure(with: "0.0", subtitle: "Total Earnings")
+            }
+            self.bottomRightDetailView.configure(with: "$0.00", subtitle: "Credit Balance")
+            self.layoutNow()
+        }
+    }
+    
+    func calculateEarnings(for items: [WalletCollectionViewDataSource.ItemType]) async throws -> Double {
+        let transactions: [Transaction] = try await items.asyncMap { type in
+            switch type {
+            case .transaction(let transaction):
+                return try await transaction.retrieveDataIfNeeded()
+            }
+        }
+        
+        var total: Double = 0.0
+        transactions.forEach { transaction in
+            total += transaction.amount
+        }
+        
+        return total
+        
     }
     
     override func layoutSubviews() {

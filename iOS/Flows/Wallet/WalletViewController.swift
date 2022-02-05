@@ -53,7 +53,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true 
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }

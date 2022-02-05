@@ -30,6 +30,12 @@ extension Date {
         formatter.dateFormat = "MM/dd/yyyy"
         return formatter
     }
+    
+    static var monthYear: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM, yyyy"
+        return formatter
+    }
 
     static var monthAndDay: DateFormatter {
         let formatter = DateFormatter()

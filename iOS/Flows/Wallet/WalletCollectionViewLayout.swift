@@ -18,10 +18,13 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
             // Item
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                         leading: Theme.ContentOffset.xtraLong.value,
+                                                         bottom: Theme.ContentOffset.xtraLong.value,
+                                                         trailing: Theme.ContentOffset.xtraLong.value)
 
             // Group
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(44))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(56))
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
             // Section
