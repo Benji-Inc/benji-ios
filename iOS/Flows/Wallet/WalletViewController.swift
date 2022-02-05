@@ -8,23 +8,6 @@
 
 import Foundation
 
-//class WalletViewController: ViewController {
-//
-//    override func initializeViews() {
-//        super.initializeViews()
-//
-//        self.view.set(backgroundColor: .red)
-//
-//        self.modalPresentationStyle = .popover
-//        if let pop = self.popoverPresentationController {
-//            let sheet = pop.adaptiveSheetPresentationController
-//            sheet.detents = [.medium(), .large()]
-//            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-//        }
-//
-//    }
-//}
-
 class WalletViewController: DiffableCollectionViewController<WalletCollectionViewDataSource.SectionType,
                             WalletCollectionViewDataSource.ItemType,
                             WalletCollectionViewDataSource> {
