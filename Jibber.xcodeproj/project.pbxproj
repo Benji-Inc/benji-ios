@@ -3241,7 +3241,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3271,7 +3271,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3298,7 +3298,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3325,7 +3325,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3352,7 +3352,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -3384,7 +3384,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -3417,7 +3417,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -3449,7 +3449,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -3482,7 +3482,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
@@ -3515,7 +3515,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
