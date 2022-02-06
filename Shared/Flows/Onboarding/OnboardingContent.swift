@@ -48,7 +48,7 @@ enum OnboardingContent: Switchable {
         case .name(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Jibber use's real names. What's yours?")
+                                   default: "Jibber uses real names. What's yours?")
         case .photo(let vc):
             switch vc.currentState {
             case .initial:
