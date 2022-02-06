@@ -70,27 +70,31 @@ class MessageReadView: MessageStatusContainer {
             // text, no image
             let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
             self.label.setSize(withWidth: maxWidth)
-            self.label.pin(.left, offset: self.padding)
-            self.label.centerOnY()
+            
             let width = (self.padding.value * 2) + self.label.width
             self.width = clamp(width, self.minWidth, self.maxWidth)
+            
+            self.label.pin(.left, offset: self.padding)
+            self.label.centerOnY()
+            
         case .delivered, .readCollapsed(_):
             // no text, image
             self.label.width = 0
             self.imageView.centerOnY()
-            self.imageView.center.x = self.halfWidth
             self.width = self.minWidth
+            self.imageView.center.x = self.halfWidth
         case .read(_):
             let maxWidth = self.maxWidth - self.padding.value.doubled - self.imageView.width
             self.label.setSize(withWidth: maxWidth)
+            
+            let width = (self.padding.value * 3) + self.imageView.width + self.label.width
+            self.width = clamp(width, self.minWidth, self.maxWidth)
+            
             self.label.pin(.left, offset: self.padding)
             self.label.centerOnY()
             
             self.imageView.match(.left, to: .right, of: self.label, offset: self.padding)
             self.imageView.centerOnY()
-            
-            let width = (self.padding.value * 3) + self.imageView.width + self.label.width
-            self.width = clamp(width, self.minWidth, self.maxWidth)
         }
 
         self.progressView.expandToSuperviewHeight()

@@ -92,7 +92,7 @@ extension PeopleCoordinator {
         let title = LocalizedString(id: "", arguments: [user.fullName], default: "Connect with @(name)?")
         let titleText = localized(title)
 
-        let body = LocalizedString(id: "", arguments: [user.fullName], default: "@(name) has an account. Tap OK to send the request. (This will NOT consume one of your RSVP's)")
+        let body = LocalizedString(id: "", arguments: [user.fullName], default: "@(name) has an account. Tap OK to send the request. (This will NOT consume one of your RSVPs)")
         let bodyText = localized(body)
         let alert = UIAlertController(title: titleText,
                                       message: bodyText,

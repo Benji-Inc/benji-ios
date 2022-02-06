@@ -55,7 +55,7 @@ class NoticeSupplier {
 
             let reservations = await Reservation.getAllUnclaimed()
             if reservations.count > 0 {
-                let text = LocalizedString(id: "", arguments: [String(reservations.count)], default: "You have @(count) RSVP's left.\nTap to invite someone.")
+                let text = LocalizedString(id: "", arguments: [String(reservations.count)], default: "You have @(count) RSVPs left.\nTap to invite someone.")
                 let reservationNotice = SystemNotice(createdAt: Date(),
                                                      notice: nil,
                                                      type: .rsvps,
