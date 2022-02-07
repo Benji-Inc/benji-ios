@@ -46,7 +46,7 @@ extension Message: Messageable {
         return .passive
     }
     
-    var lastReadAt: Date? {
+    var lastUpdatedAt: Date? {
         let reads = self.latestReactions.filter { reaction in
             guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
             return type == .read
@@ -54,7 +54,11 @@ extension Message: Messageable {
             return lhs.createdAt < rhs.createdAt
         }
         
-        return reads.first?.createdAt
+        guard let latestRead = reads.last?.createdAt else {
+            return self.createdAt
+        }
+
+        return latestRead
     }
 
     var hasBeenConsumedBy: [Avatar] {

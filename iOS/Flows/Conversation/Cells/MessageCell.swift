@@ -67,6 +67,7 @@ class MessageCell: UICollectionViewCell {
 
         self.detailState.emotion = message.emotion
         self.detailState.isRead = message.isConsumed
+        self.detailState.updateDate = message.lastUpdatedAt
         self.detailState.replyCount = message.totalReplyCount
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar

@@ -8,26 +8,47 @@
 
 import SwiftUI
 
+struct newStatusView: View {
+
+    @ObservedObject var config: MessageDetailConfig
+
+    var body: some View {
+        HStack {
+            newReadView(config: self.config)
+
+            if self.config.replyCount > 0 {
+                Spacer.length(.short)
+                newReplyView(config: self.config)
+            }
+        }
+    }
+}
+
 struct newReadView: View {
     
-    @State var message: Messageable?
+    @ObservedObject var config: MessageDetailConfig
     
     var body: some View {
         HStack {
             Spacer.length(.short)
 
-            Text("12:34 PM")
-                .fontType(.small)
-                .color(.T1)
 
-            Spacer.length(.short)
+            if let updateDate = self.config.updateDate {
+                let dateString = Date.hourMinuteTimeOfDay.string(from: updateDate)
+                Text(dateString)
+                    .fontType(.small)
+                    .color(.T1)
 
-            Image("checkmark-double")
-                .color(.T1)
+                Spacer.length(.short)
+            }
 
-            Spacer.length(.short)
+            if self.config.isRead {
+                Image("checkmark-double")
+                    .color(.T1)
+
+                Spacer.length(.short)
+            }
         }
-        .frame(minHeight: 15, idealHeight: 25, maxHeight: 25)
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
@@ -40,12 +61,12 @@ struct newReadView: View {
 
 struct newReplyView: View {
     
-    @State var message: Messageable?
+    @ObservedObject var config: MessageDetailConfig
     
     var body: some View {
         HStack {
             Spacer.length(.short)
-            Text("2")
+            Text(self.config.replyCount.description)
                 .fontType(.small)
                 .color(.T1)
             Spacer.length(.short)
@@ -61,22 +82,9 @@ struct newReplyView: View {
     }
 }
 
-struct newStatusView: View {
-    
-    @State var message: Messageable?
-    
-    var body: some View {
-        HStack {
-            newReadView()
-            Spacer.length(.short)
-            newReplyView()
-        }
-//        .background(.orange)
-    }
-}
-
 struct newStatusView_Previews: PreviewProvider {
     static var previews: some View {
-        newStatusView(message: nil).preferredColorScheme(.dark)
+        let config = MessageDetailConfig(emotion: .calm, isRead: true, updateDate: nil, replyCount: 3)
+        newStatusView(config: config).preferredColorScheme(.dark)
     }
 }

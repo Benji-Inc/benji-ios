@@ -35,6 +35,7 @@ protocol Messageable {
     var isDeleted: Bool { get }
     var totalReplyCount: Int { get }
     var recentReplies: [Messageable] { get }
+    var lastUpdatedAt: Date? { get }
 
     func setToConsumed() async throws
     func setToUnconsumed() async throws

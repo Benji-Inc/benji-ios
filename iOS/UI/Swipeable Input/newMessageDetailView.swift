@@ -12,15 +12,17 @@ class MessageDetailConfig: ObservableObject {
 
     @Published var emotion: Emotion?
     @Published var isRead: Bool
+    @Published var updateDate: Date?
     @Published var replyCount: Int
 
     convenience init() {
-        self.init(emotion: nil, isRead: false, replyCount: 0)
+        self.init(emotion: nil, isRead: false, updateDate: nil, replyCount: 0)
     }
 
-    init(emotion: Emotion?, isRead: Bool, replyCount: Int) {
+    init(emotion: Emotion?, isRead: Bool, updateDate: Date?, replyCount: Int) {
         self.emotion = emotion
         self.isRead = isRead
+        self.updateDate = updateDate
         self.replyCount = replyCount
     }
 }
@@ -39,7 +41,7 @@ struct newMessageDetailView: View {
 
             Spacer()
 
-            newStatusView()
+            newStatusView(config: self.config)
                 .padding(.vertical, 0.0)
 
             Spacer()
@@ -54,8 +56,9 @@ struct newMessageDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
         let config = MessageDetailConfig(emotion: .calm,
-                                        isRead: false,
-                                        replyCount: 2)
+                                         isRead: false,
+                                         updateDate: nil,
+                                         replyCount: 2)
 
         newMessageDetailView(config: config).preferredColorScheme(.dark)
     }

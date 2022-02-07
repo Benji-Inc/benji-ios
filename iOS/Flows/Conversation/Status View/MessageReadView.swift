@@ -146,7 +146,7 @@ class MessageReadView: MessageStatusContainer {
     }
     
     func showRead(with message: Message) {
-        guard let messageDate = message.lastReadAt else { return }
+        guard let messageDate = message.lastUpdatedAt else { return }
         let dateString = Date.hourMinuteTimeOfDay.string(from: messageDate)
         self.state = .read(dateString)
     }
