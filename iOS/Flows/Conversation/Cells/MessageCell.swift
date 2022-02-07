@@ -93,7 +93,7 @@ class MessageCell: UICollectionViewCell {
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
-        self.detailVC.view.height = MessageDetailView.height
+        self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 //        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
 //        self.detailView.handleTopMessage(isAtTop: isAtTop)

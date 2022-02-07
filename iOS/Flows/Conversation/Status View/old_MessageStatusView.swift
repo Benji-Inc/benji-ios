@@ -11,10 +11,10 @@ import StreamChat
 import Combine
 import Localization
 
-class MessageStatusView: BaseView {
+class old_MessageStatusView: BaseView {
 
-    private let readView = MessageReadView()
-    private let replyView = MessageReplyView()
+    private let readView = old_MessageReadView()
+    private let replyView = old_MessageReplyView()
     private var messageController: ChatMessageController?
 
     private var cancellables = Set<AnyCancellable>()

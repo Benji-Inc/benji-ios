@@ -10,11 +10,11 @@ import Foundation
 import StreamChat
 import Combine
 
-class MessageDetailView: BaseView {
+class old_MessageDetailView: BaseView {
 
     static let height: CGFloat = 25
 
-    let statusView = MessageStatusView()
+    let statusView = old_MessageStatusView()
     let emotionView = EmotionView()
     private var isAtTop: Bool = false
 

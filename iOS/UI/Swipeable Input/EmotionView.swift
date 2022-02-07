@@ -71,7 +71,7 @@ class EmotionView: BaseView {
         
         self.emojiLabel.pin(.left)
         
-        self.height = MessageDetailView.height
+        self.height = old_MessageDetailView.height
         self.width = self.emojiLabel.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.short.value.doubled
         
         self.pin(.left)

@@ -18,7 +18,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
-    let detailView = MessageDetailView()
+    let detailView = old_MessageDetailView()
     
     /// If true we should scroll to the last item in the collection in layout subviews.
     private var scrollToLastItemOnLayout: Bool = true
@@ -137,7 +137,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.parentMessageView.centerOnX()
 
         self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value
-        self.detailView.height = MessageDetailView.height
+        self.detailView.height = old_MessageDetailView.height
         self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
         self.detailView.centerOnX()
     }
@@ -174,7 +174,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private func configureCollectionLayout(for state: ConversationUIState) {
         let threadLayout = self.threadCollectionView.threadLayout
         threadLayout.itemHeight
-        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
+        = MessageContentView.bubbleHeight + old_MessageDetailView.height + Theme.ContentOffset.short.value
 
         switch state {
         case .read:

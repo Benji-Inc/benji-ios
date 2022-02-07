@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import StreamChat
 
-class MessageReadView: MessageStatusContainer {
+class old_MessageReadView: old_MessageStatusContainer {
     
     enum State {
         case initial
