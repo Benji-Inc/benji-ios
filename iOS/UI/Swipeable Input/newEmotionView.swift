@@ -38,45 +38,17 @@ extension Binding {
 
 struct newEmotionView: View {
     
-    @State var emotion: Emotion?
+    let emotion: Emotion
         
     var body: some View {
         HStack {
-            if let emotion = self.emotion {
-                Spacer.length(.short)
-                EmojiContainer(emoji: emotion.emoji)
-                Spacer.length(.short)
-                Text(emotion.rawValue.firstCapitalized)
-                    .fontType(.small)
-                Spacer.length(.short)
-            }
-        }.overlay {
-            Picker("", selection: $emotion) {
-                ForEach(Emotion.allCases, content: { e in
-                    let text = "\(e.emoji) \(e.rawValue.firstCapitalized)"
-                    Text(text)
-                        .fontType(.small)
-                })
-            }.opacity(0.011)
-                .onChange(of: emotion) { newValue in
-                    if let e = newValue {
-                        self.configure(for: e)
-                    }
-                }
+            Spacer.length(.short)
+            EmojiContainer(emoji: self.emotion.emoji)
+            Spacer.length(.short)
+            Text(self.emotion.rawValue.firstCapitalized)
+                .fontType(.small)
+            Spacer.length(.short)
         }
-    }
-    
-    func configure(for message: Messageable) {
-        let controller = ChatClient.shared.messageController(for: message)
-        if let msg = controller?.message, let reaction = msg.latestReactions.first(where: { reaction in
-            return reaction.author.userObjectId == msg.authorId
-        }), let emotion = Emotion(rawValue: reaction.type.rawValue) {
-            self.configure(for: emotion)
-        }
-    }
-    
-    func configure(for emotion: Emotion) {
-        self.emotion = emotion
     }
 }
 

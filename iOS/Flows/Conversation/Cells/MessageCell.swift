@@ -13,7 +13,10 @@ import SwiftUI
 class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
-    let detailView = newMessageDetailView()
+
+    // Detail View
+    @ObservedObject var detailState = MessageDetailConfig()
+    lazy var detailView = newMessageDetailView(config: self.detailState)
     lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
@@ -61,11 +64,13 @@ class MessageCell: UICollectionViewCell {
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
-        if self.shouldShowDetailBar {
-            self.detailView.configure(with: message)
-        }
+
+        self.detailState.emotion = message.emotion
+        self.detailState.isRead = message.isConsumed
+        self.detailState.replyCount = message.totalReplyCount
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
+
         self.setNeedsLayout()
     }
 

@@ -8,16 +8,34 @@
 
 import SwiftUI
 
+class MessageDetailConfig: ObservableObject {
+
+    @Published var emotion: Emotion?
+    @Published var isRead: Bool
+    @Published var replyCount: Int
+
+    convenience init() {
+        self.init(emotion: nil, isRead: false, replyCount: 0)
+    }
+
+    init(emotion: Emotion?, isRead: Bool, replyCount: Int) {
+        self.emotion = emotion
+        self.isRead = isRead
+        self.replyCount = replyCount
+    }
+}
+
 struct newMessageDetailView: View {
-    
-    @State private var message: Messageable?
+
+    @ObservedObject var config: MessageDetailConfig
     
     var body: some View {
         HStack {
-            Spacer().frame(width: Theme.ContentOffset.standard.value)
-
-            newEmotionView(emotion: .bored)
-                .background(.green)
+            if let emotion = self.config.emotion {
+                Spacer().frame(width: Theme.ContentOffset.standard.value)
+                newEmotionView(emotion: emotion)
+                    .background(.green)
+            }
 
             Spacer()
 
@@ -29,27 +47,16 @@ struct newMessageDetailView: View {
         }
         .frame(height: 50)
         .background(.red)
-
     }
-    
-    func configure(with message: Messageable) {
-        self.message = message
-    }
-
-//    func configure(with message: Messageable) {
-//        self.emotionView.configure(for: message)
-//        self.statusView.configure(for: message)
-//
-//    }
-//
-//    func update(with message: Messageable) {
-//        self.emotionView.configure(for: message)
-//        self.statusView.configure(for: message)
-//    }
 }
 
 struct newMessageDetailView_Previews: PreviewProvider {
+
     static var previews: some View {
-        newMessageDetailView().preferredColorScheme(.dark)
+        let config = MessageDetailConfig(emotion: .calm,
+                                        isRead: false,
+                                        replyCount: 2)
+
+        newMessageDetailView(config: config).preferredColorScheme(.dark)
     }
 }
