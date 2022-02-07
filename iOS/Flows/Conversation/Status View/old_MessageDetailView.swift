@@ -15,7 +15,7 @@ class old_MessageDetailView: BaseView {
     static let height: CGFloat = 25
 
     let statusView = old_MessageStatusView()
-    let emotionView = EmotionView()
+    let emotionView = old_EmotionView()
     private var isAtTop: Bool = false
 
     private var hasLoadedMessage: Message?

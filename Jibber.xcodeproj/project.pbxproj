@@ -522,14 +522,14 @@
 		D6BF814D2721EE9B006D7760 /* ToastQue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQue.swift */; };
 		D6BF814F2721EEBF006D7760 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
 		D6BF81512721EEE1006D7760 /* ToastBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastBannerView.swift */; };
-		D6C20128276CFDAC0085B187 /* newMessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */; };
+		D6C20128276CFDAC0085B187 /* MessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C20127276CFDAC0085B187 /* MessageDetailView.swift */; };
 		D6C3892F2724B8E5004D29D5 /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
 		D6C389312724B8F9004D29D5 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6C3893627287307004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893527287307004D29D5 /* StreamChat */; };
 		D6C3893A27287491004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893927287491004D29D5 /* StreamChat */; };
 		D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893B2728749C004D29D5 /* StreamChat */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
-		D6CC1482276BE808005F617F /* newEmotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1481276BE808005F617F /* newEmotionView.swift */; };
+		D6CC1482276BE808005F617F /* EmotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1481276BE808005F617F /* EmotionView.swift */; };
 		D6CC1485276BEF5B005F617F /* Text+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1484276BEF5B005F617F /* Text+Extensions.swift */; };
 		D6CC1487276BF08F005F617F /* Spacer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1486276BF08F005F617F /* Spacer+Extensions.swift */; };
 		D6CC1489276BFA89005F617F /* Shape+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1488276BFA89005F617F /* Shape+Extensions.swift */; };
@@ -617,7 +617,7 @@
 		D6FA27422767A67300315528 /* Localization in Resources */ = {isa = PBXBuildFile; fileRef = D6FA273C2767A67300315528 /* Localization */; };
 		D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622123F067A300048C4A /* AnimationDuration.swift */; };
 		D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622323F06AEF00048C4A /* AnimationCycle.swift */; };
-		D6FE05222767B2BC00137EEA /* EmotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FE05212767B2BC00137EEA /* EmotionView.swift */; };
+		D6FE05222767B2BC00137EEA /* old_EmotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FE05212767B2BC00137EEA /* old_EmotionView.swift */; };
 		D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF02C257EB71700F9789B /* Button+Extensions.swift */; };
 		D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */; };
 		E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E2F7DB90EF2AB2CB1624D0 /* Pods_Jibber.framework */; };
@@ -988,9 +988,9 @@
 		D6B95AF2272324BD00FBE66A /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
 		D6B95AF627236E1000FBE66A /* ConversationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsManager.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
-		D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newMessageDetailView.swift; sourceTree = "<group>"; };
+		D6C20127276CFDAC0085B187 /* MessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailView.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
-		D6CC1481276BE808005F617F /* newEmotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newEmotionView.swift; sourceTree = "<group>"; };
+		D6CC1481276BE808005F617F /* EmotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionView.swift; sourceTree = "<group>"; };
 		D6CC1484276BEF5B005F617F /* Text+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Extensions.swift"; sourceTree = "<group>"; };
 		D6CC1486276BF08F005F617F /* Spacer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spacer+Extensions.swift"; sourceTree = "<group>"; };
 		D6CC1488276BFA89005F617F /* Shape+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+Extensions.swift"; sourceTree = "<group>"; };
@@ -1060,7 +1060,7 @@
 		D6FA273C2767A67300315528 /* Localization */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Localization; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
 		D6FA622323F06AEF00048C4A /* AnimationCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationCycle.swift; sourceTree = "<group>"; };
-		D6FE05212767B2BC00137EEA /* EmotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionView.swift; sourceTree = "<group>"; };
+		D6FE05212767B2BC00137EEA /* old_EmotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_EmotionView.swift; sourceTree = "<group>"; };
 		D6FEF02C257EB71700F9789B /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extensions.swift"; sourceTree = "<group>"; };
 		F3CB2AFC202AF9758DB4EBDE /* Pods-Intents Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Intents Extension/Pods-Intents Extension.release.xcconfig"; sourceTree = "<group>"; };
@@ -1970,9 +1970,9 @@
 			isa = PBXGroup;
 			children = (
 				D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */,
-				D6FE05212767B2BC00137EEA /* EmotionView.swift */,
-				D6CC1481276BE808005F617F /* newEmotionView.swift */,
-				D6C20127276CFDAC0085B187 /* newMessageDetailView.swift */,
+				D6FE05212767B2BC00137EEA /* old_EmotionView.swift */,
+				D6CC1481276BE808005F617F /* EmotionView.swift */,
+				D6C20127276CFDAC0085B187 /* MessageDetailView.swift */,
 				D6CC148E276C1323005F617F /* newStatusView.swift */,
 				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
 				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
@@ -2481,7 +2481,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */,
-				D6CC1482276BE808005F617F /* newEmotionView.swift in Sources */,
+				D6CC1482276BE808005F617F /* EmotionView.swift in Sources */,
 				D6129FAC27ADC61F0058811C /* WalletHeaderView.swift in Sources */,
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
@@ -2757,7 +2757,7 @@
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
 				D61592E024FC195D00B63412 /* InputTextView.swift in Sources */,
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
-				D6FE05222767B2BC00137EEA /* EmotionView.swift in Sources */,
+				D6FE05222767B2BC00137EEA /* old_EmotionView.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
@@ -2766,7 +2766,7 @@
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D605AC8427861C9A0015D800 /* BackgroundGradientView.swift in Sources */,
 				D6129FB627ADC9CF0058811C /* WalletCollectionViewLayout.swift in Sources */,
-				D6C20128276CFDAC0085B187 /* newMessageDetailView.swift in Sources */,
+				D6C20128276CFDAC0085B187 /* MessageDetailView.swift in Sources */,
 				D62ED57C279CB96E00F7C08A /* ModalPhotoViewController.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,

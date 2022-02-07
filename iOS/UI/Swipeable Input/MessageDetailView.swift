@@ -27,7 +27,7 @@ class MessageDetailConfig: ObservableObject {
     }
 }
 
-struct newMessageDetailView: View {
+struct MessageDetailView: View {
 
     @ObservedObject var config: MessageDetailConfig
     
@@ -35,13 +35,13 @@ struct newMessageDetailView: View {
         HStack {
             if let emotion = self.config.emotion {
                 Spacer().frame(width: Theme.ContentOffset.standard.value)
-                newEmotionView(emotion: emotion)
+                EmotionView(emotion: emotion)
                     .background(.green)
             }
 
             Spacer()
 
-            newStatusView(config: self.config)
+            StatusView(config: self.config)
                 .padding(.vertical, 0.0)
 
             Spacer()
@@ -52,7 +52,7 @@ struct newMessageDetailView: View {
     }
 }
 
-struct newMessageDetailView_Previews: PreviewProvider {
+struct MessageDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
         let config = MessageDetailConfig(emotion: .calm,
@@ -60,6 +60,6 @@ struct newMessageDetailView_Previews: PreviewProvider {
                                          updateDate: nil,
                                          replyCount: 2)
 
-        newMessageDetailView(config: config).preferredColorScheme(.dark)
+        MessageDetailView(config: config).preferredColorScheme(.dark)
     }
 }

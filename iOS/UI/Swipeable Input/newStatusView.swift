@@ -8,23 +8,23 @@
 
 import SwiftUI
 
-struct newStatusView: View {
+struct StatusView: View {
 
     @ObservedObject var config: MessageDetailConfig
 
     var body: some View {
         HStack {
-            newReadView(config: self.config)
+            ReadView(config: self.config)
 
             if self.config.replyCount > 0 {
                 Spacer.length(.short)
-                newReplyView(config: self.config)
+                ReplyView(config: self.config)
             }
         }
     }
 }
 
-struct newReadView: View {
+struct ReadView: View {
     
     @ObservedObject var config: MessageDetailConfig
     
@@ -59,7 +59,7 @@ struct newReadView: View {
     }
 }
 
-struct newReplyView: View {
+struct ReplyView: View {
     
     @ObservedObject var config: MessageDetailConfig
     
@@ -82,9 +82,9 @@ struct newReplyView: View {
     }
 }
 
-struct newStatusView_Previews: PreviewProvider {
+struct StatusView_Previews: PreviewProvider {
     static var previews: some View {
         let config = MessageDetailConfig(emotion: .calm, isRead: true, updateDate: nil, replyCount: 3)
-        newStatusView(config: config).preferredColorScheme(.dark)
+        StatusView(config: config).preferredColorScheme(.dark)
     }
 }
