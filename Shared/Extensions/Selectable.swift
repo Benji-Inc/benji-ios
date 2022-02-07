@@ -148,6 +148,7 @@ class PanGestureRecognizer: UIPanGestureRecognizer {
 
 class SwipeGestureRecognizer: UIPanGestureRecognizer {
     private var action: (UIPanGestureRecognizer) -> Void
+    var tochesDidBegin: CompletionOptional = nil
     private var textView: UITextView
 
     init(textView: UITextView, action: @escaping (UIPanGestureRecognizer) -> Void) {
@@ -165,6 +166,7 @@ class SwipeGestureRecognizer: UIPanGestureRecognizer {
         super.touchesBegan(touches, with: event)
         
         if self.textView.isFirstResponder {
+            self.tochesDidBegin?()
             self.state = .began
         }
     }
