@@ -80,10 +80,10 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         }
         
         Task {
-            await Task.sleep(seconds: 0.1)
+            await Task.sleep(seconds: 0.2)
             self.welcomeCollectionView.timeMachineLayout.prepare()
             let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
             self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
         }.add(to: self.taskPool)
     }
@@ -131,13 +131,13 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             if !ChatClient.isConnected {
                 try await ChatClient.connectAnonymousUser()
             }
-            
+
             guard let conversationId = PFConfig.current().welcomeConversationCID else { return data }
-            
             let cid = ChannelId(type: .custom("onboarding"), id: conversationId)
             let conversationController
             = ChatClient.shared.channelController(for: cid,
                                                      messageOrdering: .topToBottom)
+
             self.conversationController = conversationController
 
             // Ensure that we've synchronized the conversation controller with the backend.
@@ -146,14 +146,18 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             } else if let conversation = conversationController.channel, conversation.messages.isEmpty {
                 try await conversationController.synchronize()
             }
-            
+
             try await conversationController.loadPreviousMessages()
 
             // Put Benji's messages at the top, and all other messages below.
             var benjiMessages: [MessageSequenceItem] = []
             var otherMessages: [MessageSequenceItem] = []
-            
-            conversationController.messages.forEach({ message in
+
+            let allMessages = conversationController.messages.filter { message in
+                return !message.isDeleted
+            }
+
+            allMessages.forEach({ message in
                 if message.authorId == PFConfig.current().adminUserId {
                     benjiMessages.append(MessageSequenceItem.message(cid: cid,
                                                                      messageID: message.id,
@@ -164,7 +168,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
                                                                      showDetail: false))
                 }
             })
-            
+
             data[.topMessages] = benjiMessages.reversed()
             data[.bottomMessages] = otherMessages.reversed()
         } catch {

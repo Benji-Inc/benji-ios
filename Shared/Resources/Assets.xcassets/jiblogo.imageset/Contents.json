@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "pull_bar_light-1.pdf",
+      "filename" : "Jib-1.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,7 +12,7 @@
           "value" : "light"
         }
       ],
-      "filename" : "pull_bar_light.pdf",
+      "filename" : "Jib.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -23,7 +23,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "pullbar.pdf",
+      "filename" : "jiblogo.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },

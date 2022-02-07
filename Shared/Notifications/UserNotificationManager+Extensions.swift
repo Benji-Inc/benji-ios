@@ -13,9 +13,6 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-
-        guard notification.request.content.categoryIdentifier != "message.new" else { return [] }
-
         return [.banner, .list, .sound, .badge]
     }
 

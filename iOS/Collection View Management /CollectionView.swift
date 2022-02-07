@@ -12,7 +12,7 @@ import Lottie
 class CollectionView: UICollectionView {
 
     let animationView = AnimationView.with(animation: .loading)
-    private let backView = PassThroughView()
+    let backView = BaseView()
 
     init(layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)

@@ -20,7 +20,7 @@ struct CreateConnection: CloudFunction {
                      viewsToIgnore: [UIView]) async throws -> Any {
         
         let params = ["to": self.to.objectId!,
-                      "status": Connection.Status.invited.rawValue]
+                      "status": Connection.Status.accepted.rawValue]
         
         return try await self.makeRequest(andUpdate: statusables,
                                           params: params,

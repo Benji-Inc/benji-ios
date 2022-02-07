@@ -33,6 +33,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
     var handleTopicTapped: ((ConversationId) -> Void)?
+    var handleCollectionViewTapped: CompletionOptional?
 
     /// If true, show the detail bar for each message
     var shouldShowDetailBar = true
@@ -70,6 +71,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             messageCell.content.handleTappedMessage = { [unowned self] cid, messageID in
                 self.handleTappedMessage?(cid, messageID, messageCell.content)
             }
+
             return messageCell
         case .loadMore(cid: let conversationID):
             let loadMoreCell = collectionView.dequeueConfiguredReusableCell(using: self.loadMoreRegistration,

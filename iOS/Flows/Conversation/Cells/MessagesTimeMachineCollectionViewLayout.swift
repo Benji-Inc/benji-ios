@@ -16,7 +16,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     override class var layoutAttributesClass: AnyClass {
         return ConversationMessageCellLayoutAttributes.self
     }
-
+    
     // MARK: - Layout Configuration
 
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
@@ -27,6 +27,49 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
     
     var messageContentState: MessageContentView.State = .collapsed
+    var decorationAttributes: DecorationViewLayoutAttributes?
+    var uiState: ConversationUIState = .read
+    var hideCenterDecorationView: Bool = false
+    
+    override func initializeLayout() {
+        super.initializeLayout()
+        
+        self.register(CenterDectorationView.self, forDecorationViewOfKind: CenterDectorationView.kind)
+    }
+        
+    override func prepare() {
+        super.prepare()
+        
+        self.decorationAttributes = DecorationViewLayoutAttributes.init(forDecorationViewOfKind: CenterDectorationView.kind, with: IndexPath(item: 0, section: 0))
+        self.decorationAttributes?.bounds.size = CGSize(width: self.collectionView?.width ?? .zero,
+                                                        height: 14)
+    }
+    
+    override func layoutAttributesForDecorationView(ofKind elementKind: String,
+                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        switch elementKind {
+        case CenterDectorationView.kind:
+            if self.sectionCount > 0 {
+                self.decorationAttributes?.center = self.getCenterOfItems()
+                self.decorationAttributes?.state = self.uiState
+                self.decorationAttributes?.isHidden = self.hideCenterDecorationView
+                return self.decorationAttributes
+            } else {
+                return super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
+            }
+        default:
+            return super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
+        }
+    }
+    
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        var all = super.layoutAttributesForElements(in: rect)
+        if let decorationAttributes = self.layoutAttributesForDecorationView(ofKind: CenterDectorationView.kind, at: IndexPath(item: 0, section: 0)) {
+            all?.append(decorationAttributes)
+        }
+        
+        return all
+    }
 
     override func layoutAttributesForItemAt(indexPath: IndexPath,
                                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
@@ -166,6 +209,13 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                 break
             }
         }
+    }
+    
+    func getCenterOfItems() -> CGPoint {
+        let topCenter = self.getItemCenterPoint(in: 0, withYOffset: 0, scale: 1.0)
+        let bottomCenter = self.getItemCenterPoint(in: 1, withYOffset: 0, scale: 1.0)
+        let center = CGPoint(x: topCenter.x, y: (topCenter.y + bottomCenter.y) / 2)
+        return center
     }
 
     override func finalizeCollectionViewUpdates() {

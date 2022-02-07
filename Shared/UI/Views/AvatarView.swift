@@ -51,6 +51,9 @@ class AvatarView: DisplayableImageView {
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius
         self.imageView.set(backgroundColor: .B3)
+        
+        self.blurView.layer.masksToBounds = true
+        self.blurView.layer.cornerRadius = Theme.innerCornerRadius
 
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)

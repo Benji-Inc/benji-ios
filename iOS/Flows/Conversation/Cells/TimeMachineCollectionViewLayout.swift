@@ -95,6 +95,17 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// This can be used to keep the focused item in place when items are inserted before it.
     private var sortValueOfFocusedItemBeforeInvalidation: Double?
     private var sortValuesBeforeInvalidation: [IndexPath : Double] = [:]
+    
+    override init() {
+        super.init()
+        self.initializeLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initializeLayout() {}
 
     // MARK: - UICollectionViewLayout Overrides
 
