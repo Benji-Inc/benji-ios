@@ -171,6 +171,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        self.conversationController = nil
 
         self.dataSource.shouldPrepareToSend = false
 
@@ -204,7 +206,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                 for change in changes {
                     switch change {
                     case .update(let message, _):
-                        itemsToReconfigure.append(.message(cid: cid, messageID: message.id))
+                        if !message.isDeleted {
+                            itemsToReconfigure.append(.message(cid: cid, messageID: message.id))
+                        }
                     default:
                         break
                     }

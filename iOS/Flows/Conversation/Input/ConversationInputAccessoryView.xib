@@ -83,25 +83,15 @@
                                 <constraint firstAttribute="bottom" secondItem="sdi-8g-wyi" secondAttribute="bottom" id="pTd-MF-aKN"/>
                             </constraints>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KZz-F4-Lq2" customClass="AnimationView" customModule="Lottie">
-                            <rect key="frame" x="305" y="37.5" width="32" height="60"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="60" id="hpb-8K-viJ"/>
-                            </constraints>
-                        </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="KZz-F4-Lq2" secondAttribute="trailing" id="09I-Cx-Gqs"/>
-                        <constraint firstItem="KZz-F4-Lq2" firstAttribute="centerY" secondItem="Ads-9e-WJh" secondAttribute="centerY" id="7Lw-ya-ian"/>
                         <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="36" id="7ML-EV-mbN"/>
                         <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="32" id="Tgi-A5-L3c"/>
                         <constraint firstAttribute="bottom" secondItem="vaX-xP-i7k" secondAttribute="bottom" constant="8" id="W0X-I8-0SE"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="32" id="Zve-FB-6La"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" constant="8" id="byR-VP-Ldn"/>
                         <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="-4" id="khc-UU-tVU"/>
-                        <constraint firstItem="KZz-F4-Lq2" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="trailing" id="qRU-EW-G3A"/>
                         <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" constant="36" id="y13-oz-083"/>
                     </constraints>
                 </view>
@@ -123,15 +113,11 @@
                 <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="iQV-ts-qMa"/>
                 <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="ISn-9g-1kH"/>
                 <outlet property="overlayButton" destination="b2H-ok-H5y" id="78P-cH-BSH"/>
-                <outlet property="swipeHintView" destination="KZz-F4-Lq2" id="f2P-JF-8gZ"/>
                 <outlet property="textView" destination="Ads-9e-WJh" id="T8m-mt-M46"/>
             </connections>
             <point key="canvasLocation" x="81.884057971014499" y="-35.825892857142854"/>
         </view>
     </objects>
-    <designables>
-        <designable name="KZz-F4-Lq2"/>
-    </designables>
     <resources>
         <namedColor name="RED">
             <color red="0.92900002002716064" green="0.29399999976158142" blue="0.29800000786781311" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

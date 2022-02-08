@@ -25,7 +25,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     required init(collectionView: UICollectionView) {
         fatalError("init(collectionView:) has not been implemented")
     }
-
+    
     override func loadView() {
         self.view = self.backgroundView
     }
@@ -36,9 +36,9 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium()]
+            sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true 
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
     }
     

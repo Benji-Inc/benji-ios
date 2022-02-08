@@ -54,9 +54,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
-    /// A view that shows a hint animation for how to swipe up a message.
-    @IBOutlet var swipeHintView: AnimationView!
-
     private lazy var panGestureHandler = SwipeInputPanGestureHandler(inputView: self)
 
     static var minHeight: CGFloat = 76
@@ -117,11 +114,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.avatarView.didSelect { [unowned self] in
             self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
         }
-
-        self.swipeHintView.set(backgroundColor: .clear)
-        self.swipeHintView.animation = Animation.named(MicroAnimation.swipeUp.rawValue)
-        self.swipeHintView.loopMode = .repeat(2.0)
-        self.swipeHintView.contentMode = .scaleAspectFill
 
         self.setupGestures()
         self.setupHandlers()
@@ -210,6 +202,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         let panRecognizer = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
             self.panGestureHandler.handle(pan: recognizer)
         }
+        
+        panRecognizer.tochesDidBegin = { [unowned self] in
+            self.updateSwipeHint(shouldPlay: false)
+        }
+        
         panRecognizer.delegate = self
         self.overlayButton.addGestureRecognizer(panRecognizer)
     }
@@ -244,7 +241,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
         self.swipeHintTask?.cancel()
 
-        self.swipeHintView.stop()
+        self.inputContainerView.transform = .identity
+        self.emotionView.alpha = 1.0
+        self.deliveryTypeView.alpha = 1.0
+        
+        //self.swipeHintView.stop()
         if shouldPlay {
             self.swipeHintTask = Task {
                 // Wait 2 seconds before playing the hint
@@ -252,8 +253,51 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
                 // Don't play the hint if the user started more typing.
                 guard !Task.isCancelled else { return }
-
-                self.swipeHintView.play()
+                
+                await UIView.awaitAnimation(with: .standard, animations: {
+                    self.emotionView.alpha = 0
+                    self.deliveryTypeView.alpha = 0
+                })
+                
+                // Don't play the hint if the user started more typing.
+                guard !Task.isCancelled else { return }
+                
+                await UIView.awaitSpringAnimation(with: .slow,
+                                                  damping: 0.2,
+                                                  options: [.curveEaseInOut, .allowUserInteraction]) {
+                    self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
+                }
+                
+                // Don't play the hint if the user started more typing.
+                guard !Task.isCancelled else { return }
+                
+                await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
+                    self.inputContainerView.transform = .identity
+                }
+                
+                // Don't play the hint if the user started more typing.
+                guard !Task.isCancelled else { return }
+                
+                await UIView.awaitSpringAnimation(with: .slow,
+                                                  damping: 0.2,
+                                                  options: [.curveEaseInOut, .allowUserInteraction]) {
+                    self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
+                }
+                
+                // Don't play the hint if the user started more typing.
+                guard !Task.isCancelled else { return }
+                
+                await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
+                    self.inputContainerView.transform = .identity
+                }
+                
+                // Don't play the hint if the user started more typing.
+                guard !Task.isCancelled else { return }
+                
+                await UIView.awaitAnimation(with: .standard, animations: {
+                    self.emotionView.alpha = 1.0
+                    self.deliveryTypeView.alpha = 1.0
+                })
             }
         }
     }
@@ -288,7 +332,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.currentContext = .passive
         self.textView.reset()
         self.inputContainerView.alpha = 1
-        self.countView.isHidden = true
+        self.countView.alpha = 0.0
     }
 
     // MARK: - UIGestureRecognizerDelegate
