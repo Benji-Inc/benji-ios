@@ -50,7 +50,6 @@ struct MessageDetailView: View {
                 .frame(width: Theme.ContentOffset.standard.value)
         }
         .frame(height: 50)
-        .background(.red)
     }
 }
 
