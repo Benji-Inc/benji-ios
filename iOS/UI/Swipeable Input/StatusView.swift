@@ -32,7 +32,6 @@ struct ReadView: View {
         HStack {
             Spacer.length(.short)
 
-
             if let updateDate = self.config.updateDate {
                 let dateString = Date.hourMinuteTimeOfDay.string(from: updateDate)
                 Text(dateString)
@@ -42,6 +41,7 @@ struct ReadView: View {
                 Spacer.length(.short)
             }
 
+            
             if self.config.isRead {
                 Image("checkmark-double")
                     .color(.T1)
@@ -49,6 +49,7 @@ struct ReadView: View {
                 Spacer.length(.short)
             }
         }
+        .frame(minHeight: 15, idealHeight: 25, maxHeight: 25)
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
@@ -71,7 +72,7 @@ struct ReplyView: View {
                 .color(.T1)
             Spacer.length(.short)
         }
-        .frame(minHeight: 15, idealHeight: 25, maxHeight: 25)
+        .frame(minWidth: 25, minHeight: 15, idealHeight: 25, maxHeight: 25)
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,

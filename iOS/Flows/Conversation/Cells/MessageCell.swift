@@ -15,9 +15,9 @@ class MessageCell: UICollectionViewCell {
     let content = MessageContentView()
 
     // Detail View
-    @ObservedObject var detailState = MessageDetailConfig()
-    lazy var detailView = MessageDetailView(config: self.detailState)
-    lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
+    @ObservedObject private var detailState = MessageDetailConfig()
+    private lazy var detailView = MessageDetailView(config: self.detailState)
+    private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
     override init(frame: CGRect) {

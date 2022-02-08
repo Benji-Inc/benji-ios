@@ -36,7 +36,6 @@ struct MessageDetailView: View {
             if let emotion = self.config.emotion {
                 Spacer().frame(width: Theme.ContentOffset.standard.value)
                 EmotionView(emotion: emotion)
-                    .background(.green)
             }
 
             Spacer()
