@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import StreamChat
 
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
@@ -15,8 +16,8 @@ class MessageCell: UICollectionViewCell {
     let content = MessageContentView()
 
     // Detail View
-    @ObservedObject private var detailState = MessageDetailConfig(message: nil)
-    private lazy var detailView = MessageDetailView(config: self.detailState)
+    @ObservedObject private var messageState = MessageDetailConfig(message: nil)
+    private lazy var detailView = MessageDetailView(config: self.messageState)
     private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
@@ -71,12 +72,14 @@ class MessageCell: UICollectionViewCell {
     func configure(with message: Messageable) {
         self.content.configure(with: message)
 
-        self.detailState.message = message
+        self.messageState.message = message
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
 
         self.setNeedsLayout()
     }
+
+    private var consumeMessageTask: Task<Void, Never>?
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
@@ -98,9 +101,37 @@ class MessageCell: UICollectionViewCell {
 
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
-        #warning("restore")
-//        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-//        self.detailView.handleTopMessage(isAtTop: isAtTop)
+
+        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+        if isAtTop {
+            self.handleConsumption()
+        } else {
+            self.consumeMessageTask?.cancel()
+        }
+    }
+
+    func handleConsumption() {
+        guard ChatUser.currentUserRole != .anonymous,
+              let message = self.messageState.message,
+              message.canBeConsumed else {
+                  return
+              }
+
+        self.consumeMessageTask?.cancel()
+        self.consumeMessageTask = Task {
+            logDebug("starting consumption of: "+message.kind.text)
+
+            await Task.snooze(seconds: 2)
+
+            guard !Task.isCancelled else {
+                logDebug("consumption was cancelled")
+                return
+            }
+
+            try? await message.setToConsumed()
+
+            logDebug("finished consumption of: "+message.kind.text)
+        }
     }
 }
 
