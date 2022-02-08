@@ -98,6 +98,7 @@ class MessageCell: UICollectionViewCell {
 
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
+        #warning("restore")
 //        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
 //        self.detailView.handleTopMessage(isAtTop: isAtTop)
     }
