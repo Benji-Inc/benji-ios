@@ -25,6 +25,8 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
     private let backgroundConfig = ManageableSupplementaryViewRegistration<BackgroundSupplementaryView>().provider
     private let segmentControlConfig = ManageableSupplementaryViewRegistration<TransactionSegmentControlView>().provider
         
+    @Published var segmentIndex: TransactionSegmentControlView.SegmentType = .you
+        
     // MARK: - Cell Dequeueing
 
     override func dequeueCell(with collectionView: UICollectionView,
@@ -57,6 +59,10 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
                 return background
             } else if kind == TransactionSegmentControlView.kind {
                 let segmentControl = collectionView.dequeueConfiguredReusableSupplementary(using: self.segmentControlConfig, for: indexPath)
+                
+                segmentControl.didSelectSegmentIndex = { [unowned self] index in
+                    self.segmentIndex = index 
+                }
                 return segmentControl
             }
         }

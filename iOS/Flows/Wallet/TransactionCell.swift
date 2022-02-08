@@ -24,10 +24,10 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.avatarView)
         self.contentView.addSubview(self.titleLabel)
+        self.titleLabel.alpha = 0.35
         self.titleLabel.textAlignment = .left
         self.contentView.addSubview(self.noteLabel)
         self.noteLabel.textAlignment = .left
-        self.noteLabel.alpha = 0.35
         self.contentView.addSubview(self.amountLabel)
         self.amountLabel.textAlignment = .right
         
@@ -67,11 +67,13 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.pin(.left)
         self.avatarView.centerOnY()
         
-        self.titleLabel.setSize(withWidth: self.contentView.width)
+        let maxWidth = self.contentView.width - self.avatarView.right - Theme.ContentOffset.standard.value
+        
+        self.titleLabel.setSize(withWidth: maxWidth)
         self.titleLabel.match(.top, to: .top, of: self.avatarView)
         self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: .standard)
         
-        self.noteLabel.setSize(withWidth: self.contentView.width)
+        self.noteLabel.setSize(withWidth: maxWidth)
         self.noteLabel.match(.top, to: .bottom, of: self.titleLabel)
         self.noteLabel.match(.left, to: .left, of: self.titleLabel)
         

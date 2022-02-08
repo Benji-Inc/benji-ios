@@ -41,13 +41,43 @@ final class Transaction: PFObject, PFSubclassing {
         set { self.setObject(for: .note, with: newValue) }
     }
     
-    static func fetchAllTransactions() async throws -> [Transaction] {
+    static func fetchAllCurrentTransactions() async throws -> [Transaction] {
         let objects: [Transaction] = try await withCheckedThrowingContinuation { continuation in
             guard let query = self.query() else {
                 continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
                 return
             }
             query.whereKey("to", equalTo: User.current()!)
+            query.findObjectsInBackground { objects, error in
+                if let objs = objects as? [Transaction] {
+                    continuation.resume(returning: objs)
+                } else if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: [])
+                }
+            }
+        }
+
+        return objects
+    }
+    
+    static func fetchAllConnectionsTransactions() async throws -> [Transaction] {
+        guard let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []) else { return [] }
+        
+        let connectionIds: [String] = connections.filter({ connection in
+            return connection.status == .accepted
+        }).compactMap({ connection in
+            return connection.nonMeUser?.userObjectId
+        })
+        
+        let objects: [Transaction] = try await withCheckedThrowingContinuation { continuation in
+            
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
+                return
+            }
+            query.whereKey("to", containedIn: connectionIds)
             query.findObjectsInBackground { objects, error in
                 if let objs = objects as? [Transaction] {
                     continuation.resume(returning: objs)

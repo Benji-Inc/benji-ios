@@ -12,20 +12,27 @@ class TransactionSegmentControlView: UICollectionReusableView, ElementKind {
     
     static var kind: String = "transactionsegmentcontrol"
     
-    var didSelectYou: CompletionOptional = nil
-    var didSelectConnections: CompletionOptional = nil
+    enum SegmentType: Int {
+        case you
+        case connections
+    }
+    
+    var didSelectSegmentIndex: ((SegmentType) -> Void)? = nil
     
     lazy var segmentControl: UISegmentedControl = {
         let youAction = UIAction(title: "You") { _ in
-            self.didSelectYou?()
+            self.didSelectSegmentIndex?(.you)
         }
         
         let connectionsAction = UIAction(title: "Connections") { _ in
-            self.didSelectYou?()
+            self.didSelectSegmentIndex?(.connections)
         }
         
         let control = UISegmentedControl(frame: .zero, actions: [youAction, connectionsAction])
-        control.selectedSegmentIndex = 0 
+        control.selectedSegmentIndex = 0
+        control.setTitleTextAttributes([.font: FontType.small.font], for: .normal)
+        control.setTitleTextAttributes([.font: FontType.smallBold.font], for: .selected)
+        control.setTitleTextAttributes([.font: FontType.smallBold.font], for: .highlighted)
         return control
     }()
     

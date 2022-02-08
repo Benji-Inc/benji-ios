@@ -87,7 +87,8 @@ class WalletHeaderView: UICollectionReusableView {
         self.bottomRightDetailView.pin(.bottom, offset: .screenPadding)
         
         self.imageView.squaredSize = 100
-        self.imageView.centerOnXAndY()
+        self.imageView.centerOnX()
+        self.imageView.centerY = self.centerY - Theme.ContentOffset.screenPadding.value.half
         self.imageView.centerY += 10
     }
 }
