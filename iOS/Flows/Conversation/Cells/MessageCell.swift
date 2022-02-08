@@ -15,7 +15,7 @@ class MessageCell: UICollectionViewCell {
     let content = MessageContentView()
 
     // Detail View
-    @ObservedObject private var detailState = MessageDetailConfig()
+    @ObservedObject private var detailState = MessageDetailConfig(message: nil)
     private lazy var detailView = MessageDetailView(config: self.detailState)
     private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
@@ -37,12 +37,17 @@ class MessageCell: UICollectionViewCell {
     override func didMoveToWindow() {
         super.didMoveToWindow()
 
-        if self.detailVC.parent.isNil {
-            self.parentViewController()?.addChild(viewController: self.detailVC,
-                                                  toView: self.contentView)
+        if self.window.exists {
+            if self.detailVC.parent.isNil {
+                self.parentViewController()?.addChild(viewController: self.detailVC,
+                                                      toView: self.contentView)
+            }
+        } else {
+            if self.detailVC.parent.exists {
+                self.detailVC.removeFromParentSuperview()
+            }
         }
     }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -65,10 +70,7 @@ class MessageCell: UICollectionViewCell {
     func configure(with message: Messageable) {
         self.content.configure(with: message)
 
-        self.detailState.emotion = message.emotion
-        self.detailState.isRead = message.isConsumed
-        self.detailState.updateDate = message.lastUpdatedAt
-        self.detailState.replyCount = message.totalReplyCount
+        self.detailState.message = message
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
 

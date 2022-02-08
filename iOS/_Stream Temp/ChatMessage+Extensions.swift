@@ -29,7 +29,7 @@ extension Message: Messageable {
         return nil
     }
 
-    var avatar: Avatar {
+    var avatar: Avatar? {
         return self.author
     }
 
@@ -86,6 +86,25 @@ extension Message: Messageable {
     
     var recentReplies: [Messageable] {
         return self.latestReplies
+    }
+
+    var emotion: Emotion? {
+        let controller = ChatClient.shared.messageController(for: self)
+
+        guard let data = controller?.message?.extraData["emotions"] else {
+            return nil
+        }
+
+        guard case .array(let JSONObjects) = data, let emotionJSON = JSONObjects.first else {
+            return nil
+        }
+
+        guard case .string(let emotionString) = emotionJSON,
+              let emotion = Emotion(rawValue: emotionString) else {
+                  return nil
+              }
+
+        return emotion
     }
 
     func setToConsumed() async throws {

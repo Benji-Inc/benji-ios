@@ -10,20 +10,23 @@ import SwiftUI
 
 class MessageDetailConfig: ObservableObject {
 
-    @Published var emotion: Emotion?
-    @Published var isRead: Bool
-    @Published var updateDate: Date?
-    @Published var replyCount: Int
+    @Published var message: Messageable? = nil
 
-    convenience init() {
-        self.init(emotion: nil, isRead: false, updateDate: nil, replyCount: 0)
+    var emotion: Emotion? {
+        return self.message?.emotion
+    }
+    var isRead: Bool {
+        return self.message?.isConsumed ?? false
+    }
+    var updateDate: Date? {
+        return self.message?.lastUpdatedAt
+    }
+    var replyCount: Int {
+        return self.message?.totalReplyCount ?? 0
     }
 
-    init(emotion: Emotion?, isRead: Bool, updateDate: Date?, replyCount: Int) {
-        self.emotion = emotion
-        self.isRead = isRead
-        self.updateDate = updateDate
-        self.replyCount = replyCount
+    init(message: Messageable?) {
+        self.message = message
     }
 }
 
@@ -40,7 +43,7 @@ struct MessageDetailView: View {
 
             Spacer()
 
-            StatusView(config: self.config)
+            MessageStatusView(config: self.config)
                 .padding(.vertical, 0.0)
 
             Spacer()
@@ -54,10 +57,7 @@ struct MessageDetailView: View {
 struct MessageDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
-        let config = MessageDetailConfig(emotion: .calm,
-                                         isRead: false,
-                                         updateDate: nil,
-                                         replyCount: 2)
+        let config = MessageDetailConfig(message: MockMessage())
 
         MessageDetailView(config: config).preferredColorScheme(.dark)
     }

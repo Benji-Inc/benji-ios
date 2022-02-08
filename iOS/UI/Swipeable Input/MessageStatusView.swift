@@ -8,23 +8,24 @@
 
 import SwiftUI
 
-struct StatusView: View {
+/// A view that shows the read status and reply count of a message.
+struct MessageStatusView: View {
 
     @ObservedObject var config: MessageDetailConfig
 
     var body: some View {
         HStack {
-            ReadView(config: self.config)
+            MessageReadView(config: self.config)
 
             if self.config.replyCount > 0 {
                 Spacer.length(.short)
-                ReplyView(config: self.config)
+                MessageReplyView(config: self.config)
             }
         }
     }
 }
 
-struct ReadView: View {
+private struct MessageReadView: View {
     
     @ObservedObject var config: MessageDetailConfig
     
@@ -41,7 +42,7 @@ struct ReadView: View {
                 Spacer.length(.short)
             }
 
-            
+
             if self.config.isRead {
                 Image("checkmark-double")
                     .color(.T1)
@@ -60,7 +61,7 @@ struct ReadView: View {
     }
 }
 
-struct ReplyView: View {
+private struct MessageReplyView: View {
     
     @ObservedObject var config: MessageDetailConfig
     
@@ -85,7 +86,7 @@ struct ReplyView: View {
 
 struct StatusView_Previews: PreviewProvider {
     static var previews: some View {
-        let config = MessageDetailConfig(emotion: .calm, isRead: true, updateDate: nil, replyCount: 3)
-        StatusView(config: config).preferredColorScheme(.dark)
+        let config = MessageDetailConfig(message: nil)
+        MessageStatusView(config: config).preferredColorScheme(.dark)
     }
 }
