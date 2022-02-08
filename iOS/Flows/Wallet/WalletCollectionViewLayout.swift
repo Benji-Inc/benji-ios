@@ -32,7 +32,8 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                 
-                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(270))
+                let headerHeight = 270 + Theme.ContentOffset.screenPadding.value
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(headerHeight))
                 let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
                 headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                                    leading: Theme.ContentOffset.xtraLong.value,
@@ -42,35 +43,45 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                 
                 return section
             case .transactions:
+                
+                let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
+
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                             leading: Theme.ContentOffset.xtraLong.value,
+                                                             leading: sectionInset,
                                                              bottom: 0,
-                                                             trailing: Theme.ContentOffset.xtraLong.value)
+                                                             trailing: sectionInset)
 
                 // Group
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(66))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                              leading: sectionInset,
+                                                              bottom: 0,
+                                                              trailing: sectionInset)
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
-                section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset, leading: sectionInset, bottom: sectionInset, trailing: sectionInset)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 70,
+                                                                leading: 0,
+                                                                bottom: 0,
+                                                                trailing: 0)
                 
                 let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: BackgroundSupplementaryView.kind)
                 let backgroundInset: CGFloat = Theme.ContentOffset.xtraLong.value
-                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: backgroundInset, leading: backgroundInset, bottom: backgroundInset, trailing: backgroundInset)
-                section.decorationItems = [backgroundItem]
+                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                       leading: backgroundInset,
+                                                                       bottom: 0,
+                                                                       trailing: backgroundInset)
                 
-//                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(270))
-//                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-//                headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
-//                                                                   leading: Theme.ContentOffset.xtraLong.value,
-//                                                                   bottom: Theme.ContentOffset.xtraLong.value,
-//                                                                   trailing: Theme.ContentOffset.xtraLong.value)
-//                section.boundarySupplementaryItems = [headerItem]
+                let headerAnchor = NSCollectionLayoutAnchor(edges: [.top], absoluteOffset: CGPoint(x: 0, y: 0))
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(70))
+                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: TransactionSegmentControlView.kind, containerAnchor: headerAnchor)
+                
+                section.boundarySupplementaryItems = [headerItem]
+                section.decorationItems = [backgroundItem]
 
                 return section
             }

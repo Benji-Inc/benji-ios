@@ -77,14 +77,14 @@ class WalletHeaderView: UICollectionReusableView {
         self.topLeftDetailView.pin(.left)
         self.topLeftDetailView.pin(.top, offset: .custom(20))
         
-        self.bottomLeftDetailView.pin(.bottom)
+        self.bottomLeftDetailView.pin(.bottom, offset: .screenPadding)
         self.bottomLeftDetailView.pin(.left)
         
         self.topRightDetailView.pin(.right)
         self.topRightDetailView.pin(.top, offset: .custom(20))
         
         self.bottomRightDetailView.pin(.right)
-        self.bottomRightDetailView.pin(.bottom)
+        self.bottomRightDetailView.pin(.bottom, offset: .screenPadding)
         
         self.imageView.squaredSize = 100
         self.imageView.centerOnXAndY()

@@ -141,6 +141,7 @@
 		D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4CB277E0079007B3286 /* WelcomeViewController.swift */; };
 		D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4CE277E06A1007B3286 /* WelcomeCollectionView.swift */; };
 		D628B00427B2EBF700949154 /* BackgroundSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */; };
+		D628B00627B2F63000949154 /* TransactionSegmentControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */; };
 		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
 		D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
@@ -803,6 +804,7 @@
 		D627E4CB277E0079007B3286 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		D627E4CE277E06A1007B3286 /* WelcomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeCollectionView.swift; sourceTree = "<group>"; };
 		D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSupplementaryView.swift; sourceTree = "<group>"; };
+		D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSegmentControlView.swift; sourceTree = "<group>"; };
 		D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotificationContent+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
@@ -1219,6 +1221,7 @@
 				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
 				D6129FA927ADC6030058811C /* WalletViewController.swift */,
 				D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */,
+				D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -2566,6 +2569,7 @@
 				D6DEC3F127A1DDB70072D9D0 /* CircleView.swift in Sources */,
 				D6AE0FA3267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
+				D628B00627B2F63000949154 /* TransactionSegmentControlView.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				D66F0FD622BF28A100BA277D /* AppDelegate+Initialization.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,

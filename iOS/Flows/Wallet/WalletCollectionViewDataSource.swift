@@ -23,6 +23,7 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
     private let transactionConfig = ManageableCellRegistration<TransactionCell>().provider
     private let headerConfig = ManageableHeaderRegistration<WalletHeaderView>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<BackgroundSupplementaryView>().provider
+    private let segmentControlConfig = ManageableSupplementaryViewRegistration<TransactionSegmentControlView>().provider
         
     // MARK: - Cell Dequeueing
 
@@ -51,9 +52,15 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
             header.configure(with: self.itemIdentifiers(in: .transactions))
             return header
         case .transactions:
-            guard kind == BackgroundSupplementaryView.kind else { return nil }
-            let background = collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig, for: indexPath)
-            return background
+            if kind == BackgroundSupplementaryView.kind {
+                let background = collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig, for: indexPath)
+                return background
+            } else if kind == TransactionSegmentControlView.kind {
+                let segmentControl = collectionView.dequeueConfiguredReusableSupplementary(using: self.segmentControlConfig, for: indexPath)
+                return segmentControl
+            }
         }
+        
+        return nil 
     }
 }

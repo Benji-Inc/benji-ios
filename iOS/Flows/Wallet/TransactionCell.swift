@@ -72,7 +72,7 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: .standard)
         
         self.noteLabel.setSize(withWidth: self.contentView.width)
-        self.noteLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .short)
+        self.noteLabel.match(.top, to: .bottom, of: self.titleLabel)
         self.noteLabel.match(.left, to: .left, of: self.titleLabel)
         
         self.amountLabel.setSize(withWidth: self.contentView.width)
