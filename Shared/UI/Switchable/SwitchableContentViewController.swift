@@ -38,7 +38,7 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
 
         self.prepareAnimator?.addCompletion({ (position) in
             if position == .end {
-                self.currentCenterVC?.removeFromParentSuperview()
+                self.currentCenterVC?.removeFromParentAndSuperviewIfNeeded()
 
                 self.updateUI()
 

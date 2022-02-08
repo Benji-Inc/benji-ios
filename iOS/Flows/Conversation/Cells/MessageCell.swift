@@ -34,20 +34,21 @@ class MessageCell: UICollectionViewCell {
         self.contentView.addSubview(self.content)
     }
 
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+
+        self.detailVC.removeFromParentAndSuperviewIfNeeded()
+    }
+
     override func didMoveToWindow() {
         super.didMoveToWindow()
 
         if self.window.exists {
-            if self.detailVC.parent.isNil {
-                self.parentViewController()?.addChild(viewController: self.detailVC,
-                                                      toView: self.contentView)
-            }
-        } else {
-            if self.detailVC.parent.exists {
-                self.detailVC.removeFromParentSuperview()
-            }
+            self.parentViewController()?.addChild(viewController: self.detailVC,
+                                                  toView: self.contentView)
         }
     }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
