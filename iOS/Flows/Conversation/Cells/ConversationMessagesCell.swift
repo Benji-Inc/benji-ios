@@ -205,6 +205,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                     switch change {
                     case .update(let message, _):
                         itemsToReconfigure.append(.message(cid: cid, messageID: message.id))
+                    case .remove(let message, _):
+                        itemsToReconfigure.remove(object: .message(cid: cid, messageID: message.id))
                     default:
                         break
                     }
