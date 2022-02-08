@@ -13,6 +13,7 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
 
     enum SectionType: Int, CaseIterable {
         case wallet
+        case transactions
     }
 
     enum ItemType: Hashable {
@@ -21,6 +22,7 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
 
     private let transactionConfig = ManageableCellRegistration<TransactionCell>().provider
     private let headerConfig = ManageableHeaderRegistration<WalletHeaderView>().provider
+    private let backgroundConfig = ManageableSupplementaryViewRegistration<BackgroundSupplementaryView>().provider
         
     // MARK: - Cell Dequeueing
 
@@ -41,9 +43,17 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
                                            kind: String,
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
-        guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-        let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-        header.configure(with: self.itemIdentifiers(in: .wallet))
-        return header
+        
+        switch section {
+        case .wallet:
+            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            header.configure(with: self.itemIdentifiers(in: .transactions))
+            return header
+        case .transactions:
+            guard kind == BackgroundSupplementaryView.kind else { return nil }
+            let background = collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig, for: indexPath)
+            return background
+        }
     }
 }

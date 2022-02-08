@@ -14,9 +14,10 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: Transaction?
     
     let avatarView = BorderedAvatarView()
-    let titleLabel = ThemeLabel(font: .regular, textColor: .D1)
+    let titleLabel = ThemeLabel(font: .regular)
     let noteLabel = ThemeLabel(font: .small)
-    let amountLabel = ThemeLabel(font: .regularBold)
+    let amountLabel = ThemeLabel(font: .regular)
+    let lineView = BaseView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -26,8 +27,12 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.textAlignment = .left
         self.contentView.addSubview(self.noteLabel)
         self.noteLabel.textAlignment = .left
+        self.noteLabel.alpha = 0.35
         self.contentView.addSubview(self.amountLabel)
         self.amountLabel.textAlignment = .right
+        
+        self.addSubview(self.lineView)
+        self.lineView.set(backgroundColor: .B0)
     }
     
     func configure(with item: Transaction) {
@@ -48,7 +53,7 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     private func setAmount(with amount: Double) {
         if amount < 0 {
             self.amountLabel.setText("- \(amount * -1)")
-            self.amountLabel.setTextColor(.red)
+            self.amountLabel.setTextColor(.T1)
         } else {
             self.amountLabel.setText("+ \(amount)")
             self.amountLabel.setTextColor(.D6)
@@ -58,9 +63,9 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.avatarView.squaredSize = 40
+        self.avatarView.squaredSize = 32
         self.avatarView.pin(.left)
-        self.avatarView.pin(.top)
+        self.avatarView.centerOnY()
         
         self.titleLabel.setSize(withWidth: self.contentView.width)
         self.titleLabel.match(.top, to: .top, of: self.avatarView)
@@ -73,5 +78,9 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
         self.amountLabel.setSize(withWidth: self.contentView.width)
         self.amountLabel.pin(.right)
         self.amountLabel.match(.top, to: .top, of: self.avatarView)
+        
+        self.lineView.height = 1
+        self.lineView.expandToSuperviewWidth()
+        self.lineView.pin(.bottom)
     }
 }

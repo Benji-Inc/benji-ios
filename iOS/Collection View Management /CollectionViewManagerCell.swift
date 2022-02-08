@@ -23,7 +23,15 @@ struct ManageableFooterRegistration<Footer: UICollectionReusableView> {
 }
 
 struct ManageableHeaderRegistration<Header: UICollectionReusableView> {
-    let provider = UICollectionView.SupplementaryRegistration<Header>(elementKind: UICollectionView.elementKindSectionHeader) { footerView, elementKind, indexPath in }
+    let provider = UICollectionView.SupplementaryRegistration<Header>(elementKind: UICollectionView.elementKindSectionHeader) { headerView, elementKind, indexPath in }
+}
+
+protocol ElementKind {
+    static var kind: String { get set }
+}
+
+struct ManageableSupplementaryViewRegistration<View: UICollectionReusableView & ElementKind> {
+    let provider = UICollectionView.SupplementaryRegistration<View>(elementKind: View.kind) { headerView, elementKind, indexPath in }
 }
 
 // A base class that other cells managed by a CollectionViewManager can inherit from.

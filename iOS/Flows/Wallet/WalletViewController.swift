@@ -11,9 +11,6 @@ import Foundation
 class WalletViewController: DiffableCollectionViewController<WalletCollectionViewDataSource.SectionType,
                             WalletCollectionViewDataSource.ItemType,
                             WalletCollectionViewDataSource> {
-
-    private let backgroundView = BackgroundGradientView()
-
     init() {
         super.init(with: WalletCollectionView())
     }
@@ -24,10 +21,6 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
 
     required init(collectionView: UICollectionView) {
         fatalError("init(collectionView:) has not been implemented")
-    }
-    
-    override func loadView() {
-        self.view = self.backgroundView
     }
 
     override func initializeViews() {
@@ -45,6 +38,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.set(backgroundColor: .B0)
+        
         self.loadInitialData()
     }
 
@@ -60,7 +55,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
 
         guard let transactions = try? await Transaction.fetchAllTransactions() else { return data }
 
-        data[.wallet] = transactions.compactMap({ transaction in
+        data[.transactions] = transactions.compactMap({ transaction in
             return .transaction(transaction)
         })
 
