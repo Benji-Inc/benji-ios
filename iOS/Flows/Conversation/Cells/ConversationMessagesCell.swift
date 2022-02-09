@@ -18,7 +18,7 @@ protocol ConversationUIStateSettable {
 /// A cell to display the messages of a conversation.
 /// The user's messages and other messages are put in two stacks (along the z-axis),
 /// with the most recent messages at the front.
-class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable {
+class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable, UICollectionViewDelegate {
 
     // Interaction handling
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -29,7 +29,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    @Published var incomingTopmostMessage: ChatMessage?
+    @Published var frontmostNonUserMessage: ChatMessage?
     
     // CollectionView
     var collectionLayout: MessagesTimeMachineCollectionViewLayout {
@@ -93,8 +93,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                 self.conversationController?.loadPreviousMessages()
             }
         }
-        
-        self.collectionLayout.delegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -267,10 +265,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     func getBottomFrontmostCell() -> MessageCell? {
         return self.collectionLayout.getBottomFrontmostCell()
     }
-}
 
-extension ConversationMessagesCell: UICollectionViewDelegate {
-    
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -285,24 +280,69 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
             break
         }
     }
-}
 
-extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
+    private var frontmostEventHandlers: [IndexPath : AnyCancellable] = [:]
+    private var consumptionTasks: [IndexPath : Task<Void, Never>] = [:]
 
-    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
-                                         updatedFrontmostItemAt indexPath: IndexPath) {
-        
-        guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else {
-            self.incomingTopmostMessage = nil
-            return
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
+        guard indexPath.section == 0, let messageCell = cell as? MessageCell else { return }
+
+        self.frontmostEventHandlers[indexPath]
+        = messageCell.$isFrontmostMessage
+            .removeDuplicates()
+            .mainSink { [unowned self] isFrontmostMessage in
+                self.handleFrontmostUpdated(to: isFrontmostMessage, forItemAt: indexPath)
+            }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didEndDisplaying cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
+        self.frontmostEventHandlers.removeValue(forKey: indexPath)
+        self.consumptionTasks[indexPath]?.cancel()
+    }
+
+    private func handleFrontmostUpdated(to isFrontmostMessage: Bool, forItemAt indexPath: IndexPath) {
+        // If the the frontmost status changes for an item, we always want to cancel its tasks.
+        self.consumptionTasks[indexPath]?.cancel()
+
+        // If this item became the frontmost message, we may want to start the consumption process for it.
+        guard isFrontmostMessage,
+              ChatUser.currentUserRole != .anonymous,
+              let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+
+        guard case .message(let cid, let messageID, _) = item else { return }
+
+        let message = ChatClient.shared.message(cid: cid, id: messageID)
+
+        if !message.isFromCurrentUser {
+            self.frontmostNonUserMessage = message
         }
 
-        switch item {
-        case .message(cid: let cid, messageID: let messageID, _):
-            let message = ChatClient.shared.message(cid: cid, id: messageID)
-            self.incomingTopmostMessage = message
-        case .loadMore, .placeholder, .initial:
-            break
+//        if message.canBeConsumed {
+        if self.collectionView.isUserInteractionEnabled {
+            self.startConsumption(for: message, at: indexPath)
+        }
+    }
+
+    private func startConsumption(for message: Message, at indexPath: IndexPath) {
+        self.consumptionTasks[indexPath] = Task {
+
+            logDebug("starting consumption for "+message.text)
+            await Task.snooze(seconds: 2)
+
+            guard !Task.isCancelled else {
+                logDebug("cancelled consumption for "+message.text)
+                return
+            }
+
+            try? await message.setToConsumed()
+
+            logDebug("finished consumption for "+message.text)
         }
     }
 }

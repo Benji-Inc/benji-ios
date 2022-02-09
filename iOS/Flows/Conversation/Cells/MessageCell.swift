@@ -21,6 +21,8 @@ class MessageCell: UICollectionViewCell {
     private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
+    @Published var isFrontmostMessage: Bool = false
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeViews()
@@ -75,8 +77,6 @@ class MessageCell: UICollectionViewCell {
         self.messageState.message = message
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
-
-        self.setNeedsLayout()
     }
 
     private var consumeMessageTask: Task<Void, Never>?
@@ -102,36 +102,8 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
-        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-        if isAtTop {
-            self.handleConsumption()
-        } else {
-            self.consumeMessageTask?.cancel()
-        }
-    }
-
-    func handleConsumption() {
-        guard ChatUser.currentUserRole != .anonymous,
-              let message = self.messageState.message,
-              message.canBeConsumed else {
-                  return
-              }
-
-        self.consumeMessageTask?.cancel()
-        self.consumeMessageTask = Task {
-            logDebug("starting consumption of: "+message.kind.text)
-
-            await Task.snooze(seconds: 2)
-
-            guard !Task.isCancelled else {
-                logDebug("consumption was cancelled")
-                return
-            }
-
-            try? await message.setToConsumed()
-
-            logDebug("finished consumption of: "+message.kind.text)
-        }
+        let isFrontmost = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+        self.isFrontmostMessage = isFrontmost
     }
 }
 
