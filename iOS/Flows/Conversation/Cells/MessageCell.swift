@@ -8,12 +8,17 @@
 
 import Foundation
 import SwiftUI
+import StreamChat
 
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
-    let detailView = MessageDetailView()
+
+    // Detail View
+    @ObservedObject private var messageState = MessageDetailConfig(message: nil)
+    private lazy var detailView = MessageDetailView(config: self.messageState)
+    private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
     override init(frame: CGRect) {
@@ -28,42 +33,53 @@ class MessageCell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
-        self.contentView.addSubview(self.detailView)
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        //let host = UIHostingController(rootView: ())
-        //self.parentViewController()?.addChild(viewController: host, toView: <#T##UIView?#>)
+
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+
+        self.detailVC.removeFromParentAndSuperviewIfNeeded()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+
+        if self.window.exists {
+            self.parentViewController()?.addChild(viewController: self.detailVC,
+                                                  toView: self.contentView)
+        }
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.detailView.expandToSuperviewWidth()
+        self.detailVC.view.expandToSuperviewWidth()
+        self.detailVC.view.height = 25
+
         self.content.expandToSuperviewWidth()
-        
-        self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
+        self.content.height
+        = self.bounds.height - (self.detailVC.view.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
 
         if self.content.bubbleView.orientation == .down {
             self.content.pin(.top)
-            self.detailView.pin(.bottom)
+            self.detailVC.view.pin(.bottom)
         } else if self.content.bubbleView.orientation == .up {
-            self.detailView.pin(.top)
+            self.detailVC.view.pin(.top)
             self.content.pin(.bottom)
         }
     }
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
-        if self.shouldShowDetailBar {
-            self.detailView.configure(with: message)
-        }
+
+        self.messageState.message = message
         
-        self.detailView.isVisible = self.shouldShowDetailBar
+        self.detailVC.view.isVisible = self.shouldShowDetailBar
+
         self.setNeedsLayout()
     }
+
+    private var consumeMessageTask: Task<Void, Never>?
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
@@ -83,10 +99,39 @@ class MessageCell: UICollectionViewCell {
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
-        self.detailView.height = MessageDetailView.height
-        self.detailView.alpha = messageLayoutAttributes.detailAlpha
+        self.detailVC.view.height = old_MessageDetailView.height
+        self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
+
         let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-        self.detailView.handleTopMessage(isAtTop: isAtTop)
+        if isAtTop {
+            self.handleConsumption()
+        } else {
+            self.consumeMessageTask?.cancel()
+        }
+    }
+
+    func handleConsumption() {
+        guard ChatUser.currentUserRole != .anonymous,
+              let message = self.messageState.message,
+              message.canBeConsumed else {
+                  return
+              }
+
+        self.consumeMessageTask?.cancel()
+        self.consumeMessageTask = Task {
+            logDebug("starting consumption of: "+message.kind.text)
+
+            await Task.snooze(seconds: 2)
+
+            guard !Task.isCancelled else {
+                logDebug("consumption was cancelled")
+                return
+            }
+
+            try? await message.setToConsumed()
+
+            logDebug("finished consumption of: "+message.kind.text)
+        }
     }
 }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MessageReplyView: MessageStatusContainer {
+class old_MessageReplyView: old_MessageStatusContainer {
 
     let countLabel = ThemeLabel(font: .small)
 

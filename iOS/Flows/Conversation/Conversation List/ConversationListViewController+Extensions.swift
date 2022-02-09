@@ -66,7 +66,6 @@ extension ConversationListViewController {
     }
 
     func subscribeToConversationUpdates() {
-
         self.conversationListController
             .channelsChangesPublisher
             .mainSink { [unowned self] _ in

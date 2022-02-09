@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MessageStatusContainer: BaseView {
+class old_MessageStatusContainer: BaseView {
 
     let maxWidth: CGFloat = 200
     let minWidth: CGFloat = 25

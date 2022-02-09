@@ -23,7 +23,7 @@ protocol Messageable {
     var isFromCurrentUser: Bool { get }
     var authorId: String { get }
     var attributes: [String: Any]? { get }
-    var avatar: Avatar { get }
+    var avatar: Avatar? { get }
     var status: MessageStatus { get }
     var context: MessageContext { get }
     var canBeConsumed: Bool { get }
@@ -35,6 +35,9 @@ protocol Messageable {
     var isDeleted: Bool { get }
     var totalReplyCount: Int { get }
     var recentReplies: [Messageable] { get }
+    var lastUpdatedAt: Date? { get }
+
+    var emotion: Emotion? { get }
 
     func setToConsumed() async throws
     func setToUnconsumed() async throws
@@ -53,7 +56,7 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
 extension Messageable {
 
     var canBeConsumed: Bool {
-        return !self.isConsumedByMe
+        return !self.isConsumedByMe && self.isFromCurrentUser
     }
 
     var isConsumed: Bool {
