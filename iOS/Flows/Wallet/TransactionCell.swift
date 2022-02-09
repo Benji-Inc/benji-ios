@@ -14,8 +14,8 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: Transaction?
     
     let avatarView = BorderedAvatarView()
-    let titleLabel = ThemeLabel(font: .regular)
-    let noteLabel = ThemeLabel(font: .small)
+    let titleLabel = ThemeLabel(font: .small)
+    let noteLabel = ThemeLabel(font: .regular)
     let amountLabel = ThemeLabel(font: .regular)
     let lineView = BaseView()
     
@@ -32,7 +32,8 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
         self.amountLabel.textAlignment = .right
         
         self.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .B0)
+        self.lineView.set(backgroundColor: .white)
+        self.lineView.alpha = 0.1
     }
     
     func configure(with item: Transaction) {
@@ -65,21 +66,21 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
         
         self.avatarView.squaredSize = 32
         self.avatarView.pin(.left)
-        self.avatarView.centerOnY()
-        
-        let maxWidth = self.contentView.width - self.avatarView.right - Theme.ContentOffset.standard.value
-        
-        self.titleLabel.setSize(withWidth: maxWidth)
-        self.titleLabel.match(.top, to: .top, of: self.avatarView)
-        self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: .standard)
-        
-        self.noteLabel.setSize(withWidth: maxWidth)
-        self.noteLabel.match(.top, to: .bottom, of: self.titleLabel)
-        self.noteLabel.match(.left, to: .left, of: self.titleLabel)
+        self.avatarView.pin(.top, offset: .xtraLong)
         
         self.amountLabel.setSize(withWidth: self.contentView.width)
         self.amountLabel.pin(.right)
         self.amountLabel.match(.top, to: .top, of: self.avatarView)
+         
+        let maxWidth = self.contentView.width - self.avatarView.right - Theme.ContentOffset.long.value - self.amountLabel.width
+        
+        self.titleLabel.setSize(withWidth: maxWidth)
+        self.titleLabel.match(.top, to: .top, of: self.avatarView)
+        self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: .long)
+        
+        self.noteLabel.setSize(withWidth: maxWidth)
+        self.noteLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .short)
+        self.noteLabel.match(.left, to: .left, of: self.titleLabel)
         
         self.lineView.height = 1
         self.lineView.expandToSuperviewWidth()

@@ -12,6 +12,14 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                             WalletCollectionViewDataSource.ItemType,
                             WalletCollectionViewDataSource> {
     
+    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, UIColor.clear.cgColor],
+                                               startPoint: .topCenter,
+                                               endPoint: .bottomCenter)
+    
+    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, UIColor.clear.cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
+    
     init() {
         super.init(with: WalletCollectionView())
     }
@@ -34,6 +42,21 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             sheet.prefersGrabberVisible = true 
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
+        
+        self.view.addSubview(self.topGradientView)
+        self.view.addSubview(self.bottomGradientView)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = 34
+        self.topGradientView.pin(.top)
+        
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
     }
     
     override func viewDidLoad() {

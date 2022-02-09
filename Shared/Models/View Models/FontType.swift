@@ -50,7 +50,7 @@ enum FontType {
         case .display:
             return 30
         case .medium, .mediumBold:
-            return 24
+            return 20
         case .regular, .regularBold:
             return 16
         case .small, .smallBold, .reactionEmoji:

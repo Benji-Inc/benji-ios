@@ -32,7 +32,7 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                 
-                let headerHeight = 270 + Theme.ContentOffset.screenPadding.value
+                let headerHeight: CGFloat = 240
                 let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(headerHeight))
                 let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
                 headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,

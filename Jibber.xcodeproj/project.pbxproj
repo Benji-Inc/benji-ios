@@ -266,7 +266,6 @@
 		D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
 		D63DB28B25E999A600F6B323 /* SwitchableContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8B123CE403D0039DC5A /* SwitchableContentViewController.swift */; };
 		D63DB28C25E999AB00F6B323 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0C121D3071400204BEE /* ViewController.swift */; };
-		D63DB28D25E999AB00F6B323 /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D63DB28E25E999AB00F6B323 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461221D583E500CD8CE4 /* NavigationController.swift */; };
 		D63DB28F25E999AB00F6B323 /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DF21D30E3F00204BEE /* FullScreenViewController.swift */; };
 		D63DB29025E999B200F6B323 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E521D30EB300204BEE /* BaseView.swift */; };
@@ -562,7 +561,6 @@
 		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B22667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */; };
-		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D6DEC3ED27A1D9520072D9D0 /* CircleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */; };
@@ -1019,7 +1017,6 @@
 		D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 		D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationaryPressRecognizer.swift; sourceTree = "<group>"; };
 		D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextCheckingResult+Extension.swift"; sourceTree = "<group>"; };
-		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleViewController.swift; sourceTree = "<group>"; };
@@ -1717,7 +1714,6 @@
 			isa = PBXGroup;
 			children = (
 				D61EC0DF21D30E3F00204BEE /* FullScreenViewController.swift */,
-				D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */,
 				D6D1461221D583E500CD8CE4 /* NavigationController.swift */,
 				D61EC0C121D3071400204BEE /* ViewController.swift */,
 			);
@@ -2667,7 +2663,6 @@
 				D6E9743C2755568D00D95F08 /* MessageContentView+Read.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */,
-				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */,
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
@@ -2957,7 +2952,6 @@
 				D63DB25C25E9995E00F6B323 /* Reservation.swift in Sources */,
 				D63DB28E25E999AB00F6B323 /* NavigationController.swift in Sources */,
 				D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */,
-				D63DB28D25E999AB00F6B323 /* NavigationBarViewController.swift in Sources */,
 				D63DB29125E999B200F6B323 /* ThemeButton.swift in Sources */,
 				D6617CEC26741C4500439C06 /* UITextField+Extensions.swift in Sources */,
 				D63DB25625E9995700F6B323 /* ClientError.swift in Sources */,
