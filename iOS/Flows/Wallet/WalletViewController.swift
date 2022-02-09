@@ -12,20 +12,6 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                             WalletCollectionViewDataSource.ItemType,
                             WalletCollectionViewDataSource> {
     
-    private lazy var refreshControl: UIRefreshControl = {
-        let action = UIAction { _ in
-            switch self.dataSource.segmentIndex {
-            case .you:
-                self.loadCurrentTransactions()
-            case .connections:
-                self.loadConnectionsTransactions()
-            }
-        }
-        let control = UIRefreshControl(frame: .zero, primaryAction: action)
-        control.tintColor = ThemeColor.D1.color
-        return control
-    }()
-    
     init() {
         super.init(with: WalletCollectionView())
     }
@@ -56,8 +42,6 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         self.view.set(backgroundColor: .B0)
         
         self.loadInitialData()
-        
-        self.collectionView.refreshControl = self.refreshControl
     }
     
     override func collectionViewDataWasLoaded() {
@@ -117,8 +101,5 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .transactions)
         await self.dataSource.apply(snapshot)
-        Task.onMainActor {
-            self.refreshControl.endRefreshing()
-        }
     }
 }
