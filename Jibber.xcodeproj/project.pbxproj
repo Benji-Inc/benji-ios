@@ -142,6 +142,7 @@
 		D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4CE277E06A1007B3286 /* WelcomeCollectionView.swift */; };
 		D628B00427B2EBF700949154 /* BackgroundSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */; };
 		D628B00627B2F63000949154 /* TransactionSegmentControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */; };
+		D628B00727B33EFB00949154 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FB327ADC72E0058811C /* Transaction.swift */; };
 		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
 		D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
@@ -2847,6 +2848,7 @@
 				D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */,
 				D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				D63DB27F25E9999C00F6B323 /* TransitionRouter+Fill.swift in Sources */,
+				D628B00727B33EFB00949154 /* Transaction.swift in Sources */,
 				D63DB22C25E9991800F6B323 /* PFInstallation+Extensions.swift in Sources */,
 				D6C3892D2724B8D0004D29D5 /* Messageable.swift in Sources */,
 				D63DB25A25E9995E00F6B323 /* User+Objectable.swift in Sources */,
