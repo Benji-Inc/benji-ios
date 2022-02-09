@@ -58,6 +58,7 @@ class TransactionSegmentControlView: UICollectionReusableView, ElementKind {
         self.segmentControl.setWidth(self.halfWidth - padding, forSegmentAt: 0)
         self.segmentControl.setWidth(self.halfWidth - padding, forSegmentAt: 1)
         self.segmentControl.width = self.width - padding.doubled
-        self.segmentControl.centerOnXAndY()
+        self.segmentControl.centerOnX()
+        self.segmentControl.pin(.bottom)
     }
 }

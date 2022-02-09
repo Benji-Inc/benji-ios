@@ -50,9 +50,7 @@ class CollectionViewManagerCell: UICollectionViewListCell {
         self.initializeSubviews()
     }
 
-    func initializeSubviews() {
-
-    }
+    func initializeSubviews() {}
 
     func update(isSelected: Bool) {
         guard isSelected != self.isSelected else { return }
