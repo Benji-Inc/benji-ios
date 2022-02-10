@@ -56,8 +56,14 @@ extension ConversationListCoordinator {
     func presentPeoplePicker() {
         guard let conversation = self.activeConversation else { return }
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
+        coordinator.selectedConversationCID = self.activeConversation?.cid
         self.present(coordinator) { [unowned self] people in
-            self.add(people: people, to: conversation)
+            
+            if people.isEmpty {
+                self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+            } else {
+                self.add(people: people, to: conversation)
+            }
         }
     }
     
@@ -151,6 +157,33 @@ extension ConversationListCoordinator {
         
         self.conversationListVC.resignFirstResponder()
 
+        self.conversationListVC.present(alertController, animated: true, completion: nil)
+    }
+    
+    func presentDeleteConversationAlert(cid: ConversationId?) {
+        guard let cid = cid else { return }
+        
+        let controller = ChatClient.shared.channelController(for: cid)
+        
+        let alertController = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+        
+        let deleteAction = UIAlertAction(title: "Delete Conversation", style: .destructive, handler: {
+            (action : UIAlertAction!) -> Void in
+            Task {
+                try await controller.deleteChannel()
+            }
+            self.conversationListVC.becomeFirstResponder()
+        })
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (action : UIAlertAction!) -> Void in
+            self.conversationListVC.becomeFirstResponder()
+        })
+
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        
+        self.conversationListVC.resignFirstResponder()
         self.conversationListVC.present(alertController, animated: true, completion: nil)
     }
     

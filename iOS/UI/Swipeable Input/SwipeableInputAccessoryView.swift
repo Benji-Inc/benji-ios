@@ -62,7 +62,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     // MARK: - Message State
 
-    var currentContext: MessageContext = .passive {
+    var currentContext: MessageContext = .respectful {
         didSet {
             self.deliveryTypeView.configure(for: self.currentContext)
         }
@@ -329,7 +329,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     func animateInputViews(with text: String) {}
 
     func resetInputViews() {
-        self.currentContext = .passive
+        self.currentContext = .respectful
         self.textView.reset()
         self.inputContainerView.alpha = 1
         self.countView.alpha = 0.0

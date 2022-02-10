@@ -30,6 +30,7 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
         
         self.content.configure(with: "Who do you want to Jibber with?",
                                subtitle: "Up to 10 in a group chat.",
+                               image: UIImage(named: "question_bubbles"),
                                buttonTitle: "Choose People")
         self.content.button.didSelect { [unowned self] in
             self.didSelectAddPeople?()

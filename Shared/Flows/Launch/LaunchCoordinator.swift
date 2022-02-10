@@ -21,7 +21,6 @@ class LaunchCoordinator: PresentableCoordinator<LaunchStatus> {
 
         Task {
             let launchStatus = await LaunchManager.shared.launchApp()
-
             self.finishFlow(with: launchStatus)
         }
     }
