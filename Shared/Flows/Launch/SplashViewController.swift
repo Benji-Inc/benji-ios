@@ -21,7 +21,9 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     let label = ThemeLabel(font: .small)
     let versionLabel = ThemeLabel(font: .small)
 
-    private let messages = ["Booting up", "Getting coffee", "Squishing bugs", "Saving trees", "Finding purpose", "Doing math", "Painting pixels", "Kerning type", "Doing darkmode", "Earning Jibs", "Raising money"]
+    private let messages = ["Booting up", "Getting coffee", "Squishing bugs", "Saving trees",
+                            "Finding purpose", "Doing math", "Painting pixels", "Kerning type",
+                            "Doing dark mode", "Earning Jibs", "Raising money"]
 
     var text: Localized? {
         didSet {
@@ -42,20 +44,6 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.contentContainer.addSubview(self.versionLabel)
         let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
         self.versionLabel.setText(version)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.animateText()
-    }
-    
-    func animateText() {
-        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveLinear) {
-            self.text = self.messages.random()
-        } completion: { _ in
-            self.animateText()
-        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -81,9 +69,23 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.animationView.play()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.startAnimatingText()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.animationView.stop()
+    }
+
+    private func startAnimatingText() {
+        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveLinear) {
+            self.text = self.messages.random()
+        } completion: { [weak self] _ in
+            self?.startAnimatingText()
+        }
     }
 }
