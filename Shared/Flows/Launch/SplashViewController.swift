@@ -108,9 +108,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         await UIView.awaitAnimation(with: .fast, animations: {
             self.label.alpha = 1
         })
-        
-        await Task.sleep(seconds: 0.2)
-        
+                
         await self.startAnimatingText()
     }
 }
