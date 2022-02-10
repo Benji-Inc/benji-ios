@@ -33,7 +33,7 @@ extension Date {
     
     static var monthYear: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM, yyyy"
+        formatter.dateFormat = "MMM yyyy"
         return formatter
     }
 

@@ -48,7 +48,6 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         
         self.welcomeCollectionView.timeMachineLayout.dataSource = self.dataSource
         
-        self.view.addSubview(self.collectionView)
         self.collectionView.clipsToBounds = false
         
         self.view.addSubview(self.waitlistButton)

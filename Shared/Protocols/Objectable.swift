@@ -93,7 +93,8 @@ extension Objectable where Self: PFObject {
     }
 
     static func getFirstObject(where key: String? = nil,
-                               contains string: String? = nil) async throws -> Self {
+                               contains string: String? = nil,
+                               forUserId: String? = nil) async throws -> Self {
 
         let object: Self = try await withCheckedThrowingContinuation { continuation in
             guard let query = self.query() else {
@@ -102,6 +103,9 @@ extension Objectable where Self: PFObject {
             }
             if let k = key, let s = string {
                 query.whereKey(k, contains: s)
+            }
+            if let objectId = forUserId {
+                query.whereKey("objectId", equalTo: objectId)
             }
             query.getFirstObjectInBackground(block: { object, error in
                 if let obj = object as? Self {

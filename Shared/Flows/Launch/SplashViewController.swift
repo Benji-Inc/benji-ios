@@ -21,7 +21,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     let label = ThemeLabel(font: .small)
     let versionLabel = ThemeLabel(font: .small)
 
-    private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
+    private let messages = ["Booting up", "Getting coffee", "Squishing bugs", "Saving trees", "Finding purpose", "Doing math", "Painting pixels", "Kerning type", "Doing darkmode", "Earning Jibs", "Raising money"]
 
     var text: Localized? {
         didSet {
@@ -42,8 +42,20 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.contentContainer.addSubview(self.versionLabel)
         let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
         self.versionLabel.setText(version)
-
-        self.text = self.messages.random()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.animateText()
+    }
+    
+    func animateText() {
+        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveLinear) {
+            self.text = self.messages.random()
+        } completion: { _ in
+            self.animateText()
+        }
     }
 
     override func viewDidLayoutSubviews() {
