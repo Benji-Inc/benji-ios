@@ -12,7 +12,7 @@ class BackgroundSupplementaryView: UICollectionReusableView, ElementKind {
     
     static var kind: String = "background"
     
-    let backgroundView = BackgroundGradientView()
+    private let backgroundView = BackgroundGradientView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,7 +20,7 @@ class BackgroundSupplementaryView: UICollectionReusableView, ElementKind {
         self.layer.cornerRadius = Theme.cornerRadius
         self.addSubview(self.backgroundView)
         self.clipsToBounds = true
-        self.layer.masksToBounds = true 
+        self.layer.masksToBounds = true
     }
     
     required init?(coder: NSCoder) {

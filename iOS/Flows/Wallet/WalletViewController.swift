@@ -12,11 +12,11 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                             WalletCollectionViewDataSource.ItemType,
                             WalletCollectionViewDataSource> {
     
-    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, UIColor.clear.cgColor],
+    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                startPoint: .topCenter,
                                                endPoint: .bottomCenter)
     
-    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, UIColor.clear.cgColor],
+    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
     

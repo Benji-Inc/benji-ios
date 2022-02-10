@@ -34,7 +34,7 @@ class TransactionSegmentControlView: UICollectionReusableView, ElementKind {
         control.setTitleTextAttributes(attributes, for: .normal)
         control.setTitleTextAttributes(attributes, for: .selected)
         control.setTitleTextAttributes(attributes, for: .highlighted)
-        control.selectedSegmentTintColor = ThemeColor.white.color.withAlphaComponent(0.1)
+        control.selectedSegmentTintColor = ThemeColor.B5.color.withAlphaComponent(0.1)
         
         return control
     }()
