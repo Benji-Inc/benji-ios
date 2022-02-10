@@ -11,6 +11,7 @@ import Localization
 
 class UpsellContentView: BaseView {
     
+    let imageView = UIImageView()
     let button = ThemeButton()
     let label = ThemeLabel(font: .medium, textColor: .T3)
     let subTitle = ThemeLabel(font: .regular, textColor: .T3)
@@ -20,6 +21,9 @@ class UpsellContentView: BaseView {
         
         self.set(backgroundColor: .D1)
         self.roundCorners()
+        
+        self.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.button)
 
         self.addSubview(self.label)
@@ -31,8 +35,10 @@ class UpsellContentView: BaseView {
     
     func configure(with title: Localized,
                    subtitle: Localized,
+                   image: UIImage?,
                    buttonTitle: Localized) {
         
+        self.imageView.image = image
         self.button.set(style: .custom(color: .white, textColor: .T2, text: buttonTitle))
         self.label.setText(title)
         self.subTitle.setText(subtitle)
@@ -52,6 +58,10 @@ class UpsellContentView: BaseView {
         self.label.setSize(withWidth: self.width - padding)
         self.label.centerOnX()
         self.label.center.y = self.halfHeight * 0.9
+        
+        self.imageView.squaredSize = 54
+        self.imageView.match(.bottom, to: .top, of: self.label, offset: .negative(.xtraLong))
+        self.imageView.centerOnX()
         
         self.subTitle.setSize(withWidth: self.width - padding)
         self.subTitle.centerOnX()

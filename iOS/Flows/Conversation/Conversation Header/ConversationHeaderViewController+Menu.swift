@@ -83,12 +83,7 @@ extension ConversationHeaderViewController {
                                 children: [confirmLeave, neverMind])
 
         if conversation.isOwnedByMe {
-            /// Don't allow the waitlist user to delete/hide conversations. No way to create new ones.
-            if User.isOnWaitlist {
-                children = [topic, add]
-            } else {
-                children = [topic, add, leaveMenu, hideMenu, deleteMenu]
-            }
+            children = [topic, add, leaveMenu, hideMenu, deleteMenu]
         } else {
             children = [topic, leaveMenu, hideMenu]
         }

@@ -75,26 +75,27 @@ class WalletHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         
         self.topLeftDetailView.pin(.left)
-        self.topLeftDetailView.pin(.top, offset: .custom(20))
+        self.topLeftDetailView.pin(.top, offset: .screenPadding)
         
-        self.bottomLeftDetailView.pin(.bottom)
+        self.bottomLeftDetailView.pin(.bottom, offset: .screenPadding)
         self.bottomLeftDetailView.pin(.left)
         
         self.topRightDetailView.pin(.right)
-        self.topRightDetailView.pin(.top, offset: .custom(20))
+        self.topRightDetailView.pin(.top, offset: .screenPadding)
         
         self.bottomRightDetailView.pin(.right)
-        self.bottomRightDetailView.pin(.bottom)
+        self.bottomRightDetailView.pin(.bottom, offset: .screenPadding)
         
-        self.imageView.squaredSize = 100
-        self.imageView.centerOnXAndY()
+        self.imageView.squaredSize = 160
+        self.imageView.centerOnX()
+        self.imageView.centerY = self.centerY - Theme.ContentOffset.screenPadding.value.half
         self.imageView.centerY += 10
     }
 }
 
 private class DetailView: BaseView {
     let titleLabel = ThemeLabel(font: .medium)
-    let subtitleLabel = ThemeLabel(font: .regular, textColor: .D1)
+    let subtitleLabel = ThemeLabel(font: .small, textColor: .D1)
     private let shouldPinLeft: Bool
     
     init(shouldPinLeft: Bool) {
@@ -129,7 +130,7 @@ private class DetailView: BaseView {
         self.titleLabel.setSize(withWidth: 200)
         self.subtitleLabel.setSize(withWidth: 200)
         
-        self.height = self.titleLabel.height + Theme.ContentOffset.standard.value + self.subtitleLabel.height
+        self.height = self.titleLabel.height + Theme.ContentOffset.short.value + self.subtitleLabel.height
         self.width = self.titleLabel.width > self.subtitleLabel.width ? self.titleLabel.width : self.subtitleLabel.width
         
         if self.shouldPinLeft {
@@ -141,6 +142,6 @@ private class DetailView: BaseView {
         }
         
         self.titleLabel.pin(.top)
-        self.subtitleLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .standard)
+        self.subtitleLabel.pin(.bottom)
     }
 }

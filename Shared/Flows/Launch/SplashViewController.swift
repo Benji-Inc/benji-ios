@@ -21,7 +21,11 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     let label = ThemeLabel(font: .small)
     let versionLabel = ThemeLabel(font: .small)
 
-    private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
+    private let allMessages = ["Booting up", "Getting coffee", "Squishing bugs", "Saving trees",
+                               "Finding purpose", "Doing math", "Painting pixels", "Kerning type",
+                               "Doing dark mode", "Earning Jibs", "Raising money"]
+    
+    private var messages: [String] = []
 
     var text: Localized? {
         didSet {
@@ -33,6 +37,8 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     override func initializeViews() {
         super.initializeViews()
+        
+        self.messages = self.allMessages
 
         self.contentContainer.addSubview(self.label)
         self.contentContainer.addSubview(self.animationView)
@@ -42,8 +48,6 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.contentContainer.addSubview(self.versionLabel)
         let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
         self.versionLabel.setText(version)
-
-        self.text = self.messages.random()
     }
 
     override func viewDidLayoutSubviews() {
@@ -55,8 +59,8 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
 
         let max = self.view.width - (Theme.contentOffset * 3) - self.animationView.width
         self.label.setSize(withWidth: max)
-        self.label.match(.right, to: .left, of: self.animationView, offset: .negative(.xtraLong))
-        self.label.match(.bottom, to: .bottom, of: self.animationView)
+        self.label.match(.right, to: .left, of: self.animationView, offset: .negative(.standard))
+        self.label.centerY  = self.animationView.centerY
 
         self.versionLabel.setSize(withWidth: self.view.width)
         self.versionLabel.pinToSafeAreaLeft()
@@ -69,9 +73,42 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.animationView.play()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        Task {
+            await self.startAnimatingText()
+        }.add(to: self.taskPool)
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.animationView.stop()
+    }
+
+    @MainActor
+    private func startAnimatingText() async {
+        guard !Task.isCancelled else { return }
+        
+        await UIView.awaitAnimation(with: .fast, animations: {
+            self.label.alpha = 0
+        })
+        
+        if let message = self.messages.randomElement() {
+            self.text = message
+            self.messages.remove(object: message)
+        } else {
+            self.messages = self.allMessages
+            let message = self.messages.randomElement()
+            self.text = message
+            self.messages.remove(object: message!)
+        }
+                
+        await UIView.awaitAnimation(with: .fast, animations: {
+            self.label.alpha = 1
+        })
+                
+        await self.startAnimatingText()
     }
 }

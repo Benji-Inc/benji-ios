@@ -29,13 +29,15 @@ class InvestmentUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
         self.contentView.addSubview(self.content)
         
         if let email = User.current()?.email {
-            self.content.configure(with: "Thank your for showing interest in becoming an investor in Jibber!",
+            self.content.configure(with: "Thank you for showing interest in Jibber!",
                                    subtitle: "We will get in touch soon.\n \(email)",
+                                   image: UIImage(named: "invest_bubbles"),
                                    buttonTitle: "Update Email")
             
         } else {
             self.content.configure(with: "Do you want to invest in Jibber?",
                                    subtitle: "Open to everyone, even you.",
+                                   image: UIImage(named: "invest_bubbles"),
                                    buttonTitle: "Learn More")
         }
         

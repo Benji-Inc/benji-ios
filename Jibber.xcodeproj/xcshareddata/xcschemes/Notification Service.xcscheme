@@ -46,22 +46,21 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
-      launchStyle = "0"
+      launchStyle = "1"
       askForAppToLaunch = "Yes"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
-      launchAutomaticallySubstyle = "2"
-      notificationPayloadFile = "PushNotificationPayload.apns">
+      launchAutomaticallySubstyle = "2">
       <RemoteRunnable
          runnableDebuggingMode = "0"
-         BundleIdentifier = "com.Jibber-Inc.Jibber"
-         RemotePath = "/var/containers/Bundle/Application/2BF78D8D-1A7C-4C65-AD86-B3A006FD5B78/Jibber.app">
+         BundleIdentifier = "com.Jibber-Inc.iOS"
+         RemotePath = "/var/containers/Bundle/Application/CE3D2E6B-15AF-4081-815A-91E507274C28/Jibber.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference
@@ -79,6 +78,7 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
+      askForAppToLaunch = "Yes"
       launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">

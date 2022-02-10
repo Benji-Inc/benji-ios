@@ -10,13 +10,13 @@ import UserNotifications
 import Intents
 import StreamChat
 import Parse
-import Combine
 
 class NotificationService: UNNotificationServiceExtension {
 
-    private var cancellables = Set<AnyCancellable>()
-    var contentHandler: ((UNNotificationContent) -> Void)?
-    var request: UNNotificationRequest?
+    /// The current notification request that we're processing.
+    private var request: UNNotificationRequest?
+    /// The content handler we received for the notification request we're processing.
+    private var contentHandler: ((UNNotificationContent) -> Void)?
 
     private var recipients: [INPerson] = []
     private var conversation: ChatChannel?
@@ -26,31 +26,35 @@ class NotificationService: UNNotificationServiceExtension {
 
     private var chatHandler: ChatRemoteNotificationHandler?
 
+    // MARK: - UNNotificationServiceExtension
+
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
-        self.contentHandler = contentHandler
+        // Save the request and content handler in case we need to finish early.
         self.request = request
+        self.contentHandler = contentHandler
 
         Task {
             await self.initializeParse()
-            
-            if let client = self.getChatClient() {
-                await self.updateContent(with: request,
-                                         client: client,
-                                         contentHandler: contentHandler)
-            }
+
+            guard let chatClient = self.getConfiguredChatClient() else { return }
+
+            await self.updateContent(with: request,
+                                     client: chatClient,
+                                     contentHandler: contentHandler)
         }
     }
 
     override func serviceExtensionTimeWillExpire() {
-        if let contentHandler = self.contentHandler,
-           let content = self.request?.content {
-            Task {
-                await self.finalizeContent(content: content, contentHandler: contentHandler)
-            }
+        guard let content = self.request?.content, let contentHandler = self.contentHandler else { return }
+
+        Task {
+            await self.finalizeContent(content: content, contentHandler: contentHandler)
         }
     }
+
+    // MARK: - Parse/Chat Initialization
 
     private func initializeParse() async {
         return await withCheckedContinuation { continuation in
@@ -70,7 +74,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func getChatClient() -> ChatClient? {
+    private func getConfiguredChatClient() -> ChatClient? {
         guard let user = User.current() else { return nil }
 
         var config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
@@ -84,17 +88,19 @@ class NotificationService: UNNotificationServiceExtension {
         return client
     }
 
+    // MARK: - Notification Content Updates
+
     private func updateContent(with request: UNNotificationRequest,
                                client: ChatClient,
                                contentHandler: @escaping (UNNotificationContent) -> Void) async {
 
-        /// Ensure we have the data we need
+        // Ensure we have the data we need
         guard let authorId = request.content.author,
               let author = try? await User.getObject(with: authorId).iNPerson,
               let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
                   await self.finalizeContent(content: request.content, contentHandler: contentHandler)
-            return
-        }
+                  return
+              }
 
         self.author = author
 
@@ -126,7 +132,7 @@ class NotificationService: UNNotificationServiceExtension {
 
         if !notification {
             logDebug("chat handler failed to update notification content")
-           await self.finalizeContent(content: content, contentHandler: contentHandler)
+            await self.finalizeContent(content: content, contentHandler: contentHandler)
         }
     }
 
@@ -146,12 +152,29 @@ class NotificationService: UNNotificationServiceExtension {
             self.recipients = recipients
         }
 
-        /// Update the interruption level
+        // Update the interruption level
         if let value = self.message?.extraData["context"],
            case RawJSON.string(let string) = value,
            let context = MessageContext.init(rawValue: string) {
-            
-            content.interruptionLevel = context.interruptionLevel
+
+            // Focused users should not be interrupted unless the message is time sensitive.
+            if INFocusStatusCenter.default.focusStatus.isFocused == true {
+                switch context {
+                case .timeSensitive:
+                    content.interruptionLevel = .timeSensitive
+                case .respectful:
+                    content.interruptionLevel = .passive
+                }
+            } else {
+                // Available users can be interrupted freely.
+                switch context {
+                case .timeSensitive:
+                    content.interruptionLevel = .timeSensitive
+                case .respectful:
+                    content.interruptionLevel = .active
+                }
+            }
+
             content.badge = self.getBadge(with: context)
         }
 
@@ -169,7 +192,7 @@ class NotificationService: UNNotificationServiceExtension {
 
     private func finalizeContent(content: UNNotificationContent,
                                  contentHandler: @escaping (UNNotificationContent) -> Void) async {
-        /// Create the intent
+        // Create the intent
         let incomingMessageIntent = INSendMessageIntent(recipients: recipients,
                                                         outgoingMessageType: .outgoingMessageText,
                                                         content: content.body,

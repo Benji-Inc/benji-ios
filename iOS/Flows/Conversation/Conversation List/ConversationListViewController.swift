@@ -164,6 +164,7 @@ class ConversationListViewController: ViewController {
                 }
                 let users = try await UserStore.shared.mapMembersToUsers(members: members)
                 self.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
+                self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
             }
             
             if !self.isFirstResponder {
@@ -176,6 +177,7 @@ class ConversationListViewController: ViewController {
             }
             self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
             ConversationsManager.shared.activeConversation = nil
+            self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
         }
     }
 
