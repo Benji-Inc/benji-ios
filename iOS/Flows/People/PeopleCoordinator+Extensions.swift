@@ -71,6 +71,8 @@ extension PeopleCoordinator {
         // Search for user with phone number
         guard let phone = contact?.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
 
+        reservation.conversationCid = self.selectedConversationCID?.description
+
         do {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
             // Ensure that the reservation metadata is prepared before we show the reservation
