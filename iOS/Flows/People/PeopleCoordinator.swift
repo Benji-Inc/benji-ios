@@ -19,6 +19,8 @@ class PeopleCoordinator: PresentableCoordinator<[Person]> {
     var invitedPeople: [Person] = []
     
     var inviteIndex: Int = 0
+    
+    var selectedConversationCID: ConversationId?
 
     override func toPresentable() -> DismissableVC {
         return self.peopleNavController
