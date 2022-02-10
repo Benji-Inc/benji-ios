@@ -7,31 +7,21 @@
 //
 
 import Foundation
-import UserNotifications
 
 enum MessageContext: String, CaseIterable {
 
     case timeSensitive = "time-sensitive"
-    case passive = "passive"
+    case respectful = "respectful"
 
     var color: ThemeColor {
         return .B1
-    }
-
-    var interruptionLevel: UNNotificationInterruptionLevel {
-        switch self {
-        case .timeSensitive:
-            return .timeSensitive
-        case .passive:
-            return .passive
-        }
     }
 
     var displayName: String {
         switch self {
         case .timeSensitive:
             return "Urgently"
-        case .passive:
+        case .respectful:
             return "Quietly"
         }
     }

@@ -57,15 +57,15 @@ class DeliveryTypeView: BaseView {
 
     private func createMenu(for context: MessageContext) -> UIMenu {
 
-        let state: UIMenuElement.State = context == .passive ? .on : .off
+        let state: UIMenuElement.State = context == .respectful ? .on : .off
         let quitely = UIAction(title: "Quietly",
                                image: UIImage(systemName: "bell.slash"),
                                identifier: nil,
                                discoverabilityTitle: nil,
                                attributes: [],
                                state: state) { [unowned self] _ in
-            self.didSelectContext?(.passive)
-            self.configure(for: .passive)
+            self.didSelectContext?(.respectful)
+            self.configure(for: .respectful)
         }
 
         let urgentState: UIMenuElement.State = context == .timeSensitive ? .on : .off
