@@ -21,7 +21,8 @@ class MessageCell: UICollectionViewCell {
     private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
 
-    @Published var isFrontmostMessage: Bool = false
+    /// If true, this cell's message details are fully visible.
+    @Published private(set) var areDetailsShown: Bool = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -102,8 +103,8 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
-        let isFrontmost = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-        self.isFrontmostMessage = isFrontmost
+        let areDetailsShown = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+        self.areDetailsShown = areDetailsShown
     }
 }
 

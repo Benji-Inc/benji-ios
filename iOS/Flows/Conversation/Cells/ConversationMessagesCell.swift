@@ -281,7 +281,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         }
     }
 
-    private var frontmostEventHandlers: [IndexPath : AnyCancellable] = [:]
+    /// Subscriptions for details-shown events on the message cells.
+    private var detailsShownEventHandlers: [IndexPath : AnyCancellable] = [:]
     private var consumptionTasks: [IndexPath : Task<Void, Never>] = [:]
 
     func collectionView(_ collectionView: UICollectionView,
@@ -290,8 +291,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         guard indexPath.section == 0, let messageCell = cell as? MessageCell else { return }
 
-        self.frontmostEventHandlers[indexPath]
-        = messageCell.$isFrontmostMessage
+        self.detailsShownEventHandlers[indexPath]
+        = messageCell.$areDetailsShown
             .removeDuplicates()
             .mainSink { [unowned self] isFrontmostMessage in
                 self.handleFrontmostUpdated(to: isFrontmostMessage, forItemAt: indexPath)
@@ -302,7 +303,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                         didEndDisplaying cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
-        self.frontmostEventHandlers.removeValue(forKey: indexPath)
+        self.detailsShownEventHandlers.removeValue(forKey: indexPath)
         self.consumptionTasks[indexPath]?.cancel()
     }
 
