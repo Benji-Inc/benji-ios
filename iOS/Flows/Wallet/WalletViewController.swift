@@ -61,7 +61,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                        
         self.view.set(backgroundColor: .B0)
         
         self.loadInitialData()
@@ -124,5 +124,9 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .transactions)
         await self.dataSource.apply(snapshot)
+    }
+        
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.setNeedsUpdateConfiguration()
     }
 }

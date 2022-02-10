@@ -57,8 +57,9 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DKC-5W-2sT" customClass="ThemeLabel" customModule="Jibber" customModuleProvider="target">
-                    <rect key="frame" x="44" y="40" width="41.5" height="133"/>
+                    <rect key="frame" x="44" y="40" width="751" height="133"/>
                     <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="41.5" id="8se-Oj-OHI"/>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20.5" id="hkP-4o-gld"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -70,7 +71,7 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="DKC-5W-2sT" firstAttribute="leading" secondItem="mRx-w7-sSG" secondAttribute="leading" id="34Y-CC-Sfo"/>
-                <constraint firstItem="yhg-ce-86G" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DKC-5W-2sT" secondAttribute="trailing" priority="999" constant="16" id="3PK-dB-2YK"/>
+                <constraint firstItem="yhg-ce-86G" firstAttribute="leading" secondItem="DKC-5W-2sT" secondAttribute="trailing" priority="750" constant="16" id="3PK-dB-2YK"/>
                 <constraint firstAttribute="trailing" secondItem="mzj-Ny-lxD" secondAttribute="trailing" id="49Q-rD-wqK"/>
                 <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="DKC-5W-2sT" secondAttribute="bottom" constant="16" id="5M3-An-Phe"/>
                 <constraint firstItem="mzj-Ny-lxD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="5Wy-cr-H8U"/>

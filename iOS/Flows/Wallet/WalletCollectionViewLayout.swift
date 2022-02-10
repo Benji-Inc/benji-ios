@@ -20,7 +20,6 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
             
             switch sectionType {
             case .wallet:
-                
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 
@@ -45,7 +44,6 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
             case .transactions:
                 
                 let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
-                
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(environment.container.contentSize.width), heightDimension: .estimated(70))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -94,4 +92,6 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+
 }

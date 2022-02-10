@@ -15,6 +15,8 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     
     func configure(with item: Transaction) {
         self.currentItem = item
+        self.automaticallyUpdatesContentConfiguration = false 
+        self.setNeedsUpdateConfiguration()
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
