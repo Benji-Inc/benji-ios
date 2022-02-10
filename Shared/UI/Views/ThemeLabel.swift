@@ -43,7 +43,7 @@ class ThemeLabel: UILabel {
     }
 
     /// The string attributes to apply to any text given this label's assigned font and font color.
-    private var attributes: [NSAttributedString.Key : Any] {
+    private var defaultAttributes: [NSAttributedString.Key : Any] {
         let font = self.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
         let textColor = self.textColor ?? ThemeColor.T1.color
 
@@ -118,7 +118,7 @@ class ThemeLabel: UILabel {
 
         // Create an attributed string and add attributes to the entire range.
         let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(self.attributes, range: NSRange(location: 0,
+        attributedString.addAttributes(self.defaultAttributes, range: NSRange(location: 0,
                                                                        length: attributedString.length))
 
         super.attributedText = attributedString
