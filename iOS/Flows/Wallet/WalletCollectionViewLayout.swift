@@ -45,7 +45,7 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                 
                 let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(environment.container.contentSize.width), heightDimension: .estimated(70))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(70))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                              leading: sectionInset,

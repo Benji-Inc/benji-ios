@@ -15,7 +15,6 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     
     func configure(with item: Transaction) {
         self.currentItem = item
-        self.automaticallyUpdatesContentConfiguration = false 
         self.setNeedsUpdateConfiguration()
     }
     
@@ -79,6 +78,7 @@ class TransactionContentView: BaseView, UIContentView {
             self.content.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0.0),
             self.content.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0.0),
             self.content.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0),
+            self.widthAnchor.constraint(equalToConstant: 500)
         ])
         
         self.titleLabel?.setFont(.small)
@@ -86,6 +86,7 @@ class TransactionContentView: BaseView, UIContentView {
         self.titleLabel?.textAlignment = .left
         self.noteLabel?.setFont(.regular)
         self.noteLabel?.textAlignment = .left
+        self.noteLabel?.lineBreakMode = .byTruncatingTail
         self.amountLabel?.setFont(.regular)
         self.amountLabel?.textAlignment = .right
         
@@ -99,7 +100,7 @@ class TransactionContentView: BaseView, UIContentView {
             return
         }
         
-        currentConfiguration = configuration
+        self.currentConfiguration = configuration
         
         guard let transaction = configuration.transaction else { return }
         
@@ -112,6 +113,7 @@ class TransactionContentView: BaseView, UIContentView {
             if let from = try? await transaction.from?.retrieveDataIfNeeded() {
                 self.avatarView?.set(avatar: from)
                 self.titleLabel?.setText(from.fullName)
+                self.setNeedsUpdateConstraints()
             }
             
             self.setAmount(with: transaction.amount)
