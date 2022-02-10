@@ -37,6 +37,7 @@ struct SendCode: CloudFunction {
 }
 
 struct VerifyCode: CloudFunction {
+
     typealias ReturnType = [String: String]
     
     let code: String
@@ -82,11 +83,18 @@ struct FinalizeOnboarding: CloudFunction {
         let params: [String: Any] = ["passId": self.passId,
                                      "reservationId": self.reservationId]
         
-        return try await self.makeRequest(andUpdate: statusables,
-                                          params: params,
-                                          callName: "finalizeUserOnboarding",
-                                          delayInterval: 0.0,
-                                          viewsToIgnore: viewsToIgnore)
+        _ = try await self.makeRequest(andUpdate: statusables,
+                                       params: params,
+                                       callName: "finalizeUserOnboarding",
+                                       delayInterval: 0.0,
+                                       viewsToIgnore: viewsToIgnore)
+
+        guard let user = User.current() else {
+            throw ClientError.message(detail: "No user found.")
+        }
+
+        // Refresh the user so it's activation status is properly reflected.
+        return try await user.fetchInBackground()
     }
 
 }
