@@ -324,6 +324,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             self.frontmostNonUserMessage = message
         }
 
+        #warning("Ensure that the message can actually consumed first.")
 //        if message.canBeConsumed {
         if self.collectionView.isUserInteractionEnabled {
             self.startConsumption(for: message, at: indexPath)
