@@ -162,7 +162,7 @@ class NotificationService: UNNotificationServiceExtension {
                 switch context {
                 case .timeSensitive:
                     content.interruptionLevel = .timeSensitive
-                case .passive:
+                case .respectful:
                     content.interruptionLevel = .passive
                 }
             } else {
@@ -170,7 +170,7 @@ class NotificationService: UNNotificationServiceExtension {
                 switch context {
                 case .timeSensitive:
                     content.interruptionLevel = .timeSensitive
-                case .passive:
+                case .respectful:
                     content.interruptionLevel = .active
                 }
             }
