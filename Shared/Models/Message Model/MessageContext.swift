@@ -12,7 +12,7 @@ import UserNotifications
 enum MessageContext: String, CaseIterable {
 
     case timeSensitive = "time-sensitive"
-    case passive = "active"
+    case passive = "passive"
 
     var color: ThemeColor {
         return .B1
