@@ -143,6 +143,7 @@
 		D628B00427B2EBF700949154 /* BackgroundSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */; };
 		D628B00627B2F63000949154 /* TransactionSegmentControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */; };
 		D628B00727B33EFB00949154 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FB327ADC72E0058811C /* Transaction.swift */; };
+		D628B00927B47EEF00949154 /* TransactionContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D628B00827B47EEF00949154 /* TransactionContentView.xib */; };
 		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
 		D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
@@ -804,6 +805,7 @@
 		D627E4CE277E06A1007B3286 /* WelcomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeCollectionView.swift; sourceTree = "<group>"; };
 		D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSupplementaryView.swift; sourceTree = "<group>"; };
 		D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSegmentControlView.swift; sourceTree = "<group>"; };
+		D628B00827B47EEF00949154 /* TransactionContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionContentView.xib; sourceTree = "<group>"; };
 		D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotificationContent+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
@@ -1211,15 +1213,16 @@
 		D6129FA627ADC5E70058811C /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */,
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
+				D628B00827B47EEF00949154 /* TransactionContentView.xib */,
+				D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */,
 				D6129FAF27ADC6530058811C /* WalletCollectionView.swift */,
 				D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */,
 				D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */,
 				D6129FA727ADC5F50058811C /* WalletCoordinator.swift */,
 				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
 				D6129FA927ADC6030058811C /* WalletViewController.swift */,
-				D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */,
-				D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -2273,6 +2276,7 @@
 				D640329625AF3CA500139396 /* checkbox.json in Resources */,
 				D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6B00D3C2796480D00DF07B1 /* loading.json in Resources */,
+				D628B00927B47EEF00949154 /* TransactionContentView.xib in Resources */,
 				8020DD93272C81FB00D5BA04 /* ConversationInputAccessoryView.xib in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
 				D6E974642756DAFF00D95F08 /* SF-Pro-Text-Bold.otf in Resources */,

@@ -45,9 +45,9 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
             case .transactions:
                 
                 let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
-
+                
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(environment.container.contentSize.width), heightDimension: .estimated(70))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                              leading: sectionInset,
@@ -55,7 +55,7 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                              trailing: sectionInset)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(70))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                               leading: sectionInset,
@@ -76,7 +76,7 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                        trailing: sectionInset)
                 
                 let headerAnchor = NSCollectionLayoutAnchor(edges: [.top], absoluteOffset: CGPoint(x: 0, y: sectionInset))
-                let headerHeight: CGFloat = 32 //+ Theme.ContentOffset.screenPadding.value
+                let headerHeight: CGFloat = Theme.ContentOffset.screenPadding.value
                 let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(headerHeight))
                 let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: TransactionSegmentControlView.kind, containerAnchor: headerAnchor)
                 

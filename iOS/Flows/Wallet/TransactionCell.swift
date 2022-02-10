@@ -13,77 +13,130 @@ class TransactionCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: Transaction?
     
-    let avatarView = BorderedAvatarView()
-    let titleLabel = ThemeLabel(font: .small)
-    let noteLabel = ThemeLabel(font: .regular)
-    let amountLabel = ThemeLabel(font: .regular)
-    let lineView = BaseView()
-    
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.contentView.addSubview(self.avatarView)
-        self.contentView.addSubview(self.titleLabel)
-        self.titleLabel.alpha = 0.35
-        self.titleLabel.textAlignment = .left
-        self.contentView.addSubview(self.noteLabel)
-        self.noteLabel.textAlignment = .left
-        self.contentView.addSubview(self.amountLabel)
-        self.amountLabel.textAlignment = .right
-        
-        self.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .white)
-        self.lineView.alpha = 0.1
+    func configure(with item: Transaction) {
+        self.currentItem = item
     }
     
-    func configure(with item: Transaction) {
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        super.updateConfiguration(using: state)
         
+        // Create new configuration object and update it base on state
+        var newConfiguration = TransactionContentConfiguration().updated(for: state)
+        
+        // Update any configuration parameters related to data item
+        newConfiguration.transaction = self.currentItem
+        
+        // Set content configuration in order to update custom content view
+        self.contentConfiguration = newConfiguration
+    }
+}
+
+class TransactionContentView: BaseView, UIContentView {
+    
+    private var currentConfiguration: TransactionContentConfiguration!
+    
+    var configuration: UIContentConfiguration {
+        get {
+            return self.currentConfiguration
+        }
+        set {
+            guard let newConfiguration = newValue as? TransactionContentConfiguration else {
+                return
+            }
+            
+            self.apply(configuration: newConfiguration)
+        }
+    }
+    
+    @IBOutlet weak var content: UIView!
+    
+    @IBOutlet weak var avatarView: BorderedAvatarView?
+    @IBOutlet weak var titleLabel: ThemeLabel?
+    @IBOutlet weak var noteLabel: ThemeLabel?
+    @IBOutlet weak var amountLabel: ThemeLabel?
+    @IBOutlet weak var lineView: BaseView?
+    
+    init(configuration: TransactionContentConfiguration) {
+        super.init()
+        
+        self.loadNib()
+        self.apply(configuration: configuration)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    private func loadNib() {
+        Bundle.main.loadNibNamed("\(TransactionContentView.self)", owner: self, options: nil)
+        
+        self.addSubview(self.content)
+        self.content.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            self.content.topAnchor.constraint(equalTo: self.topAnchor, constant: 0.0),
+            self.content.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0.0),
+            self.content.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0.0),
+            self.content.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0),
+        ])
+        
+        self.titleLabel?.setFont(.small)
+        self.titleLabel?.alpha = 0.35
+        self.titleLabel?.textAlignment = .left
+        self.noteLabel?.setFont(.regular)
+        self.noteLabel?.textAlignment = .left
+        self.amountLabel?.setFont(.regular)
+        self.amountLabel?.textAlignment = .right
+        
+        self.lineView?.set(backgroundColor: .white)
+        self.lineView?.alpha = 0.1
+    }
+    
+    private func apply(configuration: TransactionContentConfiguration) {
+
+        guard self.currentConfiguration != configuration else {
+            return
+        }
+        
+        currentConfiguration = configuration
+        
+        guard let transaction = configuration.transaction else { return }
+        
+        self.updateLayout(with: transaction)
+    }
+    
+    private func updateLayout(with item: Transaction) {
         Task {
             guard let transaction = try? await item.retrieveDataIfNeeded() else { return }
             if let from = try? await transaction.from?.retrieveDataIfNeeded() {
-                self.avatarView.set(avatar: from)
-                self.titleLabel.setText(from.fullName)
+                self.avatarView?.set(avatar: from)
+                self.titleLabel?.setText(from.fullName)
             }
             
             self.setAmount(with: transaction.amount)
-            self.noteLabel.setText(transaction.note)
-            self.layoutNow()
+            self.noteLabel?.setText(transaction.note)
         }.add(to: self.taskPool)
     }
     
     private func setAmount(with amount: Double) {
         if amount < 0 {
-            self.amountLabel.setText("- \(amount * -1)")
-            self.amountLabel.setTextColor(.T1)
+            self.amountLabel?.setText("- \(amount * -1)")
+            self.amountLabel?.setTextColor(.T1)
         } else {
-            self.amountLabel.setText("+ \(amount)")
-            self.amountLabel.setTextColor(.D6)
+            self.amountLabel?.setText("+ \(amount)")
+            self.amountLabel?.setTextColor(.D6)
         }
     }
+}
+
+struct TransactionContentConfiguration: UIContentConfiguration, Hashable {
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.avatarView.squaredSize = 32
-        self.avatarView.pin(.left)
-        self.avatarView.pin(.top, offset: .xtraLong)
-        
-        self.amountLabel.setSize(withWidth: self.contentView.width)
-        self.amountLabel.pin(.right)
-        self.amountLabel.match(.top, to: .top, of: self.avatarView)
-         
-        let maxWidth = self.contentView.width - self.avatarView.right - Theme.ContentOffset.long.value - self.amountLabel.width
-        
-        self.titleLabel.setSize(withWidth: maxWidth)
-        self.titleLabel.match(.top, to: .top, of: self.avatarView)
-        self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: .long)
-        
-        self.noteLabel.setSize(withWidth: maxWidth)
-        self.noteLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .short)
-        self.noteLabel.match(.left, to: .left, of: self.titleLabel)
-        
-        self.lineView.height = 1
-        self.lineView.expandToSuperviewWidth()
-        self.lineView.pin(.bottom)
+    var transaction: Transaction?
+    
+    func makeContentView() -> UIView & UIContentView {
+        return TransactionContentView(configuration: self)
+    }
+    
+    func updated(for state: UIConfigurationState) -> TransactionContentConfiguration {
+        return self
     }
 }
