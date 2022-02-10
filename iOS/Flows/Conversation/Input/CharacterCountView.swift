@@ -10,7 +10,7 @@ import Foundation
 
 class CharacterCountView: BaseView {
 
-    let label = ThemeLabel(font: .small)
+    let label = ThemeLabel(font: .small, textColor: .T1)
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -29,7 +29,7 @@ class CharacterCountView: BaseView {
         if count >= max {
             self.alpha = 1.0
             self.label.setText(self.getText(from: count, max: max))
-            self.label.setTextColor(.red)
+            self.label.setTextColor(.T1)
         } else if count >= max - 20 {
             self.alpha = 1.0
             self.label.setText(self.getText(from: count, max: max))
@@ -40,6 +40,6 @@ class CharacterCountView: BaseView {
     }
 
     private func getText(from count: Int, max: Int) -> String {
-        return String("\(String(count))/\(String(max))")
+        return String("\(String(count)) / \(String(max))")
     }
 }

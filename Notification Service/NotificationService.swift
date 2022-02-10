@@ -49,6 +49,7 @@ class NotificationService: UNNotificationServiceExtension {
             Task {
                 await self.finalizeContent(content: content, contentHandler: contentHandler)
             }
+            
         }
     }
 

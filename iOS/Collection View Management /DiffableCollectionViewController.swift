@@ -155,4 +155,8 @@ class DiffableCollectionViewController<SectionType: Hashable,
                         point: CGPoint) -> UIContextMenuConfiguration? {
         return nil
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+    }
 }

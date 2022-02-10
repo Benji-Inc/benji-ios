@@ -13,6 +13,7 @@ import Localization
 enum ToastType {
     case newMessage(Messageable)
     case error(ClientError)
+    case transaction(Transaction)
     case basic(identifier: String,
                displayable: ImageDisplayable,
                title: Localized,
@@ -55,6 +56,10 @@ class ToastScheduler {
             toast = self.createMessageToast(for: message,
                                                position: position,
                                                duration: duration)
+        case .transaction(let transaction):
+            toast = try? await self.createTransactionToast(for: transaction,
+                                                              position: position,
+                                                              duration: duration)
         }
 
         if let t = toast {
@@ -132,6 +137,29 @@ class ToastScheduler {
             deeplink.customMetadata["conversationId"] = message.conversationId
             deeplink.customMetadata["messageId"] = message.id
             self.delegate?.didInteractWith(type: .newMessage(message), deeplink: deeplink)
+        })
+
+        return toast
+    }
+    
+    private func createTransactionToast(for transaction: Transaction,
+                                        position: Toast.Position,
+                                        duration: TimeInterval) async throws -> Toast? {
+        guard let transaction = try? await transaction.retrieveDataIfNeeded(),
+              let objectId = transaction.objectId,
+              let from = transaction.from else { return nil }
+
+        let toast = Toast(id: objectId,
+                          priority: 1,
+                          title: "\(transaction.amount) Jibs received",
+                          description: transaction.note,
+                          displayable: from,
+                          deeplink: nil,
+                          type: .banner,
+                          position: position,
+                          duration: duration,
+                          didTap: { [unowned self] in
+            self.delegate?.didInteractWith(type: .transaction(transaction), deeplink: nil)
         })
 
         return toast
