@@ -43,7 +43,7 @@ extension Message: Messageable {
             let context = MessageContext.init(rawValue: string) {
             return context
         }
-        return .passive
+        return .respectful
     }
     
     var lastReadAt: Date? {
