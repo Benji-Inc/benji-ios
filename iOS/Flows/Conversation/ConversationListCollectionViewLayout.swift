@@ -93,10 +93,12 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
     private func sendCenterUpdateEventIfNeeded(withContentOffset contentOffset: CGPoint) {
         var cid: ConversationId?
+
         if let centeredItem = self.getCenteredItem(forContentOffset: contentOffset) {
             cid = self.delegate?.conversationListCollectionViewLayout(self,
                                                                       cidFor: centeredItem.indexPath)
         }
+
         if self.previousCenteredCID != cid {
             self.previousCenteredCID = cid
             self.delegate?.conversationListCollectionViewLayout(self, didUpdateCentered: cid)

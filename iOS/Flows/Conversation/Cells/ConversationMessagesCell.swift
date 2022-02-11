@@ -89,9 +89,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
-            Task {
-                self.conversationController?.loadPreviousMessages()
-            }
+            self.conversationController?.loadPreviousMessages()
         }
     }
 
@@ -186,9 +184,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
         
-        if let attributes = layoutAttributes as? ConversationsMessagesCellAttributes {
-            self.collectionView.isUserInteractionEnabled = attributes.canScroll
-        }
+        guard let attributes = layoutAttributes as? ConversationsMessagesCellAttributes else { return }
+
+        self.collectionView.isUserInteractionEnabled = attributes.canScroll
     }
 
     // MARK: - Update Subscriptions
@@ -215,6 +213,28 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                 self.dataSource.set(messageSequence: conversation,
                                     itemsToReconfigure: itemsToReconfigure,
                                     showLoadMore: self.shouldShowLoadMore)
+            }.store(in: &self.subscriptions)
+
+        ConversationsManager.shared.$activeConversation
+            .removeDuplicates()
+            .mainSink { activeConversation in
+
+                // If this cell's conversation becomes active,
+                // then start message consumption if needed.
+                guard activeConversation?.cid == self.conversation?.cid else { return }
+
+                for cell in self.collectionView.visibleCells {
+                    guard let messageCell = cell as? MessageCell,
+                          let indexPath = self.collectionView.indexPath(for: messageCell),
+                          messageCell.areDetailsShown else { continue }
+
+                    guard let item = self.dataSource.itemIdentifier(for: indexPath),
+                          case .message(let cid, let messageID, _) = item else { continue }
+
+                    let message = ChatClient.shared.message(cid: cid, id: messageID)
+
+                    self.startConsumptionIfNeeded(for: message, at: indexPath)
+                }
             }.store(in: &self.subscriptions)
     }
 
@@ -283,7 +303,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
     /// Subscriptions for details-shown events on the message cells.
     private var detailsShownEventHandlers: [IndexPath : AnyCancellable] = [:]
-    private var consumptionTasks: [IndexPath : Task<Void, Never>] = [:]
 
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
@@ -294,8 +313,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.detailsShownEventHandlers[indexPath]
         = messageCell.$areDetailsShown
             .removeDuplicates()
-            .mainSink { [unowned self] isFrontmostMessage in
-                self.handleFrontmostUpdated(to: isFrontmostMessage, forItemAt: indexPath)
+            .mainSink { [unowned self] areDetailsShown in
+                self.handleDetailsShown(areDetailsShown, forItemAt: indexPath)
             }
     }
 
@@ -304,15 +323,19 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                         forItemAt indexPath: IndexPath) {
 
         self.detailsShownEventHandlers.removeValue(forKey: indexPath)
-        self.consumptionTasks[indexPath]?.cancel()
     }
 
-    private func handleFrontmostUpdated(to isFrontmostMessage: Bool, forItemAt indexPath: IndexPath) {
-        // If the the frontmost status changes for an item, we always want to cancel its tasks.
+    private var consumptionTasks: [IndexPath : Task<Void, Never>] = [:]
+
+    private func handleDetailsShown(_ areDetailsShown: Bool, forItemAt indexPath: IndexPath) {
+        // If the detail visibility changes for a message, we always want to cancel its tasks.
         self.consumptionTasks[indexPath]?.cancel()
 
-        // If this item became the frontmost message, we may want to start the consumption process for it.
-        guard isFrontmostMessage,
+        // Don't consume messages unless they're a part of the active conversation.
+        guard ConversationsManager.shared.activeConversation?.cid == self.conversation?.cid else { return }
+
+        // If this item is showing its details, we may want to start the consumption process for it.
+        guard areDetailsShown,
               ChatUser.currentUserRole != .anonymous,
               let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
 
@@ -324,27 +347,19 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             self.frontmostNonUserMessage = message
         }
 
-        #warning("Ensure that the message can actually consumed first.")
-//        if message.canBeConsumed {
-        if self.collectionView.isUserInteractionEnabled {
-            self.startConsumption(for: message, at: indexPath)
-        }
+        self.startConsumptionIfNeeded(for: message, at: indexPath)
     }
 
-    private func startConsumption(for message: Message, at indexPath: IndexPath) {
-        self.consumptionTasks[indexPath] = Task {
+    private func startConsumptionIfNeeded(for message: Message, at indexPath: IndexPath) {
+        guard message.canBeConsumed else { return }
 
-            logDebug("starting consumption for "+message.text)
+        guard indexPath.section == 0 else { return }
+        self.consumptionTasks[indexPath] = Task {
             await Task.snooze(seconds: 2)
 
-            guard !Task.isCancelled else {
-                logDebug("cancelled consumption for "+message.text)
-                return
-            }
+            guard !Task.isCancelled else { return }
 
             try? await message.setToConsumed()
-
-            logDebug("finished consumption for "+message.text)
         }
     }
 }
