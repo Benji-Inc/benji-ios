@@ -56,7 +56,6 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
 extension Messageable {
 
     var canBeConsumed: Bool {
-        return !self.isFromCurrentUser
         return !self.isConsumedByMe && !self.isFromCurrentUser
     }
 
