@@ -18,7 +18,7 @@ struct MockMessage: Messageable {
     var attributes: [String : Any]? = nil
     var avatar: Avatar? = nil
     var status: MessageStatus = .delivered
-    var context: MessageContext = .passive
+    var context: MessageContext = .respectful
     var hasBeenConsumedBy: [Avatar] = []
     var kind: MessageKind = .text("Some Text")
     var isDeleted: Bool = false

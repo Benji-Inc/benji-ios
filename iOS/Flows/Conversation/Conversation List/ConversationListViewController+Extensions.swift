@@ -99,7 +99,7 @@ extension ConversationListViewController {
     func subscribeToTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
         // didUpdate is called before this is ever set.
         // Also looks like a non centered conversation is being used
-        self.topMessageSubscription = cell.$incomingTopmostMessage
+        self.incomingFrontmostMessageSubscription = cell.$frontmostNonUserMessage
             .removeDuplicates()
             .mainSink { [unowned self] message in
                 guard let author = message?.author else { return }

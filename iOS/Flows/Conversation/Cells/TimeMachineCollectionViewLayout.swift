@@ -17,11 +17,6 @@ protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType
 }
 
-protocol TimeMachineCollectionViewLayoutDelegate: AnyObject {
-    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
-                                         updatedFrontmostItemAt indexPath: IndexPath)
-}
-
 class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
     /// If true, the z ranges for all the items should be recalculated.
     var shouldRecalculateZRanges = true
@@ -40,7 +35,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Data Source
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
-    weak var delegate: TimeMachineCollectionViewLayoutDelegate?
 
     var sectionCount: Int {
         return self.collectionView?.numberOfSections ?? 0
@@ -258,11 +252,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return attributes
         }
 
-        let normalizedZOffset = self.getNormalizedZOffsetForItem(at: indexPath, givenZPosition: self.zPosition)
-
-        if normalizedZOffset == 0 {
-            self.delegate?.timeMachineCollectionViewLayout(self, updatedFrontmostItemAt: indexPath)
-        }
+        let normalizedZOffset = self.getNormalizedZOffsetForItem(at: indexPath,
+                                                                 givenZPosition: self.zPosition)
 
         guard (-1...1).contains(normalizedZOffset) else { return nil }
         
