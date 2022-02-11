@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 
 extension Spacer {
+    
     static func length(_ value: Theme.ContentOffset) -> some View {
         Spacer().frame(minWidth: value.value,
                        idealWidth: value.value,

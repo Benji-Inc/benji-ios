@@ -8,13 +8,23 @@
 
 import Foundation
 import SwiftUI
+import StreamChat
+import Combine
 
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
-    let detailView = MessageDetailView()
+
+    // Detail View
+    @ObservedObject private var messageState = MessageDetailConfig(message: nil)
+    private lazy var detailView = MessageDetailView(config: self.messageState)
+    private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
+
+    /// If true, this cell's message details are fully visible.
+    @Published private(set) var areDetailsShown: Bool = false
+    private var subscriptions = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,41 +38,56 @@ class MessageCell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
-        self.contentView.addSubview(self.detailView)
+
+        ConversationsManager.shared.$activeConversation
+            .removeDuplicates()
+            .mainSink { [unowned self] activeConversation in
+                // If this cell's conversation becomes active,
+                // then start message consumption if needed.
+                self.handleDetailsShown(self.detailVC.view.alpha == 1)
+            }.store(in: &self.subscriptions)
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        //let host = UIHostingController(rootView: ())
-        //self.parentViewController()?.addChild(viewController: host, toView: <#T##UIView?#>)
+
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+
+        self.detailVC.removeFromParentAndSuperviewIfNeeded()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+
+        if self.window.exists {
+            self.parentViewController()?.addChild(viewController: self.detailVC,
+                                                  toView: self.contentView)
+        }
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.detailView.expandToSuperviewWidth()
+        self.detailVC.view.expandToSuperviewWidth()
+        self.detailVC.view.height = 25
+
         self.content.expandToSuperviewWidth()
-        
-        self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
+        self.content.height
+        = self.bounds.height - (self.detailVC.view.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
 
         if self.content.bubbleView.orientation == .down {
             self.content.pin(.top)
-            self.detailView.pin(.bottom)
+            self.detailVC.view.pin(.bottom)
         } else if self.content.bubbleView.orientation == .up {
-            self.detailView.pin(.top)
+            self.detailVC.view.pin(.top)
             self.content.pin(.bottom)
         }
     }
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
-        if self.shouldShowDetailBar {
-            self.detailView.configure(with: message)
-        }
+
+        self.messageState.message = message
         
-        self.detailView.isVisible = self.shouldShowDetailBar
-        self.setNeedsLayout()
+        self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -83,10 +108,47 @@ class MessageCell: UICollectionViewCell {
         self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
-        self.detailView.height = MessageDetailView.height
-        self.detailView.alpha = messageLayoutAttributes.detailAlpha
-        let isAtTop = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-        self.detailView.handleTopMessage(isAtTop: isAtTop)
+        self.detailVC.view.height = old_MessageDetailView.height
+        self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
+
+        let areDetailsShown = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+        self.areDetailsShown = areDetailsShown
+        self.handleDetailsShown(areDetailsShown)
+    }
+
+    // MARK: - Message Consumption
+
+    private var consumeMessageTask: Task<Void, Never>?
+
+    private func handleDetailsShown(_ areDetailsShown: Bool) {
+        // If the detail visibility changes for a message, we always want to cancel its tasks.
+        self.consumeMessageTask?.cancel()
+        self.consumeMessageTask = nil
+
+        // If this item is showing its details, we may want to start the consumption process for it.
+        guard areDetailsShown, ChatUser.currentUserRole != .anonymous else { return}
+
+        guard let messageable = self.messageState.message,
+              let cid = try? ConversationId(cid: messageable.conversationId) else { return }
+
+        // Don't consume messages unless they're a part of the active conversation.
+        guard ConversationsManager.shared.activeConversation?.cid == cid else { return }
+
+        let message = ChatClient.shared.message(cid: cid, id: messageable.id)
+
+        self.startConsumptionIfNeeded(for: message)
+    }
+
+    private func startConsumptionIfNeeded(for message: Message) {
+        guard message.canBeConsumed else { return }
+
+        self.consumeMessageTask = Task {
+            await Task.snooze(seconds: 2)
+
+            guard !Task.isCancelled else { return }
+
+            try? await message.setToConsumed()
+        }
     }
 }
 

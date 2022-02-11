@@ -19,7 +19,12 @@ extension UIViewController {
         viewController.didMove(toParent: self)
     }
 
-    func removeFromParentSuperview() {
+    func removeFromParentAndSuperviewIfNeeded() {
+        guard self.parent.exists else {
+            self.view.removeFromSuperview()
+            return
+        }
+
         self.willMove(toParent: nil)
         self.view.removeFromSuperview()
         self.removeFromParent()

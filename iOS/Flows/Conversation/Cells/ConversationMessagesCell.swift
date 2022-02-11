@@ -18,7 +18,7 @@ protocol ConversationUIStateSettable {
 /// A cell to display the messages of a conversation.
 /// The user's messages and other messages are put in two stacks (along the z-axis),
 /// with the most recent messages at the front.
-class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable {
+class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable, UICollectionViewDelegate {
 
     // Interaction handling
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -29,7 +29,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    @Published var incomingTopmostMessage: ChatMessage?
+    @Published var frontmostNonUserMessage: ChatMessage?
     
     // CollectionView
     var collectionLayout: MessagesTimeMachineCollectionViewLayout {
@@ -89,12 +89,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
-            Task {
-                self.conversationController?.loadPreviousMessages()
-            }
+            self.conversationController?.loadPreviousMessages()
         }
-        
-        self.collectionLayout.delegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -155,7 +151,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
     private func configureCollectionLayout(for state: ConversationUIState) {
         self.collectionLayout.itemHeight
-        = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value
+        = MessageContentView.bubbleHeight + old_MessageDetailView.height + Theme.ContentOffset.short.value
 
         switch state {
         case .read:
@@ -188,9 +184,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
         
-        if let attributes = layoutAttributes as? ConversationsMessagesCellAttributes {
-            self.collectionView.isUserInteractionEnabled = attributes.canScroll
-        }
+        guard let attributes = layoutAttributes as? ConversationsMessagesCellAttributes else { return }
+
+        self.collectionView.isUserInteractionEnabled = attributes.canScroll
     }
 
     // MARK: - Update Subscriptions
@@ -267,10 +263,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     func getBottomFrontmostCell() -> MessageCell? {
         return self.collectionLayout.getBottomFrontmostCell()
     }
-}
 
-extension ConversationMessagesCell: UICollectionViewDelegate {
-    
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -285,24 +278,36 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
             break
         }
     }
-}
 
-extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
+    /// Subscriptions for details-shown events on the message cells.
+    private var detailsShownEventHandlers: [IndexPath : AnyCancellable] = [:]
 
-    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
-                                         updatedFrontmostItemAt indexPath: IndexPath) {
-        
-        guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else {
-            self.incomingTopmostMessage = nil
-            return
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
 
-        switch item {
-        case .message(cid: let cid, messageID: let messageID, _):
-            let message = ChatClient.shared.message(cid: cid, id: messageID)
-            self.incomingTopmostMessage = message
-        case .loadMore, .placeholder, .initial:
-            break
-        }
+        guard indexPath.section == 0, let messageCell = cell as? MessageCell else { return }
+
+        self.detailsShownEventHandlers[indexPath]
+        = messageCell.$areDetailsShown
+            .removeDuplicates()
+            .mainSink { [unowned self] areDetailsShown in
+                guard messageCell.areDetailsShown else { return }
+
+                guard let item = self.dataSource.itemIdentifier(for: indexPath),
+                      case .message(let cid, let messageID, _) = item else { return }
+
+                let message = ChatClient.shared.message(cid: cid, id: messageID)
+
+                self.frontmostNonUserMessage = message
+            }
     }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didEndDisplaying cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
+        self.detailsShownEventHandlers.removeValue(forKey: indexPath)
+    }
+
 }

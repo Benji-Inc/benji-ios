@@ -74,7 +74,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     var currentMessageKind: MessageKind = .text(String())
     var sendable: SendableObject?
     let deliveryTypeView = DeliveryTypeView()
-    let emotionView = EmotionView()
+    let emotionView = old_EmotionView()
 
     var cancellables = Set<AnyCancellable>()
 

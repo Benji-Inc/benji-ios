@@ -1,116 +1,61 @@
 //
-//  EmotionView.swift
+//  SwiftUIView.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 12/13/21.
+//  Created by Benji Dodgson on 12/16/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
-import Foundation
-import UIKit
+import SwiftUI
 import StreamChat
 
-class EmotionView: BaseView {
+struct EmojiContainer: View {
+    @State var emoji: String = ""
     
-    let emojiLabel = ThemeLabel(font: .reactionEmoji)
-    
-    let label = ThemeLabel(font: .small)
-    let button = ThemeButton()
-    
-    var didSelectEmotion: ((Emotion) -> Void)?
-    
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.addSubview(self.emojiLabel)
-        
-        self.addSubview(self.label)
-        self.addSubview(self.button)
-        
-        self.clipsToBounds = false
-        
-        self.button.showsMenuAsPrimaryAction = true
-    }
-    
-    func configure(for message: Messageable) {
-        let controller = ChatClient.shared.messageController(for: message)
-        if let data = controller?.message?.extraData["emotions"] {
-            switch data {
-            case .array(let emotions):
-                if let first = emotions.first {
-                    switch first {
-                    case .string(let value):
-                        if let emotion = Emotion.init(rawValue: value) {
-                            self.isVisible = true
-                            self.configure(for: emotion)
-                        } else {
-                            self.isVisible = false 
-                        }
-                    default:
-                        self.isVisible = false
-                    }
-                } else {
-                    self.isVisible = false
+    var body: some View {
+        RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+            .overlay (
+                ZStack {
+                    RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+                        .stroke(.D6withAlpha, alpha: 0.3, width: 0.25)
+                    Text(self.emoji).fontType(.small)
                 }
-            default:
-                self.isVisible = false
-            }
-        } else {
-            self.isVisible = false
-        }
+            ).frame(width: 20, height: 20, alignment: .center)
+            .color(.T1, alpha: 0.1)
     }
-    
-    func configure(for emotion: Emotion) {
-        self.emojiLabel.setText(emotion.emoji)
-        self.label.setText(emotion.rawValue.firstCapitalized)
-        self.button.menu = self.createMenu(for: emotion)
-        self.layoutNow()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.emojiLabel.setSize(withWidth: 200)
-        self.label.setSize(withWidth: 200)
-        
-        self.emojiLabel.pin(.left)
-        
-        self.height = MessageDetailView.height
-        self.width = self.emojiLabel.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.short.value.doubled
-        
-        self.pin(.left)
-        
-        self.label.centerOnY()
-        self.label.match(.left, to: .right, of: self.emojiLabel, offset: .standard)
-        self.emojiLabel.center.y = self.label.center.y
+}
 
-        self.button.expandToSuperviewWidth()
-        self.button.height = 36
-        self.button.centerOnXAndY()
+extension Binding {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        return Binding(
+            get: { self.wrappedValue },
+            set: { selection in
+                self.wrappedValue = selection
+                handler(selection)
+        })
     }
+}
+
+struct EmotionView: View {
     
-    private func createMenu(for emotion: Emotion) -> UIMenu {
+    let emotion: Emotion
         
-        var children: [UIMenuElement] = []
-        Emotion.allCases.forEach { e in
-            let state: UIMenuElement.State = e == emotion ? .on : .off
-            let title = "\(e.emoji) \(e.rawValue.capitalized)"
-            let action = UIAction(title: title,
-                                  image: nil,
-                                  identifier: nil,
-                                  discoverabilityTitle: nil,
-                                  attributes: [],
-                                  state: state) { [unowned self] _ in
-                self.didSelectEmotion?(e)
-                self.configure(for: e)
-            }
-            children.append(action)
+    var body: some View {
+        HStack {
+            Spacer.length(.short)
+            EmojiContainer(emoji: self.emotion.emoji)
+            Spacer.length(.short)
+            Text(self.emotion.rawValue.firstCapitalized)
+                .fontType(.small)
+            Spacer.length(.short)
         }
-        
-        return UIMenu(title: "I'm feeling...",
-                      image: nil,
-                      identifier: nil,
-                      options: [.singleSelection],
-                      children: children)
+    }
+}
+
+struct EmotionView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            EmotionView(emotion: .awkward)
+        }
     }
 }

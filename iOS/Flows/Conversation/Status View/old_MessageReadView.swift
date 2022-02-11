@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import StreamChat
 
-class MessageReadView: MessageStatusContainer {
+class old_MessageReadView: old_MessageStatusContainer {
     
     enum State {
         case initial
@@ -105,8 +105,7 @@ class MessageReadView: MessageStatusContainer {
     
     @MainActor
     func configure(for message: Message) {
-        
-        /// Need to reset each time or will crash.
+        // Need to reset each time or will crash.
         self.state = .initial
 
         if message.isConsumed {
@@ -147,7 +146,7 @@ class MessageReadView: MessageStatusContainer {
     }
     
     func showRead(with message: Message) {
-        guard let messageDate = message.lastReadAt else { return }
+        guard let messageDate = message.lastUpdatedAt else { return }
         let dateString = Date.hourMinuteTimeOfDay.string(from: messageDate)
         self.state = .read(dateString)
     }
