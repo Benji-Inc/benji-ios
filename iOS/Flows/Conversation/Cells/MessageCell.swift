@@ -143,16 +143,11 @@ class MessageCell: UICollectionViewCell {
         guard message.canBeConsumed else { return }
 
         self.consumeMessageTask = Task {
-            logDebug("starting consumption for "+message.text)
             await Task.snooze(seconds: 2)
 
-            guard !Task.isCancelled else {
-                logDebug("cancelled consumption for "+message.text)
-                return }
-
+            guard !Task.isCancelled else { return }
 
             try? await message.setToConsumed()
-            logDebug("consumed "+message.text)
         }
     }
 }
