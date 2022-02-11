@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import StreamChat
+import Combine
 
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
@@ -23,6 +24,7 @@ class MessageCell: UICollectionViewCell {
 
     /// If true, this cell's message details are fully visible.
     @Published private(set) var areDetailsShown: Bool = false
+    private var subscriptions = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +38,14 @@ class MessageCell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
+
+        ConversationsManager.shared.$activeConversation
+            .removeDuplicates()
+            .mainSink { [unowned self] activeConversation in
+                // If this cell's conversation becomes active,
+                // then start message consumption if needed.
+                self.handleDetailsShown(self.detailVC.view.alpha == 1)
+            }.store(in: &self.subscriptions)
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
@@ -80,8 +90,6 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
 
-    private var consumeMessageTask: Task<Void, Never>?
-
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 
@@ -105,6 +113,47 @@ class MessageCell: UICollectionViewCell {
 
         let areDetailsShown = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
         self.areDetailsShown = areDetailsShown
+        self.handleDetailsShown(areDetailsShown)
+    }
+
+    // MARK: - Message Consumption
+
+    private var consumeMessageTask: Task<Void, Never>?
+
+    private func handleDetailsShown(_ areDetailsShown: Bool) {
+        // If the detail visibility changes for a message, we always want to cancel its tasks.
+        self.consumeMessageTask?.cancel()
+        self.consumeMessageTask = nil
+
+        // If this item is showing its details, we may want to start the consumption process for it.
+        guard areDetailsShown, ChatUser.currentUserRole != .anonymous else { return}
+
+        guard let messageable = self.messageState.message,
+              let cid = try? ConversationId(cid: messageable.conversationId) else { return }
+
+        // Don't consume messages unless they're a part of the active conversation.
+        guard ConversationsManager.shared.activeConversation?.cid == cid else { return }
+
+        let message = ChatClient.shared.message(cid: cid, id: messageable.id)
+
+        self.startConsumptionIfNeeded(for: message)
+    }
+
+    private func startConsumptionIfNeeded(for message: Message) {
+        guard message.canBeConsumed else { return }
+
+        self.consumeMessageTask = Task {
+            logDebug("starting consumption for "+message.text)
+            await Task.snooze(seconds: 2)
+
+            guard !Task.isCancelled else {
+                logDebug("cancelled consumption for "+message.text)
+                return }
+
+
+            try? await message.setToConsumed()
+            logDebug("consumed "+message.text)
+        }
     }
 }
 

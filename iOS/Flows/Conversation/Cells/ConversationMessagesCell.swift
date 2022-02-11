@@ -214,28 +214,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                                     itemsToReconfigure: itemsToReconfigure,
                                     showLoadMore: self.shouldShowLoadMore)
             }.store(in: &self.subscriptions)
-
-        ConversationsManager.shared.$activeConversation
-            .removeDuplicates()
-            .mainSink { activeConversation in
-
-                // If this cell's conversation becomes active,
-                // then start message consumption if needed.
-                guard activeConversation?.cid == self.conversation?.cid else { return }
-
-                for cell in self.collectionView.visibleCells {
-                    guard let messageCell = cell as? MessageCell,
-                          let indexPath = self.collectionView.indexPath(for: messageCell),
-                          messageCell.areDetailsShown else { continue }
-
-                    guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                          case .message(let cid, let messageID, _) = item else { continue }
-
-                    let message = ChatClient.shared.message(cid: cid, id: messageID)
-
-                    self.startConsumptionIfNeeded(for: message, at: indexPath)
-                }
-            }.store(in: &self.subscriptions)
     }
 
     func scrollToMessage(with messageId: MessageId, animateSelection: Bool) async {
@@ -314,7 +292,14 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         = messageCell.$areDetailsShown
             .removeDuplicates()
             .mainSink { [unowned self] areDetailsShown in
-                self.handleDetailsShown(areDetailsShown, forItemAt: indexPath)
+                guard messageCell.areDetailsShown else { return }
+
+                guard let item = self.dataSource.itemIdentifier(for: indexPath),
+                      case .message(let cid, let messageID, _) = item else { return }
+
+                let message = ChatClient.shared.message(cid: cid, id: messageID)
+
+                self.frontmostNonUserMessage = message
             }
     }
 
@@ -325,41 +310,4 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.detailsShownEventHandlers.removeValue(forKey: indexPath)
     }
 
-    private var consumptionTasks: [IndexPath : Task<Void, Never>] = [:]
-
-    private func handleDetailsShown(_ areDetailsShown: Bool, forItemAt indexPath: IndexPath) {
-        // If the detail visibility changes for a message, we always want to cancel its tasks.
-        self.consumptionTasks[indexPath]?.cancel()
-
-        // Don't consume messages unless they're a part of the active conversation.
-        guard ConversationsManager.shared.activeConversation?.cid == self.conversation?.cid else { return }
-
-        // If this item is showing its details, we may want to start the consumption process for it.
-        guard areDetailsShown,
-              ChatUser.currentUserRole != .anonymous,
-              let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
-
-        guard case .message(let cid, let messageID, _) = item else { return }
-
-        let message = ChatClient.shared.message(cid: cid, id: messageID)
-
-        if !message.isFromCurrentUser {
-            self.frontmostNonUserMessage = message
-        }
-
-        self.startConsumptionIfNeeded(for: message, at: indexPath)
-    }
-
-    private func startConsumptionIfNeeded(for message: Message, at indexPath: IndexPath) {
-        guard message.canBeConsumed else { return }
-
-        guard indexPath.section == 0 else { return }
-        self.consumptionTasks[indexPath] = Task {
-            await Task.snooze(seconds: 2)
-
-            guard !Task.isCancelled else { return }
-
-            try? await message.setToConsumed()
-        }
-    }
 }
