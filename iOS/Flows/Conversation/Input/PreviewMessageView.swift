@@ -12,7 +12,7 @@ import Combine
 class PreviewMessageView: SpeechBubbleView {
 
     private let minHeight: CGFloat = 52
-    private let textView = ExpandingTextView()
+    let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
     @Published var messageKind: MessageKind?
     private var cancellables = Set<AnyCancellable>()

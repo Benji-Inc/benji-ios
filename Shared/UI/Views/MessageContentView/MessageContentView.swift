@@ -62,7 +62,7 @@ class MessageContentView: BaseView {
 
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
-
+        
         self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
 

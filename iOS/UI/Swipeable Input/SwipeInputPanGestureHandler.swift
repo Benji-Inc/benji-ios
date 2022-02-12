@@ -178,6 +178,7 @@ class SwipeInputPanGestureHandler {
             if !self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: false)
                 previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
+                previewView.textView.setTextColor(.T3)
                 self.impactFeedback.impactOccurred()
             }
             self.isPreviewInDropZone = true
@@ -185,6 +186,13 @@ class SwipeInputPanGestureHandler {
             if self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: true)
                 previewView.setBubbleColor(ThemeColor.B1.color, animated: true)
+                // Apple bug where the trait collection for all subviews is dark, even though it should be light.
+                // So we have to access the window to get the correct trait. 
+                if let window = UIWindow.topWindow(), window.traitCollection.userInterfaceStyle == .light {
+                    previewView.textView.setTextColor(.B3)
+                } else {
+                    previewView.textView.setTextColor(.T1)
+                }
             }
             self.isPreviewInDropZone = false
         }
