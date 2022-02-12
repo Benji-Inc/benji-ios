@@ -35,7 +35,6 @@ class MessageContentView: BaseView {
     private (set) var message: Messageable?
 
     let authorView = AvatarView()
-    let scrollView = UIScrollView()
 
     private var cancellables = Set<AnyCancellable>()
     var publisherCancellables = Set<AnyCancellable>()
@@ -64,10 +63,7 @@ class MessageContentView: BaseView {
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
         
-        self.bubbleView.addSubview(self.scrollView)
-        self.scrollView.set(backgroundColor: .red)
-        
-        self.scrollView.addSubview(self.textView)
+        self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
 
         self.bubbleView.addSubview(self.authorView)
@@ -139,51 +135,47 @@ class MessageContentView: BaseView {
         self.authorView.pin(.left, offset: MessageContentView.padding)
 
         self.textView.size = self.textView.getSize(with: self.state, width: self.bubbleView.bubbleFrame.width)
-        self.scrollView.size = self.textView.size
 
         if self.state == .thread {
             self.textView.textAlignment = .left
-            self.scrollView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-            self.scrollView.centerOnY()
+            self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.textView.centerOnY()
         } else if state == .expanded {
             if self.textView.numberOfLines > 1 {
                 self.textView.textAlignment = .left
-                self.scrollView.pin(.left, offset: MessageContentView.padding)
-                self.scrollView.centerOnY()
+                self.textView.pin(.left, offset: MessageContentView.padding)
+                self.textView.centerOnY()
                 if self.bubbleView.orientation == .up {
-                    self.scrollView.centerY += self.bubbleView.tailLength.half
+                    self.textView.centerY += self.bubbleView.tailLength.half
                 }
             } else {
                 self.textView.textAlignment = .center
-                self.scrollView.centerOnX()
-                self.scrollView.center = self.bubbleView.center
-                self.scrollView.center.y += self.bubbleView.tailLength.half
+                self.textView.centerOnX()
+                self.textView.center = self.bubbleView.center
+                self.textView.center.y += self.bubbleView.tailLength.half
             }
         } else if self.textView.numberOfLines > 1 {
             self.textView.textAlignment = .left
-            self.scrollView.pin(.left, offset: MessageContentView.padding)
-            self.scrollView.center.y = self.bubbleView.center.y
+            self.textView.pin(.left, offset: MessageContentView.padding)
+            self.textView.center.y = self.bubbleView.center.y
 
-            if self.scrollView.top < MessageContentView.padding.value {
-                self.scrollView.pin(.top, offset: MessageContentView.padding)
+            if self.textView.top < MessageContentView.padding.value {
+                self.textView.pin(.top, offset: MessageContentView.padding)
             }
 
         } else {
             self.textView.textAlignment = .center
-            self.scrollView.center = self.bubbleView.center
+            self.textView.center = self.bubbleView.center
         }
 
         if self.state == .collapsed, self.bubbleView.tailLength > 0 {
             switch self.bubbleView.orientation {
             case .up:
-                self.scrollView.center.y += self.bubbleView.tailLength.half
+                self.textView.center.y += self.bubbleView.tailLength.half
             default:
                 break
             }
         }
-        
-        self.textView.frame = self.scrollView.bounds
-        self.scrollView.contentSize = self.textView.size
     }
 
     func getAuthorSize(for state: State) -> CGSize {
