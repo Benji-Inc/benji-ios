@@ -41,7 +41,7 @@ extension PeopleViewController: UISearchBarDelegate {
     
     func filtered(people: [Person], filter: String? = nil, limit: Int? = nil) -> [Person] {
         let filtered = people.filter { person in
-            person.contains(filter)
+            person.contains(filter) && !self.selectedPeople.contains(.person(person))
         }
         
         if let limit = limit {
