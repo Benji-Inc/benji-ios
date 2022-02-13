@@ -57,6 +57,10 @@ extension ConversationListCoordinator {
         guard let conversation = self.activeConversation else { return }
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.selectedConversationCID = self.activeConversation?.cid
+        
+        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+            self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+        }
         self.present(coordinator) { [unowned self] people in
             
             if people.isEmpty {
