@@ -29,7 +29,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private let backgroundView = BackgroundGradientView()
     private(set) var allPeople: [Person] = []
     
-    @Published var selectedPeople: [PeopleCollectionViewDataSource.ItemType] = []
+    @Published var selectedPeople: [Person] = []
 
     override func loadView() {
         self.view = self.backgroundView
@@ -61,10 +61,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.button.didSelect { [unowned self] in
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
         }
-
-        self.$selectedPeople.mainSink { [unowned self] items in
-            self.updateButton()
-        }.store(in: &self.cancellables)
         
         KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self]  _ in
             self.view.setNeedsLayout()
@@ -100,6 +96,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.loadContacts()
         }
     }
+    
+    
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -120,6 +118,25 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         } else {
             self.button.top = self.view.height
         }
+    }
+    
+    func updateSelectedPeopleItems() {
+        logDebug(self.selectedPeople.count)
+         let updatedItems: [PeopleCollectionViewDataSource.ItemType] = self.dataSource.itemIdentifiers(in: .people).compactMap { item in
+            switch item {
+            case .person(let person):
+                var copy = person
+                copy.isSelected = self.selectedPeople.contains(where: { current in
+                    return current.identifier == person.identifier
+                })
+
+                return .person(copy)
+            }
+        }
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(updatedItems, in: .people)
+        self.dataSource.apply(snapshot)
     }
 
     func showLoading(for person: Person) async {
@@ -171,6 +188,11 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         if ContactsManger.shared.hasPermissions {
             self.loadContacts()
         }
+        
+        self.$selectedPeople.mainSink { [unowned self] items in
+            self.updateSelectedPeopleItems()
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
     
     private func loadContacts() {
@@ -217,15 +239,25 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         super.collectionView(collectionView, didSelectItemAt: indexPath)
-        guard let item = self.dataSource.itemIdentifier(for: indexPath), !self.selectedPeople.contains(item) else { return }
+        guard let person: Person = self.dataSource.itemIdentifier(for: indexPath).map({ item in
+            switch item {
+            case .person(let person):
+                return person
+            }
+        }), !self.selectedPeople.contains(person) else { return }
         
-        self.selectedPeople.append(item)
+        self.selectedPeople.append(person)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         super.collectionView(collectionView, didDeselectItemAt: indexPath)
-        guard let item = self.dataSource.itemIdentifier(for: indexPath), self.selectedPeople.contains(item) else { return }
+        guard let person: Person = self.dataSource.itemIdentifier(for: indexPath).map({ item in
+            switch item {
+            case .person(let person):
+                return person
+            }
+        }), self.selectedPeople.contains(person) else { return }
         
-        self.selectedPeople.remove(object: item)
+        self.selectedPeople.remove(object: person)
     }
 }
