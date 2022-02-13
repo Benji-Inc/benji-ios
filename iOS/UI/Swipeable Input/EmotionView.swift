@@ -28,10 +28,12 @@ struct EmotionView: View {
         HStack {
             if let emotion = self.config.emotion {
                 Spacer.length(.standard)
-                let text = "\(emotion.emoji)  \(emotion.rawValue.firstCapitalized)"
-                Text(text)
+                Text(emotion.emoji)
+                    .fontType(.reactionEmoji)
+                Spacer.length(.standard)
+                Text(emotion.rawValue.firstCapitalized)
                     .fontType(.small)
-                Spacer.length(.short)
+                Spacer.length(.standard)
             }
         }
     }
