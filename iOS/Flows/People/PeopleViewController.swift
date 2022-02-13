@@ -28,6 +28,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     
     private let backgroundView = BackgroundGradientView()
     private(set) var allPeople: [Person] = []
+    
+    @Published var selectedPeople: [PeopleCollectionViewDataSource.ItemType] = []
 
     override func loadView() {
         self.view = self.backgroundView
@@ -60,8 +62,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
         }
 
-        self.$selectedItems.mainSink { [unowned self] items in
-            logDebug(items.count)
+        self.$selectedPeople.mainSink { [unowned self] items in
             self.updateButton()
         }.store(in: &self.cancellables)
         
@@ -155,7 +156,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func getButtonTitle() -> Localized {
-        return "Add \(self.selectedItems.count) people"
+        return "Add \(self.selectedPeople.count) people"
     }
 
     // MARK: Data Loading
@@ -212,5 +213,19 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         })
 
         return data
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didSelectItemAt: indexPath)
+        guard let item = self.dataSource.itemIdentifier(for: indexPath), !self.selectedPeople.contains(item) else { return }
+        
+        self.selectedPeople.append(item)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didDeselectItemAt: indexPath)
+        guard let item = self.dataSource.itemIdentifier(for: indexPath), self.selectedPeople.contains(item) else { return }
+        
+        self.selectedPeople.remove(object: item)
     }
 }
