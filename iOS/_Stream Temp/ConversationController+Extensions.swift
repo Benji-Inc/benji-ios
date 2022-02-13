@@ -180,7 +180,9 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation { continuation in
             var data = extraData
-            data["emotions"] = .array([.string(sendable.emotion.rawValue)])
+            if let emotion = sendable.emotion {
+                data["emotions"] = .array([.string(emotion.rawValue)])
+            }
             data["context"] = .string(sendable.context.rawValue)
             self.createNewMessage(text: text,
                                   pinning: pinning,
@@ -323,7 +325,9 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation({ continuation in
             var data = extraData
-            data["emotions"] = .array([.string(sendable.emotion.rawValue)])
+            if let emotion = sendable.emotion {
+                data["emotions"] = .array([.string(emotion.rawValue)])
+            }
             data["context"] = .string(sendable.context.rawValue)
             messageController.createNewReply(text: text,
                                              pinning: pinning,

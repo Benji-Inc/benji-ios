@@ -67,11 +67,11 @@ private struct MessageReplyView: View {
     
     var body: some View {
         HStack {
-            Spacer.length(.short)
+            Spacer.length(.standard)
             Text(self.config.replyCount.description)
                 .fontType(.small)
                 .color(.T1)
-            Spacer.length(.short)
+            Spacer.length(.standard)
         }
         .frame(minWidth: 25, minHeight: 15, idealHeight: 25, maxHeight: 25)
         .background(

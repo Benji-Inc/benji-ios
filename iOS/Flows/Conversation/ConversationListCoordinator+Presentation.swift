@@ -165,7 +165,7 @@ extension ConversationListCoordinator {
         
         let controller = ChatClient.shared.channelController(for: cid)
         
-        let alertController = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let deleteAction = UIAlertAction(title: "Delete Conversation", style: .destructive, handler: {
             (action : UIAlertAction!) -> Void in

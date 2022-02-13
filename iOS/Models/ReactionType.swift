@@ -58,7 +58,7 @@ enum ReactionType: String, CaseIterable {
 }
 
 enum Emotion: String, CaseIterable, Identifiable {
-        
+            
     case appreciated
     case amused
     case angry

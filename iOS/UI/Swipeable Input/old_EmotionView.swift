@@ -56,9 +56,14 @@ class old_EmotionView: BaseView {
         self.configure(for: emotion)
     }
     
-    func configure(for emotion: Emotion) {
-        self.emojiLabel.setText(emotion.emoji)
-        self.label.setText(emotion.rawValue.firstCapitalized)
+    func configure(for emotion: Emotion?) {
+        if let emotion = emotion {
+            self.emojiLabel.setText(emotion.emoji)
+            self.label.setText(emotion.rawValue.firstCapitalized)
+        } else {
+            self.label.setText("I'm feeling...")
+        }
+        
         self.button.menu = self.createMenu(for: emotion)
         self.setNeedsLayout()
     }
@@ -85,7 +90,7 @@ class old_EmotionView: BaseView {
         self.button.centerOnXAndY()
     }
     
-    private func createMenu(for emotion: Emotion) -> UIMenu {
+    private func createMenu(for emotion: Emotion?) -> UIMenu {
         
         var children: [UIMenuElement] = []
         Emotion.allCases.forEach { e in

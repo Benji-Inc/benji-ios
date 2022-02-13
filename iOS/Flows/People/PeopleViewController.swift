@@ -36,7 +36,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     init() {
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
         cv.keyboardDismissMode = .interactive
-        cv.isScrollEnabled = true 
+        cv.isScrollEnabled = true
+        cv.allowsMultipleSelection = true
         super.init(with: cv)
     }
 
@@ -59,11 +60,12 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
         }
 
-        self.$selectedItems.mainSink { _ in
+        self.$selectedItems.mainSink { [unowned self] items in
+            logDebug(items.count)
             self.updateButton()
         }.store(in: &self.cancellables)
         
-        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { _ in
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self]  _ in
             self.view.setNeedsLayout()
         }.store(in: &self.cancellables)
     }
