@@ -16,8 +16,12 @@ extension PeopleViewController: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         var snapshot = self.dataSource.snapshot()
-        let items: [PeopleCollectionViewDataSource.ItemType] = self.allPeople.map { person in
-            return .person(person)
+        let items: [PeopleCollectionViewDataSource.ItemType] = self.allPeople.sorted().map { person in
+            var copy = person
+            copy.isSelected = self.selectedPeople.contains(where: { current in
+                return current.identifier == person.identifier
+            })
+            return .person(copy)
         }
         
         snapshot.setItems(items, in: .people)

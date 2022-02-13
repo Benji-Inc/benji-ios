@@ -10,7 +10,19 @@ import Foundation
 import Contacts
 import PhoneNumberKit
 
-struct Person: Avatar, Hashable {
+struct Person: Avatar, Hashable, Comparable {
+    
+    static func < (lhs: Person, rhs: Person) -> Bool {
+        if let _ = lhs.connection,
+           let _ = rhs.connection {
+            return lhs.familyName < rhs.familyName
+        } else if let _ = lhs.cnContact,
+                    let _ = rhs.cnContact {
+            return lhs.familyName < rhs.familyName
+        } else {
+            return false 
+        }
+    }
     
     var identifier: String {
         return self.connection?.objectId ?? self.cnContact?.identifier ?? ""

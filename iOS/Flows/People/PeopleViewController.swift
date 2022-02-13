@@ -121,7 +121,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
     
     func updateSelectedPeopleItems() {
-        logDebug(self.selectedPeople.count)
          let updatedItems: [PeopleCollectionViewDataSource.ItemType] = self.dataSource.itemIdentifiers(in: .people).compactMap { item in
             switch item {
             case .person(let person):
@@ -229,8 +228,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             
             self.allPeople.append(contentsOf: connectedPeople)
         }
-        
-        data[.people] = self.allPeople.compactMap({ person in
+                
+        data[.people] = self.allPeople.sorted().compactMap({ person in
             return .person(person)
         })
 
