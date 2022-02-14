@@ -136,6 +136,7 @@ class NotificationService: UNNotificationServiceExtension {
         self.author = author
         // Creat a notification handler so we can retrieve the relevant message data.
         // (This is needed because the ChatClient can't be put in the connected state from an extension).
+        // See: https://getstream.io/chat/docs/sdk/ios/guides/push-notifications/
         let chatHandler = ChatRemoteNotificationHandler(client: client, content: content)
 
         let notificationContent = await chatHandler.handleNotification()
