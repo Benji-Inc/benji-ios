@@ -18,13 +18,15 @@ class NotificationService: UNNotificationServiceExtension {
     /// The content handler we received for the notification request we're processing.
     private var contentHandler: ((UNNotificationContent) -> Void)?
 
-    private var recipients: [INPerson] = []
+    private var author: INPerson?
     private var conversation: ChatChannel?
     private var message: ChatMessage?
-    private var author: INPerson?
-    private var conversationId: String?
-
-    private var chatHandler: ChatRemoteNotificationHandler?
+    private var messageContext: MessageContext? {
+        guard let value = self.message?.extraData["context"],
+              case RawJSON.string(let string) = value else { return nil }
+        return MessageContext(rawValue: string)
+    }
+    private var recipients: [INPerson] = []
 
     // MARK: - UNNotificationServiceExtension
 
@@ -38,19 +40,30 @@ class NotificationService: UNNotificationServiceExtension {
         Task {
             await self.initializeParse()
 
-            guard let chatClient = self.getConfiguredChatClient() else { return }
+            guard let chatClient = self.getConfiguredChatClient(),
+                  let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
 
-            await self.updateContent(with: request,
-                                     client: chatClient,
-                                     contentHandler: contentHandler)
+                      contentHandler(request.content)
+                      return
+                  }
+
+
+            await self.initializeNotificationService(with: mutableContent, client: chatClient)
+            await self.updateInterruptionLevel(of: mutableContent)
+            await self.updateBadgeCount(of: mutableContent)
+
+            let finalContent = await self.finalizeContent(mutableContent)
+            contentHandler(finalContent)
         }
     }
 
     override func serviceExtensionTimeWillExpire() {
-        guard let content = self.request?.content, let contentHandler = self.contentHandler else { return }
+        guard let content = self.request?.content.mutableCopy() as? UNMutableNotificationContent,
+                let contentHandler = self.contentHandler else { return }
 
         Task {
-            await self.finalizeContent(content: content, contentHandler: contentHandler)
+            let content = await self.finalizeContent(content)
+            contentHandler(content)
         }
     }
 
@@ -77,7 +90,7 @@ class NotificationService: UNNotificationServiceExtension {
     private func getConfiguredChatClient() -> ChatClient? {
         guard let user = User.current() else { return nil }
 
-        var config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
+        var config = ChatClientConfig(apiKey: .init("ybdsdqhd2nhg"))
         config.isLocalStorageEnabled = true
         config.applicationGroupIdentifier = Config.shared.environment.groupId
 
@@ -90,54 +103,35 @@ class NotificationService: UNNotificationServiceExtension {
 
     // MARK: - Notification Content Updates
 
-    private func updateContent(with request: UNNotificationRequest,
-                               client: ChatClient,
-                               contentHandler: @escaping (UNNotificationContent) -> Void) async {
-
+    /// Initializes all of the member variables on the notification service that are needed to update the notification content.
+    private func initializeNotificationService(with content: UNNotificationContent,
+                                               client: ChatClient) async {
         // Ensure we have the data we need
-        guard let authorId = request.content.author,
-              let author = try? await User.getObject(with: authorId).iNPerson,
-              let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
-                  await self.finalizeContent(content: request.content, contentHandler: contentHandler)
+        guard let authorId = content.author,
+              let author = try? await User.getObject(with: authorId).iNPerson else {
                   return
               }
 
         self.author = author
+        let chatHandler = ChatRemoteNotificationHandler(client: client, content: content)
 
-        self.chatHandler = ChatRemoteNotificationHandler(client: client, content: content)
+        let notificationContent = await chatHandler.handleNotification()
 
-        let notification = self.chatHandler?.handleNotification { pushContentType in
-            Task {
-                switch pushContentType {
-                case .message(let msg):
-                    if let conversation = msg.channel {
-                        self.conversation = conversation
-                        self.message = msg.message
+        switch notificationContent {
+        case .message(let msg):
+            guard let conversation = msg.channel else { break }
 
-                        await self.applyMessageData(content: content, contentHandler: contentHandler)
-                    }
-                case .reaction(let reaction):
-                    if let conversation = reaction.channel {
+            self.conversation = conversation
+            self.message = msg.message
+        case .reaction(let reaction):
+            guard let conversation = reaction.channel else { break }
 
-                        self.conversation = conversation
-                        self.message = reaction.message
-
-                        await self.applyMessageData(content: content, contentHandler: contentHandler)
-                    }
-                case .unknown(_):
-                    break
-                }
-            }
-        } ?? false
-
-        if !notification {
-            logDebug("chat handler failed to update notification content")
-            await self.finalizeContent(content: content, contentHandler: contentHandler)
+            self.conversation = conversation
+            self.message = reaction.message
+        case .unknown(_):
+            logDebug("unknown notification content received")
+            break
         }
-    }
-
-    private func applyMessageData(content: UNMutableNotificationContent,
-                                  contentHandler: @escaping (UNNotificationContent) -> Void) async {
 
         let memberIds = self.conversation?.lastActiveMembers.compactMap { member in
             return member.id
@@ -151,56 +145,46 @@ class NotificationService: UNNotificationServiceExtension {
             }) {
             self.recipients = recipients
         }
+    }
 
+    private func updateInterruptionLevel(of content: UNMutableNotificationContent) async {
         // Update the interruption level
-        if let value = self.message?.extraData["context"],
-           case RawJSON.string(let string) = value,
-           let context = MessageContext.init(rawValue: string) {
+        guard let messageContext = self.messageContext else { return }
 
-            // Focused users should not be interrupted unless the message is time sensitive.
+        switch messageContext {
+        case .timeSensitive:
+            // Time-sensitive messages are always delivered with a time-sensitive interruption level
+            // regardless of the user's current focus state
+            content.interruptionLevel = .timeSensitive
+        case .respectful:
+            // Respectful messages are delivered passively for focused users, and actively for
+            // for non-focused users.
             if INFocusStatusCenter.default.focusStatus.isFocused == true {
-                switch context {
-                case .timeSensitive:
-                    content.interruptionLevel = .timeSensitive
-                case .respectful:
-                    content.interruptionLevel = .passive
-                }
+                content.interruptionLevel = .passive
             } else {
-                // Available users can be interrupted freely.
-                switch context {
-                case .timeSensitive:
-                    content.interruptionLevel = .timeSensitive
-                case .respectful:
-                    content.interruptionLevel = .active
-                }
+                content.interruptionLevel = .active
             }
-
-            content.badge = self.getBadge(with: context)
         }
-
-        await self.finalizeContent(content: content, contentHandler: contentHandler)
-    }
-    
-    func getBadge(with context: MessageContext) -> NSNumber {
-        guard let defaults = UserDefaults(suiteName: Config.shared.environment.groupId),
-              var count = defaults.value(forKey: "badgeNumber") as? Int else { return 0 }
-        
-        count += 1
-        defaults.set(count, forKey: "badgeNumber")
-        return count as NSNumber
     }
 
-    private func finalizeContent(content: UNNotificationContent,
-                                 contentHandler: @escaping (UNNotificationContent) -> Void) async {
+    private func updateBadgeCount(of content: UNMutableNotificationContent) async {
+        content.body = "setting count to 7"
+        content.badge = 7
+        //            content.badge = self.getBadge(with: context)
+    }
+
+
+    private func finalizeContent(_ content: UNMutableNotificationContent) async -> UNNotificationContent {
         // Create the intent
-        let incomingMessageIntent = INSendMessageIntent(recipients: recipients,
-                                                        outgoingMessageType: .outgoingMessageText,
-                                                        content: content.body,
-                                                        speakableGroupName: self.conversation?.speakableGroupName,
-                                                        conversationIdentifier: self.conversationId,
-                                                        serviceName: nil,
-                                                        sender: self.author,
-                                                        attachments: nil)
+        let incomingMessageIntent
+        = INSendMessageIntent(recipients: self.recipients,
+                              outgoingMessageType: .outgoingMessageText,
+                              content: content.body,
+                              speakableGroupName: self.conversation?.speakableGroupName,
+                              conversationIdentifier: self.conversation?.cid.description,
+                              serviceName: nil,
+                              sender: self.author,
+                              attachments: nil)
 
         let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
         interaction.direction = .incoming
@@ -209,9 +193,44 @@ class NotificationService: UNNotificationServiceExtension {
             try await interaction.donate()
             // Update the content with the intent
             let messageContent = try content.updating(from: incomingMessageIntent)
-            self.contentHandler?(messageContent)
+            return messageContent
         } catch {
-            print(error)
+            logError(error)
+            return content
         }
+    }
+
+    // MARK: - Helper Functions
+
+    /// Gets the app badge number stored in user defaults.
+    private func getUserDefaultsBadgeNumber() -> NSNumber {
+        guard let defaults = UserDefaults(suiteName: Config.shared.environment.groupId),
+              let count = defaults.value(forKey: "badgeNumber") as? NSNumber else { return 0 }
+
+        return count
+    }
+
+    /// Sets the badge number stored in user defaults.
+    private func setUserDefaultsBadgeNumber(to number: NSNumber) {
+        guard let defaults = UserDefaults(suiteName: Config.shared.environment.groupId) else  {
+            logDebug("Failed to update badge number")
+            return
+        }
+
+        defaults.set(number, forKey: "badgeNumber")
+    }
+}
+
+extension ChatRemoteNotificationHandler {
+
+    func handleNotification() async -> ChatPushNotificationContent {
+        let content: ChatPushNotificationContent = await withCheckedContinuation { continuation in
+            _ = self.handleNotification { content in
+                logDebug("handled notification with content \(content)")
+                continuation.resume(returning: content)
+            }
+        }
+
+        return content
     }
 }
