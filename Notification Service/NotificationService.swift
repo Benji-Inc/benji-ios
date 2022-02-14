@@ -40,7 +40,7 @@ class NotificationService: UNNotificationServiceExtension {
         Task {
             await self.initializeParse()
 
-            guard let chatClient = self.getConfiguredChatClient(),
+            guard let chatClient = await self.getConfiguredChatClient(),
                   let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
 
                       contentHandler(request.content)
@@ -74,7 +74,8 @@ class NotificationService: UNNotificationServiceExtension {
             if Parse.currentConfiguration.isNil  {
                 let config = ParseClientConfiguration { configuration in
                     configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                    configuration.containingApplicationBundleIdentifier = "com.Jibber-iOS"
+                    // Allow parse to access the data from the main app bundle.
+                    configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.iOS"
                     configuration.server = Config.shared.environment.url
                     configuration.applicationId = Config.shared.environment.appId
                     configuration.isLocalDatastoreEnabled = true
@@ -87,18 +88,38 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func getConfiguredChatClient() -> ChatClient? {
-        guard let user = User.current() else { return nil }
+    private func getConfiguredChatClient() async -> ChatClient? {
+        guard let user = User.current(), user.isAuthenticated  else { return nil }
 
-        var config = ChatClientConfig(apiKey: .init("ybdsdqhd2nhg"))
+        var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
         config.isLocalStorageEnabled = true
         config.applicationGroupIdentifier = Config.shared.environment.groupId
+        let client = ChatClient(config: config, tokenProvider: nil)
 
-        let client = ChatClient(config: config)
-        let token = Token.development(userId: user.objectId!)
-        client.setToken(token: token)
+        do {
+            // Get the app token and then apply it to the chat client.
+            let result: String = try await withCheckedThrowingContinuation { continuation in
+                PFCloud.callFunction(inBackground: "getChatToken",
+                                     withParameters: [:]) { (object, error) in
 
-        return client
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let value = object as? String {
+                        continuation.resume(returning: value)
+                    } else {
+                        continuation.resume(throwing: ClientError.apiError(detail: "Request failed"))
+                    }
+                }
+            }
+
+            let token = try Token(rawValue: result)
+            client.setToken(token: token)
+
+            return client
+        } catch {
+            logError(error)
+            return nil
+        }
     }
 
     // MARK: - Notification Content Updates
@@ -113,6 +134,8 @@ class NotificationService: UNNotificationServiceExtension {
               }
 
         self.author = author
+        // Creat a notification handler so we can retrieve the relevant message data.
+        // (This is needed because the ChatClient can't be put in the connected state from an extension).
         let chatHandler = ChatRemoteNotificationHandler(client: client, content: content)
 
         let notificationContent = await chatHandler.handleNotification()
@@ -168,9 +191,12 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     private func updateBadgeCount(of content: UNMutableNotificationContent) async {
-        content.body = "setting count to 7"
-        content.badge = 7
-        //            content.badge = self.getBadge(with: context)
+        // Only increment the badge count for time sensitive messages.
+        guard self.messageContext == .timeSensitive else { return }
+
+        let badgeNumber = self.getUserDefaultsBadgeNumber() + 1
+        content.badge = badgeNumber as NSNumber
+        self.setUserDefaultsBadgeNumber(to: badgeNumber)
     }
 
 
@@ -203,21 +229,21 @@ class NotificationService: UNNotificationServiceExtension {
     // MARK: - Helper Functions
 
     /// Gets the app badge number stored in user defaults.
-    private func getUserDefaultsBadgeNumber() -> NSNumber {
+    private func getUserDefaultsBadgeNumber() -> Int {
         guard let defaults = UserDefaults(suiteName: Config.shared.environment.groupId),
-              let count = defaults.value(forKey: "badgeNumber") as? NSNumber else { return 0 }
+              let count = defaults.value(forKey: "badgeNumber") as? Int else { return 0 }
 
         return count
     }
 
     /// Sets the badge number stored in user defaults.
-    private func setUserDefaultsBadgeNumber(to number: NSNumber) {
-        guard let defaults = UserDefaults(suiteName: Config.shared.environment.groupId) else  {
+    private func setUserDefaultsBadgeNumber(to number: Int) {
+        guard let defaults = UserDefaults(suiteName: Config.shared.environment.groupId) else {
             logDebug("Failed to update badge number")
             return
         }
 
-        defaults.set(number, forKey: "badgeNumber")
+        defaults.set(number as NSNumber, forKey: "badgeNumber")
     }
 }
 
@@ -226,7 +252,6 @@ extension ChatRemoteNotificationHandler {
     func handleNotification() async -> ChatPushNotificationContent {
         let content: ChatPushNotificationContent = await withCheckedContinuation { continuation in
             _ = self.handleNotification { content in
-                logDebug("handled notification with content \(content)")
                 continuation.resume(returning: content)
             }
         }

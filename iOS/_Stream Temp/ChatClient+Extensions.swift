@@ -47,9 +47,9 @@ extension ChatClient {
     }
 
     /// Retrieves the token
-    private static func getChatToken() async throws -> Token {
+    static func getChatToken() async throws -> Token {
         let string = try await GetChatToken().makeRequest()
-        return try Token.init(rawValue: string)
+        return try Token(rawValue: string)
     }
 
     /// Initializes the ChatClient with a configuration, retrieves and sets token, and connects the user
@@ -115,6 +115,7 @@ extension ChatClient {
             }
         })
     }
+
     func messageController(for messageable: Messageable) -> MessageController? {
         guard let msg = messageable as? Message else { return nil }
         return self.messageController(cid: msg.cid!, messageId: msg.id)
