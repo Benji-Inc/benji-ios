@@ -132,7 +132,9 @@ extension MessageController {
         return try await withCheckedThrowingContinuation { continuation in
             
             var data = extraData
-            data["emotions"] = .array([.string(sendable.emotion.rawValue)])
+            if let emotion = sendable.emotion {
+                data["emotions"] = .array([.string(emotion.rawValue)])
+            }
             data["context"] = .string(sendable.context.rawValue)
             
             self.createNewReply(text: text,

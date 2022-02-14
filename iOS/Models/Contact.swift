@@ -10,7 +10,23 @@ import Foundation
 import Contacts
 import PhoneNumberKit
 
-struct Person: Avatar, Hashable {
+struct Person: Avatar, Hashable, Comparable {
+    
+    static func < (lhs: Person, rhs: Person) -> Bool {
+        if let _ = lhs.connection,
+           let _ = rhs.connection {
+            return lhs.familyName < rhs.familyName
+        } else if let _ = lhs.cnContact,
+                    let _ = rhs.cnContact {
+            return lhs.familyName < rhs.familyName
+        } else {
+            return false 
+        }
+    }
+    
+    var identifier: String {
+        return self.connection?.objectId ?? self.cnContact?.identifier ?? ""
+    }
     
     var familyName: String
     var givenName: String
@@ -27,16 +43,20 @@ struct Person: Avatar, Hashable {
     
     var cnContact: CNContact?
     
-    init(withContact contact: CNContact) {
+    var isSelected: Bool
+    
+    init(withContact contact: CNContact, isSelected: Bool = false) {
         self.image = contact.image
         self.cnContact = contact
         self.givenName = contact.givenName
         self.familyName = contact.familyName
+        self.isSelected = isSelected
     }
     
-    init(withConnection connection: Connection) {
+    init(withConnection connection: Connection, isSelected: Bool = false) {
         self.connection = connection
         self.userObjectId = connection.nonMeUser?.userObjectId
+        self.isSelected = isSelected
         /// We may not have a user data at this point.
         
         if let user = connection.nonMeUser, user.isDataAvailable {

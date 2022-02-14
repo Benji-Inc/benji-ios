@@ -68,7 +68,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
     }
     
-    var currentEmotion: Emotion = .calm
+    var currentEmotion: Emotion? 
 
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
@@ -146,6 +146,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 default:
                     break
                 }
+                self.updateSwipeHint(shouldPlay: false)
             }.store(in: &self.cancellables)
         
         self.textView.$inputText.mainSink { [unowned self] text in

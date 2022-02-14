@@ -100,9 +100,7 @@ extension PeopleCoordinator {
                                       message: bodyText,
                                       preferredStyle: .alert)
 
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
-
-        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
 
         let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
             self.createConnection(with: user)

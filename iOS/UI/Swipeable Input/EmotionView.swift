@@ -9,22 +9,6 @@
 import SwiftUI
 import StreamChat
 
-struct EmojiContainer: View {
-    @State var emoji: String = ""
-    
-    var body: some View {
-        RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-            .overlay (
-                ZStack {
-                    RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                        .stroke(.D6withAlpha, alpha: 0.3, width: 0.25)
-                    Text(self.emoji).fontType(.small)
-                }
-            ).frame(width: 20, height: 20, alignment: .center)
-            .color(.T1, alpha: 0.1)
-    }
-}
-
 extension Binding {
     func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
         return Binding(
@@ -38,16 +22,19 @@ extension Binding {
 
 struct EmotionView: View {
     
-    let emotion: Emotion
+    @ObservedObject var config: MessageDetailConfig
         
     var body: some View {
         HStack {
-            Spacer.length(.short)
-            EmojiContainer(emoji: self.emotion.emoji)
-            Spacer.length(.short)
-            Text(self.emotion.rawValue.firstCapitalized)
-                .fontType(.small)
-            Spacer.length(.short)
+            if let emotion = self.config.emotion {
+                Spacer.length(.standard)
+                Text(emotion.emoji)
+                    .fontType(.reactionEmoji)
+                Spacer.length(.standard)
+                Text(emotion.rawValue.firstCapitalized)
+                    .fontType(.small)
+                Spacer.length(.standard)
+            }
         }
     }
 }
@@ -55,7 +42,9 @@ struct EmotionView: View {
 struct EmotionView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            EmotionView(emotion: .awkward)
+            let config = MessageDetailConfig(message: nil)
+
+            EmotionView(config: config)
         }
     }
 }
