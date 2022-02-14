@@ -31,7 +31,7 @@ private struct MessageReadView: View {
     
     var body: some View {
         HStack {
-            Spacer.length(.short)
+            Spacer.length(.standard)
 
             if let updateDate = self.config.updateDate {
                 let dateString = Date.hourMinuteTimeOfDay.string(from: updateDate)
@@ -39,7 +39,7 @@ private struct MessageReadView: View {
                     .fontType(.small)
                     .color(.T1)
 
-                Spacer.length(.short)
+                Spacer.length(.standard)
             }
 
 
@@ -47,7 +47,7 @@ private struct MessageReadView: View {
                 Image("checkmark-double")
                     .color(.T1)
 
-                Spacer.length(.short)
+                Spacer.length(.standard)
             }
         }
         .frame(minHeight: 15, idealHeight: 25, maxHeight: 25)
@@ -67,11 +67,11 @@ private struct MessageReplyView: View {
     
     var body: some View {
         HStack {
-            Spacer.length(.short)
+            Spacer.length(.standard)
             Text(self.config.replyCount.description)
                 .fontType(.small)
                 .color(.T1)
-            Spacer.length(.short)
+            Spacer.length(.standard)
         }
         .frame(minWidth: 25, minHeight: 15, idealHeight: 25, maxHeight: 25)
         .background(

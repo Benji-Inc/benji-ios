@@ -28,6 +28,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     
     private let backgroundView = BackgroundGradientView()
     private(set) var allPeople: [Person] = []
+    
+    @Published var selectedPeople: [Person] = []
 
     override func loadView() {
         self.view = self.backgroundView
@@ -36,7 +38,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     init() {
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
         cv.keyboardDismissMode = .interactive
-        cv.isScrollEnabled = true 
+        cv.isScrollEnabled = true
+        cv.allowsMultipleSelection = true
         super.init(with: cv)
     }
 
@@ -58,12 +61,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.button.didSelect { [unowned self] in
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
         }
-
-        self.$selectedItems.mainSink { _ in
-            self.updateButton()
-        }.store(in: &self.cancellables)
         
-        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { _ in
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self]  _ in
             self.view.setNeedsLayout()
         }.store(in: &self.cancellables)
     }
@@ -97,6 +96,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.loadContacts()
         }
     }
+    
+    
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -117,6 +118,24 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         } else {
             self.button.top = self.view.height
         }
+    }
+    
+    func updateSelectedPeopleItems() {
+         let updatedItems: [PeopleCollectionViewDataSource.ItemType] = self.dataSource.itemIdentifiers(in: .people).compactMap { item in
+            switch item {
+            case .person(let person):
+                var copy = person
+                copy.isSelected = self.selectedPeople.contains(where: { current in
+                    return current.identifier == person.identifier
+                })
+
+                return .person(copy)
+            }
+        }
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(updatedItems, in: .people)
+        self.dataSource.apply(snapshot)
     }
 
     func showLoading(for person: Person) async {
@@ -153,7 +172,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func getButtonTitle() -> Localized {
-        return "Add \(self.selectedItems.count) people"
+        return "Add \(self.selectedPeople.count) people"
     }
 
     // MARK: Data Loading
@@ -168,6 +187,11 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         if ContactsManger.shared.hasPermissions {
             self.loadContacts()
         }
+        
+        self.$selectedPeople.mainSink { [unowned self] items in
+            self.updateSelectedPeopleItems()
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
     
     private func loadContacts() {
@@ -204,11 +228,35 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             
             self.allPeople.append(contentsOf: connectedPeople)
         }
-        
-        data[.people] = self.allPeople.compactMap({ person in
+                
+        data[.people] = self.allPeople.sorted().compactMap({ person in
             return .person(person)
         })
 
         return data
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didSelectItemAt: indexPath)
+        guard let person: Person = self.dataSource.itemIdentifier(for: indexPath).map({ item in
+            switch item {
+            case .person(let person):
+                return person
+            }
+        }), !self.selectedPeople.contains(person) else { return }
+        
+        self.selectedPeople.append(person)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didDeselectItemAt: indexPath)
+        guard let person: Person = self.dataSource.itemIdentifier(for: indexPath).map({ item in
+            switch item {
+            case .person(let person):
+                return person
+            }
+        }), self.selectedPeople.contains(person) else { return }
+        
+        self.selectedPeople.remove(object: person)
     }
 }

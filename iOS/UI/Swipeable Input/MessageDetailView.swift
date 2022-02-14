@@ -36,11 +36,12 @@ struct MessageDetailView: View {
     
     var body: some View {
         HStack {
-            if let emotion = self.config.emotion {
-                Spacer().frame(width: Theme.ContentOffset.standard.value)
-                EmotionView(emotion: emotion)
-            }
 
+            if let _ = self.config.emotion {
+                Spacer().frame(width: Theme.ContentOffset.standard.value)
+                EmotionView(config: self.config)
+            }
+            
             Spacer()
 
             MessageStatusView(config: self.config)

@@ -47,6 +47,8 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
             self.buttonTitleLabel.setTextColor(.T1)
             self.updateName(for: item, highlightText: item.highlightText)
         }
+        
+        self.handle(isSelected: item.isSelected)
     }
     
     private func updateName(for avatar: Avatar, highlightText: String?) {
@@ -60,10 +62,8 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
 
         self.layoutNow()
     }
-
-    override func update(isSelected: Bool) {
-        super.update(isSelected: isSelected)
-        
+    
+    private func handle(isSelected: Bool) {
         var color: ThemeColor = isSelected ? .D1 : .T1
         
         if let person = self.currentItem {
