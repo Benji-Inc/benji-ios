@@ -477,12 +477,15 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         // Items being inserted
-        var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
-                                                                 givenZPosition: self.zPosition)
-        if normalizedZOffset <= 0 {
-            normalizedZOffset = -1
+        let normalizedZOffset: CGFloat
+        if itemIndexPath.item == self.numberOfItems(inSection: itemIndexPath.section) - 1 {
+            if itemIndexPath.section == 0 {
+                normalizedZOffset = 1
+            } else {
+                normalizedZOffset = 0
+            }
         } else {
-            normalizedZOffset = 1
+            normalizedZOffset = -1
         }
         let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
                                                                 withNormalizedZOffset: normalizedZOffset)
