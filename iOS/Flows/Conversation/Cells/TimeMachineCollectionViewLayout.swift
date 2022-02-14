@@ -476,9 +476,23 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return modifiedAttributes
         }
 
-        attributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
+        // Items being inserted
+        let normalizedZOffset: CGFloat
+        if itemIndexPath.item == self.numberOfItems(inSection: itemIndexPath.section) - 1 {
+            if itemIndexPath.section == 0 {
+                normalizedZOffset = 1
+            } else {
+                normalizedZOffset = 0
+            }
+        } else {
+            normalizedZOffset = -1
+        }
+        let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
+                                                                withNormalizedZOffset: normalizedZOffset)
 
-        return attributes
+        modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
+
+        return modifiedAttributes
     }
 
     override func finalizeCollectionViewUpdates() {
