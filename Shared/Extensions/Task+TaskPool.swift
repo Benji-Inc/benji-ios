@@ -10,10 +10,6 @@ import Foundation
 
 /// A collection of tasks that automatically handles removing tasks from itself when the tasks finish.
 class TaskPool {
-
-    var isEmpty: Bool {
-        return self.pool.isEmpty
-    }
     
     private var pool: [Task<Void, Never>] = []
 
