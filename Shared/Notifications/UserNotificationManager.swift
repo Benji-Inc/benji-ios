@@ -97,7 +97,6 @@ class UserNotificationManager: NSObject {
     }
     
     func handleRead(message: Messageable) {
-        
         self.center.getDeliveredNotifications { [unowned self] delivered in
             Task.onMainActor {
                 var identifiers: [String] = []
