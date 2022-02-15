@@ -54,7 +54,6 @@ fileprivate class Toaster {
     var isPresenting: Bool = false
 
     func add(toast: Toast) {
-
         var toastView: ToastViewable
 
         switch toast.type {
@@ -87,7 +86,6 @@ fileprivate class Toaster {
     }
 
     func didDismiss(toastView: ToastViewable) {
-
         if let view = toastView as? UIView {
             view.removeFromSuperview()
         }

@@ -57,9 +57,7 @@ class ViewController: UIViewController, Dismissable {
         }
 
         // If our view goes off the screen, automatically cancel any tasks associated with it.
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
+        self.taskPool.cancelAndRemoveAll()
     }
 
     /// Called right after this VC's view is removed from the view hierarchy due to a dismiss/pop call or removed as a child view controller.

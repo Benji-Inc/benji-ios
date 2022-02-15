@@ -33,32 +33,34 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         super.initializeViews()
 
         self.view.clipsToBounds = false
-        self.collectionView.clipsToBounds = false 
+        self.collectionView.clipsToBounds = false
 
-        self.collectionView.animationView.isHidden = true 
+        self.collectionView.animationView.isHidden = true
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
-            .mainSink { conversation in
-            Task {
-                guard let cid = conversation?.cid else {
-                    await self.dataSource.deleteAllItems()
-                    return
-                }
-                
-                self.conversationController = ChatClient.shared.channelController(for: cid)
+            .mainSink { [unowned self] conversation in
+                logDebug("\(conversation?.name)")
+                Task {
+                    guard let cid = conversation?.cid else {
+                        await self.dataSource.deleteAllItems()
+                        return
+                    }
 
-                await self.loadData()
-                self.subscribeToUpdates(for: conversation)
-                
-            }.add(to: self.taskPool)
-        }.store(in: &self.cancellables)
+                    self.conversationController = ChatClient.shared.channelController(for: cid)
+
+                    await self.loadData()
+                    self.subscribeToUpdates(for: conversation)
+
+                }.add(to: self.taskPool)
+            }.store(in: &self.cancellables)
     }
 
     func subscribeToUpdates(for conversation: Conversation?) {
         self.conversationController?
             .typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in
+                logDebug("received some typing events")
                 self.dataSource.reconfigureAllItems()
             }).store(in: &self.cancellables)
 
@@ -128,7 +130,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                                 conversationController: conversationController)
             return .member(member)
         })
-                
+
         if !isRelease {
             data[.members]?.append(.add(conversation.cid))
         }
@@ -139,10 +141,10 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     func updateAuthor(for conversation: Conversation, user: ChatUser) {
         guard let controller = self.conversationController,
               conversation == controller.conversation else {
-            // If the conversation hasn't been set yet, store the user it should scroll too once it does. 
-            self.initialTopMostAuthor = user
-            return
-        }
+                  // If the conversation hasn't been set yet, store the user it should scroll too once it does.
+                  self.initialTopMostAuthor = user
+                  return
+              }
         
         self.initialTopMostAuthor = nil
         
