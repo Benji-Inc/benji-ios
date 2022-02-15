@@ -37,6 +37,12 @@ class NotificationService: UNNotificationServiceExtension {
         self.request = request
         self.contentHandler = contentHandler
 
+        // Reset the member vars so new notifications don't get polluted with old data.
+        self.author = nil
+        self.conversation = nil
+        self.message = nil
+        self.recipients = []
+
         Task {
             await self.initializeParse()
 
