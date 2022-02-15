@@ -371,6 +371,9 @@
 		D671E1F326402B1F00BF2B8D /* ToastQue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQue.swift */; };
 		D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
 		D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */; };
+		D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */; };
+		D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A6227BC45730047BBCA /* JibsDetailView.swift */; };
+		D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */; };
 		D6766C46274D50680046B449 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6766C45274D50680046B449 /* MemberCell.swift */; };
 		D6766C48274D50BF0046B449 /* MembersCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6766C47274D50BF0046B449 /* MembersCollectionViewDataSource.swift */; };
 		D6766C4A274D50D40046B449 /* MembersCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6766C49274D50D40046B449 /* MembersCollectionViewLayout.swift */; };
@@ -901,6 +904,9 @@
 		D671E1F226402B1F00BF2B8D /* ToastQue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastQue.swift; sourceTree = "<group>"; };
 		D671E1F426402B9800BF2B8D /* ToastScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastScheduler.swift; sourceTree = "<group>"; };
 		D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVURLAsset+Extension.swift"; sourceTree = "<group>"; };
+		D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderDetailView.swift; sourceTree = "<group>"; };
+		D6739A6227BC45730047BBCA /* JibsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JibsDetailView.swift; sourceTree = "<group>"; };
+		D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallanceDetailView.swift; sourceTree = "<group>"; };
 		D6766C45274D50680046B449 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6766C47274D50BF0046B449 /* MembersCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6766C49274D50D40046B449 /* MembersCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -1226,6 +1232,7 @@
 			isa = PBXGroup;
 			children = (
 				D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */,
+				D6739A6127BC45500047BBCA /* Header Views */,
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
 				D628B00827B47EEF00949154 /* TransactionContentView.xib */,
 				D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */,
@@ -1233,7 +1240,6 @@
 				D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */,
 				D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */,
 				D6129FA727ADC5F50058811C /* WalletCoordinator.swift */,
-				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
 				D6129FA927ADC6030058811C /* WalletViewController.swift */,
 			);
 			path = Wallet;
@@ -1754,6 +1760,17 @@
 				D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */,
 			);
 			path = Gradients;
+			sourceTree = "<group>";
+		};
+		D6739A6127BC45500047BBCA /* Header Views */ = {
+			isa = PBXGroup;
+			children = (
+				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
+				D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */,
+				D6739A6227BC45730047BBCA /* JibsDetailView.swift */,
+				D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */,
+			);
+			path = "Header Views";
 			sourceTree = "<group>";
 		};
 		D6766C44274D50360046B449 /* Conversation Header */ = {
@@ -2502,6 +2519,7 @@
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
 				D69565CC2790AE170063E802 /* MemberCellLayoutAttributes.swift in Sources */,
+				D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */,
 				D66AB0F2277A46F2007A35D1 /* BoxView.swift in Sources */,
 				D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
@@ -2551,6 +2569,7 @@
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
+				D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */,
 				D6766C4C274D50F50046B449 /* MembersViewController.swift in Sources */,
 				D615534A2745737300B08459 /* ThreadCoordinator.swift in Sources */,
 				D6766C48274D50BF0046B449 /* MembersCollectionViewDataSource.swift in Sources */,
@@ -2659,6 +2678,7 @@
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
 				80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */,
+				D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */,
 				D671E1F326402B1F00BF2B8D /* ToastQue.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */,

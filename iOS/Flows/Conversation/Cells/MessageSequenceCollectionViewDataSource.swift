@@ -32,7 +32,6 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
-    var handleTopicTapped: ((ConversationId) -> Void)?
     var handleCollectionViewTapped: CompletionOptional?
 
     /// If true, show the detail bar for each message
@@ -89,9 +88,6 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.initialCellRegistration,
                                                                             for: indexPath,
                                                                             item: (conversationID, collectionView))
-            cell.handleTopicTapped = { [unowned self] in
-                self.handleTopicTapped?(conversationID)
-            }
             return cell
         }
     }

@@ -80,7 +80,7 @@ class DeliveryTypeView: BaseView {
             self.configure(for: .timeSensitive)
         }
 
-        return UIMenu(title: "Select delivery method",
+        return UIMenu(title: "Send message...",
                       image: nil,
                       identifier: nil,
                       options: [.singleSelection],
