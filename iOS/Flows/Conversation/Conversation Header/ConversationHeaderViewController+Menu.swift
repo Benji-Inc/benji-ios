@@ -37,7 +37,7 @@ extension ConversationHeaderViewController {
                 } catch {
                     logError(error)
                 }
-            }.add(to: self.taskPool)
+            }.add(to: self.autoreleaseTaskPool)
         }
         
         let deleteMenu = UIMenu(title: "Delete Conversation",
@@ -55,7 +55,7 @@ extension ConversationHeaderViewController {
                 } catch {
                     logError(error)
                 }
-            }.add(to: self.taskPool)
+            }.add(to: self.autoreleaseTaskPool)
         }
         
         let hideMenu = UIMenu(title: "Hide Conversation",
@@ -74,7 +74,7 @@ extension ConversationHeaderViewController {
                 } catch {
                     logError(error)
                 }
-            }.add(to: self.taskPool)
+            }.add(to: self.autoreleaseTaskPool)
         }
         
         let leaveMenu = UIMenu(title: "Leave Conversation",

@@ -78,7 +78,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
 
         Task {
             await self.startAnimatingText()
-        }.add(to: self.taskPool)
+        }.add(to: self.autoreleaseTaskPool)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

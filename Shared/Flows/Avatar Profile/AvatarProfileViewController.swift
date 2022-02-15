@@ -42,7 +42,7 @@ class AvatarProfileViewController: ViewController {
                 self.nameLabel.setText(user?.fullName)
                 self.focusLabel.setText(user?.focusStatus?.rawValue)
                 self.view.layoutNow()
-            }.add(to: self.taskPool)
+            }.add(to: self.autoreleaseTaskPool)
         }
         self.avatarView.set(avatar: self.avatar)
 
