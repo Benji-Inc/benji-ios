@@ -124,7 +124,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
-    /// Returns a value between 0 and 1 denoting how in focus a section is. "In focus" means that its frontmost item is in focus.
+    /// Returns a value between 0 and 1 denoting how in focus a section is. "In focus" means that its frontmost item is the one the user should
+    /// be paying attention to..
     /// 0 means that no item in the section is even partially in focus.
     /// 1 means at least one item in the section is fully in focus, or we are between two items that are both partially in focus.
     func getFocusAmount(forSection section: SectionIndex) -> CGFloat {
@@ -139,7 +140,9 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         var normalizedDistance: CGFloat = 0
 
         for focusPosition in focusPositionsInSection {
-            let itemDistance = abs(focusPosition - self.zPosition)
+            // Clamp the z position so items stay focused even when the user scrolls past the normal bounds.
+            let clampedZPosition = clamp(self.zPosition, 0, self.maxZPosition)
+            let itemDistance = abs(focusPosition - clampedZPosition)
             let normalizedItemDistance = itemDistance/self.itemHeight
             if normalizedItemDistance < 1 {
                 normalizedDistance += 1 - normalizedItemDistance
@@ -177,6 +180,13 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return CGPoint(x: 0, y: upperBound)
     }
 
+    private func getCenterOfItems() -> CGPoint {
+        let topCenter = self.getItemCenterPoint(in: 0, withYOffset: 0, scale: 1.0)
+        let bottomCenter = self.getItemCenterPoint(in: 1, withYOffset: 0, scale: 1.0)
+        let center = CGPoint(x: topCenter.x, y: (topCenter.y + bottomCenter.y) / 2)
+        return center
+    }
+
     // MARK: - Content Offset and Update Animation Handling
 
     /// If true, scroll to the most recent item after performing collection view updates.
@@ -209,13 +219,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                 break
             }
         }
-    }
-    
-    func getCenterOfItems() -> CGPoint {
-        let topCenter = self.getItemCenterPoint(in: 0, withYOffset: 0, scale: 1.0)
-        let bottomCenter = self.getItemCenterPoint(in: 1, withYOffset: 0, scale: 1.0)
-        let center = CGPoint(x: topCenter.x, y: (topCenter.y + bottomCenter.y) / 2)
-        return center
     }
 
     override func finalizeCollectionViewUpdates() {
