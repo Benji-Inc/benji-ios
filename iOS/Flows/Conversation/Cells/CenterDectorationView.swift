@@ -12,6 +12,9 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
     static let kind = "decoration"
     let imageView = UIImageView()
     
+    let leftLabel = ThemeLabel(font: .small, textColor: .D1)
+    let rightLabel = ThemeLabel(font: .small, textColor: .D1)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeSubviews()
@@ -22,6 +25,12 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
     }
     
     func initializeSubviews() {
+        self.addSubview(self.leftLabel)
+        self.leftLabel.textAlignment = .left
+        self.leftLabel.setText("Just now")
+        self.addSubview(self.rightLabel)
+        self.rightLabel.setText("Unread: 0")
+        self.rightLabel.textAlignment = .right
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
     }
@@ -31,6 +40,14 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
         
         self.imageView.squaredSize = 14
         self.imageView.centerOnXAndY()
+        
+        self.leftLabel.setSize(withWidth: 120)
+        self.leftLabel.match(.right, to: .left, of: self.imageView, offset: .negative(.screenPadding))
+        self.leftLabel.centerOnY()
+        
+        self.rightLabel.setSize(withWidth: 120)
+        self.rightLabel.match(.left, to: .right, of: self.imageView, offset: .screenPadding)
+        self.rightLabel.centerOnY()
     }
     
     func set(state: ConversationUIState) {

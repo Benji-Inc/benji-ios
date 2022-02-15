@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum MessageContext: String, CaseIterable {
 
@@ -20,9 +21,18 @@ enum MessageContext: String, CaseIterable {
     var displayName: String {
         switch self {
         case .timeSensitive:
-            return "Urgently"
+            return "Time Sensitive"
         case .respectful:
-            return "Quietly"
+            return "Small Talk"
+        }
+    }
+    
+    var image: UIImage? {
+        switch self {
+        case .timeSensitive:
+            return UIImage(systemName: "bell.badge")
+        case .respectful:
+            return UIImage(systemName: "bell.slash")
         }
     }
 }
