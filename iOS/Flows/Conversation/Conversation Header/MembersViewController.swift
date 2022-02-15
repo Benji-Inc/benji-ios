@@ -67,7 +67,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         conversationController
             .typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in
-                logDebug("received some typing events")
                 self.dataSource.reconfigureAllItems()
             }).store(in: &self.conversationCancellables)
 
@@ -102,7 +101,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     }
 
     func scroll(to user: ChatUser) {
-        logDebug("update author name is "+user.fullName)
         guard let controller = self.conversationController else { return }
 
         let member = Member(displayable: AnyHashableDisplayable(user),
