@@ -69,7 +69,7 @@ extension ConversationListViewController {
             .mainSink { [unowned self] _ in
                 Task {
                     await self.dataSource.update(with: self.conversationListController)
-                }.add(to: self.autoreleaseTaskPool)
+                }.add(to: self.autocancelTaskPool)
             }.store(in: &self.cancellables)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in

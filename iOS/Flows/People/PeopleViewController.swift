@@ -210,7 +210,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
             await self.dataSource.appendItems(contactItems, toSection: .people)
             
-        }.add(to: self.autoreleaseTaskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 
     override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {

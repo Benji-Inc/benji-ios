@@ -53,7 +53,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                     guard !Task.isCancelled else { return }
 
                     self.subscribeToUpdates(for: conversationController)
-                }.add(to: self.autoreleaseTaskPool)
+                }.add(to: self.autocancelTaskPool)
             }.store(in: &self.cancellables)
     }
 

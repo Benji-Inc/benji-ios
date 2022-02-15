@@ -279,7 +279,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                     cell.transform = .identity
                 })
             }
-        }.add(to: self.autoreleaseTaskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 }
 // MARK: - Messaging
@@ -304,7 +304,7 @@ extension ThreadViewController: MessageSendingViewControllerType {
             } catch {
                 logError(error)
             }
-        }.add(to: self.autoreleaseTaskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 
     func createNewConversation(_ sendable: Sendable) {
