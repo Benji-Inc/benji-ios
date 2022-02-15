@@ -19,7 +19,7 @@ class WalletCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
         
-        self.walletVC.dataSource.didTapDetail = {
+        self.walletVC.dataSource.didTapDetail = { [unowned self] in 
             self.presentAlert()
         }
     }

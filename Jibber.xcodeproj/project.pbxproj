@@ -1234,6 +1234,7 @@
 			isa = PBXGroup;
 			children = (
 				D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */,
+				D6739A6127BC45500047BBCA /* Header Views */,
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
 				D628B00827B47EEF00949154 /* TransactionContentView.xib */,
 				D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */,
@@ -1241,7 +1242,6 @@
 				D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */,
 				D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */,
 				D6129FA727ADC5F50058811C /* WalletCoordinator.swift */,
-				D6739A6127BC45500047BBCA /* Header Views */,
 				D6129FA927ADC6030058811C /* WalletViewController.swift */,
 			);
 			path = Wallet;

@@ -206,7 +206,6 @@ extension Transaction: Objectable {
 struct TransactionsCalculator {
     
     /// 1 Jib earned each day with a value of $0.01
-    ///
     /// Number of jibs earned per day
     private let interestRate: Double = 1.0
     /// Value of 1 jib earned in dollars
@@ -240,8 +239,6 @@ struct TransactionsCalculator {
         
         guard let latestCreateAt = interestTransaction?.createdAt else { return 0.0 }
         
-        // start the clock from the latest createdAt
-        // Jib 0.1 = $0.01
         let timeSince = -latestCreateAt.timeIntervalSinceNow
         let jibsEarned = (timeSince / 86400) * self.interestRate
         return jibsEarned

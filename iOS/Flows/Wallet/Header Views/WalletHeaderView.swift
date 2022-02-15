@@ -12,8 +12,8 @@ class WalletHeaderView: UICollectionReusableView {
     
     private let topLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true)
     private let bottomLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true)
-    private let topRightDetailView = JibsDetailView(showDetail: true)//WalletHeaderDetailView(shouldPinLeft: false)
-    private let bottomRightDetailView = BallanceDetailView(showDetail: false)//WalletHeaderDetailView(shouldPinLeft: false)
+    private let topRightDetailView = JibsDetailView(showDetail: true)
+    private let bottomRightDetailView = BallanceDetailView(showDetail: false)
     private let imageView = UIImageView(image: UIImage(named: "jiblogo"))
     
     var didTapDetail: CompletionOptional = nil
