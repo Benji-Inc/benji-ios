@@ -3,6 +3,7 @@ platform :ios, '14.0'
 
 def shared_pods
   pod 'ParseLiveQuery'
+  pod 'ScrollCounter'
 end
 
 target 'Jibber' do

@@ -26,6 +26,8 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
     private let segmentControlConfig = ManageableSupplementaryViewRegistration<TransactionSegmentControlView>().provider
         
     @Published var segmentIndex: TransactionSegmentControlView.SegmentType = .you
+    
+    var didTapDetail: CompletionOptional = nil
         
     // MARK: - Cell Dequeueing
 
@@ -52,6 +54,9 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
             guard kind == UICollectionView.elementKindSectionHeader else { return nil }
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
             header.configure(with: self.itemIdentifiers(in: .transactions))
+            header.didTapDetail = { [unowned self] in
+                self.didTapDetail?()
+            }
             return header
         case .transactions:
             if kind == BackgroundSupplementaryView.kind {

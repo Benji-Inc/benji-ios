@@ -25,10 +25,6 @@ extension ConversationListViewController {
             self.loadMoreConversationsIfNeeded()
         }
         
-        self.dataSource.handleTopicTapped = { [unowned self] _ in
-            self.headerVC.didTapUpdateTopic?()
-        }
-        
         self.dataSource.handleCollectionViewTapped = {
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()

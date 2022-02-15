@@ -23,7 +23,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     // Interaction handling
     var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
-    var handleTopicTapped: ((ConversationId) -> Void)?
     var handleCollectionViewTapped: CompletionOptional = nil 
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
@@ -82,10 +81,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         self.dataSource.handleEditMessage = { [unowned self] cid, messageID in
             self.handleEditMessage?(cid, messageID)
-        }
-        
-        self.dataSource.handleTopicTapped = { [unowned self] cid in
-            self.handleTopicTapped?(cid)
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in

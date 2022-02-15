@@ -80,7 +80,7 @@ class TransactionContentView: BaseView, UIContentView {
             self.content.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0),
             self.widthAnchor.constraint(equalToConstant: 500)
         ])
-        
+                
         self.titleLabel?.setFont(.small)
         self.titleLabel?.alpha = 0.35
         self.titleLabel?.textAlignment = .left

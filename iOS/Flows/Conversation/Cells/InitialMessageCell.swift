@@ -12,8 +12,6 @@ import Combine
 
 class InitialMessageCell: UICollectionViewCell {
 
-    var handleTopicTapped: CompletionOptional = nil
-
     private(set) var label = ThemeLabel(font: .regular)
     private let borderView = BaseView()
     
@@ -34,17 +32,9 @@ class InitialMessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.borderView)
         self.borderView.addSubview(self.label)
-        
-        self.borderView.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
-        self.borderView.layer.borderWidth = 1
-        self.borderView.layer.cornerRadius = Theme.cornerRadius
 
         self.label.alpha = 0
         self.label.textAlignment = .center
-
-        self.contentView.didSelect { [unowned self] in
-            self.handleTopicTapped?()
-        }
     }
 
     override func layoutSubviews() {
@@ -65,19 +55,11 @@ class InitialMessageCell: UICollectionViewCell {
     }
     
     private func update(with conversation: Conversation) {
-        if conversation.isOwnedByMe {
-            if let title = conversation.title {
-                self.label.setText("Tap to edit: \(title)")
-            } else {
-                self.label.setText("Tap to add a group name")
-            }
+        let dateString = Date.monthDayYear.string(from: conversation.createdAt)
+        if let title = conversation.title {
+            self.label.setText("\(title.capitalized) was created on:\n\(dateString)")
         } else {
-            let dateString = Date.monthDayYear.string(from: conversation.createdAt)
-            if let title = conversation.title {
-                self.label.setText("\(title.capitalized) was created on:\n\(dateString)")
-            } else {
-                self.label.setText("This conversation was created on:\n\(dateString)")
-            }
+            self.label.setText("This conversation was created on:\n\(dateString)")
         }
         
         self.layoutNow()

@@ -28,6 +28,7 @@ final class Transaction: PFObject, PFSubclassing {
         case swipeToSend = "SWIPE_TO_SEND"
         case invite = "INVITE"
         case bugReport = "BUG_REPORT"
+        case interestPayment = "INTEREST_PAYMENT"
         
         var isUnique: Bool {
             switch self {
@@ -38,6 +39,8 @@ final class Transaction: PFObject, PFSubclassing {
             case .invite:
                 return false
             case .bugReport:
+                return false
+            case .interestPayment:
                 return false
             }
         }
@@ -52,6 +55,8 @@ final class Transaction: PFObject, PFSubclassing {
                 return 5.0
             case .bugReport:
                 return 2.0
+            case .interestPayment:
+                return 0.0
             }
         }
         
@@ -65,6 +70,8 @@ final class Transaction: PFObject, PFSubclassing {
                 return "For being a team player. 🤝"
             case .bugReport:
                 return "For hepling us find 🕵️‍♀️ and smash those 🐛."
+            case .interestPayment:
+                return ""
             }
         }
     }
@@ -193,5 +200,51 @@ extension Transaction: Objectable {
 
     func getRelationalObject<PFRelation>(for key: TransactionKey) -> PFRelation? {
         return self.relation(forKey: key.rawValue) as? PFRelation
+    }
+}
+
+struct TransactionsCalculator {
+    
+    /// 1 Jib earned each day with a value of $0.01
+    /// Number of jibs earned per day
+    private let interestRate: Double = 1.0
+    /// Value of 1 jib earned in dollars
+    private let conversationRate: Double = 0.01
+    
+    func calculateJibsEarned(for transactions: [Transaction]) async throws -> Double {
+        let transactions: [Transaction] = try await transactions.asyncMap { transaction in
+            return try await transaction.retrieveDataIfNeeded()
+        }
+        
+        var total: Double = 0.0
+        transactions.forEach { transaction in
+            total += transaction.amount
+        }
+        
+        return total
+    }
+    
+    func calculateInterestEarned(for transactions: [Transaction]) -> Double {
+        let interestTransaction: Transaction? = transactions.compactMap({ transaction in
+            if transaction.eventType == .interestPayment {
+                return transaction
+            } else {
+                return nil
+            }
+        }).sorted { lhs, rhs in
+            let lhsDate = lhs.createdAt ?? Date.distantFuture
+            let rhsDate = rhs.createdAt ?? Date.distantFuture
+            return lhsDate < rhsDate
+        }.last
+        
+        guard let latestCreateAt = interestTransaction?.createdAt else { return 0.0 }
+        
+        let timeSince = -latestCreateAt.timeIntervalSinceNow
+        let jibsEarned = (timeSince / 86400) * self.interestRate
+        return jibsEarned
+    }
+    
+    func calculateCreditBalanceForJibs(for total: Double) -> Double {
+        return total * self.conversationRate
     }
 }

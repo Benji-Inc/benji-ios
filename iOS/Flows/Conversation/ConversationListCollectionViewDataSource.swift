@@ -71,9 +71,6 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             conversationCell.handleEditMessage = { [unowned self] cid, messageID in
                 self.handleEditMessage?(cid, messageID)
             }
-            conversationCell.handleTopicTapped = { [unowned self] cid in
-                self.handleTopicTapped?(cid)
-            }
             conversationCell.handleCollectionViewTapped = { [unowned self] in
                 self.handleCollectionViewTapped?()
             }
