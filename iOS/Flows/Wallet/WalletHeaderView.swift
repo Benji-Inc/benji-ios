@@ -29,9 +29,12 @@ class WalletHeaderView: UICollectionReusableView {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.currencyCode = "usd"
+        formatter.roundingMode = .down
         formatter.minimumFractionDigits = 2
         return formatter
     }()
+    
+    var interestTask: Task<Void, Never>?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,7 +58,7 @@ class WalletHeaderView: UICollectionReusableView {
         }
     }
     
-    func configure(with transactions: [WalletCollectionViewDataSource.ItemType]) {
+    func configure(with items: [WalletCollectionViewDataSource.ItemType]) {
         self.topLeftDetailView.configure(with: "Jibs", subtitle: "Reward Credits")
         Task {
             guard let user = try? await User.current()?.retrieveDataIfNeeded(),
@@ -68,37 +71,43 @@ class WalletHeaderView: UICollectionReusableView {
             } else {
                 self.bottomLeftDetailView.configure(with: "Jibber", subtitle: "Member since \(dateString)")
             }
-
-            let total = try? await self.calculateEarnings(for: transactions)
-            if let stringTotal = self.totalFormatter.string(from: total ?? 0.0) {
+            
+            let transactions: [Transaction] = items.compactMap { type in
+                switch type {
+                case .transaction(let transaction):
+                    return transaction
+                }
+            }
+            self.startCalculatingInterest(for: transactions)
+        }
+    }
+    
+    func startCalculatingInterest(for transactions: [Transaction]) {
+        self.interestTask?.cancel()
+        
+        let calculator = TransactionsCalculator()
+        
+        self.interestTask = Task { [unowned self] in
+            
+            guard let jibsEarned = try? await calculator.calculateJibsEarned(for: transactions), !Task.isCancelled else { return }
+            
+            let projectedInterest = calculator.calculateInterestEarned(for: transactions)
+            let totalEarned = jibsEarned + projectedInterest
+            
+            if let stringTotal = self.totalFormatter.string(from: NSNumber(value: totalEarned)) {
                 self.topRightDetailView.configure(with: stringTotal, subtitle: "Earned for activity")
             }
-
-            let balance = self.balanceFormatter.string(from: self.calculateCreditBalance(for: total ?? 0.0)) ?? "$0.00"
+            
+            let totalCurrencyEarned = calculator.calculateCreditBalanceForJibs(for: totalEarned)
+    
+            let balance = self.balanceFormatter.string(from: NSNumber(value: totalCurrencyEarned)) ?? "$0.00"
             self.bottomRightDetailView.configure(with: balance, subtitle: "Credit Balance")
             self.layoutNow()
+            await Task.snooze(seconds: 0.5)
+            
+            guard !Task.isCancelled else { return }
+            self.startCalculatingInterest(for: transactions)
         }
-    }
-    
-    func calculateEarnings(for items: [WalletCollectionViewDataSource.ItemType]) async throws -> NSNumber {
-        let transactions: [Transaction] = try await items.asyncMap { type in
-            switch type {
-            case .transaction(let transaction):
-                return try await transaction.retrieveDataIfNeeded()
-            }
-        }
-        
-        var total: Double = 0.0
-        transactions.forEach { transaction in
-            total += transaction.amount
-        }
-        
-        return NSNumber(value: total)
-    }
-    
-    func calculateCreditBalance(for total: NSNumber) -> NSNumber {
-        let multiplier: Double = 10000000
-        return NSNumber(value: total.doubleValue / multiplier)
     }
     
     override func layoutSubviews() {
@@ -120,6 +129,12 @@ class WalletHeaderView: UICollectionReusableView {
         self.imageView.centerOnX()
         self.imageView.centerY = self.centerY - Theme.ContentOffset.screenPadding.value.half
         self.imageView.centerY += 10
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.interestTask?.cancel()
     }
 }
 
