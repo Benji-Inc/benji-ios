@@ -50,7 +50,7 @@ private struct MessageReadView: View {
                 Spacer.length(.standard)
             }
         }
-        .frame(minHeight: 15, idealHeight: 25, maxHeight: 25)
+        .frame(minHeight: 25, idealHeight: 25, maxHeight: 25)
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
@@ -73,7 +73,7 @@ private struct MessageReplyView: View {
                 .color(.T1)
             Spacer.length(.standard)
         }
-        .frame(minWidth: 25, minHeight: 15, idealHeight: 25, maxHeight: 25)
+        .frame(minWidth: 25, minHeight: 25, idealHeight: 25, maxHeight: 25)
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
