@@ -69,12 +69,12 @@ class DiffableCollectionViewController<SectionType: Hashable,
         self.collectionView.layoutNow()
         self.collectionView.animationView.play()
 
+        let dataDictionary = await self.retrieveDataForSnapshot()
+
         guard !Task.isCancelled else {
             self.collectionView.animationView.stop()
             return
         }
-
-        let dataDictionary = await self.retrieveDataForSnapshot()
 
         let snapshot = self.getInitialSnapshot(with: dataDictionary)
 
@@ -84,6 +84,11 @@ class DiffableCollectionViewController<SectionType: Hashable,
                                         animationCycle: animationCycle)
         } else {
             await self.dataSource.apply(snapshot)
+        }
+
+        guard !Task.isCancelled else {
+            self.collectionView.animationView.stop()
+            return
         }
 
         self.collectionView.animationView.stop()

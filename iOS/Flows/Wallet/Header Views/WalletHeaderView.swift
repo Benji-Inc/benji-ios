@@ -34,8 +34,6 @@ class WalletHeaderView: UICollectionReusableView {
         return formatter
     }()
     
-    var interestTask: Task<Void, Never>?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeViews()
@@ -67,7 +65,8 @@ class WalletHeaderView: UICollectionReusableView {
             let dateString = Date.monthYear.string(from: createdAt)
             
             if let memberPosition = User.current()?.quePosition {
-                self.bottomLeftDetailView.configure(with: "#\(memberPosition)", subtitle: "Member since \(dateString)")
+                self.bottomLeftDetailView.configure(with: "#\(memberPosition)",
+                                                    subtitle: "Member since \(dateString)")
             } else {
                 self.bottomLeftDetailView.configure(with: "Jibber", subtitle: "Member since \(dateString)")
             }
@@ -84,28 +83,31 @@ class WalletHeaderView: UICollectionReusableView {
             self.startCalculatingInterest(for: transactions)
         }
     }
-    
+
+    private var interestTask: Task<Void, Never>?
+
     func startCalculatingInterest(for transactions: [Transaction]) {
         self.interestTask?.cancel()
         
         let calculator = TransactionsCalculator()
         
-        self.interestTask = Task { [unowned self] in
-            
-            guard let jibsEarned = try? await calculator.calculateJibsEarned(for: transactions), !Task.isCancelled else { return }
+        self.interestTask = Task { [weak self] in
+            guard let jibsEarned = try? await calculator.calculateJibsEarned(for: transactions),
+                  !Task.isCancelled else { return }
             
             let projectedInterest = calculator.calculateInterestEarned(for: transactions)
             let totalEarned = jibsEarned + projectedInterest
             
-            self.topRightDetailView.configure(with: totalEarned)
+            self?.topRightDetailView.configure(with: totalEarned)
             
             let totalCurrencyEarned = calculator.calculateCreditBalanceForJibs(for: totalEarned)
-            self.bottomRightDetailView.configure(with: totalCurrencyEarned)
-            self.layoutNow()
+            self?.bottomRightDetailView.configure(with: totalCurrencyEarned)
+            self?.layoutNow()
+            
             await Task.snooze(seconds: 1.0)
             
             guard !Task.isCancelled else { return }
-            self.startCalculatingInterest(for: transactions)
+            self?.startCalculatingInterest(for: transactions)
         }
     }
     
