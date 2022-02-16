@@ -13,6 +13,11 @@ typealias MessageController = ChatMessageController
 
 extension MessageController {
 
+    /// Creates a message controller using the shared ChatClient.
+    static func initialize(cid: ConversationId, messageId: MessageId) -> MessageController {
+        return ChatClient.shared.messageController(cid: cid, messageId: messageId)
+    }
+
     func editMessage(with sendable: Sendable) async throws {
         switch sendable.kind {
         case .text(let text):

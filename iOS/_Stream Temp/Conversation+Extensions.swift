@@ -17,6 +17,11 @@ extension Conversation {
         case member
     }
 
+    /// Returns the conversation with the specified cid using the shared ChatClient.
+    static func conversation(_ cid: ConversationId) -> Conversation {
+        return ConversationController.controller(cid).conversation
+    }
+
     var currentRole: Role? {
         return Role(rawValue: self.membership?.memberRole.rawValue ?? "")
     }

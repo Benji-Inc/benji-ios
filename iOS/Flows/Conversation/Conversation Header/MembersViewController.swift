@@ -60,7 +60,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     /// The subscriptions for the current conversation.
     private var conversationCancellables = Set<AnyCancellable>()
 
-    func subscribeToUpdates(for conversationController: ConversationController) {
+    private func subscribeToUpdates(for conversationController: ConversationController) {
         // Clear out previous subscriptions.
         self.conversationCancellables.removeAll()
 
