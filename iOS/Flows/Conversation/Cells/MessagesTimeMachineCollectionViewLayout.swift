@@ -30,41 +30,35 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     var decorationAttributes: DecorationViewLayoutAttributes?
     var uiState: ConversationUIState = .read
     var hideCenterDecorationView: Bool = false
-    
-    override func initializeLayout() {
-        super.initializeLayout()
-        
-        self.register(CenterDectorationView.self, forDecorationViewOfKind: CenterDectorationView.kind)
-    }
         
     override func prepare() {
         super.prepare()
         
-        self.decorationAttributes = DecorationViewLayoutAttributes.init(forDecorationViewOfKind: CenterDectorationView.kind, with: IndexPath(item: 0, section: 0))
+        self.decorationAttributes = DecorationViewLayoutAttributes.init(forSupplementaryViewOfKind: CenterConversationDetailView.kind, with: IndexPath(row: 0, section: 0))
         self.decorationAttributes?.bounds.size = CGSize(width: self.collectionView?.width ?? .zero,
                                                         height: 14)
     }
     
-    override func layoutAttributesForDecorationView(ofKind elementKind: String,
+    override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
                                                     at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         switch elementKind {
-        case CenterDectorationView.kind:
+        case CenterConversationDetailView.kind:
             if self.sectionCount > 0 {
                 self.decorationAttributes?.center = self.getCenterOfItems()
                 self.decorationAttributes?.state = self.uiState
                 self.decorationAttributes?.isHidden = self.hideCenterDecorationView
                 return self.decorationAttributes
             } else {
-                return super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
+                return super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
             }
         default:
-            return super.layoutAttributesForDecorationView(ofKind: elementKind, at: indexPath)
+            return super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
         }
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var all = super.layoutAttributesForElements(in: rect)
-        if let decorationAttributes = self.layoutAttributesForDecorationView(ofKind: CenterDectorationView.kind, at: IndexPath(item: 0, section: 0)) {
+        if let decorationAttributes = self.layoutAttributesForSupplementaryView(ofKind: CenterConversationDetailView.kind, at: IndexPath(item: 0, section: 0)) {
             all?.append(decorationAttributes)
         }
         

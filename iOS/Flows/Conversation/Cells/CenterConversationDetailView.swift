@@ -11,8 +11,9 @@ import Combine
 import StreamChat
 import ScrollCounter
 
-class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettable {
-    static let kind = "decoration"
+class CenterConversationDetailView: UICollectionReusableView, ConversationUIStateSettable, ElementKind {
+    static var kind: String = "centerdetailview"
+    
     let imageView = UIImageView()
     
     let leftLabel = ThemeLabel(font: .small, textColor: .D1)
@@ -51,20 +52,6 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
         self.addSubview(self.rightLabel)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        
-        ConversationsManager.shared
-            .$activeConversation
-            .removeDuplicates()
-            .mainSink { [unowned self] conversation in
-            self.configure(for: conversation)
-        }.store(in: &self.cancellables)
-        
-        ConversationsManager.shared.$topMostMessage
-            .removeDuplicates()
-            .mainSink { [unowned self] message in
-                guard let msg = message, msg != self.currentMessage else { return }
-                self.configure(for: msg)
-        }.store(in: &self.cancellables)
     }
         
     override func layoutSubviews() {
@@ -82,28 +69,26 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
         self.rightLabel.centerOnY()
     }
     
-    func configure(for conversation: Conversation?) {
+    func configure(for message: Message) {
         
         self.taskPool.cancelAndRemoveAll()
         
         Task {
-            if let conversation = conversation {
-                self.conversationController = ChatClient.shared.channelController(for: conversation.cid)
+            guard let cid = message.cid else { return }
+            
+            if self.conversationController?.cid != cid {
+                self.conversationController = ChatClient.shared.channelController(for: cid)
                 if self.conversationController!.messages.isEmpty {
-                    try? await self.conversationController!.synchronize()
+                    try? await self.conversationController?.synchronize()
                 }
                 
-                guard !Task.isCancelled else { return }
-
-                if let first = self.conversationController?.messages.first {
-                    self.configure(for: first)
-                }
-
                 self.setNumberOfUnread(value: self.conversationController!.conversation.totalUnread)
                 self.subscribeToUpdates()
-            } else {
-                self.setNumberOfUnread(value: 0)
             }
+            
+            guard !Task.isCancelled else { return }
+            
+            self.update(for: message)
         }.add(to: self.taskPool)
     }
     
@@ -113,11 +98,8 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
         self.rightLabel.setValue(new, animated: true)
     }
  
-    private func configure(for message: Message) {
-        if message.cid == ConversationsManager.shared.activeConversation?.cid {
-            let date = message.createdAt
-            self.leftLabel.setText(message.text)
-        }
+    private func update(for message: Message) {
+        self.leftLabel.setText(date.getDaysAgoString())
         self.setNeedsLayout()
     }
     
@@ -130,7 +112,7 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
             .messagesChangesPublisher
             .mainSink { [unowned self] changes in
                 guard let conversationController = self.conversationController else { return }
-                self.configure(for: conversationController.conversation)
+                self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
             }.store(in: &self.subscriptions)
     }
     

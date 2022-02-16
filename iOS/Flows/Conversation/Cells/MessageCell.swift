@@ -11,6 +11,11 @@ import SwiftUI
 import StreamChat
 import Combine
 
+struct MessageDetailState: Equatable {
+    var detailShown: Bool = false
+    var isInFocus: Bool = false
+}
+
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
@@ -23,7 +28,7 @@ class MessageCell: UICollectionViewCell {
     var shouldShowDetailBar: Bool = true
 
     /// If true, this cell's message details are fully visible.
-    @Published private(set) var areDetailsShown: Bool = false
+    @Published private(set) var messageDetailState: MessageDetailState = MessageDetailState()
     private var subscriptions = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
@@ -112,7 +117,8 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
         let areDetailsShown = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
-        self.areDetailsShown = areDetailsShown
+        let isInfocus = messageLayoutAttributes.sectionFocusAmount == 1
+        self.messageDetailState = MessageDetailState(detailShown: areDetailsShown, isInFocus: isInfocus)
         self.handleDetailsShown(areDetailsShown)
     }
 
