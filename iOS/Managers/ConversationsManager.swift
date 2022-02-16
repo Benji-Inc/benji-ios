@@ -34,6 +34,7 @@ class ConversationsManager: EventsControllerDelegate {
     private let controller = ChatClient.shared.eventsController()
 
     @Published var activeConversation: Conversation?
+    @Published var topMostMessage: Message? 
 
     @Published var reactionEvent: Event?
     @Published var localMessageStateEvent: Event?

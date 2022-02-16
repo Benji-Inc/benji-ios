@@ -21,7 +21,7 @@ class DeliveryTypeView: BaseView {
 
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.T1.color
+        self.imageView.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
         self.addSubview(self.button)
 
         self.set(backgroundColor: .B1withAlpha)
