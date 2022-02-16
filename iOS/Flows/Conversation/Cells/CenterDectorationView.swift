@@ -42,14 +42,14 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
 //                self.configure(for: message)
 //            }.store(in: &self.cancellables)
     }
-    
-    private func configure(for message: Message?) {
-        guard let msg = message else { return }
-        logDebug(msg.text)
-        self.leftLabel.setText(msg.createdAt.getDaysAgoString())
-        self.rightLabel.setText("Unread: 0")
-        self.layoutNow()
-    }
+//
+//    private func configure(for message: Message?) {
+//        guard let msg = message else { return }
+//        logDebug(msg.text)
+//        self.leftLabel.setText(msg.createdAt.getDaysAgoString())
+//        self.rightLabel.setText("Unread: 0")
+//        self.layoutNow()
+//    }
         
     override func layoutSubviews() {
         super.layoutSubviews()

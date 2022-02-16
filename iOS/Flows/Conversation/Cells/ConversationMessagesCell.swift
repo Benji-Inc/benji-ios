@@ -299,7 +299,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                 }
                 
                 /// Using the notification center as there is no way to access a decoration view directly to provide an update
-                NotificationCenter.default.post(name: .topMessageUdpated, object: message)
+//                NotificationCenter.default.post(name: .topMessageUdpated, object: message)
             }
     }
 
