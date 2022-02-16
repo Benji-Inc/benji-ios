@@ -99,7 +99,7 @@ class CenterConversationDetailView: UICollectionReusableView, ConversationUIStat
     }
  
     private func update(for message: Message) {
-        self.leftLabel.setText(date.getDaysAgoString())
+        self.leftLabel.setText(message.createdAt.getDaysAgoString())
         self.setNeedsLayout()
     }
     
