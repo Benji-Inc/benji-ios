@@ -84,7 +84,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
             self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
             self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
     
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {

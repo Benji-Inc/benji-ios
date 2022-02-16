@@ -34,7 +34,7 @@ struct ManageableSupplementaryViewRegistration<View: UICollectionReusableView & 
     let provider = UICollectionView.SupplementaryRegistration<View>(elementKind: View.kind) { headerView, elementKind, indexPath in }
 }
 
-// A base class that other cells managed by a CollectionViewManager can inherit from.
+/// A base class that other cells managed by a CollectionViewManager can inherit from.
 class CollectionViewManagerCell: UICollectionViewListCell {
 
     var cancellables = Set<AnyCancellable>()
@@ -76,8 +76,6 @@ class CollectionViewManagerCell: UICollectionViewListCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
+        self.taskPool.cancelAndRemoveAll()
     }
 }

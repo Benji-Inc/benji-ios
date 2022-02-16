@@ -102,9 +102,7 @@ class Coordinator<Result>: NSObject, CoordinatorType {
         self.removeFromParent()
         self.onFinishedFlow?(result)
         
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
+        self.taskPool.cancelAndRemoveAll()
     }
 }
 

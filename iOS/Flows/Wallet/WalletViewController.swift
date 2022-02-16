@@ -103,7 +103,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         Task {
             guard let transactions = try? await Transaction.fetchAllCurrentTransactions() else { return }
             await self.load(transactions: transactions)
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
     
     private func loadConnectionsTransactions() {
@@ -114,7 +114,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             }
             
             await self.load(transactions: transactions)
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
     
     private func load(transactions: [Transaction]) async {

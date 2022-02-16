@@ -14,7 +14,7 @@ class ViewController: UIViewController, Dismissable {
     var dismissHandlers: [DismissHandler] = []
     var cancellables = Set<AnyCancellable>()
     /// A pool of Tasks that are automatically cancelled when our view disappears
-    var taskPool = TaskPool()
+    var autocancelTaskPool = TaskPool()
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -57,9 +57,7 @@ class ViewController: UIViewController, Dismissable {
         }
 
         // If our view goes off the screen, automatically cancel any tasks associated with it.
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
+        self.autocancelTaskPool.cancelAndRemoveAll()
     }
 
     /// Called right after this VC's view is removed from the view hierarchy due to a dismiss/pop call or removed as a child view controller.

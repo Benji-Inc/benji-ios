@@ -7,9 +7,8 @@
 //
 
 import Foundation
-// A custom transitions that simultaneously slides the current VC vertically off the screen
-// and the destination one onto it.
-
+/// A custom transitions that simultaneously slides the current VC vertically off the screen
+/// and the destination one onto it.
 class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
 
     // The fromVC sets the stage for how it wants to get to the toVC
@@ -17,7 +16,7 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     private(set) var toVC: TransitionableViewController
     private let operation: UINavigationController.Operation
 
-    var taskPool = TaskPool()
+    let taskPool = TaskPool()
 
     init(fromVC: TransitionableViewController,
          toVC: TransitionableViewController,
@@ -54,8 +53,6 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     func animationEnded(_ transitionCompleted: Bool) {
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
+        self.taskPool.cancelAndRemoveAll()
     }
 }

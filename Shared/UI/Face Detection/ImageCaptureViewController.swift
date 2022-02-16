@@ -42,7 +42,7 @@ class ImageCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
                 self.configureCaptureSession()
                 self.session.startRunning()
             }
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 
     func stop() {

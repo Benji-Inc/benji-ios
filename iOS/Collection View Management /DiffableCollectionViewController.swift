@@ -48,7 +48,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
     func loadInitialData() {
         Task {
             await self.loadData()
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 
     func collectionViewDataWasLoaded() {}

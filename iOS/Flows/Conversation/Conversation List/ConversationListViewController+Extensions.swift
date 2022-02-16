@@ -12,7 +12,6 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
-
         self.dataSource.handleSelectedMessage = { [unowned self] (cid, messageID, view) in
             self.selectedMessageView = view
             self.onSelectedMessage?(cid, messageID, nil)
@@ -36,7 +35,6 @@ extension ConversationListViewController {
     }
 
     func subscribeToUIUpdates() {
-        
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
@@ -67,7 +65,7 @@ extension ConversationListViewController {
             .mainSink { [unowned self] _ in
                 Task {
                     await self.dataSource.update(with: self.conversationListController)
-                }.add(to: self.taskPool)
+                }.add(to: self.autocancelTaskPool)
             }.store(in: &self.cancellables)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
@@ -95,11 +93,12 @@ extension ConversationListViewController {
     func subscribeToTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
         // didUpdate is called before this is ever set.
         // Also looks like a non centered conversation is being used
-        self.incomingFrontmostMessageSubscription = cell.$frontmostNonUserMessage
+        self.frontmostNonUserMessageSubscription = cell.$frontmostNonUserMessage
             .removeDuplicates()
             .mainSink { [unowned self] message in
                 guard let author = message?.author else { return }
-                self.headerVC.membersVC.updateAuthor(for: conversation, user: author)
+
+                self.headerVC.membersVC.scroll(to: author)
             }
     }
 }
