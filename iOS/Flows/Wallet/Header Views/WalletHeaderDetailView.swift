@@ -14,8 +14,11 @@ class WalletHeaderDetailView: BaseView {
     let subtitleLabel = ThemeLabel(font: .small, textColor: .D1)
 
     private let shouldPinLeft: Bool
-    
-    init(shouldPinLeft: Bool) {
+    private let detailDisclosure = UIImageView(image: UIImage(systemName: "info.circle"))
+    private let showDetail: Bool
+
+    init(shouldPinLeft: Bool, showDetail: Bool) {
+        self.showDetail = showDetail
         self.shouldPinLeft = shouldPinLeft
         super.init()
     }
@@ -27,7 +30,10 @@ class WalletHeaderDetailView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.tintColor = ThemeColor.T1.color
+        self.addSubview(self.detailDisclosure)
+        self.detailDisclosure.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
+        self.detailDisclosure.isHidden = !self.showDetail
+        
         self.addSubview(self.titleLabel)
         self.addSubview(self.subtitleLabel)
     }
@@ -59,6 +65,10 @@ class WalletHeaderDetailView: BaseView {
             self.titleLabel.pin(.right)
             self.subtitleLabel.pin(.right)
         }
+        
+        self.detailDisclosure.squaredSize = 18
+        self.detailDisclosure.centerY = self.titleLabel.centerY
+        self.detailDisclosure.match(.left, to: .right, of: self.titleLabel, offset: .short)
         
         self.titleLabel.pin(.top)
         self.subtitleLabel.pin(.bottom)

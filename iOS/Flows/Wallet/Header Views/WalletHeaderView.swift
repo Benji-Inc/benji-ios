@@ -10,10 +10,10 @@ import Foundation
 
 class WalletHeaderView: UICollectionReusableView {
     
-    private let topLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true)
-    private let bottomLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true)
-    private let topRightDetailView = JibsDetailView(showDetail: true)
-    private let bottomRightDetailView = BallanceDetailView(showDetail: false)
+    private let topLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true, showDetail: true)
+    private let bottomLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true, showDetail: false)
+    private let topRightDetailView = JibsDetailView()
+    private let bottomRightDetailView = BallanceDetailView()
     private let imageView = UIImageView(image: UIImage(named: "jiblogo"))
     
     var didTapDetail: CompletionOptional = nil
@@ -53,7 +53,7 @@ class WalletHeaderView: UICollectionReusableView {
         self.addSubview(self.bottomRightDetailView)
         self.addSubview(self.imageView)
         
-        self.topRightDetailView.didSelect { [unowned self] in
+        self.topLeftDetailView.didSelect { [unowned self] in
             self.didTapDetail?()
         }
     }
