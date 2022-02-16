@@ -246,7 +246,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.emotionView.alpha = 1.0
         self.deliveryTypeView.alpha = 1.0
         
-        //self.swipeHintView.stop()
         if shouldPlay {
             self.swipeHintTask = Task {
                 // Wait 2 seconds before playing the hint
