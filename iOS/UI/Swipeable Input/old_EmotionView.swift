@@ -22,6 +22,11 @@ class old_EmotionView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.set(backgroundColor: .B1withAlpha)
+        self.layer.cornerRadius = Theme.innerCornerRadius
+        self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
+        self.layer.borderWidth = 0.5
+        
         self.addSubview(self.emojiLabel)
         
         self.addSubview(self.label)
@@ -74,15 +79,22 @@ class old_EmotionView: BaseView {
         self.emojiLabel.setSize(withWidth: 200)
         self.label.setSize(withWidth: 200)
         
-        self.emojiLabel.pin(.left)
-        
         self.height = old_MessageDetailView.height
-        self.width = self.emojiLabel.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.short.value.doubled
+        
+        if let text = self.emojiLabel.text, !text.isEmpty {
+            self.width = self.emojiLabel.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.standard.value.doubled
+            self.label.match(.left, to: .right, of: self.emojiLabel, offset: .short)
+
+        } else {
+            self.width = self.label.width + Theme.ContentOffset.standard.value.doubled
+            self.label.pin(.left, offset: .standard)
+        }
+        
+        self.emojiLabel.pin(.left, offset: .standard)
         
         self.pin(.left)
         
         self.label.centerOnY()
-        self.label.match(.left, to: .right, of: self.emojiLabel, offset: .standard)
         self.emojiLabel.center.y = self.label.center.y
 
         self.button.expandToSuperviewWidth()
