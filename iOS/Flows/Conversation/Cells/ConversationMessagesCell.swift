@@ -281,7 +281,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
-        guard indexPath.section == 0, let messageCell = cell as? MessageCell else { return }
+        guard let messageCell = cell as? MessageCell else { return }
 
         self.detailsShownEventHandlers[indexPath]
         = messageCell.$areDetailsShown
@@ -294,7 +294,12 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
                 let message = ChatClient.shared.message(cid: cid, id: messageID)
 
-                self.frontmostNonUserMessage = message
+                if indexPath.section == 0 {
+                    self.frontmostNonUserMessage = message
+                }
+                
+                /// Using the notification center as there is no way to access a decoration view directly to provide an update
+                NotificationCenter.default.post(name: .topMessageUdpated, object: message)
             }
     }
 
@@ -304,5 +309,4 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         self.detailsShownEventHandlers.removeValue(forKey: indexPath)
     }
-
 }
