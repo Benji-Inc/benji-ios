@@ -19,7 +19,7 @@ enum ConversationUIState: String {
     }
 }
 
-class ConversationListViewController: ViewController {
+class ConversationListViewController: ViewController, ConversationListCollectionViewLayoutDelegate {
     
     // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
@@ -250,11 +250,8 @@ class ConversationListViewController: ViewController {
             self.isLoadingConversations = false
         }.add(to: self.autocancelTaskPool)
     }
-}
 
-// MARK: - ConversationListCollectionViewLayoutDelegate
-
-extension ConversationListViewController: ConversationListCollectionViewLayoutDelegate {
+    // MARK: - ConversationListCollectionViewLayoutDelegate
 
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
                                               cidFor indexPath: IndexPath) -> ConversationId? {
@@ -277,35 +274,48 @@ extension ConversationListViewController: ConversationListCollectionViewLayoutDe
             logDebug("no centered conversation")
         }
 
-        self.update(withCenteredConversation: cid)
+        self.update(withCenteredCid: cid)
     }
 
+    /// A task for updating the message input accessory.
+    private var messageInputTask: Task<Void, Never>?
 
-    private func update(withCenteredConversation cid: ConversationId?) {
+    private func update(withCenteredCid cid: ConversationId?) {
+        self.messageInputTask?.cancel()
+
+        // Reset the input accessory view.
+        self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
+        self.messageInputAccessoryView.updateSwipeHint(shouldPlay: false)
+
         if let cid = cid {
             let conversation = Conversation.conversation(cid)
             // Sets the active conversation
             ConversationsManager.shared.activeConversation = conversation
 
-            Task {
-                let members = conversation.lastActiveMembers.filter { member in
-                    return member.id != ChatClient.shared.currentUserId
-                }
-                let users = try await UserStore.shared.mapMembersToUsers(members: members)
-                self.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
-                self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
-            }
-
             if !self.isFirstResponder {
                 self.becomeFirstResponder()
             }
 
+            self.messageInputTask = Task { [weak self] in
+                let members = conversation.lastActiveMembers.filter { member in
+                    return member.id != ChatClient.shared.currentUserId
+                }
+                guard let users = try? await UserStore.shared.mapMembersToUsers(members: members) else {
+                    return
+                }
+
+                guard !Task.isCancelled else { return }
+
+                self?.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
+                self?.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
+            }
         } else {
+            ConversationsManager.shared.activeConversation = nil
+
             if self.isFirstResponder {
                 self.resignFirstResponder()
             }
-            self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
-            ConversationsManager.shared.activeConversation = nil
+
             self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
         }
     }

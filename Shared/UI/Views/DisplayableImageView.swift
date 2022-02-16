@@ -30,8 +30,7 @@ class DisplayableImageView: BaseView {
 
     let animationView = AnimationView()
 
-    var displayableTask: Task<Void, Never>?
-
+    private var displayableTask: Task<Void, Never>?
     var displayable: ImageDisplayable? {
         didSet {
             self.displayableTask?.cancel()

@@ -28,6 +28,9 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// A task for loading data and subscribing to conversation updates.
+    private var loadDataTask: Task<Void, Never>?
+
     override func initializeViews() {
         super.initializeViews()
 
@@ -39,21 +42,30 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { [unowned self] conversation in
-                Task {
-                    guard let cid = conversation?.cid else {
-                        await self.dataSource.deleteAllItems()
+                self.loadDataTask?.cancel()
+
+                if let cid = conversation?.cid {
+                    self.conversationController = ConversationController.controller(cid)
+                } else {
+                    self.conversationController = nil
+                }
+
+                self.loadDataTask = Task { [weak self] in
+                    guard let conversationController = self?.conversationController else {
+                        // If there's no current conversation, then there's nothing to show.
+                        await self?.dataSource.deleteAllItems()
                         return
                     }
 
-                    let conversationController = ChatClient.shared.channelController(for: cid)
-                    self.conversationController = conversationController
+                    await self?.loadData()
 
-                    await self.loadData()
 
                     guard !Task.isCancelled else { return }
 
-                    self.subscribeToUpdates(for: conversationController)
-                }.add(to: self.autocancelTaskPool)
+                    logDebug("finished loading data for \(conversation?.name)")
+
+                    self?.subscribeToUpdates(for: conversationController)
+                }
             }.store(in: &self.cancellables)
     }
 
@@ -100,24 +112,48 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         self.dataSource.appendItems([.member(member)], toSection: .members)
     }
 
+    /// A task for scrolling to a specific chat user.
+    private var scrollToUserTask: Task<Void, Never>?
+
     func scroll(to user: ChatUser) {
-        guard let controller = self.conversationController else { return }
+        self.scrollToUserTask?.cancel()
 
-        let member = Member(displayable: AnyHashableDisplayable(user),
-                            conversationController: controller)
-        guard let ip = self.dataSource.indexPath(for: .member(member)) else { return }
+        self.scrollToUserTask = Task { [weak self] in
+            // Wait for the data to finish loading before we try to scroll to a specific user.
+            await self?.loadDataTask?.value
 
-        self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+            guard !Task.isCancelled,
+                let controller = self?.conversationController else { return }
+
+            let member = Member(displayable: AnyHashableDisplayable(user),
+                                conversationController: controller)
+            guard let ip = self?.dataSource.indexPath(for: .member(member)) else { return }
+
+            self?.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+        }
     }
 
     // MARK: - Data Loading
 
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersSectionType, MembersItemType>)
     -> AnimationCycle? {
+
+        // Center on the user who sent the most recent message.
+        var centeredIndexPath: IndexPath?
+        if let conversationController = conversationController,
+           let nonCurrentUserMessage = conversationController.messages.first(where: { message in
+               return !message.isFromCurrentUser
+           }) {
+            let user = nonCurrentUserMessage.author
+            let member = Member(displayable: AnyHashableDisplayable(user),
+                                conversationController: conversationController)
+            centeredIndexPath = snapshot.indexPathOfItem(.member(member))
+        }
+
         return AnimationCycle(inFromPosition: nil,
                               outToPosition: nil,
                               shouldConcatenate: false,
-                              scrollToIndexPath: nil)
+                              scrollToIndexPath: centeredIndexPath)
     }
 
     override func getAllSections() -> [MembersCollectionViewDataSource.SectionType] {
