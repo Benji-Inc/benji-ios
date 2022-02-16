@@ -62,7 +62,7 @@ class DeliveryTypeView: BaseView {
         let state: UIMenuElement.State = context == .respectful ? .on : .off
         let quitely = UIAction(title: "Small Talk",
                                subtitle: "No need to notify",
-                               image: context.image,
+                               image: MessageContext.respectful.image,
                                identifier: nil,
                                discoverabilityTitle: nil,
                                attributes: [],
@@ -75,7 +75,7 @@ class DeliveryTypeView: BaseView {
 
         let urgent = UIAction(title: "Time Sensitive",
                               subtitle: "Notify no matter what",
-                              image: context.image,
+                              image: MessageContext.timeSensitive.image,
                               identifier: nil,
                               discoverabilityTitle: nil,
                               attributes: [],

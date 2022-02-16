@@ -29,9 +29,12 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
                                          gradientColor: nil,
                                          gradientStop: nil)
     
-    private(set) var conversationController: ConversationController?
+    private var conversationController: ConversationController?
+    private var currentMessage: Message?
+    
     var cancellables = Set<AnyCancellable>()
     var subscriptions = Set<AnyCancellable>()
+    let taskPool = TaskPool()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,20 +52,18 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
         
-        ConversationsManager.shared.$activeConversation.mainSink { [unowned self] conversation in
+        ConversationsManager.shared
+            .$activeConversation
+            .removeDuplicates()
+            .mainSink { [unowned self] conversation in
             self.configure(for: conversation)
         }.store(in: &self.cancellables)
         
         ConversationsManager.shared.$topMostMessage
             .removeDuplicates()
             .mainSink { [unowned self] message in
-            if let message = message, message.cid == self.conversationController?.cid {
-                self.leftLabel.setText(message.createdAt.getDaysAgoString())
-                self.leftLabel.setText(message.text)
-                self.layoutNow()
-            } else {
-                self.leftLabel.text = nil
-            }
+                guard let msg = message, msg != self.currentMessage else { return }
+                self.configure(for: msg)
         }.store(in: &self.cancellables)
     }
         
@@ -82,19 +83,42 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
     }
     
     func configure(for conversation: Conversation?) {
-        if let conversation = conversation {
-            self.conversationController = ChatClient.shared.channelController(for: conversation.cid)
-            if self.conversationController!.messages.isEmpty {
-                self.conversationController!.synchronize()
+        
+        self.taskPool.cancelAndRemoveAll()
+        
+        Task {
+            if let conversation = conversation {
+                self.conversationController = ChatClient.shared.channelController(for: conversation.cid)
+                if self.conversationController!.messages.isEmpty {
+                    try? await self.conversationController!.synchronize()
+                }
+                
+                guard !Task.isCancelled else { return }
+
+                if let first = self.conversationController?.messages.first {
+                    self.configure(for: first)
+                }
+
+                self.setNumberOfUnread(value: self.conversationController!.conversation.totalUnread)
+                self.subscribeToUpdates()
+            } else {
+                self.setNumberOfUnread(value: 0)
             }
-            
-            // get the top most message?
-            //self.leftLabel.text = nil
-            self.rightLabel.setValue(Float(self.conversationController!.conversation.totalUnread), animated: true)
-            self.subscribeToUpdates()
-        } else {
-            self.rightLabel.setValue(0, animated: true)
+        }.add(to: self.taskPool)
+    }
+    
+    private func setNumberOfUnread(value: Int) {
+        let new = Float(value)
+        guard new != self.rightLabel.currentValue else { return }
+        self.rightLabel.setValue(new, animated: true)
+    }
+ 
+    private func configure(for message: Message) {
+        if message.cid == self.conversationController?.cid {
+            let date = message.createdAt
+            self.leftLabel.setText(date.getDaysAgoString())
         }
+        self.layoutNow()
     }
     
     private func subscribeToUpdates() {

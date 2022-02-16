@@ -284,19 +284,21 @@ extension Date {
             return "Today"
         // If greater than a day AND less than a week - show # of days
         } else if self.isBetween(aDayAgo!, and: aWeekAgo!), let diff = self.days(from: now) {
-            return "\(abs(diff)) days ago"
-
+            if abs(diff) == 1 {
+                return "\(abs(diff)) day ago"
+            } else {
+                return "\(abs(diff)) days ago"
+            }
         // If greater than a week AND less than a month - show # of weeks
         } else if self.isBetween(aWeekAgo!, and: aMonthAgo!), let diff = self.weeks(from: now) {
-            if diff == 1 {
+            if abs(diff) == 1 {
                 return "\(abs(diff)) week ago"
             } else {
                 return "\(abs(diff)) weeks ago"
             }
         // If greater than a month AND less than a year - show # of months
         } else if self.isBetween(aMonthAgo!, and: aYearAgo!), let diff = self.months(from: now) {
-            
-            if diff == 1 {
+            if abs(diff) == 1 {
                 return "\(abs(diff)) month ago"
             } else {
                 return "\(abs(diff)) months ago"
