@@ -59,10 +59,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
                     await self?.loadData()
 
-
                     guard !Task.isCancelled else { return }
-
-                    logDebug("finished loading data for \(conversation?.name)")
 
                     self?.subscribeToUpdates(for: conversationController)
                 }
