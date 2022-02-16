@@ -114,20 +114,24 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
     }
  
     private func configure(for message: Message) {
-        if message.cid == self.conversationController?.cid {
+        if message.cid == ConversationsManager.shared.activeConversation?.cid {
             let date = message.createdAt
-            self.leftLabel.setText(date.getDaysAgoString())
+            self.leftLabel.setText(message.text)
         }
-        self.layoutNow()
+        self.setNeedsLayout()
     }
     
     private func subscribeToUpdates() {
+        
+        self.subscriptions.forEach { cancellable in
+            cancellable.cancel()
+        }
         self.conversationController?
             .messagesChangesPublisher
             .mainSink { [unowned self] changes in
                 guard let conversationController = self.conversationController else { return }
                 self.configure(for: conversationController.conversation)
-            }.store(in: &self.cancellables)
+            }.store(in: &self.subscriptions)
     }
     
     func set(state: ConversationUIState) {
@@ -149,5 +153,19 @@ class CenterDectorationView: UICollectionReusableView, ConversationUIStateSettab
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return false
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.subscriptions.forEach { cancellable in
+            cancellable.cancel()
+        }
+        
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+        
+        self.taskPool.cancelAndRemoveAll()
     }
 }
