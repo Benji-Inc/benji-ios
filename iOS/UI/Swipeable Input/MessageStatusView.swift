@@ -34,7 +34,7 @@ private struct MessageReadView: View {
             Spacer.length(.standard)
 
             if let updateDate = self.config.updateDate {
-                let dateString = Date.hourMinuteTimeOfDay.string(from: updateDate)
+                let dateString = updateDate.getTimeAgoString() 
                 Text(dateString)
                     .fontType(.small)
                     .color(.T1)
