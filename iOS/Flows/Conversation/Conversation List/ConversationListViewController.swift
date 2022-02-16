@@ -267,12 +267,6 @@ class ConversationListViewController: ViewController, ConversationListCollection
 
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
                                               didUpdateCentered cid: ConversationId?) {
-        if let cid = cid {
-            let conversation = ChatClient.shared.channelController(for: cid).conversation
-            logDebug("centered convo: \(conversation.title)")
-        } else {
-            logDebug("no centered conversation")
-        }
 
         self.update(withCenteredCid: cid)
     }
