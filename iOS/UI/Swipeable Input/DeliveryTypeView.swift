@@ -11,7 +11,7 @@ import UIKit
 
 class DeliveryTypeView: BaseView {
 
-    let label = ThemeLabel(font: .small)
+    let imageView = UIImageView()
     let button = ThemeButton()
 
     var didSelectContext: ((MessageContext) -> Void)?
@@ -19,7 +19,9 @@ class DeliveryTypeView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.label)
+        self.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.tintColor = ThemeColor.T1.color
         self.addSubview(self.button)
 
         self.set(backgroundColor: .B1withAlpha)
@@ -33,7 +35,7 @@ class DeliveryTypeView: BaseView {
     }
 
     func configure(for context: MessageContext) {
-        self.label.setText(context.displayName)
+        self.imageView.image = context.image
         self.button.menu = self.createMenu(for: context)
         self.layoutNow()
     }
@@ -41,14 +43,14 @@ class DeliveryTypeView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.label.setSize(withWidth: 200)
+        self.imageView.squaredSize = 12
 
         self.height = old_MessageDetailView.height
-        self.width = self.label.width + Theme.ContentOffset.standard.value.doubled
+        self.width = 25
 
         self.pin(.right)
 
-        self.label.centerOnXAndY()
+        self.imageView.centerOnXAndY()
         
         self.button.expandToSuperviewWidth()
         self.button.height = 36
