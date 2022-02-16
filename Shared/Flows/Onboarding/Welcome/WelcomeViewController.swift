@@ -77,20 +77,16 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         if let convo = self.conversationController?.conversation {
             self.didLoadConversation?(convo)
         }
-        
-        Task {
-            await Task.sleep(seconds: 0.2)
-            self.welcomeCollectionView.timeMachineLayout.prepare()
-            let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
-            self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
-        }.add(to: self.autocancelTaskPool)
     }
     
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {
-        return AnimationCycle(inFromPosition: .inward,
-                              outToPosition: .inward,
-                              shouldConcatenate: true)
+        let count = (snapshot.numberOfItems(inSection: .topMessages) + snapshot.numberOfItems(inSection: .bottomMessages)) - 1
+        let maxOffset = CGFloat(count) * self.welcomeCollectionView.timeMachineLayout.itemHeight
+        
+        return AnimationCycle(inFromPosition: nil,
+                              outToPosition: nil,
+                              shouldConcatenate: false,
+                              scrollToOffset: CGPoint(x: 0, y: maxOffset))
     }
     
     override func viewDidLayoutSubviews() {
@@ -108,8 +104,11 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         } else {
             self.waitlistButton.pinToSafeAreaBottom()
         }
-        self.waitlistButton.centerOnX()
         
+        self.waitlistButton.centerOnX()
+    }
+    
+    override func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pin(.top, offset: .custom(self.view.height * 0.25))
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
