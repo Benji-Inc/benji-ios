@@ -14,7 +14,7 @@ typealias MessageController = ChatMessageController
 extension MessageController {
 
     /// Creates a message controller using the shared ChatClient.
-    static func initialize(cid: ConversationId, messageId: MessageId) -> MessageController {
+    static func controller(_ cid: ConversationId, messageId: MessageId) -> MessageController {
         return ChatClient.shared.messageController(cid: cid, messageId: messageId)
     }
 
