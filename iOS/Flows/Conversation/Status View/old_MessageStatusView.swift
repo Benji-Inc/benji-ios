@@ -70,11 +70,9 @@ class old_MessageStatusView: BaseView {
     }
 
     func resetConsumption() {
-        Task {
-            await self.readView.taskPool.cancelAndRemoveAll()
-            self.readView.progressView.alpha = 0
-            self.readView.progressView.width = 0
-        }
+        self.readView.taskPool.cancelAndRemoveAll()
+        self.readView.progressView.alpha = 0
+        self.readView.progressView.width = 0
     }
 
     func reset() {

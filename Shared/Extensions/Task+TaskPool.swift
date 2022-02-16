@@ -8,8 +8,8 @@
 
 import Foundation
 
-/// A thread safe collection of tasks that automatically handles removing tasks from itself when the tasks finish.
-actor TaskPool {
+/// A collection of tasks that automatically handles removing tasks from itself when the tasks finish.
+class TaskPool {
     
     private var pool: [Task<Void, Never>] = []
 
@@ -36,8 +36,6 @@ extension Task where Success == Void, Failure == Never {
 
     /// Adds the task to the given task pool. Once the task is finished, the task is removed from the pool.
     func add(to taskPool: TaskPool) {
-        Task {
-            await taskPool.add(self)
-        }
+        taskPool.add(self)
     }
 }

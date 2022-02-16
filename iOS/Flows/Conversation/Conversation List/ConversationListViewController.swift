@@ -30,7 +30,7 @@ class ConversationListViewController: ViewController {
     private(set) var conversationListController: ConversationListController
 
     var selectedMessageView: MessageContentView?
-    var incomingFrontmostMessageSubscription: AnyCancellable?
+    var frontmostNonUserMessageSubscription: AnyCancellable?
 
     // Input handlers
     var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?
@@ -214,7 +214,7 @@ class ConversationListViewController: ViewController {
 
         Task {
             await self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 
     @MainActor
@@ -277,7 +277,7 @@ class ConversationListViewController: ViewController {
                 logError(error)
             }
             self.isLoadingConversations = false
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 }
 
@@ -339,7 +339,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             } catch {
                 logError(error)
             }
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 
     func sendMessage(_ message: Sendable) {
@@ -356,7 +356,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             } catch {
                 logError(error)
             }
-        }.add(to: self.taskPool)
+        }.add(to: self.autocancelTaskPool)
     }
 }
 

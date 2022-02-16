@@ -361,7 +361,6 @@
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
 		D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
 		D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */; };
-		D66F0FD622BF28A100BA277D /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
 		D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD722BF295A00BA277D /* Coordinator.swift */; };
 		D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD922BF297F00BA277D /* MainCoordinator.swift */; };
 		D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* AvatarView.swift */; };
@@ -369,9 +368,12 @@
 		D66F102622C7C6A900BA277D /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
 		D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastBannerView.swift */; };
-		D671E1F326402B1F00BF2B8D /* ToastQue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQue.swift */; };
+		D671E1F326402B1F00BF2B8D /* ToastQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQueue.swift */; };
 		D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
 		D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */; };
+		D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */; };
+		D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A6227BC45730047BBCA /* JibsDetailView.swift */; };
+		D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */; };
 		D6766C46274D50680046B449 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6766C45274D50680046B449 /* MemberCell.swift */; };
 		D6766C48274D50BF0046B449 /* MembersCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6766C47274D50BF0046B449 /* MembersCollectionViewDataSource.swift */; };
 		D6766C4A274D50D40046B449 /* MembersCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6766C49274D50D40046B449 /* MembersCollectionViewLayout.swift */; };
@@ -520,7 +522,7 @@
 		D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF627236E1000FBE66A /* ConversationsManager.swift */; };
 		D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */; };
 		D6BF814B2721EE84006D7760 /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
-		D6BF814D2721EE9B006D7760 /* ToastQue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQue.swift */; };
+		D6BF814D2721EE9B006D7760 /* ToastQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQueue.swift */; };
 		D6BF814F2721EEBF006D7760 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
 		D6BF81512721EEE1006D7760 /* ToastBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastBannerView.swift */; };
 		D6C20128276CFDAC0085B187 /* MessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C20127276CFDAC0085B187 /* MessageDetailView.swift */; };
@@ -892,7 +894,6 @@
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
 		D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkTarget.swift; sourceTree = "<group>"; };
 		D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkObject.swift; sourceTree = "<group>"; };
-		D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Initialization.swift"; sourceTree = "<group>"; };
 		D66F0FD722BF295A00BA277D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		D66F0FD922BF297F00BA277D /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		D66F0FE122C041AF00BA277D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
@@ -900,9 +901,12 @@
 		D66F102522C7C6A900BA277D /* Lorem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
 		D671E1EE264029BC00BF2B8D /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D671E1F026402A2000BF2B8D /* ToastBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastBannerView.swift; sourceTree = "<group>"; };
-		D671E1F226402B1F00BF2B8D /* ToastQue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastQue.swift; sourceTree = "<group>"; };
+		D671E1F226402B1F00BF2B8D /* ToastQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastQueue.swift; sourceTree = "<group>"; };
 		D671E1F426402B9800BF2B8D /* ToastScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastScheduler.swift; sourceTree = "<group>"; };
 		D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVURLAsset+Extension.swift"; sourceTree = "<group>"; };
+		D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderDetailView.swift; sourceTree = "<group>"; };
+		D6739A6227BC45730047BBCA /* JibsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JibsDetailView.swift; sourceTree = "<group>"; };
+		D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallanceDetailView.swift; sourceTree = "<group>"; };
 		D6766C45274D50680046B449 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6766C47274D50BF0046B449 /* MembersCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6766C49274D50D40046B449 /* MembersCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -1228,6 +1232,7 @@
 			isa = PBXGroup;
 			children = (
 				D628B00327B2EBF700949154 /* BackgroundSupplementaryView.swift */,
+				D6739A6127BC45500047BBCA /* Header Views */,
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
 				D628B00827B47EEF00949154 /* TransactionContentView.xib */,
 				D628B00527B2F63000949154 /* TransactionSegmentControlView.swift */,
@@ -1235,7 +1240,6 @@
 				D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */,
 				D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */,
 				D6129FA727ADC5F50058811C /* WalletCoordinator.swift */,
-				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
 				D6129FA927ADC6030058811C /* WalletViewController.swift */,
 			);
 			path = Wallet;
@@ -1386,7 +1390,6 @@
 			isa = PBXGroup;
 			children = (
 				D61EC0BF21D3071400204BEE /* AppDelegate.swift */,
-				D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */,
 				D61EC0DC21D30CF700204BEE /* Bridging-Header.h */,
 				D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */,
 				D66F102522C7C6A900BA277D /* Lorem.swift */,
@@ -1742,7 +1745,7 @@
 			isa = PBXGroup;
 			children = (
 				D62D16312736F60400C542CE /* ToastErrorView.swift */,
-				D671E1F226402B1F00BF2B8D /* ToastQue.swift */,
+				D671E1F226402B1F00BF2B8D /* ToastQueue.swift */,
 				D671E1F426402B9800BF2B8D /* ToastScheduler.swift */,
 				D671E1F026402A2000BF2B8D /* ToastBannerView.swift */,
 				D646955727370A7B00BF47CE /* ToastView.swift */,
@@ -1757,6 +1760,17 @@
 				D605AC8327861C9A0015D800 /* BackgroundGradientView.swift */,
 			);
 			path = Gradients;
+			sourceTree = "<group>";
+		};
+		D6739A6127BC45500047BBCA /* Header Views */ = {
+			isa = PBXGroup;
+			children = (
+				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
+				D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */,
+				D6739A6227BC45730047BBCA /* JibsDetailView.swift */,
+				D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */,
+			);
+			path = "Header Views";
 			sourceTree = "<group>";
 		};
 		D6766C44274D50360046B449 /* Conversation Header */ = {
@@ -2505,6 +2519,7 @@
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
 				D69565CC2790AE170063E802 /* MemberCellLayoutAttributes.swift in Sources */,
+				D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */,
 				D66AB0F2277A46F2007A35D1 /* BoxView.swift in Sources */,
 				D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
@@ -2554,6 +2569,7 @@
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
+				D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */,
 				D6766C4C274D50F50046B449 /* MembersViewController.swift in Sources */,
 				D615534A2745737300B08459 /* ThreadCoordinator.swift in Sources */,
 				D6766C48274D50BF0046B449 /* MembersCollectionViewDataSource.swift in Sources */,
@@ -2588,7 +2604,6 @@
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D628B00627B2F63000949154 /* TransactionSegmentControlView.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
-				D66F0FD622BF28A100BA277D /* AppDelegate+Initialization.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
 				D6D1502921D6085200CD8CE4 /* ResourceObject.swift in Sources */,
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
@@ -2663,7 +2678,8 @@
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
 				80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */,
-				D671E1F326402B1F00BF2B8D /* ToastQue.swift in Sources */,
+				D671E1F326402B1F00BF2B8D /* ToastQueue.swift in Sources */,
+				D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */,
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
@@ -2953,7 +2969,7 @@
 				D63DB21E25E998FC00F6B323 /* CGFloat+Extensions.swift in Sources */,
 				D63DB28325E9999C00F6B323 /* TransitionRouter+Fade.swift in Sources */,
 				D6C389312724B8F9004D29D5 /* MessageKind.swift in Sources */,
-				D6BF814D2721EE9B006D7760 /* ToastQue.swift in Sources */,
+				D6BF814D2721EE9B006D7760 /* ToastQueue.swift in Sources */,
 				D63DB28925E999A600F6B323 /* Sizeable.swift in Sources */,
 				D63DB26225E9997200F6B323 /* FontType.swift in Sources */,
 				D6A6691F271A44FB0001D218 /* Pass.swift in Sources */,

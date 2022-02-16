@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Combine
 
 class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType,
                              MembersCollectionViewDataSource.ItemType,
@@ -15,8 +16,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                              ActiveConversationable {
 
     var conversationController: ConversationController?
-    
-    private var initialTopMostAuthor: ChatUser?
 
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
@@ -33,53 +32,64 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         super.initializeViews()
 
         self.view.clipsToBounds = false
-        self.collectionView.clipsToBounds = false 
+        self.collectionView.clipsToBounds = false
 
-        self.collectionView.animationView.isHidden = true 
+        self.collectionView.animationView.isHidden = true
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
-            .mainSink { conversation in
-            Task {
-                guard let cid = conversation?.cid else {
-                    await self.dataSource.deleteAllItems()
-                    return
-                }
-                
-                self.conversationController = ChatClient.shared.channelController(for: cid)
+            .mainSink { [unowned self] conversation in
+                Task {
+                    guard let cid = conversation?.cid else {
+                        await self.dataSource.deleteAllItems()
+                        return
+                    }
 
-                await self.loadData()
-                self.subscribeToUpdates(for: conversation)
-                
-            }.add(to: self.taskPool)
-        }.store(in: &self.cancellables)
+                    let conversationController = ChatClient.shared.channelController(for: cid)
+                    self.conversationController = conversationController
+
+                    await self.loadData()
+
+                    guard !Task.isCancelled else { return }
+
+                    self.subscribeToUpdates(for: conversationController)
+                }.add(to: self.autocancelTaskPool)
+            }.store(in: &self.cancellables)
     }
 
-    func subscribeToUpdates(for conversation: Conversation?) {
-        self.conversationController?
+    /// The subscriptions for the current conversation.
+    private var conversationCancellables = Set<AnyCancellable>()
+
+    func subscribeToUpdates(for conversationController: ConversationController) {
+        // Clear out previous subscriptions.
+        self.conversationCancellables.removeAll()
+
+        conversationController
             .typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in
                 self.dataSource.reconfigureAllItems()
-            }).store(in: &self.cancellables)
+            }).store(in: &self.conversationCancellables)
 
-        self.conversationController?.memberEventPublisher.mainSink(receiveValue: { [unowned self] event in
-            switch event as MemberEvent {
-            case let event as MemberAddedEvent:
-                self.add(member: event.member)
-            case let event as MemberRemovedEvent:
-                guard let conversationController = self.conversationController else { return }
-                let member = Member(displayable: AnyHashableDisplayable.init(event.user),
-                                    conversationController: conversationController)
-                self.dataSource.deleteItems([.member(member)])
-            case let event as MemberUpdatedEvent:
-                guard let conversationController = self.conversationController else { return }
-                let member = Member(displayable: AnyHashableDisplayable.init(event.member),
-                                    conversationController: conversationController)
-                self.dataSource.reconfigureItems([.member(member)])
-            default:
-                break
-            }
-        }).store(in: &self.cancellables)
+        conversationController
+            .memberEventPublisher
+            .mainSink(receiveValue: { [unowned self] event in
+                switch event as MemberEvent {
+                case let event as MemberAddedEvent:
+                    self.add(member: event.member)
+                case let event as MemberRemovedEvent:
+                    guard let conversationController = self.conversationController else { return }
+                    let member = Member(displayable: AnyHashableDisplayable(event.user),
+                                        conversationController: conversationController)
+                    self.dataSource.deleteItems([.member(member)])
+                case let event as MemberUpdatedEvent:
+                    guard let conversationController = self.conversationController else { return }
+                    let member = Member(displayable: AnyHashableDisplayable(event.member),
+                                        conversationController: conversationController)
+                    self.dataSource.reconfigureItems([.member(member)])
+                default:
+                    break
+                }
+            }).store(in: &self.conversationCancellables)
     }
     
     func add(member: ChatChannelMember) {
@@ -90,22 +100,24 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         self.dataSource.appendItems([.member(member)], toSection: .members)
     }
 
-    // MARK: Data Loading
+    func scroll(to user: ChatUser) {
+        guard let controller = self.conversationController else { return }
+
+        let member = Member(displayable: AnyHashableDisplayable(user),
+                            conversationController: controller)
+        guard let ip = self.dataSource.indexPath(for: .member(member)) else { return }
+
+        self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+    }
+
+    // MARK: - Data Loading
 
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersSectionType, MembersItemType>)
     -> AnimationCycle? {
-        var index: Int = 0
-        if let user = self.initialTopMostAuthor,
-           let controller = self.conversationController {
-            let member = Member(displayable: AnyHashableDisplayable.init(user),
-                                conversationController: controller)
-            index = snapshot.indexOfItem(.member(member)) ?? 0
-        }
-
         return AnimationCycle(inFromPosition: nil,
                               outToPosition: nil,
                               shouldConcatenate: false,
-                              scrollToIndexPath: IndexPath(row: index, section: 0))
+                              scrollToIndexPath: nil)
     }
 
     override func getAllSections() -> [MembersCollectionViewDataSource.SectionType] {
@@ -128,28 +140,11 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                                 conversationController: conversationController)
             return .member(member)
         })
-                
+
         if !isRelease {
             data[.members]?.append(.add(conversation.cid))
         }
 
         return data
-    }
-    
-    func updateAuthor(for conversation: Conversation, user: ChatUser) {
-        guard let controller = self.conversationController,
-              conversation == controller.conversation else {
-            // If the conversation hasn't been set yet, store the user it should scroll too once it does. 
-            self.initialTopMostAuthor = user
-            return
-        }
-        
-        self.initialTopMostAuthor = nil
-        
-        let member = Member(displayable: AnyHashableDisplayable.init(user),
-                            conversationController: controller)
-        if let ip = self.dataSource.indexPath(for: .member(member)) {
-            self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
-        }
     }
 }

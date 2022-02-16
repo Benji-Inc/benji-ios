@@ -20,19 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        
-    }
-
     func application(_ application: UIApplication,
                      continue userActivity: NSUserActivity,
                      restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return LaunchManager.shared.continueUser(activity: userActivity)
-    }
-    
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        UserDefaults(suiteName: Config.shared.environment.groupId)?.set(application.applicationIconBadgeNumber,
-                                                                        forKey: "badgeNumber")
     }
 
 #if !APPCLIP
@@ -43,7 +34,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    func application(_ application: UIApplication,
+                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        
         print("DID FAIL TO REGISTER FOR PUSH \(error)")
     }
 
@@ -84,5 +77,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.mainCoordinator = MainCoordinator(router: router, deepLink: nil)
         self.mainCoordinator?.start()
     }
-}
 
+    func sceneWillResignActive(_ scene: UIScene) {
+        let badgeNumber = UIApplication.shared.applicationIconBadgeNumber
+        UserDefaults(suiteName: Config.shared.environment.groupId)?.set(badgeNumber, forKey: "badgeNumber")
+    }
+}

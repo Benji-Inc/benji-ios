@@ -97,12 +97,10 @@ class ToastBannerView: ToastView {
             if position == .end {
                 Task {
                     await Task.sleep(seconds: self.toast.duration)
-                    if self.state != .gone {
-                        self.dismiss()
-                    } else {
-                        await self.taskPool.cancelAndRemoveAll()
-                    }
 
+                    guard !Task.isCancelled, self.state != .gone else { return }
+
+                    self.dismiss()
                 }.add(to: self.taskPool)
             }
         })

@@ -36,6 +36,14 @@ struct EmotionView: View {
                 Spacer.length(.standard)
             }
         }
+        .frame(minHeight: 25, idealHeight: 25, maxHeight: 25)
+        .background(
+            RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+                .fill(color: .B1withAlpha,
+                      strokeColor: .D6withAlpha,
+                      lineWidth: 0.5)
+
+        )
     }
 }
 

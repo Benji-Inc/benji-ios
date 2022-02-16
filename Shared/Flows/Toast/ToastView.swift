@@ -109,7 +109,7 @@ class ToastView: BaseView, ToastViewable {
             if self.state != .gone {
                 self.dismiss()
             } else {
-                await self.taskPool.cancelAndRemoveAll()
+                self.taskPool.cancelAndRemoveAll()
             }
 
         }.add(to: self.taskPool)

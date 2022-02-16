@@ -58,8 +58,9 @@ class DeliveryTypeView: BaseView {
     private func createMenu(for context: MessageContext) -> UIMenu {
 
         let state: UIMenuElement.State = context == .respectful ? .on : .off
-        let quitely = UIAction(title: "Quietly",
-                               image: UIImage(systemName: "bell.slash"),
+        let quitely = UIAction(title: "Small Talk",
+                               subtitle: "No need to notify",
+                               image: context.image,
                                identifier: nil,
                                discoverabilityTitle: nil,
                                attributes: [],
@@ -70,17 +71,18 @@ class DeliveryTypeView: BaseView {
 
         let urgentState: UIMenuElement.State = context == .timeSensitive ? .on : .off
 
-        let urgent = UIAction(title: "Urgently",
-                               image: UIImage(systemName: "bell.badge"),
-                               identifier: nil,
-                               discoverabilityTitle: nil,
-                               attributes: [],
-                               state: urgentState) { [unowned self] _ in
+        let urgent = UIAction(title: "Time Sensitive",
+                              subtitle: "Notify no matter what",
+                              image: context.image,
+                              identifier: nil,
+                              discoverabilityTitle: nil,
+                              attributes: [],
+                              state: urgentState) { [unowned self] _ in
             self.didSelectContext?(.timeSensitive)
             self.configure(for: .timeSensitive)
         }
 
-        return UIMenu(title: "Select delivery method",
+        return UIMenu(title: "This message is...",
                       image: nil,
                       identifier: nil,
                       options: [.singleSelection],

@@ -11,17 +11,8 @@ import UIKit
 
 class BaseView: UIView {
 
-    private var _taskPool: TaskPool? = nil
     /// A collection of tasks that this view might run. Tasks added to the pool will automatically be cancelled if this view is removed from a window.
-    var taskPool: TaskPool {
-        if let taskPool = self._taskPool {
-            return taskPool
-        }
-
-        let taskPool = TaskPool()
-        self._taskPool = taskPool
-        return taskPool
-    }
+    var taskPool = TaskPool()
 
     init() {
         super.init(frame: .zero)
@@ -30,6 +21,8 @@ class BaseView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        // Don't call initialize subviews here because it can cause a crash.
+        // Instead call from from awake from nib.
     }
 
     override func awakeFromNib() {
@@ -44,11 +37,8 @@ class BaseView: UIView {
         super.didMoveToWindow()
 
         // Once a view leaves the screen, automatically cancel all of its tasks and reset the task pool.
-        if self.window.isNil, _taskPool.exists {
-            Task { [weak self] in
-                await self?.taskPool.cancelAndRemoveAll()
-                self?._taskPool = nil
-            }
+        if self.window.isNil {
+            self.taskPool.cancelAndRemoveAll()
         }
     }
 }

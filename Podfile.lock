@@ -9,10 +9,12 @@ PODS:
     - Bolts-Swift (~> 1.5.0)
     - Parse (~> 1.19.0)
     - Starscream (~> 4.0.4)
+  - ScrollCounter (0.0.2)
   - Starscream (4.0.4)
 
 DEPENDENCIES:
   - ParseLiveQuery
+  - ScrollCounter
 
 SPEC REPOS:
   trunk:
@@ -20,6 +22,7 @@ SPEC REPOS:
     - Bolts-Swift
     - Parse
     - ParseLiveQuery
+    - ScrollCounter
     - Starscream
 
 SPEC CHECKSUMS:
@@ -27,8 +30,9 @@ SPEC CHECKSUMS:
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
   ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
+  ScrollCounter: 22ba58449addef7ed242cdf2e4b46aa9dbbe3a49
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: 2c6fc52a4ee956f74f7026f13cf6e7c627c01e84
+PODFILE CHECKSUM: d12272610730aa206e42cf89998d961e35a7cec5
 
 COCOAPODS: 1.11.2

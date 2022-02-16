@@ -1463,6 +1463,7 @@
 				0D0921A83B5F7764079ED7084E7C0BED /* WSEngine.swift */,
 				F50018F11F85FF84EB3B7CF6F9F6E51C /* Support Files */,
 			);
+			name = Starscream;
 			path = Starscream;
 			sourceTree = "<group>";
 		};
@@ -1547,6 +1548,7 @@
 				E9FC3CA49047D73A9C5F766579CB7675 /* Core */,
 				D134FD8C3835BB2AEDEC60F8777ACB46 /* Support Files */,
 			);
+			name = Parse;
 			path = Parse;
 			sourceTree = "<group>";
 		};
@@ -1584,6 +1586,7 @@
 				677D70BF4C20A566DC655AB4FEE36B64 /* Support Files */,
 				D67A4250BA9D98893F443A5032C68DD1 /* Tasks */,
 			);
+			name = Bolts;
 			path = Bolts;
 			sourceTree = "<group>";
 		};
@@ -1672,6 +1675,7 @@
 				40A972D4DDFF1F4821A8EC22754BB917 /* Subscription.swift */,
 				20C9D8CC484B35EEECF71FC3F5082DEE /* Support Files */,
 			);
+			name = ParseLiveQuery;
 			path = ParseLiveQuery;
 			sourceTree = "<group>";
 		};
@@ -1707,6 +1711,7 @@
 				B44B38857F85F5719FEA0446169260F5 /* ScrollCounter.h */,
 				EA4F20E8E99B078CBD2ACA1E8DB25974 /* Support Files */,
 			);
+			name = ScrollCounter;
 			path = ScrollCounter;
 			sourceTree = "<group>";
 		};
@@ -2137,6 +2142,7 @@
 				A99150863BF2E9D00EDA76E2E0077E0E /* TaskCompletionSource.swift */,
 				CC0AEA22E886307B3005CA025662ADE3 /* Support Files */,
 			);
+			name = "Bolts-Swift";
 			path = "Bolts-Swift";
 			sourceTree = "<group>";
 		};
