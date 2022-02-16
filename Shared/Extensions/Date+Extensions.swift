@@ -231,45 +231,28 @@ extension Date {
         let aMinuteAgo = now.subtract(component: .minute, amount: 1)
         let anHourAgo = now.subtract(component: .hour, amount: 1)
         let aDayAgo = now.subtract(component: .day, amount: 1)
-        let aWeekAgo = now.subtract(component: .weekOfYear, amount: 1)
-        let aMonthAgo = now.subtract(component: .month, amount: 1)
-        let aYearAgo = now.subtract(component: .year, amount: 1)
-
-        if self > now {
-            let inADay = now.add(component: .day, amount: 1)
-            if self.isBetween(now, and: inADay!) {
-                return "Later Today"
-            } else {
-                return "Coming soon."
-            }
-        }
 
         if self.isBetween(now, and: aMinuteAgo!) {
             return "Just now"
 
         // If less than hour - show # minutes
         } else if self.isBetween(now, and: anHourAgo!), let diff = self.minutes(from: now) {
-            return "\(abs(diff))min ago"
-
+            if abs(diff) == 1 {
+                return "\(abs(diff)) min ago"
+            } else {
+                return "\(abs(diff)) mins ago"
+            }
         // If greater than an hour AND less than a day - show # hours
         } else if self.isBetween(anHourAgo!, and: aDayAgo!), let diff = self.hours(from: now) {
-            return "\(abs(diff))h ago"
-
-        // If greater than a day AND less than a week - show # of days
-        } else if self.isBetween(aDayAgo!, and: aWeekAgo!), let diff = self.days(from: now) {
-            return "\(abs(diff))d ago"
-
-        // If greater than a week AND less than a month - show # of weeks
-        } else if self.isBetween(aWeekAgo!, and: aMonthAgo!), let diff = self.weeks(from: now) {
-            return "\(abs(diff))w ago"
-        // If greater than a month AND less than a year - show # of months
-        } else if self.isBetween(aMonthAgo!, and: aYearAgo!), let diff = self.months(from: now) {
-            return "\(abs(diff))mo ago"
-        // Else show year and month
+            if abs(diff) == 1 {
+                return "\(abs(diff)) hour ago"
+            } else {
+                return "\(abs(diff)) hours ago"
+            }
+        // Else show time
         } else {
-            return Date.standard.string(from: self)
+            return Date.hourMinuteTimeOfDay.string(from: self)
         }
-
     }
     
     func getDaysAgoString() -> String {
@@ -284,19 +267,21 @@ extension Date {
             return "Today"
         // If greater than a day AND less than a week - show # of days
         } else if self.isBetween(aDayAgo!, and: aWeekAgo!), let diff = self.days(from: now) {
-            return "\(abs(diff)) days ago"
-
+            if abs(diff) == 1 {
+                return "\(abs(diff)) day ago"
+            } else {
+                return "\(abs(diff)) days ago"
+            }
         // If greater than a week AND less than a month - show # of weeks
         } else if self.isBetween(aWeekAgo!, and: aMonthAgo!), let diff = self.weeks(from: now) {
-            if diff == 1 {
+            if abs(diff) == 1 {
                 return "\(abs(diff)) week ago"
             } else {
                 return "\(abs(diff)) weeks ago"
             }
         // If greater than a month AND less than a year - show # of months
         } else if self.isBetween(aMonthAgo!, and: aYearAgo!), let diff = self.months(from: now) {
-            
-            if diff == 1 {
+            if abs(diff) == 1 {
                 return "\(abs(diff)) month ago"
             } else {
                 return "\(abs(diff)) months ago"
