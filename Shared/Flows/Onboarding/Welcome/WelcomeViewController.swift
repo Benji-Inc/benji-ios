@@ -97,8 +97,8 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
         self.scrollTask?.cancel()
         
-        self.scrollTask = Task {
-            
+        self.scrollTask = Task { [weak self] in
+            guard let `self` = self else { return }
             var currentOffset = self.welcomeCollectionView.contentOffset
             currentOffset.y = round(currentOffset.y / self.welcomeCollectionView.timeMachineLayout.itemHeight) * self.welcomeCollectionView.timeMachineLayout.itemHeight
             
@@ -110,6 +110,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             let newOffset = clamp(yOffset, min: 0)
             self.welcomeCollectionView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: true)
             
+            guard !Task.isCancelled else { return }
             await Task.snooze(seconds: 0.3)
             self.updateContentOffset()
         }
@@ -203,10 +204,12 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     }
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        super.scrollViewWillBeginDragging(scrollView)
         self.scrollTask?.cancel()
     }
     
-     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        super.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
         self.updateContentOffset()
     }
 }
