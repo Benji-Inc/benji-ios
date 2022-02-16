@@ -18,6 +18,16 @@ extension ConversationController {
         return self.channel!
     }
 
+    /// Creates a conversation controller using the shared ChatClient.
+    static func controller(_ cid: ConversationId,
+                           channelListQuery: ChannelListQuery? = nil,
+                           messageOrdering: MessageOrdering = .topToBottom) -> ConversationController {
+        
+        return ChatClient.shared.channelController(for: cid,
+                                                      channelListQuery: channelListQuery,
+                                                      messageOrdering: messageOrdering)
+    }
+
     func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
         return self.conversation.getOldestUnreadMessage(withUserID: userID)
     }

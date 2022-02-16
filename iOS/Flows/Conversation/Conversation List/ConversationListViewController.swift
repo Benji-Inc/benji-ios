@@ -152,35 +152,6 @@ class ConversationListViewController: ViewController {
         self.dataSource.reconfigureAllItems()
     }
 
-    func update(withCenteredConversation cid: ConversationId?) {
-        if let cid = cid {
-            let conversation = ChatClient.shared.channelController(for: cid).conversation
-            // Sets the active conversation
-            ConversationsManager.shared.activeConversation = conversation
-            
-            Task {
-                let members = conversation.lastActiveMembers.filter { member in
-                    return member.id != ChatClient.shared.currentUserId
-                }
-                let users = try await UserStore.shared.mapMembersToUsers(members: members)
-                self.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
-                self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
-            }
-            
-            if !self.isFirstResponder {
-                self.becomeFirstResponder()
-            }
-            
-        } else {
-            if self.isFirstResponder {
-                self.resignFirstResponder()
-            }
-            self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
-            ConversationsManager.shared.activeConversation = nil
-            self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
-        }
-    }
-
     // MARK: - Message Loading and Updates
 
     @MainActor
@@ -299,7 +270,44 @@ extension ConversationListViewController: ConversationListCollectionViewLayoutDe
 
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
                                               didUpdateCentered cid: ConversationId?) {
+        if let cid = cid {
+            let conversation = ChatClient.shared.channelController(for: cid).conversation
+            logDebug("centered convo: \(conversation.title)")
+        } else {
+            logDebug("no centered conversation")
+        }
+
         self.update(withCenteredConversation: cid)
+    }
+
+
+    private func update(withCenteredConversation cid: ConversationId?) {
+        if let cid = cid {
+            let conversation = Conversation.conversation(cid)
+            // Sets the active conversation
+            ConversationsManager.shared.activeConversation = conversation
+
+            Task {
+                let members = conversation.lastActiveMembers.filter { member in
+                    return member.id != ChatClient.shared.currentUserId
+                }
+                let users = try await UserStore.shared.mapMembersToUsers(members: members)
+                self.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
+                self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
+            }
+
+            if !self.isFirstResponder {
+                self.becomeFirstResponder()
+            }
+
+        } else {
+            if self.isFirstResponder {
+                self.resignFirstResponder()
+            }
+            self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
+            ConversationsManager.shared.activeConversation = nil
+            self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
+        }
     }
 }
 
@@ -339,7 +347,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             } catch {
                 logError(error)
             }
-        }.add(to: self.autocancelTaskPool)
+        }
     }
 
     func sendMessage(_ message: Sendable) {
@@ -356,7 +364,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             } catch {
                 logError(error)
             }
-        }.add(to: self.autocancelTaskPool)
+        }
     }
 }
 
