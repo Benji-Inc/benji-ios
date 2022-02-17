@@ -297,7 +297,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                     self.frontmostNonUserMessage = message
                 }
 
-                if state.isInFocus, state.detailShown, let centerView = collectionView.supplementaryView(forElementKind: CenterConversationDetailView.kind, at: IndexPath(row: 0, section: 0)) as? CenterConversationDetailView {
+                if state.isInFocus,
+                   state.detailShown,
+                   let centerView = collectionView.supplementaryView(forElementKind: CenterConversationDetailView.kind,
+                                                                     at: IndexPath(row: 0, section: 0)) as? CenterConversationDetailView {
                     centerView.configure(for: message)
                 }
         }
