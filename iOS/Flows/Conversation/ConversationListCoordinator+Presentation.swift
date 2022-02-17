@@ -59,7 +59,9 @@ extension ConversationListCoordinator {
         coordinator.selectedConversationCID = self.activeConversation?.cid
         
         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+            if coordinator.invitedPeople.isEmpty {
+                self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+            }
         }
         self.present(coordinator) { [unowned self] people in
             
@@ -169,6 +171,8 @@ extension ConversationListCoordinator {
         
         let controller = ChatClient.shared.channelController(for: cid)
         
+        guard controller.conversation.memberCount <= 1 else { return }
+
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let deleteAction = UIAlertAction(title: "Delete Conversation", style: .destructive, handler: {

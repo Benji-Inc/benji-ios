@@ -284,10 +284,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         guard let messageCell = cell as? MessageCell else { return }
 
         self.detailsShownEventHandlers[indexPath]
-        = messageCell.$areDetailsShown
+        = messageCell.$messageDetailState
             .removeDuplicates()
-            .mainSink { [unowned self] areDetailsShown in
-                guard messageCell.areDetailsShown else { return }
+            .mainSink { [unowned self] state in
 
                 guard let item = self.dataSource.itemIdentifier(for: indexPath),
                       case .message(let cid, let messageID, _) = item else { return }
@@ -298,9 +297,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                     self.frontmostNonUserMessage = message
                 }
                 
-                /// Using the notification center as there is no way to access a decoration view directly to provide an update
-//                NotificationCenter.default.post(name: .topMessageUdpated, object: message)
-            }
+                if state.isInFocus, state.detailShown, let centerView = collectionView.supplementaryView(forElementKind: CenterConversationDetailView.kind, at: IndexPath(row: 0, section: 0)) as? CenterConversationDetailView {
+                    centerView.configure(for: message)
+                }
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView,

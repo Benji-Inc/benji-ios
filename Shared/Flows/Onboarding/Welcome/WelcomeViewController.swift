@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Parse
+import Combine
 
 class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSection,
                              MessageSequenceItem,
@@ -28,7 +29,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     
     let waitlistButton = ThemeButton()
     let rsvpButton = ThemeButton()
-    
+        
     var welcomeCollectionView: WelcomeCollectionView {
         return self.collectionView as! WelcomeCollectionView
     }
@@ -78,19 +79,41 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             self.didLoadConversation?(convo)
         }
         
-        Task {
-            await Task.sleep(seconds: 0.2)
-            self.welcomeCollectionView.timeMachineLayout.prepare()
-            let maxOffset = self.welcomeCollectionView.timeMachineLayout.maxZPosition
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
-            self.welcomeCollectionView.timeMachineLayout.invalidateLayout()
-        }.add(to: self.autocancelTaskPool)
+        self.updateContentOffset()
     }
     
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {
-        return AnimationCycle(inFromPosition: .inward,
-                              outToPosition: .inward,
-                              shouldConcatenate: true)
+        let count = (snapshot.numberOfItems(inSection: .topMessages) + snapshot.numberOfItems(inSection: .bottomMessages)) - 1
+        let maxOffset = CGFloat(count) * self.welcomeCollectionView.timeMachineLayout.itemHeight
+        
+        return AnimationCycle(inFromPosition: nil,
+                              outToPosition: nil,
+                              shouldConcatenate: false,
+                              scrollToOffset: CGPoint(x: 0, y: maxOffset))
+    }
+    
+    var scrollTask: Task<Void, Never>?
+    func updateContentOffset() {
+        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
+        self.scrollTask?.cancel()
+        
+        self.scrollTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            var currentOffset = self.welcomeCollectionView.contentOffset
+            currentOffset.y = round(currentOffset.y / self.welcomeCollectionView.timeMachineLayout.itemHeight) * self.welcomeCollectionView.timeMachineLayout.itemHeight
+            
+            // Wait 2 seconds before scrolling
+            await Task.snooze(seconds: 2)
+            // Don't scroll if cancelled.
+            guard !Task.isCancelled else { return }
+            let yOffset = currentOffset.y - self.welcomeCollectionView.timeMachineLayout.itemHeight
+            let newOffset = clamp(yOffset, min: 0)
+            self.welcomeCollectionView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: true)
+            
+            guard !Task.isCancelled else { return }
+            await Task.snooze(seconds: 0.3)
+            self.updateContentOffset()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -108,8 +131,11 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         } else {
             self.waitlistButton.pinToSafeAreaBottom()
         }
-        self.waitlistButton.centerOnX()
         
+        self.waitlistButton.centerOnX()
+    }
+    
+    override func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pin(.top, offset: .custom(self.view.height * 0.25))
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
@@ -175,5 +201,15 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         }
         
         return data
+    }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        super.scrollViewWillBeginDragging(scrollView)
+        self.scrollTask?.cancel()
+    }
+    
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        super.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
+        self.updateContentOffset()
     }
 }

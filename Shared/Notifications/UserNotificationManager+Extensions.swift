@@ -13,6 +13,19 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        
+        // If the app is in the foreground, and is a new message, then check the interruption level to determine whether or not to show a banner. Don't show banners for non time-sensitive messages.
+        if let app = self.application,
+            await app.applicationState == .active,
+            notification.request.content.categoryIdentifier == "MESSAGE_NEW" {
+            
+            if notification.request.content.interruptionLevel == .timeSensitive {
+                return [.banner, .list, .sound, .badge]
+            } else {
+                return [.list, .sound, .badge]
+            }
+        }
+        
         return [.banner, .list, .sound, .badge]
     }
 

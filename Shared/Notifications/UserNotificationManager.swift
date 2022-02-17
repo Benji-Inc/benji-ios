@@ -24,7 +24,7 @@ class UserNotificationManager: NSObject {
     weak var delegate: UserNotificationManagerDelegate?
 
     private let center = UNUserNotificationCenter.current()
-    private var application: UIApplication?
+    private(set) var application: UIApplication?
 
     var cancellables = Set<AnyCancellable>()
 
