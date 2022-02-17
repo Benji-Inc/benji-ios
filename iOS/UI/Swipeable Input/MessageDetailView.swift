@@ -8,9 +8,11 @@
 
 import SwiftUI
 
-class MessageDetailConfig: ObservableObject {
+/// ViewModel for the MessageDetailView.
+class MessageDetailViewState: ObservableObject {
 
-    @Published var message: Messageable? = nil
+    @Published var message: Messageable?
+    @Published var readingState: LottieUIViewRepresentable.ReadingState
 
     var emotion: Emotion? {
         return self.message?.emotion
@@ -27,16 +29,16 @@ class MessageDetailConfig: ObservableObject {
 
     init(message: Messageable?) {
         self.message = message
+        self.readingState = .notReading
     }
 }
 
 struct MessageDetailView: View {
 
-    @ObservedObject var config: MessageDetailConfig
+    @ObservedObject var config: MessageDetailViewState
     
     var body: some View {
         HStack {
-
             if let _ = self.config.emotion {
                 Spacer().frame(width: Theme.ContentOffset.standard.value)
                 EmotionView(config: self.config)
@@ -57,7 +59,7 @@ struct MessageDetailView: View {
 struct MessageDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
-        let config = MessageDetailConfig(message: MockMessage())
+        let config = MessageDetailViewState(message: MockMessage())
 
         MessageDetailView(config: config).preferredColorScheme(.dark)
     }

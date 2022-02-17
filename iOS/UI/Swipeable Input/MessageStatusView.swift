@@ -11,12 +11,13 @@ import SwiftUI
 /// A view that shows the read status and reply count of a message.
 struct MessageStatusView: View {
 
-    @ObservedObject var config: MessageDetailConfig
+    @ObservedObject var config: MessageDetailViewState
 
     var body: some View {
         HStack {
             MessageReadView(config: self.config)
 
+            // Don't show the replies view if there aren't any replies.
             if self.config.replyCount > 0 {
                 Spacer.length(.short)
                 MessageReplyView(config: self.config)
@@ -25,9 +26,10 @@ struct MessageStatusView: View {
     }
 }
 
+/// A subview of the message status view that specifically shows read status of message.
 private struct MessageReadView: View {
     
-    @ObservedObject var config: MessageDetailConfig
+    @ObservedObject var config: MessageDetailViewState
     
     var body: some View {
         HStack {
@@ -42,10 +44,14 @@ private struct MessageReadView: View {
                 Spacer.length(.standard)
             }
 
+            if !self.config.isRead {
+                LottieUIViewRepresentable(readingState: self.$config.readingState)
+                    .frame(width: 25)
 
-            if self.config.isRead {
-                Image("checkmark-double")
-                    .color(.T1)
+                Spacer.length(.standard)
+            } else if self.config.isRead {
+                LottieUIViewRepresentable(readingState: self.$config.readingState)
+                    .frame(width: 25)
 
                 Spacer.length(.standard)
             }
@@ -61,9 +67,10 @@ private struct MessageReadView: View {
     }
 }
 
+/// A subview of the message status view that specifically shows how many replies a message has..
 private struct MessageReplyView: View {
     
-    @ObservedObject var config: MessageDetailConfig
+    @ObservedObject var config: MessageDetailViewState
     
     var body: some View {
         HStack {
@@ -85,8 +92,9 @@ private struct MessageReplyView: View {
 }
 
 struct StatusView_Previews: PreviewProvider {
+
     static var previews: some View {
-        let config = MessageDetailConfig(message: nil)
+        let config = MessageDetailViewState(message: MockMessage())
         MessageStatusView(config: config).preferredColorScheme(.dark)
     }
 }

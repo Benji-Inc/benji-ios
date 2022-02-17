@@ -22,7 +22,7 @@ class MessageCell: UICollectionViewCell {
     let content = MessageContentView()
 
     // Detail View
-    @ObservedObject private var messageState = MessageDetailConfig(message: nil)
+    @ObservedObject private var messageState = MessageDetailViewState(message: nil)
     private lazy var detailView = MessageDetailView(config: self.messageState)
     private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
@@ -131,6 +131,10 @@ class MessageCell: UICollectionViewCell {
         self.consumeMessageTask?.cancel()
         self.consumeMessageTask = nil
 
+        if !areDetailsShown {
+            self.messageState.readingState = .notReading
+        }
+        
         // If this item is showing its details, we may want to start the consumption process for it.
         guard areDetailsShown, ChatUser.currentUserRole != .anonymous else { return}
 
@@ -146,9 +150,15 @@ class MessageCell: UICollectionViewCell {
     }
 
     private func startConsumptionIfNeeded(for message: Message) {
-        guard message.canBeConsumed else { return }
+        #warning("remove this")
+        guard !message.isFromCurrentUser else { return }
+
+
+        #warning("Restore this!")
+//        guard message.canBeConsumed else { return }
 
         self.consumeMessageTask = Task {
+            self.messageState.readingState = .reading
             await Task.snooze(seconds: 2)
 
             guard !Task.isCancelled else { return }
