@@ -78,7 +78,6 @@ class TransactionContentView: BaseView, UIContentView {
             self.content.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0.0),
             self.content.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0.0),
             self.content.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0),
-            self.widthAnchor.constraint(equalToConstant: 500)
         ])
                 
         self.titleLabel?.setFont(.small)
