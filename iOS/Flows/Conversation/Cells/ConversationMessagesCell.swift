@@ -293,10 +293,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
                 let message = ChatClient.shared.message(cid: cid, id: messageID)
 
-                if indexPath.section == 0 {
+                if !message.isFromCurrentUser && state.detailShown {
                     self.frontmostNonUserMessage = message
                 }
-                
+
                 if state.isInFocus, state.detailShown, let centerView = collectionView.supplementaryView(forElementKind: CenterConversationDetailView.kind, at: IndexPath(row: 0, section: 0)) as? CenterConversationDetailView {
                     centerView.configure(for: message)
                 }
