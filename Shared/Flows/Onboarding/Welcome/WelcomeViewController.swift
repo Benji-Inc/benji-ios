@@ -94,7 +94,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     
     var scrollTask: Task<Void, Never>?
     func updateContentOffset() {
-        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
+        // Cancel any currently running scroll tasks.
         self.scrollTask?.cancel()
         
         self.scrollTask = Task { [weak self] in

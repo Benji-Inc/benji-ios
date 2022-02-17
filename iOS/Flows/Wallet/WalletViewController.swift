@@ -72,6 +72,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             .removeDuplicates()
             .mainSink { index in
                 switch index {
+                case .rewards:
+                    self.loadRewards()
                 case .you:
                     self.loadCurrentTransactions()
                 case .connections:
@@ -97,6 +99,12 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         })
 
         return data
+    }
+    
+    private func loadRewards() {
+        Task {
+            await self.load(transactions: [])
+        }.add(to: self.autocancelTaskPool)
     }
     
     private func loadCurrentTransactions() {
