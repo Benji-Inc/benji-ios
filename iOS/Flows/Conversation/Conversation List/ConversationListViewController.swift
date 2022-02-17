@@ -51,7 +51,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
     }
 
     override var canBecomeFirstResponder: Bool {
-        return self.presentedViewController.isNil
+        return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
     }
 
     @Published var state: ConversationUIState = .read
@@ -303,7 +303,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
             }
 
             self.firstResponderTask = Task { [weak self] in
-                await Task.sleep(seconds: 0.5)
+                await Task.sleep(seconds: 0.25)
 
                 guard !Task.isCancelled else { return }
 
@@ -319,7 +319,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
             self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
 
             self.firstResponderTask = Task {
-                await Task.sleep(seconds: 0.5)
+                await Task.sleep(seconds: 0.25)
 
                 guard !Task.isCancelled else { return }
 
