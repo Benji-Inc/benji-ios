@@ -12,6 +12,7 @@ extension UIResponder {
 
     private weak static var currentFirstResponder: UIResponder?
 
+    /// Returns the UIResponder that is currently designated as first responder. Nil is returned if there is no current first responder.
     static var firstResponder: UIResponder? {
         UIResponder.currentFirstResponder = nil
         UIApplication.shared.sendAction(#selector(findFirstResponder(sender:)),
