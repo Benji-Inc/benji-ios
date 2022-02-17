@@ -123,13 +123,6 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
         return CGPoint(x: newXOffset, y: proposedContentOffset.y)
     }
 
-    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        self.sendCenterUpdateEventIfNeeded(withContentOffset: proposedContentOffset)
-
-        return self.targetContentOffset(forProposedContentOffset: proposedContentOffset,
-                                        withScrollingVelocity: .zero)
-    }
-
     /// Gets the UICollectionViewLayoutAttributes of the centermost item given the specified collection view  content offset.
     func getCenteredItem(forContentOffset contentOffset: CGPoint)
     -> UICollectionViewLayoutAttributes? {

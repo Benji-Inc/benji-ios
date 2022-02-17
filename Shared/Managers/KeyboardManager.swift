@@ -9,25 +9,6 @@
 import Foundation
 import Combine
 
-private extension UIResponder {
-
-    weak static var currentFirstResponder: UIResponder?
-
-    static var firstReponder: UIResponder? {
-        UIResponder.currentFirstResponder = nil
-        UIApplication.shared.sendAction(#selector(findFirstResponder(sender:)),
-                                        to: nil,
-                                        from: nil,
-                                        for: nil)
-        return UIResponder.currentFirstResponder
-    }
-
-    @objc private func findFirstResponder(sender: AnyObject) {
-        UIResponder.currentFirstResponder = self
-    }
-}
-
-
 class KeyboardManager {
 
     /// Keyboard events that can happen. Translates directly to `UIKeyboard` notifications from UIKit.
@@ -124,7 +105,7 @@ class KeyboardManager {
 
     private func getInputAccessoryHeight() -> CGFloat {
         var inputAccessoryHeight: CGFloat = 0
-        if let responder = UIResponder.firstReponder,
+        if let responder = UIResponder.firstResponder,
            let inputAccessoryView = responder.inputAccessoryView {
 
             inputAccessoryHeight = inputAccessoryView.height

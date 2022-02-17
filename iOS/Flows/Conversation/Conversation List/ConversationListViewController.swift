@@ -51,7 +51,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
     }
 
     override var canBecomeFirstResponder: Bool {
-        return self.presentedViewController.isNil
+        return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
     }
 
     @Published var state: ConversationUIState = .read
@@ -273,22 +273,20 @@ class ConversationListViewController: ViewController, ConversationListCollection
 
     /// A task for updating the message input accessory.
     private var messageInputTask: Task<Void, Never>?
+    /// A task to become or resign first responder status.
+    private var firstResponderTask: Task<Void, Never>?
 
     private func update(withCenteredCid cid: ConversationId?) {
         self.messageInputTask?.cancel()
+        self.firstResponderTask?.cancel()
 
         // Reset the input accessory view.
-        self.messageInputAccessoryView.textView.setPlaceholder(for: [], isReply: false)
         self.messageInputAccessoryView.updateSwipeHint(shouldPlay: false)
 
         if let cid = cid {
             let conversation = Conversation.conversation(cid)
             // Sets the active conversation
             ConversationsManager.shared.activeConversation = conversation
-
-            if !self.isFirstResponder {
-                self.becomeFirstResponder()
-            }
 
             self.messageInputTask = Task { [weak self] in
                 let members = conversation.lastActiveMembers.filter { member in
@@ -303,14 +301,31 @@ class ConversationListViewController: ViewController, ConversationListCollection
                 self?.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
                 self?.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
             }
+
+            self.firstResponderTask = Task { [weak self] in
+                await Task.sleep(seconds: 0.25)
+
+                guard !Task.isCancelled else { return }
+
+                // The input accessory view should be shown when centered on a conversation. If there's not
+                // already set as first responder, then make the VC first responder.
+                if UIResponder.firstResponder.isNil {
+                    self?.becomeFirstResponder()
+                }
+            }
         } else {
             ConversationsManager.shared.activeConversation = nil
 
-            if self.isFirstResponder {
-                self.resignFirstResponder()
-            }
-
             self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
+
+            self.firstResponderTask = Task {
+                await Task.sleep(seconds: 0.25)
+
+                guard !Task.isCancelled else { return }
+
+                // Hide the keyboard and accessory view when we're not centered on a conversation.
+                UIResponder.firstResponder?.resignFirstResponder()
+            }
         }
     }
 }
