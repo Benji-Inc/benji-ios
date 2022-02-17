@@ -102,7 +102,9 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     }
     
     private func loadRewards() {
-        
+        Task {
+            await self.load(transactions: [])
+        }.add(to: self.autocancelTaskPool)
     }
     
     private func loadCurrentTransactions() {
