@@ -105,7 +105,7 @@ enum AchievementType: String, CaseIterable {
         case .firstFeeling:
             return "First Feeling"
         case .firstUnreadMessage:
-            return "Read Message"
+            return "Message Read"
         case .firstGroup:
             return "First Group"
         case .groupOfThreePlus:
