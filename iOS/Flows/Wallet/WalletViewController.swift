@@ -103,8 +103,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         
         self.segmentControl.didSelectSegmentIndex = { [unowned self] index in
             switch index {
-            case .rewards:
-                self.loadRewards()
+            case .achievements:
+                self.loadAchievements()
             case .you:
                 self.loadCurrentTransactions()
             case .connections:
@@ -139,9 +139,9 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         return data
     }
     
-    private func loadRewards() {
+    private func loadAchievements() {
         Task { [weak self] in
-            await self?.load(transactions: [])
+            await self?.loadAchievements()
         }.add(to: self.autocancelTaskPool)
     }
     
@@ -163,11 +163,23 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         }.add(to: self.autocancelTaskPool)
     }
     
+    private func loadAchievements() async {
+        let items = AchievementType.allCases.map { type in
+            return WalletCollectionViewDataSource.ItemType.achievement(type)
+        }
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(items, in: .achievements)
+        snapshot.setItems([], in: .transactions)
+        await self.dataSource.apply(snapshot)
+    }
+    
     private func load(transactions: [Transaction]) async {
         let items = transactions.map { transaction in
             return WalletCollectionViewDataSource.ItemType.transaction(transaction)
         }
         var snapshot = self.dataSource.snapshot()
+        snapshot.setItems([], in: .achievements)
         snapshot.setItems(items, in: .transactions)
         await self.dataSource.apply(snapshot)
     }

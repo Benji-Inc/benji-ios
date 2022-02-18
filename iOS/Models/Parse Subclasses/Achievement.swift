@@ -53,7 +53,7 @@ extension Achievement: Objectable {
     }
 }
 
-enum AchievementType: String {
+enum AchievementType: String, CaseIterable {
     
     case joinJibber = "JOIN_JIBBER"
     case inviteSent = "INVITE_SENT"

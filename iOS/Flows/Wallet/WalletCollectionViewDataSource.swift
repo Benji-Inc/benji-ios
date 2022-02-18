@@ -12,15 +12,17 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
                                       WalletCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
+        case achievements
         case transactions
     }
 
     enum ItemType: Hashable {
         case transaction(Transaction)
-        case reward(Bool)
+        case achievement(AchievementType)
     }
 
     private let transactionConfig = ManageableCellRegistration<TransactionCell>().provider
+    private let achievementConfig = ManageableCellRegistration<AchievementCell>().provider
                     
     // MARK: - Cell Dequeueing
 
@@ -34,25 +36,10 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
             return collectionView.dequeueConfiguredReusableCell(using: self.transactionConfig,
                                                                 for: indexPath,
                                                                 item: transaction)
-        case .reward(let reward):
-            return nil 
+        case .achievement(let type):
+            return collectionView.dequeueConfiguredReusableCell(using: self.achievementConfig,
+                                                                for: indexPath,
+                                                                item: type)
         }
-    }
-    
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String,
-                                           section: SectionType,
-                                           indexPath: IndexPath) -> UICollectionReusableView? {
-        
-//        switch section {
-//        case .transactions:
-//            if kind == BackgroundSupplementaryView.kind {
-//                let background = collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig, for: indexPath)
-//                return background
-//            }
-//            return nil
-//        }
-        
-        return nil 
     }
 }

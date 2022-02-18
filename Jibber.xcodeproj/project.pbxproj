@@ -459,6 +459,7 @@
 		D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
 		D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */; };
 		D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9927C0070C001D8855 /* Achievement.swift */; };
+		D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -963,6 +964,7 @@
 		D69972FD25EAFC18000AEE6A /* NotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContent.entitlements; sourceTree = "<group>"; };
 		D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSegmentControl.swift; sourceTree = "<group>"; };
 		D69D2F9927C0070C001D8855 /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
+		D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementCell.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderViewController.swift; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
@@ -1233,6 +1235,7 @@
 		D6129FA627ADC5E70058811C /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */,
 				D6739A6127BC45500047BBCA /* Header Views */,
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
 				D628B00827B47EEF00949154 /* TransactionContentView.xib */,
@@ -2623,6 +2626,7 @@
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
+				D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */,
 				D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */,
 				D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,

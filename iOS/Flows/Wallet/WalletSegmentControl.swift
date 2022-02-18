@@ -11,7 +11,7 @@ import Foundation
 class WalletSegmentControl: UISegmentedControl {
     
     enum SegmentType: Int {
-        case rewards
+        case achievements
         case you
         case connections
     }
@@ -22,8 +22,8 @@ class WalletSegmentControl: UISegmentedControl {
         
         super.init(frame: .zero)
         
-        let rewardsAction = UIAction(title: "Rewards") { _ in
-            self.didSelectSegmentIndex?(.rewards)
+        let rewardsAction = UIAction(title: "Achievements") { _ in
+            self.didSelectSegmentIndex?(.achievements)
         }
         
         let youAction = UIAction(title: "You") { _ in
