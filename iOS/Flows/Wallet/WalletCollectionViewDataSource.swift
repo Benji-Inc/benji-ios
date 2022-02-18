@@ -12,23 +12,17 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
                                       WalletCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
-        case wallet
+        case reward
         case transactions
     }
 
     enum ItemType: Hashable {
         case transaction(Transaction)
+        case reward(Bool)
     }
 
     private let transactionConfig = ManageableCellRegistration<TransactionCell>().provider
-    private let headerConfig = ManageableHeaderRegistration<WalletHeaderView>().provider
-    private let backgroundConfig = ManageableSupplementaryViewRegistration<BackgroundSupplementaryView>().provider
-    private let segmentControlConfig = ManageableSupplementaryViewRegistration<TransactionSegmentControlView>().provider
-        
-    @Published var segmentIndex: TransactionSegmentControlView.SegmentType = .you
-    
-    var didTapDetail: CompletionOptional = nil
-        
+                    
     // MARK: - Cell Dequeueing
 
     override func dequeueCell(with collectionView: UICollectionView,
@@ -41,6 +35,8 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
             return collectionView.dequeueConfiguredReusableCell(using: self.transactionConfig,
                                                                 for: indexPath,
                                                                 item: transaction)
+        case .reward(let reward):
+            return nil 
         }
     }
     
@@ -49,28 +45,14 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         
-        switch section {
-        case .wallet:
-            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            header.configure(with: self.itemIdentifiers(in: .transactions))
-            header.didTapDetail = { [unowned self] in
-                self.didTapDetail?()
-            }
-            return header
-        case .transactions:
-            if kind == BackgroundSupplementaryView.kind {
-                let background = collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig, for: indexPath)
-                return background
-            } else if kind == TransactionSegmentControlView.kind {
-                let segmentControl = collectionView.dequeueConfiguredReusableSupplementary(using: self.segmentControlConfig, for: indexPath)
-                
-                segmentControl.didSelectSegmentIndex = { [unowned self] index in
-                    self.segmentIndex = index 
-                }
-                return segmentControl
-            }
-        }
+//        switch section {
+//        case .transactions:
+//            if kind == BackgroundSupplementaryView.kind {
+//                let background = collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig, for: indexPath)
+//                return background
+//            }
+//            return nil
+//        }
         
         return nil 
     }
