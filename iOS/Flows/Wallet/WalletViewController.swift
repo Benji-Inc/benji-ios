@@ -19,7 +19,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
-    private let gradientView = BackgroundGradientView()
+    private let backgroundView = BaseView()
 
     lazy var header = WalletHeaderView()
     lazy var segmentControl = WalletSegmentControl()
@@ -48,14 +48,15 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         }
         
         self.view.addSubview(self.header)
-        self.view.addSubview(self.gradientView)
+        self.backgroundView.set(backgroundColor: .white)
+        self.backgroundView.alpha = 0.1
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         
-        self.gradientView.layer.cornerRadius = Theme.cornerRadius
-        self.gradientView.clipsToBounds = true
+        self.backgroundView.layer.cornerRadius = Theme.cornerRadius
+        self.backgroundView.clipsToBounds = true
         
-        self.view.insertSubview(self.gradientView, belowSubview: self.collectionView)
+        self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
         self.view.insertSubview(self.segmentControl, aboveSubview: self.collectionView)
     }
     
@@ -88,7 +89,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         self.segmentControl.centerOnX()
         self.segmentControl.match(.top, to: .top, of: self.collectionView, offset: .xtraLong)
         
-        self.gradientView.frame = self.collectionView.frame
+        self.backgroundView.frame = self.collectionView.frame
+        self.backgroundView.height = self.collectionView.height + 100
     }
     
     override func layoutCollectionView(_ collectionView: UICollectionView) {

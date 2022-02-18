@@ -26,7 +26,7 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(145))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(160))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
