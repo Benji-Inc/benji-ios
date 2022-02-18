@@ -12,7 +12,7 @@ import SwiftUI
 class MessageDetailViewState: ObservableObject {
 
     @Published var message: Messageable?
-    @Published var readingState: LottieUIViewRepresentable.ReadingState
+    @Published var readingState: MessageDeliveryStatusUIViewRepresentable.ReadingState
 
     var emotion: Emotion? {
         return self.message?.emotion

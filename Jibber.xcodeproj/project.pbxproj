@@ -36,7 +36,7 @@
 		80536B5E27A249D00094B81C /* SwipeInputPanGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */; };
 		805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8059AD4B27851162004330DC /* ChatUser+Extensions.swift */; };
-		8060C86027BED71100E5FAB1 /* LottieUIViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060C85F27BED71100E5FAB1 /* LottieUIViewRepresentable.swift */; };
+		8060C86027BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8060C85F27BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift */; };
 		8060C86227BEE0A900E5FAB1 /* checkmark.json in Resources */ = {isa = PBXBuildFile; fileRef = 8060C86127BEE0A900E5FAB1 /* checkmark.json */; };
 		8060C86327BEE0A900E5FAB1 /* checkmark.json in Resources */ = {isa = PBXBuildFile; fileRef = 8060C86127BEE0A900E5FAB1 /* checkmark.json */; };
 		80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
@@ -719,7 +719,7 @@
 		80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInputPanGestureHandler.swift; sourceTree = "<group>"; };
 		805881552743008D0004F2EA /* ConversationMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationMember+Extensions.swift"; sourceTree = "<group>"; };
 		8059AD4B27851162004330DC /* ChatUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatUser+Extensions.swift"; sourceTree = "<group>"; };
-		8060C85F27BED71100E5FAB1 /* LottieUIViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieUIViewRepresentable.swift; sourceTree = "<group>"; };
+		8060C85F27BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDeliveryStatusUIViewRepresentable.swift; sourceTree = "<group>"; };
 		8060C86127BEE0A900E5FAB1 /* checkmark.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = checkmark.json; sourceTree = "<group>"; };
 		80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatClient+Extensions.swift"; sourceTree = "<group>"; };
 		80616E3426EAD2F300C077BA /* DataController+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataController+Async.swift"; sourceTree = "<group>"; };
@@ -1177,7 +1177,6 @@
 			isa = PBXGroup;
 			children = (
 				8072253427AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift */,
-				8060C85F27BED71100E5FAB1 /* LottieUIViewRepresentable.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -2005,6 +2004,7 @@
 			children = (
 				D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */,
 				D6CC1481276BE808005F617F /* EmotionView.swift */,
+				8060C85F27BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift */,
 				D6C20127276CFDAC0085B187 /* MessageDetailView.swift */,
 				D6CC148E276C1323005F617F /* MessageStatusView.swift */,
 				D6FE05212767B2BC00137EEA /* old_EmotionView.swift */,
@@ -2534,7 +2534,7 @@
 				D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */,
 				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
 				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
-				8060C86027BED71100E5FAB1 /* LottieUIViewRepresentable.swift in Sources */,
+				8060C86027BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				D6129FA327AC5F510058811C /* CenterConversationDetailView.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,

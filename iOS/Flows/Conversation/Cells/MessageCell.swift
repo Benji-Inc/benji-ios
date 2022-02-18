@@ -87,10 +87,16 @@ class MessageCell: UICollectionViewCell {
         }
     }
 
+    var messageController: MessageController?
+    var cancellables = Set<AnyCancellable>()
+
     func configure(with message: Messageable) {
         self.content.configure(with: message)
 
         self.messageState.message = message
+
+        self.messageController = MessageController.controller(try! ConversationId(cid: message.conversationId),
+                                                              messageId: message.id)
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
@@ -134,7 +140,7 @@ class MessageCell: UICollectionViewCell {
         if !areDetailsShown {
             self.messageState.readingState = .notReading
         }
-        
+
         // If this item is showing its details, we may want to start the consumption process for it.
         guard areDetailsShown, ChatUser.currentUserRole != .anonymous else { return}
 

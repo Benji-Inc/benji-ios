@@ -44,17 +44,11 @@ private struct MessageReadView: View {
                 Spacer.length(.standard)
             }
 
-            if !self.config.isRead {
-                LottieUIViewRepresentable(readingState: self.$config.readingState)
-                    .frame(width: 25)
+            MessageDeliveryStatusUIViewRepresentable(message: self.$config.message,
+                                                 readingState: self.$config.readingState)
+                .frame(width: 25)
 
-                Spacer.length(.standard)
-            } else if self.config.isRead {
-                LottieUIViewRepresentable(readingState: self.$config.readingState)
-                    .frame(width: 25)
-
-                Spacer.length(.standard)
-            }
+            Spacer.length(.standard)
         }
         .frame(minHeight: 25, idealHeight: 25, maxHeight: 25)
         .background(
