@@ -19,6 +19,13 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
+    
+    private let walletGradientView = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
+                                                         ThemeColor.walletBackground.color.cgColor,
+                                                         ThemeColor.walletBackground.color.cgColor,
+                                                         ThemeColor.walletBackground.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .topCenter,
+                                                  endPoint: .bottomCenter)
     private let backgroundView = BaseView()
 
     lazy var header = WalletHeaderView()
@@ -48,8 +55,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         }
         
         self.view.addSubview(self.header)
-        self.backgroundView.set(backgroundColor: .white)
-        self.backgroundView.alpha = 0.1
+        self.backgroundView.set(backgroundColor: .walletBackground)
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         
@@ -58,6 +64,10 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         
         self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
         self.view.insertSubview(self.segmentControl, aboveSubview: self.collectionView)
+        self.view.insertSubview(self.walletGradientView, belowSubview: self.segmentControl)
+        
+        self.walletGradientView.layer.cornerRadius = Theme.cornerRadius
+        self.walletGradientView.clipsToBounds = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -79,7 +89,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         
         let padding = Theme.ContentOffset.xtraLong.value
         let totalWidth = self.collectionView.width - padding.doubled
-        let segmentWidth = totalWidth * 0.33
+        let segmentWidth = totalWidth * 0.3333
         self.segmentControl.sizeToFit()
         self.segmentControl.setWidth(segmentWidth, forSegmentAt: 0)
         self.segmentControl.setWidth(segmentWidth, forSegmentAt: 1)
@@ -91,6 +101,11 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         
         self.backgroundView.frame = self.collectionView.frame
         self.backgroundView.height = self.collectionView.height + 100
+        
+        self.walletGradientView.width = self.collectionView.width
+        self.walletGradientView.top = self.collectionView.top
+        self.walletGradientView.height = padding.doubled + self.segmentControl.height
+        self.walletGradientView.centerOnX()
     }
     
     override func layoutCollectionView(_ collectionView: UICollectionView) {

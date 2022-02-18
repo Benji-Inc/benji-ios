@@ -34,6 +34,7 @@ enum ThemeColor: String, CaseIterable {
     
     case badgeTop
     case badgeBottom
+    case walletBackground
     
     case white
     case clear
@@ -96,7 +97,8 @@ enum ThemeColor: String, CaseIterable {
             return UIColor(named: "BADGE_TOP")!
         case .badgeBottom:
             return UIColor(named: "BADGE_BOTTOM")!
-
+        case .walletBackground:
+            return UIColor(named: "WALLET_BACKGROUND")!
         }
     }
     
