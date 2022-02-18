@@ -22,7 +22,7 @@ class WalletSegmentControl: UISegmentedControl {
         
         super.init(frame: .zero)
         
-        let rewardsAction = UIAction(title: "Achievements") { _ in
+        let rewardsAction = UIAction(title: "Rewards") { _ in
             self.didSelectSegmentIndex?(.achievements)
         }
         

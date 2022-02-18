@@ -45,6 +45,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
 
     override func initializeViews() {
         super.initializeViews()
+        
+        self.collectionView.allowsMultipleSelection = false 
 
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
