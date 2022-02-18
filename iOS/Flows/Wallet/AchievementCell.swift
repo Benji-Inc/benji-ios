@@ -13,13 +13,33 @@ class AchievementCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: AchievementType?
     
+    private let badgeView = BadgeView()
+    
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.contentView.set(backgroundColor: .red)
+        self.contentView.addSubview(self.badgeView)
     }
     
     func configure(with item: AchievementType) {
         self.currentItem = item
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let padding = Theme.ContentOffset.xtraLong.value
+        self.badgeView.width = self.contentView.width - padding.doubled
+        self.badgeView.height = self.contentView.height - padding.doubled
+        self.badgeView.centerOnXAndY()
+    }
+}
+
+private class BadgeView: BaseView {
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.set(backgroundColor: .red)
     }
 }
