@@ -20,51 +20,24 @@ struct MessageDeliveryStatusUIViewRepresentable: UIViewRepresentable {
     @Binding var message: Messageable?
     @Binding var readingState: ReadingState
 
-    func makeUIView(context: UIViewRepresentableContext<MessageDeliveryStatusUIViewRepresentable>) -> AnimationView {
-        let animationView = AnimationView()
-        animationView.contentMode = .scaleAspectFit
-
-        let animation = Animation.named("visibility")
-        animationView.animation = animation
-
-
-        // TODO: Make this configurable
-        animationView.animationSpeed = 0.1
-        animationView.currentProgress = 1
-
-        return animationView
+    func makeUIView(context: UIViewRepresentableContext<MessageDeliveryStatusUIViewRepresentable>) -> MessageDeliveryStatusView {
+        return MessageDeliveryStatusView()
     }
 
-    func updateUIView(_ uiView: AnimationView, context: Context) {
+    func updateUIView(_ uiView: MessageDeliveryStatusView, context: Context) {
         guard let message = self.message else { return }
 
-
-        switch self.readingState {
-        case .notReading:
-            uiView.stop()
-            if message.isConsumed {
-                uiView.currentProgress = 0
-            } else {
-                uiView.currentProgress = 1
-            }
-        case .reading:
-            if !uiView.isAnimationPlaying {//}&& uiView.currentProgress > 0 {
-                uiView.play(fromProgress: 1, toProgress: 0, loopMode: .playOnce) { finished in
-                    if finished {
-                        self.readingState = .notReading
-                    }
-                }
-            }
-        }
+        uiView.update(with: message, readingState: self.readingState)
     }
 }
 
-private class MessageDeliveryStatusView: BaseView {
+class MessageDeliveryStatusView: BaseView {
 
     typealias ReadingState = MessageDeliveryStatusUIViewRepresentable.ReadingState
 
     let readStatusView = AnimationView(name: "visibility")
     let deliveryStatusView = AnimationView(name: "checkmark")
+    let errorStatusView = AnimationView(name: "alertCircle")
     let statusLabel = ThemeLabel(font: .small)
 
     override func initializeSubviews() {
@@ -77,14 +50,22 @@ private class MessageDeliveryStatusView: BaseView {
         self.addSubview(self.readStatusView)
         self.readStatusView.currentProgress = 1
         self.readStatusView.setValueProvider(colorProvider, keypath: keypath)
+        self.readStatusView.animationSpeed = 0.1
+        self.readStatusView.contentMode = .scaleAspectFit
 
         self.addSubview(self.deliveryStatusView)
         self.deliveryStatusView.currentProgress = 0
         self.deliveryStatusView.setValueProvider(colorProvider, keypath: keypath)
+        self.deliveryStatusView.contentMode = .scaleAspectFit
+
+        self.addSubview(self.errorStatusView)
+        self.errorStatusView.currentProgress = 0
+        self.errorStatusView.setValueProvider(colorProvider, keypath: keypath)
+        self.errorStatusView.contentMode = .scaleAspectFit
 
         self.addSubview(self.statusLabel)
         self.statusLabel.text = "Sending"
-        self.statusLabel.sizeToFit()
+
         self.pin(.right)
     }
 
@@ -93,6 +74,10 @@ private class MessageDeliveryStatusView: BaseView {
 
         self.readStatusView.expandToSuperviewSize()
         self.deliveryStatusView.expandToSuperviewSize()
+        self.errorStatusView.expandToSuperviewSize()
+
+        self.statusLabel.sizeToFit()
+        self.statusLabel.centerOnXAndY()
     }
 
     func update(with message: Messageable, readingState: ReadingState) {
