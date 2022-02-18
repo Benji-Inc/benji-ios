@@ -21,7 +21,7 @@ struct MessageDeliveryStatusUIViewRepresentable: UIViewRepresentable {
     @Binding var readingState: ReadingState
 
     func makeUIView(context: UIViewRepresentableContext<MessageDeliveryStatusUIViewRepresentable>) -> MessageDeliveryStatusView {
-        return MessageDeliveryStatusView()
+        return MessageDeliveryStatusView(readingState: self.$readingState)
     }
 
     func updateUIView(_ uiView: MessageDeliveryStatusView, context: Context) {
@@ -35,10 +35,22 @@ class MessageDeliveryStatusView: BaseView {
 
     typealias ReadingState = MessageDeliveryStatusUIViewRepresentable.ReadingState
 
+    var readingState: Binding<ReadingState>
+
     let readStatusView = AnimationView(name: "visibility")
     let deliveryStatusView = AnimationView(name: "checkmark")
     let errorStatusView = AnimationView(name: "alertCircle")
     let statusLabel = ThemeLabel(font: .small)
+
+    init(readingState: Binding<ReadingState>) {
+        self.readingState = readingState
+
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -64,9 +76,6 @@ class MessageDeliveryStatusView: BaseView {
         self.errorStatusView.contentMode = .scaleAspectFit
 
         self.addSubview(self.statusLabel)
-        self.statusLabel.text = "Sending"
-
-        self.pin(.right)
     }
 
     override func layoutSubviews() {
@@ -75,12 +84,15 @@ class MessageDeliveryStatusView: BaseView {
         self.readStatusView.expandToSuperviewSize()
         self.deliveryStatusView.expandToSuperviewSize()
         self.errorStatusView.expandToSuperviewSize()
-
-        self.statusLabel.sizeToFit()
-        self.statusLabel.centerOnXAndY()
+        self.statusLabel.expandToSuperviewSize()
     }
 
     func update(with message: Messageable, readingState: ReadingState) {
+        self.readStatusView.isVisible = false
+        self.deliveryStatusView.isVisible = false
+        self.errorStatusView.isVisible = false
+        self.statusLabel.isVisible = false
+
         if message.isFromCurrentUser {
             self.updateForCurrentUserMessage(message, readingState: readingState)
         } else {
@@ -89,36 +101,58 @@ class MessageDeliveryStatusView: BaseView {
     }
 
     private func updateForCurrentUserMessage(_ message: Messageable, readingState: ReadingState) {
-        self.readStatusView.isVisible = false
-        self.deliveryStatusView.isVisible = true
-        self.statusLabel.isVisible = true
-
-        guard let chatMessage = MessageController.controller(try! ConversationId(cid: message.conversationId),
+        guard let chatMessage = MessageController.controller(message.streamCid,
                                                              messageId: message.id).message else { return }
 
-        if let localState = chatMessage.localState {
-            switch localState {
-            case .pendingSync, .syncing, .pendingSend, .sending:
-                break
-            case .syncingFailed, .sendingFailed, .deletingFailed:
-                break
-            case .deleting:
-                break
+        switch chatMessage.localState {
+        case .pendingSync, .syncing, .pendingSend, .sending:
+            // Show sending message ui
+            self.statusLabel.isVisible = true
+            self.statusLabel.text = "Sending"
+        case .syncingFailed, .sendingFailed, .deletingFailed:
+            self.errorStatusView.isVisible = true
+        case .deleting:
+            self.statusLabel.isVisible = true
+            self.statusLabel.text = "Deleting"
+        case .none:
+            if chatMessage.isConsumed {
+                self.deliveryStatusView.isVisible = true
+            } else {
+                self.readStatusView.isVisible = true
             }
         }
 
         switch readingState {
         case .notReading:
-            break
+            self.errorStatusView.stop()
+            self.deliveryStatusView.stop()
+
+            if self.errorStatusView.isVisible {
+                self.errorStatusView.currentProgress = 1
+            }
+            if self.deliveryStatusView.isVisible {
+                self.deliveryStatusView.currentProgress = 1
+            }
+            if self.readStatusView.isVisible {
+                self.readStatusView.currentProgress = 0
+            }
         case .reading:
-            break
+            if self.errorStatusView.isVisible && !self.errorStatusView.isAnimationPlaying {
+                self.errorStatusView.play { finished in
+                    self.readingState.wrappedValue = .notReading
+                }
+            }
+
+            if self.deliveryStatusView.isVisible && !self.deliveryStatusView.isAnimationPlaying {
+                self.deliveryStatusView.play { finished in
+                    self.readingState.wrappedValue = .notReading
+                }
+            }
         }
     }
 
     private func updateForNonUserMessage(_ message: Messageable, readingState: ReadingState) {
         self.readStatusView.isVisible = true
-        self.deliveryStatusView.isVisible = false
-        self.statusLabel.isVisible = false
 
         switch readingState {
         case .notReading:
@@ -132,7 +166,7 @@ class MessageDeliveryStatusView: BaseView {
             if !self.readStatusView.isAnimationPlaying {//}&& uiView.currentProgress > 0 {
                 self.readStatusView.play(fromProgress: 1, toProgress: 0, loopMode: .playOnce) { finished in
                     if finished {
-//                        self.readingState = .notReading
+                        self.readingState.wrappedValue = .notReading
                     }
                 }
             }
