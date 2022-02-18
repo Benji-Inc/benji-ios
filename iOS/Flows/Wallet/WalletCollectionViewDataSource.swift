@@ -12,7 +12,6 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
                                       WalletCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
-        case reward
         case transactions
     }
 

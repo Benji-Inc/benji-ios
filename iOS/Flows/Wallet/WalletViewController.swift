@@ -19,7 +19,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
-    
+    private let gradientView = BackgroundGradientView()
+
     lazy var header = WalletHeaderView()
     lazy var segmentControl = WalletSegmentControl()
     
@@ -47,9 +48,14 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         }
         
         self.view.addSubview(self.header)
+        self.view.addSubview(self.gradientView)
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         
+        self.gradientView.layer.cornerRadius = Theme.cornerRadius
+        self.gradientView.clipsToBounds = true
+        
+        self.view.insertSubview(self.gradientView, belowSubview: self.collectionView)
         self.view.insertSubview(self.segmentControl, aboveSubview: self.collectionView)
     }
     
@@ -81,6 +87,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         self.segmentControl.width = self.collectionView.width - padding.doubled
         self.segmentControl.centerOnX()
         self.segmentControl.match(.top, to: .top, of: self.collectionView, offset: .xtraLong)
+        
+        self.gradientView.frame = self.collectionView.frame
     }
     
     override func layoutCollectionView(_ collectionView: UICollectionView) {
@@ -92,14 +100,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                        
-        self.view.set(backgroundColor: .B0)
         
-        self.loadInitialData()
-    }
-    
-    override func collectionViewDataWasLoaded() {
-
         self.segmentControl.didSelectSegmentIndex = { [unowned self] index in
             switch index {
             case .rewards:
@@ -110,6 +111,9 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                 self.loadConnectionsTransactions()
             }
         }
+                        
+        self.view.set(backgroundColor: .B0)
+        self.loadInitialData()
     }
 
     // MARK: Data Loading

@@ -9,14 +9,10 @@
 import Foundation
 
 class WalletCollectionView: CollectionView {
-    
-    private let gradientView = BackgroundGradientView()
-    
+        
     init() {
         super.init(layout: WalletCollectionViewLayout())
-        self.addSubview(self.gradientView)
-        self.layer.cornerRadius = Theme.cornerRadius
-        self.clipsToBounds = true
+        self.showsVerticalScrollIndicator = false
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -26,6 +22,5 @@ class WalletCollectionView: CollectionView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.gradientView.expandToSuperviewSize()
     }
 }

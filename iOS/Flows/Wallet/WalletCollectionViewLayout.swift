@@ -19,19 +19,19 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
             guard let sectionType = WalletCollectionViewDataSource.SectionType.init(rawValue: sectionIndex) else { return nil }
             
             switch sectionType {
-            case .reward:
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(145))
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                
-                // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-                // Section
-                let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                
-                return section
+//            case .reward:
+//                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+//                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//                
+//                // Group
+//                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+//                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+//
+//                // Section
+//                let section = NSCollectionLayoutSection(group: group)
+//                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+//                
+//                return section
             case .transactions:
                                 
                 let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
@@ -48,13 +48,13 @@ class WalletCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                              leading: sectionInset,
+                                                              leading: 0,
                                                               bottom: 0,
-                                                              trailing: sectionInset)
+                                                              trailing: 0)
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 70 - sectionInset,
+                section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset.doubled + 20,
                                                                 leading: 0,
                                                                 bottom: 0,
                                                                 trailing: 0)
