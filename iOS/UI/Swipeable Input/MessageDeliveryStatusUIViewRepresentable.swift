@@ -12,28 +12,36 @@ import StreamChat
 
 struct MessageDeliveryStatusUIViewRepresentable: UIViewRepresentable {
 
-    enum ReadingState {
-        case notReading
+    enum UpdatingState {
+        case notUpdating
+        case updating
+    }
+
+    enum DeliveryStatus {
+        case sending
+        case sent
         case reading
+        case read
+        case error
     }
 
     @Binding var message: Messageable?
-    @Binding var readingState: ReadingState
+    @Binding var updatingState: UpdatingState
 
-    func makeUIView(context: UIViewRepresentableContext<MessageDeliveryStatusUIViewRepresentable>) -> MessageDeliveryStatusView {
-        return MessageDeliveryStatusView(readingState: self.$readingState)
+    func makeUIView(context: UIViewRepresentableContext<MessageDeliveryStatusUIViewRepresentable>) -> MessageDeliveryStatusUIView {
+        return MessageDeliveryStatusUIView(readingState: self.$updatingState)
     }
 
-    func updateUIView(_ uiView: MessageDeliveryStatusView, context: Context) {
+    func updateUIView(_ uiView: MessageDeliveryStatusUIView, context: Context) {
         guard let message = self.message else { return }
 
-        uiView.update(with: message, readingState: self.readingState)
+        uiView.update(with: message, readingState: self.updatingState)
     }
 }
 
-class MessageDeliveryStatusView: BaseView {
+class MessageDeliveryStatusUIView: BaseView {
 
-    typealias ReadingState = MessageDeliveryStatusUIViewRepresentable.ReadingState
+    typealias ReadingState = MessageDeliveryStatusUIViewRepresentable.UpdatingState
 
     var readingState: Binding<ReadingState>
 
@@ -55,14 +63,13 @@ class MessageDeliveryStatusView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        // TODO: Make this configurable
         let keypath = AnimationKeypath(keys: ["**", "Color"])
-        let colorProvider = ColorValueProvider(UIColor.green.lottieColorValue)
+        let colorProvider = ColorValueProvider(ThemeColor.D1.color.lottieColorValue)
 
         self.addSubview(self.readStatusView)
         self.readStatusView.currentProgress = 1
         self.readStatusView.setValueProvider(colorProvider, keypath: keypath)
-        self.readStatusView.animationSpeed = 0.1
+        self.readStatusView.animationSpeed = 0.25
         self.readStatusView.contentMode = .scaleAspectFit
 
         self.addSubview(self.deliveryStatusView)
@@ -116,14 +123,14 @@ class MessageDeliveryStatusView: BaseView {
             self.statusLabel.text = "Deleting"
         case .none:
             if chatMessage.isConsumed {
-                self.deliveryStatusView.isVisible = true
-            } else {
                 self.readStatusView.isVisible = true
+            } else {
+                self.deliveryStatusView.isVisible = true
             }
         }
 
         switch readingState {
-        case .notReading:
+        case .notUpdating:
             self.errorStatusView.stop()
             self.deliveryStatusView.stop()
 
@@ -136,16 +143,16 @@ class MessageDeliveryStatusView: BaseView {
             if self.readStatusView.isVisible {
                 self.readStatusView.currentProgress = 0
             }
-        case .reading:
+        case .updating:
             if self.errorStatusView.isVisible && !self.errorStatusView.isAnimationPlaying {
                 self.errorStatusView.play { finished in
-                    self.readingState.wrappedValue = .notReading
+                    self.readingState.wrappedValue = .notUpdating
                 }
             }
 
             if self.deliveryStatusView.isVisible && !self.deliveryStatusView.isAnimationPlaying {
                 self.deliveryStatusView.play { finished in
-                    self.readingState.wrappedValue = .notReading
+                    self.readingState.wrappedValue = .notUpdating
                 }
             }
         }
@@ -155,18 +162,18 @@ class MessageDeliveryStatusView: BaseView {
         self.readStatusView.isVisible = true
 
         switch readingState {
-        case .notReading:
+        case .notUpdating:
             self.readStatusView.stop()
             if message.isConsumed {
                 self.readStatusView.currentProgress = 0
             } else {
                 self.readStatusView.currentProgress = 1
             }
-        case .reading:
+        case .updating:
             if !self.readStatusView.isAnimationPlaying {//}&& uiView.currentProgress > 0 {
                 self.readStatusView.play(fromProgress: 1, toProgress: 0, loopMode: .playOnce) { finished in
                     if finished {
-                        self.readingState.wrappedValue = .notReading
+                        self.readingState.wrappedValue = .notUpdating
                     }
                 }
             }

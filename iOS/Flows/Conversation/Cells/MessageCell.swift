@@ -138,7 +138,7 @@ class MessageCell: UICollectionViewCell {
         self.consumeMessageTask = nil
 
         if !areDetailsShown {
-            self.messageState.readingState = .notReading
+            self.messageState.updatingState = .notUpdating
         }
 
         // If this item is showing its details, we may want to start the consumption process for it.
@@ -156,15 +156,10 @@ class MessageCell: UICollectionViewCell {
     }
 
     private func startConsumptionIfNeeded(for message: Message) {
-        #warning("remove this")
-        guard !message.isFromCurrentUser else { return }
-
-
-        #warning("Restore this!")
-//        guard message.canBeConsumed else { return }
+        guard message.canBeConsumed else { return }
 
         self.consumeMessageTask = Task {
-            self.messageState.readingState = .reading
+            self.messageState.updatingState = .updating
             await Task.snooze(seconds: 2)
 
             guard !Task.isCancelled else { return }

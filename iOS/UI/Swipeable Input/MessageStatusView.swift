@@ -15,7 +15,7 @@ struct MessageStatusView: View {
 
     var body: some View {
         HStack {
-            MessageReadView(config: self.config)
+            MessageDeliveryStatusView(config: self.config)
 
             // Don't show the replies view if there aren't any replies.
             if self.config.replyCount > 0 {
@@ -27,7 +27,7 @@ struct MessageStatusView: View {
 }
 
 /// A subview of the message status view that specifically shows read status of message.
-private struct MessageReadView: View {
+private struct MessageDeliveryStatusView: View {
     
     @ObservedObject var config: MessageDetailViewState
     
@@ -45,7 +45,7 @@ private struct MessageReadView: View {
             }
 
             MessageDeliveryStatusUIViewRepresentable(message: self.$config.message,
-                                                 readingState: self.$config.readingState)
+                                                     updatingState: self.$config.updatingState)
                 .frame(width: 25)
 
             Spacer.length(.standard)
