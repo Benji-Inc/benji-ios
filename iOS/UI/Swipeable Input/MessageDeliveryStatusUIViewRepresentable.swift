@@ -48,7 +48,6 @@ class MessageDeliveryStatusUIView: BaseView {
     let readStatusView = AnimationView(name: "visibility")
     let deliveryStatusView = AnimationView(name: "checkmark")
     let errorStatusView = AnimationView(name: "alertCircle")
-    let statusLabel = ThemeLabel(font: .small)
 
     init(readingState: Binding<ReadingState>) {
         self.readingState = readingState
@@ -81,8 +80,6 @@ class MessageDeliveryStatusUIView: BaseView {
         self.errorStatusView.currentProgress = 0
         self.errorStatusView.setValueProvider(colorProvider, keypath: keypath)
         self.errorStatusView.contentMode = .scaleAspectFit
-
-        self.addSubview(self.statusLabel)
     }
 
     override func layoutSubviews() {
@@ -91,14 +88,12 @@ class MessageDeliveryStatusUIView: BaseView {
         self.readStatusView.expandToSuperviewSize()
         self.deliveryStatusView.expandToSuperviewSize()
         self.errorStatusView.expandToSuperviewSize()
-        self.statusLabel.expandToSuperviewSize()
     }
 
     func update(with message: Messageable, readingState: ReadingState) {
         self.readStatusView.isVisible = false
         self.deliveryStatusView.isVisible = false
         self.errorStatusView.isVisible = false
-        self.statusLabel.isVisible = false
 
         if message.isFromCurrentUser {
             self.updateForCurrentUserMessage(message, readingState: readingState)
@@ -112,15 +107,10 @@ class MessageDeliveryStatusUIView: BaseView {
                                                              messageId: message.id).message else { return }
 
         switch chatMessage.localState {
-        case .pendingSync, .syncing, .pendingSend, .sending:
-            // Show sending message ui
-            self.statusLabel.isVisible = true
-            self.statusLabel.text = "Sending"
+        case .pendingSync, .syncing, .pendingSend, .sending, .deleting:
+            break
         case .syncingFailed, .sendingFailed, .deletingFailed:
             self.errorStatusView.isVisible = true
-        case .deleting:
-            self.statusLabel.isVisible = true
-            self.statusLabel.text = "Deleting"
         case .none:
             if chatMessage.isConsumed {
                 self.readStatusView.isVisible = true

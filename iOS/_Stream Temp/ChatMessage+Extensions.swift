@@ -107,6 +107,10 @@ extension Message: Messageable {
         return emotion
     }
 
+    static func message(with cid: ConversationId, messageId: MessageId) -> Message {
+        return MessageController.controller(cid, messageId: messageId).message!
+    }
+
     func setToConsumed() async throws {
         let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
         try await controller.addReaction(with: .read)

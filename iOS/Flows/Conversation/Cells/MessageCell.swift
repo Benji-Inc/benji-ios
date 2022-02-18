@@ -87,17 +87,11 @@ class MessageCell: UICollectionViewCell {
         }
     }
 
-    var messageController: MessageController?
-    var cancellables = Set<AnyCancellable>()
-
     func configure(with message: Messageable) {
         self.content.configure(with: message)
 
         self.messageState.message = message
 
-        self.messageController = MessageController.controller(try! ConversationId(cid: message.conversationId),
-                                                              messageId: message.id)
-        
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
 
