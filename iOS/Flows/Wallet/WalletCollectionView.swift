@@ -18,7 +18,7 @@ class WalletCollectionView: CollectionView {
         let topOffset = padding.doubled + 20
         self.contentInset = UIEdgeInsets(top: topOffset,
                                          left: 0,
-                                         bottom: 0,
+                                         bottom: 100,
                                          right: 0)
     }
     
