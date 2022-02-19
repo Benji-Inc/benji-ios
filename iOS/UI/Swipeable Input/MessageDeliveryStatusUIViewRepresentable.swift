@@ -100,7 +100,7 @@ class MessageDeliveryStatusUIView: BaseView {
             }
         case .reading:
             self.readStatusView.isVisible = true
-            self.readStatusView.stop()
+            self.readStatusView.currentProgress = 1
             self.readStatusView.play(fromProgress: 1, toProgress: 0, loopMode: .playOnce)
         case .read:
             self.readStatusView.isVisible = true
