@@ -33,7 +33,22 @@ extension Message: Messageable {
         return self.author
     }
 
-    var status: MessageStatus {
+    var deliveryStatus: DeliveryStatus {
+        if let localState = self.localState {
+            switch localState {
+            case .pendingSend, .sending:
+                return .sending
+            case .sendingFailed, .deletingFailed:
+                return .error
+            case .pendingSync, .syncing, .syncingFailed, .deleting:
+                break
+            }
+        }
+
+        if self.isConsumed {
+            return .read
+        }
+
         return .sent
     }
 

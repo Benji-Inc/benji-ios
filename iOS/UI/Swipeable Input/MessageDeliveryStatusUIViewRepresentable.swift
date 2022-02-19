@@ -12,52 +12,25 @@ import StreamChat
 
 struct MessageDeliveryStatusUIViewRepresentable: UIViewRepresentable {
 
-    enum UpdatingState {
-        case notUpdating
-        case updating
-    }
-
-    enum DeliveryStatus {
-        case sending
-        case sent
-        case reading
-        case read
-        case error
-    }
-
     @Binding var message: Messageable?
-    @Binding var updatingState: UpdatingState
+    @Binding var deliveryStatus: DeliveryStatus
 
     func makeUIView(context: UIViewRepresentableContext<MessageDeliveryStatusUIViewRepresentable>) -> MessageDeliveryStatusUIView {
-        return MessageDeliveryStatusUIView(readingState: self.$updatingState)
+        return MessageDeliveryStatusUIView()
     }
 
     func updateUIView(_ uiView: MessageDeliveryStatusUIView, context: Context) {
         guard let message = self.message else { return }
 
-        uiView.update(with: message, readingState: self.updatingState)
+        uiView.update(with: message, deliveryStatus: self.deliveryStatus)
     }
 }
 
 class MessageDeliveryStatusUIView: BaseView {
 
-    typealias ReadingState = MessageDeliveryStatusUIViewRepresentable.UpdatingState
-
-    var readingState: Binding<ReadingState>
-
-    let readStatusView = AnimationView(name: "visibility")
-    let deliveryStatusView = AnimationView(name: "checkmark")
-    let errorStatusView = AnimationView(name: "alertCircle")
-
-    init(readingState: Binding<ReadingState>) {
-        self.readingState = readingState
-
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let readStatusView = AnimationView(name: "visibility")
+    private let sendStatus = AnimationView(name: "checkmark")
+    private let errorStatusView = AnimationView(name: "alertCircle")
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -65,20 +38,22 @@ class MessageDeliveryStatusUIView: BaseView {
         let keypath = AnimationKeypath(keys: ["**", "Color"])
         let colorProvider = ColorValueProvider(ThemeColor.D1.color.lottieColorValue)
 
+        self.addSubview(self.sendStatus)
+        self.sendStatus.currentProgress = 0
+        self.sendStatus.setValueProvider(colorProvider, keypath: keypath)
+        self.sendStatus.contentMode = .scaleAspectFit
+
         self.addSubview(self.readStatusView)
         self.readStatusView.currentProgress = 1
         self.readStatusView.setValueProvider(colorProvider, keypath: keypath)
         self.readStatusView.animationSpeed = 0.25
         self.readStatusView.contentMode = .scaleAspectFit
 
-        self.addSubview(self.deliveryStatusView)
-        self.deliveryStatusView.currentProgress = 0
-        self.deliveryStatusView.setValueProvider(colorProvider, keypath: keypath)
-        self.deliveryStatusView.contentMode = .scaleAspectFit
+        let errorColorProvider = ColorValueProvider(ThemeColor.red.color.lottieColorValue)
 
         self.addSubview(self.errorStatusView)
         self.errorStatusView.currentProgress = 0
-        self.errorStatusView.setValueProvider(colorProvider, keypath: keypath)
+        self.errorStatusView.setValueProvider(errorColorProvider, keypath: keypath)
         self.errorStatusView.contentMode = .scaleAspectFit
     }
 
@@ -86,87 +61,54 @@ class MessageDeliveryStatusUIView: BaseView {
         super.layoutSubviews()
 
         self.readStatusView.expandToSuperviewSize()
-        self.deliveryStatusView.expandToSuperviewSize()
+        self.sendStatus.expandToSuperviewSize()
         self.errorStatusView.expandToSuperviewSize()
     }
 
-    func update(with message: Messageable, readingState: ReadingState) {
+    private var previousMessage: Messageable?
+    private var previousStatus: DeliveryStatus?
+
+    func update(with message: Messageable, deliveryStatus: DeliveryStatus) {
+        // Ignore redundant states
+        guard message.id != self.previousMessage?.id
+                || deliveryStatus != self.previousStatus else { return }
+
+        defer {
+            self.previousMessage = message
+            self.previousStatus = deliveryStatus
+        }
+
         self.readStatusView.isVisible = false
-        self.deliveryStatusView.isVisible = false
+        self.sendStatus.isVisible = false
         self.errorStatusView.isVisible = false
 
-        if message.isFromCurrentUser {
-            self.updateForCurrentUserMessage(message, readingState: readingState)
-        } else {
-            self.updateForNonUserMessage(message, readingState: readingState)
-        }
-    }
-
-    private func updateForCurrentUserMessage(_ message: Messageable, readingState: ReadingState) {
-        guard let chatMessage = MessageController.controller(message.streamCid,
-                                                             messageId: message.id).message else { return }
-
-        switch chatMessage.localState {
-        case .pendingSync, .syncing, .pendingSend, .sending, .deleting:
+        switch deliveryStatus {
+        case .sending:
             break
-        case .syncingFailed, .sendingFailed, .deletingFailed:
-            self.errorStatusView.isVisible = true
-        case .none:
-            if chatMessage.isConsumed {
+        case .sent:
+            if !message.isFromCurrentUser {
                 self.readStatusView.isVisible = true
-            } else {
-                self.deliveryStatusView.isVisible = true
-            }
-        }
-
-        switch readingState {
-        case .notUpdating:
-            self.errorStatusView.stop()
-            self.deliveryStatusView.stop()
-
-            if self.errorStatusView.isVisible {
-                self.errorStatusView.currentProgress = 1
-            }
-            if self.deliveryStatusView.isVisible {
-                self.deliveryStatusView.currentProgress = 1
-            }
-            if self.readStatusView.isVisible {
-                self.readStatusView.currentProgress = 0
-            }
-        case .updating:
-            if self.errorStatusView.isVisible && !self.errorStatusView.isAnimationPlaying {
-                self.errorStatusView.play { finished in
-                    self.readingState.wrappedValue = .notUpdating
-                }
-            }
-
-            if self.deliveryStatusView.isVisible && !self.deliveryStatusView.isAnimationPlaying {
-                self.deliveryStatusView.play { finished in
-                    self.readingState.wrappedValue = .notUpdating
-                }
-            }
-        }
-    }
-
-    private func updateForNonUserMessage(_ message: Messageable, readingState: ReadingState) {
-        self.readStatusView.isVisible = true
-
-        switch readingState {
-        case .notUpdating:
-            self.readStatusView.stop()
-            if message.isConsumed {
-                self.readStatusView.currentProgress = 0
-            } else {
                 self.readStatusView.currentProgress = 1
-            }
-        case .updating:
-            if !self.readStatusView.isAnimationPlaying {//}&& uiView.currentProgress > 0 {
-                self.readStatusView.play(fromProgress: 1, toProgress: 0, loopMode: .playOnce) { finished in
-                    if finished {
-                        self.readingState.wrappedValue = .notUpdating
-                    }
+            } else {
+                self.sendStatus.isVisible = true
+                if self.previousStatus == .sending {
+                    self.sendStatus.stop()
+                    self.sendStatus.play()
+                } else {
+                    self.sendStatus.currentProgress = 1
                 }
             }
+        case .reading:
+            self.readStatusView.isVisible = true
+            self.readStatusView.stop()
+            self.readStatusView.play(fromProgress: 1, toProgress: 0, loopMode: .playOnce)
+        case .read:
+            self.readStatusView.isVisible = true
+            self.readStatusView.currentProgress = 0
+        case .error:
+            self.errorStatusView.isVisible = true
+            self.errorStatusView.stop()
+            self.errorStatusView.play()
         }
     }
 }

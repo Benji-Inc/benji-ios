@@ -12,7 +12,7 @@ import SwiftUI
 class MessageDetailViewState: ObservableObject {
 
     @Published var message: Messageable?
-    @Published var updatingState: MessageDeliveryStatusUIViewRepresentable.UpdatingState
+    @Published var deliveryStatus: DeliveryStatus
 
     var emotion: Emotion? {
         return self.message?.emotion
@@ -29,7 +29,7 @@ class MessageDetailViewState: ObservableObject {
 
     init(message: Messageable?) {
         self.message = message
-        self.updatingState = .notUpdating
+        self.deliveryStatus = .sent
     }
 }
 

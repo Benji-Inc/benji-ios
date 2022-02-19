@@ -17,7 +17,7 @@ struct MockMessage: Messageable {
     var authorId: String = UUID().uuidString
     var attributes: [String : Any]? = nil
     var avatar: Avatar? = nil
-    var status: MessageStatus = .delivered
+    var deliveryStatus: DeliveryStatus = .sent
     var context: MessageContext = .respectful
     var hasBeenConsumedBy: [Avatar] = [SystemAvatar(userObjectId: nil,
                                                     givenName: "system",

@@ -16,6 +16,7 @@ struct MessageStatusView: View {
     var body: some View {
         HStack {
             MessageDeliveryStatusView(config: self.config)
+                .opacity(self.config.deliveryStatus == .sending ? 0.5 : 1)
 
             // Don't show the replies view if there aren't any replies.
             if self.config.replyCount > 0 {
@@ -45,7 +46,7 @@ private struct MessageDeliveryStatusView: View {
             }
 
             MessageDeliveryStatusUIViewRepresentable(message: self.$config.message,
-                                                     updatingState: self.$config.updatingState)
+                                                     deliveryStatus: self.$config.deliveryStatus)
                 .frame(width: 25)
 
             Spacer.length(.standard)
