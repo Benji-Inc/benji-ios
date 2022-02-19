@@ -12,13 +12,10 @@ import Contacts
 import UIKit
 import Localization
 
-protocol PeopleViewControllerDelegate: AnyObject {
-    func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
-}
 
 class PeopleViewController: DiffableCollectionViewController<PeopleCollectionViewDataSource.SectionType, PeopleCollectionViewDataSource.ItemType, PeopleCollectionViewDataSource> {
-
-    weak var delegate: PeopleViewControllerDelegate?
+    
+    let leftItem = UIBarButtonItem(title: "Invites Left", image: nil, primaryAction: nil, menu: nil)
 
     private(set) var reservations: [Reservation] = []
     
@@ -57,10 +54,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.setupNavigationBar()
 
         self.view.addSubview(self.button)
-
-        self.button.didSelect { [unowned self] in
-            self.delegate?.peopleView(self, didSelect: self.selectedItems)
-        }
         
         KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self]  _ in
             self.view.setNeedsLayout()
@@ -70,8 +63,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private func setupNavigationBar() {
         self.navigationItem.title = "Contacts"
 
-        let leftItem = UIBarButtonItem(title: "Groups", image: nil, primaryAction: nil, menu: nil)
-        leftItem.tintColor = ThemeColor.D1.color
+        self.leftItem.tintColor = ThemeColor.D1.color
         
         let cancel = UIAction { _ in
             self.dismiss(animated: true, completion: nil)
@@ -83,7 +75,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         search.searchBar.tintColor = ThemeColor.D1.color
         self.navigationItem.searchController = search
         
-        self.navigationItem.leftBarButtonItem = leftItem
+        self.leftItem.title = ""
+        
+        self.navigationItem.leftBarButtonItem = self.leftItem
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -96,8 +90,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.loadContacts()
         }
     }
-    
-    
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -172,7 +164,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func getButtonTitle() -> Localized {
-        return "Add \(self.selectedPeople.count) people"
+        let text = self.selectedPeople.count == 1 ? "person" : "people"
+        return "Add \(self.selectedPeople.count) \(text)"
     }
 
     // MARK: Data Loading
@@ -197,6 +190,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private func loadContacts() {
         Task {
             self.reservations = await Reservation.getAllUnclaimed()
+            self.updateNavLeftItem()
             
             let contacts = await ContactsManger.shared.fetchContacts().compactMap({ contact in
                 return Person(withContact: contact)
@@ -211,6 +205,16 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             await self.dataSource.appendItems(contactItems, toSection: .people)
             
         }.add(to: self.autocancelTaskPool)
+    }
+    
+    private func updateNavLeftItem() {
+        if self.reservations.count == 0 {
+            self.leftItem.title = "0 Invites"
+        } else if self.reservations.count == 1 {
+            self.leftItem.title = "1 Invite"
+        } else {
+            self.leftItem.title = "\(self.reservations.count) Invites"
+        }
     }
 
     override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {

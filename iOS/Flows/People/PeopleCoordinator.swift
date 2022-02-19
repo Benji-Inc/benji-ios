@@ -15,7 +15,10 @@ class PeopleCoordinator: PresentableCoordinator<[Person]> {
     
     var messageComposer: MessageComposerViewController?
 
-    var peopleToInvite: [Person] = []
+    var peopleToInvite: [Person] {
+        return self.peopleNavController.peopleVC.selectedPeople
+    }
+    
     var invitedPeople: [Person] = []
     
     var inviteIndex: Int = 0
@@ -28,23 +31,8 @@ class PeopleCoordinator: PresentableCoordinator<[Person]> {
 
     override func start() {
         super.start()
-
-        self.peopleNavController.peopleVC.delegate = self
-    }
-}
-
-extension PeopleCoordinator: PeopleViewControllerDelegate {
-
-    nonisolated func peopleView(_ controller: PeopleViewController,
-                                didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
         
-        Task.onMainActor {
-            self.peopleToInvite = items.compactMap({ item in
-                switch item {
-                case .person(let person):
-                    return person 
-                }
-            })
+        self.peopleNavController.peopleVC.button.didSelect { [unowned self] in
             self.peopleNavController.prepareForInvitations()
             
             Task {

@@ -20,6 +20,8 @@ enum ReservationKey: String {
 }
 
 final class Reservation: PFObject, PFSubclassing {
+    
+    static let domainURL = "https://testflight.apple.com/join/YnJTwvSL"
 
     static func parseClassName() -> String {
         return String(describing: self)
@@ -105,72 +107,72 @@ extension Reservation: UIActivityItemSource {
     }
 
     var message: String? {
-        guard let link = self.link else { return nil }
-        return "RSVP code: \(String(optional: self.objectId))\nClaim your RSVP by tapping 👇\n\(link), and then entering the code."
+        //guard let link = self.link else { return nil }
+        return "RSVP code: \(String(optional: self.objectId))\nClaim your RSVP by tapping 👇\n\(Reservation.domainURL), and then entering the code."
     }
 
     var reminderMessage: String? {
-        guard let link = self.link else { return nil }
-        return "RSVP code: \(String(optional: self.objectId))\nJibber is an exclusive place to be social. I saved you a spot. Tap👇\n\(link)"
+        //guard let link = self.link else { return nil }
+        return "RSVP code: \(String(optional: self.objectId))\nJibber is an exclusive place to be social. I saved you a spot. Tap👇\n\(Reservation.domainURL)"
     }
 
-    func prepareMetadata(andUpdate statusables: [Statusable]) async throws {
-        // Trigger the loading event for all statusables
-        await withTaskGroup(of: Void.self) { group in
-            for statusable in statusables {
-                group.addTask {
-                    await statusable.handleEvent(status: .loading)
-                }
-            }
-        }
-
-        do {
-            let _: Void = try await withCheckedThrowingContinuation { continuation in
-                let metadataProvider = LPMetadataProvider()
-
-                let domainURL = "https://testflight.apple.com/join/YnJTwvSL"
-                self.link = domainURL
-//                let domainURL = "https://joinjibber.com"
-//                if let objectId = self.objectId {
-//                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
+//    func prepareMetadata(andUpdate statusables: [Statusable]) async throws {
+//        // Trigger the loading event for all statusables
+//        await withTaskGroup(of: Void.self) { group in
+//            for statusable in statusables {
+//                group.addTask {
+//                    await statusable.handleEvent(status: .loading)
 //                }
-
-                if let url = URL(string: domainURL) {
-                    metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
-                        Task.onMainActor {
-                            if let e = error {
-
-                                continuation.resume(throwing: e)
-                            } else {
-                                self.metadata = metadata
-
-                                continuation.resume(returning: ())
-                            }
-                        }
-                    }
-                } else {
-                    continuation.resume(throwing: ClientError.generic)
-                }
-            }
-
-            await withTaskGroup(of: Void.self) { group in
-                for statusable in statusables {
-                    group.addTask {
-                        await statusable.handleEvent(status: .complete)
-                    }
-                }
-            }
-        } catch {
-            await withTaskGroup(of: Void.self) { group in
-                for statusable in statusables {
-                    group.addTask {
-                        await statusable.handleEvent(status: .error(error.localizedDescription))
-                    }
-                }
-            }
-            throw error
-        }
-    }
+//            }
+//        }
+//
+//        do {
+//            let _: Void = try await withCheckedThrowingContinuation { continuation in
+//                let metadataProvider = LPMetadataProvider()
+//
+//
+//                self.link = domainURL
+////                let domainURL = "https://joinjibber.com"
+////                if let objectId = self.objectId {
+////                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
+////                }
+//
+//                if let url = URL(string: domainURL) {
+//                    metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
+//                        Task.onMainActor {
+//                            if let e = error {
+//
+//                                continuation.resume(throwing: e)
+//                            } else {
+//                                self.metadata = metadata
+//
+//                                continuation.resume(returning: ())
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    continuation.resume(throwing: ClientError.generic)
+//                }
+//            }
+//
+//            await withTaskGroup(of: Void.self) { group in
+//                for statusable in statusables {
+//                    group.addTask {
+//                        await statusable.handleEvent(status: .complete)
+//                    }
+//                }
+//            }
+//        } catch {
+//            await withTaskGroup(of: Void.self) { group in
+//                for statusable in statusables {
+//                    group.addTask {
+//                        await statusable.handleEvent(status: .error(error.localizedDescription))
+//                    }
+//                }
+//            }
+//            throw error
+//        }
+//    }
 
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return URL(string: self.link!)!

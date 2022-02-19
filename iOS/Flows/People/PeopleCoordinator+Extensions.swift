@@ -76,9 +76,9 @@ extension PeopleCoordinator {
         do {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
             // Ensure that the reservation metadata is prepared before we show the reservation
-            try await reservation.prepareMetadata(andUpdate: [])
-            try await reservation.saveLocalThenServer()
+            //try await reservation.prepareMetadata(andUpdate: [])
             try await self.showConnectionAlert(for: matchingUser)
+            try await reservation.saveLocalThenServer()
         } catch {
             if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
