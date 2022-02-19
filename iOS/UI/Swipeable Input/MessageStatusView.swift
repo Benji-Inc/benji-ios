@@ -42,14 +42,14 @@ private struct MessageDeliveryStatusView: View {
                     .fontType(.small)
                     .color(.T1)
 
-                Spacer.length(.standard)
+                Spacer.length(.short)
             }
 
             MessageDeliveryStatusUIViewRepresentable(message: self.$config.message,
                                                      deliveryStatus: self.$config.deliveryStatus)
                 .frame(width: 25)
 
-            Spacer.length(.standard)
+            Spacer.length(.short)
         }
         .frame(minHeight: 25, idealHeight: 25, maxHeight: 25)
         .background(

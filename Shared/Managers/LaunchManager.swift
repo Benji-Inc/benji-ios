@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import PostHog
 #if !APPCLIP && !NOTIFICATION
 import StreamChat
 #endif
@@ -65,7 +66,13 @@ class LaunchManager {
             _ = ContactsManger.shared
         }
 #endif
+        let configuration = PHGPostHogConfiguration(apiKey: "phc_nTIZgY0M0QgX0QB14Ux428lvGVnUeddJCqEFEo4vt9n", host: "https://app.posthog.com")
 
+        configuration.captureApplicationLifecycleEvents = true; // Record certain application events automatically!
+        configuration.recordScreenViews = true; // Record screen views automatically!
+
+        PHGPostHog.setup(with: configuration)
+        
         let launchStatus = await self.initializeUserData(with: nil)
         try? await PFConfig.awaitConfig()
         return launchStatus
