@@ -28,7 +28,7 @@ class MessageCell: UICollectionViewCell {
     var shouldShowDetailBar: Bool = true
 
     /// If true, this cell's message details are fully visible.
-    @Published private(set) var messageDetailState: MessageDetailState = MessageDetailState()
+    @Published private(set) var messageDetailState = MessageDetailState()
     private var subscriptions = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
