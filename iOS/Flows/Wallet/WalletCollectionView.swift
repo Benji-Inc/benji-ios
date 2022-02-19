@@ -12,9 +12,22 @@ class WalletCollectionView: CollectionView {
     
     init() {
         super.init(layout: WalletCollectionViewLayout())
+        self.showsVerticalScrollIndicator = false
+        
+        let padding = Theme.ContentOffset.xtraLong.value
+        let topOffset = padding.doubled + 20
+        self.contentInset = UIEdgeInsets(top: topOffset,
+                                         left: 0,
+                                         bottom: 0,
+                                         right: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
     }
 }

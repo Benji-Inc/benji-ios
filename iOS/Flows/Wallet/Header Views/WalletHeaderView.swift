@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import StoreKit
 
-class WalletHeaderView: UICollectionReusableView {
+class WalletHeaderView: BaseView {
     
     private let topLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true, showDetail: true)
     private let bottomLeftDetailView = WalletHeaderDetailView(shouldPinLeft: true, showDetail: false)
@@ -34,17 +35,9 @@ class WalletHeaderView: UICollectionReusableView {
         return formatter
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initializeViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.initializeViews()
-    }
-    
-    func initializeViews() {
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
         self.addSubview(self.topLeftDetailView)
         self.addSubview(self.bottomLeftDetailView)
         self.addSubview(self.topRightDetailView)
@@ -56,7 +49,7 @@ class WalletHeaderView: UICollectionReusableView {
         }
     }
     
-    func configure(with items: [WalletCollectionViewDataSource.ItemType]) {
+    func configure(with items: [Transaction]) {
         self.topLeftDetailView.configure(with: "Jibs", subtitle: "Reward Credits")
         Task {
             guard let user = try? await User.current()?.retrieveDataIfNeeded(),
@@ -71,16 +64,11 @@ class WalletHeaderView: UICollectionReusableView {
                 self.bottomLeftDetailView.configure(with: "Jibber", subtitle: "Member since \(dateString)")
             }
             
-            let transactions: [Transaction] = items.compactMap { type in
-                switch type {
-                case .transaction(let transaction):
-                    return transaction
-                }
-            }
-            
             self.topRightDetailView.subtitleLabel.setText("Earned for activity")
-            self.bottomRightDetailView.subtitleLabel.setText("Credit Balance")
-            self.startCalculatingInterest(for: transactions)
+            self.bottomRightDetailView.subtitleLabel.setText("Total Balance")
+            self.startCalculatingInterest(for: items)
+            
+            self.layoutNow()
         }
     }
 
@@ -130,11 +118,5 @@ class WalletHeaderView: UICollectionReusableView {
         self.imageView.centerOnX()
         self.imageView.centerY = self.centerY - Theme.ContentOffset.screenPadding.value.half
         self.imageView.centerY += 10
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        self.interestTask?.cancel()
     }
 }

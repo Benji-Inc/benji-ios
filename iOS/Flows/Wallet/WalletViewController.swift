@@ -20,6 +20,17 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
     
+    private let walletGradientView = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
+                                                         ThemeColor.walletBackground.color.cgColor,
+                                                         ThemeColor.walletBackground.color.cgColor,
+                                                         ThemeColor.walletBackground.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .topCenter,
+                                                  endPoint: .bottomCenter)
+    private let backgroundView = BaseView()
+
+    lazy var header = WalletHeaderView()
+    lazy var segmentControl = WalletSegmentControl()
+    
     init() {
         super.init(with: WalletCollectionView())
     }
@@ -34,6 +45,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
 
     override func initializeViews() {
         super.initializeViews()
+        
+        self.collectionView.allowsMultipleSelection = false 
 
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
@@ -43,11 +56,29 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
+        self.view.addSubview(self.header)
+        self.backgroundView.set(backgroundColor: .walletBackground)
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
+        
+        self.backgroundView.layer.cornerRadius = Theme.cornerRadius
+        self.backgroundView.clipsToBounds = true
+        
+        self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
+        self.view.insertSubview(self.segmentControl, aboveSubview: self.collectionView)
+        self.view.insertSubview(self.walletGradientView, belowSubview: self.segmentControl)
+        
+        self.walletGradientView.layer.cornerRadius = Theme.cornerRadius
+        self.walletGradientView.clipsToBounds = true
     }
     
     override func viewDidLayoutSubviews() {
+        
+        self.header.height = 240
+        self.header.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
+        self.header.pin(.top)
+        self.header.centerOnX()
+        
         super.viewDidLayoutSubviews()
         
         self.topGradientView.expandToSuperviewWidth()
@@ -57,29 +88,51 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
         self.bottomGradientView.pin(.bottom)
+        
+        let padding = Theme.ContentOffset.xtraLong.value
+        let totalWidth = self.collectionView.width - padding.doubled
+        let segmentWidth = totalWidth * 0.3333
+        self.segmentControl.sizeToFit()
+        self.segmentControl.setWidth(segmentWidth, forSegmentAt: 0)
+        self.segmentControl.setWidth(segmentWidth, forSegmentAt: 1)
+        self.segmentControl.setWidth(segmentWidth, forSegmentAt: 2)
+
+        self.segmentControl.width = self.collectionView.width - padding.doubled
+        self.segmentControl.centerOnX()
+        self.segmentControl.match(.top, to: .top, of: self.collectionView, offset: .xtraLong)
+        
+        self.backgroundView.frame = self.collectionView.frame
+        self.backgroundView.height = self.collectionView.height + 100
+        
+        self.walletGradientView.width = self.collectionView.width
+        self.walletGradientView.top = self.collectionView.top
+        self.walletGradientView.height = padding.doubled + self.segmentControl.height
+        self.walletGradientView.centerOnX()
+    }
+    
+    override func layoutCollectionView(_ collectionView: UICollectionView) {
+        self.collectionView.match(.top, to: .bottom, of: self.header)
+        self.collectionView.height = self.view.height - self.header.bottom
+        self.collectionView.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
+        self.collectionView.centerOnX()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.segmentControl.didSelectSegmentIndex = { [unowned self] index in
+            switch index {
+            case .achievements:
+                self.loadAchievements()
+            case .you:
+                self.loadCurrentTransactions()
+            case .connections:
+                self.loadConnectionsTransactions()
+            }
+        }
                         
         self.view.set(backgroundColor: .B0)
-        
         self.loadInitialData()
-    }
-    
-    override func collectionViewDataWasLoaded() {
-        self.dataSource.$segmentIndex
-            .removeDuplicates()
-            .mainSink { index in
-                switch index {
-                case .rewards:
-                    self.loadRewards()
-                case .you:
-                    self.loadCurrentTransactions()
-                case .connections:
-                    self.loadConnectionsTransactions()
-                }
-            }.store(in: &self.cancellables)
     }
 
     // MARK: Data Loading
@@ -94,6 +147,10 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
 
         guard let transactions = try? await Transaction.fetchAllCurrentTransactions() else { return data }
 
+        Task.onMainActor {
+            self.header.configure(with: transactions)
+        }
+        
         data[.transactions] = transactions.compactMap({ transaction in
             return .transaction(transaction)
         })
@@ -101,28 +158,39 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         return data
     }
     
-    private func loadRewards() {
-        Task {
-            await self.load(transactions: [])
+    private func loadAchievements() {
+        Task { [weak self] in
+            await self?.loadAchievements()
         }.add(to: self.autocancelTaskPool)
     }
     
     private func loadCurrentTransactions() {
-        Task {
+        Task { [weak self] in
             guard let transactions = try? await Transaction.fetchAllCurrentTransactions() else { return }
-            await self.load(transactions: transactions)
+            await self?.load(transactions: transactions)
         }.add(to: self.autocancelTaskPool)
     }
     
     private func loadConnectionsTransactions() {
-        Task {
+        Task { [weak self] in
             guard let transactions = try? await Transaction.fetchAllConnectionsTransactions() else {
-                await self.dataSource.deleteAllItems()
+                await self?.dataSource.deleteAllItems()
                 return
             }
             
-            await self.load(transactions: transactions)
+            await self?.load(transactions: transactions)
         }.add(to: self.autocancelTaskPool)
+    }
+    
+    private func loadAchievements() async {
+        let items = AchievementType.allCases.map { type in
+            return WalletCollectionViewDataSource.ItemType.achievement(type)
+        }
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(items, in: .achievements)
+        snapshot.setItems([], in: .transactions)
+        await self.dataSource.apply(snapshot)
     }
     
     private func load(transactions: [Transaction]) async {
@@ -130,6 +198,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             return WalletCollectionViewDataSource.ItemType.transaction(transaction)
         }
         var snapshot = self.dataSource.snapshot()
+        snapshot.setItems([], in: .achievements)
         snapshot.setItems(items, in: .transactions)
         await self.dataSource.apply(snapshot)
     }
