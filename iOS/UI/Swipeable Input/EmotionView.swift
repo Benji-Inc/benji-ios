@@ -22,7 +22,7 @@ extension Binding {
 
 struct EmotionView: View {
     
-    @ObservedObject var config: MessageDetailConfig
+    @ObservedObject var config: MessageDetailViewState
         
     var body: some View {
         HStack {
@@ -50,7 +50,7 @@ struct EmotionView: View {
 struct EmotionView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let config = MessageDetailConfig(message: nil)
+            let config = MessageDetailViewState(message: nil)
 
             EmotionView(config: config)
         }

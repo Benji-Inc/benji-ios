@@ -17,9 +17,13 @@ struct MockMessage: Messageable {
     var authorId: String = UUID().uuidString
     var attributes: [String : Any]? = nil
     var avatar: Avatar? = nil
-    var status: MessageStatus = .delivered
+    var deliveryStatus: DeliveryStatus = .sent
     var context: MessageContext = .respectful
-    var hasBeenConsumedBy: [Avatar] = []
+    var hasBeenConsumedBy: [Avatar] = [SystemAvatar(userObjectId: nil,
+                                                    givenName: "system",
+                                                    familyName: "avatar",
+                                                    image: nil,
+                                                    handle: "system")]
     var kind: MessageKind = .text("Some Text")
     var isDeleted: Bool = false
     var totalReplyCount: Int = 0

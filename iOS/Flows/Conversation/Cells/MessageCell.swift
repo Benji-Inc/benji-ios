@@ -22,7 +22,7 @@ class MessageCell: UICollectionViewCell {
     let content = MessageContentView()
 
     // Detail View
-    @ObservedObject private var messageState = MessageDetailConfig(message: nil)
+    @ObservedObject private var messageState = MessageDetailViewState(message: nil)
     private lazy var detailView = MessageDetailView(config: self.messageState)
     private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
@@ -89,9 +89,10 @@ class MessageCell: UICollectionViewCell {
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
-
-        self.messageState.message = message
         
+        self.messageState.message = message
+        self.messageState.deliveryStatus = message.deliveryStatus
+
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
 
@@ -116,7 +117,7 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
-        let areDetailsShown = messageLayoutAttributes.detailAlpha == 1.0 && self.shouldShowDetailBar
+        let areDetailsShown = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
         let isInfocus = messageLayoutAttributes.sectionFocusAmount == 1
         self.messageDetailState = MessageDetailState(detailShown: areDetailsShown, isInFocus: isInfocus)
         self.handleDetailsShown(areDetailsShown)
@@ -130,6 +131,10 @@ class MessageCell: UICollectionViewCell {
         // If the detail visibility changes for a message, we always want to cancel its tasks.
         self.consumeMessageTask?.cancel()
         self.consumeMessageTask = nil
+
+        if !areDetailsShown, let message = self.messageState.message {
+            self.messageState.deliveryStatus = message.deliveryStatus
+        }
 
         // If this item is showing its details, we may want to start the consumption process for it.
         guard areDetailsShown, ChatUser.currentUserRole != .anonymous else { return}
@@ -149,6 +154,7 @@ class MessageCell: UICollectionViewCell {
         guard message.canBeConsumed else { return }
 
         self.consumeMessageTask = Task {
+            self.messageState.deliveryStatus = .reading
             await Task.snooze(seconds: 2)
 
             guard !Task.isCancelled else { return }

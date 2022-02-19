@@ -31,7 +31,6 @@ extension Conversation {
     }
 
     var title: String? {
-
         if let friendlyName = self.name, !friendlyName.isEmpty {
             return localized(friendlyName.capitalized)
         }

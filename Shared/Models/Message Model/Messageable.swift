@@ -7,11 +7,13 @@
 //
 
 import Foundation
+import StreamChat
 
-enum MessageStatus: String {
-    case sent // Message was sent as a system message
-    case delivered // Message was successfully delivered by Twilio
-    case unknown
+enum DeliveryStatus {
+    case sending
+    case sent
+    case reading
+    case read
     case error
 }
 
@@ -24,7 +26,7 @@ protocol Messageable {
     var authorId: String { get }
     var attributes: [String: Any]? { get }
     var avatar: Avatar? { get }
-    var status: MessageStatus { get }
+    var deliveryStatus: DeliveryStatus { get }
     var context: MessageContext { get }
     var canBeConsumed: Bool { get }
     var isConsumedByMe: Bool { get }
@@ -54,6 +56,10 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
 }
 
 extension Messageable {
+
+    var streamCid: ChannelId {
+        return try! ChannelId(cid: self.conversationId)
+    }
 
     var canBeConsumed: Bool {
         return !self.isConsumedByMe && !self.isFromCurrentUser
