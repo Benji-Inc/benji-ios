@@ -75,7 +75,7 @@ private class BadgeView: BaseView {
     private let bottomView = BaseView()
     
     private let amountLabel = ThemeLabel(font: .mediumBold)
-    private let imageView = UIImageView(image: UIImage(named: "jiblogo"))
+    private let imageView = UIImageView(image: UIImage(named: "Jib"))
     
     override func initializeSubviews() {
         super.initializeSubviews()
