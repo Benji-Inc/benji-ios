@@ -84,6 +84,12 @@ class LaunchManager {
         }
 
 #if !APPCLIP && !NOTIFICATION
+        do {
+            try await ChatClient.initialize(for: user)
+        } catch {
+            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
+        }
+
         return await self.getChatToken(for: user, deepLink: deeplink)
 #else
         return .success(deepLink: deeplink)
@@ -123,27 +129,22 @@ extension LaunchManager {
 
 #if !APPCLIP && !NOTIFICATION
     func getChatToken(for user: User, deepLink: DeepLinkable?) async -> LaunchStatus {
-        do {
-            try await ChatClient.initialize(for: user)
-            if let user = User.current(), user.isAuthenticated {
-                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-            }
-
-            var link = deepLink
-
-            // Used to load the initial conversation when a user has downloaded the full app from an app clip.
-            if let initial = try? await InitialConveration.retrieve() {
-                if let cidString = initial.conversationIdString {
-                    link?.conversationId = try? ConversationId(cid: cidString)
-                }
-
-                link?.deepLinkTarget = .conversation
-            }
-
-            return .success(deepLink: link)
-        } catch {
-            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
+        if let user = User.current(), user.isAuthenticated {
+            await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
         }
+
+        var link = deepLink
+
+        // Used to load the initial conversation when a user has downloaded the full app from an app clip.
+        if let initial = try? await InitialConveration.retrieve() {
+            if let cidString = initial.conversationIdString {
+                link?.conversationId = try? ConversationId(cid: cidString)
+            }
+
+            link?.deepLinkTarget = .conversation
+        }
+
+        return .success(deepLink: link)
     }
 #endif
 }
