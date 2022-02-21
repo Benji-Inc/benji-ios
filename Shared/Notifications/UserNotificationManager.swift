@@ -144,7 +144,7 @@ class UserNotificationManager: NSObject {
             
             try await installation.saveInBackground()
         } catch {
-            print(error)
+            logError(error)
         }
 
         #if IOS
@@ -152,17 +152,7 @@ class UserNotificationManager: NSObject {
             try? await ChatClient.initialize(for: user)
         }
 
-        return await withCheckedContinuation({ continuation in
-            ChatClient.shared.currentUserController().reloadUserIfNeeded { _ in
-                ChatClient.shared.currentUserController().addDevice(token: deviceToken) { error in
-                    if let _ = error {
-                        continuation.resume(returning: ())
-                    } else {
-                        continuation.resume(returning: ())
-                    }
-                }
-            }
-        })
+
         #endif
     }
 }
