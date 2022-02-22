@@ -152,8 +152,10 @@ class UserNotificationManager: NSObject {
         } catch {
             logError(error)
 
-            // If the installation object was deleted off the server, then clear out the local installation
-            // object so we create a new one on next launch.
+            // HACK: If the installation object was deleted off the server,
+            // then clear out the local installation object so we create a new one on next launch.
+            // We're using the private string "_currentInstallation" because Parse prevents us from
+            // deleting Installations normally.
             if error.code == PFErrorCode.errorObjectNotFound.rawValue {
                 try? PFObject.unpinAllObjects(withName: "_currentInstallation")
             }
