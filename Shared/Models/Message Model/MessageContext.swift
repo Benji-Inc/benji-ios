@@ -24,9 +24,20 @@ enum MessageContext: String, CaseIterable {
         case .timeSensitive:
             return "Time Sensitive"
         case .conversational:
-            return "conversational"
+            return "Conversational"
         case .respectful:
             return "Small Talk"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .timeSensitive:
+            return "Notify no matter what"
+        case .conversational:
+            return "Notify if available"
+        case .respectful:
+            return "No need to notify"
         }
     }
     

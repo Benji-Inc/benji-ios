@@ -11,7 +11,7 @@ import UIKit
 
 class DeliveryTypeView: BaseView {
 
-    let imageView = UIImageView()
+    let label = ThemeLabel(font: .small)
     let button = ThemeButton()
 
     var didSelectContext: ((MessageContext) -> Void)?
@@ -19,9 +19,8 @@ class DeliveryTypeView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.imageView)
-        self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
+        self.addSubview(self.label)
+        self.label.textAlignment = .right
         self.addSubview(self.button)
 
         self.set(backgroundColor: .B1withAlpha)
@@ -33,24 +32,31 @@ class DeliveryTypeView: BaseView {
 
         self.button.showsMenuAsPrimaryAction = true
     }
+    
+    func reset() {
+        self.label.setText("This is...")
+        self.button.menu = self.createMenu(for: .respectful)
+        self.setNeedsLayout()
+    }
 
     func configure(for context: MessageContext) {
-        self.imageView.image = context.image
+        self.label.setText(context.displayName)
         self.button.menu = self.createMenu(for: context)
         self.layoutNow()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        self.imageView.squaredSize = 12
+        
+        self.label.setSize(withWidth: 200)
 
         self.height = old_MessageDetailView.height
-        self.width = 25
+        self.width = self.label.width + Theme.ContentOffset.standard.value.doubled
 
         self.pin(.right)
 
-        self.imageView.centerOnXAndY()
+        self.label.centerOnY()
+        self.label.pin(.left, offset: .standard)
         
         self.button.expandToSuperviewWidth()
         self.button.height = 36
@@ -58,49 +64,27 @@ class DeliveryTypeView: BaseView {
     }
 
     private func createMenu(for context: MessageContext) -> UIMenu {
-
-        let state: UIMenuElement.State = context == .respectful ? .on : .off
-        let quitely = UIAction(title: "Small Talk",
-                               subtitle: "No need to notify",
-                               image: MessageContext.respectful.image,
-                               identifier: nil,
-                               discoverabilityTitle: nil,
-                               attributes: [],
-                               state: state) { [unowned self] _ in
-            self.didSelectContext?(.respectful)
-            self.configure(for: .respectful)
-        }
-
-        let urgentState: UIMenuElement.State = context == .timeSensitive ? .on : .off
-
-        let urgent = UIAction(title: "Time Sensitive",
-                              subtitle: "Notify no matter what",
-                              image: MessageContext.timeSensitive.image,
-                              identifier: nil,
-                              discoverabilityTitle: nil,
-                              attributes: [],
-                              state: urgentState) { [unowned self] _ in
-            self.didSelectContext?(.timeSensitive)
-            self.configure(for: .timeSensitive)
-        }
         
-        let conversationalState: UIMenuElement.State = context == .conversational ? .on : .off
-
-        let conversational = UIAction(title: "Conversational",
-                              subtitle: "Notify if available",
-                              image: MessageContext.conversational.image,
-                              identifier: nil,
-                              discoverabilityTitle: nil,
-                              attributes: [],
-                              state: conversationalState) { [unowned self] _ in
-            self.didSelectContext?(.conversational)
-            self.configure(for: .conversational)
+        var actions: [UIAction] = []
+        MessageContext.allCases.forEach { value in
+            let state: UIMenuElement.State = context == value ? .on : .off
+            let action = UIAction(title: value.displayName,
+                                   subtitle: value.description,
+                                   image: value.image,
+                                   identifier: nil,
+                                   discoverabilityTitle: nil,
+                                   attributes: [],
+                                   state: state) { [unowned self] _ in
+                self.didSelectContext?(value)
+                self.configure(for: value)
+            }
+            actions.append(action)
         }
 
         return UIMenu(title: "This is...",
                       image: nil,
                       identifier: nil,
                       options: [.singleSelection],
-                      children: [quitely, conversational, urgent])
+                      children: actions)
     }
 }

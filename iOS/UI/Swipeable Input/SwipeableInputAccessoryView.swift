@@ -104,7 +104,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         
         self.inputTypeContainer.addSubview(self.deliveryTypeView)
         self.deliveryTypeView.alpha = 0
-        self.deliveryTypeView.configure(for: self.currentContext)
+        
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
         }
@@ -124,6 +124,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
         self.emotionView.pin(.left)
         self.deliveryTypeView.pin(.right)
+    }
+    
+    func resetDeliveryType() {
+        self.currentContext = .respectful
+        self.deliveryTypeView.reset()
     }
 
     // MARK: PRIVATE
@@ -329,7 +334,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     func animateInputViews(with text: String) {}
 
     func resetInputViews() {
-        self.currentContext = .respectful
         self.textView.reset()
         self.inputContainerView.alpha = 1
         self.countView.alpha = 0.0
