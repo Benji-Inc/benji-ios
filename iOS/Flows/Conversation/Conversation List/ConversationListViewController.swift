@@ -104,12 +104,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
-        
-        if ScreenSize.current.rawValue <= ScreenSize.phoneMedium.rawValue {
-            self.headerVC.view.pin(.top, offset: .short)
-        } else {
-            self.headerVC.view.pinToSafeArea(.top, offset: .noOffset)
-        }
+        self.headerVC.view.pinToSafeArea(.top, offset: .noOffset)
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.top = self.headerVC.view.bottom - Theme.ContentOffset.xtraLong.value
