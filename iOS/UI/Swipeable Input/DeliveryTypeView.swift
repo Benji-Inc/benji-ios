@@ -83,11 +83,24 @@ class DeliveryTypeView: BaseView {
             self.didSelectContext?(.timeSensitive)
             self.configure(for: .timeSensitive)
         }
+        
+        let conversationalState: UIMenuElement.State = context == .conversational ? .on : .off
 
-        return UIMenu(title: "This message is...",
+        let conversational = UIAction(title: "Conversational",
+                              subtitle: "Notify if available",
+                              image: MessageContext.conversational.image,
+                              identifier: nil,
+                              discoverabilityTitle: nil,
+                              attributes: [],
+                              state: conversationalState) { [unowned self] _ in
+            self.didSelectContext?(.conversational)
+            self.configure(for: .conversational)
+        }
+
+        return UIMenu(title: "This is...",
                       image: nil,
                       identifier: nil,
                       options: [.singleSelection],
-                      children: [quitely, urgent])
+                      children: [quitely, conversational, urgent])
     }
 }

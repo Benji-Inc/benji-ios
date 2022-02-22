@@ -12,6 +12,7 @@ import UIKit
 enum MessageContext: String, CaseIterable {
 
     case timeSensitive = "time-sensitive"
+    case conversational = "conversational"
     case respectful = "respectful"
 
     var color: ThemeColor {
@@ -22,6 +23,8 @@ enum MessageContext: String, CaseIterable {
         switch self {
         case .timeSensitive:
             return "Time Sensitive"
+        case .conversational:
+            return "conversational"
         case .respectful:
             return "Small Talk"
         }
@@ -31,6 +34,8 @@ enum MessageContext: String, CaseIterable {
         switch self {
         case .timeSensitive:
             return UIImage(systemName: "bell.badge")
+        case .conversational:
+            return UIImage(systemName: "bell")
         case .respectful:
             return UIImage(systemName: "bell.slash")
         }

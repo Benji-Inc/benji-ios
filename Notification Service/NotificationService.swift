@@ -186,6 +186,9 @@ class NotificationService: UNNotificationServiceExtension {
             // Time-sensitive messages are always delivered with a time-sensitive interruption level
             // regardless of the user's current focus state
             content.interruptionLevel = .timeSensitive
+        case .conversational:
+            // Conversational messages will show on the lock screen if a users focus status allows
+            content.interruptionLevel = .active
         case .respectful:
             // Respectful messages are delivered passively for focused users, and actively for
             // for non-focused users.
