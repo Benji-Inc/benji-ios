@@ -52,6 +52,11 @@ extension ConversationListCoordinator {
         self.conversationListVC.resignFirstResponder()
         self.router.present(vc, source: self.conversationListVC)
     }
+    
+    func presentProfile(for avatar: Avatar) {
+        let coordinator = ProfileCoordinator(with: avatar, router: self.router, deepLink: self.deepLink)
+        self.present(coordinator, finishedHandler: nil)
+    }
 
     func presentPeoplePicker() {
         guard let conversation = self.activeConversation else { return }

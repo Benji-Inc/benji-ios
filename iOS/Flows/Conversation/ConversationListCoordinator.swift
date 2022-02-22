@@ -59,7 +59,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
         
         self.conversationListVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
-            self.presentProfilePicture()
+            self.presentProfile(for: User.current()!)
         }
 
         self.conversationListVC.headerVC.didTapUpdateTopic = { [unowned self] in
