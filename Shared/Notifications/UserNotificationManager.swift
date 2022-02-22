@@ -138,13 +138,25 @@ class UserNotificationManager: NSObject {
             let installation = try await PFInstallation.getCurrent()
             installation.badge = 0
             installation.setDeviceTokenFrom(deviceToken)
-            if installation["userId"].isNil {
-                installation["userId"] = User.current()?.objectId
+
+            // Update the user id on the installation object if it's different than the current user's id.
+            if let userId = User.current()?.objectId {
+                let installationUserId = installation["userId"] as? String ?? String()
+
+                if userId != installationUserId {
+                    installation["userId"] = userId
+                }
             }
             
             try await installation.saveInBackground()
         } catch {
             logError(error)
+
+            // If the installation object was deleted off the server, then clear out the local installation
+            // object so we create a new one on next launch.
+            if error.code == PFErrorCode.errorObjectNotFound.rawValue {
+                try? PFObject.unpinAllObjects(withName: "_currentInstallation")
+            }
         }
     }
 }
