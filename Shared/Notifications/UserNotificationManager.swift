@@ -146,13 +146,5 @@ class UserNotificationManager: NSObject {
         } catch {
             logError(error)
         }
-
-        #if IOS
-        if !ChatClient.isConnected, let user = User.current() {
-            try? await ChatClient.initialize(for: user)
-        }
-
-
-        #endif
     }
 }
