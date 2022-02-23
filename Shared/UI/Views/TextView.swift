@@ -14,11 +14,10 @@ class TextView: UITextView {
 
     // Trim white space and newline characters when end editing. Default is true
     var trimWhiteSpaceWhenEndEditing: Bool = true
-
     // Maximum length of text. 0 means no limit.
     var maxLength: Int = 250
 
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
 
     var numberOfLines: Int {
         guard let lineHeight = self.font?.lineHeight else { return 0 }
@@ -68,10 +67,10 @@ class TextView: UITextView {
     }
 
     private var attributedPlaceholder: NSAttributedString? {
-        didSet {
-            self.setNeedsDisplay()
-        }
+        didSet { self.setNeedsDisplay() }
     }
+
+    // MARK: - Life cycle
 
     init(frame: CGRect = .zero,
          font: FontType,
@@ -137,7 +136,25 @@ class TextView: UITextView {
             }.store(in: &self.cancellables)
     }
 
-    // MARK: Setters
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+
+        // If the text view is empty, show the placeholder.
+        if self.text.isEmpty {
+            let xValue = self.textContainerInset.left + self.textContainer.lineFragmentPadding
+            let yValue = self.textContainerInset.top
+            let width = rect.size.width - xValue - self.textContainerInset.right
+            let height = rect.size.height - yValue - self.textContainerInset.bottom
+            let placeholderRect = CGRect(x: xValue, y: yValue, width: width, height: height)
+
+            if let attributedPlaceholder = self.attributedPlaceholder {
+                // Prefer to use attributedPlaceholder
+                attributedPlaceholder.draw(in: placeholderRect)
+            }
+        }
+    }
+
+    // MARK: - Setters
     
     func setText(_ localizedText: Localized?) {
         guard let localizedText = localizedText else {
@@ -185,13 +202,16 @@ class TextView: UITextView {
         self.attributedText = newString
     }
 
+    #warning("Remove this?")
     func reset() {
         self.text = ""
         self.textDidChange()
     }
 
-    // Trim white space and new line characters when end editing.
+    // MARK: - TextView Event Handlers
+
     func textViewDidEndEditing() {
+        // Trim white space and new line characters when editing ends.
         if self.trimWhiteSpaceWhenEndEditing {
             self.text = self.text?.trimmingCharacters(in: .whitespacesAndNewlines)
             self.setNeedsDisplay()
@@ -199,19 +219,21 @@ class TextView: UITextView {
         self.scrollToCorrectPosition()
     }
 
-    // Limit the length of text
+
     func textDidChange() {
+        // Limit the length of text to be under the max length count.
         if self.maxLength > 0 && self.text.count > self.maxLength {
             let endIndex = self.text.index(self.text.startIndex, offsetBy: self.maxLength)
             self.text = String(self.text[..<endIndex])
             self.undoManager?.removeAllActions()
         }
+
         self.setNeedsDisplay()
     }
 
     func textViewDidBeginEditing() {}
 
-    func scrollToCorrectPosition() {
+    private func scrollToCorrectPosition() {
         if self.isFirstResponder {
             self.scrollRangeToVisible(NSMakeRange(-1, 0)) // Scroll to bottom
         } else {
@@ -219,23 +241,7 @@ class TextView: UITextView {
         }
     }
 
-    // Show placeholder if needed
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-
-        if self.text.isEmpty {
-            let xValue = self.textContainerInset.left + self.textContainer.lineFragmentPadding
-            let yValue = self.textContainerInset.top
-            let width = rect.size.width - xValue - self.textContainerInset.right
-            let height = rect.size.height - yValue - self.textContainerInset.bottom
-            let placeholderRect = CGRect(x: xValue, y: yValue, width: width, height: height)
-
-            if let attributedPlaceholder = self.attributedPlaceholder {
-                // Prefer to use attributedPlaceholder
-                attributedPlaceholder.draw(in: placeholderRect)
-            }
-        }
-    }
+    // MARK: Frame Sizing
 
     func setSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) {
         self.size = self.getSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
