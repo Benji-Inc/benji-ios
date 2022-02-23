@@ -146,10 +146,14 @@ class PanGestureRecognizer: UIPanGestureRecognizer {
     }
 }
 
+/// Similar to pan gesture recognizer except that the begin state is triggered after a short delay, even if the touch doesn't move.
 class SwipeGestureRecognizer: UIPanGestureRecognizer {
-    
-    private var action: (UIPanGestureRecognizer) -> Void
+
     var touchesDidBegin: CompletionOptional = nil
+
+    var beginDelay: TimeInterval = 0.25
+
+    private var action: (UIPanGestureRecognizer) -> Void
     private var textView: UITextView
 
     init(textView: UITextView, action: @escaping (UIPanGestureRecognizer) -> Void) {
@@ -164,13 +168,38 @@ class SwipeGestureRecognizer: UIPanGestureRecognizer {
     @objc private func execute() {
         self.action(self)
     }
-    
+
+    private var beginStateTask: Task<Void, Never>?
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesBegan(touches, with: event)
-        
-        if self.textView.isFirstResponder {
-            self.touchesDidBegin?()
-            self.state = .began
+
+        self.beginStateTask?.cancel()
+
+        self.beginStateTask = Task { [weak self] in
+            await Task.sleep(seconds: self?.beginDelay ?? 0)
+
+            guard !Task.isCancelled else { return }
+
+            self?.touchesDidBegin?()
+            self?.state = .began
         }
+    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesMoved(touches, with: event)
+
+        self.beginStateTask?.cancel()
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesEnded(touches, with: event)
+
+        self.beginStateTask?.cancel()
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesCancelled(touches, with: event)
+
+        self.beginStateTask?.cancel()
     }
 }

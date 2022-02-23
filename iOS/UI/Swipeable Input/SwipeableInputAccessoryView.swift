@@ -32,7 +32,7 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessoryDidTapAvatar(_ view: SwipeableInputAccessoryView)
 }
 
-class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, ActiveConversationable {
+class SwipeableInputAccessoryView: BaseView {
 
     weak var delegate: SwipeableInputAccessoryViewDelegate?
 
@@ -100,7 +100,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self)
 
-
     // MARK: BaseView Setup and Layout
 
     // Override intrinsic content size so that height is adjusted for safe areas and text input.
@@ -111,9 +110,6 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     override func initializeSubviews() {
         super.initializeSubviews()
-
-        #warning("remove")
-        self.textView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.3)
 
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
@@ -152,20 +148,31 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.deliveryTypeView.pin(.right)
     }
 
-    // MARK: PRIVATE
+        private lazy var panRecognizer
+    = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
+        self.panGestureHandler.handle(pan: recognizer)
+    }
+    private lazy var tapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] recognizer in
+        self.handleTap()
+    }
 
     func setupGestures() {
-        let panRecognizer = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
-            self.panGestureHandler.handle(pan: recognizer)
-        }
-
-        panRecognizer.touchesDidBegin = { [unowned self] in
+        self.panRecognizer.touchesDidBegin = { [unowned self] in
             // Stop playing animations when the user interacts with the view.
             self.hintAnimator.updateSwipeHint(shouldPlay: false)
         }
+        self.gestureButton.addGestureRecognizer(self.panRecognizer)
 
-        panRecognizer.delegate = self
-        self.gestureButton.addGestureRecognizer(panRecognizer)
+        self.gestureButton.addGestureRecognizer(self.tapRecognizer)
+    }
+
+    private func handleTap() {
+        if self.textView.isFirstResponder {
+            guard !self.textView.text.isEmpty else { return }
+            self.inputState = .expanded
+        } else {
+            self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
+        }
     }
 
     private func setupHandlers() {
@@ -194,12 +201,12 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.updateInputState(with: self.textView.numberOfLines)
             self.countView.update(with: text.count, max: self.textView.maxLength)
         }.store(in: &self.cancellables)
-        
-        self.gestureButton.didSelect { [unowned self] in
-            // No need to become first responder if we already are.
-            guard !self.textView.isFirstResponder else { return }
-            self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
-        }
+
+        self.textView.$isEditing.mainSink { [unowned self] isEditing in
+            // If we're not editing, it takes 1 tap to start.
+            // If we are editing, a double tap should trigger the expanded state.
+            self.tapRecognizer.numberOfTapsRequired = isEditing ? 2 : 1
+        }.store(in: &self.cancellables)
 
         self.$inputState
             .removeDuplicates()
@@ -207,6 +214,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 self.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
     }
+
+    // MARK: - State Updates
 
     private func updateInputState(with numberOfLines: Int) {
         // When the text hits 3 lines, transition to the expanded state.
@@ -244,14 +253,13 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             // Disable swipe gestures when expanded
             self.gestureButton.isVisible = false
 
-            newInputHeight = 200
-//            newHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
+            newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }
 
         // There's no need to animate the height if it hasn't changed.
         guard newInputHeight != self.inputHeightConstraint.constant else { return }
 
-        UIView.animate(withDuration: Theme.animationDurationFast) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.inputHeightConstraint.constant = newInputHeight
             self.layoutNow()
         }
@@ -274,13 +282,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
     }
 
-    // MARK: OVERRIDES
-
     func updateSwipeHint(shouldPlay: Bool) {
         self.hintAnimator.updateSwipeHint(shouldPlay: shouldPlay)
     }
 
-    func handleTextChange(_ text: String) {
+    private func handleTextChange(_ text: String) {
         switch self.currentMessageKind {
         case .text(_):
             self.currentMessageKind = .text(text)
@@ -293,7 +299,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
 
         // After the user enters text, the swipe hint can play to show them how to send it.
-        self.hintAnimator.updateSwipeHint(shouldPlay: !text.isEmpty)
+        let shouldPlay = !text.isEmpty && self.inputState == .collapsed
+        self.hintAnimator.updateSwipeHint(shouldPlay: shouldPlay)
 
         self.delegate?.swipeableInputAccessory(self, swipeIsEnabled: !text.isEmpty)
     }
@@ -308,19 +315,5 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.textView.reset()
         self.inputContainerView.alpha = 1
         self.countView.alpha = 0.0
-    }
-
-    // MARK: - UIGestureRecognizerDelegate
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-
-        #warning("Use an identity check instead of a type check")
-        // The pan gesture should cancel other gestures.
-        if gestureRecognizer is UIPanGestureRecognizer {
-            return false
-        }
-
-        return true
     }
 }

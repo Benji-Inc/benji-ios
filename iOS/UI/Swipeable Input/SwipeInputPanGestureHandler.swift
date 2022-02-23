@@ -215,12 +215,12 @@ class SwipeInputPanGestureHandler {
             // If the user didn't swipe far enough to send a message, animate the preview view back
             // to where it started, then reveal the text view to allow for input again.
             self.inputView.inputContainerView.layer.shadowOpacity = 0.0
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
+            UIView.animate(withDuration: Theme.animationDurationFast) {
                 guard let initialOrigin = self.initialPreviewCenter else { return }
                 self.previewView?.center = initialOrigin
                 self.previewView?.transform = .identity
             } completion: { completed in
-                UIView.animate(withDuration: Theme.animationDurationStandard) {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
                     self.inputView.inputContainerView.alpha = 1
                 } completion: { completed in
                     self.inputView.inputContainerView.layer.shadowOpacity = 0.3

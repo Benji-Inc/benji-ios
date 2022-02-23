@@ -17,6 +17,8 @@ class TextView: UITextView {
     // Maximum length of text. 0 means no limit.
     var maxLength: Int = 1000
 
+    @Published var isEditing: Bool = false
+
     private var cancellables = Set<AnyCancellable>()
 
     var numberOfLines: Int {
@@ -203,13 +205,16 @@ class TextView: UITextView {
         self.attributedText = newString
     }
 
-    #warning("Remove this?")
     func reset() {
         self.text = ""
         self.textDidChange()
     }
 
     // MARK: - TextView Event Handlers
+
+    func textViewDidBeginEditing() {
+        self.isEditing = true
+    }
 
     func textViewDidEndEditing() {
         // Trim white space and new line characters when editing ends.
@@ -218,8 +223,9 @@ class TextView: UITextView {
             self.setNeedsDisplay()
         }
         self.scrollToCorrectPosition()
-    }
 
+        self.isEditing = false
+    }
 
     func textDidChange() {
         // Limit the length of text to be under the max length count.
@@ -231,8 +237,6 @@ class TextView: UITextView {
 
         self.setNeedsDisplay()
     }
-
-    func textViewDidBeginEditing() {}
 
     private func scrollToCorrectPosition() {
         if self.isFirstResponder {
