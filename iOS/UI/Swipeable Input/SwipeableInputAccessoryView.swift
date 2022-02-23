@@ -168,9 +168,10 @@ class SwipeableInputAccessoryView: BaseView {
 
     private func handleTap() {
         if self.textView.isFirstResponder {
-            guard !self.textView.text.isEmpty else { return }
+            // When the text view is editing, double taps should expand it.
             self.inputState = .expanded
         } else {
+            // If we're not editing, a tap starts editing.
             self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
         }
     }
@@ -203,8 +204,8 @@ class SwipeableInputAccessoryView: BaseView {
         }.store(in: &self.cancellables)
 
         self.textView.$isEditing.mainSink { [unowned self] isEditing in
-            // If we're not editing, it takes 1 tap to start.
             // If we are editing, a double tap should trigger the expanded state.
+            // If we're not editing, it takes 1 tap to start.
             self.tapRecognizer.numberOfTapsRequired = isEditing ? 2 : 1
         }.store(in: &self.cancellables)
 
