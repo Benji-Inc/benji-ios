@@ -43,6 +43,21 @@ extension User: Avatar {
     var isCurrentUser: Bool {
         return self.objectId == User.current()?.objectId
     }
+    
+    func getLocalTime() -> String {
+        let timeZone: TimeZone?
+        if self.isCurrentUser {
+            timeZone = TimeZone.current
+        } else {
+            let timeZoneId = self.timeZone
+            timeZone = TimeZone.init(identifier: timeZoneId)
+        }
+        
+        let formatter = Date.hourMinuteTimeOfDay
+        formatter.timeZone = timeZone
+        let localTime = formatter.string(from: Date())
+        return localTime.isEmpty ? "Unkown" : localTime
+    }
 }
 
 extension User {

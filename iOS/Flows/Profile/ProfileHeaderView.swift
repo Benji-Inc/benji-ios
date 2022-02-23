@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 class ProfileHeaderView: BaseView {
     
@@ -50,18 +51,20 @@ class ProfileHeaderView: BaseView {
         self.addSubview(self.avatarView)
     }
     
-    func configure(with avatar: Avatar) {
-        guard let user = avatar as? User else { return }
+    func configure(with user: User) {
         
-        self.avatarView.set(avatar: avatar)
-        self.nameLabel.setText(avatar.givenName)
+        self.avatarView.set(avatar: user)
+        self.nameLabel.setText(user.givenName)
         if let position = user.quePosition {
             self.memberLabel.setText("Member #\(position)")
         }
         
-        //get local time
-        let nowTime = Date.hourMinuteTimeOfDay.string(from: Date())
-        self.timeLabel.setText(nowTime)
+        if user.isCurrentUser {
+            let nowTime = Date.hourMinuteTimeOfDay.string(from: Date())
+            self.timeLabel.setText(nowTime)
+        } else {
+            self.timeLabel.setText(user.getLocalTime())
+        }
         
         if let status = user.focusStatus {
             self.focusLabel.setText(status.rawValue.firstCapitalized)

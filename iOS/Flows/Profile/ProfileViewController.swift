@@ -52,9 +52,14 @@ class ProfileViewController: ViewController {
             if let user = self.avatar as? User,
                let updated = try? await user.retrieveDataIfNeeded() {
                 self.avatar = updated
+                self.header.configure(with: updated)
+            } else if let userId = self.avatar.userObjectId,
+                        let user = try? await User.getObject(with: userId),
+                      let updated = try? await user.retrieveDataIfNeeded() {
+                self.avatar = updated
+                self.header.configure(with: updated)
             }
             
-            self.header.configure(with: self.avatar)
         }.add(to: self.autocancelTaskPool)
     }
     
