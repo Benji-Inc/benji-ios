@@ -71,12 +71,12 @@ class ProfileViewController: ViewController {
         self.header.pinToSafeAreaTop()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
-        self.contextCuesVC.view.height = 130
+        self.contextCuesVC.view.height = 40
         self.contextCuesVC.view.match(.top, to: .bottom, of: self.header)
         
         self.conversationsVC.view.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
-        self.conversationsVC.view.match(.top, to: .bottom, of: self.contextCuesVC.view)
-        self.conversationsVC.view.height = self.view.height - self.contextCuesVC.view.bottom
+        self.conversationsVC.view.match(.top, to: .bottom, of: self.contextCuesVC.view, offset: .custom(64))
+        self.conversationsVC.view.height = self.view.height - self.contextCuesVC.view.bottom - 64
         self.conversationsVC.view.centerOnX()
         
         self.bottomGradientView.expandToSuperviewWidth()
