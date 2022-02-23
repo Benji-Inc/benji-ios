@@ -54,10 +54,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
 #if !NOTIFICATION
-        _ = UserNotificationManager.shared
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController, for: windowScene)
         self.initializeMainCoordinator(with: rootNavController)
+        _ = UserNotificationManager.shared
 #endif
     }
     

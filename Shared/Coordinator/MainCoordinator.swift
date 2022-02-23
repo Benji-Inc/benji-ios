@@ -32,7 +32,7 @@ class MainCoordinator: Coordinator<Void> {
         self.runLaunchFlow()
     }
 
-    /// A task to start the launch flow and
+    /// A task to start the launch flow and handle a deep link. If the task is cancelled, the deep link will not be handled.
     private var launchAndDeepLinkTask: Task<Void, Never>?
     private func runLaunchFlow() {
         self.launchAndDeepLinkTask?.cancel()
