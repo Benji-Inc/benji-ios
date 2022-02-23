@@ -13,7 +13,6 @@ import SwiftUI
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var mainCoordinator: MainCoordinator?
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -55,10 +54,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
 
 #if !NOTIFICATION
+        _ = UserNotificationManager.shared
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController, for: windowScene)
         self.initializeMainCoordinator(with: rootNavController)
-        _ = UserNotificationManager.shared
 #endif
     }
     

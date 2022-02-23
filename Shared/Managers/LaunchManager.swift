@@ -38,7 +38,7 @@ class LaunchManager {
     
     weak var delegate: LaunchManagerDelegate?
 
-    func launchApp() async -> LaunchStatus {
+    func launchApp(with deepLink: DeepLinkable?) async -> LaunchStatus {
         // Initialize Parse if necessary
         if Parse.currentConfiguration.isNil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
@@ -55,7 +55,8 @@ class LaunchManager {
             // Ensure that the user object is up to date.
             _ = try? await user.fetchInBackground()
             
-            async let first : () = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            async let first : ()
+            = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             // Initialize the stores.
             async let second : () = ConnectionStore.shared.initialize()
             let _: [()] = await [first, second]
@@ -66,20 +67,22 @@ class LaunchManager {
             _ = ContactsManger.shared
         }
 #endif
-        let configuration = PHGPostHogConfiguration(apiKey: "phc_nTIZgY0M0QgX0QB14Ux428lvGVnUeddJCqEFEo4vt9n", host: "https://app.posthog.com")
+        let configuration = PHGPostHogConfiguration(apiKey: "phc_nTIZgY0M0QgX0QB14Ux428lvGVnUeddJCqEFEo4vt9n",
+                                                    host: "https://app.posthog.com")
 
         configuration.captureApplicationLifecycleEvents = true; // Record certain application events automatically!
         configuration.recordScreenViews = true; // Record screen views automatically!
 
         PHGPostHog.setup(with: configuration)
         
-        let launchStatus = await self.initializeUserData(with: nil)
+        let launchStatus = await self.initializeUserData(with: deepLink)
         try? await PFConfig.awaitConfig()
         return launchStatus
     }
 
     private func initializeUserData(with deeplink: DeepLinkable?) async -> LaunchStatus {
         guard let user = User.current() else {
+            // There is no user object yet, there's nothing to initialize.
             return .success(deepLink: deeplink)
         }
 

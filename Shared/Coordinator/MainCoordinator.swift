@@ -32,10 +32,23 @@ class MainCoordinator: Coordinator<Void> {
         self.runLaunchFlow()
     }
 
+    /// A task to start the launch flow and
+    private var launchAndDeepLinkTask: Task<Void, Never>?
     private func runLaunchFlow() {
-        let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
-        self.router.setRootModule(launchCoordinator)
-        self.addChildAndStart(launchCoordinator) { [unowned self] launchStatus in
+        self.launchAndDeepLinkTask?.cancel()
+
+        self.launchAndDeepLinkTask = Task {
+            let launchStatus: LaunchStatus = await withCheckedContinuation { continuation in
+                let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
+                self.router.setRootModule(launchCoordinator)
+                self.addChildAndStart(launchCoordinator) { launchStatus in
+                    continuation.resume(returning: launchStatus)
+                }
+            }
+
+            // Don't handle the launch status if the task was cancelled.
+            guard !Task.isCancelled else { return }
+
 #if IOS
             self.handle(result: launchStatus)
 #elseif APPCLIP
@@ -45,7 +58,7 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    func handle(result: LaunchStatus) {
+    private func handle(result: LaunchStatus) {
         switch result {
         case .success(let deepLink):
             if let deepLink = deepLink {
@@ -123,7 +136,7 @@ class MainCoordinator: Coordinator<Void> {
         let alert = UIAlertController(title: "🙀",
                                       message: "Someone tripped over a 🐈 and ☠️ the mainframe.",
                                       preferredStyle: .alert)
-        let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
+        let ok = UIAlertAction(title: "Ok", style: .default) { [unowned self] (_) in
             self.logOut()
         }
         
@@ -147,10 +160,17 @@ class MainCoordinator: Coordinator<Void> {
 }
 
 #if IOS
+
+// MARK: - UserNotificationManagerDelegate
+
 extension MainCoordinator: UserNotificationManagerDelegate {
 
     nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
-        Task.onMainActor {
+        Task.onMainActorAsync {
+            self.launchAndDeepLinkTask?.cancel()
+
+            await self.launchAndDeepLinkTask?.value
+
             self.handle(deeplink: deeplink)
         }
     }

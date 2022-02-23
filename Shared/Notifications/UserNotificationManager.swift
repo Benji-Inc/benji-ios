@@ -26,8 +26,6 @@ class UserNotificationManager: NSObject {
     private let center = UNUserNotificationCenter.current()
     private(set) var application: UIApplication?
 
-    var cancellables = Set<AnyCancellable>()
-
     override init() {
         super.init()
 
@@ -45,7 +43,6 @@ class UserNotificationManager: NSObject {
     }
 
     func silentRegister(withApplication application: UIApplication) {
-        
         self.application = application
         
         Task {
@@ -95,43 +92,6 @@ class UserNotificationManager: NSObject {
             return false
         }
     }
-    
-    func handleRead(message: Messageable) {
-        self.center.getDeliveredNotifications { [unowned self] delivered in
-            Task.onMainActor {
-                var identifiers: [String] = []
-                var badgeCount = self.application?.applicationIconBadgeNumber ?? 0
-                delivered.forEach { note in
-                    if note.request.identifier == message.id {
-                        identifiers.append(message.id)
-                    }
-                    
-                    if message.context == .timeSensitive {
-                        badgeCount -= 1
-                    }
-                }
-
-                self.application?.applicationIconBadgeNumber = badgeCount
-                self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
-            }
-        }
-    }
-    
-    func getDeliveredNotifications() async -> [UNNotification] {
-        return await withCheckedContinuation({ continuation in
-            self.center.getDeliveredNotifications { notifications in
-                continuation.resume(returning: notifications)
-            }
-        })
-    }
-
-    func removeAllPendingNotificationRequests() {
-        self.center.removeAllPendingNotificationRequests()
-    }
-
-    func schedule(note: UNNotificationRequest) async {
-        try? await self.center.add(note)
-    }
 
     func registerPush(from deviceToken: Data) async {
         do {
@@ -145,6 +105,86 @@ class UserNotificationManager: NSObject {
             try await installation.saveInBackground()
         } catch {
             logError(error)
+        }
+    }
+
+    // MARK: - Message Event Handling
+
+    func handleRead(message: Messageable) {
+        self.center.getDeliveredNotifications { [unowned self] delivered in
+            Task.onMainActor {
+                var identifiers: [String] = []
+                var badgeCount = self.application?.applicationIconBadgeNumber ?? 0
+                delivered.forEach { note in
+                    if note.request.identifier == message.id {
+                        identifiers.append(message.id)
+                    }
+
+                    if message.context == .timeSensitive {
+                        badgeCount -= 1
+                    }
+                }
+
+                self.application?.applicationIconBadgeNumber = badgeCount
+                self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+            }
+        }
+    }
+}
+
+// MARK: - UNUserNotificationCenterDelegate
+
+extension UserNotificationManager: UNUserNotificationCenterDelegate {
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+
+        // If the app is in the foreground, and is a new message, then check the interruption level to determine whether or not to show a banner. Don't show banners for non time-sensitive messages.
+        if let app = self.application,
+            await app.applicationState == .active,
+            notification.request.content.categoryIdentifier == "MESSAGE_NEW" {
+
+            if notification.request.content.interruptionLevel == .timeSensitive {
+                return [.banner, .list, .sound, .badge]
+            } else {
+                return [.list, .sound, .badge]
+            }
+        }
+
+        return [.banner, .list, .sound, .badge]
+    }
+
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+
+        if let action = UserNotificationAction(rawValue: response.actionIdentifier) {
+            self.handle(action: action, for: response)
+        } else if let target = response.notification.deepLinkTarget {
+            var deepLink = DeepLinkObject(target: target)
+            deepLink.customMetadata = response.notification.customMetadata
+            logDebug("notification center received deep link \(deepLink)")
+            self.delegate?.userNotificationManager(willHandle: deepLink)
+        }
+
+        completionHandler()
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                openSettingsFor notification: UNNotification?) {}
+
+    private func handle(action: UserNotificationAction, for response: UNNotificationResponse) {
+        switch action {
+        case .sayHi:
+            if let target = response.notification.deepLinkTarget {
+                var deepLink = DeepLinkObject(target: target)
+                deepLink.customMetadata = response.notification.customMetadata
+
+                self.delegate?.userNotificationManager(willHandle: deepLink)
+            }
+        default:
+            break
         }
     }
 }
