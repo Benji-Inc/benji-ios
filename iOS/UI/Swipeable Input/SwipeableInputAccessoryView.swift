@@ -148,12 +148,15 @@ class SwipeableInputAccessoryView: BaseView {
         self.deliveryTypeView.pin(.right)
     }
 
-        private lazy var panRecognizer
+    private lazy var panRecognizer
     = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
         self.panGestureHandler.handle(pan: recognizer)
     }
-    private lazy var tapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] recognizer in
-        self.handleTap()
+    private lazy var inputFieldTapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] recognizer in
+        self.handleInputTap()
+    }
+    private lazy var backgroundTapRecognizer = TapGestureRecognizer { [unowned self] recognizer in
+        self.handleBackgroundTap()
     }
 
     func setupGestures() {
@@ -163,16 +166,26 @@ class SwipeableInputAccessoryView: BaseView {
         }
         self.gestureButton.addGestureRecognizer(self.panRecognizer)
 
-        self.gestureButton.addGestureRecognizer(self.tapRecognizer)
+        self.gestureButton.addGestureRecognizer(self.inputFieldTapRecognizer)
+
+        self.addGestureRecognizer(self.backgroundTapRecognizer)
     }
 
-    private func handleTap() {
+    private func handleInputTap() {
         if self.textView.isFirstResponder {
             // When the text view is editing, double taps should expand it.
             self.inputState = .expanded
         } else {
             // If we're not editing, a tap starts editing.
             self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
+        }
+    }
+
+    private func handleBackgroundTap() {
+        if self.inputState == .expanded {
+            self.inputState = .collapsed
+        } else if self.textView.isFirstResponder {
+            self.textView.resignFirstResponder()
         }
     }
 
@@ -206,7 +219,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.textView.$isEditing.mainSink { [unowned self] isEditing in
             // If we are editing, a double tap should trigger the expanded state.
             // If we're not editing, it takes 1 tap to start.
-            self.tapRecognizer.numberOfTapsRequired = isEditing ? 2 : 1
+            self.inputFieldTapRecognizer.numberOfTapsRequired = isEditing ? 2 : 1
         }.store(in: &self.cancellables)
 
         self.$inputState
