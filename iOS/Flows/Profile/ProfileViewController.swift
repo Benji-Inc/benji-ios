@@ -12,10 +12,14 @@ class ProfileViewController: ViewController {
     
     private var avatar: Avatar
     
-    private let backgroundGradient = BackgroundGradientView()
     private let header = ProfileHeaderView()
-    private let contextCuesVC = ContextCuesViewController()
+    private lazy var contextCuesVC = ContextCuesViewController()
+    private lazy var conversationsVC = UserConversationsViewController()
     
+    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
+        
     init(with avatar: Avatar) {
         self.avatar = avatar
         super.init()
@@ -36,10 +40,13 @@ class ProfileViewController: ViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.view.addSubview(self.backgroundGradient)
-        
+        self.view.set(backgroundColor: .B0)
+                
         self.view.addSubview(self.header)
         self.addChild(viewController: self.contextCuesVC, toView: self.view)
+        self.addChild(viewController: self.conversationsVC, toView: self.view)
+        
+        self.view.addSubview(self.bottomGradientView)
         
         Task {
             if let user = self.avatar as? User,
@@ -54,10 +61,6 @@ class ProfileViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.backgroundGradient.expandToSuperviewWidth()
-        self.backgroundGradient.height = self.view.height + 100
-        self.backgroundGradient.pin(.top)
-        
         self.header.expandToSuperviewWidth()
         self.header.height = 200
         self.header.pinToSafeAreaTop()
@@ -65,5 +68,14 @@ class ProfileViewController: ViewController {
         self.contextCuesVC.view.expandToSuperviewWidth()
         self.contextCuesVC.view.height = 150
         self.contextCuesVC.view.match(.top, to: .bottom, of: self.header)
+        
+        self.conversationsVC.view.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
+        self.conversationsVC.view.match(.top, to: .bottom, of: self.contextCuesVC.view)
+        self.conversationsVC.view.height = self.view.height - self.contextCuesVC.view.bottom
+        self.conversationsVC.view.centerOnX()
+        
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
     }
 }
