@@ -119,6 +119,8 @@ class UserNotificationManager: NSObject {
             if error.code == PFErrorCode.errorObjectNotFound.rawValue {
                 try? PFObject.unpinAllObjects(withName: "_currentInstallation")
             }
+        }
+    }
 
     // MARK: - Message Event Handling
 
