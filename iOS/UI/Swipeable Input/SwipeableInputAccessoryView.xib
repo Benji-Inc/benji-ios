@@ -58,11 +58,11 @@
                             <rect key="frame" x="36" y="135" width="265" height="56"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TRK-Tt-Z8M" customClass="CharacterCountView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="105" y="4" width="55" height="20"/>
+                                    <rect key="frame" x="97.5" y="4" width="70" height="20"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="20" id="1Xf-ck-M2V"/>
-                                        <constraint firstAttribute="width" constant="55" id="KDy-gd-pQb"/>
+                                        <constraint firstAttribute="width" constant="70" id="sCE-Y6-Doa"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdi-8g-wyi" customClass="BorderedAvatarView" customModule="Jibber" customModuleProvider="target">

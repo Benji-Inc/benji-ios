@@ -36,6 +36,13 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     weak var delegate: SwipeableInputAccessoryViewDelegate?
 
+    enum InputState {
+        /// The input field is fit to the current input. Swipe to send is enabled.
+        case collapsed
+        /// The input field is expanded and can be tapped to edit/copy/paste. Swipe to send is disabled.
+        case expanded
+    }
+
     // MARK: - Drag and Drop Properties
 
     /// The rough area that we need to drag and drop messages to send them.
@@ -63,6 +70,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     static var inputTypeMaxHeight: CGFloat = 25
     static var inputTypeAvatarHeight: CGFloat = 56
 
+    /// The current input state of the accessory view.
+    @Published private var inputState: InputState = .collapsed
+
     // MARK: - Message State
 
     var currentContext: MessageContext = .respectful {
@@ -76,10 +86,14 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
     var sendable: SendableObject?
-    private let deliveryTypeView = DeliveryTypeView()
-    private let emotionView = old_EmotionView()
+    let deliveryTypeView = DeliveryTypeView()
+    let emotionView = old_EmotionView()
 
     private var cancellables = Set<AnyCancellable>()
+
+    // MARK: - Animation
+    
+    private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self)
 
     // MARK: BaseView Setup and Layout
 
@@ -134,6 +148,20 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     // MARK: PRIVATE
 
+    func setupGestures() {
+        let panRecognizer = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
+            self.panGestureHandler.handle(pan: recognizer)
+        }
+
+        panRecognizer.touchesDidBegin = { [unowned self] in
+            // Stop playing animations when the user interacts with the view.
+            self.hintAnimator.updateSwipeHint(shouldPlay: false)
+        }
+
+        panRecognizer.delegate = self
+        self.gestureButton.addGestureRecognizer(panRecognizer)
+    }
+
     private func setupHandlers() {
         self.updateInputType(with: .keyboard)
         
@@ -143,10 +171,10 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                 switch currentEvent {
                 case .willShow:
                     self.showDetail(shouldShow: true)
-                    self.updateSwipeHint(shouldPlay: false)
+                    self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .willHide:
                     self.showDetail(shouldShow: false)
-                    self.updateSwipeHint(shouldPlay: false)
+                    self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 default:
@@ -156,7 +184,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
-            self.updateHeight(with: self.textView.numberOfLines)
+            self.updateInputState(with: self.textView.numberOfLines)
             self.countView.update(with: text.count, max: self.textView.maxLength)
         }.store(in: &self.cancellables)
         
@@ -165,19 +193,34 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             guard !self.textView.isFirstResponder else { return }
             self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
         }
-    }
-    
-    private func updateHeight(with numberOfLines: Int) {
-        var newHeight: CGFloat = SwipeableInputAccessoryView.minHeight
 
-        if numberOfLines > 2 || self.inputHeightConstraint.constant == 400 {
-            #warning("Make this dynamic")
-            newHeight = 400
-            self.textView.textAlignment = .left
-            self.gestureButton.isVisible = false
-        } else {
+        self.$inputState
+            .removeDuplicates()
+            .mainSink { [unowned self] inputState in
+                self.updateLayout(for: inputState)
+            }.store(in: &self.cancellables)
+    }
+
+    private func updateInputState(with numberOfLines: Int) {
+        // When the text hits 3 lines, transition to the expanded state.
+        // However don't automatically go back to the collapsed state when the line count is less than 3.
+        guard numberOfLines > 2 else { return }
+        self.inputState = .expanded
+    }
+
+    private func updateLayout(for inputState: InputState) {
+        let newHeight: CGFloat
+
+        switch inputState {
+        case .collapsed:
             self.textView.textAlignment = .center
             self.gestureButton.isVisible = true
+            newHeight = SwipeableInputAccessoryView.minHeight
+        case .expanded:
+            self.textView.textAlignment = .left
+            // Disable swipe gestures when expanded
+            self.gestureButton.isVisible = false
+            newHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }
 
         // There's no need to animate the height if it hasn't changed.
@@ -208,18 +251,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     // MARK: OVERRIDES
 
-    func setupGestures() {
-        let panRecognizer = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
-            self.panGestureHandler.handle(pan: recognizer)
-        }
-        
-        panRecognizer.touchesDidBegin = { [unowned self] in
-            // Stop playing animations when the user interacts with the view.
-            self.updateSwipeHint(shouldPlay: false)
-        }
-        
-        panRecognizer.delegate = self
-        self.gestureButton.addGestureRecognizer(panRecognizer)
+    func updateSwipeHint(shouldPlay: Bool) {
+        self.hintAnimator.updateSwipeHint(shouldPlay: shouldPlay)
     }
 
     func handleTextChange(_ text: String) {
@@ -235,68 +268,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
 
         // After the user enters text, the swipe hint can play to show them how to send it.
-        self.updateSwipeHint(shouldPlay: !text.isEmpty)
+        self.hintAnimator.updateSwipeHint(shouldPlay: !text.isEmpty)
 
         self.delegate?.swipeableInputAccessory(self, swipeIsEnabled: !text.isEmpty)
-    }
-
-    var swipeHintTask: Task<Void, Never>?
-    func updateSwipeHint(shouldPlay: Bool) {
-        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
-        self.swipeHintTask?.cancel()
-
-        self.inputContainerView.transform = .identity
-        self.emotionView.alpha = 1.0
-        self.deliveryTypeView.alpha = 1.0
-        
-        guard shouldPlay else { return }
-
-        self.swipeHintTask = Task {
-            // Wait a bit before playing the hint
-            await Task.snooze(seconds: 3)
-
-            guard !Task.isCancelled else { return }
-
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.emotionView.alpha = 0
-                self.deliveryTypeView.alpha = 0
-            })
-
-            guard !Task.isCancelled else { return }
-
-            await UIView.awaitSpringAnimation(with: .slow,
-                                              damping: 0.2,
-                                              options: [.curveEaseInOut, .allowUserInteraction]) {
-                self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
-            }
-
-            guard !Task.isCancelled else { return }
-
-            await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
-                self.inputContainerView.transform = .identity
-            }
-
-            guard !Task.isCancelled else { return }
-
-            await UIView.awaitSpringAnimation(with: .slow,
-                                              damping: 0.2,
-                                              options: [.curveEaseInOut, .allowUserInteraction]) {
-                self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
-            }
-
-            guard !Task.isCancelled else { return }
-
-            await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
-                self.inputContainerView.transform = .identity
-            }
-
-            guard !Task.isCancelled else { return }
-
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.emotionView.alpha = 1.0
-                self.deliveryTypeView.alpha = 1.0
-            })
-        }
     }
 
     func updateInputType(with type: InputType) {
@@ -304,6 +278,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     }
 
     func resetInputViews() {
+        self.inputState = .collapsed
         self.currentContext = .respectful
         self.textView.reset()
         self.inputContainerView.alpha = 1

@@ -155,7 +155,9 @@ class SwipeGestureRecognizer: UIPanGestureRecognizer {
     init(textView: UITextView, action: @escaping (UIPanGestureRecognizer) -> Void) {
         self.action = action
         self.textView = textView
+
         super.init(target: nil, action: nil)
+
         self.addTarget(self, action: #selector(execute))
     }
 
