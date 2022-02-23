@@ -167,8 +167,10 @@ extension MainCoordinator: UserNotificationManagerDelegate {
 
     nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
         Task.onMainActorAsync {
+            // Cancelling other deeplink calls.
             self.launchAndDeepLinkTask?.cancel()
 
+            // Wait until the launch is finished.
             await self.launchAndDeepLinkTask?.value
 
             self.handle(deeplink: deeplink)
