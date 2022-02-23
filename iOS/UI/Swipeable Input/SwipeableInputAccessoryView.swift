@@ -43,12 +43,14 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     // MARK:  - Views
 
+    /// A view that contains and provides a background for the input view.
     @IBOutlet var inputContainerView: SpeechBubbleView!
+    /// Height constraint for the input container view.
     @IBOutlet var inputHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
-    /// A button to handle taps and pan gestures.
-    @IBOutlet var overlayButton: UIButton!
+    /// An invisible button to handle taps and pan gestures.
+    @IBOutlet var gestureButton: UIButton!
     @IBOutlet var countView: CharacterCountView!
     @IBOutlet var avatarView: BorderedAvatarView!
 
@@ -77,7 +79,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     let deliveryTypeView = DeliveryTypeView()
     let emotionView = old_EmotionView()
 
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: BaseView Setup and Layout
 
@@ -89,6 +91,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     override func initializeSubviews() {
         super.initializeSubviews()
+
+        #warning("Remove")
+        self.textView.backgroundColor = .red
 
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
@@ -156,10 +161,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.countView.update(with: text.count, max: self.textView.maxLength)
         }.store(in: &self.cancellables)
         
-        self.overlayButton.didSelect { [unowned self] in
-            if !self.textView.isFirstResponder {
-                self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
-            }
+        self.gestureButton.didSelect { [unowned self] in
+            guard !self.textView.isFirstResponder else { return }
+            self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
         }
         
         self.textView.confirmationView.button.didSelect { [unowned self] in
@@ -169,16 +173,17 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     
     func updateHeight(with numberOfLines: Int) {
         var new: CGFloat = SwipeableInputAccessoryView.minHeight
-        
-        if numberOfLines > 3 {
-            new = self.textView.height + self.inputTypeContainer.height
+
+        if numberOfLines > 2 {
+            new = 400
         }
-        
+
+        // There's no need to animate the height if it hasn't changed.
         guard new != self.inputHeightConstraint.constant else { return }
 
-        UIView.animate(withDuration: Theme.animationDurationFast) {
+        UIView.animate(withDuration: 1) {
             self.inputHeightConstraint.constant = new
-            self.setNeedsLayout()
+            self.layoutNow()
         }
     }
 
@@ -211,7 +216,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
         
         panRecognizer.delegate = self
-        self.overlayButton.addGestureRecognizer(panRecognizer)
+        self.gestureButton.addGestureRecognizer(panRecognizer)
     }
 
     func didPressAlertCancel() {}

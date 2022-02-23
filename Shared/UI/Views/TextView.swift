@@ -21,8 +21,9 @@ class TextView: UITextView {
 
     var numberOfLines: Int {
         guard let lineHeight = self.font?.lineHeight else { return 0 }
-        let height = self.contentSize.height - self.textContainerInset.top - self.textContainerInset.bottom
-        return Int(height / lineHeight)
+        let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
+        let textHeight = self.getTextContentSize(withMaxWidth: self.width - horizontalPadding).height
+        return Int(textHeight / lineHeight)
     }
 
     override var text: String! {
@@ -248,19 +249,12 @@ class TextView: UITextView {
     }
 
     func getSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) -> CGSize {
-        guard let text = self.text, !text.isEmpty, let attText = self.attributedText else {
-            return CGSize.zero
-        }
-
         let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
         let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
 
         // Get the max size available for the text, taking the textview's insets into account.
-        let maxTextSize = CGSize(width: maxWidth - horizontalPadding, height: maxHeight - verticalPadding)
-
-        var size: CGSize = attText.boundingRect(with: maxTextSize,
-                                                options: .usesLineFragmentOrigin,
-                                                context: nil).size
+        var size: CGSize = self.getTextContentSize(withMaxWidth: maxWidth - horizontalPadding,
+                                                   maxHeight: maxHeight - verticalPadding)
 
         // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
         size.width += horizontalPadding
@@ -270,5 +264,17 @@ class TextView: UITextView {
         size.height = clamp(size.height, max: maxHeight)
 
         return size
+    }
+
+    func getTextContentSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = .infinity) -> CGSize {
+        guard let text = self.text, !text.isEmpty, let attText = self.attributedText else {
+            return CGSize.zero
+        }
+
+        let maxTextSize = CGSize(width: maxWidth, height: maxHeight)
+
+        return attText.boundingRect(with: maxTextSize,
+                                    options: .usesLineFragmentOrigin,
+                                    context: nil).size
     }
 }

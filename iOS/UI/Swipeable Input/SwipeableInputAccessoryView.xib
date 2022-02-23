@@ -108,11 +108,11 @@
             <connections>
                 <outlet property="avatarView" destination="sdi-8g-wyi" id="1zf-uD-U28"/>
                 <outlet property="countView" destination="TRK-Tt-Z8M" id="Eby-pz-IPO"/>
+                <outlet property="gestureButton" destination="b2H-ok-H5y" id="B2D-c9-aad"/>
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="waN-uG-qvj"/>
                 <outlet property="inputHeightConstraint" destination="7Po-qb-mxR" id="bsb-Rf-EPm"/>
                 <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="TBm-Q0-wqy"/>
                 <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="kiT-F0-XH9"/>
-                <outlet property="overlayButton" destination="b2H-ok-H5y" id="B2D-c9-aad"/>
                 <outlet property="textView" destination="Ads-9e-WJh" id="meA-CW-ppC"/>
             </connections>
             <point key="canvasLocation" x="81.884057971014499" y="-35.825892857142854"/>
