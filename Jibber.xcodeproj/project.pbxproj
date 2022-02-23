@@ -291,7 +291,6 @@
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D640329625AF3CA500139396 /* checkbox.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328D25AF3CA500139396 /* checkbox.json */; };
-		D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
 		D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B6A236E0E7900FAA06B /* Connection.swift */; };
 		D642735122C857760088256B /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
@@ -848,7 +847,6 @@
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D640328D25AF3CA500139396 /* checkbox.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = checkbox.json; sourceTree = "<group>"; };
-		D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertConfirmationView.swift; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D6405B6A236E0E7900FAA06B /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		D642735022C857760088256B /* MessageContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContext.swift; sourceTree = "<group>"; };
@@ -1976,7 +1974,6 @@
 		D6B2603622E6AA3800143CF0 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */,
 				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
 				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
 				D61592DF24FC195D00B63412 /* InputTextView.swift */,
@@ -2667,7 +2664,6 @@
 				D6129FB427ADC72E0058811C /* Transaction.swift in Sources */,
 				D6265ED0279F13A40020BD26 /* InvitationUpsellCell.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
-				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				8094D5DB26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D63DB20B25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */,

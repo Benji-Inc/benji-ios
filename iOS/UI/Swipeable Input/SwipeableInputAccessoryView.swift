@@ -76,8 +76,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
     var sendable: SendableObject?
-    let deliveryTypeView = DeliveryTypeView()
-    let emotionView = old_EmotionView()
+    private let deliveryTypeView = DeliveryTypeView()
+    private let emotionView = old_EmotionView()
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -93,7 +93,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         super.initializeSubviews()
 
         #warning("Remove")
-        self.textView.backgroundColor = .red
+//        self.textView.backgroundColor = .red
 
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
@@ -139,20 +139,19 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         
         KeyboardManager.shared
             .$currentEvent
-            .mainSink { [weak self] currentEvent in
-                guard let `self` = self else { return }
-                
+            .mainSink { [unowned self] currentEvent in
                 switch currentEvent {
                 case .willShow:
                     self.showDetail(shouldShow: true)
+                    self.updateSwipeHint(shouldPlay: false)
                 case .willHide:
                     self.showDetail(shouldShow: false)
+                    self.updateSwipeHint(shouldPlay: false)
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 default:
                     break
                 }
-                self.updateSwipeHint(shouldPlay: false)
             }.store(in: &self.cancellables)
         
         self.textView.$inputText.mainSink { [unowned self] text in
@@ -162,32 +161,35 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }.store(in: &self.cancellables)
         
         self.gestureButton.didSelect { [unowned self] in
+            // No need to become first responder if we already are.
             guard !self.textView.isFirstResponder else { return }
             self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
         }
-        
-        self.textView.confirmationView.button.didSelect { [unowned self] in
-            self.didPressAlertCancel()
-        }
     }
     
-    func updateHeight(with numberOfLines: Int) {
-        var new: CGFloat = SwipeableInputAccessoryView.minHeight
+    private func updateHeight(with numberOfLines: Int) {
+        var newHeight: CGFloat = SwipeableInputAccessoryView.minHeight
 
-        if numberOfLines > 2 {
-            new = 400
+        if numberOfLines > 2 || self.inputHeightConstraint.constant == 400 {
+            #warning("Make this dynamic")
+            newHeight = 400
+            self.textView.textAlignment = .left
+            self.gestureButton.isVisible = false
+        } else {
+            self.textView.textAlignment = .center
+            self.gestureButton.isVisible = true
         }
 
         // There's no need to animate the height if it hasn't changed.
-        guard new != self.inputHeightConstraint.constant else { return }
+        guard newHeight != self.inputHeightConstraint.constant else { return }
 
-        UIView.animate(withDuration: 1) {
-            self.inputHeightConstraint.constant = new
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.inputHeightConstraint.constant = newHeight
             self.layoutNow()
         }
     }
 
-    func showDetail(shouldShow: Bool) {
+    private func showDetail(shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputTypeHeightConstraint.constant
             = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : SwipeableInputAccessoryView.inputTypeAvatarHeight
@@ -212,6 +214,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
         
         panRecognizer.touchesDidBegin = { [unowned self] in
+            // Stop playing animations when the user interacts with the view.
             self.updateSwipeHint(shouldPlay: false)
         }
         
@@ -219,18 +222,10 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.gestureButton.addGestureRecognizer(panRecognizer)
     }
 
-    func didPressAlertCancel() {}
-
     func handleTextChange(_ text: String) {
-        self.animateInputViews(with: text)
-
         switch self.currentMessageKind {
         case .text(_):
-//            if let types = self.getDataTypes(from: text), let first = types.first, let url = first.url {
-//                self.currentMessageKind = .link(url)
-//            } else {
-                self.currentMessageKind = .text(text)
- //           }
+            self.currentMessageKind = .text(text)
         case .photo(photo: let photo, _):
             self.currentMessageKind = .photo(photo: photo, body: text)
         case .video(video: let video, _):
@@ -239,6 +234,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             break
         }
 
+        // After the user enters text, the swipe hint can play to show them how to send it.
         self.updateSwipeHint(shouldPlay: !text.isEmpty)
 
         self.delegate?.swipeableInputAccessory(self, swipeIsEnabled: !text.isEmpty)
@@ -303,31 +299,9 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         }
     }
 
-    func getDataTypes(from text: String) -> [NSTextCheckingResult]? {
-        guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return nil }
-
-        let range = NSRange(text.startIndex..<text.endIndex, in: text)
-
-        var results: [NSTextCheckingResult] = []
-
-        detector.enumerateMatches(in: text,
-                                  options: [],
-                                  range: range) { (match, flags, _) in
-            guard let match = match else {
-                return
-            }
-
-            results.append(match)
-        }
-
-        return results
-    }
-
     func updateInputType(with type: InputType) {
         self.textView.updateInputView(type: type)
     }
-
-    func animateInputViews(with text: String) {}
 
     func resetInputViews() {
         self.currentContext = .respectful
@@ -338,17 +312,11 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     // MARK: - UIGestureRecognizerDelegate
 
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer is UILongPressGestureRecognizer {
-            return self.textView.isFirstResponder
-        }
-
-        return true
-    }
-
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
 
+        #warning("Use an identity check instead of a type check")
+        // The pan gesture should cancel other gestures.
         if gestureRecognizer is UIPanGestureRecognizer {
             return false
         }

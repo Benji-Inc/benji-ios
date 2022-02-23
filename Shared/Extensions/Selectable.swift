@@ -147,6 +147,7 @@ class PanGestureRecognizer: UIPanGestureRecognizer {
 }
 
 class SwipeGestureRecognizer: UIPanGestureRecognizer {
+    
     private var action: (UIPanGestureRecognizer) -> Void
     var touchesDidBegin: CompletionOptional = nil
     private var textView: UITextView
