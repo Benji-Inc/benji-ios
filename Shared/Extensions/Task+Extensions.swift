@@ -20,9 +20,9 @@ extension Task where Success == Void, Failure == Never {
     }
 
     /// Creates a new task that runs the passed in closure on the MainActor. For use in async functions.
-    static func onMainActorAsync(body: @escaping @MainActor @Sendable () -> Success) async {
-        await MainActor.run {
-            body()
+    static func onMainActorAsync(body: @escaping @MainActor @Sendable () async -> Success) {
+        Task {
+            await body()
         }
     }
 }
