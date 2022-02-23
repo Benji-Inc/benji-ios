@@ -62,11 +62,11 @@ class ProfileViewController: ViewController {
         super.viewDidLayoutSubviews()
         
         self.header.expandToSuperviewWidth()
-        self.header.height = 200
+        self.header.height = 220
         self.header.pinToSafeAreaTop()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
-        self.contextCuesVC.view.height = 150
+        self.contextCuesVC.view.height = 130
         self.contextCuesVC.view.match(.top, to: .bottom, of: self.header)
         
         self.conversationsVC.view.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
