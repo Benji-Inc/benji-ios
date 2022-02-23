@@ -10,10 +10,11 @@ import Foundation
 
 class ProfileViewController: ViewController {
     
-    private let avatar: Avatar
+    private var avatar: Avatar
     
     private let backgroundGradient = BackgroundGradientView()
     private let header = ProfileHeaderView()
+    private let contextCuesVC = ContextCuesViewController()
     
     init(with avatar: Avatar) {
         self.avatar = avatar
@@ -38,16 +39,31 @@ class ProfileViewController: ViewController {
         self.view.addSubview(self.backgroundGradient)
         
         self.view.addSubview(self.header)
-        self.header.configure(with: self.avatar)
+        self.addChild(viewController: self.contextCuesVC, toView: self.view)
+        
+        Task {
+            if let user = self.avatar as? User,
+               let updated = try? await user.retrieveDataIfNeeded() {
+                self.avatar = updated
+            }
+            
+            self.header.configure(with: self.avatar)
+        }.add(to: self.autocancelTaskPool)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.backgroundGradient.expandToSuperviewSize()
+        self.backgroundGradient.expandToSuperviewWidth()
+        self.backgroundGradient.height = self.view.height + 100
+        self.backgroundGradient.pin(.top)
         
         self.header.expandToSuperviewWidth()
         self.header.height = 200
-        self.header.pin(.top)
+        self.header.pinToSafeAreaTop()
+        
+        self.contextCuesVC.view.expandToSuperviewWidth()
+        self.contextCuesVC.view.height = 150
+        self.contextCuesVC.view.match(.top, to: .bottom, of: self.header)
     }
 }
