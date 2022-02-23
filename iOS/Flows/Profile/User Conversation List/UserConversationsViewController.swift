@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 class UserConversationsViewController: DiffableCollectionViewController<UserConversationsDataSource.SectionType,
                                        UserConversationsDataSource.ItemType,
@@ -20,6 +21,8 @@ class UserConversationsViewController: DiffableCollectionViewController<UserConv
                                                   endPoint: .bottomCenter)
     private let backgroundView = BaseView()
     lazy var segmentControl = ConversationsSegmentControl()
+    
+    private(set) var conversationListController: ConversationListController?
     
     init() {
         super.init(with: CollectionView(layout: UserConversationsCollectionViewLayout()))
@@ -39,6 +42,12 @@ class UserConversationsViewController: DiffableCollectionViewController<UserConv
         self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
         self.view.insertSubview(self.segmentControl, aboveSubview: self.collectionView)
         self.view.insertSubview(self.segmentGradientView, belowSubview: self.segmentControl)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.loadInitialData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,12 +75,31 @@ class UserConversationsViewController: DiffableCollectionViewController<UserConv
     }
     
     override func getAllSections() -> [UserConversationsDataSource.SectionType] {
-        return []
+        return [.conversations]
     }
     
     override func retrieveDataForSnapshot() async -> [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] {
+        
         var data: [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] = [:]
         
+        let filter = Filter<ChannelListFilterScope>.containMembers(userIds: [User.current()!.objectId!])
+
+        let query = ChannelListQuery(filter: filter,
+                                     sort: [Sorting(key: .createdAt, isAscending: true)],
+                                     pageSize: .channelsPageSize,
+                                     messagesLimit: .messagesPageSize)
+        self.conversationListController
+        = ChatClient.shared.channelListController(query: query)
+        
+        try? await self.conversationListController?.synchronize()
+        try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
+
+        let conversations: [Conversation] = self.conversationListController?.conversations ?? []
+        
+        data[.conversations] = conversations.map({ conversation in
+            return .conversation(conversation.cid)
+        })
+                
         return data
     }
 }

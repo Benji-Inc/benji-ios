@@ -15,7 +15,7 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
     }
     
     enum ItemType: Hashable {
-        case conversation(Conversation)
+        case conversation(ConversationId)
     }
     
     let config = ManageableCellRegistration<ConversationCell>().provider
@@ -23,10 +23,10 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
         
         switch item {
-        case .conversation(let conversation):
+        case .conversation(let cid):
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
-                                                                item: conversation)
+                                                                item: cid)
         }
     }
 }
