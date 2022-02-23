@@ -56,6 +56,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var inputHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
+    @IBOutlet var collapseButton: UIButton!
     /// An invisible button to handle taps and pan gestures.
     @IBOutlet var gestureButton: UIButton!
     @IBOutlet var countView: CharacterCountView!
@@ -168,6 +169,10 @@ class SwipeableInputAccessoryView: BaseView {
 
         self.gestureButton.addGestureRecognizer(self.inputFieldTapRecognizer)
 
+        self.collapseButton.addAction(for: .touchUpInside) { [unowned self] in
+            self.inputState = .collapsed
+        }
+
         self.addGestureRecognizer(self.backgroundTapRecognizer)
     }
 
@@ -251,7 +256,9 @@ class SwipeableInputAccessoryView: BaseView {
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
             self.textView.isScrollEnabled = false
             self.textView.textAlignment = .center
+
             self.gestureButton.isVisible = true
+            self.collapseButton.isVisible = false
 
             newInputHeight = SwipeableInputAccessoryView.minHeight
         case .expanded:
@@ -266,6 +273,7 @@ class SwipeableInputAccessoryView: BaseView {
 
             // Disable swipe gestures when expanded
             self.gestureButton.isVisible = false
+            self.collapseButton.isVisible = true
 
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }

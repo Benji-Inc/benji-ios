@@ -37,6 +37,14 @@
                                     <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="14"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-jA-Yqp">
+                                    <rect key="frame" x="0.0" y="73" width="273" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="Cq9-5y-qrp"/>
+                                    </constraints>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain" image="Collapse"/>
+                                </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
                                     <rect key="frame" x="0.0" y="0.0" width="273" height="131"/>
                                     <state key="normal" title="Button"/>
@@ -48,6 +56,9 @@
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="3E0-AT-Kum"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="76" id="7Po-qb-mxR"/>
+                                <constraint firstItem="wxD-jA-Yqp" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="7Qi-P2-Vbz"/>
+                                <constraint firstItem="wxD-jA-Yqp" firstAttribute="centerX" secondItem="VuQ-5S-h7F" secondAttribute="centerX" id="E5T-lW-ZLU"/>
+                                <constraint firstAttribute="bottom" secondItem="wxD-jA-Yqp" secondAttribute="bottom" constant="14" id="IYW-9o-rq4"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="fhu-x1-1GA"/>
                                 <constraint firstAttribute="bottom" secondItem="Ads-9e-WJh" secondAttribute="bottom" constant="20" id="g4Y-rU-cRa"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="hq5-LO-hrU"/>
@@ -55,6 +66,7 @@
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="centerY" secondItem="VuQ-5S-h7F" secondAttribute="centerY" constant="-6" id="jrV-3k-sUT"/>
                                 <constraint firstAttribute="bottom" secondItem="b2H-ok-H5y" secondAttribute="bottom" id="o6A-2N-qrt"/>
                                 <constraint firstAttribute="trailing" secondItem="b2H-ok-H5y" secondAttribute="trailing" id="tFu-L7-c6N"/>
+                                <constraint firstAttribute="trailing" secondItem="wxD-jA-Yqp" secondAttribute="trailing" id="ybi-NR-WiI"/>
                             </constraints>
                             <variation key="default">
                                 <mask key="constraints">
@@ -116,6 +128,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="avatarView" destination="sdi-8g-wyi" id="1zf-uD-U28"/>
+                <outlet property="collapseButton" destination="wxD-jA-Yqp" id="IRt-FG-tCk"/>
                 <outlet property="countView" destination="TRK-Tt-Z8M" id="Eby-pz-IPO"/>
                 <outlet property="gestureButton" destination="b2H-ok-H5y" id="B2D-c9-aad"/>
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="waN-uG-qvj"/>
@@ -132,6 +145,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Collapse" width="11" height="15"/>
         <namedColor name="RED">
             <color red="0.92900002002716064" green="0.29399999976158142" blue="0.29800000786781311" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
