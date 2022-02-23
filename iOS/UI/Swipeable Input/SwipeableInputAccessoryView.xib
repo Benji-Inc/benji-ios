@@ -16,7 +16,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ConversationInputAccessoryView" customModule="Jibber" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SwipeableInputAccessoryView" customModule="Jibber" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="337" height="199"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -106,14 +106,14 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="avatarView" destination="sdi-8g-wyi" id="0nu-4g-sC0"/>
-                <outlet property="countView" destination="TRK-Tt-Z8M" id="FJ4-jL-WvN"/>
-                <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="o5I-Cx-4HN"/>
-                <outlet property="inputHeightConstraint" destination="7Po-qb-mxR" id="WXH-5N-l52"/>
-                <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="iQV-ts-qMa"/>
-                <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="ISn-9g-1kH"/>
-                <outlet property="overlayButton" destination="b2H-ok-H5y" id="78P-cH-BSH"/>
-                <outlet property="textView" destination="Ads-9e-WJh" id="T8m-mt-M46"/>
+                <outlet property="avatarView" destination="sdi-8g-wyi" id="1zf-uD-U28"/>
+                <outlet property="countView" destination="TRK-Tt-Z8M" id="Eby-pz-IPO"/>
+                <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="waN-uG-qvj"/>
+                <outlet property="inputHeightConstraint" destination="7Po-qb-mxR" id="bsb-Rf-EPm"/>
+                <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="TBm-Q0-wqy"/>
+                <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="kiT-F0-XH9"/>
+                <outlet property="overlayButton" destination="b2H-ok-H5y" id="B2D-c9-aad"/>
+                <outlet property="textView" destination="Ads-9e-WJh" id="meA-CW-ppC"/>
             </connections>
             <point key="canvasLocation" x="81.884057971014499" y="-35.825892857142854"/>
         </view>

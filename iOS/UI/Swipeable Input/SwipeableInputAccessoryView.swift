@@ -11,6 +11,7 @@ import Lottie
 import Combine
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
+
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool)
     /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
@@ -183,7 +184,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     func showDetail(shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputTypeHeightConstraint.constant = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : SwipeableInputAccessoryView.inputTypeAvatarHeight
+            self.inputTypeHeightConstraint.constant
+            = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : SwipeableInputAccessoryView.inputTypeAvatarHeight
             
             self.emotionView.alpha = shouldShow ? 1.0 : 0.0
             self.deliveryTypeView.alpha = shouldShow ? 1.0 : 0.0

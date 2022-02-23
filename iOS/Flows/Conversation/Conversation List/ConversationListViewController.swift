@@ -36,8 +36,8 @@ class ConversationListViewController: ViewController, ConversationListCollection
     var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?
 
     // Custom Input Accessory View
-    lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
-        let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
+    lazy var messageInputAccessoryView: SwipeableInputAccessoryView = {
+        let inputView: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
         inputView.delegate = self.swipeInputDelegate
         inputView.textView.restorationIdentifier = "list"
         return inputView
