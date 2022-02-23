@@ -91,9 +91,15 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
 
     private var cancellables = Set<AnyCancellable>()
 
-    // MARK: - Animation
-    
+    // MARK: - Layout/Animation Properties
+
+    @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewCollapsedMaxHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
+
     private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self)
+
 
     // MARK: BaseView Setup and Layout
 
@@ -106,8 +112,8 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        #warning("Remove")
-//        self.textView.backgroundColor = .red
+        #warning("remove")
+        self.textView.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0.3)
 
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
@@ -177,6 +183,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
+                    self.inputState = .collapsed
                 default:
                     break
                 }
@@ -209,25 +216,43 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
     }
 
     private func updateLayout(for inputState: InputState) {
-        let newHeight: CGFloat
+        let newInputHeight: CGFloat
 
         switch inputState {
         case .collapsed:
+            NSLayoutConstraint.deactivate([self.textViewExpandedTopPinConstraint,
+                                           self.textViewExpandedBottomPinConstraint])
+            NSLayoutConstraint.activate([self.textViewCollapsedVerticalCenterConstraint,
+                                         self.textViewCollapsedMaxHeightConstraint])
+
+            self.textView.textContainer.lineBreakMode = .byTruncatingTail
+            self.textView.isScrollEnabled = false
             self.textView.textAlignment = .center
             self.gestureButton.isVisible = true
-            newHeight = SwipeableInputAccessoryView.minHeight
+
+            newInputHeight = SwipeableInputAccessoryView.minHeight
         case .expanded:
+            NSLayoutConstraint.deactivate([self.textViewCollapsedVerticalCenterConstraint,
+                                           self.textViewCollapsedMaxHeightConstraint])
+            NSLayoutConstraint.activate([self.textViewExpandedTopPinConstraint,
+                                         self.textViewExpandedBottomPinConstraint])
+
+            self.textView.textContainer.lineBreakMode = .byWordWrapping
+            self.textView.isScrollEnabled = true
             self.textView.textAlignment = .left
+
             // Disable swipe gestures when expanded
             self.gestureButton.isVisible = false
-            newHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
+
+            newInputHeight = 200
+//            newHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }
 
         // There's no need to animate the height if it hasn't changed.
-        guard newHeight != self.inputHeightConstraint.constant else { return }
+        guard newInputHeight != self.inputHeightConstraint.constant else { return }
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputHeightConstraint.constant = newHeight
+            self.inputHeightConstraint.constant = newInputHeight
             self.layoutNow()
         }
     }

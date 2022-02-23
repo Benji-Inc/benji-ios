@@ -27,9 +27,10 @@
                             <rect key="frame" x="32" y="8" width="273" height="131"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="273" height="33"/>
+                                    <rect key="frame" x="0.0" y="43" width="273" height="33"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
+                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="66" id="9Hx-7h-Yqq"/>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="DYI-6o-w2X"/>
                                     </constraints>
                                     <color key="textColor" name="RED"/>
@@ -47,12 +48,20 @@
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="3E0-AT-Kum"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="76" id="7Po-qb-mxR"/>
-                                <constraint firstItem="Ads-9e-WJh" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="VIR-zN-Axi"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="fhu-x1-1GA"/>
+                                <constraint firstAttribute="bottom" secondItem="Ads-9e-WJh" secondAttribute="bottom" constant="20" id="g4Y-rU-cRa"/>
+                                <constraint firstItem="Ads-9e-WJh" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="hq5-LO-hrU"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="jJa-qV-wJv"/>
+                                <constraint firstItem="Ads-9e-WJh" firstAttribute="centerY" secondItem="VuQ-5S-h7F" secondAttribute="centerY" constant="-6" id="jrV-3k-sUT"/>
                                 <constraint firstAttribute="bottom" secondItem="b2H-ok-H5y" secondAttribute="bottom" id="o6A-2N-qrt"/>
                                 <constraint firstAttribute="trailing" secondItem="b2H-ok-H5y" secondAttribute="trailing" id="tFu-L7-c6N"/>
                             </constraints>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="g4Y-rU-cRa"/>
+                                    <exclude reference="hq5-LO-hrU"/>
+                                </mask>
+                            </variation>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vaX-xP-i7k">
                             <rect key="frame" x="36" y="135" width="265" height="56"/>
@@ -114,6 +123,10 @@
                 <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="TBm-Q0-wqy"/>
                 <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="kiT-F0-XH9"/>
                 <outlet property="textView" destination="Ads-9e-WJh" id="meA-CW-ppC"/>
+                <outlet property="textViewCollapsedMaxHeightConstraint" destination="9Hx-7h-Yqq" id="c4E-c9-4Kg"/>
+                <outlet property="textViewCollapsedVerticalCenterConstraint" destination="jrV-3k-sUT" id="cyF-hj-Elk"/>
+                <outlet property="textViewExpandedBottomPinConstraint" destination="g4Y-rU-cRa" id="e7c-Pe-EIY"/>
+                <outlet property="textViewExpandedTopPinConstraint" destination="hq5-LO-hrU" id="8XH-mH-x2P"/>
             </connections>
             <point key="canvasLocation" x="81.884057971014499" y="-35.825892857142854"/>
         </view>
