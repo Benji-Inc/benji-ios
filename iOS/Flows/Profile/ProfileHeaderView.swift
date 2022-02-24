@@ -51,6 +51,7 @@ class ProfileHeaderView: BaseView {
         self.addSubview(self.avatarView)
     }
     
+    @MainActor
     func configure(with user: User) {
         
         self.avatarView.set(avatar: user)
@@ -98,7 +99,7 @@ class ProfileHeaderView: BaseView {
         self.timeLabel.top = self.avatarView.centerY + 2
         
         self.bottomLabel.setSize(withWidth: self.width)
-        self.bottomLabel.pin(.bottom, offset: .standard)
+        self.bottomLabel.match(.top, to: .bottom, of: self.avatarView, offset: .xtraLong)
         self.bottomLabel.centerOnX()
         
         self.statusLabel.setSize(withWidth: self.width)

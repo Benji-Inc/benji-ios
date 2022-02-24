@@ -24,6 +24,8 @@ class UserConversationsViewController: DiffableCollectionViewController<UserConv
     
     private(set) var conversationListController: ConversationListController?
     
+    private(set) var user: User?
+    
     init() {
         super.init(with: CollectionView(layout: UserConversationsCollectionViewLayout()))
     }
@@ -42,12 +44,6 @@ class UserConversationsViewController: DiffableCollectionViewController<UserConv
         self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
         self.view.insertSubview(self.segmentControl, aboveSubview: self.collectionView)
         self.view.insertSubview(self.segmentGradientView, belowSubview: self.segmentControl)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.loadInitialData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -72,6 +68,15 @@ class UserConversationsViewController: DiffableCollectionViewController<UserConv
         self.segmentGradientView.top = self.collectionView.top
         self.segmentGradientView.height = padding.doubled + self.segmentControl.height
         self.segmentGradientView.centerOnX()
+    }
+    
+    @MainActor
+    func configure(with user: User) {
+        self.user = user
+        Task {
+            await Task.sleep(seconds: 1)
+            self.loadInitialData()
+        }
     }
     
     override func getAllSections() -> [UserConversationsDataSource.SectionType] {
@@ -99,7 +104,7 @@ class UserConversationsViewController: DiffableCollectionViewController<UserConv
         data[.conversations] = conversations.map({ conversation in
             return .conversation(conversation.cid)
         })
-                
+
         return data
     }
 }

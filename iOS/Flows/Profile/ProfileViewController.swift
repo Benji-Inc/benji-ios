@@ -47,17 +47,23 @@ class ProfileViewController: ViewController {
         self.addChild(viewController: self.conversationsVC, toView: self.view)
         
         self.view.addSubview(self.bottomGradientView)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         Task {
             if let user = self.avatar as? User,
                let updated = try? await user.retrieveDataIfNeeded() {
                 self.avatar = updated
                 self.header.configure(with: updated)
+                self.conversationsVC.configure(with: updated)
             } else if let userId = self.avatar.userObjectId,
                         let user = try? await User.getObject(with: userId),
                       let updated = try? await user.retrieveDataIfNeeded() {
                 self.avatar = updated
                 self.header.configure(with: updated)
+                self.conversationsVC.configure(with: updated)
             }
             
         }.add(to: self.autocancelTaskPool)
