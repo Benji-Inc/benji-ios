@@ -11,8 +11,6 @@ import Lottie
 import Combine
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool)
     /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
     /// The accessory view updated the position of the sendable's preview view's position.
@@ -323,8 +321,6 @@ class SwipeableInputAccessoryView: BaseView {
         // After the user enters text, the swipe hint can play to show them how to send it.
         let shouldPlay = !text.isEmpty && self.inputState == .collapsed
         self.hintAnimator.updateSwipeHint(shouldPlay: shouldPlay)
-
-        self.delegate?.swipeableInputAccessory(self, swipeIsEnabled: !text.isEmpty)
     }
 
     func updateInputType(with type: InputType) {
