@@ -56,7 +56,7 @@ extension User: Avatar {
         let formatter = Date.hourMinuteTimeOfDay
         formatter.timeZone = timeZone
         let localTime = formatter.string(from: Date())
-        return localTime.isEmpty ? "Unkown" : localTime
+        return localTime.isEmpty ? "Unknown" : localTime
     }
 }
 
