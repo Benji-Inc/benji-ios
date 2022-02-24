@@ -204,7 +204,7 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
             self.panGestureHandler.handle(pan: recognizer)
         }
         
-        panRecognizer.tochesDidBegin = { [unowned self] in
+        panRecognizer.touchesDidBegin = { [unowned self] in
             self.updateSwipeHint(shouldPlay: false)
         }
         
@@ -246,59 +246,53 @@ class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, Active
         self.emotionView.alpha = 1.0
         self.deliveryTypeView.alpha = 1.0
         
-        if shouldPlay {
-            self.swipeHintTask = Task {
-                // Wait 2 seconds before playing the hint
-                await Task.snooze(seconds: 2)
+        guard shouldPlay else { return }
 
-                // Don't play the hint if the user started more typing.
-                guard !Task.isCancelled else { return }
-                
-                await UIView.awaitAnimation(with: .standard, animations: {
-                    self.emotionView.alpha = 0
-                    self.deliveryTypeView.alpha = 0
-                })
-                
-                // Don't play the hint if the user started more typing.
-                guard !Task.isCancelled else { return }
-                
-                await UIView.awaitSpringAnimation(with: .slow,
-                                                  damping: 0.2,
-                                                  options: [.curveEaseInOut, .allowUserInteraction]) {
-                    self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
-                }
-                
-                // Don't play the hint if the user started more typing.
-                guard !Task.isCancelled else { return }
-                
-                await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
-                    self.inputContainerView.transform = .identity
-                }
-                
-                // Don't play the hint if the user started more typing.
-                guard !Task.isCancelled else { return }
-                
-                await UIView.awaitSpringAnimation(with: .slow,
-                                                  damping: 0.2,
-                                                  options: [.curveEaseInOut, .allowUserInteraction]) {
-                    self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
-                }
-                
-                // Don't play the hint if the user started more typing.
-                guard !Task.isCancelled else { return }
-                
-                await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
-                    self.inputContainerView.transform = .identity
-                }
-                
-                // Don't play the hint if the user started more typing.
-                guard !Task.isCancelled else { return }
-                
-                await UIView.awaitAnimation(with: .standard, animations: {
-                    self.emotionView.alpha = 1.0
-                    self.deliveryTypeView.alpha = 1.0
-                })
+        self.swipeHintTask = Task {
+            // Wait a bit before playing the hint
+            await Task.snooze(seconds: 3)
+
+            guard !Task.isCancelled else { return }
+
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.emotionView.alpha = 0
+                self.deliveryTypeView.alpha = 0
+            })
+
+            guard !Task.isCancelled else { return }
+
+            await UIView.awaitSpringAnimation(with: .slow,
+                                              damping: 0.2,
+                                              options: [.curveEaseInOut, .allowUserInteraction]) {
+                self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
             }
+
+            guard !Task.isCancelled else { return }
+
+            await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
+                self.inputContainerView.transform = .identity
+            }
+
+            guard !Task.isCancelled else { return }
+
+            await UIView.awaitSpringAnimation(with: .slow,
+                                              damping: 0.2,
+                                              options: [.curveEaseInOut, .allowUserInteraction]) {
+                self.inputContainerView.transform = CGAffineTransform(translationX: 0.0, y: -4.0)
+            }
+
+            guard !Task.isCancelled else { return }
+
+            await UIView.awaitSpringAnimation(with: .slow, options: [.curveEaseInOut, .allowUserInteraction]) {
+                self.inputContainerView.transform = .identity
+            }
+
+            guard !Task.isCancelled else { return }
+
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.emotionView.alpha = 1.0
+                self.deliveryTypeView.alpha = 1.0
+            })
         }
     }
 
