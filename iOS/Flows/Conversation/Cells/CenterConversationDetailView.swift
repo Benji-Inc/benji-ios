@@ -52,6 +52,8 @@ class CenterConversationDetailView: UICollectionReusableView, ConversationUIStat
         self.addSubview(self.rightLabel)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
+        
+        self.leftLabel.setText("No messages")
     }
         
     override func layoutSubviews() {
@@ -138,7 +140,7 @@ class CenterConversationDetailView: UICollectionReusableView, ConversationUIStat
     }
     
     override func prepareForReuse() {
-        super.prepareForReuse()
+        super.prepareForReuse() 
         
         self.subscriptions.forEach { cancellable in
             cancellable.cancel()

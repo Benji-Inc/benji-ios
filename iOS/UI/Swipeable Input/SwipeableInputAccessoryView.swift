@@ -125,7 +125,7 @@ class SwipeableInputAccessoryView: BaseView {
         
         self.inputTypeContainer.addSubview(self.deliveryTypeView)
         self.deliveryTypeView.alpha = 0
-        self.deliveryTypeView.configure(for: self.currentContext)
+        
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
         }
@@ -145,6 +145,11 @@ class SwipeableInputAccessoryView: BaseView {
 
         self.emotionView.pin(.left)
         self.deliveryTypeView.pin(.right)
+    }
+    
+    func resetDeliveryType() {
+        self.currentContext = .respectful
+        self.deliveryTypeView.reset()
     }
 
     private lazy var panRecognizer
@@ -329,7 +334,6 @@ class SwipeableInputAccessoryView: BaseView {
 
     func resetInputViews() {
         self.inputState = .collapsed
-        self.currentContext = .respectful
         self.textView.reset()
         self.inputContainerView.alpha = 1
         self.countView.alpha = 0.0
