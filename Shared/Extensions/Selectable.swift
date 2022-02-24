@@ -151,7 +151,7 @@ class SwipeGestureRecognizer: UIPanGestureRecognizer {
 
     var touchesDidBegin: CompletionOptional = nil
 
-    var beginDelay: TimeInterval = 0.25
+    var beginDelay: TimeInterval = 0.2
 
     private var action: (UIPanGestureRecognizer) -> Void
     private var textView: UITextView

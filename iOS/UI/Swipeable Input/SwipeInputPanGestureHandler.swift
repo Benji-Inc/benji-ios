@@ -109,8 +109,8 @@ class SwipeInputPanGestureHandler {
         guard let sendable = self.inputView.sendable, let previewView = self.previewView else { return }
 
         self.inputView.delegate?.swipeableInputAccessory(self.inputView,
-                                               didUpdatePreviewFrame: previewView.frame,
-                                               for: sendable)
+                                                         didUpdatePreviewFrame: previewView.frame,
+                                                         for: sendable)
     }
 
     private func handlePanEnded(withOffset panOffset: CGPoint) {
@@ -163,7 +163,7 @@ class SwipeInputPanGestureHandler {
         let gravityFactorX = lerpClamped(abs(previewCenter.x - dropZoneCenter.x)/xGravityRange,
                                          keyPoints: [1, 0.95, 0.85, 0.5, 0])
         let gravityFactorY = lerpClamped(abs(previewCenter.y - dropZoneCenter.y)/yGravityRange,
-                                        keyPoints: [1, 0.95, 0.85, 0.7, 0])
+                                         keyPoints: [1, 0.95, 0.85, 0.7, 0])
         gravityVector = CGVector(dx: gravityVector.dx * gravityFactorX,
                                  dy: gravityVector.dy * gravityFactorY)
 
@@ -188,7 +188,7 @@ class SwipeInputPanGestureHandler {
                 self.animatePreviewScale(shouldScale: true)
                 previewView.setBubbleColor(ThemeColor.B1.color, animated: true)
                 // Apple bug where the trait collection for all subviews is dark, even though it should be light.
-                // So we have to access the window to get the correct trait. 
+                // So we have to access the window to get the correct trait.
                 if let window = UIWindow.topWindow(), window.traitCollection.userInterfaceStyle == .light {
                     previewView.textView.setTextColor(.B3)
                 } else {
