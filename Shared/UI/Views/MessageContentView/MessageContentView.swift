@@ -162,7 +162,6 @@ class MessageContentView: BaseView {
             if self.textView.top < MessageContentView.padding.value {
                 self.textView.pin(.top, offset: MessageContentView.padding)
             }
-
         } else {
             self.textView.textAlignment = .center
             self.textView.center = self.bubbleView.center

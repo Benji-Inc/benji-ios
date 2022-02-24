@@ -39,7 +39,9 @@ class MessageTextView: TextView {
         let characterIndex = self.layoutManager.characterIndex(for: location, in: self.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         if characterIndex < self.textStorage.length {
             // Check if character is a link and handle normally
-            if (self.textStorage.attribute(NSAttributedString.Key.link, at: characterIndex, effectiveRange: nil) != nil) {
+            if self.textStorage.attribute(NSAttributedString.Key.link,
+                                          at: characterIndex,
+                                          effectiveRange: nil) != nil {
                 return self
             }
         }
