@@ -29,6 +29,7 @@ enum UserKey: String {
     case handle
     case connectionPreferences
     case focusStatus
+    case timeZone
 }
 
 enum UserStatus: String {
@@ -105,5 +106,10 @@ final class User: PFUser {
 
     var connectionPreferences: [ConnectionPreference] {
         return self.getObject(for: .connectionPreferences) ?? []
+    }
+    
+    var timeZone: String {
+        get { return self.getObject(for: .timeZone) ?? String() }
+        set { self.setObject(for: .timeZone, with: newValue) }
     }
 }

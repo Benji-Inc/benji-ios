@@ -32,6 +32,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             await UserNotificationManager.shared.registerPush(from: deviceToken)
         }
     }
+    
+    func applicationSignificantTimeChange(_ application: UIApplication) {
+        if let user = User.current(), user.isAuthenticated {
+            // Update the timeZone
+            user.timeZone = TimeZone.current.identifier
+            user.saveEventually()
+        }
+    }
 
     func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {

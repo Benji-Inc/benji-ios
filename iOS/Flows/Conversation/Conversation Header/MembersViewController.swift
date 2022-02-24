@@ -19,7 +19,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
-        cv.isScrollEnabled = false
         cv.showsHorizontalScrollIndicator = false
         super.init(with: cv)
     }
@@ -38,6 +37,8 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         self.collectionView.clipsToBounds = false
 
         self.collectionView.animationView.isHidden = true
+        
+        self.collectionView.allowsMultipleSelection = false 
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
