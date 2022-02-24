@@ -56,13 +56,11 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
-        // Show the send message overlay so the user can see where to drag the message
+    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
+        // Set the drop zone frame on the swipe view so it knows where to gravitate the message toward.
         let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: view)
         view.dropZoneFrame = overlayFrame
-    }
 
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = false
 
         self.initialContentOffset = self.collectionView.contentOffset

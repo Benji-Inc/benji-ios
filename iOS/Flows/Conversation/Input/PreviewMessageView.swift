@@ -21,6 +21,7 @@ class PreviewMessageView: SpeechBubbleView {
         super.initializeSubviews()
 
         self.addSubview(self.textView)
+        self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.addSubview(self.imageView)
 
         self.$messageKind.mainSink { (kind) in
@@ -60,7 +61,7 @@ class PreviewMessageView: SpeechBubbleView {
         self.imageView.height = self.imageView.displayable.isNil ? 0 : 100
         self.imageView.centerOnX()
         
-        self.textView.setSize(withMaxWidth: self.width)
+        self.textView.setSize(withMaxWidth: self.width, maxHeight: self.height)
         self.textView.centerOnX()
         self.textView.center.y = self.halfHeight - 6
     }

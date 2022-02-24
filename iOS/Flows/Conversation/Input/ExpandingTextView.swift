@@ -28,8 +28,6 @@ class ExpandingTextView: TextView {
     
     override func initializeViews() {
         super.initializeViews()
-        
-        self.maxLength = 140
 
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainer.heightTracksTextView = true
@@ -88,9 +86,12 @@ class ExpandingTextView: TextView {
         }
     }
 
+    // MARK: - TextView Event Handlers
+
     override func textViewDidBeginEditing() {
         super.textViewDidBeginEditing()
 
+        // Hide the placeholder when the user wants to start typing a message.
         self.set(placeholder: "")
         self.setNeedsDisplay()
     }
