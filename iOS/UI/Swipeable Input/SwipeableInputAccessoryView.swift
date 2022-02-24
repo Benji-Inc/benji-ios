@@ -148,7 +148,7 @@ class SwipeableInputAccessoryView: BaseView {
     }
 
     private lazy var panRecognizer
-    = SwipeGestureRecognizer(textView: self.textView) { [unowned self] (recognizer) in
+    = SwipeGestureRecognizer { [unowned self] (recognizer) in
         self.panGestureHandler.handle(pan: recognizer)
     }
     private lazy var inputFieldTapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] recognizer in

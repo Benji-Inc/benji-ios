@@ -154,11 +154,9 @@ class SwipeGestureRecognizer: UIPanGestureRecognizer {
     var beginDelay: TimeInterval = 0.2
 
     private var action: (UIPanGestureRecognizer) -> Void
-    private var textView: UITextView
 
-    init(textView: UITextView, action: @escaping (UIPanGestureRecognizer) -> Void) {
+    init(action: @escaping (UIPanGestureRecognizer) -> Void) {
         self.action = action
-        self.textView = textView
 
         super.init(target: nil, action: nil)
 
