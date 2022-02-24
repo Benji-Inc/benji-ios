@@ -108,12 +108,12 @@ extension Reservation: UIActivityItemSource {
 
     var message: String? {
         //guard let link = self.link else { return nil }
-        return "RSVP code: \(String(optional: self.objectId))\nClaim your RSVP by tapping 👇\n\(Reservation.domainURL), and then entering the code."
+        return "Get the Jibber app so we can communicate with empathy.\nRSVP by tapping 👇\n\(Reservation.domainURL)\nand then enter this code:\n\(String(optional: self.objectId))"
     }
 
     var reminderMessage: String? {
         //guard let link = self.link else { return nil }
-        return "RSVP code: \(String(optional: self.objectId))\nJibber is an exclusive place to be social. I saved you a spot. Tap👇\n\(Reservation.domainURL)"
+        return "Reminder! Get the Jibber app so we can communicate with empathy.\nRSVP by tapping 👇\n\(Reservation.domainURL)\nand then enter this code:\n\(String(optional: self.objectId))"
     }
 
 //    func prepareMetadata(andUpdate statusables: [Statusable]) async throws {

@@ -13,7 +13,8 @@ import Localization
 class InvitationLoadingView: BaseView {
 
     let blurView = BlurView()
-    let label = ThemeLabel(font: .regular)
+    let label = ThemeLabel(font: .small)
+    let nameLabel = ThemeLabel(font: .regular)
     let progressView = UIProgressView()
 
     override func initializeSubviews() {
@@ -21,7 +22,10 @@ class InvitationLoadingView: BaseView {
 
         self.addSubview(self.blurView)
         self.addSubview(self.label)
+        self.label.alpha = 0.35
         self.label.textAlignment = .center
+        self.addSubview(self.nameLabel)
+        self.nameLabel.textAlignment = .center
         self.addSubview(self.progressView)
         
         self.progressView.progressTintColor = ThemeColor.D6.color
@@ -39,8 +43,10 @@ class InvitationLoadingView: BaseView {
             }
 
             UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                self.label.alpha = 1.0
+                self.label.alpha = 0.35
                 self.label.transform = .identity
+                self.nameLabel.alpha = 1.0
+                self.nameLabel.transform = .identity
                 self.progressView.alpha = 1.0
             }
         }
@@ -63,7 +69,8 @@ class InvitationLoadingView: BaseView {
             }
 
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                self.label.alpha = 1.0
+                self.label.alpha = 0.35
+                self.nameLabel.alpha = 1.0
                 self.progressView.alpha = 1.0
             }
         }
@@ -85,10 +92,8 @@ class InvitationLoadingView: BaseView {
     }
 
     private func set(person: Person) {
-        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Preparing message for\n\n\n@(contact)")
-        self.label.setText(text)
-        self.label.add(attributes: [.foregroundColor: ThemeColor.D6.color,
-                                    .font: FontType.regularBold.font], to: person.fullName)
+        self.label.setText("Preparing message...")
+        self.nameLabel.setText(person.fullName)
         self.layoutNow()
     }
 
@@ -99,6 +104,7 @@ class InvitationLoadingView: BaseView {
 
     private func resetAnimation() {
         self.label.alpha = 0
+        self.nameLabel.alpha = 0
         self.progressView.alpha = 0
         self.progressView.progress = 0.0
     }
@@ -108,12 +114,16 @@ class InvitationLoadingView: BaseView {
 
         self.blurView.expandToSuperviewSize()
 
+        self.progressView.width = self.halfWidth
+        self.progressView.centerY = self.height * 0.4
+        self.progressView.centerOnX()
+        
         self.label.setSize(withWidth: self.width - Theme.contentOffset.doubled)
         self.label.centerOnX()
-        self.label.centerY = self.height * 0.4
-
-        self.progressView.width = self.halfWidth
-        self.progressView.match(.top, to: .bottom, of: self.label, offset: .standard)
-        self.progressView.centerOnX()
+        self.label.match(.bottom, to: .top, of: self.progressView, offset: .negative(.standard))
+        
+        self.nameLabel.setSize(withWidth: self.width - Theme.contentOffset.doubled)
+        self.nameLabel.centerOnX()
+        self.nameLabel.match(.top, to: .bottom, of: self.progressView, offset: .standard)
     }
 }
