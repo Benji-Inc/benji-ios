@@ -55,7 +55,7 @@ extension Achievement: Objectable {
 
 enum AchievementType: String, CaseIterable {
     
-    case joinJibber = "JOIN_JIBBER"
+    case joinJibber = "INTEREST_PAYMENT"
     case inviteSent = "INVITE_SENT"
     case firstMessage = "FIRST_MESSAGE"
     case firstFeeling = "FIRST_FEELING"
