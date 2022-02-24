@@ -12,6 +12,7 @@ class InvestmentUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
 
     let content = UpsellContentView()
     
+    var didSelectClose: CompletionOptional = nil
     var didTapInvest: CompletionOptional = nil
     var heightMultiplier: CGFloat = 0.75
 
@@ -27,6 +28,10 @@ class InvestmentUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
+        
+        self.content.closeButton.didSelect { [unowned self] in 
+            self.didSelectClose?()
+        }
         
         if let email = User.current()?.email {
             self.content.configure(with: "Thank you for showing interest in Jibber!",

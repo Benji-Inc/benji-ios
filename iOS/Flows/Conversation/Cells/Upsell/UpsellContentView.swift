@@ -11,6 +11,8 @@ import Localization
 
 class UpsellContentView: BaseView {
     
+    let closeButton = ThemeButton()
+    let closeImageView = UIImageView(image: UIImage(systemName: "xmark"))
     let imageView = UIImageView()
     let button = ThemeButton()
     let label = ThemeLabel(font: .medium, textColor: .T3)
@@ -31,6 +33,13 @@ class UpsellContentView: BaseView {
         self.addSubview(self.subTitle)
         self.subTitle.alpha = 0.5
         self.subTitle.textAlignment = .center
+        
+        self.closeImageView.contentMode = .scaleAspectFit
+        self.closeImageView.tintColor = ThemeColor.white.color
+        self.closeImageView.alpha = 0.5
+        
+        self.addSubview(self.closeImageView)
+        self.addSubview(self.closeButton)
     }
     
     func configure(with title: Localized,
@@ -66,5 +75,12 @@ class UpsellContentView: BaseView {
         self.subTitle.setSize(withWidth: self.width - padding)
         self.subTitle.centerOnX()
         self.subTitle.match(.top, to: .bottom, of: self.label, offset: .xtraLong)
+        
+        self.closeImageView.squaredSize = 20
+        self.closeImageView.pin(.top, offset: .long)
+        self.closeImageView.pin(.right, offset: .long)
+        
+        self.closeButton.squaredSize = 44
+        self.closeButton.center = self.closeImageView.center
     }
 }
