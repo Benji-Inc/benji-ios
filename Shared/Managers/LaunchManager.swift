@@ -38,7 +38,7 @@ class LaunchManager {
     
     weak var delegate: LaunchManagerDelegate?
 
-    func launchApp() async -> LaunchStatus {
+    func launchApp(with deepLink: DeepLinkable?) async -> LaunchStatus {
         // Initialize Parse if necessary
         if Parse.currentConfiguration.isNil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
@@ -55,7 +55,8 @@ class LaunchManager {
             // Ensure that the user object is up to date.
             _ = try? await user.fetchInBackground()
             
-            async let first : () = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            async let first : ()
+            = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             // Initialize the stores.
             async let second : () = ConnectionStore.shared.initialize()
             let _: [()] = await [first, second]
@@ -70,24 +71,32 @@ class LaunchManager {
             user.saveEventually()
         }
 #endif
-        let configuration = PHGPostHogConfiguration(apiKey: "phc_nTIZgY0M0QgX0QB14Ux428lvGVnUeddJCqEFEo4vt9n", host: "https://app.posthog.com")
+        let configuration = PHGPostHogConfiguration(apiKey: "phc_nTIZgY0M0QgX0QB14Ux428lvGVnUeddJCqEFEo4vt9n",
+                                                    host: "https://app.posthog.com")
 
         configuration.captureApplicationLifecycleEvents = true; // Record certain application events automatically!
         configuration.recordScreenViews = true; // Record screen views automatically!
 
         PHGPostHog.setup(with: configuration)
         
-        let launchStatus = await self.initializeUserData(with: nil)
+        let launchStatus = await self.initializeUserData(with: deepLink)
         try? await PFConfig.awaitConfig()
         return launchStatus
     }
 
     private func initializeUserData(with deeplink: DeepLinkable?) async -> LaunchStatus {
         guard let user = User.current() else {
+            // There is no user object yet, there's nothing to initialize.
             return .success(deepLink: deeplink)
         }
 
 #if !APPCLIP && !NOTIFICATION
+        do {
+            try await ChatClient.initialize(for: user)
+        } catch {
+            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
+        }
+
         return await self.getChatToken(for: user, deepLink: deeplink)
 #else
         return .success(deepLink: deeplink)
@@ -127,27 +136,22 @@ extension LaunchManager {
 
 #if !APPCLIP && !NOTIFICATION
     func getChatToken(for user: User, deepLink: DeepLinkable?) async -> LaunchStatus {
-        do {
-            try await ChatClient.initialize(for: user)
-            if let user = User.current(), user.isAuthenticated {
-                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-            }
-
-            var link = deepLink
-
-            // Used to load the initial conversation when a user has downloaded the full app from an app clip.
-            if let initial = try? await InitialConveration.retrieve() {
-                if let cidString = initial.conversationIdString {
-                    link?.conversationId = try? ConversationId(cid: cidString)
-                }
-
-                link?.deepLinkTarget = .conversation
-            }
-
-            return .success(deepLink: link)
-        } catch {
-            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
+        if let user = User.current(), user.isAuthenticated {
+            await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
         }
+
+        var link = deepLink
+
+        // Used to load the initial conversation when a user has downloaded the full app from an app clip.
+        if let initial = try? await InitialConveration.retrieve() {
+            if let cidString = initial.conversationIdString {
+                link?.conversationId = try? ConversationId(cid: cidString)
+            }
+
+            link?.deepLinkTarget = .conversation
+        }
+
+        return .success(deepLink: link)
     }
 #endif
 }

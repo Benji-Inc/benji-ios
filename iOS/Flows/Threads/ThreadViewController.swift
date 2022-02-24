@@ -43,8 +43,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
 
     // Custom Input Accessory View
-    lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
-        let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
+    lazy var messageInputAccessoryView: SwipeableInputAccessoryView = {
+        let view: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
         view.delegate = self.swipeInputDelegate
         view.textView.restorationIdentifier = "thread"
         return view

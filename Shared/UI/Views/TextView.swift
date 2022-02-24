@@ -14,16 +14,18 @@ class TextView: UITextView {
 
     // Trim white space and newline characters when end editing. Default is true
     var trimWhiteSpaceWhenEndEditing: Bool = true
-
     // Maximum length of text. 0 means no limit.
-    var maxLength: Int = 250
+    var maxLength: Int = 500
 
-    var cancellables = Set<AnyCancellable>()
+    @Published var isEditing: Bool = false
+
+    private var cancellables = Set<AnyCancellable>()
 
     var numberOfLines: Int {
         guard let lineHeight = self.font?.lineHeight else { return 0 }
-        let height = self.contentSize.height - self.textContainerInset.top - self.textContainerInset.bottom
-        return Int(height / lineHeight)
+        let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
+        let textHeight = self.getTextContentSize(withMaxWidth: self.width - horizontalPadding).height
+        return Int(textHeight / lineHeight)
     }
 
     override var text: String! {
@@ -68,10 +70,10 @@ class TextView: UITextView {
     }
 
     private var attributedPlaceholder: NSAttributedString? {
-        didSet {
-            self.setNeedsDisplay()
-        }
+        didSet { self.setNeedsDisplay() }
     }
+
+    // MARK: - Life cycle
 
     init(frame: CGRect = .zero,
          font: FontType,
@@ -137,7 +139,25 @@ class TextView: UITextView {
             }.store(in: &self.cancellables)
     }
 
-    // MARK: Setters
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+
+        // If the text view is empty, show the placeholder.
+        if self.text.isEmpty {
+            let xValue = self.textContainerInset.left + self.textContainer.lineFragmentPadding
+            let yValue = self.textContainerInset.top
+            let width = rect.size.width - xValue - self.textContainerInset.right
+            let height = rect.size.height - yValue - self.textContainerInset.bottom
+            let placeholderRect = CGRect(x: xValue, y: yValue, width: width, height: height)
+
+            if let attributedPlaceholder = self.attributedPlaceholder {
+                // Prefer to use attributedPlaceholder
+                attributedPlaceholder.draw(in: placeholderRect)
+            }
+        }
+    }
+
+    // MARK: - Setters
     
     func setText(_ localizedText: Localized?) {
         guard let localizedText = localizedText else {
@@ -190,28 +210,35 @@ class TextView: UITextView {
         self.textDidChange()
     }
 
-    // Trim white space and new line characters when end editing.
+    // MARK: - TextView Event Handlers
+
+    func textViewDidBeginEditing() {
+        self.isEditing = true
+    }
+
     func textViewDidEndEditing() {
+        // Trim white space and new line characters when editing ends.
         if self.trimWhiteSpaceWhenEndEditing {
             self.text = self.text?.trimmingCharacters(in: .whitespacesAndNewlines)
             self.setNeedsDisplay()
         }
         self.scrollToCorrectPosition()
+
+        self.isEditing = false
     }
 
-    // Limit the length of text
     func textDidChange() {
+        // Limit the length of text to be under the max length count.
         if self.maxLength > 0 && self.text.count > self.maxLength {
             let endIndex = self.text.index(self.text.startIndex, offsetBy: self.maxLength)
             self.text = String(self.text[..<endIndex])
             self.undoManager?.removeAllActions()
         }
+
         self.setNeedsDisplay()
     }
 
-    func textViewDidBeginEditing() {}
-
-    func scrollToCorrectPosition() {
+    private func scrollToCorrectPosition() {
         if self.isFirstResponder {
             self.scrollRangeToVisible(NSMakeRange(-1, 0)) // Scroll to bottom
         } else {
@@ -219,42 +246,19 @@ class TextView: UITextView {
         }
     }
 
-    // Show placeholder if needed
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-
-        if self.text.isEmpty {
-            let xValue = self.textContainerInset.left + self.textContainer.lineFragmentPadding
-            let yValue = self.textContainerInset.top
-            let width = rect.size.width - xValue - self.textContainerInset.right
-            let height = rect.size.height - yValue - self.textContainerInset.bottom
-            let placeholderRect = CGRect(x: xValue, y: yValue, width: width, height: height)
-
-            if let attributedPlaceholder = self.attributedPlaceholder {
-                // Prefer to use attributedPlaceholder
-                attributedPlaceholder.draw(in: placeholderRect)
-            }
-        }
-    }
+    // MARK: Frame Sizing
 
     func setSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) {
         self.size = self.getSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
     }
 
     func getSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) -> CGSize {
-        guard let text = self.text, !text.isEmpty, let attText = self.attributedText else {
-            return CGSize.zero
-        }
-
         let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
         let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
 
         // Get the max size available for the text, taking the textview's insets into account.
-        let maxTextSize = CGSize(width: maxWidth - horizontalPadding, height: maxHeight - verticalPadding)
-
-        var size: CGSize = attText.boundingRect(with: maxTextSize,
-                                                options: .usesLineFragmentOrigin,
-                                                context: nil).size
+        var size: CGSize = self.getTextContentSize(withMaxWidth: maxWidth - horizontalPadding,
+                                                   maxHeight: maxHeight - verticalPadding)
 
         // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
         size.width += horizontalPadding
@@ -264,5 +268,17 @@ class TextView: UITextView {
         size.height = clamp(size.height, max: maxHeight)
 
         return size
+    }
+
+    func getTextContentSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = .infinity) -> CGSize {
+        guard let text = self.text, !text.isEmpty, let attText = self.attributedText else {
+            return CGSize.zero
+        }
+
+        let maxTextSize = CGSize(width: maxWidth, height: maxHeight)
+
+        return attText.boundingRect(with: maxTextSize,
+                                    options: .usesLineFragmentOrigin,
+                                    context: nil).size
     }
 }

@@ -20,7 +20,7 @@ class LaunchCoordinator: PresentableCoordinator<LaunchStatus> {
         super.start()
 
         Task {
-            let launchStatus = await LaunchManager.shared.launchApp()
+            let launchStatus = await LaunchManager.shared.launchApp(with: self.deepLink)
             self.finishFlow(with: launchStatus)
         }
     }

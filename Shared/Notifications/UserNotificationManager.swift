@@ -26,8 +26,6 @@ class UserNotificationManager: NSObject {
     private let center = UNUserNotificationCenter.current()
     private(set) var application: UIApplication?
 
-    var cancellables = Set<AnyCancellable>()
-
     override init() {
         super.init()
 
@@ -45,7 +43,6 @@ class UserNotificationManager: NSObject {
     }
 
     func silentRegister(withApplication application: UIApplication) {
-        
         self.application = application
         
         Task {
@@ -95,7 +92,38 @@ class UserNotificationManager: NSObject {
             return false
         }
     }
-    
+
+    func registerPush(from deviceToken: Data) async {
+        do {
+            let installation = try await PFInstallation.getCurrent()
+            installation.badge = 0
+            installation.setDeviceTokenFrom(deviceToken)
+
+            // Update the user id on the installation object if it's different than the current user's id.
+            if let userId = User.current()?.objectId {
+                let installationUserId = installation["userId"] as? String ?? String()
+
+                if userId != installationUserId {
+                    installation["userId"] = userId
+                }
+            }
+
+            try await installation.saveInBackground()
+        } catch {
+            logError(error)
+
+            // HACK: If the installation object was deleted off the server,
+            // then clear out the local installation object so we create a new one on next launch.
+            // We're using the private string "_currentInstallation" because Parse prevents us from
+            // deleting Installations normally.
+            if error.code == PFErrorCode.errorObjectNotFound.rawValue {
+                try? PFObject.unpinAllObjects(withName: "_currentInstallation")
+            }
+        }
+    }
+
+    // MARK: - Message Event Handling
+
     func handleRead(message: Messageable) {
         self.center.getDeliveredNotifications { [unowned self] delivered in
             Task.onMainActor {
@@ -105,7 +133,7 @@ class UserNotificationManager: NSObject {
                     if note.request.identifier == message.id {
                         identifiers.append(message.id)
                     }
-                    
+
                     if message.context == .timeSensitive {
                         badgeCount -= 1
                     }
@@ -116,53 +144,60 @@ class UserNotificationManager: NSObject {
             }
         }
     }
-    
-    func getDeliveredNotifications() async -> [UNNotification] {
-        return await withCheckedContinuation({ continuation in
-            self.center.getDeliveredNotifications { notifications in
-                continuation.resume(returning: notifications)
+}
+
+// MARK: - UNUserNotificationCenterDelegate
+
+extension UserNotificationManager: UNUserNotificationCenterDelegate {
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+
+        // If the app is in the foreground, and is a new message, then check the interruption level to determine whether or not to show a banner. Don't show banners for non time-sensitive messages.
+        if let app = self.application,
+            await app.applicationState == .active,
+            notification.request.content.categoryIdentifier == "MESSAGE_NEW" {
+
+            if notification.request.content.interruptionLevel == .timeSensitive {
+                return [.banner, .list, .sound, .badge]
+            } else {
+                return [.list, .sound, .badge]
             }
-        })
-    }
-
-    func removeAllPendingNotificationRequests() {
-        self.center.removeAllPendingNotificationRequests()
-    }
-
-    func schedule(note: UNNotificationRequest) async {
-        try? await self.center.add(note)
-    }
-
-    func registerPush(from deviceToken: Data) async {
-        do {
-            let installation = try await PFInstallation.getCurrent()
-            installation.badge = 0
-            installation.setDeviceTokenFrom(deviceToken)
-            if installation["userId"].isNil {
-                installation["userId"] = User.current()?.objectId
-            }
-            
-            try await installation.saveInBackground()
-        } catch {
-            print(error)
         }
 
-        #if IOS
-        if !ChatClient.isConnected, let user = User.current() {
-            try? await ChatClient.initialize(for: user)
+        return [.banner, .list, .sound, .badge]
+    }
+
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+
+        if let action = UserNotificationAction(rawValue: response.actionIdentifier) {
+            self.handle(action: action, for: response)
+        } else if let target = response.notification.deepLinkTarget {
+            var deepLink = DeepLinkObject(target: target)
+            deepLink.customMetadata = response.notification.customMetadata
+            self.delegate?.userNotificationManager(willHandle: deepLink)
         }
 
-        return await withCheckedContinuation({ continuation in
-            ChatClient.shared.currentUserController().reloadUserIfNeeded { _ in
-                ChatClient.shared.currentUserController().addDevice(token: deviceToken) { error in
-                    if let _ = error {
-                        continuation.resume(returning: ())
-                    } else {
-                        continuation.resume(returning: ())
-                    }
-                }
+        completionHandler()
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                openSettingsFor notification: UNNotification?) {}
+
+    private func handle(action: UserNotificationAction, for response: UNNotificationResponse) {
+        switch action {
+        case .sayHi:
+            if let target = response.notification.deepLinkTarget {
+                var deepLink = DeepLinkObject(target: target)
+                deepLink.customMetadata = response.notification.customMetadata
+
+                self.delegate?.userNotificationManager(willHandle: deepLink)
             }
-        })
-        #endif
+        default:
+            break
+        }
     }
 }

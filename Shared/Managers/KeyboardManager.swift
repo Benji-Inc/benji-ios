@@ -35,7 +35,6 @@ class KeyboardManager {
     }
 
     private func addKeyboardObservers() {
-
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
             .mainSink { (notification) in
                 guard !self.isKeyboardShowing else { return }

@@ -15,7 +15,6 @@ enum InputType {
     case keyboard
     case calendar
     case jibs
-    case confirmation
 
     var image: UIImage? {
         switch self {
@@ -29,15 +28,11 @@ enum InputType {
             return UIImage(systemName: "calendar")
         case .jibs:
             return UIImage(systemName: "bitcoinsign.circle")
-        case .confirmation:
-            return nil
         }
     }
 }
 
 class InputTextView: ExpandingTextView {
-
-    lazy var confirmationView = AlertConfirmationView()
 
     private(set) var currentInputType: InputType?
     @Published var inputText: String = ""
@@ -52,8 +47,6 @@ class InputTextView: ExpandingTextView {
         guard self.currentInputType != type else { return }
 
         switch type {
-        case .confirmation:
-            self.inputView = self.confirmationView
         case .keyboard:
             self.inputView = nil
         case .photo, .video, .calendar, .jibs:
