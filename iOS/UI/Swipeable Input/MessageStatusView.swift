@@ -33,17 +33,16 @@ private struct MessageDeliveryStatusView: View {
     @ObservedObject var config: MessageDetailViewState
     
     var body: some View {
+        
         HStack {
             Spacer.length(.standard)
-
-            if let updateDate = self.config.updateDate {
-                let dateString = updateDate.getTimeAgoString() 
-                Text(dateString)
-                    .fontType(.small)
-                    .color(.T1)
-
-                Spacer.length(.short)
-            }
+            
+            Text(config.statusText)
+                .fontType(.small)
+                .color(.T1)
+                .animation(.linear(duration: Theme.animationDurationFast), value: config.statusText)
+            
+            Spacer.length(.short)
 
             MessageDeliveryStatusUIViewRepresentable(message: self.$config.message,
                                                      deliveryStatus: self.$config.deliveryStatus)
