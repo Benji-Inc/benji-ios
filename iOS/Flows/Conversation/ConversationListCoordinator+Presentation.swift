@@ -28,13 +28,11 @@ extension ConversationListCoordinator {
     func presentThread(for channelId: ChannelId,
                        messageId: MessageId,
                        startingReplyId: MessageId?) {
-        
-        let coordinator = ThreadCoordinator(with: channelId,
-                                            messageId: messageId,
-                                            startingReplyId: startingReplyId,
-                                            router: self.router,
-                                            deepLink: self.deepLink)
-        self.present(coordinator)
+
+        #warning("Present the coordinator instead.")
+        let message = Message.message(with: channelId, messageId: messageId)
+        let detailVC = MessageDetailViewController(message: message)
+        self.router.present(detailVC, source: self.conversationListVC)
     }
     
     func presentProfilePicture() {

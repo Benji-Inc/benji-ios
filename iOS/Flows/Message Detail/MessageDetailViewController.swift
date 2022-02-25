@@ -10,7 +10,19 @@ import Foundation
 
 class MessageDetailViewController: ViewController {
 
-    let messageView = MessageTextView()
+    private let messageView = MessageContentView()
+
+    let message: Messageable
+
+    init(message: Messageable) {
+        self.message = message
+
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func initializeViews() {
         super.initializeViews()
@@ -23,16 +35,23 @@ class MessageDetailViewController: ViewController {
         }
 
         self.view.addSubview(self.messageView)
-        self.messageView.backgroundColor = .blue
-        self.messageView.text = Lorem.paragraph()
-        self.messageView.isEditable = true
-        self.messageView.isScrollEnabled = true
-        self.messageView.isSelectable = true
+        self.messageView.configure(with: self.message)
+        self.messageView.configureBackground(color: .blue,
+                                             textColor: .red,
+                                             brightness: 1,
+                                             focusAmount: 1,
+                                             showBubbleTail: false,
+                                             tailOrientation: .down)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.messageView.setSize(withMaxWidth: self.view.width - 60)
+        let horizontalMargins = Theme.ContentOffset.long.value.doubled
+        let textViewSize = self.messageView.textView.getSize(with: .expanded,
+                                                             width: self.view.width - horizontalMargins)
+        self.messageView.size = textViewSize
+        self.messageView.pin(.top, offset: .standard)
+        self.messageView.centerOnX()
     }
 }
