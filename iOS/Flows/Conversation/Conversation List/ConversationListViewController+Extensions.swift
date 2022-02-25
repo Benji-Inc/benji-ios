@@ -12,6 +12,19 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
+        
+        self.dataSource.handleDidTapClose = { [unowned self] item in
+            self.dataSource.deleteItems([item])
+            switch item {
+            case .upsell:
+                UserDefaultsManager.update(key: .shouldShowGroupsUpsell, with: false)
+            case .invest:
+                UserDefaultsManager.update(key: .shouldShowInvestUpsell, with: false)
+            default:
+                break
+            }
+        }
+        
         self.dataSource.handleSelectedMessage = { [unowned self] (cid, messageID, view) in
             self.selectedMessageView = view
             self.onSelectedMessage?(cid, messageID, nil)

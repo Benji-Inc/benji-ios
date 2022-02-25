@@ -36,6 +36,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleLoadMoreMessages: CompletionOptional = nil
     var handleAddPeopleSelected: CompletionOptional = nil
     var handleInvestmentSelected: CompletionOptional = nil
+    
+    var handleDidTapClose: ((ItemType) -> Void)?
 
     /// The conversation ID of the conversation that is preparing to send, if any.
     private var conversationPreparingToSend: ConversationId?
@@ -96,6 +98,9 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             = collectionView.dequeueConfiguredReusableCell(using: self.invitationUpsellCellRegistration,
                                                            for: indexPath,
                                                            item: self)
+            cell.didSelectClose = { [unowned self]  in
+                self.handleDidTapClose?(item)
+            }
             cell.didSelectAddPeople = { [unowned self] in
                 self.handleAddPeopleSelected?()
             }
@@ -105,6 +110,9 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             = collectionView.dequeueConfiguredReusableCell(using: self.investmentUpsellCellRegistration,
                                                            for: indexPath,
                                                            item: self)
+            cell.didSelectClose = { [unowned self]  in
+                self.handleDidTapClose?(item)
+            }
             cell.didTapInvest = { [unowned self] in
                 self.handleInvestmentSelected?()
             }
@@ -134,8 +142,13 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         }
         updatedItems.append(contentsOf: conversationListController.conversations.asConversationCollectionItems)
         
-        updatedItems.append(.upsell)
-        updatedItems.append(.invest)
+        if UserDefaultsManager.getBool(for: .shouldShowGroupsUpsell, defaultValue: true) {
+            updatedItems.append(.upsell)
+        }
+        
+        if UserDefaultsManager.getBool(for: .shouldShowInvestUpsell, defaultValue: true) {
+            updatedItems.append(.invest)
+        }
       
         snapshot.setItems(updatedItems, in: sectionID)
 

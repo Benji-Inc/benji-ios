@@ -28,15 +28,15 @@ struct MessageDeliveryStatusUIViewRepresentable: UIViewRepresentable {
 
 class MessageDeliveryStatusUIView: BaseView {
 
-    private let readStatusView = AnimationView(name: "visibility")
-    private let sendStatus = AnimationView(name: "checkmark")
-    private let errorStatusView = AnimationView(name: "alertCircle")
+    private let readStatusView = AnimationView.with(animation: .doubleCheckMark)
+    private let sendStatus = AnimationView.with(animation: .checkMark)
+    private let errorStatusView = AnimationView.with(animation: .alertCircle)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         let keypath = AnimationKeypath(keys: ["**", "Color"])
-        let colorProvider = ColorValueProvider(ThemeColor.D1.color.lottieColorValue)
+        let colorProvider = ColorValueProvider(ThemeColor.D6.color.lottieColorValue)
 
         self.addSubview(self.sendStatus)
         self.sendStatus.currentProgress = 0
@@ -44,8 +44,7 @@ class MessageDeliveryStatusUIView: BaseView {
         self.sendStatus.contentMode = .scaleAspectFit
 
         self.addSubview(self.readStatusView)
-        self.readStatusView.currentProgress = 1
-        self.readStatusView.setValueProvider(colorProvider, keypath: keypath)
+        self.readStatusView.currentProgress = 0
         self.readStatusView.animationSpeed = 0.25
         self.readStatusView.contentMode = .scaleAspectFit
 
@@ -100,11 +99,11 @@ class MessageDeliveryStatusUIView: BaseView {
             }
         case .reading:
             self.readStatusView.isVisible = true
-            self.readStatusView.currentProgress = 1
-            self.readStatusView.play(fromProgress: 1, toProgress: 0, loopMode: .playOnce)
+            self.readStatusView.currentProgress = 0
+            self.readStatusView.play(fromProgress: 0, toProgress: 1, loopMode: .playOnce)
         case .read:
             self.readStatusView.isVisible = true
-            self.readStatusView.currentProgress = 0
+            self.readStatusView.currentProgress = 1
         case .error:
             self.errorStatusView.isVisible = true
             self.errorStatusView.stop()

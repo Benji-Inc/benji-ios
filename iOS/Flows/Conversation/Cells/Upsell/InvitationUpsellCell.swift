@@ -12,6 +12,7 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
 
     let content = UpsellContentView()
     
+    var didSelectClose: CompletionOptional = nil 
     var didSelectAddPeople: CompletionOptional = nil
     var heightMultiplier: CGFloat = 0.75
 
@@ -27,6 +28,10 @@ class InvitationUpsellCell: UICollectionViewCell, ConversationUIStateSettable {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
+        
+        self.content.closeButton.didSelect { [unowned self] in
+            self.didSelectClose?()
+        }
         
         self.content.configure(with: "Who do you want to Jibber with?",
                                subtitle: "Up to 10 in a group chat.",

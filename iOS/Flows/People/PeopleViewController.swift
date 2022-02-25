@@ -23,14 +23,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private let loadingView = InvitationLoadingView()
     private var showButton: Bool = true
     
-    private let backgroundView = BackgroundGradientView()
     private(set) var allPeople: [Person] = []
     
     @Published var selectedPeople: [Person] = []
-
-    override func loadView() {
-        self.view = self.backgroundView
-    }
     
     init() {
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
@@ -50,6 +45,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     override func initializeViews() {
         super.initializeViews()
+        
+        self.view.set(backgroundColor: .B0)
                 
         self.setupNavigationBar()
 

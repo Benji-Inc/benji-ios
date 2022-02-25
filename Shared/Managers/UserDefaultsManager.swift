@@ -13,13 +13,18 @@ class UserDefaultsManager {
     enum Key: String {
         case hasShownHomeSwipe
         case hasShownKeyboardInstructions
+        case shouldShowInvestUpsell
+        case shouldShowGroupsUpsell
     }
 
     static func update(key: Key, with value: Any) {
         UserDefaults.standard.setValue(value, forKey: key.rawValue)
     }
 
-    static func getBool(for key: Key) -> Bool {
+    static func getBool(for key: Key, defaultValue: Bool = true) -> Bool {
+        if UserDefaults.standard.value(forKey: key.rawValue).isNil {
+            return defaultValue
+        }
         return UserDefaults.standard.bool(forKey: key.rawValue)
     }
 

@@ -13,6 +13,7 @@ class MessageDetailViewState: ObservableObject {
 
     @Published var message: Messageable?
     @Published var deliveryStatus: DeliveryStatus
+    @Published var statusText: String
 
     var emotion: Emotion? {
         return self.message?.emotion
@@ -26,10 +27,14 @@ class MessageDetailViewState: ObservableObject {
     var replyCount: Int {
         return self.message?.totalReplyCount ?? 0
     }
+    var context: MessageContext? {
+        return self.message?.context
+    }
 
     init(message: Messageable?) {
         self.message = message
         self.deliveryStatus = .sent
+        self.statusText = ""
     }
 }
 

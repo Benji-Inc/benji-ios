@@ -92,7 +92,7 @@ class MessageCell: UICollectionViewCell {
         
         self.messageState.message = message
         self.messageState.deliveryStatus = message.deliveryStatus
-
+        
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
 
@@ -126,11 +126,15 @@ class MessageCell: UICollectionViewCell {
     // MARK: - Message Consumption
 
     private var consumeMessageTask: Task<Void, Never>?
+    private var statusTextTask: Task<Void, Never>?
 
     private func handleDetailsShown(_ areDetailsShown: Bool) {
         // If the detail visibility changes for a message, we always want to cancel its tasks.
         self.consumeMessageTask?.cancel()
         self.consumeMessageTask = nil
+        
+        self.statusTextTask?.cancel()
+        self.statusTextTask = nil
 
         if !areDetailsShown, let message = self.messageState.message {
             self.messageState.deliveryStatus = message.deliveryStatus
@@ -148,6 +152,21 @@ class MessageCell: UICollectionViewCell {
         let message = ChatClient.shared.message(cid: cid, id: messageable.id)
 
         self.startConsumptionIfNeeded(for: message)
+        self.updateStatusText(for: message)
+    }
+        
+    private func updateStatusText(for message: Message) {
+        guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
+        
+        self.statusTextTask = Task {
+            
+            self.messageState.statusText = message.context.displayName
+
+            await Task.snooze(seconds: 2)
+            guard !Task.isCancelled else { return }
+            
+            self.messageState.statusText = message.lastUpdatedAt?.getTimeAgoString() ?? ""
+        }
     }
 
     private func startConsumptionIfNeeded(for message: Message) {

@@ -130,7 +130,7 @@ class UserNotificationManager: NSObject {
                 var identifiers: [String] = []
                 var badgeCount = self.application?.applicationIconBadgeNumber ?? 0
                 delivered.forEach { note in
-                    if note.request.identifier == message.id {
+                    if note.request.content.messageId == message.id {
                         identifiers.append(message.id)
                     }
 
