@@ -10,9 +10,11 @@ import Foundation
 
 class MessageDetailViewController: ViewController {
 
-    private let messageView = MessageContentView()
-
     let message: Messageable
+
+    private let textView = TextView(font: .regular, textColor: .T3)
+    private let bubbleView = MessageBubbleView(orientation: .down, bubbleColor: ThemeColor.D1.color)
+    private let backgroundView = BaseView()
 
     init(message: Messageable) {
         self.message = message
@@ -28,30 +30,40 @@ class MessageDetailViewController: ViewController {
         super.initializeViews()
 
         self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        if let popoverPresentationController = self.popoverPresentationController {
+            let sheet = popoverPresentationController.adaptiveSheetPresentationController
+            sheet.detents = [.medium()]
         }
 
-        self.view.addSubview(self.messageView)
-        self.messageView.configure(with: self.message)
-        self.messageView.configureBackground(color: .blue,
-                                             textColor: .red,
-                                             brightness: 1,
-                                             focusAmount: 1,
-                                             showBubbleTail: false,
-                                             tailOrientation: .down)
+        self.view.addSubview(self.bubbleView)
+        self.bubbleView.tailLength = 0
+
+        self.bubbleView.addSubview(self.textView)
+        self.textView.text = self.message.kind.text
+        self.textView.isEditable = false
+        self.textView.isSelectable = true
+
+        self.view.addSubview(self.backgroundView)
+        self.backgroundView.set(backgroundColor: .B0)
+        self.backgroundView.layer.cornerRadius = Theme.cornerRadius
+        self.backgroundView.clipsToBounds = true
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let horizontalMargins = Theme.ContentOffset.long.value.doubled
-        let textViewSize = self.messageView.textView.getSize(with: .expanded,
-                                                             width: self.view.width - horizontalMargins)
-        self.messageView.size = textViewSize
-        self.messageView.pin(.top, offset: .standard)
-        self.messageView.centerOnX()
+        let horizontalMargins = Theme.ContentOffset.screenPadding.value.doubled
+        self.bubbleView.width = self.view.width - horizontalMargins
+
+        self.textView.setSize(withMaxWidth: self.bubbleView.width - MessageContentView.textViewPadding)
+        self.textView.pin(.top, offset: .long)
+        self.textView.centerOnX()
+
+        self.bubbleView.height = self.textView.height + Theme.ContentOffset.long.value.doubled
+        self.bubbleView.centerOnXAndY()
+
+        self.backgroundView.match(.top, to: .bottom, of: self.bubbleView, offset: .xtraLong)
+        self.backgroundView.expandToSuperviewWidth()
+        self.backgroundView.expand(.bottom)
     }
 }

@@ -13,7 +13,7 @@ class MessageBubbleView: SpeechBubbleView {
     let shapeMask = CAShapeLayer()
     let backgroundLayer = CAShapeLayer()
     let darkGradientLayer = GradientLayer(with: [.D4TopLeft, .D4BottomRight],
-                                      startPoint: .topLeft, endPoint: .bottomRight)
+                                          startPoint: .topLeft, endPoint: .bottomRight)
     let lightGradientLayer = GradientLayer(with: [.L4TopLeft, .L4BottomRight],
                                            startPoint: .topLeft, endPoint: .bottomRight)
     

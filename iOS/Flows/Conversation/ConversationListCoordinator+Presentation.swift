@@ -43,7 +43,7 @@ extension ConversationListCoordinator {
             self.conversationListVC.becomeFirstResponder()
         }
         
-        vc.onDidComplete = { _ in
+        vc.onDidComplete = { [unowned vc = vc] _ in
             vc.dismiss(animated: true, completion: nil)
         }
 
