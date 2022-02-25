@@ -39,7 +39,7 @@ extension MessageDetailCoordinator: MessageDetailViewControllerDelegate {
                                             startingReplyId: nil,
                                             router: self.router,
                                             deepLink: self.deepLink)
-        self.present(coordinator)
+        self.router.present(coordinator, source: self.messageVC)
         self.addChildAndStart(coordinator) { _ in }
     }
 }
