@@ -65,6 +65,10 @@ class LaunchManager {
 
             // Pre-load contacts
             _ = ContactsManger.shared
+            
+            // Update the timeZone
+            user.timeZone = TimeZone.current.identifier
+            user.saveEventually()
         }
 #endif
         let configuration = PHGPostHogConfiguration(apiKey: "phc_nTIZgY0M0QgX0QB14Ux428lvGVnUeddJCqEFEo4vt9n",

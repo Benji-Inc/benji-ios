@@ -33,7 +33,6 @@ class CenterConversationDetailView: UICollectionReusableView, ConversationUIStat
     private var conversationController: ConversationController?
     private var currentMessage: Message?
     
-    var cancellables = Set<AnyCancellable>()
     var subscriptions = Set<AnyCancellable>()
     let taskPool = TaskPool()
         
@@ -143,10 +142,6 @@ class CenterConversationDetailView: UICollectionReusableView, ConversationUIStat
         super.prepareForReuse() 
         
         self.subscriptions.forEach { cancellable in
-            cancellable.cancel()
-        }
-        
-        self.cancellables.forEach { cancellable in
             cancellable.cancel()
         }
         
