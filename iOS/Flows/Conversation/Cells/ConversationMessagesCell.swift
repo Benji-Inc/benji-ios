@@ -58,7 +58,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     /// A reference to the current task that scrolls to a specific message
     private var scrollToMessageTask: Task<Void, Never>?
     /// If true we should scroll to the last item in the collection in layout subviews.
-    private var scrollToLastItemOnLayout: Bool = false
+    private var scrollToFirstUnreadIfNeccessary: Bool = false
 
     // MARK: - Lifecycle
 
@@ -97,9 +97,31 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         self.collectionView.expandToSuperviewSize()
 
-        if self.scrollToLastItemOnLayout {
-            self.scrollToLastItemOnLayout = false
-
+        if self.scrollToFirstUnreadIfNeccessary {
+            self.scrollToFirstUnreadIfNeccessary = false
+            self.scrollToFirstUnread()
+        }
+    }
+    
+    private func scrollToFirstUnread() {
+        
+        let firstUnread: Message? = self.dataSource.itemIdentifiers(in: .topMessages)
+            .compactMap({ type in
+            switch type {
+            case .message(cid: let cid, messageID: let messageID, _):
+                return ChatClient.shared.message(cid: cid, id: messageID)
+            default:
+                return nil
+            }
+        }).first { message in
+            return !message.isFromCurrentUser && !message.isConsumed
+        }
+        
+        if let messageId = firstUnread?.id {
+            Task {
+                await self.scrollToMessage(with: messageId, animateSelection: true)
+            }
+        } else {
             self.collectionLayout.prepare()
             let maxOffset = self.collectionLayout.maxZPosition
             self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
@@ -121,7 +143,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         // Scroll to the last item when a new conversation is loaded.
         if self.dataSource.snapshot().itemIdentifiers.isEmpty {
-            self.scrollToLastItemOnLayout = true
+            self.scrollToFirstUnreadIfNeccessary = true
             self.setNeedsLayout()
         }
 
