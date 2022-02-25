@@ -26,6 +26,9 @@ class MessageDetailViewState: ObservableObject {
     var replyCount: Int {
         return self.message?.totalReplyCount ?? 0
     }
+    var context: MessageContext? {
+        return self.message?.context
+    }
 
     init(message: Messageable?) {
         self.message = message
