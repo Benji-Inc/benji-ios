@@ -11,6 +11,10 @@ import UserNotifications
 
 extension UNNotification {
 
+    var messageId: String? {
+        return self.request.content.messageId
+    }
+    
     var conversationId: String? {
         return self.request.content.conversationId
     }
