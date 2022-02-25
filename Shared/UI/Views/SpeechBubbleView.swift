@@ -64,7 +64,7 @@ class SpeechBubbleView: BaseView {
 
         super.init()
 
-        self.setBubbleColor(ThemeColor.B1.color, animated: false)
+        self.setBubbleColor(bubbleColor, animated: false)
     }
 
     convenience init(orientation: TailOrientation, bubbleColor: ThemeColor) {

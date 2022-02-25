@@ -44,7 +44,6 @@ class ThemeButton: UIButton, Statusable {
     }
 
     func initializeSubviews() {
-
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop

@@ -12,20 +12,23 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                             WalletCollectionViewDataSource.ItemType,
                             WalletCollectionViewDataSource> {
     
-    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                               startPoint: .topCenter,
-                                               endPoint: .bottomCenter)
+    private let topGradientView
+    = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                   startPoint: .topCenter,
+                   endPoint: .bottomCenter)
     
-    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .bottomCenter,
-                                                  endPoint: .topCenter)
+    private let bottomGradientView
+    = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                   startPoint: .bottomCenter,
+                   endPoint: .topCenter)
     
-    private let walletGradientView = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
-                                                         ThemeColor.walletBackground.color.cgColor,
-                                                         ThemeColor.walletBackground.color.cgColor,
-                                                         ThemeColor.walletBackground.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .topCenter,
-                                                  endPoint: .bottomCenter)
+    private let walletGradientView
+    = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
+                          ThemeColor.walletBackground.color.cgColor,
+                          ThemeColor.walletBackground.color.cgColor,
+                          ThemeColor.walletBackground.color.withAlphaComponent(0.0).cgColor],
+                   startPoint: .topCenter,
+                   endPoint: .bottomCenter)
     private let backgroundView = BaseView()
 
     lazy var header = WalletHeaderView()

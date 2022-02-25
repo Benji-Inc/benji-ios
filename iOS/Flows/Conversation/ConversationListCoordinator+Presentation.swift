@@ -25,16 +25,32 @@ extension ConversationListCoordinator {
         }
     }
 
-    func presentThread(for channelId: ChannelId,
+    func presentThread(for cid: ConversationId,
                        messageId: MessageId,
                        startingReplyId: MessageId?) {
-        
-        let coordinator = ThreadCoordinator(with: channelId,
+
+        let coordinator = ThreadCoordinator(with: cid,
                                             messageId: messageId,
                                             startingReplyId: startingReplyId,
                                             router: self.router,
                                             deepLink: self.deepLink)
-        self.present(coordinator)
+        self.present(coordinator) { _ in }
+    }
+
+    func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
+        let message = Message.message(with: channelId, messageId: messageId)
+        let coordinator = MessageDetailCoordinator(with: message,
+                                                   router: self.router,
+                                                   deepLink: self.deepLink)
+        self.router.present(coordinator, source: self.conversationListVC)
+
+        self.addChildAndStart(coordinator) { [unowned self] message in
+            self.router.dismiss(source: self.conversationListVC) {
+                self.presentThread(for: channelId,
+                                      messageId: messageId,
+                                      startingReplyId: nil)
+            }
+        }
     }
     
     func presentProfilePicture() {
@@ -45,7 +61,7 @@ extension ConversationListCoordinator {
             self.conversationListVC.becomeFirstResponder()
         }
         
-        vc.onDidComplete = { _ in
+        vc.onDidComplete = { [unowned vc = vc] _ in
             vc.dismiss(animated: true, completion: nil)
         }
 
@@ -201,8 +217,9 @@ extension ConversationListCoordinator {
     }
     
     func presentEmailAlert() {
-
-        let alertController = UIAlertController(title: "Invest in Jibber", message: "We will follow up with you using the email provided.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Invest in Jibber",
+                                                message: "We will follow up with you using the email provided.",
+                                                preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.textContentType = .emailAddress
             textField.placeholder = "Email"

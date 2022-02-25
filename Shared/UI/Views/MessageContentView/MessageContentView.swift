@@ -162,7 +162,6 @@ class MessageContentView: BaseView {
             if self.textView.top < MessageContentView.padding.value {
                 self.textView.pin(.top, offset: MessageContentView.padding)
             }
-
         } else {
             self.textView.textAlignment = .center
             self.textView.center = self.bubbleView.center
@@ -194,6 +193,35 @@ class MessageContentView: BaseView {
     }
 }
 
+// MARK: - Message Consumption
+
+#if IOS
+extension MessageContentView {
+
+    func configureConsumption(for message: Messageable) {
+        if message.isConsumedByMe {
+            self.textView.setFont(.regular)
+        } else {
+            self.textView.setFont(.regular)
+        }
+    }
+
+    func setToRead() {
+        guard let msg = self.message, msg.canBeConsumed else { return }
+        Task {
+            try await self.message?.setToConsumed()
+        }
+    }
+
+    func setToUnread() {
+        guard let msg = self.message, msg.isConsumedByMe else { return }
+        Task {
+            try await self.message?.setToUnconsumed()
+        }
+    }
+}
+#endif
+
 extension MessageTextView {
 
     func getSize(with state: MessageContentView.State, width: CGFloat) -> CGSize {
@@ -214,3 +242,4 @@ extension MessageTextView {
         return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
     }
 }
+
