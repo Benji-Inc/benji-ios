@@ -45,9 +45,8 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         super.start()
         
         self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
-            self.presentMessageDetail(for: channelId,
-                                         messageId: messageId,
-                                         startingReplyId: replyId)
+            #warning("Make sure deep linking still works")
+            self.presentMessageDetail(for: channelId, messageId: messageId)
         }
         
         self.conversationListVC.headerVC.jibImageView.didSelect { [unowned self] in
