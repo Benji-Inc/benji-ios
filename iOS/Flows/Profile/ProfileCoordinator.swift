@@ -27,5 +27,22 @@ class ProfileCoordinator: PresentableCoordinator<Void> {
     
     override func start() {
         super.start()
+        
+        if let user = self.avatar as? User, user.isCurrentUser {
+            self.profileVC.header.avatarView.didSelect { [unowned self] in
+                self.presentProfilePicture()
+            }
+        }
+    }
+    
+    func presentProfilePicture() {
+        let vc = ModalPhotoViewController()
+
+        
+        vc.onDidComplete = { [unowned vc = vc] _ in
+            vc.dismiss(animated: true, completion: nil)
+        }
+
+        self.router.present(vc, source: self.profileVC)
     }
 }

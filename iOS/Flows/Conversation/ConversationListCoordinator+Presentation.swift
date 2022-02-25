@@ -50,22 +50,6 @@ extension ConversationListCoordinator {
         }
     }
     
-    func presentProfilePicture() {
-        let vc = ModalPhotoViewController()
-        
-        // Because of how the People are presented, we need to properly reset the KeyboardManager.
-        vc.dismissHandlers.append { [unowned self] in
-            self.conversationListVC.becomeFirstResponder()
-        }
-        
-        vc.onDidComplete = { [unowned vc = vc] _ in
-            vc.dismiss(animated: true, completion: nil)
-        }
-
-        self.conversationListVC.resignFirstResponder()
-        self.router.present(vc, source: self.conversationListVC)
-    }
-    
     func presentProfile(for avatar: Avatar) {
         let coordinator = ProfileCoordinator(with: avatar, router: self.router, deepLink: self.deepLink)
         self.present(coordinator, finishedHandler: nil)

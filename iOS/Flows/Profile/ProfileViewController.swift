@@ -12,7 +12,7 @@ class ProfileViewController: ViewController {
     
     private var avatar: Avatar
     
-    private let header = ProfileHeaderView()
+    lazy var header = ProfileHeaderView()
     private lazy var contextCuesVC = ContextCuesViewController()
     private lazy var conversationsVC = UserConversationsViewController()
     
