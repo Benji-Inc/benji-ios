@@ -42,7 +42,6 @@ class MessageDetailViewController: ViewController {
         if let popoverPresentationController = self.popoverPresentationController {
             let sheet = popoverPresentationController.adaptiveSheetPresentationController
             sheet.detents = [.medium()]
-            popoverPresentationController.backgroundColor = .red
         }
 
         self.view.addSubview(self.bubbleView)
