@@ -42,14 +42,11 @@ extension ConversationListCoordinator {
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)
-        self.router.present(coordinator, source: self.conversationListVC)
-
-        self.addChildAndStart(coordinator) { [unowned self] message in
-            self.router.dismiss(source: self.conversationListVC) {
-                self.presentThread(for: channelId,
-                                      messageId: messageId,
-                                      startingReplyId: nil)
-            }
+        
+        self.present(coordinator) { [unowned self] message in
+            self.presentThread(for: channelId,
+                                  messageId: messageId,
+                                  startingReplyId: nil)
         }
     }
     

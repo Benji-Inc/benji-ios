@@ -164,6 +164,11 @@ class PermissionsViewController: DisclosureModalViewController {
                         if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
                             self.state = .notificationAsk
                             self.notificationSwitchView.state = .enabled
+                        } else {
+                            guard let isFocused = INFocusStatusCenter.default.focusStatus.isFocused else { return }
+                            let newStatus: FocusStatus = isFocused ? .focused : .available
+                            User.current()?.focusStatus = newStatus
+                            try await User.current()?.saveInBackground()
                         }
                     }
                 }
