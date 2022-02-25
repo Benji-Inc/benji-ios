@@ -157,7 +157,6 @@ class MessageCell: UICollectionViewCell {
         
     private func updateStatusText(for message: Message) {
         guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
-        guard self.messageState.statusText != message.context.displayName else { return }
         
         self.statusTextTask = Task {
             
