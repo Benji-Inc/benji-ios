@@ -43,17 +43,17 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
     override func start() {
         super.start()
-
+        
         self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
-            self.presentThread(for: channelId,
-                                  messageId: messageId,
-                                  startingReplyId: replyId)
+            self.presentMessageDetail(for: channelId,
+                                         messageId: messageId,
+                                         startingReplyId: replyId)
         }
         
         self.conversationListVC.headerVC.jibImageView.didSelect { [unowned self] in
             self.showWallet() 
         }
-
+        
         self.conversationListVC.headerVC.didTapAddPeople = { [unowned self] in
             self.presentPeoplePicker()
         }

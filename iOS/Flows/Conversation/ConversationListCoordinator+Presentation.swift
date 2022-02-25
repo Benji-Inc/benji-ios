@@ -25,15 +25,16 @@ extension ConversationListCoordinator {
         }
     }
 
-    func presentThread(for channelId: ChannelId,
-                       messageId: MessageId,
-                       startingReplyId: MessageId?) {
+    func presentMessageDetail(for channelId: ChannelId,
+                              messageId: MessageId,
+                              startingReplyId: MessageId?) {
 
         let message = Message.message(with: channelId, messageId: messageId)
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)
         self.router.present(coordinator, source: self.conversationListVC)
+        self.addChildAndStart(coordinator) { _ in }
     }
     
     func presentProfilePicture() {

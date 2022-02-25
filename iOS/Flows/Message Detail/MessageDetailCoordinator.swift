@@ -34,6 +34,12 @@ extension MessageDetailCoordinator: MessageDetailViewControllerDelegate {
     func messageDetailViewController(_ controller: MessageDetailViewController,
                                      didSelectThreadFor message: Messageable) {
 
-        // Show the thread
+        let coordinator = ThreadCoordinator(with: message.streamCid,
+                                            messageId: message.id,
+                                            startingReplyId: nil,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
+        self.present(coordinator)
+        self.addChildAndStart(coordinator) { _ in }
     }
 }

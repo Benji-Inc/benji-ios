@@ -52,13 +52,18 @@ class MessageDetailViewController: ViewController {
         self.textView.text = self.message.kind.text
         self.textView.isEditable = false
         self.textView.isSelectable = true
+        if self.textView.numberOfLines > 1 {
+            self.textView.textAlignment = .left
+        } else {
+            self.textView.textAlignment = .center
+        }
 
         self.view.addSubview(self.backgroundView)
         self.backgroundView.set(backgroundColor: .B0)
         self.backgroundView.layer.cornerRadius = Theme.cornerRadius
         self.backgroundView.clipsToBounds = true
 
-        self.view.addSubview(self.threadButton)
+        self.backgroundView.addSubview(self.threadButton)
         self.threadButton.set(style: .normal(color: .gray, text: "Open Thread"))
         self.threadButton.addAction(for: .touchUpInside) { [unowned self] in
             self.delegate.messageDetailViewController(self, didSelectThreadFor: self.message)
@@ -76,14 +81,15 @@ class MessageDetailViewController: ViewController {
         self.textView.centerOnX()
 
         self.bubbleView.height = self.textView.height + Theme.ContentOffset.long.value.doubled
-        self.bubbleView.centerOnXAndY()
+        self.bubbleView.centerOnX()
+        self.bubbleView.pin(.top, offset: .screenPadding)
 
         self.backgroundView.match(.top, to: .bottom, of: self.bubbleView, offset: .xtraLong)
         self.backgroundView.expandToSuperviewWidth()
         self.backgroundView.expand(.bottom)
 
-        self.threadButton.width = 100
+        self.threadButton.width = 150
         self.threadButton.height = Theme.buttonHeight
-        self.threadButton.pin(.bottom)
+        self.threadButton.centerOnXAndY()
     }
 }
