@@ -8,16 +8,25 @@
 
 import Foundation
 
+@MainActor
+protocol MessageDetailViewControllerDelegate: AnyObject {
+    func messageDetailViewController(_ controller: MessageDetailViewController,
+                                     didSelectThreadFor message: Messageable)
+}
+
 class MessageDetailViewController: ViewController {
 
     let message: Messageable
+    unowned let delegate: MessageDetailViewControllerDelegate
 
     private let textView = TextView(font: .regular, textColor: .T3)
     private let bubbleView = MessageBubbleView(orientation: .down, bubbleColor: ThemeColor.D1.color)
     private let backgroundView = BaseView()
+    private let threadButton = ThemeButton()
 
-    init(message: Messageable) {
+    init(message: Messageable, delegate: MessageDetailViewControllerDelegate) {
         self.message = message
+        self.delegate = delegate
 
         super.init()
     }
@@ -33,6 +42,7 @@ class MessageDetailViewController: ViewController {
         if let popoverPresentationController = self.popoverPresentationController {
             let sheet = popoverPresentationController.adaptiveSheetPresentationController
             sheet.detents = [.medium()]
+            popoverPresentationController.backgroundColor = .red
         }
 
         self.view.addSubview(self.bubbleView)
@@ -47,6 +57,12 @@ class MessageDetailViewController: ViewController {
         self.backgroundView.set(backgroundColor: .B0)
         self.backgroundView.layer.cornerRadius = Theme.cornerRadius
         self.backgroundView.clipsToBounds = true
+
+        self.view.addSubview(self.threadButton)
+        self.threadButton.set(style: .normal(color: .gray, text: "Open Thread"))
+        self.threadButton.addAction(for: .touchUpInside) { [unowned self] in
+            self.delegate.messageDetailViewController(self, didSelectThreadFor: self.message)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -65,5 +81,9 @@ class MessageDetailViewController: ViewController {
         self.backgroundView.match(.top, to: .bottom, of: self.bubbleView, offset: .xtraLong)
         self.backgroundView.expandToSuperviewWidth()
         self.backgroundView.expand(.bottom)
+
+        self.threadButton.width = 100
+        self.threadButton.height = Theme.buttonHeight
+        self.threadButton.pin(.bottom)
     }
 }

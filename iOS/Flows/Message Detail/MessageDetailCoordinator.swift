@@ -11,7 +11,7 @@ import StreamChat
 
 class MessageDetailCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var messageVC = MessageDetailViewController(message: self.message)
+    private lazy var messageVC = MessageDetailViewController(message: self.message, delegate: self)
 
     let message: Messageable
 
@@ -26,5 +26,14 @@ class MessageDetailCoordinator: PresentableCoordinator<Void> {
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.messageVC
+    }
+}
+
+extension MessageDetailCoordinator: MessageDetailViewControllerDelegate {
+
+    func messageDetailViewController(_ controller: MessageDetailViewController,
+                                     didSelectThreadFor message: Messageable) {
+
+        // Show the thread
     }
 }
