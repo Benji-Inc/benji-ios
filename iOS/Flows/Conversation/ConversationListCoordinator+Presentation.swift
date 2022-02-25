@@ -34,8 +34,7 @@ extension ConversationListCoordinator {
                                             startingReplyId: startingReplyId,
                                             router: self.router,
                                             deepLink: self.deepLink)
-        self.router.present(coordinator, source: self.conversationListVC)
-        self.addChildAndStart(coordinator) { _ in }
+        self.present(coordinator) { _ in }
     }
 
     func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
