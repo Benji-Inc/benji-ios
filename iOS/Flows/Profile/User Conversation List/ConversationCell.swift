@@ -19,8 +19,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     let titleLabel = ThemeLabel(font: .regular)
     let messageContent = MessageContentView()
     
-//    let middleBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
-//    let bottomBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
+    let middleBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
+    let bottomBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
     
     let leftLabel = ThemeLabel(font: .small, textColor: .D1)
     let rightLabel = NumberScrollCounter(value: 0,
@@ -50,8 +50,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.titleLabel)
         self.titleLabel.textAlignment = .left
         
-//        self.contentView.addSubview(self.bottomBubble)
-//        self.contentView.addSubview(self.middleBubble)
+        self.contentView.addSubview(self.bottomBubble)
+        self.contentView.addSubview(self.middleBubble)
         self.messageContent.state = .thread
         self.contentView.addSubview(self.messageContent)
         
@@ -60,9 +60,31 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.rightLabel)
         
-        let groupName = "Favorites  /"
-        self.titleLabel.setText("\(groupName)  Josh & Erik")
-        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.T1.color.withAlphaComponent(0.35)], to: groupName)
+        let bubbleColor = ThemeColor.D1.color
+        self.messageContent.configureBackground(color: bubbleColor,
+                                                textColor: ThemeColor.T3.color,
+                                                brightness: 1.0,
+                                                focusAmount: 1.0,
+                                                showBubbleTail: false,
+                                                tailOrientation: .up)
+        
+        self.middleBubble.setBubbleColor(bubbleColor, animated: false)
+        self.middleBubble.lightGradientLayer.opacity
+        = 0.6
+        self.middleBubble.darkGradientLayer.opacity
+        = 0.2
+        self.middleBubble.tailLength = 0
+        self.middleBubble.layer.masksToBounds = true
+        self.middleBubble.layer.cornerRadius = Theme.cornerRadius
+
+        self.bottomBubble.setBubbleColor(bubbleColor, animated: false)
+        self.bottomBubble.lightGradientLayer.opacity
+        = 0.4
+        self.bottomBubble.darkGradientLayer.opacity
+        = 0.2
+        self.bottomBubble.layer.masksToBounds = true
+        self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
+        self.bottomBubble.tailLength = 0
     }
 
     func configure(with item: ConversationId) {
@@ -96,28 +118,13 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     @MainActor
     private func update(for message: Message) {
         self.messageContent.configure(with: message)
-        let bubbleColor = ThemeColor.D1.color
-        self.messageContent.configureBackground(color: bubbleColor,
-                                                textColor: ThemeColor.T3.color,
-                                                brightness: 1.0,
-                                                focusAmount: 1.0,
-                                                showBubbleTail: false,
-                                                tailOrientation: .up)
         self.leftLabel.setText(message.createdAt.getDaysAgoString())
         
-//        self.middleBubble.setBubbleColor(bubbleColor, animated: false)
-//        self.middleBubble.lightGradientLayer.opacity
-//        = Float(1 - 1.0) * 0.2 * Float(1 - 0.6)
-//        self.middleBubble.darkGradientLayer.opacity
-//        = Float(1.0) * 0.2 * Float(1 - 0.6)
-//        self.middleBubble.tailLength = 0
-//
-//        self.bottomBubble.setBubbleColor(bubbleColor, animated: false)
-//        self.bottomBubble.lightGradientLayer.opacity
-//        = Float(1 - 1.0) * 0.2 * Float(1 - 0.2)
-//        self.bottomBubble.darkGradientLayer.opacity
-//        = Float(1.0) * 0.2 * Float(1 - 0.2)
-//        self.bottomBubble.tailLength = 0
+        let title = self.conversationController?.conversation.title ?? "Untitled"
+        let groupName = "Favorites  /"
+        self.titleLabel.setTextColor(.T1)
+        self.titleLabel.setText("\(groupName)  \(title)")
+        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.T1.color.withAlphaComponent(0.35)], to: groupName)
         
         self.layoutNow()
     }
@@ -144,26 +151,26 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.messageContent.height = MessageContentView.bubbleHeight - self.messageContent.bubbleView.tailLength - 4
         self.messageContent.centerOnXAndY()
         
-//        self.middleBubble.width = maxWidth * 0.8
-//        self.middleBubble.height = self.messageContent.height
-//        self.middleBubble.centerOnX()
-//        self.middleBubble.match(.bottom, to: .bottom, of: self.messageContent, offset: .short)
-//
-//        self.bottomBubble.width = maxWidth * 0.6
-//        self.bottomBubble.height = self.messageContent.height
-//        self.bottomBubble.centerOnX()
-//        self.bottomBubble.match(.bottom, to: .bottom, of: self.middleBubble, offset: .short)
+        self.middleBubble.width = maxWidth * 0.8
+        self.middleBubble.height = self.messageContent.height
+        self.middleBubble.centerOnX()
+        self.middleBubble.match(.bottom, to: .bottom, of: self.messageContent, offset: .standard)
+
+        self.bottomBubble.width = maxWidth * 0.6
+        self.bottomBubble.height = self.messageContent.height
+        self.bottomBubble.centerOnX()
+        self.bottomBubble.match(.bottom, to: .bottom, of: self.middleBubble, offset: .standard)
         
         self.titleLabel.setSize(withWidth: self.width)
         self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.long))
         self.titleLabel.match(.left, to: .left, of: self.messageContent)
         
         self.leftLabel.setSize(withWidth: 120)
-        self.leftLabel.match(.left, to: .left, of: self.messageContent, offset: .screenPadding)
-        self.leftLabel.match(.top, to: .bottom, of: self.messageContent, offset: .long)
+        self.leftLabel.match(.left, to: .left, of: self.bottomBubble)
+        self.leftLabel.match(.top, to: .bottom, of: self.bottomBubble, offset: .long)
         
         self.rightLabel.sizeToFit()
-        self.rightLabel.match(.right, to: .right, of: self.messageContent, offset: .negative(.screenPadding))
+        self.rightLabel.match(.right, to: .right, of: self.bottomBubble)
         self.rightLabel.match(.top, to: .top, of: self.leftLabel)
         
         self.lineView.height = 1

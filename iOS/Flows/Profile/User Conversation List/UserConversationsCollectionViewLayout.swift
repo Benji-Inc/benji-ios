@@ -22,7 +22,7 @@ class UserConversationsCollectionViewLayout: UICollectionViewCompositionalLayout
                 let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
 
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(160))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(180))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                              leading: sectionInset,
@@ -30,7 +30,7 @@ class UserConversationsCollectionViewLayout: UICollectionViewCompositionalLayout
                                                              trailing: sectionInset)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(160))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(180))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                               leading: 0,
