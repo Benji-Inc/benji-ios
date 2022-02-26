@@ -19,6 +19,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     let titleLabel = ThemeLabel(font: .regular)
     let messageContent = MessageContentView()
     
+    let middleBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
+    let bottomBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
+    
     let leftLabel = ThemeLabel(font: .small, textColor: .D1)
     let rightLabel = NumberScrollCounter(value: 0,
                                          scrollDuration: Theme.animationDurationSlow,
@@ -28,20 +31,20 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                                          seperator: "",
                                          seperatorSpacing: 0,
                                          font: FontType.small.font,
-                                         textColor: ThemeColor.D1.color,
+                                         textColor: ThemeColor.T1.color,
                                          animateInitialValue: true,
                                          gradientColor: nil,
                                          gradientStop: nil)
     let lineView = BaseView()
+    
+    private let stackedAvatarView = StackedAvatarView()
     
     private var conversationController: ConversationController?
     var subscriptions = Set<AnyCancellable>()
     
     override func initializeSubviews() {
         super.initializeSubviews()
-        
-        self.contentView.set(backgroundColor: .red)
-        
+                
         self.contentView.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .white)
         self.lineView.alpha = 0.1
@@ -49,23 +52,60 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.titleLabel)
         self.titleLabel.textAlignment = .left
         
+        self.contentView.addSubview(self.bottomBubble)
+        self.contentView.addSubview(self.middleBubble)
+        self.messageContent.state = .thread
         self.contentView.addSubview(self.messageContent)
         
         self.contentView.addSubview(self.leftLabel)
         self.leftLabel.textAlignment = .left
         
         self.contentView.addSubview(self.rightLabel)
+        
+        let bubbleColor = ThemeColor.D1.color
+        self.messageContent.configureBackground(color: bubbleColor,
+                                                textColor: ThemeColor.T3.color,
+                                                brightness: 1.0,
+                                                focusAmount: 1.0,
+                                                showBubbleTail: false,
+                                                tailOrientation: .up)
+        
+        self.middleBubble.setBubbleColor(bubbleColor, animated: false)
+        self.middleBubble.lightGradientLayer.opacity
+        = 0.6
+        self.middleBubble.darkGradientLayer.opacity
+        = 0.2
+        self.middleBubble.tailLength = 0
+        self.middleBubble.layer.masksToBounds = true
+        self.middleBubble.layer.cornerRadius = Theme.cornerRadius
+
+        self.bottomBubble.setBubbleColor(bubbleColor, animated: false)
+        self.bottomBubble.lightGradientLayer.opacity
+        = 0.4
+        self.bottomBubble.darkGradientLayer.opacity
+        = 0.2
+        self.bottomBubble.layer.masksToBounds = true
+        self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
+        self.bottomBubble.tailLength = 0
+        
+        self.contentView.addSubview(self.stackedAvatarView)
     }
 
     func configure(with item: ConversationId) {
         
-        Task {
+        Task.onMainActorAsync {
             
             if self.conversationController?.cid != item {
                 self.conversationController = ChatClient.shared.channelController(for: item)
                 if let latest = self.conversationController?.channel?.latestMessages, latest.isEmpty  {
                     try? await self.conversationController?.synchronize()
                 }
+                
+                let members = self.conversationController?.conversation.lastActiveMembers.filter { member in
+                    return member.id != ChatClient.shared.currentUserId
+                } ?? []
+                
+                self.stackedAvatarView.configure(with: members)
                 
                 self.setNumberOfUnread(value: self.conversationController!.conversation.totalUnread)
                 self.subscribeToUpdates()
@@ -76,7 +116,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
             if let latest = self.conversationController?.channel?.latestMessages.first {
                 self.update(for: latest)
             }
-        }.add(to: self.taskPool)
+        }
     }
     
     private func setNumberOfUnread(value: Int) {
@@ -85,16 +125,18 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.rightLabel.setValue(new, animated: true)
     }
  
+    @MainActor
     private func update(for message: Message) {
         self.messageContent.configure(with: message)
-        self.messageContent.configureBackground(color: ThemeColor.D1.color,
-                                                textColor: ThemeColor.T2.color,
-                                                brightness: 1.0,
-                                                focusAmount: 1.0,
-                                                showBubbleTail: false,
-                                                tailOrientation: .up)
         self.leftLabel.setText(message.createdAt.getDaysAgoString())
-        self.setNeedsLayout()
+        
+        let title = self.conversationController?.conversation.title ?? "Untitled"
+        let groupName = "Favorites  /"
+        self.titleLabel.setTextColor(.T1)
+        self.titleLabel.setText("\(groupName)  \(title)")
+        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.T1.color.withAlphaComponent(0.35)], to: groupName)
+        
+        self.layoutNow()
     }
     
     private func subscribeToUpdates() {
@@ -113,23 +155,36 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let maxWidth = self.width * 0.75
+        let maxWidth = self.width * 0.9
+        
+        self.messageContent.width = maxWidth
+        self.messageContent.height = MessageContentView.bubbleHeight - self.messageContent.bubbleView.tailLength - 4
+        self.messageContent.centerOnXAndY()
+        
+        self.middleBubble.width = maxWidth * 0.8
+        self.middleBubble.height = self.messageContent.height
+        self.middleBubble.centerOnX()
+        self.middleBubble.match(.bottom, to: .bottom, of: self.messageContent, offset: .standard)
+
+        self.bottomBubble.width = maxWidth * 0.6
+        self.bottomBubble.height = self.messageContent.height
+        self.bottomBubble.centerOnX()
+        self.bottomBubble.match(.bottom, to: .bottom, of: self.middleBubble, offset: .standard)
         
         self.titleLabel.setSize(withWidth: self.width)
-        self.titleLabel.pin(.top, offset: .xtraLong)
-        self.titleLabel.pin(.left, offset: .custom(maxWidth * 0.5))
+        self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.long))
+        self.titleLabel.match(.left, to: .left, of: self.messageContent)
         
-        self.messageContent.size = self.messageContent.getSize(for: .thread, with: maxWidth)
-        self.messageContent.match(.top, to: .bottom, of: self.titleLabel, offset: .xtraLong)
-        self.messageContent.match(.left, to: .left, of: self.titleLabel)
+        self.stackedAvatarView.match(.right, to: .right, of: self.messageContent)
+        self.stackedAvatarView.centerY = self.titleLabel.centerY
         
         self.leftLabel.setSize(withWidth: 120)
-        self.leftLabel.right = self.contentView.halfWidth - Theme.ContentOffset.screenPadding.value
-        self.leftLabel.centerOnY()
+        self.leftLabel.match(.left, to: .left, of: self.bottomBubble)
+        self.leftLabel.match(.top, to: .bottom, of: self.bottomBubble, offset: .long)
         
         self.rightLabel.sizeToFit()
-        self.rightLabel.left = self.contentView.halfWidth + Theme.ContentOffset.screenPadding.value
-        self.rightLabel.centerOnY()
+        self.rightLabel.match(.right, to: .right, of: self.bottomBubble)
+        self.rightLabel.match(.top, to: .top, of: self.leftLabel)
         
         self.lineView.height = 1
         self.lineView.expandToSuperviewWidth()
@@ -144,5 +199,60 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         }
         
         self.taskPool.cancelAndRemoveAll()
+    }
+}
+
+private class StackedAvatarView: BaseView {
+    
+    private let label = ThemeLabel(font: .small)
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.clipsToBounds = false
+    }
+
+    func configure(with avatars: [Avatar]) {
+        self.removeAllSubviews()
+        
+        for (index, avatar) in avatars.enumerated() {
+            if index <= 3 {
+                let view = BorderedAvatarView()
+                view.set(avatar: avatar)
+                self.addSubview(view)
+            }
+        }
+        
+        if avatars.count > 3 {
+            let remainder = avatars.count - 3
+            self.label.setText("+\(remainder)")
+        }
+      
+        self.layoutNow()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.height = 20
+        
+        var xOffset: CGFloat = 0
+        self.subviews.forEach { view in
+            if view is BorderedAvatarView {
+                view.frame = CGRect(x: xOffset,
+                                    y: 0,
+                                    width: 20,
+                                    height: 20)
+                xOffset += view.width + Theme.ContentOffset.short.value
+            }
+        }
+        
+        xOffset -= Theme.ContentOffset.short.value
+        
+        self.width = xOffset
+        
+        self.label.setSize(withWidth: 30)
+        self.label.match(.left, to: .right, of: self)
+        self.label.centerOnY()
     }
 }

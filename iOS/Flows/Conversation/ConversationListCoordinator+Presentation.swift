@@ -42,36 +42,21 @@ extension ConversationListCoordinator {
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)
-        self.router.present(coordinator, source: self.conversationListVC)
-
-        self.addChildAndStart(coordinator) { [unowned self] message in
-            self.router.dismiss(source: self.conversationListVC) {
-                self.presentThread(for: channelId,
-                                      messageId: messageId,
-                                      startingReplyId: nil)
-            }
-        }
-    }
-    
-    func presentProfilePicture() {
-        let vc = ModalPhotoViewController()
         
-        // Because of how the People are presented, we need to properly reset the KeyboardManager.
-        vc.dismissHandlers.append { [unowned self] in
-            self.conversationListVC.becomeFirstResponder()
+        self.present(coordinator) { [unowned self] message in
+            self.presentThread(for: channelId,
+                                  messageId: messageId,
+                                  startingReplyId: nil)
         }
-        
-        vc.onDidComplete = { [unowned vc = vc] _ in
-            vc.dismiss(animated: true, completion: nil)
-        }
-
-        self.conversationListVC.resignFirstResponder()
-        self.router.present(vc, source: self.conversationListVC)
     }
     
     func presentProfile(for avatar: Avatar) {
         let coordinator = ProfileCoordinator(with: avatar, router: self.router, deepLink: self.deepLink)
-        self.present(coordinator, finishedHandler: nil)
+        self.present(coordinator) { [unowned self] result in
+            Task.onMainActorAsync {
+                await self.conversationListVC.scrollToConversation(with: result, messageID: nil)
+            }
+        }
     }
 
     func presentPeoplePicker() {
