@@ -118,7 +118,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.segmentControl.sizeToFit()
         
         for index in 0...self.segmentControl.numberOfSegments - 1 {
-            self.segmentControl.setWidth(segmentWidth, forSegmentAt: 0)
+            self.segmentControl.setWidth(segmentWidth, forSegmentAt: index)
         }
 
         self.segmentControl.width = self.collectionView.width - padding.doubled

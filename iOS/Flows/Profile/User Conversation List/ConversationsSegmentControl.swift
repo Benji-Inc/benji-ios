@@ -22,21 +22,21 @@ class ConversationsSegmentControl: UISegmentedControl {
         
         super.init(frame: .zero)
         
-        let rewardsAction = UIAction(title: "Recents") { _ in
+        let recentsAction = UIAction(title: "Recents") { _ in
             self.didSelectSegmentIndex?(.recents)
         }
         
-        let youAction = UIAction(title: "All") { _ in
+        let allAction = UIAction(title: "All") { _ in
             self.didSelectSegmentIndex?(.all)
         }
         
-        let connectionsAction = UIAction(title: "Archive") { _ in
+        let archiveAction = UIAction(title: "Archive") { _ in
             self.didSelectSegmentIndex?(.archive)
         }
             
-        self.insertSegment(action: rewardsAction, at: 0, animated: false)
-        self.insertSegment(action: youAction, at: 1, animated: false)
-        self.insertSegment(action: connectionsAction, at: 2, animated: false)
+        self.insertSegment(action: recentsAction, at: 1, animated: false)
+        self.insertSegment(action: allAction, at: 2, animated: false)
+        self.insertSegment(action: archiveAction, at: 0, animated: false)
 
         let attributes: [NSAttributedString.Key : Any] = [.font : FontType.small.font, .foregroundColor : ThemeColor.T1.color.withAlphaComponent(0.6)]
         self.setTitleTextAttributes(attributes, for: .normal)
