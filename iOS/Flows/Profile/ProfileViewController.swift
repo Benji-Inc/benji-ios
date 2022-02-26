@@ -35,7 +35,6 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         
     init(with avatar: Avatar) {
         self.avatar = avatar
-        //super.init(with: WalletCollectionView())
         super.init(with: UserConversationsCollectionView())
     }
     
@@ -73,10 +72,23 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.view.insertSubview(self.backgroundView, belowSubview: self.collectionView)
         self.view.insertSubview(self.segmentControl, aboveSubview: self.collectionView)
         self.view.insertSubview(self.segmentGradientView, belowSubview: self.segmentControl)
+        
+        self.segmentControl.didSelectSegmentIndex = { [unowned self] index in
+            switch index {
+            case .recents:
+                self.loadRecents()
+            case .all:
+                self.loadAll()
+            case .archive:
+                self.loadArchive()
+            }
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.collectionView.allowsMultipleSelection = false 
                 
         Task {
             if let user = self.avatar as? User,
@@ -84,14 +96,30 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 self.avatar = updated
                 self.header.configure(with: updated)
                 self.loadInitialData()
+                if !user.isCurrentUser {
+                    self.segmentControl.removeSegment(at: 0, animated: false)
+                    self.segmentControl.selectedSegmentIndex = 0
+                } else {
+                    self.segmentControl.selectedSegmentIndex = 1
+                }
+                self.loadRecents()
+                self.view.layoutNow()
             } else if let userId = self.avatar.userObjectId,
                         let user = try? await User.getObject(with: userId),
                       let updated = try? await user.retrieveDataIfNeeded() {
                 self.avatar = updated
                 self.header.configure(with: updated)
                 self.loadInitialData()
+                if !user.isCurrentUser {
+                    self.segmentControl.removeSegment(at: 0, animated: false)
+                    self.segmentControl.selectedSegmentIndex = 0
+                } else {
+                    self.segmentControl.selectedSegmentIndex = 1
+                }
+                
+                self.loadRecents()
+                self.view.layoutNow()
             }
-            
         }.add(to: self.autocancelTaskPool)
     }
     
@@ -146,27 +174,62 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     }
 
     override func retrieveDataForSnapshot() async -> [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] {
+        return [:]
+    }
+    
+    private func loadArchive() {
+//        Task { [weak self] in
+//            await self?.loadAchievements()
+//        }.add(to: self.autocancelTaskPool)
+    }
+    
+    private func loadRecents() {
+        Task { [weak self] in
+            guard let `self` = self, let user = self.avatar as? User else { return }
+            var userIds: [String] = []
+            
+            if user.isCurrentUser {
+                userIds.append(user.userObjectId!)
+            } else {
+                userIds = [User.current()!.objectId!, user.userObjectId!]
+            }
+            
+            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+            let query = ChannelListQuery(filter: filter,
+                                         sort: [Sorting(key: .updatedAt, isAscending: true)],
+                                         pageSize: 5,
+                                         messagesLimit: 1)
+            self.conversationListController
+            = ChatClient.shared.channelListController(query: query)
 
-        var data: [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] = [:]
+            try? await self.conversationListController?.synchronize()
+            try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
 
-        let filter = Filter<ChannelListFilterScope>.containMembers(userIds: [User.current()!.objectId!])
-
-        let query = ChannelListQuery(filter: filter,
-                                     sort: [Sorting(key: .createdAt, isAscending: true)],
-                                     pageSize: .channelsPageSize,
-                                     messagesLimit: .messagesPageSize)
-        self.conversationListController
-        = ChatClient.shared.channelListController(query: query)
-
-        try? await self.conversationListController?.synchronize()
-        try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
-
-        let conversations: [Conversation] = self.conversationListController?.conversations ?? []
-
-        data[.conversations] = conversations.map({ conversation in
-            return .conversation(conversation.cid)
-        })
-
-        return data
+            let conversations: [Conversation] = self.conversationListController?.conversations ?? []
+            
+            await self.load(conversations: conversations)
+            
+        }.add(to: self.autocancelTaskPool)
+    }
+    
+    private func loadAll() {
+//        Task { [weak self] in
+//            guard let transactions = try? await Transaction.fetchAllConnectionsTransactions() else {
+//                await self?.dataSource.deleteAllItems()
+//                return
+//            }
+//
+//            await self?.load(transactions: transactions)
+//        }.add(to: self.autocancelTaskPool)
+    }
+    
+    private func load(conversations: [Conversation]) async {
+        let items = conversations.map { convo in
+            return UserConversationsDataSource.ItemType.conversation(convo.cid)
+        }
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems([], in: .conversations)
+        snapshot.setItems(items, in: .conversations)
+        await self.dataSource.apply(snapshot)
     }
 }

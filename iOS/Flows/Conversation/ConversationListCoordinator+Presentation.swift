@@ -52,7 +52,11 @@ extension ConversationListCoordinator {
     
     func presentProfile(for avatar: Avatar) {
         let coordinator = ProfileCoordinator(with: avatar, router: self.router, deepLink: self.deepLink)
-        self.present(coordinator, finishedHandler: nil)
+        self.present(coordinator) { [unowned self] result in
+            Task.onMainActorAsync {
+                await self.conversationListVC.scrollToConversation(with: result, messageID: nil)
+            }
+        }
     }
 
     func presentPeoplePicker() {

@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import Combine
 
-class ProfileCoordinator: PresentableCoordinator<Void> {
+class ProfileCoordinator: PresentableCoordinator<ConversationId> {
     
     lazy var profileVC = ProfileViewController(with: self.avatar)
     private let avatar: Avatar
@@ -33,6 +34,15 @@ class ProfileCoordinator: PresentableCoordinator<Void> {
                 self.presentProfilePicture()
             }
         }
+        
+        self.profileVC.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first else { return }
+            switch first {
+            case .conversation(let cid):
+                self.finishFlow(with: cid)
+            }
+            
+        }.store(in: &self.cancellables)
     }
     
     func presentProfilePicture() {
