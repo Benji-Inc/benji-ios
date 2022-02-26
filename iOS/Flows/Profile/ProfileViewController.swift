@@ -49,7 +49,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
@@ -77,21 +77,19 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.loadInitialData()
-        
+                
         Task {
             if let user = self.avatar as? User,
                let updated = try? await user.retrieveDataIfNeeded() {
                 self.avatar = updated
                 self.header.configure(with: updated)
-                //self.loadInitialData()
+                self.loadInitialData()
             } else if let userId = self.avatar.userObjectId,
                         let user = try? await User.getObject(with: userId),
                       let updated = try? await user.retrieveDataIfNeeded() {
                 self.avatar = updated
                 self.header.configure(with: updated)
-                //self.loadInitialData()
+                self.loadInitialData()
             }
             
         }.add(to: self.autocancelTaskPool)
