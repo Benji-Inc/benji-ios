@@ -141,23 +141,6 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.collectionView.centerOnX()
     }
     
-//    override func getAllSections() -> [WalletCollectionViewDataSource.SectionType] {
-//        return WalletCollectionViewDataSource.SectionType.allCases
-//    }
-//
-//    override func retrieveDataForSnapshot() async -> [WalletCollectionViewDataSource.SectionType: [WalletCollectionViewDataSource.ItemType]] {
-//
-//        var data: [WalletCollectionViewDataSource.SectionType: [WalletCollectionViewDataSource.ItemType]] = [:]
-//
-//        guard let transactions = try? await Transaction.fetchAllCurrentTransactions() else { return data }
-//
-//        data[.transactions] = transactions.compactMap({ transaction in
-//            return .transaction(transaction)
-//        })
-//
-//        return data
-//    }
-    
     override func getAllSections() -> [UserConversationsDataSource.SectionType] {
         return UserConversationsDataSource.SectionType.allCases
     }
@@ -165,28 +148,23 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     override func retrieveDataForSnapshot() async -> [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] {
 
         var data: [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] = [:]
-//
-//        let filter = Filter<ChannelListFilterScope>.containMembers(userIds: [User.current()!.objectId!])
-//
-//        let query = ChannelListQuery(filter: filter,
-//                                     sort: [Sorting(key: .createdAt, isAscending: true)],
-//                                     pageSize: .channelsPageSize,
-//                                     messagesLimit: .messagesPageSize)
-//        self.conversationListController
-//        = ChatClient.shared.channelListController(query: query)
-//
-//        try? await self.conversationListController?.synchronize()
-//        try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
-//
-//        let conversations: [Conversation] = self.conversationListController?.conversations ?? []
-//
-//        data[.conversations] = conversations.map({ conversation in
-//            return .conversation(conversation.cid)
-//        })
-        
-        let items: [Int] = [0,1,2,3,4,5]
-        data[.conversations] = items.map({ value in
-            return .fuckYou(value)
+
+        let filter = Filter<ChannelListFilterScope>.containMembers(userIds: [User.current()!.objectId!])
+
+        let query = ChannelListQuery(filter: filter,
+                                     sort: [Sorting(key: .createdAt, isAscending: true)],
+                                     pageSize: .channelsPageSize,
+                                     messagesLimit: .messagesPageSize)
+        self.conversationListController
+        = ChatClient.shared.channelListController(query: query)
+
+        try? await self.conversationListController?.synchronize()
+        try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
+
+        let conversations: [Conversation] = self.conversationListController?.conversations ?? []
+
+        data[.conversations] = conversations.map({ conversation in
+            return .conversation(conversation.cid)
         })
 
         return data

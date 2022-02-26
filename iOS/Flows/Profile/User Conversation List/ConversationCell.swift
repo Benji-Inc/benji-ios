@@ -39,9 +39,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-        
-        self.contentView.set(backgroundColor: .red)
-        
+                
         self.contentView.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .white)
         self.lineView.alpha = 0.1
