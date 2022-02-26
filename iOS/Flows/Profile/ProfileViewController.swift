@@ -178,9 +178,24 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     }
     
     private func loadArchive() {
-//        Task { [weak self] in
-//            await self?.loadAchievements()
-//        }.add(to: self.autocancelTaskPool)
+        Task { [weak self] in
+            guard let `self` = self, let user = self.avatar as? User else { return }
+            var userIds: [String] = []
+            
+            if user.isCurrentUser {
+                userIds.append(user.userObjectId!)
+            } else {
+                userIds = [User.current()!.objectId!, user.userObjectId!]
+            }
+            
+            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+            let query = ChannelListQuery(filter: .and([.equal("hidden", to: true), filter]),
+                                         sort: [Sorting(key: .createdAt, isAscending: true)],
+                                         pageSize: .channelsPageSize,
+                                         messagesLimit: 1)
+            
+            await self.loadConversations(with: query)
+        }.add(to: self.autocancelTaskPool)
     }
     
     private func loadRecents() {
@@ -196,40 +211,53 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
-                                         sort: [Sorting(key: .updatedAt, isAscending: true)],
-                                         pageSize: 5,
+                                         sort: [Sorting(key: .createdAt, isAscending: true)],
+                                         pageSize: .channelsPageSize,
                                          messagesLimit: 1)
-            self.conversationListController
-            = ChatClient.shared.channelListController(query: query)
-
-            try? await self.conversationListController?.synchronize()
-            try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
-
-            let conversations: [Conversation] = self.conversationListController?.conversations ?? []
             
-            await self.load(conversations: conversations)
-            
+            await self.loadConversations(with: query)
         }.add(to: self.autocancelTaskPool)
     }
     
     private func loadAll() {
-//        Task { [weak self] in
-//            guard let transactions = try? await Transaction.fetchAllConnectionsTransactions() else {
-//                await self?.dataSource.deleteAllItems()
-//                return
-//            }
-//
-//            await self?.load(transactions: transactions)
-//        }.add(to: self.autocancelTaskPool)
+        Task { [weak self] in
+            guard let `self` = self, let user = self.avatar as? User else { return }
+            var userIds: [String] = []
+            
+            if user.isCurrentUser {
+                userIds.append(user.userObjectId!)
+            } else {
+                userIds = [User.current()!.objectId!, user.userObjectId!]
+            }
+            
+            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+            let query = ChannelListQuery(filter: filter,
+                                         sort: [Sorting(key: .updatedAt, isAscending: true)],
+                                         pageSize: 5,
+                                         messagesLimit: 1)
+            
+            await self.loadConversations(with: query)
+        }.add(to: self.autocancelTaskPool)
     }
     
-    private func load(conversations: [Conversation]) async {
+    @MainActor
+    private func loadConversations(with query: ChannelListQuery) async {
+        
+        self.conversationListController
+        = ChatClient.shared.channelListController(query: query)
+
+        try? await self.conversationListController?.synchronize()
+        try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
+
+        let conversations: [Conversation] = self.conversationListController?.conversations ?? []
+                
         let items = conversations.map { convo in
             return UserConversationsDataSource.ItemType.conversation(convo.cid)
         }
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems([], in: .conversations)
         snapshot.setItems(items, in: .conversations)
+        
         await self.dataSource.apply(snapshot)
     }
 }
