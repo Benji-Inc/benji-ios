@@ -37,6 +37,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                                          gradientStop: nil)
     let lineView = BaseView()
     
+    private let stackedAvatarView = StackedAvatarView()
+    
     private var conversationController: ConversationController?
     var subscriptions = Set<AnyCancellable>()
     
@@ -85,6 +87,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.bottomBubble.layer.masksToBounds = true
         self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
         self.bottomBubble.tailLength = 0
+        
+        self.contentView.addSubview(self.stackedAvatarView)
     }
 
     func configure(with item: ConversationId) {
@@ -96,6 +100,12 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                 if let latest = self.conversationController?.channel?.latestMessages, latest.isEmpty  {
                     try? await self.conversationController?.synchronize()
                 }
+                
+                let members = self.conversationController?.conversation.lastActiveMembers.filter { member in
+                    return member.id != ChatClient.shared.currentUserId
+                } ?? []
+                
+                self.stackedAvatarView.configure(with: members)
                 
                 self.setNumberOfUnread(value: self.conversationController!.conversation.totalUnread)
                 self.subscribeToUpdates()
@@ -165,6 +175,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.long))
         self.titleLabel.match(.left, to: .left, of: self.messageContent)
         
+        self.stackedAvatarView.match(.right, to: .right, of: self.messageContent)
+        self.stackedAvatarView.centerY = self.titleLabel.centerY
+        
         self.leftLabel.setSize(withWidth: 120)
         self.leftLabel.match(.left, to: .left, of: self.bottomBubble)
         self.leftLabel.match(.top, to: .bottom, of: self.bottomBubble, offset: .long)
@@ -186,5 +199,60 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         }
         
         self.taskPool.cancelAndRemoveAll()
+    }
+}
+
+private class StackedAvatarView: BaseView {
+    
+    private let label = ThemeLabel(font: .small)
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.clipsToBounds = false
+    }
+
+    func configure(with avatars: [Avatar]) {
+        self.removeAllSubviews()
+        
+        for (index, avatar) in avatars.enumerated() {
+            if index <= 3 {
+                let view = BorderedAvatarView()
+                view.set(avatar: avatar)
+                self.addSubview(view)
+            }
+        }
+        
+        if avatars.count > 3 {
+            let remainder = avatars.count - 3
+            self.label.setText("+\(remainder)")
+        }
+      
+        self.layoutNow()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.height = 20
+        
+        var xOffset: CGFloat = 0
+        self.subviews.forEach { view in
+            if view is BorderedAvatarView {
+                view.frame = CGRect(x: xOffset,
+                                    y: 0,
+                                    width: 20,
+                                    height: 20)
+                xOffset += view.width + Theme.ContentOffset.short.value
+            }
+        }
+        
+        xOffset -= Theme.ContentOffset.short.value
+        
+        self.width = xOffset
+        
+        self.label.setSize(withWidth: 30)
+        self.label.match(.left, to: .right, of: self)
+        self.label.centerOnY()
     }
 }

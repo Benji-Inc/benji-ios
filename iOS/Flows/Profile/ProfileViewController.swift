@@ -113,11 +113,13 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         
         let padding = Theme.ContentOffset.xtraLong.value
         let totalWidth = self.collectionView.width - padding.doubled
-        let segmentWidth = totalWidth * 0.3333
+        let multiplier = self.segmentControl.numberOfSegments < 3 ? 0.5 : 0.333
+        let segmentWidth = totalWidth * multiplier
         self.segmentControl.sizeToFit()
-        self.segmentControl.setWidth(segmentWidth, forSegmentAt: 0)
-        self.segmentControl.setWidth(segmentWidth, forSegmentAt: 1)
-        self.segmentControl.setWidth(segmentWidth, forSegmentAt: 2)
+        
+        for index in 0...self.segmentControl.numberOfSegments - 1 {
+            self.segmentControl.setWidth(segmentWidth, forSegmentAt: 0)
+        }
 
         self.segmentControl.width = self.collectionView.width - padding.doubled
         self.segmentControl.centerOnX()
@@ -134,8 +136,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     override func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
-        self.collectionView.match(.top, to: .bottom, of: self.contextCuesVC.view, offset: .custom(64))
-        self.collectionView.height = self.view.height - self.contextCuesVC.view.bottom - 64
+        self.collectionView.match(.top, to: .bottom, of: self.contextCuesVC.view, offset: .custom(34))
+        self.collectionView.height = self.view.height - self.contextCuesVC.view.bottom - 34
         self.collectionView.centerOnX()
     }
     
