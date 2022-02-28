@@ -11,6 +11,7 @@ import Combine
 import ParseLiveQuery
 import Parse
 import StreamChat
+import Contacts
 
 /// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
 /// or it could just be another person that has been invited but not yet joined Jibber.
@@ -22,8 +23,16 @@ class PeopleStore {
     @Published var userUpdated: User?
     @Published var userDeleted: User?
 
+    var personTypes: [PersonType] {
+        var allPeople: [PersonType] = self.users
+        let contactPeople: [PersonType] = self.contacts.map { contact in
+            return Person(withContact: contact)
+        }
+        allPeople.append(contentsOf: contactPeople)
+        return allPeople
+    }
     private(set) var users: [User] = []
-    private(set) var personTypes: [PersonType] = []
+    private(set) var contacts: [CNContact] = []
 
     private var initializeTask: Task<Void, Never>?
 
@@ -36,13 +45,10 @@ class PeopleStore {
 
         // Otherwise start a new initialization task and wait for it to finish.
         self.initializeTask = Task {
+            // Include the current user.
+            self.getAndStoreCurrentUser()
             // Get all of the connections and unclaimed reservations.
             await self.getAndStoreAllConnectedUsers()
-
-            // Include the current user.
-            if let current = User.current() {
-                self.personTypes.append(current)
-            }
 
             await self.getAndStoreAllContactsWithUnclaimedReservations()
 
@@ -50,6 +56,11 @@ class PeopleStore {
         }
 
         await self.initializeTask?.value
+    }
+
+    private func getAndStoreCurrentUser() {
+        guard let current = User.current() else { return }
+        self.users.append(current)
     }
 
     private func getAndStoreAllConnectedUsers() async {
@@ -61,7 +72,7 @@ class PeopleStore {
                 }
             connections.forEach { connection in
                 guard let nonMeUser = connection.nonMeUser else { return }
-                self.personTypes.append(nonMeUser)
+                self.users.append(nonMeUser)
             }
         } catch {
             logError(error)
@@ -76,8 +87,7 @@ class PeopleStore {
                     ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
                         return
                     }
-            let person = Person(withContact: contact)
-            self.personTypes.append(person)
+            self.contacts.append(contact)
         }
     }
 
@@ -95,24 +105,24 @@ class PeopleStore {
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.personTypes.append(nonMeUser)
+                self.users.append(nonMeUser)
             case .updated(let object):
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
                 self.userUpdated = nonMeUser
 
-                if let indexToUpdate = self.personTypes.firstIndex(where: { personType in
-                    return personType.fullName == nonMeUser.fullName
+                if let indexToUpdate = self.users.firstIndex(where: { user in
+                    return user.fullName == nonMeUser.fullName
                 }) {
-                    self.personTypes[indexToUpdate] = nonMeUser
+                    self.users[indexToUpdate] = nonMeUser
                 }
 
             case .left(let object), .deleted(let object):
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.personTypes.removeAll { personType in
-                    return personType.fullName == nonMeUser.fullName
+                self.users.removeAll { user in
+                    return user.fullName == nonMeUser.fullName
                 }
                 self.userDeleted = nonMeUser
             }
