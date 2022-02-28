@@ -61,7 +61,7 @@ class LaunchManager {
             async let second : () = ConnectionStore.shared.initialize()
             let _: [()] = await [first, second]
             
-            UserStore.shared.initialize()
+            PersonStore.shared.initialize()
 
             // Pre-load contacts
             _ = ContactsManger.shared

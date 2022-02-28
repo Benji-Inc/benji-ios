@@ -12,18 +12,18 @@ import ParseLiveQuery
 import Parse
 import StreamChat
 
-class UserStore {
+class PersonStore {
 
-    static let shared = UserStore()
+    static let shared = PersonStore()
     private var cancellables = Set<AnyCancellable>()
 
     @Published var userUpdated: User?
     @Published var userDeleted: User?
 
-    private(set) var users: [User] = []
+    private(set) var people: [User] = []
 
     private var queries: [PFQuery<PFObject>] {
-        return self.users.compactMap { user in
+        return self.people.compactMap { user in
             if let query = User.query(), let objectId = user.objectId {
                 query.whereKey("objectId", equalTo: objectId)
                 return query
@@ -56,10 +56,10 @@ class UserStore {
 
         if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
                                                                          container: .users) {
-            self.users = users
+            self.people = users
         }
 
-        self.users.forEach { user in
+        self.people.forEach { user in
             self.userUpdated = user 
         }
 
@@ -101,7 +101,7 @@ class UserStore {
     func findUser(with objectID: String) async -> User? {
         var foundUser: User? = nil
 
-        if let user = UserStore.shared.users.first(where: { user in
+        if let user = PersonStore.shared.people.first(where: { user in
             return user.objectId == objectID
         }) {
             foundUser = user

@@ -108,7 +108,7 @@ class DisplayableImageView: BaseView {
         if let photo = displayable?.image {
             await self.set(image: photo, state: .success)
         } else if let objectID = displayable?.userObjectId {
-            let foundUser = await UserStore.shared.findUser(with: objectID)
+            let foundUser = await PersonStore.shared.findUser(with: objectID)
             if let user = foundUser {
                 await self.downloadAndSetImage(for: user)
             }
