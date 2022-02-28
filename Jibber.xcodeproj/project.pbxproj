@@ -526,8 +526,6 @@
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
-		D6B95AEF272324AE00FBE66A /* ConnectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AEE272324AE00FBE66A /* ConnectionStore.swift */; };
-		D6B95AF1272324AE00FBE66A /* ConnectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AEE272324AE00FBE66A /* ConnectionStore.swift */; };
 		D6B95AF3272324BD00FBE66A /* PersonStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PersonStore.swift */; };
 		D6B95AF5272324BD00FBE66A /* PersonStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PersonStore.swift */; };
 		D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF627236E1000FBE66A /* ConversationsManager.swift */; };
@@ -1014,7 +1012,6 @@
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
-		D6B95AEE272324AE00FBE66A /* ConnectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStore.swift; sourceTree = "<group>"; };
 		D6B95AF2272324BD00FBE66A /* PersonStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonStore.swift; sourceTree = "<group>"; };
 		D6B95AF627236E1000FBE66A /* ConversationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsManager.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
@@ -2017,7 +2014,6 @@
 		D6B95AED2723248F00FBE66A /* Stores */ = {
 			isa = PBXGroup;
 			children = (
-				D6B95AEE272324AE00FBE66A /* ConnectionStore.swift */,
 				D6B95AF2272324BD00FBE66A /* PersonStore.swift */,
 			);
 			path = Stores;
@@ -2721,7 +2717,6 @@
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D65D460427A9B1960019301C /* old_MessageReplyView.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationListCoordinator.swift in Sources */,
-				D6B95AEF272324AE00FBE66A /* ConnectionStore.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D6CC148F276C1323005F617F /* MessageStatusView.swift in Sources */,
@@ -2999,7 +2994,6 @@
 				D62D16342736F60400C542CE /* ToastErrorView.swift in Sources */,
 				D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */,
 				D63DB22625E9990900F6B323 /* CGPoint+Extensions.swift in Sources */,
-				D6B95AF1272324AE00FBE66A /* ConnectionStore.swift in Sources */,
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
 				D682B4162792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
