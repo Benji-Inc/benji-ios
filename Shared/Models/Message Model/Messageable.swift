@@ -25,13 +25,13 @@ protocol Messageable {
     var isFromCurrentUser: Bool { get }
     var authorId: String { get }
     var attributes: [String: Any]? { get }
-    var avatar: Avatar? { get }
+    var avatar: PersonType? { get }
     var deliveryStatus: DeliveryStatus { get }
     var context: MessageContext { get }
     var canBeConsumed: Bool { get }
     var isConsumedByMe: Bool { get }
     var isConsumed: Bool { get }
-    var hasBeenConsumedBy: [Avatar] { get }
+    var hasBeenConsumedBy: [PersonType] { get }
     var color: ThemeColor { get }
     var kind: MessageKind { get }
     var isDeleted: Bool { get }

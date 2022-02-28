@@ -74,7 +74,7 @@ extension CNContact {
     }
 }
 
-extension CNContact: Avatar {
+extension CNContact: PersonType {
 
     var handle: String {
         return ""

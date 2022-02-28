@@ -61,7 +61,7 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Open setters
 
-    func set(avatar: Avatar?) {
+    func set(avatar: PersonType?) {
         Task {
             guard let avatar = avatar else { return }
 

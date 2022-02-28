@@ -16,9 +16,9 @@ class AvatarProfileViewController: ViewController {
     private let focusLabel = ThemeLabel(font: .regular)
     private let vibrancyView = VibrancyView()
 
-    private let avatar: Avatar
+    private let avatar: PersonType
 
-    init(with avatar: Avatar) {
+    init(with avatar: PersonType) {
         self.avatar = avatar
         super.init()
     }

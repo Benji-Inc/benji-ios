@@ -50,7 +50,7 @@ extension ConversationListCoordinator {
         }
     }
     
-    func presentProfile(for avatar: Avatar) {
+    func presentProfile(for avatar: PersonType) {
         let coordinator = ProfileCoordinator(with: avatar, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {

@@ -13,7 +13,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                              UserConversationsDataSource.ItemType,
                              UserConversationsDataSource> {
     
-    private var avatar: Avatar
+    private var avatar: PersonType
     
     lazy var header = ProfileHeaderView()
     private lazy var contextCuesVC = ContextCuesViewController()
@@ -33,7 +33,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
         
-    init(with avatar: Avatar) {
+    init(with avatar: PersonType) {
         self.avatar = avatar
         super.init(with: UserConversationsCollectionView())
     }

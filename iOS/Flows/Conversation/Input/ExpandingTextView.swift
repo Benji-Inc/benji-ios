@@ -41,7 +41,7 @@ class ExpandingTextView: TextView {
         self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
 
-    func setPlaceholder(for avatars: [Avatar], isReply: Bool) {
+    func setPlaceholder(for avatars: [PersonType], isReply: Bool) {
         var placeholderText = isReply ? "Reply to " : "Message "
 
         if avatars.isEmpty {

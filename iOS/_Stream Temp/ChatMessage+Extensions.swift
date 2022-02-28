@@ -29,7 +29,7 @@ extension Message: Messageable {
         return nil
     }
 
-    var avatar: Avatar? {
+    var avatar: PersonType? {
         return self.author
     }
 
@@ -76,7 +76,7 @@ extension Message: Messageable {
         return latestRead
     }
 
-    var hasBeenConsumedBy: [Avatar] {
+    var hasBeenConsumedBy: [PersonType] {
         let reads = self.latestReactions.filter { reaction in
             guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
             return type == .read

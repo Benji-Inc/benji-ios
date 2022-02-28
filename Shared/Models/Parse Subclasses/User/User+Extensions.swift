@@ -10,7 +10,7 @@ import Foundation
 import Parse
 import Combine
 
-extension User: Avatar {
+extension User: PersonType {
 
     var userObjectId: String? {
         self.objectId

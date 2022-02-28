@@ -51,7 +51,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         self.handle(isSelected: item.isSelected)
     }
     
-    private func updateName(for avatar: Avatar, highlightText: String?) {
+    private func updateName(for avatar: PersonType, highlightText: String?) {
         self.titleLabel.setText(avatar.fullName)
         
         if let highlightText = highlightText {

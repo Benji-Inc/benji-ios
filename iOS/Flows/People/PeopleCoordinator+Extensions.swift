@@ -13,7 +13,7 @@ import Localization
 
 extension PeopleCoordinator {
 
-    private func showSentTextToast(for avatar: Avatar) {
+    private func showSentTextToast(for avatar: PersonType) {
         let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         Task {
             await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: avatar, title: "RSVP Sent", description: text, deepLink: nil))

@@ -9,7 +9,7 @@
 import Foundation
 import Parse
 
-struct SystemAvatar: Avatar, Hashable {
+struct SystemAvatar: PersonType, Hashable {
     var userObjectId: String?
     var givenName: String
     var familyName: String

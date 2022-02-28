@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-extension ChatUser: Avatar {
+extension ChatUser: PersonType {
 
     var parseUser: User? {
         return UserStore.shared.users.first { user in

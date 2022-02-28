@@ -12,9 +12,9 @@ import Combine
 class ProfileCoordinator: PresentableCoordinator<ConversationId> {
     
     lazy var profileVC = ProfileViewController(with: self.avatar)
-    private let avatar: Avatar
+    private let avatar: PersonType
     
-    init(with avatar: Avatar,
+    init(with avatar: PersonType,
          router: Router,
          deepLink: DeepLinkable?) {
         

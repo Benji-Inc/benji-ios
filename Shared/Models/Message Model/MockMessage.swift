@@ -16,10 +16,10 @@ struct MockMessage: Messageable {
     var isFromCurrentUser: Bool = true
     var authorId: String = UUID().uuidString
     var attributes: [String : Any]? = nil
-    var avatar: Avatar? = nil
+    var avatar: PersonType? = nil
     var deliveryStatus: DeliveryStatus = .sent
     var context: MessageContext = .respectful
-    var hasBeenConsumedBy: [Avatar] = [SystemAvatar(userObjectId: nil,
+    var hasBeenConsumedBy: [PersonType] = [SystemAvatar(userObjectId: nil,
                                                     givenName: "system",
                                                     familyName: "avatar",
                                                     image: nil,

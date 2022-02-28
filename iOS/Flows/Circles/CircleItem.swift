@@ -9,7 +9,7 @@
 import Foundation
 import Contacts
 
-struct CircleItem: Avatar, Hashable {
+struct CircleItem: PersonType, Hashable {
     
     var givenName: String {
         if let user = self.user {

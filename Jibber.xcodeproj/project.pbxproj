@@ -254,7 +254,7 @@
 		D63DB26925E9997800F6B323 /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */; };
 		D63DB26A25E9997800F6B323 /* UserNotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C625A3704300A4A3B7 /* UserNotificationFactory.swift */; };
 		D63DB26B25E9997800F6B323 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
-		D63DB26D25E9997F00F6B323 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
+		D63DB26D25E9997F00F6B323 /* PersonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* PersonType.swift */; };
 		D63DB26E25E9997F00F6B323 /* Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE3B236F913F004FA89A /* Objectable.swift */; };
 		D63DB26F25E9997F00F6B323 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D63DB27025E9997F00F6B323 /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
@@ -369,7 +369,7 @@
 		D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD722BF295A00BA277D /* Coordinator.swift */; };
 		D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD922BF297F00BA277D /* MainCoordinator.swift */; };
 		D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* AvatarView.swift */; };
-		D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
+		D66F0FE622C0640E00BA277D /* PersonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* PersonType.swift */; };
 		D66F102622C7C6A900BA277D /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
 		D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastBannerView.swift */; };
@@ -432,7 +432,7 @@
 		D687595C2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D687595D2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D687595E2728A4BA00AF7C07 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
-		D68759612728A54000AF7C07 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
+		D68759612728A54000AF7C07 /* PersonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* PersonType.swift */; };
 		D68759622728A54300AF7C07 /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
 		D68759642728A55A00AF7C07 /* FontType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460A21D5547000CD8CE4 /* FontType.swift */; };
 		D68759652728A56300AF7C07 /* Character+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */; };
@@ -915,7 +915,7 @@
 		D66F0FD722BF295A00BA277D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		D66F0FD922BF297F00BA277D /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		D66F0FE122C041AF00BA277D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
-		D66F0FE522C0640E00BA277D /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
+		D66F0FE522C0640E00BA277D /* PersonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonType.swift; sourceTree = "<group>"; };
 		D66F102522C7C6A900BA277D /* Lorem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
 		D671E1EE264029BC00BF2B8D /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D671E1F026402A2000BF2B8D /* ToastBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastBannerView.swift; sourceTree = "<group>"; };
@@ -1622,7 +1622,7 @@
 			isa = PBXGroup;
 			children = (
 				D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */,
-				D66F0FE522C0640E00BA277D /* Avatar.swift */,
+				D66F0FE522C0640E00BA277D /* PersonType.swift */,
 				D66F0FCE22BF060500BA277D /* Deeplinkable.swift */,
 				D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */,
 				D609AE3B236F913F004FA89A /* Objectable.swift */,
@@ -2620,7 +2620,7 @@
 				D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealias.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,
-				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
+				D66F0FE622C0640E00BA277D /* PersonType.swift in Sources */,
 				D6DEC3F927A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift in Sources */,
 				D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */,
 				D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */,
@@ -2934,7 +2934,7 @@
 				D66AB0F3277A498D007A35D1 /* ImageCaptureViewController.swift in Sources */,
 				D63DB25525E9995700F6B323 /* DeeplinkObject.swift in Sources */,
 				80A36AF3278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */,
-				D63DB26D25E9997F00F6B323 /* Avatar.swift in Sources */,
+				D63DB26D25E9997F00F6B323 /* PersonType.swift in Sources */,
 				D63DB26525E9997200F6B323 /* ThemeColor.swift in Sources */,
 				D63DB22325E9990500F6B323 /* Date+Extensions.swift in Sources */,
 				D63DB27025E9997F00F6B323 /* Deeplinkable.swift in Sources */,
@@ -3126,7 +3126,7 @@
 				D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */,
 				D6166C892731F79A0013E803 /* UIImage+Extensions.swift in Sources */,
 				D6AE0FFC267D2D9500C6B048 /* Objectable.swift in Sources */,
-				D68759612728A54000AF7C07 /* Avatar.swift in Sources */,
+				D68759612728A54000AF7C07 /* PersonType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

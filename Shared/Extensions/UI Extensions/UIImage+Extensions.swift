@@ -53,7 +53,7 @@ extension UIImage {
     }
 }
 
-extension UIImage: Avatar {
+extension UIImage: PersonType {
 
     var givenName: String {
         return "First"

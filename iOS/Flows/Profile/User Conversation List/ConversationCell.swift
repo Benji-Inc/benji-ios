@@ -212,7 +212,7 @@ private class StackedAvatarView: BaseView {
         self.clipsToBounds = false
     }
 
-    func configure(with avatars: [Avatar]) {
+    func configure(with avatars: [PersonType]) {
         self.removeAllSubviews()
         
         for (index, avatar) in avatars.enumerated() {

@@ -10,7 +10,7 @@ import Foundation
 import Contacts
 import PhoneNumberKit
 
-struct Person: Avatar, Hashable, Comparable {
+struct Person: PersonType, Hashable, Comparable {
     
     static func < (lhs: Person, rhs: Person) -> Bool {
         if let _ = lhs.connection,
