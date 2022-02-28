@@ -15,7 +15,6 @@ class ConnectionStore {
 
     static let shared = ConnectionStore()
 
-    @Published var isReady: Bool = false
     @Published var connectionUpdated: Connection?
 
     private(set) var connections: [Connection] = []
@@ -31,23 +30,33 @@ class ConnectionStore {
         }
     }
 
-    func initialize() async {
-        do {
-            self.connections
-            = try await GetAllConnections().makeRequest(andUpdate: [],
-                                                        viewsToIgnore: []).filter { (connection) -> Bool in
-                return !connection.nonMeUser.isNil
-            }
+    private var initializeTask: Task<Void, Never>?
 
-            self.subscribeToUpdates()
-        } catch {
-            logError(error)
+    func initializeIfNeeded() async {
+        // If we already have an initialization task, wait for it to finish.
+        if let initializeTask = self.initializeTask {
+            await initializeTask.value
+            return
         }
+
+        self.initializeTask = Task {
+            do {
+                self.connections
+                = try await GetAllConnections().makeRequest(andUpdate: [],
+                                                            viewsToIgnore: []).filter { (connection) -> Bool in
+                    return !connection.nonMeUser.isNil
+                }
+
+                self.subscribeToUpdates()
+            } catch {
+                logError(error)
+            }
+        }
+
+        await self.initializeTask?.value
     }
 
     private func subscribeToUpdates() {
-        self.isReady = true
-
         Client.shared.shouldPrintWebSocketLog = false
 
         self.queries.forEach { query in
@@ -55,18 +64,11 @@ class ConnectionStore {
 
             subscription.handleEvent { query, event in
                 switch event {
-                case .deleted(_):
-                    break
-                case .entered(_):
-                    break
-                case .left(_):
-                    break
-                case .created(_):
+                case .deleted, .entered, .left, .created:
                     break
                 case .updated(let object):
-                    if let connection = object as? Connection {
-                        self.connectionUpdated = connection
-                    }
+                    guard let connection = object as? Connection else { break }
+                    self.connectionUpdated = connection
                 }
             }
         }

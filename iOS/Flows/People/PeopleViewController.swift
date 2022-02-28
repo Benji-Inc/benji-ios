@@ -218,7 +218,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
         var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
 
-        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter({ (connection) -> Bool in
+        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [],
+                                                                        viewsToIgnore: []).filter({ (connection) -> Bool in
             return !connection.nonMeUser.isNil
         }), let _ = try? await connections.asyncMap({ connection in
             return try await connection.nonMeUser!.retrieveDataIfNeeded()

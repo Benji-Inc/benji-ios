@@ -118,7 +118,7 @@ class ToastScheduler {
 
         guard case MessageKind.text(let text) = message.kind,
               !text.isEmpty,
-              let author = PersonStore.shared.people.first(where: { user in
+              let author = PersonStore.shared.users.first(where: { user in
                   return user.userObjectId == message.authorId
               }) else { return nil }
 

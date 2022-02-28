@@ -12,6 +12,8 @@ import ParseLiveQuery
 import Parse
 import StreamChat
 
+/// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
+/// or it could just be another person that has been invited but not yet joined Jibber.
 class PersonStore {
 
     static let shared = PersonStore()
@@ -20,71 +22,100 @@ class PersonStore {
     @Published var userUpdated: User?
     @Published var userDeleted: User?
 
-    private(set) var people: [User] = []
+    private(set) var users: [User] = []
+    private(set) var personTypes: [PersonType] = []
 
-    private var queries: [PFQuery<PFObject>] {
-        return self.people.compactMap { user in
-            if let query = User.query(), let objectId = user.objectId {
-                query.whereKey("objectId", equalTo: objectId)
-                return query
-            }
+    private var initializeTask: Task<Void, Never>?
 
-            return nil
+    func initializeIfNeeded() async {
+        // If we already have an initialization task, wait for it to finish.
+        if let initializeTask = self.initializeTask {
+            await initializeTask.value
+            return
         }
-    }
 
-    func initialize() {
-        ConnectionStore.shared.$isReady.mainSink { [unowned self] isReady in
-            if isReady {
-                onceEver(token: "userStoreSubscribe") {
-                    Task {
-                        await self.subscribeToUpdates()
-                    }
-                }
+        // Otherwise start a new initialization task and wait for it to finish.
+        self.initializeTask = Task {
+            // Get all of the connections and unclaimed reservations.
+            await ConnectionStore.shared.initializeIfNeeded()
+
+            // Get all of the people connected to us.
+            var connectedUserIds = ConnectionStore.shared.connections.compactMap { connection in
+                return connection.nonMeUser?.objectId
             }
-        }.store(in: &self.cancellables)
+            // Include the current user.
+            if let current = User.current()?.objectId {
+                connectedUserIds.append(current)
+            }
+            // Subscribe for updates to connections and reservations
+            if let users = try? await User.fetchAndUpdateLocalContainer(where: connectedUserIds,
+                                                                             container: .users) {
+                self.users = users
+                self.personTypes = users
+            }
+
+            let reservations = await Reservation.getAllUnclaimed()
+            reservations.forEach { reservation in
+                guard let contactId = reservation.contactId else { return }
+                guard let contact =
+                        ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
+                            return
+                        }
+                let person = Person(withContact: contact)
+                self.personTypes.append(person)
+            }
+
+            await self.subscribeToUpdates()
+        }
+
+        await self.initializeTask?.value
     }
 
     private func subscribeToUpdates() async {
-        var unfetchedUserIds = ConnectionStore.shared.connections.compactMap { connection in
-            return connection.nonMeUser?.objectId
-        }
+        let connectionsQuery = Connection.query()!
+        let connectionSubscription = Client.shared.subscribe(connectionsQuery)
+        connectionSubscription.handleEvent { query, event in
+            switch event {
+            case .entered(let object), .created(let object):
+                guard let connection = object as? Connection,
+                      let nonMeUser = connection.nonMeUser else { break }
 
-        if let current = User.current()?.objectId {
-            unfetchedUserIds.append(current)
-        }
+                self.personTypes.append(nonMeUser)
+            case .updated(let object):
+                guard let connection = object as? Connection,
+                      let nonMeUser = connection.nonMeUser else { break }
+                self.userUpdated = nonMeUser
 
-        if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
-                                                                         container: .users) {
-            self.people = users
-        }
-
-        self.people.forEach { user in
-            self.userUpdated = user 
-        }
-
-        self.queries.forEach { query in
-            let subscription = Client.shared.subscribe(query)
-
-            subscription.handleEvent { query, event in
-                switch event {
-                case .deleted(let object):
-                    if let user = object as? User {
-                        self.userDeleted = user
-                    }
-                case .entered(_):
-                    break
-                case .left(_):
-                    break
-                case .created(_):
-                    break
-                case .updated(let object):
-                    if let user = object as? User {
-                        self.userUpdated = user
-                    }
+                if let indexToUpdate = self.personTypes.firstIndex(where: { personType in
+                    return personType.fullName == nonMeUser.fullName
+                }) {
+                    self.personTypes[indexToUpdate] = nonMeUser
                 }
+
+            case .left(let object), .deleted(let object):
+                guard let connection = object as? Connection,
+                      let nonMeUser = connection.nonMeUser else { break }
+
+                self.personTypes.removeAll { personType in
+                    return personType.fullName == nonMeUser.fullName
+                }
+                self.userDeleted = nonMeUser
             }
         }
+        
+//        let reservationQuery = Reservation.query()!
+//        reservationQuery.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+//        let reservationSubscription = Client.shared.subscribe(reservationQuery)
+//        reservationSubscription.handleEvent { query, event in
+//            switch event {
+//            case .updated(let object):
+//                break
+//            case .deleted(let object):
+//                break
+//            case .entered, .left, .created:
+//                break
+//            }
+//        }
     }
     
     func mapMembersToUsers(members: [ConversationMember]) async throws -> [User] {
@@ -101,7 +132,7 @@ class PersonStore {
     func findUser(with objectID: String) async -> User? {
         var foundUser: User? = nil
 
-        if let user = PersonStore.shared.people.first(where: { user in
+        if let user = PersonStore.shared.users.first(where: { user in
             return user.objectId == objectID
         }) {
             foundUser = user

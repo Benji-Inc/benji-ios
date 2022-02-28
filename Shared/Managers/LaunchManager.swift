@@ -55,13 +55,12 @@ class LaunchManager {
             // Ensure that the user object is up to date.
             _ = try? await user.fetchInBackground()
             
-            async let first : ()
+            async let first: Void
             = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             // Initialize the stores.
-            async let second : () = ConnectionStore.shared.initialize()
-            let _: [()] = await [first, second]
-            
-            PersonStore.shared.initialize()
+            async let second: Void = ConnectionStore.shared.initializeIfNeeded()
+            async let third: Void = PersonStore.shared.initializeIfNeeded()
+            let _: [Void] = await [first, second, third]
 
             // Pre-load contacts
             _ = ContactsManger.shared
