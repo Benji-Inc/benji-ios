@@ -38,7 +38,7 @@ class AvatarProfileViewController: ViewController {
 
         if let objectId = self.avatar.userObjectId {
             Task {
-                let user = await PersonStore.shared.findUser(with: objectId)
+                let user = await PeopleStore.shared.findUser(with: objectId)
                 self.nameLabel.setText(user?.fullName)
                 self.focusLabel.setText(user?.focusStatus?.rawValue)
                 self.view.layoutNow()

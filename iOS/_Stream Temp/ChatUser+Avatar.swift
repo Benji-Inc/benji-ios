@@ -12,7 +12,7 @@ import StreamChat
 extension ChatUser: PersonType {
 
     var parseUser: User? {
-        return PersonStore.shared.users.first { user in
+        return PeopleStore.shared.users.first { user in
             return user.objectId == self.userObjectId
         }
     }

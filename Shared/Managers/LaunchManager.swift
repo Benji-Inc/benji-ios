@@ -58,7 +58,7 @@ class LaunchManager {
             async let first: Void
             = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             // Initialize the stores.
-            async let second: Void = PersonStore.shared.initializeIfNeeded()
+            async let second: Void = PeopleStore.shared.initializeIfNeeded()
             let _: [Void] = await [first, second]
 
             // Pre-load contacts

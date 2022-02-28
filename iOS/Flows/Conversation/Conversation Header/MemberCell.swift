@@ -47,7 +47,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
         Task {
             if let userId = item.displayable.value.userObjectId,
-               let user = await PersonStore.shared.findUser(with: userId) {
+               let user = await PeopleStore.shared.findUser(with: userId) {
                 self.subscribeToUpdates(for: user)
             }
         }

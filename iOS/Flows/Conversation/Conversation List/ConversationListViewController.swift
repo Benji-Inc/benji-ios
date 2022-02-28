@@ -287,7 +287,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
                 let members = conversation.lastActiveMembers.filter { member in
                     return member.id != ChatClient.shared.currentUserId
                 }
-                guard let users = try? await PersonStore.shared.mapMembersToUsers(members: members) else {
+                guard let users = try? await PeopleStore.shared.mapMembersToUsers(members: members) else {
                     return
                 }
 

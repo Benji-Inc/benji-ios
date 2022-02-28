@@ -68,7 +68,7 @@ class AvatarView: DisplayableImageView {
             if let user = avatar as? User, user.isDataAvailable {
                 self.subscribeToUpdates(for: user)
             } else if let userId = avatar.userObjectId,
-                      let user = await PersonStore.shared.findUser(with: userId) {
+                      let user = await PeopleStore.shared.findUser(with: userId) {
                 self.subscribeToUpdates(for: user)
             }
         }.add(to: self.taskPool)
@@ -79,7 +79,7 @@ class AvatarView: DisplayableImageView {
     }
     
     func subscribeToUpdates(for user: User) {
-        PersonStore.shared.$userUpdated.filter { updatedUser in
+        PeopleStore.shared.$userUpdated.filter { updatedUser in
             updatedUser?.objectId == user.userObjectId
         }.mainSink { [unowned self] updatedUser in
             guard let user = updatedUser else { return }
@@ -96,9 +96,4 @@ class AvatarView: DisplayableImageView {
 
         self.label.expandToSuperviewSize()
     }
-}
-
-fileprivate extension FloatingPoint {
-    var degreesToRadians: Self { return self * .pi / 180 }
-    var radiansToDegrees: Self { return self * 180 / .pi }
 }

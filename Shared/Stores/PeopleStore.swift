@@ -14,9 +14,9 @@ import StreamChat
 
 /// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
 /// or it could just be another person that has been invited but not yet joined Jibber.
-class PersonStore {
+class PeopleStore {
 
-    static let shared = PersonStore()
+    static let shared = PeopleStore()
     private var cancellables = Set<AnyCancellable>()
 
     @Published var userUpdated: User?
@@ -143,7 +143,7 @@ class PersonStore {
     func findUser(with objectID: String) async -> User? {
         var foundUser: User? = nil
 
-        if let user = PersonStore.shared.users.first(where: { user in
+        if let user = PeopleStore.shared.users.first(where: { user in
             return user.objectId == objectID
         }) {
             foundUser = user
