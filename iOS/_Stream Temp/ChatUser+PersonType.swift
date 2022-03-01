@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Parse
 
 extension ChatUser: PersonType {
 
@@ -34,8 +35,7 @@ extension ChatUser: PersonType {
     }
 
     var focusStatus: FocusStatus? {
-        #warning("Get the focus status off the corresponding user?")
-        return nil
+        return self.parseUser?.focusStatus
     }
 
     var image: UIImage? {
@@ -44,5 +44,9 @@ extension ChatUser: PersonType {
 
     var url: URL? {
         return self.parseUser?.url
+    }
+
+    var fileObject: PFFileObject? {
+        return self.parseUser?.smallImage
     }
 }
