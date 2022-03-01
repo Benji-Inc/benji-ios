@@ -67,16 +67,16 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Open setters
 
-    func set(avatar: PersonType?) {
+    func set(person: PersonType?) {
         Task {
-            guard let avatar = avatar else { return }
+            guard let person = person else { return }
 
-            self.subscribeToUpdates(for: avatar)
+            self.subscribeToUpdates(for: person)
         }.add(to: self.taskPool)
         
-        self.avatar = avatar
+        self.person = person
 
-        self.displayable = avatar
+        self.displayable = person
     }
     
     func subscribeToUpdates(for person: PersonType) {

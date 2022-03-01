@@ -29,7 +29,7 @@ extension Message: Messageable {
         return nil
     }
 
-    var avatar: PersonType? {
+    var person: PersonType? {
         return self.author
     }
 

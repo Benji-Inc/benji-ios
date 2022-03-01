@@ -11,15 +11,15 @@ import Combine
 
 class AvatarProfileViewController: ViewController {
 
-    private let avatarView = BorderedAvatarView()
+    private let personView = BorderedAvatarView()
     private let nameLabel = ThemeLabel(font: .mediumBold)
     private let focusLabel = ThemeLabel(font: .regular)
     private let vibrancyView = VibrancyView()
 
-    private let avatar: PersonType
+    private let person: PersonType
 
-    init(with avatar: PersonType) {
-        self.avatar = avatar
+    init(with person: PersonType) {
+        self.person = person
         super.init()
     }
 
@@ -32,11 +32,11 @@ class AvatarProfileViewController: ViewController {
 
         self.view.set(backgroundColor: .clear)
         self.view.addSubview(self.vibrancyView)
-        self.view.addSubview(self.avatarView)
+        self.view.addSubview(self.personView)
         self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.focusLabel)
 
-        let objectId = self.avatar.personId
+        let objectId = self.person.personId
         Task {
             let user = await PeopleStore.shared.findUser(with: objectId)
             self.nameLabel.setText(user?.fullName)
@@ -44,7 +44,7 @@ class AvatarProfileViewController: ViewController {
             self.view.layoutNow()
         }.add(to: self.autocancelTaskPool)
 
-        self.avatarView.set(avatar: self.avatar)
+        self.personView.set(person: self.person)
 
         self.preferredContentSize = CGSize(width: 300, height: 300)
     }
@@ -54,15 +54,15 @@ class AvatarProfileViewController: ViewController {
 
         self.vibrancyView.expandToSuperviewSize()
 
-        self.avatarView.setSize(for: 120)
-        self.avatarView.pinToSafeAreaTop()
-        self.avatarView.centerOnX()
+        self.personView.setSize(for: 120)
+        self.personView.pinToSafeAreaTop()
+        self.personView.centerOnX()
 
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
         self.nameLabel.setSize(withWidth: maxWidth)
         self.nameLabel.centerOnX()
-        self.nameLabel.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
+        self.nameLabel.match(.top, to: .bottom, of: self.personView, offset: .standard)
         
         self.focusLabel.setSize(withWidth: maxWidth)
         self.focusLabel.centerOnX()

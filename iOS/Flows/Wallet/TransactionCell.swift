@@ -110,7 +110,7 @@ class TransactionContentView: BaseView, UIContentView {
         Task {
             guard let transaction = try? await item.retrieveDataIfNeeded() else { return }
             if let from = try? await transaction.from?.retrieveDataIfNeeded() {
-                self.avatarView?.set(avatar: from)
+                self.avatarView?.set(person: from)
                 self.titleLabel?.setText(from.fullName)
                 self.setNeedsUpdateConstraints()
             }

@@ -30,20 +30,20 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: Member?
 
-    let avatarView = BorderedAvatarView()
+    let personView = BorderedAvatarView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.avatarView.squaredSize = self.contentView.height
-        self.avatarView.centerOnXAndY()
+        self.personView.squaredSize = self.contentView.height
+        self.personView.centerOnXAndY()
 
         self.contentView.clipsToBounds = false
-        self.contentView.addSubview(self.avatarView)
+        self.contentView.addSubview(self.personView)
     }
 
     func configure(with item: Member) {
-        self.avatarView.set(avatar: item.displayable.value)
+        self.personView.set(person: item.displayable.value)
 
         Task {
             let userId = item.displayable.value.personId
@@ -56,16 +56,16 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         if typingUsers.contains(where: { typingUser in
             typingUser.personId == item.displayable.value.personId
         }) {
-            self.avatarView.beginTyping()
+            self.personView.beginTyping()
         } else {
-            self.avatarView.endTyping()
+            self.personView.endTyping()
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.avatarView.set(avatar: nil)
+        self.personView.set(person: nil)
     }
     
     private func subscribeToUpdates(for user: User) {

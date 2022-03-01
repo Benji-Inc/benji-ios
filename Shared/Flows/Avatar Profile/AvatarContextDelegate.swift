@@ -9,22 +9,22 @@
 import Foundation
 
 protocol AvatarContextDelegate: UIContextMenuInteractionDelegate {
-    func getMenu(for avatar: PersonType) -> UIMenu
+    func getMenu(for person: PersonType) -> UIMenu
 }
 
-private var avatarKey: UInt8 = 0
+private var personKey: UInt8 = 0
 extension AvatarContextDelegate where Self: NSObject {
 
-    var avatar: PersonType? {
+    var person: PersonType? {
         get {
-            return self.getAssociatedObject(&avatarKey)
+            return self.getAssociatedObject(&personKey)
         }
         set {
-            self.setAssociatedObject(key: &avatarKey, value: newValue)
+            self.setAssociatedObject(key: &personKey, value: newValue)
         }
     }
 
-    func getMenu(for avatar: PersonType) -> UIMenu {
+    func getMenu(for person: PersonType) -> UIMenu {
         return UIMenu(title: "Menu", children: [])
     }
 }

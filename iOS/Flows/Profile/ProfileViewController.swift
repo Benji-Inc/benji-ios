@@ -13,7 +13,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                              UserConversationsDataSource.ItemType,
                              UserConversationsDataSource> {
     
-    private var avatar: PersonType
+    private var person: PersonType
     
     lazy var header = ProfileHeaderView()
     private lazy var contextCuesVC = ContextCuesViewController()
@@ -33,8 +33,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
         
-    init(with avatar: PersonType) {
-        self.avatar = avatar
+    init(with person: PersonType) {
+        self.person = person
         super.init(with: UserConversationsCollectionView())
     }
     
@@ -91,9 +91,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.collectionView.allowsMultipleSelection = false 
                 
         Task {
-            if let user = self.avatar as? User,
+            if let user = self.person as? User,
                let updated = try? await user.retrieveDataIfNeeded() {
-                self.avatar = updated
+                self.person = updated
                 self.header.configure(with: updated)
                 self.loadInitialData()
                 if !user.isCurrentUser {
@@ -104,9 +104,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 }
                 self.loadRecents()
                 self.view.layoutNow()
-            } else if let user = try? await User.getObject(with: self.avatar.personId),
+            } else if let user = try? await User.getObject(with: self.person.personId),
                       let updated = try? await user.retrieveDataIfNeeded() {
-                self.avatar = updated
+                self.person = updated
                 self.header.configure(with: updated)
                 self.loadInitialData()
                 if !user.isCurrentUser {
@@ -178,7 +178,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     private func loadArchive() {
         Task { [weak self] in
-            guard let `self` = self, let user = self.avatar as? User else { return }
+            guard let `self` = self, let user = self.person as? User else { return }
             var userIds: [String] = []
             
             if user.isCurrentUser {
@@ -199,7 +199,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     private func loadRecents() {
         Task { [weak self] in
-            guard let `self` = self, let user = self.avatar as? User else { return }
+            guard let `self` = self, let user = self.person as? User else { return }
             var userIds: [String] = []
             
             if user.isCurrentUser {
@@ -220,7 +220,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     private func loadAll() {
         Task { [weak self] in
-            guard let `self` = self, let user = self.avatar as? User else { return }
+            guard let `self` = self, let user = self.person as? User else { return }
             var userIds: [String] = []
             
             if user.isCurrentUser {

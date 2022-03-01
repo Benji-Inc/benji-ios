@@ -25,7 +25,7 @@ protocol Messageable {
     var isFromCurrentUser: Bool { get }
     var authorId: String { get }
     var attributes: [String: Any]? { get }
-    var avatar: PersonType? { get }
+    var person: PersonType? { get }
     var deliveryStatus: DeliveryStatus { get }
     var context: MessageContext { get }
     var canBeConsumed: Bool { get }
@@ -70,8 +70,8 @@ extension Messageable {
     }
 
     var isConsumedByMe: Bool {
-        return self.hasBeenConsumedBy.contains { avatar in
-            return avatar.personId == User.current()?.objectId
+        return self.hasBeenConsumedBy.contains { person in
+            return person.personId == User.current()?.objectId
         }
     }
 
