@@ -45,8 +45,6 @@ class PeopleStore {
 
         // Otherwise start a new initialization task and wait for it to finish.
         self.initializeTask = Task {
-            // Include the current user.
-            self.getAndStoreCurrentUser()
             // Get all of the connections and unclaimed reservations.
             await self.getAndStoreAllConnectedUsers()
 
@@ -62,18 +60,26 @@ class PeopleStore {
         guard let current = User.current() else { return }
         self.users.append(current)
     }
-
+    
     private func getAndStoreAllConnectedUsers() async {
         do {
-            
             let connections = try await GetAllConnections().makeRequest(andUpdate: [],
                                                                         viewsToIgnore: [])
                 .filter { (connection) -> Bool in
                     return !connection.nonMeUser.isNil
                 }
-            connections.forEach { connection in
-                guard let nonMeUser = connection.nonMeUser else { return }
-                self.users.append(nonMeUser)
+            
+            var unfetchedUserIds = connections.compactMap { connection in
+                return connection.nonMeUser?.objectId
+            }
+            
+            if let current = User.current()?.objectId {
+                unfetchedUserIds.append(current)
+            }
+            
+            if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
+                                                                             container: .users) {
+                self.users = users
             }
         } catch {
             logError(error)
