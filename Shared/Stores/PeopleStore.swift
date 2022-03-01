@@ -20,7 +20,7 @@ class PeopleStore {
     static let shared = PeopleStore()
     private var cancellables = Set<AnyCancellable>()
 
-    @Published var userUpdated: User?
+    @Published var personUpdated: PersonType?
     @Published var userDeleted: User?
 
     var personTypes: [PersonType] {
@@ -109,7 +109,7 @@ class PeopleStore {
             case .updated(let object):
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
-                self.userUpdated = nonMeUser
+                self.personUpdated = nonMeUser
 
                 if let indexToUpdate = self.users.firstIndex(where: { user in
                     return user.fullName == nonMeUser.fullName
@@ -149,7 +149,8 @@ class PeopleStore {
         
         return users
     }
-    
+
+    #warning("Rename")
     func findUser(with objectID: String) async -> User? {
         var foundUser: User? = nil
 

@@ -56,7 +56,7 @@
 		807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807C63F027CD7F100017112E /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
-		807C63F127CD7F4F0017112E /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Contact.swift */; };
+		807C63F127CD7F4F0017112E /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Person.swift */; };
 		807C63F227CD7F6F0017112E /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
 		807E98E9273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
 		807E98EB273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
@@ -307,7 +307,7 @@
 		D646955A27370A7B00BF47CE /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646955727370A7B00BF47CE /* ToastView.swift */; };
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
 		D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
-		D64C323E270391AE004BC1BD /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Contact.swift */; };
+		D64C323E270391AE004BC1BD /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Person.swift */; };
 		D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */; };
 		D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C324127039646004BC1BD /* MessageComposerViewController.swift */; };
 		D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */; };
@@ -577,7 +577,6 @@
 		D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B22667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
-		D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -873,7 +872,7 @@
 		D646955727370A7B00BF47CE /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
 		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
-		D64C323D270391AE004BC1BD /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		D64C323D270391AE004BC1BD /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PeopleCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D64C324127039646004BC1BD /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
 		D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationLoadingView.swift; sourceTree = "<group>"; };
@@ -1050,7 +1049,6 @@
 		D6D557FD27C9B8AE0024D1CD /* UserConversationsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversationsCollectionView.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 		D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationaryPressRecognizer.swift; sourceTree = "<group>"; };
-		D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextCheckingResult+Extension.swift"; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
@@ -1335,7 +1333,6 @@
 			children = (
 				D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */,
 				D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */,
-				D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */,
 				D6CC1483276BEF41005F617F /* SwiftUI */,
 				803DECC927BDBCA40029A734 /* UIResponder+Extensions.swift */,
 			);
@@ -1654,9 +1651,9 @@
 			isa = PBXGroup;
 			children = (
 				D695B44125BA398400843780 /* Attachments */,
-				D64C323D270391AE004BC1BD /* Contact.swift */,
 				D64C6A7D23294A8600DB7257 /* ConversationKey.swift */,
 				D6617CF326743DFE00439C06 /* Parse Subclasses */,
+				D64C323D270391AE004BC1BD /* Person.swift */,
 				D6E974352752C47F00D95F08 /* ReactionType.swift */,
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
 				D6617CEF26743DCF00439C06 /* SystemNotice.swift */,
@@ -2820,7 +2817,6 @@
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
 				D6DEC40427A22F660072D9D0 /* CircleCollectionViewDataSource.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
-				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6079705279F574E000D0715 /* PersonCell.swift in Sources */,
 				D6E9746E2757356C00D95F08 /* old_MessageStatusView.swift in Sources */,
@@ -2899,7 +2895,7 @@
 				D65D460027A9B09D0019301C /* old_MessageReadView.swift in Sources */,
 				D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */,
 				D6129FA527ACAA4A0058811C /* DecorationViewLayoutAttributes.swift in Sources */,
-				D64C323E270391AE004BC1BD /* Contact.swift in Sources */,
+				D64C323E270391AE004BC1BD /* Person.swift in Sources */,
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
@@ -2977,7 +2973,7 @@
 				D63DB23025E9991F00F6B323 /* String+Extensions.swift in Sources */,
 				D66AB0F4277A4991007A35D1 /* BoxView.swift in Sources */,
 				D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */,
-				807C63F127CD7F4F0017112E /* Contact.swift in Sources */,
+				807C63F127CD7F4F0017112E /* Person.swift in Sources */,
 				D63DB23725E9992600F6B323 /* UIView+Animations.swift in Sources */,
 				D6F7DEF826FBDD8600F72A5C /* UserOnboardingViewController.swift in Sources */,
 				801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,

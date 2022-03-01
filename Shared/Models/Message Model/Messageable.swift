@@ -71,7 +71,7 @@ extension Messageable {
 
     var isConsumedByMe: Bool {
         return self.hasBeenConsumedBy.contains { avatar in
-            return avatar.userObjectId == User.current()?.objectId
+            return avatar.personId == User.current()?.objectId
         }
     }
 

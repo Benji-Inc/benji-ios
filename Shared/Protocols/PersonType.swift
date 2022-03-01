@@ -9,6 +9,8 @@
 import Foundation
 
 protocol PersonType: ImageDisplayable {
+    /// The unique identifier for this person.
+    var personId: String { get }
     var initials: String { get }
     var givenName: String { get }
     var familyName: String { get }

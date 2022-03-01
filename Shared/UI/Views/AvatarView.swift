@@ -59,18 +59,19 @@ class AvatarView: DisplayableImageView {
         self.addInteraction(interaction)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.label.expandToSuperviewSize()
+    }
+
     // MARK: - Open setters
 
     func set(avatar: PersonType?) {
         Task {
             guard let avatar = avatar else { return }
 
-            if let user = avatar as? User, user.isDataAvailable {
-                self.subscribeToUpdates(for: user)
-            } else if let userId = avatar.userObjectId,
-                      let user = await PeopleStore.shared.findUser(with: userId) {
-                self.subscribeToUpdates(for: user)
-            }
+            self.subscribeToUpdates(for: avatar)
         }.add(to: self.taskPool)
         
         self.avatar = avatar
@@ -78,22 +79,16 @@ class AvatarView: DisplayableImageView {
         self.displayable = avatar
     }
     
-    func subscribeToUpdates(for user: User) {
-        PeopleStore.shared.$userUpdated.filter { updatedUser in
-            updatedUser?.objectId == user.userObjectId
-        }.mainSink { [unowned self] updatedUser in
-            guard let user = updatedUser else { return }
-            self.didRecieveUpdateFor(user: user)
+    func subscribeToUpdates(for person: PersonType) {
+        PeopleStore.shared.$personUpdated.filter { updatedPerson in
+            updatedPerson?.personId == person.personId
+        }.mainSink { [unowned self] updatedPerson in
+            guard let updatedPerson = updatedPerson else { return }
+            self.didRecieveUpdateFor(person: updatedPerson)
         }.store(in: &self.cancellables)
     }
     
-    func didRecieveUpdateFor(user: User) {
-        self.displayable = user
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.label.expandToSuperviewSize()
+    func didRecieveUpdateFor(person: PersonType) {
+        self.displayable = person
     }
 }

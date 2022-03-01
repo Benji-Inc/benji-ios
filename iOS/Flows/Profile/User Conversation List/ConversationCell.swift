@@ -102,7 +102,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                 }
                 
                 let members = self.conversationController?.conversation.lastActiveMembers.filter { member in
-                    return member.id != ChatClient.shared.currentUserId
+                    return member.personId != ChatClient.shared.currentUserId
                 } ?? []
                 
                 self.stackedAvatarView.configure(with: members)

@@ -10,7 +10,11 @@ import Foundation
 import Contacts
 
 struct CircleItem: PersonType, Hashable {
-    
+
+    var personId: String {
+        return self.user?.objectId ?? String()
+    }
+
     var givenName: String {
         if let user = self.user {
             return user.givenName
@@ -33,10 +37,6 @@ struct CircleItem: PersonType, Hashable {
     
     var handle: String {
         return self.user?.handle ?? ""
-    }
-    
-    var userObjectId: String? {
-        return self.user?.objectId ?? nil
     }
     
     var image: UIImage? {

@@ -13,7 +13,7 @@ extension ChatUser: PersonType {
 
     var parseUser: User? {
         return PeopleStore.shared.users.first { user in
-            return user.objectId == self.userObjectId
+            return user.objectId == self.personId
         }
     }
 
@@ -29,7 +29,7 @@ extension ChatUser: PersonType {
         return self.parseUser?.handle ?? String()
     }
 
-    var userObjectId: String? {
+    var personId: String {
         return self.id
     }
 

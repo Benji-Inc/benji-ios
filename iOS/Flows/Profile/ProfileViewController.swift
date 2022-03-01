@@ -104,8 +104,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 }
                 self.loadRecents()
                 self.view.layoutNow()
-            } else if let userId = self.avatar.userObjectId,
-                        let user = try? await User.getObject(with: userId),
+            } else if let user = try? await User.getObject(with: self.avatar.personId),
                       let updated = try? await user.retrieveDataIfNeeded() {
                 self.avatar = updated
                 self.header.configure(with: updated)

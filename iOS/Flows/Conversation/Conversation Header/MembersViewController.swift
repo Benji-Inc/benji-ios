@@ -165,7 +165,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         guard let conversation = self.conversationController?.conversation else { return data }
 
         let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
+            return member.personId != ChatClient.shared.currentUserId
         }
         
         data[.members] = members.compactMap({ user in

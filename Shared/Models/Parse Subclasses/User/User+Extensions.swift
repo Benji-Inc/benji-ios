@@ -12,12 +12,20 @@ import Combine
 
 extension User: PersonType {
 
+    var personId: String {
+        return self.objectId ?? String()
+    }
+
     var userObjectId: String? {
         self.objectId
     }
 
     var image: UIImage? {
         return nil
+    }
+
+    var fileObject: PFFileObject? {
+        return self.smallImage
     }
     
     static var isOnWaitlist: Bool {

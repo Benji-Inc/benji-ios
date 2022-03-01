@@ -36,14 +36,14 @@ class AvatarProfileViewController: ViewController {
         self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.focusLabel)
 
-        if let objectId = self.avatar.userObjectId {
-            Task {
-                let user = await PeopleStore.shared.findUser(with: objectId)
-                self.nameLabel.setText(user?.fullName)
-                self.focusLabel.setText(user?.focusStatus?.rawValue)
-                self.view.layoutNow()
-            }.add(to: self.autocancelTaskPool)
-        }
+        let objectId = self.avatar.personId
+        Task {
+            let user = await PeopleStore.shared.findUser(with: objectId)
+            self.nameLabel.setText(user?.fullName)
+            self.focusLabel.setText(user?.focusStatus?.rawValue)
+            self.view.layoutNow()
+        }.add(to: self.autocancelTaskPool)
+
         self.avatarView.set(avatar: self.avatar)
 
         self.preferredContentSize = CGSize(width: 300, height: 300)

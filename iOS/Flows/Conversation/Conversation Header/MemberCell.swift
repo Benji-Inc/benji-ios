@@ -16,11 +16,11 @@ struct Member: Hashable {
     var conversationController: ConversationController
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
-        return lhs.displayable.value.userObjectId == rhs.displayable.value.userObjectId
+        return lhs.displayable.value.personId == rhs.displayable.value.personId
     }
 
     func hash(into hasher: inout Hasher) {
-        self.displayable.value.userObjectId.hash(into: &hasher)
+        self.displayable.value.personId.hash(into: &hasher)
     }
 }
 
@@ -46,15 +46,15 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.set(avatar: item.displayable.value)
 
         Task {
-            if let userId = item.displayable.value.userObjectId,
-               let user = await PeopleStore.shared.findUser(with: userId) {
-                self.subscribeToUpdates(for: user)
-            }
+            let userId = item.displayable.value.personId
+            guard let user = await PeopleStore.shared.findUser(with: userId) else { return }
+
+            self.subscribeToUpdates(for: user)
         }
                 
         let typingUsers = item.conversationController.conversation.currentlyTypingUsers
         if typingUsers.contains(where: { typingUser in
-            typingUser.userObjectId == item.displayable.value.userObjectId
+            typingUser.personId == item.displayable.value.personId
         }) {
             self.avatarView.beginTyping()
         } else {

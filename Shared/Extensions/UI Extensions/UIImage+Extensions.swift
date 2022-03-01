@@ -18,6 +18,7 @@ extension UIImage {
         }
         
         return UIImage(ciImage: grayscale)
+
     }
 
     static func imageWithColor(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
@@ -53,25 +54,9 @@ extension UIImage {
     }
 }
 
-extension UIImage: PersonType {
-
-    var givenName: String {
-        return "First"
-    }
-
-    var familyName: String {
-        return "Last"
-    }
-
-    var handle: String {
-        return String()
-    }
+extension UIImage: ImageDisplayable {
 
     var image: UIImage? {
         return self
-    }
-
-    var userObjectId: String? {
-        return nil
     }
 }

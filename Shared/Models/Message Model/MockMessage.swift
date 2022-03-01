@@ -19,11 +19,10 @@ struct MockMessage: Messageable {
     var avatar: PersonType? = nil
     var deliveryStatus: DeliveryStatus = .sent
     var context: MessageContext = .respectful
-    var hasBeenConsumedBy: [PersonType] = [SystemAvatar(userObjectId: nil,
-                                                    givenName: "system",
-                                                    familyName: "avatar",
-                                                    image: nil,
-                                                    handle: "system")]
+    var hasBeenConsumedBy: [PersonType] = [SystemAvatar(givenName: "system",
+                                                        familyName: "avatar",
+                                                        handle: "system",
+                                                        image: nil)]
     var kind: MessageKind = .text("Some Text")
     var isDeleted: Bool = false
     var totalReplyCount: Int = 0
