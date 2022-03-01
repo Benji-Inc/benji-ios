@@ -51,8 +51,6 @@ class PeopleStore {
             // Get all of the connections and unclaimed reservations.
             await self.getAndStoreAllConnectedUsers()
 
-            await self.getAndStoreAdminUsers()
-
             await self.getAndStoreAllContactsWithUnclaimedReservations()
 
             self.subscribeToParseUpdates()
@@ -86,10 +84,6 @@ class PeopleStore {
         } catch {
             logError(error)
         }
-    }
-
-    private func getAndStoreAdminUsers() async {
-
     }
 
     private func getAndStoreAllContactsWithUnclaimedReservations() async {
@@ -195,6 +189,8 @@ class PeopleStore {
             foundUser = user
         } else if let user = try? await User.getObject(with: personId) {
             foundUser = user
+            self.userDictionary[user.personId] = user
+            self.personUpdated = user
         }
         
         return foundUser
