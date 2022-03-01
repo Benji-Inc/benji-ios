@@ -30,7 +30,11 @@ class PeopleStore {
         allPeople.append(contentsOf: contactPeople)
         return allPeople
     }
-    private(set) var users: [User] = []
+    /// A dictionary of all the fetched users, keyed by their user id.
+    private var userDictionary: [String : User] = [:]
+    var users: [User] {
+        return Array(self.userDictionary.values)
+    }
     private(set) var contacts: [CNContact] = []
 
     private var initializeTask: Task<Void, Never>?
@@ -47,17 +51,14 @@ class PeopleStore {
             // Get all of the connections and unclaimed reservations.
             await self.getAndStoreAllConnectedUsers()
 
+            await self.getAndStoreAdminUsers()
+
             await self.getAndStoreAllContactsWithUnclaimedReservations()
 
-            self.subscribeToUpdates()
+            self.subscribeToParseUpdates()
         }
 
         await self.initializeTask?.value
-    }
-
-    private func getAndStoreCurrentUser() {
-        guard let current = User.current() else { return }
-        self.users.append(current)
     }
     
     private func getAndStoreAllConnectedUsers() async {
@@ -78,11 +79,17 @@ class PeopleStore {
             
             if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
                                                                              container: .users) {
-                self.users = users
+                users.forEach { user in
+                    self.userDictionary[user.personId] = user
+                }
             }
         } catch {
             logError(error)
         }
+    }
+
+    private func getAndStoreAdminUsers() async {
+
     }
 
     private func getAndStoreAllContactsWithUnclaimedReservations() async {
@@ -97,7 +104,7 @@ class PeopleStore {
         }
     }
 
-    private func subscribeToUpdates() {
+    private func subscribeToParseUpdates() {
         Client.shared.shouldPrintWebSocketLog = false
 
         // Query for all connections related to the user. Either sent to OR from.
@@ -112,30 +119,25 @@ class PeopleStore {
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.users.append(nonMeUser)
+                self.userDictionary[nonMeUser.personId] = nonMeUser
             case .updated(let object):
                 // When a connection is updated, we update the corresponding user.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
                 self.personUpdated = nonMeUser
 
-                if let indexToUpdate = self.users.firstIndex(where: { user in
-                    return user.personId == nonMeUser.personId
-                }) {
-                    self.users[indexToUpdate] = nonMeUser
-                }
+                self.userDictionary[nonMeUser.personId] = nonMeUser
             case .left(let object), .deleted(let object):
                 // Remove users when their connections are deleted.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.users.removeAll { user in
-                    return user.personId == nonMeUser.personId
-                }
+                self.userDictionary[nonMeUser.personId] = nil
                 self.userDeleted = nonMeUser
             }
         }
 
+        #warning("Handle reservations not connections")
         // Observe changes to all unclaimed reservations that the user owns.
         let reservationQuery = Reservation.query()!
         reservationQuery.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
@@ -147,7 +149,7 @@ class PeopleStore {
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.users.append(nonMeUser)
+//                self.users.append(nonMeUser)
             case .updated(let object):
                 // When a connection is updated, we update the corresponding user.
                 guard let connection = object as? Connection,
@@ -157,16 +159,16 @@ class PeopleStore {
                 if let indexToUpdate = self.users.firstIndex(where: { user in
                     return user.personId == nonMeUser.personId
                 }) {
-                    self.users[indexToUpdate] = nonMeUser
+//                    self.users[indexToUpdate] = nonMeUser
                 }
             case .left(let object), .deleted(let object):
                 // Remove users when their connections are deleted.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.users.removeAll { user in
-                    return user.personId == nonMeUser.personId
-                }
+//                self.users.removeAll { user in
+//                    return user.personId == nonMeUser.personId
+//                }
                 self.userDeleted = nonMeUser
             }
         }
