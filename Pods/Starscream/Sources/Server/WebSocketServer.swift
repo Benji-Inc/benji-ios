@@ -96,13 +96,13 @@ public class ServerConnection: Connection, HTTPServerDelegate, FramerEventClient
     private var didUpgrade = false
     public var onEvent: ((ConnectionEvent) -> Void)?
     public weak var delegate: ConnectionDelegate?
-    private let personId: String
+    private let id: String
     var uuid: String {
-        return personId
+        return id
     }
     
     init(transport: TCPTransport) {
-        self.personId = UUID().uuidString
+        self.id = UUID().uuidString
         self.transport = transport
         transport.register(delegate: self)
         httpHandler.register(delegate: self)
