@@ -23,7 +23,7 @@ class PeopleStore {
     @Published var personUpdated: PersonType?
     @Published var userDeleted: User?
 
-    var personTypes: [PersonType] {
+    var people: [PersonType] {
         var allPeople: [PersonType] = self.users
         let contactPeople: [PersonType] = self.contacts.map { contact in
             return Person(withContact: contact)
@@ -65,6 +65,7 @@ class PeopleStore {
 
     private func getAndStoreAllConnectedUsers() async {
         do {
+            
             let connections = try await GetAllConnections().makeRequest(andUpdate: [],
                                                                         viewsToIgnore: [])
                 .filter { (connection) -> Bool in
