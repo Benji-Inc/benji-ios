@@ -17,6 +17,10 @@ extension ChatUser: PersonType {
         }
     }
 
+    var personId: String {
+        return self.id
+    }
+
     var givenName: String {
         return self.parseUser?.givenName ?? String()
     }
@@ -29,8 +33,9 @@ extension ChatUser: PersonType {
         return self.parseUser?.handle ?? String()
     }
 
-    var personId: String {
-        return self.id
+    var focusStatus: FocusStatus? {
+        #warning("Get the focus status off the corresponding user?")
+        return nil
     }
 
     var image: UIImage? {

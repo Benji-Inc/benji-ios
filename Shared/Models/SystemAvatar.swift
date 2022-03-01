@@ -16,6 +16,9 @@ struct SystemAvatar: PersonType, Hashable {
     var givenName: String
     var familyName: String
     var handle: String
+    var focusStatus: FocusStatus? {
+        return nil
+    }
 
     var image: UIImage?
 }

@@ -18,7 +18,6 @@ import Contacts
 class PeopleStore {
 
     static let shared = PeopleStore()
-    private var cancellables = Set<AnyCancellable>()
 
     @Published var personUpdated: PersonType?
     @Published var userDeleted: User?
@@ -109,63 +108,90 @@ class PeopleStore {
         connectionSubscription.handleEvent { query, event in
             switch event {
             case .entered(let object), .created(let object):
+                // When a new connection is made, add the connected to the array.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
                 self.users.append(nonMeUser)
             case .updated(let object):
+                // When a connection is updated, we update the corresponding user.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
                 self.personUpdated = nonMeUser
 
                 if let indexToUpdate = self.users.firstIndex(where: { user in
-                    return user.fullName == nonMeUser.fullName
+                    return user.personId == nonMeUser.personId
                 }) {
                     self.users[indexToUpdate] = nonMeUser
                 }
-
             case .left(let object), .deleted(let object):
+                // Remove users when their connections are deleted.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
                 self.users.removeAll { user in
-                    return user.fullName == nonMeUser.fullName
+                    return user.personId == nonMeUser.personId
                 }
                 self.userDeleted = nonMeUser
             }
         }
-        
+
+        // Observe changes to all unclaimed reservations that the user owns.
         let reservationQuery = Reservation.query()!
         reservationQuery.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
-        reservationQuery.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { query, event in
-            // TODO: handle the event
+            switch event {
+            case .entered(let object), .created(let object):
+                // When a new connection is made, add the connected to the array.
+                guard let connection = object as? Connection,
+                      let nonMeUser = connection.nonMeUser else { break }
+
+                self.users.append(nonMeUser)
+            case .updated(let object):
+                // When a connection is updated, we update the corresponding user.
+                guard let connection = object as? Connection,
+                      let nonMeUser = connection.nonMeUser else { break }
+                self.personUpdated = nonMeUser
+
+                if let indexToUpdate = self.users.firstIndex(where: { user in
+                    return user.personId == nonMeUser.personId
+                }) {
+                    self.users[indexToUpdate] = nonMeUser
+                }
+            case .left(let object), .deleted(let object):
+                // Remove users when their connections are deleted.
+                guard let connection = object as? Connection,
+                      let nonMeUser = connection.nonMeUser else { break }
+
+                self.users.removeAll { user in
+                    return user.personId == nonMeUser.personId
+                }
+                self.userDeleted = nonMeUser
+            }
         }
     }
 
     // MARK: - Helper functions
 
-    func mapMembersToUsers(members: [ConversationMember]) async throws -> [User] {
-        var users: [User] = []
+    func getPeople(for members: [ConversationMember]) async throws -> [PersonType] {
+        var people: [PersonType] = []
         await members.userIDs.asyncForEach { userId in
-            if let user = await self.findUser(with: userId) {
-                users.append(user)
-            }
+            guard let person = await self.getPerson(withPersonId: userId) else { return }
+            people.append(person)
         }
         
-        return users
+        return people
     }
 
-    #warning("Rename")
-    func findUser(with objectID: String) async -> User? {
+    func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundUser: User? = nil
 
         if let user = PeopleStore.shared.users.first(where: { user in
-            return user.objectId == objectID
+            return user.objectId == personId
         }) {
             foundUser = user
-        } else if let user = try? await User.getObject(with: objectID) {
+        } else if let user = try? await User.getObject(with: personId) {
             foundUser = user
         }
         

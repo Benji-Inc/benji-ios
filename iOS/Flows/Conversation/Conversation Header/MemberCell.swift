@@ -46,10 +46,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.personView.set(person: item.displayable.value)
 
         Task {
-            let userId = item.displayable.value.personId
-            guard let user = await PeopleStore.shared.findUser(with: userId) else { return }
+            let personId = item.displayable.value.personId
+            guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
 
-            self.subscribeToUpdates(for: user)
+            self.subscribeToUpdates(for: person)
         }
                 
         let typingUsers = item.conversationController.conversation.currentlyTypingUsers
@@ -68,7 +68,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.personView.set(person: nil)
     }
     
-    private func subscribeToUpdates(for user: User) {
+    private func subscribeToUpdates(for person: PersonType) {
+        #warning("restore this")
 //        UserStore.shared.$userUpdated.filter { updatedUser in
 //            updatedUser?.objectId == user.userObjectId
 //        }.mainSink { updatedUser in
