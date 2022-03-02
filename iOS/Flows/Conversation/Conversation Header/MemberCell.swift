@@ -40,9 +40,11 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.personView)
+
+        self.subscribeToUpdates()
     }
 
-    // A reference to a task for configuring the cell.
+    /// A reference to a task for configuring the cell.
     private var configurationTask: Task<Void, Never>?
 
     func configure(with item: Member) {
@@ -63,8 +65,6 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
             } else {
                 self.personView.endTyping()
             }
-
-            self.subscribeToUpdates(for: person)
         }
     }
 
@@ -75,14 +75,12 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.personView.set(person: nil)
     }
     
-    private func subscribeToUpdates(for person: PersonType) {
-        #warning("restore this")
-//        UserStore.shared.$userUpdated.filter { updatedUser in
-//            updatedUser?.objectId == user.userObjectId
-//        }.mainSink { updatedUser in
-//           // self.statusView.update(status: updatedUser?.focusStatus ?? .available)
-//        }.store(in: &self.cancellables)
-//        
-//        //self.statusView.update(status: user.focusStatus ?? .available)
+    private func subscribeToUpdates() {
+        // Make sure that the person's focus status up to date.
+        PeopleStore.shared.$personUpdated.filter { [unowned self] updatedPerson in
+            self.currentItem?.personId == updatedPerson?.personId
+        }.mainSink { [unowned self] updatedPerson in
+            self.personView.set(person: updatedPerson)
+        }.store(in: &self.cancellables)
     }
 }

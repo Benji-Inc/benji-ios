@@ -100,6 +100,15 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                     break
                 }
             }).store(in: &self.conversationCancellables)
+
+        PeopleStore.shared.$personDeleted
+            .mainSink { [unowned self] person in
+                guard let conversationController = self.conversationController,
+                      let personId = person?.personId else { return }
+
+                let member = Member(personId: personId, conversationController: conversationController)
+                self.dataSource.deleteItems([.member(member)])
+            }.store(in: &self.conversationCancellables)
     }
     
     private func add(member: ChatChannelMember) {

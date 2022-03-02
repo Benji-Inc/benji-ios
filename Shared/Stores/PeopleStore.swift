@@ -20,7 +20,7 @@ class PeopleStore {
     static let shared = PeopleStore()
 
     @Published var personUpdated: PersonType?
-    @Published var userDeleted: User?
+    @Published var personDeleted: PersonType?
 
     var people: [PersonType] {
         var allPeople: [PersonType] = self.users
@@ -135,7 +135,7 @@ class PeopleStore {
                       let nonMeUser = connection.nonMeUser else { break }
 
                 self.userDictionary[nonMeUser.personId] = nil
-                self.userDeleted = nonMeUser
+                self.personDeleted = nonMeUser
             }
         }
 
@@ -150,19 +150,33 @@ class PeopleStore {
             case .entered(let object), .created(let object):
                 guard let reservation = object as? Reservation,
                       let contactId = reservation.contactId else { return }
-                #warning("Make sure to update the reservation object itself")
+
+                if !reservation.isClaimed {
+                    self.unclaimedReservations[reservation.objectId!] = reservation
+                }
+
                 guard let contact =
                         ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
                             return
                         }
                 self.contactsDictionary[contactId] = contact
-            case .updated:
-                break
+            case .updated(let object):
+                guard let reservation = object as? Reservation else { return }
+
+                if !reservation.isClaimed {
+                    self.unclaimedReservations[reservation.objectId!] = reservation
+                }
             case .left(let object), .deleted(let object):
                 guard let reservation = object as? Reservation,
                       let contactId = reservation.contactId else { return }
 
                 self.contactsDictionary[contactId] = nil
+
+                guard let contact =
+                        ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
+                            return
+                        }
+                self.personDeleted = contact
             }
         }
     }
@@ -190,7 +204,6 @@ class PeopleStore {
         return people
     }
 
-    #warning("Also retrieve the contacts")
     func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundPerson: PersonType? = nil
 
