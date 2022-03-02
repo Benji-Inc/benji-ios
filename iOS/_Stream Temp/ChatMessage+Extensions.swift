@@ -22,14 +22,14 @@ extension Message: Messageable {
     }
 
     var authorId: String {
-        return self.author.id
+        return self.author.personId
     }
 
     var attributes: [String : Any]? {
         return nil
     }
 
-    var avatar: Avatar? {
+    var person: PersonType? {
         return self.author
     }
 
@@ -76,7 +76,7 @@ extension Message: Messageable {
         return latestRead
     }
 
-    var hasBeenConsumedBy: [Avatar] {
+    var hasBeenConsumedBy: [PersonType] {
         let reads = self.latestReactions.filter { reaction in
             guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
             return type == .read
@@ -136,7 +136,7 @@ extension Message: Messageable {
         let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
         if let readReaction = self.latestReactions.first(where: { reaction in
             if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read,
-                reaction.author.userObjectId == User.current()?.objectId {
+               reaction.author.personId == User.current()?.objectId {
                 return true
             }
             return false

@@ -12,7 +12,7 @@ import Localization
 
 class UserOnboardingViewController: ViewController {
 
-    private(set) var avatarView = AvatarView()
+    private(set) var personView = AvatarView()
 
     private(set) var nameLabel = ThemeLabel(font: .regular)
     private(set) var messageContent = MessageContentView()
@@ -20,11 +20,11 @@ class UserOnboardingViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.avatarView.isHidden = true 
+        self.personView.isHidden = true 
 
         self.view.addSubview(self.nameLabel)
-        self.view.addSubview(self.avatarView)
-        self.avatarView.didSelect { [unowned self] in
+        self.view.addSubview(self.personView)
+        self.personView.didSelect { [unowned self] in
             self.didSelectBackButton()
         }
 
@@ -61,14 +61,14 @@ class UserOnboardingViewController: ViewController {
         self.nameLabel.pinToSafeArea(.top, offset: .noOffset)
 
         let height: CGFloat = self.shouldShowLargeAvatar() ? self.view.width * 0.35 : 60
-        self.avatarView.setSize(for: height)
-        self.avatarView.centerOnX()
-        self.avatarView.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)
+        self.personView.setSize(for: height)
+        self.personView.centerOnX()
+        self.personView.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)
 
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
         self.messageContent.size = self.messageContent.getSize(for: .collapsed, with: maxWidth)
-        self.messageContent.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
+        self.messageContent.match(.top, to: .bottom, of: self.personView, offset: .standard)
         self.messageContent.centerOnX()
     }
 

@@ -102,7 +102,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                 }
                 
                 let members = self.conversationController?.conversation.lastActiveMembers.filter { member in
-                    return member.id != ChatClient.shared.currentUserId
+                    return member.personId != ChatClient.shared.currentUserId
                 } ?? []
                 
                 self.stackedAvatarView.configure(with: members)
@@ -212,19 +212,19 @@ private class StackedAvatarView: BaseView {
         self.clipsToBounds = false
     }
 
-    func configure(with avatars: [Avatar]) {
+    func configure(with people: [PersonType]) {
         self.removeAllSubviews()
         
-        for (index, avatar) in avatars.enumerated() {
+        for (index, person) in people.enumerated() {
             if index <= 3 {
                 let view = BorderedAvatarView()
-                view.set(avatar: avatar)
+                view.set(person: person)
                 self.addSubview(view)
             }
         }
         
-        if avatars.count > 3 {
-            let remainder = avatars.count - 3
+        if people.count > 3 {
+            let remainder = people.count - 3
             self.label.setText("+\(remainder)")
         }
       

@@ -9,11 +9,11 @@
 import Foundation
 import StreamChat
 
-extension ChatUser: Avatar {
+extension ChatUser: PersonType {
 
     var parseUser: User? {
-        return UserStore.shared.users.first { user in
-            return user.objectId == self.userObjectId
+        return PeopleStore.shared.users.first { user in
+            return user.objectId == self.personId
         }
     }
 
@@ -29,7 +29,7 @@ extension ChatUser: Avatar {
         return self.parseUser?.handle ?? String()
     }
 
-    var userObjectId: String? {
+    var personId: String {
         return self.id
     }
 

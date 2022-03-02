@@ -107,11 +107,8 @@ class DisplayableImageView: BaseView {
     private func updateImageView(with displayable: ImageDisplayable?) async {
         if let photo = displayable?.image {
             await self.set(image: photo, state: .success)
-        } else if let objectID = displayable?.userObjectId {
-            let foundUser = await UserStore.shared.findUser(with: objectID)
-            if let user = foundUser {
-                await self.downloadAndSetImage(for: user)
-            }
+        } else if let fileObject = displayable?.fileObject {
+            await self.downloadAndSetImage(for: fileObject)
         } else if let file = displayable as? PFFileObject {
             await self.downloadAndSet(file: file)
         } else {
@@ -119,10 +116,8 @@ class DisplayableImageView: BaseView {
         }
     }
 
-    private func downloadAndSetImage(for user: User) async {
-        guard let file = user.smallImage else { return }
-
-        await self.downloadAndSet(file: file)
+    private func downloadAndSetImage(for fileObject: PFFileObject) async {
+        await self.downloadAndSet(file: fileObject)
     }
 
     private func downloadAndSet(file: PFFileObject) async {

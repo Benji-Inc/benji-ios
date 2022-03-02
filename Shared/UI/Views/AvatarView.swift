@@ -59,46 +59,36 @@ class AvatarView: DisplayableImageView {
         self.addInteraction(interaction)
     }
 
-    // MARK: - Open setters
-
-    func set(avatar: Avatar?) {
-        Task {
-            guard let avatar = avatar else { return }
-
-            if let user = avatar as? User, user.isDataAvailable {
-                self.subscribeToUpdates(for: user)
-            } else if let userId = avatar.userObjectId,
-                      let user = await UserStore.shared.findUser(with: userId) {
-                self.subscribeToUpdates(for: user)
-            }
-        }.add(to: self.taskPool)
-        
-        self.avatar = avatar
-
-        self.displayable = avatar
-    }
-    
-    func subscribeToUpdates(for user: User) {
-        UserStore.shared.$userUpdated.filter { updatedUser in
-            updatedUser?.objectId == user.userObjectId
-        }.mainSink { [unowned self] updatedUser in
-            guard let user = updatedUser else { return }
-            self.didRecieveUpdateFor(user: user)
-        }.store(in: &self.cancellables)
-    }
-    
-    func didRecieveUpdateFor(user: User) {
-        self.displayable = user
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.label.expandToSuperviewSize()
     }
-}
 
-fileprivate extension FloatingPoint {
-    var degreesToRadians: Self { return self * .pi / 180 }
-    var radiansToDegrees: Self { return self * 180 / .pi }
+    // MARK: - Open setters
+
+    func set(person: PersonType?) {
+        Task {
+            guard let person = person else { return }
+
+            self.subscribeToUpdates(for: person)
+        }.add(to: self.taskPool)
+        
+        self.person = person
+
+        self.displayable = person
+    }
+    
+    func subscribeToUpdates(for person: PersonType) {
+        PeopleStore.shared.$personUpdated.filter { updatedPerson in
+            updatedPerson?.personId == person.personId
+        }.mainSink { [unowned self] updatedPerson in
+            guard let updatedPerson = updatedPerson else { return }
+            self.didRecieveUpdateFor(person: updatedPerson)
+        }.store(in: &self.cancellables)
+    }
+    
+    func didRecieveUpdateFor(person: PersonType) {
+        self.displayable = person
+    }
 }

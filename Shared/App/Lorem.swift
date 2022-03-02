@@ -77,8 +77,8 @@ class Lorem {
     class func avatar() -> SystemAvatar {
         return SystemAvatar(givenName: self.name(),
                             familyName: self.name(),
-                            image: self.image(),
-                            handle: String())
+                            handle: String(),
+                            image: self.image())
     }
 
     class func randomString(length: Int = 10) -> String {

@@ -14,8 +14,8 @@ extension CNContact {
     var fullName: String? {
         return self.givenName + " " + self.familyName
     }
-    func findBestPhoneNumber() -> (phone: CNPhoneNumber?, label: String?) {
 
+    func findBestPhoneNumber() -> (phone: CNPhoneNumber?, label: String?) {
         var bestPair: (CNPhoneNumber?, String?) = (nil, nil)
         let prioritizedLabels = ["iPhone",
                                  "_$!<Mobile>!$_",
@@ -74,7 +74,11 @@ extension CNContact {
     }
 }
 
-extension CNContact: Avatar {
+extension CNContact: PersonType {
+
+    var personId: String {
+        return self.identifier
+    }
 
     var handle: String {
         return ""
@@ -92,4 +96,3 @@ extension CNContact: Avatar {
         return nil 
     }
 }
-

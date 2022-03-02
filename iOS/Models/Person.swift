@@ -9,21 +9,24 @@
 import Foundation
 import Contacts
 import PhoneNumberKit
+import Parse
 
-struct Person: Avatar, Hashable, Comparable {
-    
+struct Person: PersonType, Hashable, Comparable {
+
     static func < (lhs: Person, rhs: Person) -> Bool {
-        if let _ = lhs.connection,
-           let _ = rhs.connection {
+        if lhs.connection.exists && rhs.connection.exists {
             return lhs.familyName < rhs.familyName
-        } else if let _ = lhs.cnContact,
-                    let _ = rhs.cnContact {
+        } else if lhs.cnContact.exists && rhs.cnContact.exists {
             return lhs.familyName < rhs.familyName
         } else {
             return false 
         }
     }
-    
+
+    var personId: String {
+        return identifier
+    }
+
     var identifier: String {
         return self.connection?.objectId ?? self.cnContact?.identifier ?? ""
     }
@@ -33,8 +36,7 @@ struct Person: Avatar, Hashable, Comparable {
     var handle: String {
         return ""
     }
-    
-    var userObjectId: String?
+
     var image: UIImage?
     
     var highlightText: String?
@@ -55,10 +57,9 @@ struct Person: Avatar, Hashable, Comparable {
     
     init(withConnection connection: Connection, isSelected: Bool = false) {
         self.connection = connection
-        self.userObjectId = connection.nonMeUser?.userObjectId
         self.isSelected = isSelected
-        /// We may not have a user data at this point.
-        
+
+        // We may not have user data at this point.
         if let user = connection.nonMeUser, user.isDataAvailable {
             self.givenName = user.givenName
             self.familyName = user.familyName

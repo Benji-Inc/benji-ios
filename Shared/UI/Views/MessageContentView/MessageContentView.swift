@@ -93,7 +93,7 @@ class MessageContentView: BaseView {
         self.configureConsumption(for: message)
         #endif
 
-        self.authorView.set(avatar: message.avatar)
+        self.authorView.set(person: message.person)
 
         self.setNeedsLayout()
     }

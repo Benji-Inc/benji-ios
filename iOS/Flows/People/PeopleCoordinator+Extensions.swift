@@ -13,10 +13,10 @@ import Localization
 
 extension PeopleCoordinator {
 
-    private func showSentTextToast(for avatar: Avatar) {
-        let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
+    private func showSentTextToast(for person: PersonType) {
+        let text = LocalizedString(id: "", arguments: [person.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         Task {
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: avatar, title: "RSVP Sent", description: text, deepLink: nil))
+            await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: person, title: "RSVP Sent", description: text, deepLink: nil))
         }.add(to: self.taskPool)
     }
 

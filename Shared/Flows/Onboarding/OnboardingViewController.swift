@@ -164,7 +164,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func willUpdateContent() {
         super.willUpdateContent()
 
-        self.avatarView.isHidden = self.invitor.isNil
+        self.personView.isHidden = self.invitor.isNil
     }
 
     override func didSelectBackButton() {
@@ -228,9 +228,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     func updateInvitor(userId: String) async throws {
         let user = try await User.localThenNetworkQuery(for: userId)
         self.invitor = user
-        self.avatarView.set(avatar: user)
+        self.personView.set(person: user)
         self.nameLabel.setText(user.givenName.capitalized)
-        self.avatarView.isHidden = false
+        self.personView.isHidden = false
         self.updateUI()
         self.view.layoutNow()
     }
