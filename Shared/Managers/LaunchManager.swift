@@ -55,10 +55,13 @@ class LaunchManager {
             // Ensure that the user object is up to date.
             _ = try? await user.fetchInBackground()
 
-            await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-
             // Pre-load contacts
             _ = ContactsManger.shared
+            async let first: Void
+            = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            // Initialize the people store
+            async let second: Void = PeopleStore.shared.initializeIfNeeded()
+            let _: [Void] = await [first, second]
             
             // Update the timeZone
             user.timeZone = TimeZone.current.identifier
@@ -74,9 +77,6 @@ class LaunchManager {
         PHGPostHog.setup(with: configuration)
         
         let launchStatus = await self.initializeUserData(with: deepLink)
-
-        // Initialize the stores after the chat client is ready because it needs to subscribe to updates.
-        await PeopleStore.shared.initializeIfNeeded()
 
         try? await PFConfig.awaitConfig()
         return launchStatus

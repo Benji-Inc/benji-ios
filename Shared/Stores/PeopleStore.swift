@@ -10,7 +10,6 @@ import Foundation
 import Combine
 import ParseLiveQuery
 import Parse
-import StreamChat
 import Contacts
 
 /// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
