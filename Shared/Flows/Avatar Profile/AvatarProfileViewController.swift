@@ -37,12 +37,12 @@ class AvatarProfileViewController: ViewController {
         self.view.addSubview(self.focusLabel)
 
         let objectId = self.person.personId
-        Task {
-            let user = await PeopleStore.shared.findUser(with: objectId)
-            self.nameLabel.setText(user?.fullName)
-            self.focusLabel.setText(user?.focusStatus?.rawValue)
-            self.view.layoutNow()
-        }.add(to: self.autocancelTaskPool)
+        Task { [weak self] in
+            guard let person = await PeopleStore.shared.getPerson(withPersonId: objectId) else { return }
+            self?.nameLabel.setText(person.fullName)
+            self?.focusLabel.setText(person.focusStatus?.rawValue)
+            self?.view.setNeedsLayout()
+        }
 
         self.personView.set(person: self.person)
 

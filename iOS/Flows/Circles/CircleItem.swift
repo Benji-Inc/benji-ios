@@ -38,6 +38,10 @@ struct CircleItem: PersonType, Hashable {
     var handle: String {
         return self.user?.handle ?? ""
     }
+
+    var focusStatus: FocusStatus? {
+        return nil
+    }
     
     var image: UIImage? {
         return self.user?.image

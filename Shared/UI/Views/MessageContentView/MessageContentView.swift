@@ -34,7 +34,7 @@ class MessageContentView: BaseView {
     let textView = MessageTextView(font: .regular, textColor: .T1)
     private (set) var message: Messageable?
 
-    let authorView = AvatarView()
+    let authorView = PersonView()
 
     private var cancellables = Set<AnyCancellable>()
     var publisherCancellables = Set<AnyCancellable>()

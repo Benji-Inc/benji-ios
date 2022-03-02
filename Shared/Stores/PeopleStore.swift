@@ -10,7 +10,6 @@ import Foundation
 import Combine
 import ParseLiveQuery
 import Parse
-import StreamChat
 import Contacts
 
 /// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
@@ -18,7 +17,6 @@ import Contacts
 class PeopleStore {
 
     static let shared = PeopleStore()
-    private var cancellables = Set<AnyCancellable>()
 
     @Published var personUpdated: PersonType?
     @Published var userDeleted: User?
@@ -31,8 +29,16 @@ class PeopleStore {
         allPeople.append(contentsOf: contactPeople)
         return allPeople
     }
-    private(set) var users: [User] = []
-    private(set) var contacts: [CNContact] = []
+    /// A dictionary of all the fetched users, keyed by their user id.
+    private var userDictionary: [String : User] = [:]
+    private var contactsDictionary: [String : CNContact] = [:]
+    private var reservationDictionary: [String : Reservation] = [:]
+    var users: [User] {
+        return Array(self.userDictionary.values)
+    }
+    var contacts: [CNContact] {
+        return Array(self.contactsDictionary.values)
+    }
 
     private var initializeTask: Task<Void, Never>?
 
@@ -50,15 +56,10 @@ class PeopleStore {
 
             await self.getAndStoreAllContactsWithUnclaimedReservations()
 
-            self.subscribeToUpdates()
+            self.subscribeToParseUpdates()
         }
 
         await self.initializeTask?.value
-    }
-
-    private func getAndStoreCurrentUser() {
-        guard let current = User.current() else { return }
-        self.users.append(current)
     }
     
     private func getAndStoreAllConnectedUsers() async {
@@ -79,7 +80,9 @@ class PeopleStore {
             
             if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
                                                                              container: .users) {
-                self.users = users
+                users.forEach { user in
+                    self.userDictionary[user.personId] = user
+                }
             }
         } catch {
             logError(error)
@@ -89,16 +92,20 @@ class PeopleStore {
     private func getAndStoreAllContactsWithUnclaimedReservations() async {
         let reservations = await Reservation.getAllUnclaimed()
         reservations.forEach { reservation in
+            if let reservationId = reservation.objectId {
+                self.reservationDictionary[reservationId] = reservation
+            }
+
             guard let contactId = reservation.contactId else { return }
             guard let contact =
                     ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
                         return
                     }
-            self.contacts.append(contact)
+            self.contactsDictionary[contactId] = contact
         }
     }
 
-    private func subscribeToUpdates() {
+    private func subscribeToParseUpdates() {
         Client.shared.shouldPrintWebSocketLog = false
 
         // Query for all connections related to the user. Either sent to OR from.
@@ -109,64 +116,80 @@ class PeopleStore {
         connectionSubscription.handleEvent { query, event in
             switch event {
             case .entered(let object), .created(let object):
+                // When a new connection is made, add the connected user to the array.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.users.append(nonMeUser)
+                self.userDictionary[nonMeUser.personId] = nonMeUser
             case .updated(let object):
+                // When a connection is updated, we update the corresponding user.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
                 self.personUpdated = nonMeUser
 
-                if let indexToUpdate = self.users.firstIndex(where: { user in
-                    return user.fullName == nonMeUser.fullName
-                }) {
-                    self.users[indexToUpdate] = nonMeUser
-                }
-
+                self.userDictionary[nonMeUser.personId] = nonMeUser
             case .left(let object), .deleted(let object):
+                // Remove users when their connections are deleted.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.users.removeAll { user in
-                    return user.fullName == nonMeUser.fullName
-                }
+                self.userDictionary[nonMeUser.personId] = nil
                 self.userDeleted = nonMeUser
             }
         }
-        
+
+        // Observe changes to all unclaimed reservations that the user owns.
         let reservationQuery = Reservation.query()!
         reservationQuery.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
-        reservationQuery.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        reservationQuery.whereKeyExists(ReservationKey.contactId.rawValue)
+
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { query, event in
-            // TODO: handle the event
+            switch event {
+            case .entered(let object), .created(let object):
+                guard let reservation = object as? Reservation,
+                      let contactId = reservation.contactId else { return }
+
+                guard let contact =
+                        ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
+                            return
+                        }
+                self.contactsDictionary[contactId] = contact
+            case .updated:
+                break
+            case .left(let object), .deleted(let object):
+                guard let reservation = object as? Reservation,
+                      let contactId = reservation.contactId else { return }
+
+                self.contactsDictionary[contactId] = nil
+            }
         }
     }
 
     // MARK: - Helper functions
 
-    func mapMembersToUsers(members: [ConversationMember]) async throws -> [User] {
-        var users: [User] = []
+    func getPeople(for members: [ConversationMember]) async throws -> [PersonType] {
+        var people: [PersonType] = []
         await members.userIDs.asyncForEach { userId in
-            if let user = await self.findUser(with: userId) {
-                users.append(user)
-            }
+            guard let person = await self.getPerson(withPersonId: userId) else { return }
+            people.append(person)
         }
         
-        return users
+        return people
     }
 
-    #warning("Rename")
-    func findUser(with objectID: String) async -> User? {
+    #warning("Also retrieve the contacts")
+    func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundUser: User? = nil
 
         if let user = PeopleStore.shared.users.first(where: { user in
-            return user.objectId == objectID
+            return user.objectId == personId
         }) {
             foundUser = user
-        } else if let user = try? await User.getObject(with: objectID) {
+        } else if let user = try? await User.getObject(with: personId) {
             foundUser = user
+            self.userDictionary[user.personId] = user
+            self.personUpdated = user
         }
         
         return foundUser

@@ -12,7 +12,7 @@ import Localization
 
 class UserOnboardingViewController: ViewController {
 
-    private(set) var personView = AvatarView()
+    private(set) var personView = PersonView()
 
     private(set) var nameLabel = ThemeLabel(font: .regular)
     private(set) var messageContent = MessageContentView()

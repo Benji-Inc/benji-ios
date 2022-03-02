@@ -16,10 +16,6 @@ extension User: PersonType {
         return self.objectId ?? String()
     }
 
-    var userObjectId: String? {
-        self.objectId
-    }
-
     var image: UIImage? {
         return nil
     }

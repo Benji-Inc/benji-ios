@@ -287,14 +287,12 @@ class ConversationListViewController: ViewController, ConversationListCollection
                 let members = conversation.lastActiveMembers.filter { member in
                     return member.personId != ChatClient.shared.currentUserId
                 }
-                guard let users = try? await PeopleStore.shared.mapMembersToUsers(members: members) else {
-                    return
-                }
+                guard let people = try? await PeopleStore.shared.getPeople(for: members) else { return }
 
                 guard !Task.isCancelled else { return }
 
                 self?.messageInputAccessoryView.resetDeliveryType()
-                self?.messageInputAccessoryView.textView.setPlaceholder(for: users, isReply: false)
+                self?.messageInputAccessoryView.textView.setPlaceholder(for: people, isReply: false)
                 self?.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
             }
 

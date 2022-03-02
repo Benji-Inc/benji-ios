@@ -182,9 +182,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             var userIds: [String] = []
             
             if user.isCurrentUser {
-                userIds.append(user.userObjectId!)
+                userIds.append(user.objectId!)
             } else {
-                userIds = [User.current()!.objectId!, user.userObjectId!]
+                userIds = [User.current()!.objectId!, user.objectId!]
             }
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
@@ -203,9 +203,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             var userIds: [String] = []
             
             if user.isCurrentUser {
-                userIds.append(user.userObjectId!)
+                userIds.append(user.objectId!)
             } else {
-                userIds = [User.current()!.objectId!, user.userObjectId!]
+                userIds = [User.current()!.objectId!, user.objectId!]
             }
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
@@ -224,9 +224,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             var userIds: [String] = []
             
             if user.isCurrentUser {
-                userIds.append(user.userObjectId!)
+                userIds.append(user.objectId!)
             } else {
-                userIds = [User.current()!.objectId!, user.userObjectId!]
+                userIds = [User.current()!.objectId!, user.objectId!]
             }
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)

@@ -1,5 +1,5 @@
 //
-//  AvatarView.swift
+//  PersonView.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 6/23/19.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class AvatarView: DisplayableImageView {
+class PersonView: DisplayableImageView {
     
     // MARK: - Properties
 
@@ -57,6 +57,8 @@ class AvatarView: DisplayableImageView {
 
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
+
+        self.subscribeToUpdates()
     }
 
     override func layoutSubviews() {
@@ -68,27 +70,26 @@ class AvatarView: DisplayableImageView {
     // MARK: - Open setters
 
     func set(person: PersonType?) {
-        Task {
-            guard let person = person else { return }
-
-            self.subscribeToUpdates(for: person)
-        }.add(to: self.taskPool)
-        
         self.person = person
 
         self.displayable = person
     }
-    
-    func subscribeToUpdates(for person: PersonType) {
-        PeopleStore.shared.$personUpdated.filter { updatedPerson in
-            updatedPerson?.personId == person.personId
-        }.mainSink { [unowned self] updatedPerson in
-            guard let updatedPerson = updatedPerson else { return }
-            self.didRecieveUpdateFor(person: updatedPerson)
-        }.store(in: &self.cancellables)
-    }
-    
+
+    // MARK: - Subscriptions
+
+    /// Called when the currently assigned person receives an update to their state.
     func didRecieveUpdateFor(person: PersonType) {
         self.displayable = person
+    }
+
+    private func subscribeToUpdates() {
+        PeopleStore.shared.$personUpdated
+            .filter { [unowned self] updatedPerson in
+                // Only handle person updates related to the currently assigned person.
+                self.person?.personId ==  updatedPerson?.personId
+            }.mainSink { [unowned self] updatedPerson in
+                guard let updatedPerson = updatedPerson else { return }
+                self.didRecieveUpdateFor(person: updatedPerson)
+            }.store(in: &self.cancellables)
     }
 }

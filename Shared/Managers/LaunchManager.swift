@@ -54,15 +54,14 @@ class LaunchManager {
         if let user = User.current(), user.isAuthenticated {
             // Ensure that the user object is up to date.
             _ = try? await user.fetchInBackground()
-            
-            async let first: Void
-            = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-            // Initialize the stores.
-            async let second: Void = PeopleStore.shared.initializeIfNeeded()
-            let _: [Void] = await [first, second]
 
             // Pre-load contacts
             _ = ContactsManger.shared
+            async let first: Void
+            = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            // Initialize the people store
+            async let second: Void = PeopleStore.shared.initializeIfNeeded()
+            let _: [Void] = await [first, second]
             
             // Update the timeZone
             user.timeZone = TimeZone.current.identifier
@@ -78,6 +77,7 @@ class LaunchManager {
         PHGPostHog.setup(with: configuration)
         
         let launchStatus = await self.initializeUserData(with: deepLink)
+
         try? await PFConfig.awaitConfig()
         return launchStatus
     }

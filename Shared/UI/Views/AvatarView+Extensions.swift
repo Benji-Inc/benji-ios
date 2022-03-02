@@ -1,5 +1,5 @@
 //
-//  AvatarView+Extensions.swift
+//  PersonView+Extensions.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 1/18/21.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension AvatarView: AvatarContextDelegate {
+extension PersonView: AvatarContextDelegate {
     
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
