@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Combine
+import ParseLiveQuery
 
 class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType,
                              MembersCollectionViewDataSource.ItemType,
@@ -27,9 +28,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// A task for loading data and subscribing to conversation updates.
-    private var loadDataTask: Task<Void, Never>?
-
     override func initializeViews() {
         super.initializeViews()
 
@@ -43,28 +41,55 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { [unowned self] conversation in
-                self.loadDataTask?.cancel()
-
-                if let cid = conversation?.cid {
-                    self.conversationController = ConversationController.controller(cid)
-                } else {
-                    self.conversationController = nil
-                }
-
-                self.loadDataTask = Task { [weak self] in
-                    guard let conversationController = self?.conversationController else {
-                        // If there's no current conversation, then there's nothing to show.
-                        await self?.dataSource.deleteAllItems()
-                        return
-                    }
-
-                    await self?.loadData()
-
-                    guard !Task.isCancelled else { return }
-
-                    self?.subscribeToUpdates(for: conversationController)
-                }
+                self.startLoadDataTask(with: conversation)
             }.store(in: &self.cancellables)
+
+        let reservationQuery = Reservation.allUnclaimedCidQuery()
+        let reservationSubscription = Client.shared.subscribe(reservationQuery)
+        reservationSubscription.handleEvent { [unowned self] query, event in
+            guard let conversationController = self.conversationController else { return }
+
+            // If a reservation related to this conversation is updated, then reload the data.
+            switch event {
+            case .entered(let object), .created(let object),
+                    .updated(let object), .left(let object), .deleted(let object):
+
+                guard let reservation = object as? Reservation,
+                      let cid = reservation.conversationCid else { return }
+
+                let conversation = conversationController.conversation
+
+                guard cid == conversationController.cid?.description else { return }
+                self.startLoadDataTask(with: conversation)
+            }
+        }
+    }
+
+    /// A task for loading data and subscribing to conversation updates.
+    private var loadDataTask: Task<Void, Never>?
+    
+    private func startLoadDataTask(with conversation: Conversation?) {
+        self.loadDataTask?.cancel()
+
+        if let cid = conversation?.cid {
+            self.conversationController = ConversationController.controller(cid)
+        } else {
+            self.conversationController = nil
+        }
+
+        self.loadDataTask = Task { [weak self] in
+            guard let conversationController = self?.conversationController else {
+                // If there's no current conversation, then there's nothing to show.
+                await self?.dataSource.deleteAllItems()
+                return
+            }
+
+            await self?.loadData()
+
+            guard !Task.isCancelled else { return }
+
+            self?.subscribeToUpdates(for: conversationController)
+        }
     }
 
     /// The subscriptions for the current conversation.
@@ -100,15 +125,6 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                     break
                 }
             }).store(in: &self.conversationCancellables)
-
-        PeopleStore.shared.$personDeleted
-            .mainSink { [unowned self] person in
-                guard let conversationController = self.conversationController,
-                      let personId = person?.personId else { return }
-
-                let member = Member(personId: personId, conversationController: conversationController)
-                self.dataSource.deleteItems([.member(member)])
-            }.store(in: &self.conversationCancellables)
     }
     
     private func add(member: ChatChannelMember) {

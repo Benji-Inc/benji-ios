@@ -188,11 +188,9 @@ extension Reservation: UIActivityItemSource {
     }
 
     static func getAllUnclaimed() async -> [Reservation] {
-        let query = Reservation.query()
-        query?.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
-        query?.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        let query = Reservation.allUnclaimedCidQuery()
         do {
-            let objects = try await query?.findObjectsInBackground()
+            let objects = try await query.findObjectsInBackground()
             if let reservations = objects as? [Reservation] {
                 return reservations
             } else {
@@ -202,5 +200,14 @@ extension Reservation: UIActivityItemSource {
             logError(error)
             return []
         }
+    }
+
+    /// Returns a parse query that gets unclaimed reservations that are unclaimed by the user and have a conversation id.
+    static func allUnclaimedCidQuery() -> PFQuery<PFObject> {
+        let query = Reservation.query()!
+        query.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+        query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        query.whereKeyExists(ReservationKey.contactId.rawValue)
+        return query
     }
 }

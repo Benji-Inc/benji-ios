@@ -82,6 +82,7 @@ extension PeopleCoordinator {
         } catch {
             if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
+                _ = try? await reservation.saveLocalThenServer()
             } else {
                 reservation.contactId = contact?.identifier
                 _ = try? await reservation.saveLocalThenServer()

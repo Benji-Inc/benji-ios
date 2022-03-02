@@ -140,10 +140,7 @@ class PeopleStore {
         }
 
         // Observe changes to all unclaimed reservations that the user owns.
-        let reservationQuery = Reservation.query()!
-        reservationQuery.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
-        reservationQuery.whereKeyExists(ReservationKey.contactId.rawValue)
-
+        let reservationQuery = Reservation.allUnclaimedCidQuery()
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { query, event in
             switch event {
@@ -151,26 +148,21 @@ class PeopleStore {
                 guard let reservation = object as? Reservation,
                       let contactId = reservation.contactId else { return }
 
-                if !reservation.isClaimed {
-                    self.unclaimedReservations[reservation.objectId!] = reservation
-                }
+                self.unclaimedReservations[reservation.objectId!] = reservation
 
                 guard let contact =
                         ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
                             return
                         }
                 self.contactsDictionary[contactId] = contact
-            case .updated(let object):
-                guard let reservation = object as? Reservation else { return }
-
-                if !reservation.isClaimed {
-                    self.unclaimedReservations[reservation.objectId!] = reservation
-                }
+            case .updated:
+                break
             case .left(let object), .deleted(let object):
                 guard let reservation = object as? Reservation,
                       let contactId = reservation.contactId else { return }
 
                 self.contactsDictionary[contactId] = nil
+                self.unclaimedReservations[reservation.objectId!] = nil
 
                 guard let contact =
                         ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
