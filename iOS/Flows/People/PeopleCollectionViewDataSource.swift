@@ -45,8 +45,8 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-        footer.button.isHidden = ContactsManger.shared.hasPermissions
-        footer.label.isHidden = ContactsManger.shared.hasPermissions
+        footer.button.isHidden = ContactsManager.shared.hasPermissions
+        footer.label.isHidden = ContactsManager.shared.hasPermissions
         footer.didSelectButton = { [unowned self] in
             self.didSelectAddContacts?()
         }

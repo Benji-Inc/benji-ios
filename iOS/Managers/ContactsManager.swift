@@ -10,9 +10,9 @@ import Foundation
 import Contacts
 import Combine
 
-class ContactsManger {
+class ContactsManager {
 
-    static let shared = ContactsManger()
+    static let shared = ContactsManager()
     private let store = CNContactStore()
     
     private var fetchedContacts: [CNContact] = []

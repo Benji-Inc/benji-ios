@@ -11,6 +11,7 @@ import Combine
 import ParseLiveQuery
 import Parse
 import Contacts
+import StreamChat
 
 /// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
 /// or it could just be another person that has been invited but not yet joined Jibber.
@@ -32,7 +33,7 @@ class PeopleStore {
     /// A dictionary of all the fetched users, keyed by their user id.
     private var userDictionary: [String : User] = [:]
     private var contactsDictionary: [String : CNContact] = [:]
-    private var reservationDictionary: [String : Reservation] = [:]
+    private var unclaimedReservations: [String : Reservation] = [:]
     var users: [User] {
         return Array(self.userDictionary.values)
     }
@@ -93,12 +94,12 @@ class PeopleStore {
         let reservations = await Reservation.getAllUnclaimed()
         reservations.forEach { reservation in
             if let reservationId = reservation.objectId {
-                self.reservationDictionary[reservationId] = reservation
+                self.unclaimedReservations[reservationId] = reservation
             }
 
             guard let contactId = reservation.contactId else { return }
             guard let contact =
-                    ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
+                    ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
                         return
                     }
             self.contactsDictionary[contactId] = contact
@@ -149,9 +150,9 @@ class PeopleStore {
             case .entered(let object), .created(let object):
                 guard let reservation = object as? Reservation,
                       let contactId = reservation.contactId else { return }
-
+                #warning("Make sure to update the reservation object itself")
                 guard let contact =
-                        ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
+                        ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
                             return
                         }
                 self.contactsDictionary[contactId] = contact
@@ -168,10 +169,21 @@ class PeopleStore {
 
     // MARK: - Helper functions
 
-    func getPeople(for members: [ConversationMember]) async throws -> [PersonType] {
+    func getPeople(for conversation: ChatChannel) async throws -> [PersonType] {
         var people: [PersonType] = []
-        await members.userIDs.asyncForEach { userId in
+        let nonMeMembers = conversation.lastActiveMembers.filter { member in
+            return member.id != User.current()?.objectId
+        }
+        await nonMeMembers.userIDs.asyncForEach { userId in
             guard let person = await self.getPerson(withPersonId: userId) else { return }
+            people.append(person)
+        }
+
+        await self.unclaimedReservations.asyncForEach { (reservationId, reservation) in
+            guard reservation.conversationCid == conversation.cid.description,
+                    let contactId = reservation.contactId else { return }
+
+            guard let person = await self.getPerson(withPersonId: contactId) else { return }
             people.append(person)
         }
         
@@ -180,18 +192,20 @@ class PeopleStore {
 
     #warning("Also retrieve the contacts")
     func getPerson(withPersonId personId: String) async -> PersonType? {
-        var foundUser: User? = nil
+        var foundPerson: PersonType? = nil
 
-        if let user = PeopleStore.shared.users.first(where: { user in
-            return user.objectId == personId
-        }) {
-            foundUser = user
+        if let user = self.userDictionary[personId] {
+            foundPerson = user
+        } else if let contact = self.contactsDictionary[personId] {
+            foundPerson = contact
         } else if let user = try? await User.getObject(with: personId) {
-            foundUser = user
+            foundPerson = user
+
+            // This is newly retrieved person, so cache it and let subscribers know about it.
             self.userDictionary[user.personId] = user
             self.personUpdated = user
         }
         
-        return foundUser
+        return foundPerson
     }
 }
