@@ -33,6 +33,7 @@ class PeopleStore {
     /// A dictionary of all the fetched users, keyed by their user id.
     private var userDictionary: [String : User] = [:]
     private var contactsDictionary: [String : CNContact] = [:]
+    private var reservationDictionary: [String : Reservation] = [:]
     var users: [User] {
         return Array(self.userDictionary.values)
     }
@@ -92,6 +93,10 @@ class PeopleStore {
     private func getAndStoreAllContactsWithUnclaimedReservations() async {
         let reservations = await Reservation.getAllUnclaimed()
         reservations.forEach { reservation in
+            if let reservationId = reservation.objectId {
+                self.reservationDictionary[reservationId] = reservation
+            }
+
             guard let contactId = reservation.contactId else { return }
             guard let contact =
                     ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
@@ -174,6 +179,7 @@ class PeopleStore {
         return people
     }
 
+    #warning("Also retrieve the contacts")
     func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundUser: User? = nil
 
