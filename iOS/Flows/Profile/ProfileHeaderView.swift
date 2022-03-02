@@ -22,7 +22,7 @@ class ProfileHeaderView: BaseView {
     
     let bottomLabel = ThemeLabel(font: .regular)
     
-    let personView = BorderedAvatarView()
+    let personView = BorderedPersoniew()
     
     override func initializeSubviews() {
         super.initializeSubviews()

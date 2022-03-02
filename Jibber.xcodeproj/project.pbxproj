@@ -165,8 +165,8 @@
 		D62C9CC3266C3CAC00BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D62D16322736F60400C542CE /* ToastErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D16312736F60400C542CE /* ToastErrorView.swift */; };
 		D62D16342736F60400C542CE /* ToastErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D16312736F60400C542CE /* ToastErrorView.swift */; };
-		D62ED579279CA2ED00F7C08A /* BorderedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedAvatarView.swift */; };
-		D62ED57A279CB4A400F7C08A /* BorderedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedAvatarView.swift */; };
+		D62ED579279CA2ED00F7C08A /* BorderedPersoniew.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedPersoniew.swift */; };
+		D62ED57A279CB4A400F7C08A /* BorderedPersoniew.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedPersoniew.swift */; };
 		D62ED57C279CB96E00F7C08A /* ModalPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED57B279CB96E00F7C08A /* ModalPhotoViewController.swift */; };
 		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
@@ -839,7 +839,7 @@
 		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
 		D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		D62D16312736F60400C542CE /* ToastErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastErrorView.swift; sourceTree = "<group>"; };
-		D62ED578279CA2ED00F7C08A /* BorderedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedAvatarView.swift; sourceTree = "<group>"; };
+		D62ED578279CA2ED00F7C08A /* BorderedPersoniew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedPersoniew.swift; sourceTree = "<group>"; };
 		D62ED57B279CB96E00F7C08A /* ModalPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPhotoViewController.swift; sourceTree = "<group>"; };
 		D6347395241EBF6F0071E9DA /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
@@ -1680,7 +1680,7 @@
 				D660C4C82793626700221F76 /* AddView.swift */,
 				D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */,
 				D61EC0E521D30EB300204BEE /* BaseView.swift */,
-				D62ED578279CA2ED00F7C08A /* BorderedAvatarView.swift */,
+				D62ED578279CA2ED00F7C08A /* BorderedPersoniew.swift */,
 				D6FEF02C257EB71700F9789B /* Button+Extensions.swift */,
 				D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */,
 				D60C81492209360400A127A3 /* DisplayableImageView.swift */,
@@ -2669,7 +2669,7 @@
 				80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
-				D62ED579279CA2ED00F7C08A /* BorderedAvatarView.swift in Sources */,
+				D62ED579279CA2ED00F7C08A /* BorderedPersoniew.swift in Sources */,
 				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
 				D64C6A7E23294A8600DB7257 /* ConversationKey.swift in Sources */,
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
@@ -2947,7 +2947,7 @@
 				D63DB22425E9990500F6B323 /* DispatchQue+Extensions.swift in Sources */,
 				D63DB23B25E9992600F6B323 /* UIView+Extensions.swift in Sources */,
 				D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */,
-				D62ED57A279CB4A400F7C08A /* BorderedAvatarView.swift in Sources */,
+				D62ED57A279CB4A400F7C08A /* BorderedPersoniew.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
 				D63DB21D25E998F000F6B323 /* Coordinator.swift in Sources */,
 				D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */,

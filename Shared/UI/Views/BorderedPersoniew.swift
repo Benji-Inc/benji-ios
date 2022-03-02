@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BorderedAvatarView: PersonView {
+class BorderedPersoniew: PersonView {
     
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()

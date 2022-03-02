@@ -30,7 +30,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: Member?
 
-    let personView = BorderedAvatarView()
+    let personView = BorderedPersoniew()
     
     override func initializeSubviews() {
         super.initializeSubviews()

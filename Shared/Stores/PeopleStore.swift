@@ -169,7 +169,7 @@ class PeopleStore {
 
     // MARK: - Helper functions
 
-    func getPeople(for conversation: ChatChannel) async throws -> [PersonType] {
+    func getPeople(for conversation: ChatChannel) async -> [PersonType] {
         var people: [PersonType] = []
         let nonMeMembers = conversation.lastActiveMembers.filter { member in
             return member.id != User.current()?.objectId

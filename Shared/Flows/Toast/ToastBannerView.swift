@@ -16,7 +16,7 @@ class ToastBannerView: ToastView {
     private let blurView = BlurView()
     private let titleLabel = ThemeLabel(font: .regular, textColor: .T1)
     private let descriptionLabel = ThemeLabel(font: .small, textColor: .T1)
-    private let imageView = BorderedAvatarView()
+    private let imageView = BorderedPersoniew()
 
     let leftAnimator = UIViewPropertyAnimator(duration: 0.35,
                                               dampingRatio: 0.9,

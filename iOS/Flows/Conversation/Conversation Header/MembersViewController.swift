@@ -159,15 +159,13 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
         var data: [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] = [:]
 
-        guard let conversation = self.conversationController?.conversation else { return data }
+        guard let conversationController = self.conversationController else { return data }
+        let conversation = conversationController.conversation
 
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.personId != ChatClient.shared.currentUserId
-        }
-        
-        data[.members] = members.compactMap({ user in
-            guard let conversationController = self.conversationController else { return nil }
-            let member = Member(personId: user.personId,
+        let members = await PeopleStore.shared.getPeople(for: conversation)
+
+        data[.members] = members.compactMap({ member in
+            let member = Member(personId: member.personId,
                                 conversationController: conversationController)
             return .member(member)
         })
