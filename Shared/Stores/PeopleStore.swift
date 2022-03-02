@@ -32,10 +32,13 @@ class PeopleStore {
     }
     /// A dictionary of all the fetched users, keyed by their user id.
     private var userDictionary: [String : User] = [:]
+    private var contactsDictionary: [String : CNContact] = [:]
     var users: [User] {
         return Array(self.userDictionary.values)
     }
-    private(set) var contacts: [CNContact] = []
+    var contacts: [CNContact] {
+        return Array(self.contactsDictionary.values)
+    }
 
     private var initializeTask: Task<Void, Never>?
 
@@ -94,7 +97,7 @@ class PeopleStore {
                     ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
                         return
                     }
-            self.contacts.append(contact)
+            self.contactsDictionary[contactId] = contact
         }
     }
 
@@ -131,39 +134,30 @@ class PeopleStore {
             }
         }
 
-        #warning("Handle reservations not connections")
         // Observe changes to all unclaimed reservations that the user owns.
         let reservationQuery = Reservation.query()!
         reservationQuery.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+        reservationQuery.whereKeyExists(ReservationKey.contactId.rawValue)
+
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { query, event in
             switch event {
             case .entered(let object), .created(let object):
-                // When a new connection is made, add the connected to the array.
-                guard let connection = object as? Connection,
-                      let nonMeUser = connection.nonMeUser else { break }
+                guard let reservation = object as? Reservation,
+                      let contactId = reservation.contactId else { return }
 
-//                self.users.append(nonMeUser)
-            case .updated(let object):
-                // When a connection is updated, we update the corresponding user.
-                guard let connection = object as? Connection,
-                      let nonMeUser = connection.nonMeUser else { break }
-                self.personUpdated = nonMeUser
-
-                if let indexToUpdate = self.users.firstIndex(where: { user in
-                    return user.personId == nonMeUser.personId
-                }) {
-//                    self.users[indexToUpdate] = nonMeUser
-                }
+                guard let contact =
+                        ContactsManger.shared.searchForContact(with: .identifier(contactId)).first else {
+                            return
+                        }
+                self.contactsDictionary[contactId] = contact
+            case .updated:
+                break
             case .left(let object), .deleted(let object):
-                // Remove users when their connections are deleted.
-                guard let connection = object as? Connection,
-                      let nonMeUser = connection.nonMeUser else { break }
+                guard let reservation = object as? Reservation,
+                      let contactId = reservation.contactId else { return }
 
-//                self.users.removeAll { user in
-//                    return user.personId == nonMeUser.personId
-//                }
-                self.userDeleted = nonMeUser
+                self.contactsDictionary[contactId] = nil
             }
         }
     }
