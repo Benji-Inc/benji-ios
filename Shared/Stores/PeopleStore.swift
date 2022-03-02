@@ -116,7 +116,7 @@ class PeopleStore {
         connectionSubscription.handleEvent { query, event in
             switch event {
             case .entered(let object), .created(let object):
-                // When a new connection is made, add the connected to the array.
+                // When a new connection is made, add the connected user to the array.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 

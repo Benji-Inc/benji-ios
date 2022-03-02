@@ -85,6 +85,7 @@ class PersonView: DisplayableImageView {
     private func subscribeToUpdates() {
         PeopleStore.shared.$personUpdated
             .filter { [unowned self] updatedPerson in
+                // Only handle person updates related to the currently assigned person.
                 self.person?.personId ==  updatedPerson?.personId
             }.mainSink { [unowned self] updatedPerson in
                 guard let updatedPerson = updatedPerson else { return }
