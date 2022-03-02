@@ -61,14 +61,16 @@ class ContactsManager {
     }
 
     func fetchContacts() async -> [CNContact] {
-        if !self.fetchedContacts.isEmpty {
+        guard self.fetchedContacts.isEmpty else {
             return self.fetchedContacts
         }
-            // 1.
+        // 1.
         do {
             if try await self.store.requestAccess(for: .contacts) {
                 // 2.
-                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey]
+                let keys = [CNContactIdentifierKey,CNContactGivenNameKey, CNContactFamilyNameKey,
+                            CNContactPhoneNumbersKey, CNContactImageDataAvailableKey,
+                            CNContactThumbnailImageDataKey]
 
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
                 request.sortOrder = .familyName

@@ -15,7 +15,6 @@ protocol PersonType: ImageDisplayable {
     var givenName: String { get }
     var familyName: String { get }
     var fullName: String { get }
-    var firstAndLastInitial: String? { get }
     var handle: String { get }
     var focusStatus: FocusStatus? { get }
 }
@@ -33,10 +32,5 @@ extension PersonType {
         let firstInitial = String(optional: self.givenName.first?.uppercased())
         let lastInitial = String(optional: self.familyName.first?.uppercased())
         return firstInitial + lastInitial
-    }
-
-    var firstAndLastInitial: String? {
-        let lastInitial = String(optional: self.familyName.first?.lowercased())
-        return self.givenName.lowercased() + " " + lastInitial
     }
 }

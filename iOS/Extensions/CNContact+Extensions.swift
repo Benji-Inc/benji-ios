@@ -93,6 +93,30 @@ extension CNContact: PersonType {
             return UIImage(data: data)
         }
 
-        return nil 
+        return self.imageWith(text: self.initials)
+    }
+
+    /// Returns an image with the provided text baked into it.
+    private func imageWith(text: String) -> UIImage? {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        label.text = text
+
+        // Set the font size to something large so it will assured to be shrunk down to fit the label.
+        label.font = FontType.regularBold.font.withSize(100)
+        label.adjustsFontSizeToFitWidth = true
+
+        // Make the image small, but make sure the resolution is high enough so it doens't look bad
+        // in a thumbnail.
+        let contextSize = CGSize(width: 50, height: 50)
+        UIGraphicsBeginImageContext(contextSize)
+        defer { UIGraphicsEndImageContext() }
+
+        let currentContext = UIGraphicsGetCurrentContext()!
+        // Center the text and render it.
+        currentContext.translateBy(x: (contextSize.width - label.width)/2 ,
+                                   y: (contextSize.height - label.height)/2);
+        label.layer.render(in: currentContext)
+
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }

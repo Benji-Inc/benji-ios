@@ -50,9 +50,8 @@ class BorderedPersoniew: PersonView {
     override func set(person: PersonType?) {
         super.set(person: person)
 
-        if let person = person {
-            self.setColors(for: person)
-        }
+        guard let person = person else { return }
+        self.setColors(for: person)
     }
 
     override func didRecieveUpdateFor(person: PersonType) {
