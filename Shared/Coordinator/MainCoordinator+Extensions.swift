@@ -20,7 +20,7 @@ extension MainCoordinator: LaunchManagerDelegate {
     }
 
     func subscribeToUserUpdates() {
-        UserStore.shared.$userDeleted
+        PeopleStore.shared.$userDeleted
             .filter({ user in
                 user?.isCurrentUser ?? false
             })

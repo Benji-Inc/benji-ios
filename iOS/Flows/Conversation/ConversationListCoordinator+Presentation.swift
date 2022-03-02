@@ -50,8 +50,8 @@ extension ConversationListCoordinator {
         }
     }
     
-    func presentProfile(for avatar: Avatar) {
-        let coordinator = ProfileCoordinator(with: avatar, router: self.router, deepLink: self.deepLink)
+    func presentProfile(for person: PersonType) {
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
                 await self.conversationListVC.scrollToConversation(with: result, messageID: nil)

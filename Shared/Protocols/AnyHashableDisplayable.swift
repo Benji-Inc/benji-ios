@@ -9,15 +9,15 @@
 import Foundation
 
 /// An object that is both hashable and a displayable item.
-typealias HashableDisplayable = Hashable & Avatar
+typealias HashableDisplayable = Hashable & PersonType
 
 /// A type erased wrapper around a DisplayableItem. This allows displayable items to be treated as hashables.
 /// Equatable structs  with AnyHashableDisplayable vars can autosynthesize their "==" function.
 struct AnyHashableDisplayable {
 
-    var value: Avatar {
+    var value: PersonType {
         // The contained item is guaranteed to be displayable because of the init's type constraints.
-        return self.hashable.base as! Avatar
+        return self.hashable.base as! PersonType
     }
 
     fileprivate let hashable: AnyHashable

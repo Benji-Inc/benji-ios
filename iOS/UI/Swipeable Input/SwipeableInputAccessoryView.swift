@@ -130,7 +130,7 @@ class SwipeableInputAccessoryView: BaseView {
             self.currentContext = context
         }
                 
-        self.avatarView.set(avatar: User.current()!)
+        self.avatarView.set(person: User.current()!)
         
         self.avatarView.didSelect { [unowned self] in
             self.delegate?.swipeableInputAccessoryDidTapAvatar(self)

@@ -47,24 +47,25 @@ class BorderedAvatarView: AvatarView {
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
     }
     
-    override func subscribeToUpdates(for user: User) {
-        super.subscribeToUpdates(for: user)
-        self.setColors(for: user)
+    override func subscribeToUpdates(for person: PersonType) {
+        super.subscribeToUpdates(for: person)
+        self.setColors(for: person)
     }
     
-    override func didRecieveUpdateFor(user: User) {
-        super.didRecieveUpdateFor(user: user)
-        self.setColors(for: user)
+    override func didRecieveUpdateFor(person: PersonType) {
+        super.didRecieveUpdateFor(person: person)
+        self.setColors(for: person)
     }
     
-    private func setColors(for user: User) {
-        let isAvailable = user.focusStatus == .available
-        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.gray.color.cgColor
-        
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.pulseLayer.borderColor = color
-            self.shadowLayer.shadowColor = color 
-        }
+    private func setColors(for person: PersonType) {
+        #warning("restore this")
+//        let isAvailable = user.focusStatus == .available
+//        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.gray.color.cgColor
+//
+//        UIView.animate(withDuration: Theme.animationDurationFast) {
+//            self.pulseLayer.borderColor = color
+//            self.shadowLayer.shadowColor = color
+//        }
     }
     
     func beginTyping() {

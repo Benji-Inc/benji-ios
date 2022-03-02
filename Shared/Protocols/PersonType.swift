@@ -8,7 +8,9 @@
 
 import Foundation
 
-protocol Avatar: ImageDisplayable {
+protocol PersonType: ImageDisplayable {
+    /// The unique identifier for this person.
+    var personId: String { get }
     var initials: String { get }
     var givenName: String { get }
     var familyName: String { get }
@@ -17,7 +19,7 @@ protocol Avatar: ImageDisplayable {
     var handle: String { get }
 }
 
-extension Avatar {
+extension PersonType {
     
     var fullName: String {
         if self.givenName.isEmpty && self.familyName.isEmpty {

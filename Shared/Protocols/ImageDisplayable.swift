@@ -10,17 +10,16 @@ import Foundation
 import Parse
 
 protocol ImageDisplayable {
-    var userObjectId: String? { get }
     var image: UIImage? { get }
-    var textResult: NSTextCheckingResult? { get }
 }
 
 extension ImageDisplayable {
+
     var url: URL? {
         return nil 
     }
 
-    var textResult: NSTextCheckingResult? {
+    var fileObject: PFFileObject? {
         return nil
     }
 }

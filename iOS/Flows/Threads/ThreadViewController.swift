@@ -361,7 +361,7 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in
-            return member.id != ChatClient.shared.currentUserId
+            return member.personId != ChatClient.shared.currentUserId
         } ?? []
 
         self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: true)
