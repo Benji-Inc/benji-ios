@@ -201,7 +201,7 @@ class PeopleStore {
         } else if let user = try? await User.getObject(with: personId) {
             foundPerson = user
 
-            // This is newly retrieved person, so cache it and let subscribers know about it.
+            // This is a newly retrieved person, so cache it and let subscribers know about it.
             self.userDictionary[user.personId] = user
             self.personUpdated = user
         }

@@ -12,15 +12,15 @@ import Lottie
 
 struct Member: Hashable {
     
-    var displayable: AnyHashableDisplayable
+    var personId: String
     var conversationController: ConversationController
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
-        return lhs.displayable.value.personId == rhs.displayable.value.personId
+        return lhs.personId == rhs.personId
     }
 
     func hash(into hasher: inout Hasher) {
-        self.displayable.value.personId.hash(into: &hasher)
+        self.personId.hash(into: &hasher)
     }
 }
 
@@ -42,29 +42,36 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.personView)
     }
 
-    func configure(with item: Member) {
-        self.personView.set(person: item.displayable.value)
+    // A reference to a task for configuring the cell.
+    private var configurationTask: Task<Void, Never>?
 
-        Task {
-            let personId = item.displayable.value.personId
+    func configure(with item: Member) {
+        self.configurationTask?.cancel()
+
+        self.configurationTask = Task {
+            let personId = item.personId
             guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
 
+            guard !Task.isCancelled else { return }
+
+            self.personView.set(person: person)
+            let typingUsers = item.conversationController.conversation.currentlyTypingUsers
+            if typingUsers.contains(where: { typingUser in
+                typingUser.personId == personId
+            }) {
+                self.personView.beginTyping()
+            } else {
+                self.personView.endTyping()
+            }
+
             self.subscribeToUpdates(for: person)
-        }
-                
-        let typingUsers = item.conversationController.conversation.currentlyTypingUsers
-        if typingUsers.contains(where: { typingUser in
-            typingUser.personId == item.displayable.value.personId
-        }) {
-            self.personView.beginTyping()
-        } else {
-            self.personView.endTyping()
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.configurationTask?.cancel()
         self.personView.set(person: nil)
     }
     

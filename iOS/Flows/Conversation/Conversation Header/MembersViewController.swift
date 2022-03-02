@@ -88,12 +88,12 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                     self.add(member: event.member)
                 case let event as MemberRemovedEvent:
                     guard let conversationController = self.conversationController else { return }
-                    let member = Member(displayable: AnyHashableDisplayable(event.user),
+                    let member = Member(personId: event.user.personId,
                                         conversationController: conversationController)
                     self.dataSource.deleteItems([.member(member)])
                 case let event as MemberUpdatedEvent:
                     guard let conversationController = self.conversationController else { return }
-                    let member = Member(displayable: AnyHashableDisplayable(event.member),
+                    let member = Member(personId: event.member.personId,
                                         conversationController: conversationController)
                     self.dataSource.reconfigureItems([.member(member)])
                 default:
@@ -102,11 +102,10 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             }).store(in: &self.conversationCancellables)
     }
     
-    func add(member: ChatChannelMember) {
+    private func add(member: ChatChannelMember) {
         guard let conversationController = self.conversationController else { return }
 
-        let member = Member(displayable: AnyHashableDisplayable.init(member),
-                            conversationController: conversationController)
+        let member = Member(personId: member.personId, conversationController: conversationController)
         self.dataSource.appendItems([.member(member)], toSection: .members)
     }
 
@@ -123,8 +122,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             guard !Task.isCancelled,
                 let controller = self?.conversationController else { return }
 
-            let member = Member(displayable: AnyHashableDisplayable(user),
-                                conversationController: controller)
+            let member = Member(personId: user.personId, conversationController: controller)
             guard let ip = self?.dataSource.indexPath(for: .member(member)) else { return }
 
             self?.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
@@ -143,8 +141,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                return !message.isFromCurrentUser
            }) {
             let user = nonCurrentUserMessage.author
-            let member = Member(displayable: AnyHashableDisplayable(user),
-                                conversationController: conversationController)
+            let member = Member(personId: user.personId, conversationController: conversationController)
             centeredIndexPath = snapshot.indexPathOfItem(.member(member))
         }
 
@@ -170,7 +167,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         
         data[.members] = members.compactMap({ user in
             guard let conversationController = self.conversationController else { return nil }
-            let member = Member(displayable: AnyHashableDisplayable.init(user),
+            let member = Member(personId: user.personId,
                                 conversationController: conversationController)
             return .member(member)
         })
