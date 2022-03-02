@@ -11,6 +11,8 @@ import Parse
 
 protocol ImageDisplayable {
     var image: UIImage? { get }
+    var url: URL? { get }
+    var fileObject: PFFileObject? { get }
 }
 
 extension ImageDisplayable {

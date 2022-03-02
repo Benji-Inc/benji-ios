@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Parse
 
 extension ChatUser: PersonType {
 
@@ -15,6 +16,10 @@ extension ChatUser: PersonType {
         return PeopleStore.shared.users.first { user in
             return user.objectId == self.personId
         }
+    }
+
+    var personId: String {
+        return self.id
     }
 
     var givenName: String {
@@ -29,8 +34,8 @@ extension ChatUser: PersonType {
         return self.parseUser?.handle ?? String()
     }
 
-    var personId: String {
-        return self.id
+    var focusStatus: FocusStatus? {
+        return self.parseUser?.focusStatus
     }
 
     var image: UIImage? {
@@ -39,5 +44,9 @@ extension ChatUser: PersonType {
 
     var url: URL? {
         return self.parseUser?.url
+    }
+
+    var fileObject: PFFileObject? {
+        return self.parseUser?.smallImage
     }
 }

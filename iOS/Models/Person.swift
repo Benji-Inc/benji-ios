@@ -36,6 +36,9 @@ struct Person: PersonType, Hashable, Comparable {
     var handle: String {
         return ""
     }
+    var focusStatus: FocusStatus? {
+        return nil
+    }
 
     var image: UIImage?
     

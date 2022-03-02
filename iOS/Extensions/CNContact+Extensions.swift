@@ -84,7 +84,7 @@ extension CNContact: PersonType {
         return ""
     }
 
-    var userObjectId: String? {
+    var focusStatus: FocusStatus? {
         return nil
     }
 

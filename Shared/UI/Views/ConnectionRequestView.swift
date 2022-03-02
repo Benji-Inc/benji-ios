@@ -14,7 +14,7 @@ class ConnectionRequestView: BaseView {
 
     private let containerView = BaseView()
 
-    private let personView = AvatarView()
+    private let personView = PersonView()
     private let textView = TextView()
 
     private let acceptButton = ThemeButton()
