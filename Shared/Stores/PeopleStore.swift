@@ -91,7 +91,7 @@ class PeopleStore {
     }
 
     private func getAndStoreAllContactsWithUnclaimedReservations() async {
-        let reservations = await Reservation.getAllUnclaimed()
+        let reservations = await Reservation.getAllUnclaimedWithContact()
         reservations.forEach { reservation in
             if let reservationId = reservation.objectId {
                 self.unclaimedReservations[reservationId] = reservation
@@ -140,7 +140,7 @@ class PeopleStore {
         }
 
         // Observe changes to all unclaimed reservations that the user owns.
-        let reservationQuery = Reservation.allUnclaimedCidQuery()
+        let reservationQuery = Reservation.allUnclaimedWithContactQuery()
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { query, event in
             switch event {

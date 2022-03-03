@@ -45,7 +45,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             }.store(in: &self.cancellables)
 
         Client.shared.shouldPrintWebSocketLog = false
-        let reservationQuery = Reservation.allUnclaimedCidQuery()
+        let reservationQuery = Reservation.allUnclaimedWithContactQuery()
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { [unowned self] query, event in
             guard let conversationController = self.conversationController else { return }
