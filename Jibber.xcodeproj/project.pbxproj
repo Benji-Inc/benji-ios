@@ -460,6 +460,7 @@
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
+		D6977D6527D1780900A65330 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6977D6427D1780900A65330 /* StreamChat */; };
 		D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
@@ -492,9 +493,7 @@
 		D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */; };
 		D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */; };
 		D6AE0FA1267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */; };
-		D6AE0FA3267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusIntentHandler.swift */; };
 		D6AE0FA4267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusIntentHandler.swift */; };
-		D6AE0FA5267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusIntentHandler.swift */; };
 		D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D6AE0FAD267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -550,6 +549,12 @@
 		D6CC148F276C1323005F617F /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC148E276C1323005F617F /* MessageStatusView.swift */; };
 		D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
 		D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
+		D6CDA28E27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
+		D6CDA28F27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
+		D6CDA29227D16F9400823968 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
+		D6CDA29327D16F9400823968 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
+		D6CDA29427D170DA00823968 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E721D3107A00204BEE /* Date+Extensions.swift */; };
+		D6CDA29527D170DB00823968 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E721D3107A00204BEE /* Date+Extensions.swift */; };
 		D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D145FC21D550E400CD8CE4 /* AttributedString.swift */; };
 		D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D145FE21D5510400CD8CE4 /* StringStyle.swift */; };
 		D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460421D5524C00CD8CE4 /* StringCasing.swift */; };
@@ -1143,6 +1148,7 @@
 			files = (
 				D6AE0F7E267CFA6C00C6B048 /* Intents.framework in Frameworks */,
 				D656EF4C2765A13600FF6E2C /* Localization in Frameworks */,
+				D6977D6527D1780900A65330 /* StreamChat in Frameworks */,
 				7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2283,6 +2289,7 @@
 			name = "Intents Extension";
 			packageProductDependencies = (
 				D656EF4B2765A13600FF6E2C /* Localization */,
+				D6977D6427D1780900A65330 /* StreamChat */,
 			);
 			productName = "Intents Extension";
 			productReference = D6AE0F7C267CFA6C00C6B048 /* Intents Extension.appex */;
@@ -2682,7 +2689,6 @@
 				8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */,
 				D61EC0F721D316F100204BEE /* ThemeColor.swift in Sources */,
 				D6DEC3F127A1DDB70072D9D0 /* CircleView.swift in Sources */,
-				D6AE0FA3267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
@@ -3135,6 +3141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AE0FEC267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
+				D6CDA29227D16F9400823968 /* DeeplinkTarget.swift in Sources */,
 				D6AE0FE9267D2C1900C6B048 /* User.swift in Sources */,
 				D6AE0FF9267D2CE600C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FFE267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
@@ -3142,6 +3149,8 @@
 				D66ED45A267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0FA4267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
+				D6CDA29427D170DA00823968 /* Date+Extensions.swift in Sources */,
+				D6CDA28E27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D65D460527A9FE620019301C /* Notice.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
@@ -3158,6 +3167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
+				D6CDA29327D16F9400823968 /* DeeplinkTarget.swift in Sources */,
 				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
 				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,
@@ -3165,7 +3175,8 @@
 				D66ED458267D35E200332BA3 /* Config.swift in Sources */,
 				D66ED45B267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0FEF267D2CBA00C6B048 /* Objectable.swift in Sources */,
-				D6AE0FA5267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
+				D6CDA29527D170DB00823968 /* Date+Extensions.swift in Sources */,
+				D6CDA28F27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
 				D65D460627A9FEA00019301C /* Notice.swift in Sources */,
 				D6AE0FA1267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6166C902732FFD00013E803 /* Logger.swift in Sources */,
@@ -3773,6 +3784,11 @@
 		D656EF4D2765A13B00FF6E2C /* Localization */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Localization;
+		};
+		D6977D6427D1780900A65330 /* StreamChat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
+			productName = StreamChat;
 		};
 		D6AE0F5C267CF80C00C6B048 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -9,6 +9,13 @@
 import Foundation
 import UserNotifications
 
+enum StreamContentKey: String {
+    case cid = "cid"
+    case messageId = "id"
+    case type = "type"
+    case author = "author"
+}
+
 enum NotificationContentKey: String {
     case author = "author"
     case target = "target"
@@ -106,6 +113,10 @@ extension UNMutableNotificationContent {
 
     func setData(value: Any, for key: NotificationContentKey) {
         self.userInfo["data"] = [key.rawValue: value]
+    }
+    
+    func setStreamData(value: Any, for key: StreamContentKey) {
+        self.userInfo["stream"] = [key.rawValue: value]
     }
 }
 
