@@ -187,7 +187,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
             
-            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+            let filter = Filter<ChannelListFilterScope>.containOnly(userIds: userIds)
             let query = ChannelListQuery(filter: .and([.equal("hidden", to: true), filter]),
                                          sort: [Sorting(key: .createdAt, isAscending: true)],
                                          pageSize: .channelsPageSize,
@@ -207,8 +207,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             } else {
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
-            
-            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+
+            logDebug(userIds.description)
+            let filter = Filter<ChannelListFilterScope>.containOnly(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
                                          sort: [Sorting(key: .updatedAt, isAscending: true)],
                                          pageSize: 5,
@@ -229,7 +230,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
             
-            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+            let filter = Filter<ChannelListFilterScope>.containOnly(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
                                          sort: [Sorting(key: .createdAt, isAscending: true)],
                                          pageSize: .channelsPageSize,
@@ -241,12 +242,10 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     @MainActor
     private func loadConversations(with query: ChannelListQuery) async {
-        
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
 
         try? await self.conversationListController?.synchronize()
-        try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
 
         let conversations: [Conversation] = self.conversationListController?.conversations ?? []
                 

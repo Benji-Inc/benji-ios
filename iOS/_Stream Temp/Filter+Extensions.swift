@@ -24,4 +24,17 @@ extension Filter where Scope: AnyChannelListFilterScope {
 
         return .and(memberFilters)
     }
+
+    static func containOnly(userIds: [UserId]) -> Filter<Scope> {
+        var memberFilters: [Filter<Scope>] = []
+        for userID in userIds {
+            memberFilters.append(.containMembers(userIds: [userID]))
+        }
+
+        // Make there aren't other members in this channel who weren't included in the list.
+        let memberCountFilter: Filter<Scope> = .equal(.memberCount, to: userIds.count)
+        memberFilters.append(memberCountFilter)
+
+        return .and(memberFilters)
+    }
 }
