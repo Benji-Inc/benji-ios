@@ -60,21 +60,34 @@ extension ConversationListCoordinator {
     }
 
     func presentPeoplePicker() {
+        // If there is no conversation to invite people to, then do nothing.
         guard let conversation = self.activeConversation else { return }
+
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.selectedConversationCID = self.activeConversation?.cid
         
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            if coordinator.invitedPeople.isEmpty {
-                self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+        coordinator.toPresentable().dismissHandlers.append
+        { [unowned self, unowned coordinator = coordinator] in
+            Task {
+                let peopleInConversation = await PeopleStore.shared.getPeople(for: conversation)
+                if peopleInConversation.isEmpty {
+                    self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+                }
             }
         }
-        self.present(coordinator) { [unowned self] people in
-            
-            if people.isEmpty {
-                self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+        self.present(coordinator) { [unowned self] invitedPeople in
+            if invitedPeople.isEmpty {
+                // If the user didn't invite anyone to the conversation and the conversation doesn't have
+                // any existing members, ask them if they'd like to delete it.
+                Task {
+                    let peopleInConversation = await PeopleStore.shared.getPeople(for: conversation)
+                    if peopleInConversation.isEmpty {
+                        self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+                    }
+                }
             } else {
-                self.add(people: people, to: conversation)
+                // Add all of the invited people to the conversation.
+                self.add(people: invitedPeople, to: conversation)
             }
         }
     }
@@ -103,24 +116,24 @@ extension ConversationListCoordinator {
     func add(people: [Person], to conversation: Conversation) {
         let controller = ChatClient.shared.channelController(for: conversation.cid)
 
-        let accepted = people.compactMap { person in
+        let acceptedConnections = people.compactMap { person in
             return person.connection
         }.filter { connection in
             return connection.status == .accepted
         }
 
-        if !accepted.isEmpty {
-            let members = accepted.compactMap { connection in
-                return connection.nonMeUser?.objectId
-            }
-            controller.addMembers(userIds: Set(members)) { error in
-                if error.isNil {
-                    self.showPeopleAddedToast(for: accepted)
-                    Task {
-                        try await controller.synchronize()
-                        await self.conversationListVC.headerVC.membersVC.loadData()
-                    }
-                }
+        guard !acceptedConnections.isEmpty else { return }
+
+        let members = acceptedConnections.compactMap { connection in
+            return connection.nonMeUser?.objectId
+        }
+        controller.addMembers(userIds: Set(members)) { error in
+            guard error.isNil else { return }
+
+            self.showPeopleAddedToast(for: acceptedConnections)
+            Task {
+                try await controller.synchronize()
+                await self.conversationListVC.headerVC.membersVC.loadData()
             }
         }
     }

@@ -308,7 +308,6 @@
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
 		D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
 		D64C323E270391AE004BC1BD /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Person.swift */; };
-		D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */; };
 		D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C324127039646004BC1BD /* MessageComposerViewController.swift */; };
 		D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
@@ -873,7 +872,6 @@
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
 		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D64C323D270391AE004BC1BD /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
-		D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PeopleCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D64C324127039646004BC1BD /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
 		D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationLoadingView.swift; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
@@ -1874,7 +1872,6 @@
 				D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */,
 				D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */,
 				D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */,
-				D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */,
 				D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */,
 				D6222E5E27A0C5FC001806D6 /* PeopleNavigationController.swift */,
 				D66A580625DD691A001B3F64 /* PeopleViewController.swift */,
@@ -2799,7 +2796,6 @@
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
 				D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */,
-				D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,

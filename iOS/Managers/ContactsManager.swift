@@ -39,7 +39,8 @@ class ContactsManager {
     func searchForContact(with predicateType: ContactPredicateType) -> [CNContact] {
         let predicate: NSPredicate
 
-        let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey] as [CNKeyDescriptor]
+        let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey,
+                    CNContactIdentifierKey] as [CNKeyDescriptor]
 
         switch predicateType {
         case .name(let name):
@@ -69,8 +70,7 @@ class ContactsManager {
             if try await self.store.requestAccess(for: .contacts) {
                 // 2.
                 let keys = [CNContactIdentifierKey,CNContactGivenNameKey, CNContactFamilyNameKey,
-                            CNContactPhoneNumbersKey, CNContactImageDataAvailableKey,
-                            CNContactThumbnailImageDataKey]
+                            CNContactPhoneNumbersKey]
 
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
                 request.sortOrder = .familyName

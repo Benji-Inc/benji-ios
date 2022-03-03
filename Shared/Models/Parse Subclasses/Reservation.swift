@@ -187,6 +187,7 @@ extension Reservation: UIActivityItemSource {
         return self.metadata
     }
 
+    /// Returns all reservations that are unclaimed.
     static func getAllUnclaimed() async -> [Reservation] {
         let query = Reservation.allUnclaimedQuery()
         do {
