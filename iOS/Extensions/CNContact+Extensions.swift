@@ -100,6 +100,7 @@ extension CNContact: PersonType {
         // Set the font size to something large so it will assured to be shrunk down to fit the label.
         label.font = FontType.regularBold.font.withSize(100)
         label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
 
         // Make the image small, but make sure the resolution is high enough so it doens't look bad
         // in a thumbnail.
