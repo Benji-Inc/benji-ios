@@ -211,8 +211,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
-                                         sort: [Sorting(key: .createdAt, isAscending: true)],
-                                         pageSize: .channelsPageSize,
+                                         sort: [Sorting(key: .updatedAt, isAscending: true)],
+                                         pageSize: 5,
                                          messagesLimit: 1)
             
             await self.loadConversations(with: query)
@@ -232,8 +232,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
-                                         sort: [Sorting(key: .updatedAt, isAscending: true)],
-                                         pageSize: 5,
+                                         sort: [Sorting(key: .createdAt, isAscending: true)],
+                                         pageSize: .channelsPageSize,
                                          messagesLimit: 1)
             
             await self.loadConversations(with: query)
