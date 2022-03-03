@@ -16,6 +16,7 @@ import Localization
 class PeopleCoordinator: PresentableCoordinator<[Person]> {
 
     private lazy var peopleNavController = PeopleNavigationController()
+    private var messageController: MessageComposerViewController?
 
     var peopleToInvite: [Person] {
         return self.peopleNavController.peopleVC.selectedPeople
@@ -207,6 +208,10 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
             messageComposer.recipients = [phone]
             messageComposer.body = message
             messageComposer.messageComposeDelegate = self
+
+            // HACK: For some reason we need to keep a reference to the message composer to prevent
+            // weird warnings from appearing when its dismissed.
+            self.messageController = messageComposer
 
             self.peopleNavController.present(messageComposer, animated: true)
 
