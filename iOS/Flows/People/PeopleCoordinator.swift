@@ -31,8 +31,6 @@ class PeopleCoordinator: PresentableCoordinator<[Person]> {
     
     var selectedConversationCID: ConversationId?
 
-    @Published private var messageComposeResult: MessageComposeResult?
-
     override func toPresentable() -> DismissableVC {
         return self.peopleNavController
     }
