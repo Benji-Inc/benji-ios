@@ -51,8 +51,22 @@ final class Notice: PFObject, PFSubclassing {
         get { self.getObject(for: .body) }
     }
     
-    var unreadMessageIds: [String] {
-        get { self.attributes?["unreadMessageIds"] as? [String] ?? [] }
+    var unreadMessages: [[String: String]] {
+        get {
+            guard let value = self.attributes?["unreadMessages"],
+                  let array = value as? [[String: String]] else { return [[:]] }
+            
+            var messages: [[String: String]] = []
+            
+            array.forEach { dict in
+                if let cid = dict["cid"],
+                   let messageId = dict["messageId"] {
+                    messages.append([messageId: cid])
+                }
+            }
+            
+            return messages
+        }
     }
 }
 
