@@ -89,10 +89,6 @@ extension CNContact: PersonType {
     }
 
     var image: UIImage? {
-        if let data = self.thumbnailImageData {
-            return UIImage(data: data)
-        }
-
         return self.imageWith(text: self.initials)
     }
 
