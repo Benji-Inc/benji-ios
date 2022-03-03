@@ -15,7 +15,7 @@ extension MainCoordinator {
     @MainActor
     func runConversationListFlow(with deepLink: DeepLinkable?) async {
         // Ensure that the chat client is initialized for the logged in user.
-        if !ChatClient.isConnected || ChatClient.shared.currentUserId != User.current()?.userObjectId {
+        if !ChatClient.isConnected || ChatClient.shared.currentUserId != User.current()?.objectId {
             try? await ChatClient.initialize(for: User.current()!)
         }
 

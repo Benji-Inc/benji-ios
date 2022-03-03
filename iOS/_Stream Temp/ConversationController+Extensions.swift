@@ -113,10 +113,10 @@ extension ConversationController {
     func donateIntent(for sendable: Sendable) async {
         guard case MessageKind.text(let text) = sendable.kind else { return }
         let memberIDs = self.conversation.lastActiveMembers.compactMap { member in
-            return member.id
+            return member.personId
         }
 
-        let recipients = UserStore.shared.users.filter { user in
+        let recipients = PeopleStore.shared.users.filter { user in
             return memberIDs.contains(user.objectId ?? String())
         }.compactMap { user in
             return user.iNPerson

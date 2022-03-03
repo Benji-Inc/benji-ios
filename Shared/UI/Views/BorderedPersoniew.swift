@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BorderedAvatarView: AvatarView {
+class BorderedPersoniew: PersonView {
     
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
@@ -46,24 +46,26 @@ class BorderedAvatarView: AvatarView {
         self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
     }
-    
-    override func subscribeToUpdates(for user: User) {
-        super.subscribeToUpdates(for: user)
-        self.setColors(for: user)
+
+    override func set(person: PersonType?) {
+        super.set(person: person)
+
+        guard let person = person else { return }
+        self.setColors(for: person)
+    }
+
+    override func didRecieveUpdateFor(person: PersonType) {
+        super.didRecieveUpdateFor(person: person)
+        self.setColors(for: person)
     }
     
-    override func didRecieveUpdateFor(user: User) {
-        super.didRecieveUpdateFor(user: user)
-        self.setColors(for: user)
-    }
-    
-    private func setColors(for user: User) {
-        let isAvailable = user.focusStatus == .available
+    private func setColors(for person: PersonType) {
+        let isAvailable = person.focusStatus == .available
         let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.gray.color.cgColor
-        
+
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.pulseLayer.borderColor = color
-            self.shadowLayer.shadowColor = color 
+            self.shadowLayer.shadowColor = color
         }
     }
     

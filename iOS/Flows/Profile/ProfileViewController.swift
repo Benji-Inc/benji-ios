@@ -13,7 +13,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                              UserConversationsDataSource.ItemType,
                              UserConversationsDataSource> {
     
-    private var avatar: Avatar
+    private var person: PersonType
     
     lazy var header = ProfileHeaderView()
     private lazy var contextCuesVC = ContextCuesViewController()
@@ -33,8 +33,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
         
-    init(with avatar: Avatar) {
-        self.avatar = avatar
+    init(with person: PersonType) {
+        self.person = person
         super.init(with: UserConversationsCollectionView())
     }
     
@@ -91,9 +91,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.collectionView.allowsMultipleSelection = false 
                 
         Task {
-            if let user = self.avatar as? User,
+            if let user = self.person as? User,
                let updated = try? await user.retrieveDataIfNeeded() {
-                self.avatar = updated
+                self.person = updated
                 self.header.configure(with: updated)
                 self.loadInitialData()
                 if !user.isCurrentUser {
@@ -104,10 +104,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 }
                 self.loadRecents()
                 self.view.layoutNow()
-            } else if let userId = self.avatar.userObjectId,
-                        let user = try? await User.getObject(with: userId),
+            } else if let user = try? await User.getObject(with: self.person.personId),
                       let updated = try? await user.retrieveDataIfNeeded() {
-                self.avatar = updated
+                self.person = updated
                 self.header.configure(with: updated)
                 self.loadInitialData()
                 if !user.isCurrentUser {
@@ -179,13 +178,13 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     private func loadArchive() {
         Task { [weak self] in
-            guard let `self` = self, let user = self.avatar as? User else { return }
+            guard let `self` = self, let user = self.person as? User else { return }
             var userIds: [String] = []
             
             if user.isCurrentUser {
-                userIds.append(user.userObjectId!)
+                userIds.append(user.objectId!)
             } else {
-                userIds = [User.current()!.objectId!, user.userObjectId!]
+                userIds = [User.current()!.objectId!, user.objectId!]
             }
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
@@ -200,13 +199,13 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     private func loadRecents() {
         Task { [weak self] in
-            guard let `self` = self, let user = self.avatar as? User else { return }
+            guard let `self` = self, let user = self.person as? User else { return }
             var userIds: [String] = []
             
             if user.isCurrentUser {
-                userIds.append(user.userObjectId!)
+                userIds.append(user.objectId!)
             } else {
-                userIds = [User.current()!.objectId!, user.userObjectId!]
+                userIds = [User.current()!.objectId!, user.objectId!]
             }
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
@@ -221,13 +220,13 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     private func loadAll() {
         Task { [weak self] in
-            guard let `self` = self, let user = self.avatar as? User else { return }
+            guard let `self` = self, let user = self.person as? User else { return }
             var userIds: [String] = []
             
             if user.isCurrentUser {
-                userIds.append(user.userObjectId!)
+                userIds.append(user.objectId!)
             } else {
-                userIds = [User.current()!.objectId!, user.userObjectId!]
+                userIds = [User.current()!.objectId!, user.objectId!]
             }
             
             let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)

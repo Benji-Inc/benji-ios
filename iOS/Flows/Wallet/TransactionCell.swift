@@ -51,7 +51,7 @@ class TransactionContentView: BaseView, UIContentView {
     
     @IBOutlet weak var content: UIView!
     
-    @IBOutlet weak var avatarView: BorderedAvatarView?
+    @IBOutlet weak var avatarView: BorderedPersoniew?
     @IBOutlet weak var titleLabel: ThemeLabel?
     @IBOutlet weak var noteLabel: ThemeLabel?
     @IBOutlet weak var amountLabel: ThemeLabel?
@@ -110,7 +110,7 @@ class TransactionContentView: BaseView, UIContentView {
         Task {
             guard let transaction = try? await item.retrieveDataIfNeeded() else { return }
             if let from = try? await transaction.from?.retrieveDataIfNeeded() {
-                self.avatarView?.set(avatar: from)
+                self.avatarView?.set(person: from)
                 self.titleLabel?.setText(from.fullName)
                 self.setNeedsUpdateConstraints()
             }

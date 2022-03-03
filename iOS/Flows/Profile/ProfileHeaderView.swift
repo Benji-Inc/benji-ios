@@ -22,7 +22,7 @@ class ProfileHeaderView: BaseView {
     
     let bottomLabel = ThemeLabel(font: .regular)
     
-    let avatarView = BorderedAvatarView()
+    let personView = BorderedPersoniew()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -48,13 +48,13 @@ class ProfileHeaderView: BaseView {
         self.addSubview(self.bottomLabel)
         self.bottomLabel.textAlignment = .center
         self.bottomLabel.setText("What I'm up to...")
-        self.addSubview(self.avatarView)
+        self.addSubview(self.personView)
     }
     
     @MainActor
     func configure(with user: User) {
         
-        self.avatarView.set(avatar: user)
+        self.personView.set(person: user)
         self.nameLabel.setText(user.givenName)
         if let position = user.quePosition {
             self.memberLabel.setText("Member #\(position)")
@@ -79,11 +79,11 @@ class ProfileHeaderView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.avatarView.squaredSize = 100
-        self.avatarView.centerOnXAndY()
+        self.personView.squaredSize = 100
+        self.personView.centerOnXAndY()
         
         self.memberLabel.setSize(withWidth: self.width)
-        self.memberLabel.match(.bottom, to: .top, of: self.avatarView, offset: .negative(.xtraLong))
+        self.memberLabel.match(.bottom, to: .top, of: self.personView, offset: .negative(.xtraLong))
         self.memberLabel.centerOnX()
         
         self.nameLabel.setSize(withWidth: self.width)
@@ -91,23 +91,23 @@ class ProfileHeaderView: BaseView {
         self.nameLabel.centerOnX()
         
         self.localLabel.setSize(withWidth: self.width)
-        self.localLabel.match(.right, to: .left, of: self.avatarView, offset: .negative(.xtraLong))
-        self.localLabel.bottom = self.avatarView.centerY - 2
+        self.localLabel.match(.right, to: .left, of: self.personView, offset: .negative(.xtraLong))
+        self.localLabel.bottom = self.personView.centerY - 2
         
         self.timeLabel.setSize(withWidth: self.width)
         self.timeLabel.match(.right, to: .right, of: self.localLabel)
-        self.timeLabel.top = self.avatarView.centerY + 2
+        self.timeLabel.top = self.personView.centerY + 2
         
         self.bottomLabel.setSize(withWidth: self.width)
-        self.bottomLabel.match(.top, to: .bottom, of: self.avatarView, offset: .xtraLong)
+        self.bottomLabel.match(.top, to: .bottom, of: self.personView, offset: .xtraLong)
         self.bottomLabel.centerOnX()
         
         self.statusLabel.setSize(withWidth: self.width)
-        self.statusLabel.match(.left, to: .right, of: self.avatarView, offset: .xtraLong)
-        self.statusLabel.bottom = self.avatarView.centerY - 2
+        self.statusLabel.match(.left, to: .right, of: self.personView, offset: .xtraLong)
+        self.statusLabel.bottom = self.personView.centerY - 2
         
         self.focusLabel.setSize(withWidth: self.width)
         self.focusLabel.match(.left, to: .left, of: self.statusLabel)
-        self.focusLabel.top = self.avatarView.centerY + 2
+        self.focusLabel.top = self.personView.centerY + 2
     }
 }

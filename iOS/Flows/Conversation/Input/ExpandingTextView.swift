@@ -41,31 +41,31 @@ class ExpandingTextView: TextView {
         self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
 
-    func setPlaceholder(for avatars: [Avatar], isReply: Bool) {
+    func setPlaceholder(for people: [PersonType], isReply: Bool) {
         var placeholderText = isReply ? "Reply to " : "Message "
 
-        if avatars.isEmpty {
+        if people.isEmpty {
             placeholderText = isReply ? "Add Reply" : "Message Someone"
         }
         
-        switch avatars.count {
+        switch people.count {
         case 1:
-            if let avatar = avatars[safe: 0] {
-                placeholderText.append(avatar.givenName)
+            if let person = people[safe: 0] {
+                placeholderText.append(person.givenName)
             }
         case 2:
-            if let avatar1 = avatars[safe: 0], let avatar2 = avatars[safe: 1] {
-                placeholderText.append("\(avatar1.givenName) and \(avatar2.givenName)")
+            if let person1 = people[safe: 0], let person2 = people[safe: 1] {
+                placeholderText.append("\(person1.givenName) and \(person2.givenName)")
             }
         case 3:
-            if let avatar1 = avatars[safe: 0],
-               let avatar2 = avatars[safe: 1],
-               let avatar3 = avatars[safe: 2] {
-                placeholderText.append("\(avatar1.givenName), \(avatar2.givenName), and \(avatar3.givenName)")
+            if let person1 = people[safe: 0],
+               let person2 = people[safe: 1],
+               let person3 = people[safe: 2] {
+                placeholderText.append("\(person1.givenName), \(person2.givenName), and \(person3.givenName)")
             }
         default:
-            if !avatars.isEmpty {
-                placeholderText.append("\(avatars.count) people")
+            if !people.isEmpty {
+                placeholderText.append("\(people.count) people")
             }
         }
 

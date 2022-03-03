@@ -8,16 +8,18 @@
 
 import Foundation
 
-protocol Avatar: ImageDisplayable {
+protocol PersonType: ImageDisplayable {
+    /// The unique identifier for this person. It may represent a server generated uuid, or a client-side contact id.
+    var personId: String { get }
     var initials: String { get }
     var givenName: String { get }
     var familyName: String { get }
     var fullName: String { get }
-    var firstAndLastInitial: String? { get }
     var handle: String { get }
+    var focusStatus: FocusStatus? { get }
 }
 
-extension Avatar {
+extension PersonType {
     
     var fullName: String {
         if self.givenName.isEmpty && self.familyName.isEmpty {
@@ -30,10 +32,5 @@ extension Avatar {
         let firstInitial = String(optional: self.givenName.first?.uppercased())
         let lastInitial = String(optional: self.familyName.first?.uppercased())
         return firstInitial + lastInitial
-    }
-
-    var firstAndLastInitial: String? {
-        let lastInitial = String(optional: self.familyName.first?.lowercased())
-        return self.givenName.lowercased() + " " + lastInitial
     }
 }

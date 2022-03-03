@@ -10,9 +10,9 @@ import Foundation
 import Contacts
 import Combine
 
-class ContactsManger {
+class ContactsManager {
 
-    static let shared = ContactsManger()
+    static let shared = ContactsManager()
     private let store = CNContactStore()
     
     private var fetchedContacts: [CNContact] = []
@@ -39,7 +39,8 @@ class ContactsManger {
     func searchForContact(with predicateType: ContactPredicateType) -> [CNContact] {
         let predicate: NSPredicate
 
-        let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey] as [CNKeyDescriptor]
+        let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey,
+                    CNContactIdentifierKey] as [CNKeyDescriptor]
 
         switch predicateType {
         case .name(let name):
@@ -61,14 +62,15 @@ class ContactsManger {
     }
 
     func fetchContacts() async -> [CNContact] {
-        if !self.fetchedContacts.isEmpty {
+        guard self.fetchedContacts.isEmpty else {
             return self.fetchedContacts
         }
-            // 1.
+        // 1.
         do {
             if try await self.store.requestAccess(for: .contacts) {
                 // 2.
-                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey]
+                let keys = [CNContactIdentifierKey,CNContactGivenNameKey, CNContactFamilyNameKey,
+                            CNContactPhoneNumbersKey]
 
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
                 request.sortOrder = .familyName

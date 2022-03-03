@@ -51,8 +51,8 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         self.handle(isSelected: item.isSelected)
     }
     
-    private func updateName(for avatar: Avatar, highlightText: String?) {
-        self.titleLabel.setText(avatar.fullName)
+    private func updateName(for person: PersonType, highlightText: String?) {
+        self.titleLabel.setText(person.fullName)
         
         if let highlightText = highlightText {
             let attributes: [NSAttributedString.Key : Any] = [.font: FontType.systemBold.font,

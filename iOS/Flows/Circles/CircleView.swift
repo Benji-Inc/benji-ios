@@ -13,7 +13,7 @@ class CircleView: BaseView {
     
     let emptyView = EmptyCircleView()
     let initialsView = InitialsCircleView()
-    let avatarView = CircleAvatarView()
+    let personView = CircleAvatarView()
     var cancellables = Set<AnyCancellable>()
     
     enum State {
@@ -33,11 +33,11 @@ class CircleView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.avatarView.isHidden = true 
+        self.personView.isHidden = true 
         
         self.addSubview(self.emptyView)
         self.addSubview(self.initialsView)
-        self.addSubview(self.avatarView)
+        self.addSubview(self.personView)
         self.clipsToBounds = false
         
         self.$uiState.mainSink { [unowned self] state in
@@ -52,14 +52,14 @@ class CircleView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.avatarView.expandToSuperviewSize()
+        self.personView.expandToSuperviewSize()
         self.initialsView.expandToSuperviewSize()
         self.emptyView.expandToSuperviewSize()
     }
     
     func configure(with item: CircleItem) {
         if let user = item.user {
-            self.avatarView.set(avatar: user)
+            self.personView.set(person: user)
             self.uiState = .user
         } else if let contact = item.contact {
             self.initialsView.configure(with: contact)
@@ -73,15 +73,15 @@ class CircleView: BaseView {
         switch state {
         case .empty:
             self.emptyView.isHidden = false
-            self.avatarView.isHidden = true
+            self.personView.isHidden = true
             self.initialsView.isHidden = true
         case .initials:
             self.emptyView.isHidden = true
-            self.avatarView.isHidden = true
+            self.personView.isHidden = true
             self.initialsView.isHidden = false
         case .user:
             self.emptyView.isHidden = true
-            self.avatarView.isHidden = false
+            self.personView.isHidden = false
             self.initialsView.isHidden = true
         }
     }

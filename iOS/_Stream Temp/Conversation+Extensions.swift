@@ -27,7 +27,7 @@ extension Conversation {
     }
 
     var isOwnedByMe: Bool {
-        return self.createdBy?.id == ChatClient.shared.currentUserId
+        return self.createdBy?.personId == ChatClient.shared.currentUserId
     }
 
     var title: String? {
@@ -40,7 +40,7 @@ extension Conversation {
 
     var description: Localized {
         let members = self.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
+            return member.personId != ChatClient.shared.currentUserId
         }
 
         if members.count == 0 {
@@ -70,7 +70,7 @@ extension Conversation {
     /// Returns the oldest message that the passed in used has not yet read.
     func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
         guard let readState = self.reads.first(where: { readState in
-            return readState.user.id == userID
+            return readState.user.personId == userID
         }) else {
             return nil
         }
@@ -94,7 +94,7 @@ extension Conversation: MessageSequence {
     }
 
     var authorId: String {
-        return self.createdBy!.id
+        return self.createdBy!.personId
     }
 
     var attributes: [String : Any]? {

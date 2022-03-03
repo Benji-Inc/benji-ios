@@ -14,7 +14,7 @@ class ConnectionRequestView: BaseView {
 
     private let containerView = BaseView()
 
-    private let avatarView = AvatarView()
+    private let personView = PersonView()
     private let textView = TextView()
 
     private let acceptButton = ThemeButton()
@@ -35,7 +35,7 @@ class ConnectionRequestView: BaseView {
         self.containerView.set(backgroundColor: .B1)
 
         self.containerView.addSubview(self.textView)
-        self.containerView.addSubview(self.avatarView)
+        self.containerView.addSubview(self.personView)
         self.containerView.addSubview(self.acceptButton)
         self.acceptButton.set(style: .normal(color: .B2, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
@@ -72,7 +72,7 @@ class ConnectionRequestView: BaseView {
 
                 self.textView.linkTextAttributes = [.foregroundColor: ThemeColor.D1.color, .underlineStyle: 0]
                 self.textView.text = localized(text)
-                self.avatarView.set(avatar: userWithData)
+                self.personView.set(person: userWithData)
                 self.layoutNow()
             } else {
                 self.showSuccess(for: item, user: userWithData)
@@ -87,16 +87,16 @@ class ConnectionRequestView: BaseView {
 
         self.containerView.expandToSuperviewSize()
 
-        self.avatarView.left = Theme.contentOffset.half
-        self.avatarView.top = Theme.contentOffset.half
-        self.avatarView.setSize(for: self.containerView.height - Theme.contentOffset)
+        self.personView.left = Theme.contentOffset.half
+        self.personView.top = Theme.contentOffset.half
+        self.personView.setSize(for: self.containerView.height - Theme.contentOffset)
 
-        let maxLabelWidth = self.containerView.width - self.avatarView.right - Theme.contentOffset
+        let maxLabelWidth = self.containerView.width - self.personView.right - Theme.contentOffset
         self.textView.setSize(withMaxWidth: maxLabelWidth)
-        self.textView.match(.top, to: .top, of: self.avatarView)
-        self.textView.match(.left, to: .right, of: self.avatarView, offset: .standard)
+        self.textView.match(.top, to: .top, of: self.personView)
+        self.textView.match(.left, to: .right, of: self.personView, offset: .standard)
 
-        let buttonWidth = (self.containerView.width - self.avatarView.right - Theme.contentOffset - Theme.contentOffset.half) * 0.5
+        let buttonWidth = (self.containerView.width - self.personView.right - Theme.contentOffset - Theme.contentOffset.half) * 0.5
 
         self.acceptButton.size = CGSize(width: buttonWidth, height: 40)
         self.acceptButton.match(.right, to: .right, of: self.containerView, offset: .standard)
