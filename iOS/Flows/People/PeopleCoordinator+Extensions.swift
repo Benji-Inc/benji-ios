@@ -77,7 +77,6 @@ extension PeopleCoordinator {
             // Ensure that the reservation metadata is prepared before we show the reservation
             //try await reservation.prepareMetadata(andUpdate: [])
             try await self.showConnectionAlert(for: matchingUser)
-            try await reservation.saveLocalThenServer()
         } catch {
             // If there's already a reservation for this contact, just send a reminder text.
             if reservation.contactId == contact?.identifier {

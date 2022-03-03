@@ -144,7 +144,7 @@ class PeopleStore {
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { query, event in
             switch event {
-            case .entered(let object), .created(let object):
+            case .entered(let object), .created(let object), .updated(let object):
                 guard let reservation = object as? Reservation,
                       let contactId = reservation.contactId else { return }
 
@@ -155,8 +155,6 @@ class PeopleStore {
                             return
                         }
                 self.contactsDictionary[contactId] = contact
-            case .updated:
-                break
             case .left(let object), .deleted(let object):
                 guard let reservation = object as? Reservation,
                       let contactId = reservation.contactId else { return }
