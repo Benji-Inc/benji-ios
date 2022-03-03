@@ -24,7 +24,7 @@ struct Person: PersonType, Hashable, Comparable {
     }
 
     var personId: String {
-        return identifier
+        return self.identifier
     }
 
     var identifier: String {

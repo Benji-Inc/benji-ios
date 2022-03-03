@@ -11,21 +11,27 @@ import Parse
 
 struct CreateConnection: CloudFunction {
     
-    typealias ReturnType = Any
+    typealias ReturnType = Connection
     
     var to: User
     
     @discardableResult
     func makeRequest(andUpdate statusables: [Statusable],
-                     viewsToIgnore: [UIView]) async throws -> Any {
+                     viewsToIgnore: [UIView]) async throws -> Connection {
         
         let params = ["to": self.to.objectId!,
                       "status": Connection.Status.accepted.rawValue]
         
-        return try await self.makeRequest(andUpdate: statusables,
+        let object = try await self.makeRequest(andUpdate: statusables,
                                           params: params,
                                           callName: "createConnection",
                                           viewsToIgnore: viewsToIgnore)
+
+        if let connection = object as? Connection {
+            return connection
+        } else {
+            throw ClientError.apiError(detail: "Unable to create connection.")
+        }
     }
 }
 

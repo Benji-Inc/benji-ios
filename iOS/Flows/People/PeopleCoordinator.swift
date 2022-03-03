@@ -56,7 +56,7 @@ extension PeopleCoordinator {
     @MainActor
     func inviteRemainingPeople() async {
         // If there are no more people to invite, then finish the flow.
-        guard let person = self.peopleToInvite[safe: self.inviteIndex] else {
+        guard var person = self.peopleToInvite[safe: self.inviteIndex] else {
             await self.finishInviting()
             return
         }
@@ -72,29 +72,35 @@ extension PeopleCoordinator {
             // Do nothing because the person is already connected.
         } else {
             // The person is not connected, we'll need to try inviting them to connect.
-            await self.invite(person: person)
+            if let connection = await self.invite(person: person) {
+                // If a connection was made, update the person's connection info.
+                person.connection = connection
+            }
         }
 
-        // Keep track of who was selected for invitation.
+        // Keep track of who was connected/invited.
         self.invitedPeople.append(person)
 
+        // Continue inviting the rest of the people.
         await self.inviteRemainingPeople()
     }
 
-    func invite(person: Person) async {
+    func invite(person: Person) async -> Connection? {
         await self.peopleNavController.peopleVC.showLoading(for: person)
 
         // This person is not in you contacts, so you can't invite them.
-        guard let contact = person.cnContact else { return }
+        guard let contact = person.cnContact else { return nil }
 
         // If the user already has an account, we can just connect with them directly.
         if let user = await self.findUser(with: contact) {
-            await self.presentConnectionFlow(for: user)
+            return await self.presentConnectionFlow(for: user)
         } else if let reservation = self.getReservation(for: contact) {
             // Get a valid reservation object that we can use to invite this person. Then prompt the user
             // to send them a text
             await self.sendText(to: contact, with: reservation)
         }
+
+        return nil
     }
 
     /// Returns the reservation that should be used to invite this person. Nil is returned if there are no valid reservation objects left that can be used.
@@ -127,7 +133,7 @@ extension PeopleCoordinator {
     }
 
     /// Presents an alert that asks if the user wants to connect with the passed in user. Finishes once a connection is made or the user cancels.
-    func presentConnectionFlow(for user: User) async {
+    func presentConnectionFlow(for user: User) async -> Connection? {
         return await withCheckedContinuation { continuation in
             let title = LocalizedString(id: "", arguments: [user.fullName], default: "Connect with @(name)?")
             let titleText = localized(title)
@@ -139,13 +145,13 @@ extension PeopleCoordinator {
                                           preferredStyle: .alert)
 
             let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
-                continuation.resume(returning: ())
+                continuation.resume(returning: nil)
             }
 
             let ok = UIAlertAction(title: "Ok", style: .default) { [unowned self] (_) in
                 Task {
-                    await self.createConnection(with: user)
-                    continuation.resume(returning: ())
+                    let connection = await self.createConnection(with: user)
+                    continuation.resume(returning: connection)
                 }
             }
 
@@ -156,11 +162,12 @@ extension PeopleCoordinator {
         }
     }
 
-    private func createConnection(with user: User) async {
+    private func createConnection(with user: User) async -> Connection? {
         do {
-            try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
+            return try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
         } catch {
             logError(error)
+            return nil
         }
     }
 

@@ -65,35 +65,36 @@ extension ConversationListCoordinator {
 
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.selectedConversationCID = self.activeConversation?.cid
-        
-        coordinator.toPresentable().dismissHandlers.append
-        { [unowned self, unowned coordinator = coordinator] in
+
+        self.present(coordinator, finishedHandler: { [unowned self] invitedPeople in
+            self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
+        }, cancelHandler: { [unowned self, unowned coordinator = coordinator] in
+            let invitedPeople = coordinator.invitedPeople
+            self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
+        })
+    }
+
+    private func handleInviteFlowEnded(givenInvitedPeople invitedPeople: [Person],
+                                                       activeConversation: Conversation) {
+
+        if invitedPeople.isEmpty {
+            // If the user didn't invite anyone to the conversation and the conversation doesn't have
+            // any existing members, ask them if they'd like to delete it.
             Task {
-                let peopleInConversation = await PeopleStore.shared.getPeople(for: conversation)
-                if peopleInConversation.isEmpty {
-                    self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
-                }
+                let peopleInConversation = await PeopleStore.shared.getPeople(for: activeConversation)
+                guard peopleInConversation.isEmpty else { return }
+
+                self.presentDeleteConversationAlert(cid: activeConversation.cid)
             }
-        }
-        self.present(coordinator) { [unowned self] invitedPeople in
-            if invitedPeople.isEmpty {
-                // If the user didn't invite anyone to the conversation and the conversation doesn't have
-                // any existing members, ask them if they'd like to delete it.
-                Task {
-                    let peopleInConversation = await PeopleStore.shared.getPeople(for: conversation)
-                    if peopleInConversation.isEmpty {
-                        self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
-                    }
-                }
-            } else {
-                // Add all of the invited people to the conversation.
-                self.add(people: invitedPeople, to: conversation)
-            }
+        } else {
+            // Add all of the invited people to the conversation.
+            self.add(people: invitedPeople, to: activeConversation)
         }
     }
     
     private func present<ChildResult>(_ coordinator: PresentableCoordinator<ChildResult>,
-                                      finishedHandler: ((ChildResult) -> Void)? = nil) {
+                                      finishedHandler: ((ChildResult) -> Void)? = nil,
+                                      cancelHandler: (() -> Void)? = nil) {
         self.removeChild()
         
         // Because of how the People are presented, we need to properly reset the KeyboardManager.
@@ -110,7 +111,7 @@ extension ConversationListCoordinator {
         
         self.conversationListVC.resignFirstResponder()
         self.conversationListVC.updateUI(for: .read, forceLayout: true)
-        self.router.present(coordinator, source: self.conversationListVC)
+        self.router.present(coordinator, source: self.conversationListVC, cancelHandler: cancelHandler)
     }
     
     func add(people: [Person], to conversation: Conversation) {
