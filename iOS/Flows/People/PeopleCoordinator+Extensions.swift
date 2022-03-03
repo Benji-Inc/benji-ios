@@ -33,7 +33,6 @@ extension PeopleCoordinator {
 
     @MainActor
     func updateInvitation() async {
-
         if let person = self.peopleToInvite[safe: self.inviteIndex] {
             if let connection = try? await person.connection?.retrieveDataIfNeeded(),
                 connection.status == .accepted {
@@ -80,10 +79,13 @@ extension PeopleCoordinator {
             try await self.showConnectionAlert(for: matchingUser)
             try await reservation.saveLocalThenServer()
         } catch {
+            // If there's already a reservation for this contact, just send a reminder text.
             if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
                 _ = try? await reservation.saveLocalThenServer()
             } else {
+                // If this contact hasn't been assigned to reservation yet, then update the contact id
+                // and save it to the server.
                 reservation.contactId = contact?.identifier
                 _ = try? await reservation.saveLocalThenServer()
                 self.sendText(with: reservation.message, phone: phone)
