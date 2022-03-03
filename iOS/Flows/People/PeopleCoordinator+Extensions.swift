@@ -70,14 +70,14 @@ extension PeopleCoordinator {
         // Search for user with phone number
         guard let phone = contact?.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
 
-        reservation.conversationCid = self.selectedConversationCID?.description
-
         do {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
             // Ensure that the reservation metadata is prepared before we show the reservation
             //try await reservation.prepareMetadata(andUpdate: [])
             try await self.showConnectionAlert(for: matchingUser)
         } catch {
+            // This user doesn't exist yet so they'll need the reservation to access the conversation.
+            reservation.conversationCid = self.selectedConversationCID?.description
             // If there's already a reservation for this contact, just send a reminder text.
             if reservation.contactId == contact?.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
