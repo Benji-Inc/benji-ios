@@ -28,7 +28,7 @@ extension String {
     }
 }
 
-/// A phone number that is considerer equal if the last ten digits are the same as another fuzzy phone number.
+/// A phone number that is considered equal if the last ten digits are the same as another fuzzy phone number.
 /// NOTE: This equality check can fail and may (rarely) result in false positives.
 struct FuzzyPhoneNumber: Hashable {
 
