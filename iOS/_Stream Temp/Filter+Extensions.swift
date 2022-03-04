@@ -33,16 +33,16 @@ extension Filter where Scope: AnyChannelListFilterScope {
         return .and(memberFilters)
     }
 
-    /// Filter to match conversations that contain all the members with the passed in user ids. May contain other members.
-    static func containMembers(_ members: [ConversationMember]) -> Filter<Scope> {
+    /// Filter to match conversations that contain all the passed in members. May contain other members.
+    static func containsAtLeastTheseMembers(_ members: [ConversationMember]) -> Filter<Scope> {
         let userIds = members.map { member in
             return member.id
         }
-        return .contains(userIds: userIds)
+        return .containsAtLeastThese(userIds: userIds)
     }
 
-    /// Filter to match conversations that contain all the passed in members. May contain other members.
-    static func contains(userIds: [UserId]) -> Filter<Scope> {
+    /// Filter to match conversations that contain all the members with the passed in user ids. May contain other members.
+    static func containsAtLeastThese(userIds: [UserId]) -> Filter<Scope> {
         var memberFilters: [Filter<Scope>] = []
         for userID in userIds {
             memberFilters.append(.containMembers(userIds: [userID]))

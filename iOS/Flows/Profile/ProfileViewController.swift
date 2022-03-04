@@ -182,7 +182,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
 
-            let filter = Filter<ChannelListFilterScope>.contains(userIds: userIds)
+            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: .and([.equal("hidden", to: true), filter]),
                                          sort: [Sorting(key: .createdAt, isAscending: true)],
                                          pageSize: .channelsPageSize,
@@ -205,7 +205,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
 
-            let filter = Filter<ChannelListFilterScope>.contains(userIds: userIds)
+            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
                                          sort: [Sorting(key: .updatedAt, isAscending: true)],
                                          pageSize: 5,
@@ -228,7 +228,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
             
-            let filter = Filter<ChannelListFilterScope>.contains(userIds: userIds)
+            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
                                          sort: [Sorting(key: .createdAt, isAscending: true)],
                                          pageSize: .channelsPageSize,
