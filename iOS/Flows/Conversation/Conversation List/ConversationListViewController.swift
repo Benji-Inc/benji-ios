@@ -284,10 +284,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
             ConversationsManager.shared.activeConversation = conversation
 
             self.messageInputTask = Task { [weak self] in
-                let members = conversation.lastActiveMembers.filter { member in
-                    return member.personId != ChatClient.shared.currentUserId
-                }
-                guard let people = try? await PeopleStore.shared.getPeople(for: members) else { return }
+                let people = await PeopleStore.shared.getPeople(for: conversation)
 
                 guard !Task.isCancelled else { return }
 

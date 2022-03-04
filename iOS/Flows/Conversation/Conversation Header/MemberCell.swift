@@ -12,15 +12,15 @@ import Lottie
 
 struct Member: Hashable {
     
-    var displayable: AnyHashableDisplayable
+    var personId: String
     var conversationController: ConversationController
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
-        return lhs.displayable.value.personId == rhs.displayable.value.personId
+        return lhs.personId == rhs.personId
     }
 
     func hash(into hasher: inout Hasher) {
-        self.displayable.value.personId.hash(into: &hasher)
+        self.personId.hash(into: &hasher)
     }
 }
 
@@ -30,7 +30,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: Member?
 
-    let personView = BorderedAvatarView()
+    let personView = BorderedPersoniew()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -40,42 +40,47 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.personView)
+
+        self.subscribeToUpdates()
     }
 
-    func configure(with item: Member) {
-        self.personView.set(person: item.displayable.value)
+    /// A reference to a task for configuring the cell.
+    private var configurationTask: Task<Void, Never>?
 
-        Task {
-            let personId = item.displayable.value.personId
+    func configure(with item: Member) {
+        self.configurationTask?.cancel()
+
+        self.configurationTask = Task {
+            let personId = item.personId
             guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
 
-            self.subscribeToUpdates(for: person)
-        }
-                
-        let typingUsers = item.conversationController.conversation.currentlyTypingUsers
-        if typingUsers.contains(where: { typingUser in
-            typingUser.personId == item.displayable.value.personId
-        }) {
-            self.personView.beginTyping()
-        } else {
-            self.personView.endTyping()
+            guard !Task.isCancelled else { return }
+
+            self.personView.set(person: person)
+            let typingUsers = item.conversationController.conversation.currentlyTypingUsers
+            if typingUsers.contains(where: { typingUser in
+                typingUser.personId == personId
+            }) {
+                self.personView.beginTyping()
+            } else {
+                self.personView.endTyping()
+            }
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.configurationTask?.cancel()
         self.personView.set(person: nil)
     }
     
-    private func subscribeToUpdates(for person: PersonType) {
-        #warning("restore this")
-//        UserStore.shared.$userUpdated.filter { updatedUser in
-//            updatedUser?.objectId == user.userObjectId
-//        }.mainSink { updatedUser in
-//           // self.statusView.update(status: updatedUser?.focusStatus ?? .available)
-//        }.store(in: &self.cancellables)
-//        
-//        //self.statusView.update(status: user.focusStatus ?? .available)
+    private func subscribeToUpdates() {
+        // Make sure that the person's focus status up to date.
+        PeopleStore.shared.$personUpdated.filter { [unowned self] updatedPerson in
+            self.currentItem?.personId == updatedPerson?.personId
+        }.mainSink { [unowned self] updatedPerson in
+            self.personView.set(person: updatedPerson)
+        }.store(in: &self.cancellables)
     }
 }

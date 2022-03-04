@@ -51,7 +51,7 @@ class TransactionContentView: BaseView, UIContentView {
     
     @IBOutlet weak var content: UIView!
     
-    @IBOutlet weak var avatarView: BorderedAvatarView?
+    @IBOutlet weak var avatarView: BorderedPersoniew?
     @IBOutlet weak var titleLabel: ThemeLabel?
     @IBOutlet weak var noteLabel: ThemeLabel?
     @IBOutlet weak var amountLabel: ThemeLabel?

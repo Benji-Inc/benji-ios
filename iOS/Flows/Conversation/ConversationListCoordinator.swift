@@ -68,7 +68,11 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             guard let first = items.first else { return }
             switch first {
             case .member(let member):
-                self.presentProfile(for: member.displayable.value)
+                guard let person = PeopleStore.shared.people.first(where: { person in
+                    return person.personId == member.personId
+                }) else { return }
+
+                self.presentProfile(for: person)
             default:
                 break 
             }

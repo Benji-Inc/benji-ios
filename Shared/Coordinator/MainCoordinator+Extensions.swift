@@ -13,23 +13,23 @@ extension MainCoordinator: LaunchManagerDelegate {
 
     nonisolated func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity) {
         Task.onMainActor {
-            if let furthestChild = self.furthestChild as? LaunchActivityHandler {
-                furthestChild.handle(launchActivity: activity)
-            }
+            guard let furthestChild = self.furthestChild as? LaunchActivityHandler else { return }
+            furthestChild.handle(launchActivity: activity)
         }
     }
 
     func subscribeToUserUpdates() {
-        PeopleStore.shared.$userDeleted
-            .filter({ user in
-                user?.isCurrentUser ?? false
+        PeopleStore.shared.$personDeleted
+            .filter({ person in
+                guard let personId = person?.personId else { return false }
+                return personId == User.current()?.personId
             })
-            .mainSink { user in
+            .mainSink { [unowned self] user in
                 self.showLogOutAlert()
             }.store(in: &self.cancellables)
     }
 
-    #if APPCLIP
+#if APPCLIP
     func handleAppClip(result: LaunchStatus) {
         switch result {
         case .success(let object):
@@ -39,7 +39,7 @@ extension MainCoordinator: LaunchManagerDelegate {
             break
         }
     }
-    #endif
+#endif
 }
 
 extension MainCoordinator: ToastSchedulerDelegate {

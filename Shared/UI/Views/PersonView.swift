@@ -13,27 +13,6 @@ class PersonView: DisplayableImageView {
     
     // MARK: - Properties
 
-    var initials: String? {
-        didSet {
-            self.setImageFrom(initials: self.initials)
-        }
-    }
-
-    private let label = ThemeLabel(font: .regularBold)
-
-    private func setImageFrom(initials: String?) {
-        guard let initials = initials else {
-            self.label.text = nil
-            return
-        }
-
-        self.label.isHidden = false
-        self.label.setText(initials.uppercased())
-        self.label.textAlignment = .center
-        self.state = .success
-        self.layoutNow()
-    }
-
     func getSize(for height: CGFloat) -> CGSize {
         return CGSize(width: height, height: height)
     }
@@ -44,8 +23,7 @@ class PersonView: DisplayableImageView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-        
-        self.insertSubview(self.label, aboveSubview: self.imageView)
+
         self.imageView.contentMode = .scaleAspectFill
         self.imageView.layer.masksToBounds = true
         self.imageView.clipsToBounds = true
@@ -59,12 +37,6 @@ class PersonView: DisplayableImageView {
         self.addInteraction(interaction)
 
         self.subscribeToUpdates()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.label.expandToSuperviewSize()
     }
 
     // MARK: - Open setters

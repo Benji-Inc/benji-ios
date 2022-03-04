@@ -174,7 +174,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
-        if ContactsManger.shared.hasPermissions {
+        if ContactsManager.shared.hasPermissions {
             self.loadContacts()
         }
         
@@ -189,7 +189,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.reservations = await Reservation.getAllUnclaimed()
             self.updateNavLeftItem()
             
-            let contacts = await ContactsManger.shared.fetchContacts().compactMap({ contact in
+            let contacts = await ContactsManager.shared.fetchContacts().compactMap({ contact in
                 return Person(withContact: contact)
             })
             

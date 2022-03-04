@@ -119,7 +119,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         
         for i in 0..<limit {
             if let contactId = self.circle.invitedContacts[safe: i],
-                      let contact = ContactsManger.shared.searchForContact(with: .identifier(contactId)).first {
+                      let contact = ContactsManager.shared.searchForContact(with: .identifier(contactId)).first {
                 allItems.append(.item(CircleItem(position: i, contact: contact)))
                 itemCount += 1
             }
