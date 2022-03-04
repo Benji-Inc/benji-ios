@@ -58,7 +58,7 @@ class SwipeableInputAccessoryView: BaseView {
     /// An invisible button to handle taps and pan gestures.
     @IBOutlet var gestureButton: UIButton!
     @IBOutlet var countView: CharacterCountView!
-    @IBOutlet var avatarView: BorderedAvatarView!
+    @IBOutlet var avatarView: BorderedPersoniew!
 
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!

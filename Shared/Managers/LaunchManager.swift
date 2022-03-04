@@ -56,7 +56,7 @@ class LaunchManager {
             _ = try? await user.fetchInBackground()
 
             // Pre-load contacts
-            _ = ContactsManger.shared
+            _ = ContactsManager.shared
             async let first: Void
             = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             // Initialize the people store

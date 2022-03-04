@@ -104,6 +104,7 @@ class DisplayableImageView: BaseView {
         self.animationView.centerOnXAndY()
     }
 
+    @MainActor
     private func updateImageView(with displayable: ImageDisplayable?) async {
         if let photo = displayable?.image {
             await self.set(image: photo, state: .success)
