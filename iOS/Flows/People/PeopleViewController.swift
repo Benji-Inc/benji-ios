@@ -118,7 +118,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             case .person(let person):
                 var copy = person
                 copy.isSelected = self.selectedPeople.contains(where: { current in
-                    return current.identifier == person.identifier
+                    return current.personId == person.personId
                 })
 
                 return .person(copy)
@@ -170,22 +170,37 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     // MARK: Data Loading
 
     override func retrieveDataForSnapshot() async -> [PeopleSection : [PersonItem]] {
-
         var data: [PeopleSection: [PersonItem]] = [:]
 
-        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [],
-                                                                        viewsToIgnore: []).filter({ (connection) -> Bool in
-            return !connection.nonMeUser.isNil
-        }), let _ = try? await connections.asyncMap({ connection in
-            return try await connection.nonMeUser!.retrieveDataIfNeeded()
-        }) {
-            let connectedPeople = connections.map { connection in
-                return Person(withConnection: connection)
+        let connections = (try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])) ?? []
+
+        var connectedPeople: [Person] = []
+        await connections.asyncForEach { connection in
+            guard let userId = connection.nonMeUser?.personId else { return }
+
+            if let updatedUser = await PeopleStore.shared.getPerson(withPersonId: userId) {
+                let person = Person(person: updatedUser, connection: connection)
+                connectedPeople.append(person)
             }
-
-            self.allPeople.append(contentsOf: connectedPeople)
         }
+        self.allPeople.append(contentsOf: connectedPeople)
 
+        let users = PeopleStore.shared.users
+        let unconnectedUsers = users.filter { user in
+            guard !user.isCurrentUser else { return false }
+
+            // Filter out users who are already connected
+            let isConnected = connectedPeople.contains(where: { connectedPerson in
+                return user.personId == connectedPerson.personId
+            })
+            return !isConnected
+        }
+        let unconnectedPeople = unconnectedUsers.map { unconnectedUser in
+            return Person(person: unconnectedUser, connection: nil)
+        }
+        self.allPeople.append(contentsOf: unconnectedPeople)
+
+        // Then list all the existing Jibber users who you aren't connected to, but are in your contacts.
         data[.people] = self.allPeople.sorted().compactMap({ person in
             return .person(person)
         })

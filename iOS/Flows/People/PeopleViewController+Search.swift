@@ -19,7 +19,7 @@ extension PeopleViewController: UISearchBarDelegate {
         let items: [PeopleCollectionViewDataSource.ItemType] = self.allPeople.sorted().map { person in
             var copy = person
             copy.isSelected = self.selectedPeople.contains(where: { current in
-                return current.identifier == person.identifier
+                return current.personId == person.personId
             })
             return .person(copy)
         }

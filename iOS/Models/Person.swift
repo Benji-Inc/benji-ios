@@ -23,13 +23,7 @@ struct Person: PersonType, Hashable, Comparable {
         }
     }
 
-    var personId: String {
-        return self.identifier
-    }
-
-    var identifier: String {
-        return self.connection?.objectId ?? self.cnContact?.identifier ?? ""
-    }
+    var personId: String
     
     var familyName: String
     var givenName: String
@@ -43,14 +37,15 @@ struct Person: PersonType, Hashable, Comparable {
     var image: UIImage?
     
     var highlightText: String?
-    
+
     var connection: Connection?
-    
+
     var cnContact: CNContact?
     
     var isSelected: Bool
     
     init(withContact contact: CNContact, isSelected: Bool = false) {
+        self.personId = contact.personId
         self.image = contact.image
         self.cnContact = contact
         self.givenName = contact.givenName
@@ -58,18 +53,14 @@ struct Person: PersonType, Hashable, Comparable {
         self.isSelected = isSelected
     }
     
-    init(withConnection connection: Connection, isSelected: Bool = false) {
+    init(person: PersonType, connection: Connection?, isSelected: Bool = false) {
+        self.personId = person.personId
         self.connection = connection
         self.isSelected = isSelected
 
         // We may not have user data at this point.
-        if let user = connection.nonMeUser, user.isDataAvailable {
-            self.givenName = user.givenName
-            self.familyName = user.familyName
-        } else {
-            self.givenName = ""
-            self.familyName = ""
-        }
+        self.givenName = person.givenName
+        self.familyName = person.familyName
     }
     
     mutating func updateHighlight(text: String?) {
