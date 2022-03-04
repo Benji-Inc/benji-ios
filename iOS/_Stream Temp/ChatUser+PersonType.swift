@@ -13,7 +13,7 @@ import Parse
 extension ChatUser: PersonType {
 
     var parseUser: User? {
-        return PeopleStore.shared.users.first { user in
+        return PeopleStore.shared.usersArray.first { user in
             return user.objectId == self.personId
         }
     }

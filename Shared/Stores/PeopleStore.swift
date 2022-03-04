@@ -23,21 +23,21 @@ class PeopleStore {
     @Published var personDeleted: PersonType?
 
     var people: [PersonType] {
-        var allPeople: [PersonType] = self.users
-        let contactPeople: [PersonType] = self.contacts.map { contact in
+        var allPeople: [PersonType] = self.usersArray
+        let contactPeople: [PersonType] = self.contactsArray.map { contact in
             return Person(withContact: contact)
         }
         allPeople.append(contentsOf: contactPeople)
         return allPeople
     }
     /// A dictionary of all the fetched users, keyed by their user id.
-    private(set) var userDictionary: [String : User] = [:]
+    private(set) var usersDictionary: [String : User] = [:]
     private var contactsDictionary: [String : CNContact] = [:]
     private var unclaimedReservations: [String : Reservation] = [:]
-    var users: [User] {
-        return Array(self.userDictionary.values)
+    var usersArray: [User] {
+        return Array(self.usersDictionary.values)
     }
-    var contacts: [CNContact] {
+    var contactsArray: [CNContact] {
         return Array(self.contactsDictionary.values)
     }
 
@@ -87,7 +87,7 @@ class PeopleStore {
             if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
                                                                              container: .users) {
                 users.forEach { user in
-                    self.userDictionary[user.personId] = user
+                    self.usersDictionary[user.personId] = user
                 }
             }
         } catch {
@@ -133,7 +133,7 @@ class PeopleStore {
                 // NOTE: This can fail and may (rarely) result in false positives.
                 return contactPhone.suffix(10) == userPhone.suffix(10)
             }) {
-                self.userDictionary[user.personId] = user
+                self.usersDictionary[user.personId] = user
             }
         }
     }
@@ -153,20 +153,20 @@ class PeopleStore {
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.userDictionary[nonMeUser.personId] = nonMeUser
+                self.usersDictionary[nonMeUser.personId] = nonMeUser
             case .updated(let object):
                 // When a connection is updated, we update the corresponding user.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
                 self.personUpdated = nonMeUser
 
-                self.userDictionary[nonMeUser.personId] = nonMeUser
+                self.usersDictionary[nonMeUser.personId] = nonMeUser
             case .left(let object), .deleted(let object):
                 // Remove users when their connections are deleted.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.userDictionary[nonMeUser.personId] = nil
+                self.usersDictionary[nonMeUser.personId] = nil
                 self.personDeleted = nonMeUser
             }
         }
@@ -229,7 +229,7 @@ class PeopleStore {
     func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundPerson: PersonType? = nil
 
-        if let user = self.userDictionary[personId] {
+        if let user = self.usersDictionary[personId] {
             foundPerson = user
         } else if let contact = self.contactsDictionary[personId] {
             foundPerson = contact
@@ -237,7 +237,7 @@ class PeopleStore {
             foundPerson = user
 
             // This is a newly retrieved person, so cache it and let subscribers know about it.
-            self.userDictionary[user.personId] = user
+            self.usersDictionary[user.personId] = user
             self.personUpdated = user
         }
         

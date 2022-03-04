@@ -116,7 +116,7 @@ extension ConversationController {
             return member.personId
         }
 
-        let recipients = PeopleStore.shared.users.filter { user in
+        let recipients = PeopleStore.shared.usersArray.filter { user in
             return memberIDs.contains(user.objectId ?? String())
         }.compactMap { user in
             return user.iNPerson
