@@ -173,8 +173,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                 centeredIndexPath = memberIndexPath
             }
         }
-
-        logDebug("got the member animatino cycle")
+        
         return AnimationCycle(inFromPosition: nil,
                               outToPosition: nil,
                               shouldConcatenate: false,
