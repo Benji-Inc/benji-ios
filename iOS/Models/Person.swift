@@ -39,9 +39,7 @@ struct Person: PersonType, Hashable, Comparable {
     
     var highlightText: String?
 
-
     var connection: Connection?
-
     var cnContact: CNContact?
     
     var isSelected: Bool

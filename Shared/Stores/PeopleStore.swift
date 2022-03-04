@@ -60,7 +60,7 @@ class PeopleStore {
             self.subscribeToParseUpdates()
         }
 
-        // In the background, find parse users that in the contacts.
+        // In the background, find existing Jibber users in the contacts.
         Task {
             await self.getAndStoreAllUsersThatAreContacts()
         }
