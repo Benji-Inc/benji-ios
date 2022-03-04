@@ -144,7 +144,6 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         content.setStreamData(value: message.id, for: .messageId)
         content.setStreamData(value: "message.new", for: .type)
         content.setStreamData(value: message.author.id, for: .author)
-        content.userInfo["mutable-content"] = 1
         content.interruptionLevel = .active
         
         let updated = await self.finalizeContent(with: message, content: content)

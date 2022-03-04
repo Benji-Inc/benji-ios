@@ -131,7 +131,7 @@
 		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
-		D61A9B5327D2B14C008D8C57 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
+		D61A9B5327D2B14C008D8C57 /* PersonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* PersonType.swift */; };
 		D61A9B5427D2B160008D8C57 /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
 		D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E921D3111600204BEE /* String+Extensions.swift */; };
 		D61A9B5627D2B17C008D8C57 /* FontType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460A21D5547000CD8CE4 /* FontType.swift */; };
@@ -418,6 +418,8 @@
 		D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
 		D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
+		D67B00C227D2B2B400284564 /* User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE39236F44A8004FA89A /* User+Extensions.swift */; };
+		D67B00C327D2B2C400284564 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
 		D67CAFDA27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
 		D67CAFDC27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
 		D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
@@ -3146,10 +3148,12 @@
 				D61A9B5727D2B188008D8C57 /* Character+Extensions.swift in Sources */,
 				D6AE0FF9267D2CE600C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FFE267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
+				D67B00C227D2B2B400284564 /* User+Extensions.swift in Sources */,
 				D66ED457267D35E100332BA3 /* Config.swift in Sources */,
 				D61A9B5627D2B17C008D8C57 /* FontType.swift in Sources */,
+				D67B00C327D2B2C400284564 /* Optional+Extensions.swift in Sources */,
 				D66ED45A267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
-				D61A9B5327D2B14C008D8C57 /* Avatar.swift in Sources */,
+				D61A9B5327D2B14C008D8C57 /* PersonType.swift in Sources */,
 				D6AE0FA4267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6CDA29427D170DA00823968 /* Date+Extensions.swift in Sources */,
