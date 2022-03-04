@@ -12,8 +12,9 @@ import Contacts
 import UIKit
 import Localization
 
-
-class PeopleViewController: DiffableCollectionViewController<PeopleCollectionViewDataSource.SectionType, PeopleCollectionViewDataSource.ItemType, PeopleCollectionViewDataSource> {
+class PeopleViewController: DiffableCollectionViewController<PeopleCollectionViewDataSource.SectionType,
+                            PeopleCollectionViewDataSource.ItemType,
+                            PeopleCollectionViewDataSource> {
     
     let leftItem = UIBarButtonItem(title: "Invites Left", image: nil, primaryAction: nil, menu: nil)
 
@@ -97,7 +98,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.button.centerOnX()
         
         if self.showButton {
-            
             if KeyboardManager.shared.isKeyboardShowing {
                 let keyboardHeight = KeyboardManager.shared.cachedKeyboardEndFrame.height
                 self.button.bottom = self.view.height - keyboardHeight - Theme.ContentOffset.standard.value
@@ -128,7 +128,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func showLoading(for person: Person) async {
-
         if self.loadingView.superview.isNil {
             self.view.addSubview(self.loadingView)
             self.view.layoutNow()
@@ -167,6 +166,30 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     // MARK: Data Loading
 
+    override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
+
+        var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
+
+        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [],
+                                                                        viewsToIgnore: []).filter({ (connection) -> Bool in
+            return !connection.nonMeUser.isNil
+        }), let _ = try? await connections.asyncMap({ connection in
+            return try await connection.nonMeUser!.retrieveDataIfNeeded()
+        }) {
+            let connectedPeople = connections.map { connection in
+                return Person(withConnection: connection)
+            }
+
+            self.allPeople.append(contentsOf: connectedPeople)
+        }
+
+        data[.people] = self.allPeople.sorted().compactMap({ person in
+            return .person(person)
+        })
+
+        return data
+    }
+
     override func getAllSections() -> [PeopleCollectionViewDataSource.SectionType] {
         return PeopleCollectionViewDataSource.SectionType.allCases
     }
@@ -177,7 +200,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         if ContactsManager.shared.hasPermissions {
             self.loadContacts()
         }
-        
+
         self.$selectedPeople.mainSink { [unowned self] items in
             self.updateSelectedPeopleItems()
             self.updateButton()
@@ -214,30 +237,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         }
     }
 
-    override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
+    // MARK: - UICollectionViewDelegate
 
-        var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
-
-        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [],
-                                                                        viewsToIgnore: []).filter({ (connection) -> Bool in
-            return !connection.nonMeUser.isNil
-        }), let _ = try? await connections.asyncMap({ connection in
-            return try await connection.nonMeUser!.retrieveDataIfNeeded()
-        }) {
-            let connectedPeople = connections.map { connection in
-                return Person(withConnection: connection)
-            }
-            
-            self.allPeople.append(contentsOf: connectedPeople)
-        }
-                
-        data[.people] = self.allPeople.sorted().compactMap({ person in
-            return .person(person)
-        })
-
-        return data
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         super.collectionView(collectionView, didSelectItemAt: indexPath)
         guard let person: Person = self.dataSource.itemIdentifier(for: indexPath).map({ item in
