@@ -161,16 +161,20 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     -> AnimationCycle? {
 
         // Center on the user who sent the most recent message.
-        var centeredIndexPath: IndexPath?
+        var centeredIndexPath = IndexPath(item: 0, section: 0)
         if let conversationController = conversationController,
            let nonCurrentUserMessage = conversationController.messages.first(where: { message in
                return !message.isFromCurrentUser
            }) {
             let user = nonCurrentUserMessage.author
             let member = Member(personId: user.personId, conversationController: conversationController)
-            centeredIndexPath = snapshot.indexPathOfItem(.member(member))
+
+            if let memberIndexPath = snapshot.indexPathOfItem(.member(member)) {
+                centeredIndexPath = memberIndexPath
+            }
         }
 
+        logDebug("got the member animatino cycle")
         return AnimationCycle(inFromPosition: nil,
                               outToPosition: nil,
                               shouldConcatenate: false,
