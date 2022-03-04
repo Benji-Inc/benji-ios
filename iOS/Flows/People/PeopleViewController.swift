@@ -189,7 +189,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         }
         self.allPeople.append(contentsOf: connectedPeople)
 
-        // Get all of the Jibber user's that aren't connected, but exist in our contacts.
+        // Get all of the Jibber users that aren't connected, but exist in our contacts.
         let users = PeopleStore.shared.usersArray
         let unconnectedUsers = users.filter { user in
             guard !user.isCurrentUser else { return false }
