@@ -52,22 +52,24 @@ class ProfileHeaderView: BaseView {
     }
     
     @MainActor
-    func configure(with user: User) {
-        
-        self.personView.set(person: user)
-        self.nameLabel.setText(user.givenName)
-        if let position = user.quePosition {
-            self.memberLabel.setText("Member #\(position)")
+    func configure(with person: PersonType) {
+        self.personView.set(person: person)
+        self.nameLabel.setText(person.givenName)
+
+        if let user = person as? User {
+            if let position = user.quePosition {
+                self.memberLabel.setText("Member #\(position)")
+            }
+
+            if user.isCurrentUser {
+                let nowTime = Date.hourMinuteTimeOfDay.string(from: Date())
+                self.timeLabel.setText(nowTime)
+            } else {
+                self.timeLabel.setText(user.getLocalTime())
+            }
         }
-        
-        if user.isCurrentUser {
-            let nowTime = Date.hourMinuteTimeOfDay.string(from: Date())
-            self.timeLabel.setText(nowTime)
-        } else {
-            self.timeLabel.setText(user.getLocalTime())
-        }
-        
-        if let status = user.focusStatus {
+
+        if let status = person.focusStatus {
             self.focusLabel.setText(status.rawValue.firstCapitalized)
         } else {
             self.focusLabel.setText("Unavailable")

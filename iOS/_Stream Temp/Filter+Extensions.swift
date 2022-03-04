@@ -13,19 +13,14 @@ extension Filter where Scope: AnyChannelListFilterScope {
 
     /// Filter to match conversations that contain all and only the passed in members.
     static func containOnlyMembers(_ members: [ConversationMember]) -> Filter<Scope> {
-        var memberFilters: [Filter<Scope>] = []
-        for userID in members.userIDs {
-            memberFilters.append(.containMembers(userIds: [userID]))
+        let userIds = members.map { member in
+            return member.id
         }
-
-        // Make there aren't other members in this channel who weren't included in the list.
-        let memberCountFilter: Filter<Scope> = .equal(.memberCount, to: members.count)
-        memberFilters.append(memberCountFilter)
-
-        return .and(memberFilters)
+        return .containsOnly(userIds: userIds)
     }
 
-    static func containOnly(userIds: [UserId]) -> Filter<Scope> {
+    /// Filter to match conversations that contain all and only members with the passed in user ids.
+    static func containsOnly(userIds: [UserId]) -> Filter<Scope> {
         var memberFilters: [Filter<Scope>] = []
         for userID in userIds {
             memberFilters.append(.containMembers(userIds: [userID]))
@@ -34,6 +29,24 @@ extension Filter where Scope: AnyChannelListFilterScope {
         // Make there aren't other members in this channel who weren't included in the list.
         let memberCountFilter: Filter<Scope> = .equal(.memberCount, to: userIds.count)
         memberFilters.append(memberCountFilter)
+
+        return .and(memberFilters)
+    }
+
+    /// Filter to match conversations that contain all the members with the passed in user ids. May contain other members.
+    static func containMembers(_ members: [ConversationMember]) -> Filter<Scope> {
+        let userIds = members.map { member in
+            return member.id
+        }
+        return .contains(userIds: userIds)
+    }
+
+    /// Filter to match conversations that contain all the passed in members. May contain other members.
+    static func contains(userIds: [UserId]) -> Filter<Scope> {
+        var memberFilters: [Filter<Scope>] = []
+        for userID in userIds {
+            memberFilters.append(.containMembers(userIds: [userID]))
+        }
 
         return .and(memberFilters)
     }
