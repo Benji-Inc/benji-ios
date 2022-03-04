@@ -34,10 +34,8 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: Person) {
         self.currentItem = item
         
-        if let connection = item.connection {
-            if let user = connection.nonMeUser, user.isDataAvailable {
-                self.updateName(for: user, highlightText: item.highlightText)
-            }
+        if let user = item.user {
+            self.updateName(for: user, highlightText: item.highlightText)
             self.buttonTitleLabel.setText("Add")
             self.titleLabel.setTextColor(.D1)
             self.buttonTitleLabel.setTextColor(.D1)
@@ -51,8 +49,8 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         self.handle(isSelected: item.isSelected)
     }
     
-    private func updateName(for avatar: Avatar, highlightText: String?) {
-        self.titleLabel.setText(avatar.fullName)
+    private func updateName(for person: PersonType, highlightText: String?) {
+        self.titleLabel.setText(person.fullName)
         
         if let highlightText = highlightText {
             let attributes: [NSAttributedString.Key : Any] = [.font: FontType.systemBold.font,
@@ -67,7 +65,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         var color: ThemeColor = isSelected ? .D1 : .T1
         
         if let person = self.currentItem {
-            if let _ = person.connection {
+            if let _ = person.user {
                 if isSelected {
                     self.buttonTitleLabel.setText("Added")
                 } else {

@@ -9,43 +9,46 @@
 import Foundation
 import Contacts
 import PhoneNumberKit
+import Parse
 
-struct Person: Avatar, Hashable, Comparable {
-    
+struct Person: PersonType, Hashable, Comparable {
+
     static func < (lhs: Person, rhs: Person) -> Bool {
-        if let _ = lhs.connection,
-           let _ = rhs.connection {
+        if lhs.connection.exists && rhs.connection.exists {
             return lhs.familyName < rhs.familyName
-        } else if let _ = lhs.cnContact,
-                    let _ = rhs.cnContact {
+        } else if lhs.cnContact.exists && rhs.cnContact.exists {
             return lhs.familyName < rhs.familyName
         } else {
             return false 
         }
     }
-    
-    var identifier: String {
-        return self.connection?.objectId ?? self.cnContact?.identifier ?? ""
-    }
+
+    var personId: String
+    var phoneNumber: String?
     
     var familyName: String
     var givenName: String
     var handle: String {
         return ""
     }
-    
-    var userObjectId: String?
+    var focusStatus: FocusStatus? {
+        return nil
+    }
+
     var image: UIImage?
     
     var highlightText: String?
-    
-    var connection: Connection?
-    
+
     var cnContact: CNContact?
-    
+    var user: User?
+    var connection: Connection?
+
     var isSelected: Bool
     
     init(withContact contact: CNContact, isSelected: Bool = false) {
+        self.personId = contact.personId
+        self.phoneNumber = contact.phoneNumber
+
         self.image = contact.image
         self.cnContact = contact
         self.givenName = contact.givenName
@@ -53,19 +56,15 @@ struct Person: Avatar, Hashable, Comparable {
         self.isSelected = isSelected
     }
     
-    init(withConnection connection: Connection, isSelected: Bool = false) {
+    init(user: User, connection: Connection?, isSelected: Bool = false) {
+        self.personId = user.personId
+        self.user = user
+        self.phoneNumber = user.phoneNumber
         self.connection = connection
-        self.userObjectId = connection.nonMeUser?.userObjectId
         self.isSelected = isSelected
-        /// We may not have a user data at this point.
-        
-        if let user = connection.nonMeUser, user.isDataAvailable {
-            self.givenName = user.givenName
-            self.familyName = user.familyName
-        } else {
-            self.givenName = ""
-            self.familyName = ""
-        }
+
+        self.givenName = user.givenName
+        self.familyName = user.familyName
     }
     
     mutating func updateHighlight(text: String?) {

@@ -27,3 +27,14 @@ extension String {
         return self.filter("0123456789".contains)
     }
 }
+
+/// A phone number that is considered equal if the last ten digits are the same as another fuzzy phone number.
+/// NOTE: This equality check can fail and may (rarely) result in false positives.
+struct FuzzyPhoneNumber: Hashable {
+
+    let partialNumber: Substring
+
+    init(_ phoneNumber: String) {
+        self.partialNumber = phoneNumber.removeAllNonNumbers().suffix(10)
+    }
+}

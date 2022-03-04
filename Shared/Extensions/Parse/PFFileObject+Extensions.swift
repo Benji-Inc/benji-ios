@@ -12,12 +12,12 @@ import Combine
 
 extension PFFileObject: ImageDisplayable {
 
-    var userObjectId: String? {
+    var image: UIImage? {
         return nil
     }
 
-    var image: UIImage? {
-        return nil
+    var fileObject: PFFileObject? {
+        return self
     }
 
     func retrieveDataInBackground(progressHandler: ((Int) -> Void)? = nil) async throws -> Data {

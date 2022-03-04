@@ -12,7 +12,6 @@ import StreamChat
 extension ConversationHeaderViewController {
     
     func updateMenu(with conversation: Conversation) {
-        
         var children: [UIMenuElement] = []
         
         let add = UIAction.init(title: "Add people",

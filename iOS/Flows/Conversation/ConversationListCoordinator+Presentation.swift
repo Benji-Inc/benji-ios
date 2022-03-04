@@ -50,8 +50,8 @@ extension ConversationListCoordinator {
         }
     }
     
-    func presentProfile(for avatar: Avatar) {
-        let coordinator = ProfileCoordinator(with: avatar, router: self.router, deepLink: self.deepLink)
+    func presentProfile(for person: PersonType) {
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
                 await self.conversationListVC.scrollToConversation(with: result, messageID: nil)
@@ -60,27 +60,41 @@ extension ConversationListCoordinator {
     }
 
     func presentPeoplePicker() {
+        // If there is no conversation to invite people to, then do nothing.
         guard let conversation = self.activeConversation else { return }
+
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.selectedConversationCID = self.activeConversation?.cid
-        
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            if coordinator.invitedPeople.isEmpty {
-                self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
+
+        self.present(coordinator, finishedHandler: { [unowned self] invitedPeople in
+            self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
+        }, cancelHandler: { [unowned self, unowned coordinator = coordinator] in
+            let invitedPeople = coordinator.invitedPeople
+            self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
+        })
+    }
+
+    private func handleInviteFlowEnded(givenInvitedPeople invitedPeople: [Person],
+                                                       activeConversation: Conversation) {
+
+        if invitedPeople.isEmpty {
+            // If the user didn't invite anyone to the conversation and the conversation doesn't have
+            // any existing members, ask them if they'd like to delete it.
+            Task {
+                let peopleInConversation = await PeopleStore.shared.getPeople(for: activeConversation)
+                guard peopleInConversation.isEmpty else { return }
+
+                self.presentDeleteConversationAlert(cid: activeConversation.cid)
             }
-        }
-        self.present(coordinator) { [unowned self] people in
-            
-            if people.isEmpty {
-                self.presentDeleteConversationAlert(cid: coordinator.selectedConversationCID)
-            } else {
-                self.add(people: people, to: conversation)
-            }
+        } else {
+            // Add all of the invited people to the conversation.
+            self.add(people: invitedPeople, to: activeConversation)
         }
     }
     
     private func present<ChildResult>(_ coordinator: PresentableCoordinator<ChildResult>,
-                                      finishedHandler: ((ChildResult) -> Void)? = nil) {
+                                      finishedHandler: ((ChildResult) -> Void)? = nil,
+                                      cancelHandler: (() -> Void)? = nil) {
         self.removeChild()
         
         // Because of how the People are presented, we need to properly reset the KeyboardManager.
@@ -97,30 +111,30 @@ extension ConversationListCoordinator {
         
         self.conversationListVC.resignFirstResponder()
         self.conversationListVC.updateUI(for: .read, forceLayout: true)
-        self.router.present(coordinator, source: self.conversationListVC)
+        self.router.present(coordinator, source: self.conversationListVC, cancelHandler: cancelHandler)
     }
     
     func add(people: [Person], to conversation: Conversation) {
         let controller = ChatClient.shared.channelController(for: conversation.cid)
 
-        let accepted = people.compactMap { person in
+        let acceptedConnections = people.compactMap { person in
             return person.connection
         }.filter { connection in
             return connection.status == .accepted
         }
 
-        if !accepted.isEmpty {
-            let members = accepted.compactMap { connection in
-                return connection.nonMeUser?.objectId
-            }
-            controller.addMembers(userIds: Set(members)) { error in
-                if error.isNil {
-                    self.showPeopleAddedToast(for: accepted)
-                    Task {
-                        try await controller.synchronize()
-                        await self.conversationListVC.headerVC.membersVC.loadData()
-                    }
-                }
+        guard !acceptedConnections.isEmpty else { return }
+
+        let members = acceptedConnections.compactMap { connection in
+            return connection.nonMeUser?.objectId
+        }
+        controller.addMembers(userIds: Set(members)) { error in
+            guard error.isNil else { return }
+
+            self.showPeopleAddedToast(for: acceptedConnections)
+            Task {
+                try await controller.synchronize()
+                await self.conversationListVC.headerVC.membersVC.loadData()
             }
         }
     }

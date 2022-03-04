@@ -7,12 +7,20 @@
 //
 
 import Foundation
-import Parse
 
-struct SystemAvatar: Avatar, Hashable {
-    var userObjectId: String?
+struct SystemAvatar: PersonType, Hashable {
+
+    var personId: String {
+        return "system-avatar"
+    }
     var givenName: String
     var familyName: String
-    var image: UIImage?
     var handle: String
+    var focusStatus: FocusStatus? {
+        return nil
+    }
+
+    var phoneNumber: String?
+
+    var image: UIImage?
 }

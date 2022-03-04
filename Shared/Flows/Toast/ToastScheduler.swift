@@ -118,8 +118,8 @@ class ToastScheduler {
 
         guard case MessageKind.text(let text) = message.kind,
               !text.isEmpty,
-              let author = UserStore.shared.users.first(where: { user in
-                  return user.userObjectId == message.authorId
+              let author = PeopleStore.shared.usersArray.first(where: { person in
+                  return person.personId == message.authorId
               }) else { return nil }
 
         let toast = Toast(id: message.id,

@@ -11,14 +11,14 @@ import Combine
 
 class ProfileCoordinator: PresentableCoordinator<ConversationId> {
     
-    lazy var profileVC = ProfileViewController(with: self.avatar)
-    private let avatar: Avatar
+    lazy var profileVC = ProfileViewController(with: self.person)
+    private let person: PersonType
     
-    init(with avatar: Avatar,
+    init(with person: PersonType,
          router: Router,
          deepLink: DeepLinkable?) {
         
-        self.avatar = avatar
+        self.person = person
         super.init(router: router, deepLink: deepLink)
     }
 
@@ -29,8 +29,8 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
     override func start() {
         super.start()
                 
-        if let user = self.avatar as? User, user.isCurrentUser {
-            self.profileVC.header.avatarView.didSelect { [unowned self] in
+        if let user = self.person as? User, user.isCurrentUser {
+            self.profileVC.header.personView.didSelect { [unowned self] in
                 self.presentProfilePicture()
             }
         }

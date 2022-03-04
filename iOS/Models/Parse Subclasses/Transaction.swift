@@ -138,7 +138,7 @@ final class Transaction: PFObject, PFSubclassing {
         let connectionIds: [String] = connections.filter({ connection in
             return connection.status == .accepted
         }).compactMap({ connection in
-            return connection.nonMeUser?.userObjectId
+            return connection.nonMeUser?.objectId
         })
         
         let objects: [Transaction] = try await withCheckedThrowingContinuation { continuation in

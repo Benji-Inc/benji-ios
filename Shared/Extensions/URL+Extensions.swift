@@ -9,13 +9,9 @@
 import Foundation
 
 extension URL: ImageDisplayable {
-    
-    var userObjectId: String? {
-        nil
-    }
 
     var image: UIImage? {
-        nil
+        return nil
     }
 
     var url: URL? {

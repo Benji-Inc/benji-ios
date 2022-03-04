@@ -187,12 +187,11 @@ extension Reservation: UIActivityItemSource {
         return self.metadata
     }
 
+    /// Returns all reservations that are unclaimed.
     static func getAllUnclaimed() async -> [Reservation] {
-        let query = Reservation.query()
-        query?.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
-        query?.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        let query = Reservation.allUnclaimedQuery()
         do {
-            let objects = try await query?.findObjectsInBackground()
+            let objects = try await query.findObjectsInBackground()
             if let reservations = objects as? [Reservation] {
                 return reservations
             } else {
@@ -203,5 +202,36 @@ extension Reservation: UIActivityItemSource {
             return []
         }
     }
-}
 
+    static func allUnclaimedQuery() -> PFQuery<PFObject> {
+        let query = Reservation.query()!
+        query.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+        query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        return query
+    }
+
+    /// Returns all unclaimed reservations that have a related contact id.
+    static func getAllUnclaimedWithContact() async -> [Reservation] {
+        let query = Reservation.allUnclaimedWithContactQuery()
+        do {
+            let objects = try await query.findObjectsInBackground()
+            if let reservations = objects as? [Reservation] {
+                return reservations
+            } else {
+                return []
+            }
+        } catch {
+            logError(error)
+            return []
+        }
+    }
+
+    /// Returns a parse query that gets unclaimed reservations that have a related contact id.
+    static func allUnclaimedWithContactQuery() -> PFQuery<PFObject> {
+        let query = Reservation.query()!
+        query.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+        query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        query.whereKeyExists(ReservationKey.contactId.rawValue)
+        return query
+    }
+}
