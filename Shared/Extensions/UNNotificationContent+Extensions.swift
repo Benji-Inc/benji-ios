@@ -112,11 +112,15 @@ extension UNMutableNotificationContent {
     }
 
     func setData(value: Any, for key: NotificationContentKey) {
-        self.userInfo["data"] = [key.rawValue: value]
+        var data = self.userInfo["data"] as? [String: Any] ?? [:]
+        data[key.rawValue] = value
+        self.userInfo["data"] = data
     }
     
     func setStreamData(value: Any, for key: StreamContentKey) {
-        self.userInfo["stream"] = [key.rawValue: value]
+        var streamData = self.userInfo["stream"] as? [String: Any] ?? [:]
+        streamData[key.rawValue] = value
+        self.userInfo["stream"] = streamData
     }
 }
 

@@ -128,6 +128,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         content.title = "While you were focused..."
         content.subtitle = self.getTimeAgoString(for: message.createdAt)
         content.body = message.text
+        content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
         content.setData(value: message.author.id, for: .author)
         content.setData(value: message.id, for: .messageId)
         content.setData(value: message.cid?.id ?? "", for: .conversationId)
@@ -135,9 +136,9 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         content.setStreamData(value: message.id, for: .messageId)
         content.setStreamData(value: "message.new", for: .type)
         content.setStreamData(value: message.author.id, for: .author)
-        content.userInfo["mutable-conent"] = 1
+        content.userInfo["mutable-content"] = 1
         
-        content.interruptionLevel = .timeSensitive
+        content.interruptionLevel = .active
         let request = UNNotificationRequest(identifier: message.id,
                                             content: content,
                                             trigger: nil)

@@ -57,12 +57,10 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             self.onDidComplete?(.success((.waitlist)))
         }
         
-        if !isRelease {
-            self.view.addSubview(self.rsvpButton)
-            self.rsvpButton.set(style: .custom(color: .B5, textColor: .T4, text: "Enter Code"))
-            self.rsvpButton.didSelect { [unowned self] in
-                self.onDidComplete?(.success((.rsvp)))
-            }
+        self.view.addSubview(self.rsvpButton)
+        self.rsvpButton.set(style: .custom(color: .B5, textColor: .T4, text: "Enter Code"))
+        self.rsvpButton.didSelect { [unowned self] in
+            self.onDidComplete?(.success((.rsvp)))
         }
     }
     
@@ -119,18 +117,12 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        if !isRelease {
-            self.rsvpButton.setSize(with: self.view.width)
-            self.rsvpButton.pinToSafeAreaBottom()
-            self.rsvpButton.centerOnX()
-        }
+        self.rsvpButton.setSize(with: self.view.width)
+        self.rsvpButton.pinToSafeAreaBottom()
+        self.rsvpButton.centerOnX()
         
         self.waitlistButton.setSize(with: self.view.width)
-        if !isRelease {
-            self.waitlistButton.match(.bottom, to: .top, of: self.rsvpButton, offset: .negative(.standard))
-        } else {
-            self.waitlistButton.pinToSafeAreaBottom()
-        }
+        self.waitlistButton.match(.bottom, to: .top, of: self.rsvpButton, offset: .negative(.standard))
         
         self.waitlistButton.centerOnX()
     }
