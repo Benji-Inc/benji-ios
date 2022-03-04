@@ -39,9 +39,10 @@ struct Person: PersonType, Hashable, Comparable {
     
     var highlightText: String?
 
-    var connection: Connection?
     var cnContact: CNContact?
-    
+    var user: User?
+    var connection: Connection?
+
     var isSelected: Bool
     
     init(withContact contact: CNContact, isSelected: Bool = false) {
@@ -55,15 +56,15 @@ struct Person: PersonType, Hashable, Comparable {
         self.isSelected = isSelected
     }
     
-    init(person: PersonType, connection: Connection?, isSelected: Bool = false) {
-        self.personId = person.personId
-        self.phoneNumber = person.phoneNumber
+    init(user: User, connection: Connection?, isSelected: Bool = false) {
+        self.personId = user.personId
+        self.user = user
+        self.phoneNumber = user.phoneNumber
         self.connection = connection
         self.isSelected = isSelected
 
-        // We may not have user data at this point.
-        self.givenName = person.givenName
-        self.familyName = person.familyName
+        self.givenName = user.givenName
+        self.familyName = user.familyName
     }
     
     mutating func updateHighlight(text: String?) {

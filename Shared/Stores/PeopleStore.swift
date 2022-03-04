@@ -31,7 +31,7 @@ class PeopleStore {
         return allPeople
     }
     /// A dictionary of all the fetched users, keyed by their user id.
-    private var userDictionary: [String : User] = [:]
+    private(set) var userDictionary: [String : User] = [:]
     private var contactsDictionary: [String : CNContact] = [:]
     private var unclaimedReservations: [String : Reservation] = [:]
     var users: [User] {

@@ -175,16 +175,17 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         let connections = (try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])) ?? []
 
         var connectedPeople: [Person] = []
-        await connections.asyncForEach { connection in
+        connections.forEach { connection in
             guard let userId = connection.nonMeUser?.personId else { return }
 
-            if let updatedPerson = await PeopleStore.shared.getPerson(withPersonId: userId) {
-                let person = Person(person: updatedPerson, connection: connection)
+            if let updatedPerson = PeopleStore.shared.userDictionary[userId] {
+                let person = Person(user: updatedPerson, connection: connection)
                 connectedPeople.append(person)
             }
         }
         self.allPeople.append(contentsOf: connectedPeople)
 
+        // Get all of the Jibber user's that aren't connected, but exist in our contacts.
         let users = PeopleStore.shared.users
         let unconnectedUsers = users.filter { user in
             guard !user.isCurrentUser else { return false }
@@ -196,7 +197,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             return !isConnected
         }
         let unconnectedPeople = unconnectedUsers.map { unconnectedUser in
-            return Person(person: unconnectedUser, connection: nil)
+            return Person(user: unconnectedUser, connection: nil)
         }
         self.allPeople.append(contentsOf: unconnectedPeople)
 
