@@ -69,7 +69,7 @@ class ContactsManager {
         do {
             if try await self.store.requestAccess(for: .contacts) {
                 // 2.
-                let keys = [CNContactIdentifierKey,CNContactGivenNameKey, CNContactFamilyNameKey,
+                let keys = [CNContactIdentifierKey, CNContactGivenNameKey, CNContactFamilyNameKey,
                             CNContactPhoneNumbersKey]
 
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
@@ -94,7 +94,7 @@ class ContactsManager {
                 print("access denied")
             }
         } catch {
-            print(error)
+            logError(error)
         }
 
         return []

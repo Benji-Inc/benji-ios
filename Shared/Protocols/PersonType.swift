@@ -17,6 +17,7 @@ protocol PersonType: ImageDisplayable {
     var fullName: String { get }
     var handle: String { get }
     var focusStatus: FocusStatus? { get }
+    var phoneNumber: String? { get }
 }
 
 extension PersonType {

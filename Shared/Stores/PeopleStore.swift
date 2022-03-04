@@ -19,25 +19,26 @@ class PeopleStore {
 
     static let shared = PeopleStore()
 
+    // MARK: - Public Events
     @Published var personUpdated: PersonType?
     @Published var personDeleted: PersonType?
 
     var people: [PersonType] {
-        var allPeople: [PersonType] = self.users
-        let contactPeople: [PersonType] = self.contacts.map { contact in
+        var allPeople: [PersonType] = self.usersArray
+        let contactPeople: [PersonType] = self.contactsArray.map { contact in
             return Person(withContact: contact)
         }
         allPeople.append(contentsOf: contactPeople)
         return allPeople
     }
     /// A dictionary of all the fetched users, keyed by their user id.
-    private var userDictionary: [String : User] = [:]
+    private(set) var usersDictionary: [String : User] = [:]
     private var contactsDictionary: [String : CNContact] = [:]
     private var unclaimedReservations: [String : Reservation] = [:]
-    var users: [User] {
-        return Array(self.userDictionary.values)
+    var usersArray: [User] {
+        return Array(self.usersDictionary.values)
     }
-    var contacts: [CNContact] {
+    var contactsArray: [CNContact] {
         return Array(self.contactsDictionary.values)
     }
 
@@ -58,6 +59,11 @@ class PeopleStore {
             await self.getAndStoreAllContactsWithUnclaimedReservations()
 
             self.subscribeToParseUpdates()
+        }
+
+        // In the background, find existing Jibber users in the contacts.
+        Task {
+            await self.getAndStoreAllUsersThatAreContacts()
         }
 
         await self.initializeTask?.value
@@ -82,7 +88,7 @@ class PeopleStore {
             if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
                                                                              container: .users) {
                 users.forEach { user in
-                    self.userDictionary[user.personId] = user
+                    self.usersDictionary[user.personId] = user
                 }
             }
         } catch {
@@ -106,6 +112,31 @@ class PeopleStore {
         }
     }
 
+    private func getAndStoreAllUsersThatAreContacts() async {
+        guard ContactsManager.shared.hasPermissions else { return }
+
+        // Get every single parse user and check to see if they exist in the user's contacts.
+        // If they do, then store them in the user array.
+        // TODO: Do this more efficiently.
+        let userQuery = User.query()!
+        let usersObjects = (try? await userQuery.findObjectsInBackground()) ?? []
+
+        let contacts = await ContactsManager.shared.fetchContacts()
+
+        for userObject in usersObjects {
+            guard let user = userObject as? User, !user.isCurrentUser else { continue }
+
+            if contacts.contains(where: { contact in
+                guard let contactPhone = contact.findBestPhoneNumberString(),
+                      let userPhone = user.phoneNumber?.removeAllNonNumbers() else { return false }
+
+                return FuzzyPhoneNumber(contactPhone) == FuzzyPhoneNumber(userPhone)
+            }) {
+                self.usersDictionary[user.personId] = user
+            }
+        }
+    }
+
     private func subscribeToParseUpdates() {
         Client.shared.shouldPrintWebSocketLog = false
 
@@ -121,20 +152,20 @@ class PeopleStore {
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.userDictionary[nonMeUser.personId] = nonMeUser
+                self.usersDictionary[nonMeUser.personId] = nonMeUser
             case .updated(let object):
                 // When a connection is updated, we update the corresponding user.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
                 self.personUpdated = nonMeUser
 
-                self.userDictionary[nonMeUser.personId] = nonMeUser
+                self.usersDictionary[nonMeUser.personId] = nonMeUser
             case .left(let object), .deleted(let object):
                 // Remove users when their connections are deleted.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
-                self.userDictionary[nonMeUser.personId] = nil
+                self.usersDictionary[nonMeUser.personId] = nil
                 self.personDeleted = nonMeUser
             }
         }
@@ -197,7 +228,7 @@ class PeopleStore {
     func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundPerson: PersonType? = nil
 
-        if let user = self.userDictionary[personId] {
+        if let user = self.usersDictionary[personId] {
             foundPerson = user
         } else if let contact = self.contactsDictionary[personId] {
             foundPerson = contact
@@ -205,7 +236,7 @@ class PeopleStore {
             foundPerson = user
 
             // This is a newly retrieved person, so cache it and let subscribers know about it.
-            self.userDictionary[user.personId] = user
+            self.usersDictionary[user.personId] = user
             self.personUpdated = user
         }
         

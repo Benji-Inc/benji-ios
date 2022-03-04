@@ -12,9 +12,13 @@ import Contacts
 import UIKit
 import Localization
 
+class PeopleViewController: DiffableCollectionViewController<PeopleCollectionViewDataSource.SectionType,
+                            PeopleCollectionViewDataSource.ItemType,
+                            PeopleCollectionViewDataSource> {
 
-class PeopleViewController: DiffableCollectionViewController<PeopleCollectionViewDataSource.SectionType, PeopleCollectionViewDataSource.ItemType, PeopleCollectionViewDataSource> {
-    
+    typealias PeopleSection = PeopleCollectionViewDataSource.SectionType
+    typealias PersonItem = PeopleCollectionViewDataSource.ItemType
+
     let leftItem = UIBarButtonItem(title: "Invites Left", image: nil, primaryAction: nil, menu: nil)
 
     private(set) var reservations: [Reservation] = []
@@ -97,7 +101,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         self.button.centerOnX()
         
         if self.showButton {
-            
             if KeyboardManager.shared.isKeyboardShowing {
                 let keyboardHeight = KeyboardManager.shared.cachedKeyboardEndFrame.height
                 self.button.bottom = self.view.height - keyboardHeight - Theme.ContentOffset.standard.value
@@ -110,12 +113,12 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
     
     func updateSelectedPeopleItems() {
-         let updatedItems: [PeopleCollectionViewDataSource.ItemType] = self.dataSource.itemIdentifiers(in: .people).compactMap { item in
+         let updatedItems: [PersonItem] = self.dataSource.itemIdentifiers(in: .people).compactMap { item in
             switch item {
             case .person(let person):
                 var copy = person
                 copy.isSelected = self.selectedPeople.contains(where: { current in
-                    return current.identifier == person.identifier
+                    return current.personId == person.personId
                 })
 
                 return .person(copy)
@@ -128,7 +131,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func showLoading(for person: Person) async {
-
         if self.loadingView.superview.isNil {
             self.view.addSubview(self.loadingView)
             self.view.layoutNow()
@@ -167,8 +169,58 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     // MARK: Data Loading
 
-    override func getAllSections() -> [PeopleCollectionViewDataSource.SectionType] {
-        return PeopleCollectionViewDataSource.SectionType.allCases
+    /// The phone numbers of the loaded users objects (not contacts).
+    private var userPhoneNumbers: Set<FuzzyPhoneNumber> = []
+
+    override func retrieveDataForSnapshot() async -> [PeopleSection : [PersonItem]] {
+        var data: [PeopleSection: [PersonItem]] = [:]
+
+        let connections = (try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])) ?? []
+
+        // Get all of the connected Jibber users.
+        var connectedPeople: [Person] = []
+        connections.forEach { connection in
+            guard let userId = connection.nonMeUser?.personId else { return }
+
+            if let upToDateUser = PeopleStore.shared.usersDictionary[userId] {
+                let person = Person(user: upToDateUser, connection: connection)
+                connectedPeople.append(person)
+            }
+        }
+        self.allPeople.append(contentsOf: connectedPeople)
+
+        // Get all of the Jibber users that aren't connected, but exist in our contacts.
+        let users = PeopleStore.shared.usersArray
+        let unconnectedUsers = users.filter { user in
+            guard !user.isCurrentUser else { return false }
+
+            // Filter out users who are already connected
+            let isConnected = connectedPeople.contains(where: { connectedPerson in
+                return user.personId == connectedPerson.personId
+            })
+            return !isConnected
+        }
+        let unconnectedPeople = unconnectedUsers.map { unconnectedUser in
+            return Person(user: unconnectedUser, connection: nil)
+        }
+        self.allPeople.append(contentsOf: unconnectedPeople)
+
+        // Remember the phone numbers of the user objects so we don't show their corresponding contact.
+        self.allPeople.forEach { person in
+            guard let phoneNumber = person.phoneNumber else { return }
+            self.userPhoneNumbers.insert(FuzzyPhoneNumber(phoneNumber))
+        }
+
+        // Then list all the existing Jibber users who you aren't connected to, but are in your contacts.
+        data[.people] = self.allPeople.sorted().compactMap({ person in
+            return .person(person)
+        })
+
+        return data
+    }
+
+    override func getAllSections() -> [PeopleSection] {
+        return PeopleSection.allCases
     }
     
     override func collectionViewDataWasLoaded() {
@@ -177,7 +229,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         if ContactsManager.shared.hasPermissions {
             self.loadContacts()
         }
-        
+
         self.$selectedPeople.mainSink { [unowned self] items in
             self.updateSelectedPeopleItems()
             self.updateButton()
@@ -189,18 +241,22 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.reservations = await Reservation.getAllUnclaimed()
             self.updateNavLeftItem()
             
-            let contacts = await ContactsManager.shared.fetchContacts().compactMap({ contact in
+            let contacts: [Person] = await ContactsManager.shared.fetchContacts().compactMap({ contact in
+                // Make sure we're not already showing a user related to this contact.
+                if let phoneNumber = contact.findBestPhoneNumberString(),
+                   self.userPhoneNumbers.contains(FuzzyPhoneNumber(phoneNumber)) {
+                    return nil
+                }
                 return Person(withContact: contact)
             })
             
             self.allPeople.append(contentsOf: contacts)
 
-            let contactItems: [PeopleCollectionViewDataSource.ItemType] = contacts.map { person in
+            let contactItems: [PersonItem] = contacts.map { person in
                 return .person(person)
             }
 
             await self.dataSource.appendItems(contactItems, toSection: .people)
-            
         }.add(to: self.autocancelTaskPool)
     }
     
@@ -214,30 +270,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         }
     }
 
-    override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
+    // MARK: - UICollectionViewDelegate
 
-        var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
-
-        if let connections = try? await GetAllConnections().makeRequest(andUpdate: [],
-                                                                        viewsToIgnore: []).filter({ (connection) -> Bool in
-            return !connection.nonMeUser.isNil
-        }), let _ = try? await connections.asyncMap({ connection in
-            return try await connection.nonMeUser!.retrieveDataIfNeeded()
-        }) {
-            let connectedPeople = connections.map { connection in
-                return Person(withConnection: connection)
-            }
-            
-            self.allPeople.append(contentsOf: connectedPeople)
-        }
-                
-        data[.people] = self.allPeople.sorted().compactMap({ person in
-            return .person(person)
-        })
-
-        return data
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         super.collectionView(collectionView, didSelectItemAt: indexPath)
         guard let person: Person = self.dataSource.itemIdentifier(for: indexPath).map({ item in

@@ -15,6 +15,14 @@ extension CNContact {
         return self.givenName + " " + self.familyName
     }
 
+    /// Returns the best phone number for this contact as a string with only numeric characters.
+    func findBestPhoneNumberString() -> String? {
+        guard let phoneNumber = self.findBestPhoneNumber().phone else { return nil }
+
+        let stringPhoneNumber = phoneNumber.stringValue.removeAllNonNumbers()
+        return stringPhoneNumber
+    }
+
     func findBestPhoneNumber() -> (phone: CNPhoneNumber?, label: String?) {
         var bestPair: (CNPhoneNumber?, String?) = (nil, nil)
         let prioritizedLabels = ["iPhone",
@@ -86,6 +94,10 @@ extension CNContact: PersonType {
 
     var focusStatus: FocusStatus? {
         return nil
+    }
+
+    var phoneNumber: String? {
+        return self.findBestPhoneNumberString()
     }
 
     var image: UIImage? {
