@@ -133,7 +133,6 @@ class PeopleStore {
                 // NOTE: This can fail and may (rarely) result in false positives.
                 return contactPhone.suffix(10) == userPhone.suffix(10)
             }) {
-                logDebug("matched contact with user name "+user.fullName)
                 self.userDictionary[user.personId] = user
             }
         }
