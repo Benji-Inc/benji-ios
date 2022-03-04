@@ -181,17 +181,17 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             } else {
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
-            
+
             let filter = Filter<ChannelListFilterScope>.contains(userIds: userIds)
             let query = ChannelListQuery(filter: .and([.equal("hidden", to: true), filter]),
                                          sort: [Sorting(key: .createdAt, isAscending: true)],
                                          pageSize: .channelsPageSize,
                                          messagesLimit: 1)
-            
+
             await self?.loadConversations(with: query)
         }.add(to: self.autocancelTaskPool)
     }
-    
+
     private func startLoadRecentTask() {
         self.loadConversationsTask?.cancel()
 
