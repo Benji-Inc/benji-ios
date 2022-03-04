@@ -60,6 +60,10 @@ class PeopleStore {
             self.subscribeToParseUpdates()
         }
 
+        Task {
+            await self.getAndStoreAllUsersThatAreContacts()
+        }
+
         await self.initializeTask?.value
     }
     
@@ -103,6 +107,34 @@ class PeopleStore {
                         return
                     }
             self.contactsDictionary[contactId] = contact
+        }
+    }
+
+    private func getAndStoreAllUsersThatAreContacts() async {
+        guard ContactsManager.shared.hasPermissions else { return }
+
+        // Get every single parse user and check to see if they exist in the user's contacts.
+        // If they do, then store them in the user array.
+        // TODO: Do this more efficiently.
+        let userQuery = User.query()!
+        let usersObjects = (try? await userQuery.findObjectsInBackground()) ?? []
+
+        let contacts = await ContactsManager.shared.fetchContacts()
+
+        for userObject in usersObjects {
+            guard let user = userObject as? User, !user.isCurrentUser else { continue }
+
+            if contacts.contains(where: { contact in
+                guard let contactPhone = contact.findBestPhoneNumberString(),
+                      let userPhone = user.phoneNumber?.removeAllNonNumbers() else { return false }
+
+                // Compare the last 10 characters of the phone numbers to determine if they are equal.
+                // NOTE: This can fail and may (rarely) result in false positives.
+                return contactPhone.suffix(10) == userPhone.suffix(10)
+            }) {
+//                logDebug("matched contact with user name "+user.fullName)
+                self.userDictionary[user.personId] = user
+            }
         }
     }
 
