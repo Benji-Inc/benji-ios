@@ -23,7 +23,6 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
 
             switch sectionType {
             case .members:
-                
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
