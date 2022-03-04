@@ -38,6 +38,10 @@ extension ChatUser: PersonType {
         return self.parseUser?.focusStatus
     }
 
+    var phoneNumber: String? {
+        return self.parseUser?.phoneNumber
+    }
+
     var image: UIImage? {
         return self.parseUser?.image
     }

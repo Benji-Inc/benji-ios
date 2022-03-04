@@ -15,7 +15,7 @@ extension CNContact {
         return self.givenName + " " + self.familyName
     }
 
-    /// Returns the best phone number for this contact as a string with only numberic characters.
+    /// Returns the best phone number for this contact as a string with only numeric characters.
     func findBestPhoneNumberString() -> String? {
         guard let phoneNumber = self.findBestPhoneNumber().phone else { return nil }
 
@@ -94,6 +94,10 @@ extension CNContact: PersonType {
 
     var focusStatus: FocusStatus? {
         return nil
+    }
+
+    var phoneNumber: String? {
+        return self.findBestPhoneNumberString()
     }
 
     var image: UIImage? {

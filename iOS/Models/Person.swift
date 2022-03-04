@@ -24,6 +24,7 @@ struct Person: PersonType, Hashable, Comparable {
     }
 
     var personId: String
+    var phoneNumber: String?
     
     var familyName: String
     var givenName: String
@@ -38,6 +39,7 @@ struct Person: PersonType, Hashable, Comparable {
     
     var highlightText: String?
 
+
     var connection: Connection?
 
     var cnContact: CNContact?
@@ -46,6 +48,8 @@ struct Person: PersonType, Hashable, Comparable {
     
     init(withContact contact: CNContact, isSelected: Bool = false) {
         self.personId = contact.personId
+        self.phoneNumber = contact.phoneNumber
+
         self.image = contact.image
         self.cnContact = contact
         self.givenName = contact.givenName
@@ -55,6 +59,7 @@ struct Person: PersonType, Hashable, Comparable {
     
     init(person: PersonType, connection: Connection?, isSelected: Bool = false) {
         self.personId = person.personId
+        self.phoneNumber = person.phoneNumber
         self.connection = connection
         self.isSelected = isSelected
 

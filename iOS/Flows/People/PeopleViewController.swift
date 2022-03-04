@@ -178,8 +178,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         await connections.asyncForEach { connection in
             guard let userId = connection.nonMeUser?.personId else { return }
 
-            if let updatedUser = await PeopleStore.shared.getPerson(withPersonId: userId) {
-                let person = Person(person: updatedUser, connection: connection)
+            if let updatedPerson = await PeopleStore.shared.getPerson(withPersonId: userId) {
+                let person = Person(person: updatedPerson, connection: connection)
                 connectedPeople.append(person)
             }
         }

@@ -20,5 +20,7 @@ struct SystemAvatar: PersonType, Hashable {
         return nil
     }
 
+    var phoneNumber: String?
+
     var image: UIImage?
 }

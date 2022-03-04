@@ -42,6 +42,10 @@ struct CircleItem: PersonType, Hashable {
     var focusStatus: FocusStatus? {
         return nil
     }
+
+    var phoneNumber: String? {
+        return nil
+    }
     
     var image: UIImage? {
         return self.user?.image

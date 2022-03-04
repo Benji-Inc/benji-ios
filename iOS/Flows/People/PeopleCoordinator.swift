@@ -88,13 +88,13 @@ extension PeopleCoordinator {
     func invite(person: Person) async -> Connection? {
         await self.peopleNavController.peopleVC.showLoading(for: person)
 
-        // This person is not in you contacts, so you can't invite them.
-        guard let contact = person.cnContact else { return nil }
+        // You can't invite a person without a phone number.
+        guard let phoneNumber = person.phoneNumber else { return nil }
 
         // If the user already has an account, we can just connect with them directly.
-        if let user = await self.findUser(with: contact) {
+        if let user = await self.findUser(withPhoneNumber: phoneNumber) {
             return await self.presentConnectionFlow(for: user)
-        } else if let reservation = self.getReservation(for: contact) {
+        } else if let contact = person.cnContact, let reservation = self.getReservation(for: contact) {
             // Get a valid reservation object that we can use to invite this person. Then prompt the user
             // to send them a text
             await self.sendText(to: contact, with: reservation)
@@ -123,12 +123,8 @@ extension PeopleCoordinator {
     // MARK: - Existing Users Flow
 
     /// Returns a Jibber user that has the same phone number as the passed in contact.
-    private func findUser(with contact: CNContact) async -> User? {
-        // Search for user with phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else {
-            return nil
-        }
-
+    private func findUser(withPhoneNumber phone: String) async -> User? {
+        // Search for a user with phone number
         return try? await User.getFirstObject(where: "phoneNumber", contains: phone)
     }
 
