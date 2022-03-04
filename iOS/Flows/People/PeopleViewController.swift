@@ -169,6 +169,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     // MARK: Data Loading
 
+    /// The phone numbers of the loaded users objects (not contacts).
+    private var userPhoneNumbers: Set<FuzzyPhoneNumber> = []
+
     override func retrieveDataForSnapshot() async -> [PeopleSection : [PersonItem]] {
         var data: [PeopleSection: [PersonItem]] = [:]
 
@@ -179,8 +182,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         connections.forEach { connection in
             guard let userId = connection.nonMeUser?.personId else { return }
 
-            if let updatedPerson = PeopleStore.shared.usersDictionary[userId] {
-                let person = Person(user: updatedPerson, connection: connection)
+            if let upToDateUser = PeopleStore.shared.usersDictionary[userId] {
+                let person = Person(user: upToDateUser, connection: connection)
                 connectedPeople.append(person)
             }
         }
@@ -201,6 +204,12 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             return Person(user: unconnectedUser, connection: nil)
         }
         self.allPeople.append(contentsOf: unconnectedPeople)
+
+        // Remember the phone numbers of the user objects so we don't show their corresponding contact.
+        self.allPeople.forEach { person in
+            guard let phoneNumber = person.phoneNumber else { return }
+            self.userPhoneNumbers.insert(FuzzyPhoneNumber(phoneNumber))
+        }
 
         // Then list all the existing Jibber users who you aren't connected to, but are in your contacts.
         data[.people] = self.allPeople.sorted().compactMap({ person in
@@ -232,7 +241,12 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             self.reservations = await Reservation.getAllUnclaimed()
             self.updateNavLeftItem()
             
-            let contacts = await ContactsManager.shared.fetchContacts().compactMap({ contact in
+            let contacts: [Person] = await ContactsManager.shared.fetchContacts().compactMap({ contact in
+                // Make sure we're not already showing a user related to this contact.
+                if let phoneNumber = contact.findBestPhoneNumberString(),
+                   self.userPhoneNumbers.contains(FuzzyPhoneNumber(phoneNumber)) {
+                    return nil
+                }
                 return Person(withContact: contact)
             })
             

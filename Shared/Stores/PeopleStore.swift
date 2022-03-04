@@ -19,6 +19,7 @@ class PeopleStore {
 
     static let shared = PeopleStore()
 
+    // MARK: - Public Events
     @Published var personUpdated: PersonType?
     @Published var personDeleted: PersonType?
 
@@ -129,9 +130,7 @@ class PeopleStore {
                 guard let contactPhone = contact.findBestPhoneNumberString(),
                       let userPhone = user.phoneNumber?.removeAllNonNumbers() else { return false }
 
-                // Compare the last 10 characters of the phone numbers to determine if they are equal.
-                // NOTE: This can fail and may (rarely) result in false positives.
-                return contactPhone.suffix(10) == userPhone.suffix(10)
+                return FuzzyPhoneNumber(contactPhone) == FuzzyPhoneNumber(userPhone)
             }) {
                 self.usersDictionary[user.personId] = user
             }
