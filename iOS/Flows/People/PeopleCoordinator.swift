@@ -171,7 +171,7 @@ extension PeopleCoordinator {
 
     func sendText(to contact: CNContact, with reservation: Reservation) async {
         // Get the contact's phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
+        guard let phone = contact.findBestPhoneNumberString() else { return }
 
         // This user doesn't exist yet so they'll need the reservation to store the cid
         // in order to access the conversation.
@@ -235,7 +235,7 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
                 guard let phone = controller.recipients?.first else { return }
                 guard let invitedPerson = self.peopleToInvite.first(where: { person in
                     if let contact = person.cnContact,
-                       let phoneString = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
+                       let phoneString = contact.findBestPhoneNumberString(),
                        phone == phoneString {
                         return true
                     } else {

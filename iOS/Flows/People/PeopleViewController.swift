@@ -174,6 +174,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
         let connections = (try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])) ?? []
 
+        // Get all of the connected Jibber users.
         var connectedPeople: [Person] = []
         connections.forEach { connection in
             guard let userId = connection.nonMeUser?.personId else { return }
