@@ -15,7 +15,10 @@ import Localization
 class PeopleViewController: DiffableCollectionViewController<PeopleCollectionViewDataSource.SectionType,
                             PeopleCollectionViewDataSource.ItemType,
                             PeopleCollectionViewDataSource> {
-    
+
+    typealias PeopleSection = PeopleCollectionViewDataSource.SectionType
+    typealias PersonItem = PeopleCollectionViewDataSource.ItemType
+
     let leftItem = UIBarButtonItem(title: "Invites Left", image: nil, primaryAction: nil, menu: nil)
 
     private(set) var reservations: [Reservation] = []
@@ -110,7 +113,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
     
     func updateSelectedPeopleItems() {
-         let updatedItems: [PeopleCollectionViewDataSource.ItemType] = self.dataSource.itemIdentifiers(in: .people).compactMap { item in
+         let updatedItems: [PersonItem] = self.dataSource.itemIdentifiers(in: .people).compactMap { item in
             switch item {
             case .person(let person):
                 var copy = person
@@ -166,9 +169,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     // MARK: Data Loading
 
-    override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
+    override func retrieveDataForSnapshot() async -> [PeopleSection : [PersonItem]] {
 
-        var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
+        var data: [PeopleSection: [PersonItem]] = [:]
 
         if let connections = try? await GetAllConnections().makeRequest(andUpdate: [],
                                                                         viewsToIgnore: []).filter({ (connection) -> Bool in
@@ -190,8 +193,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         return data
     }
 
-    override func getAllSections() -> [PeopleCollectionViewDataSource.SectionType] {
-        return PeopleCollectionViewDataSource.SectionType.allCases
+    override func getAllSections() -> [PeopleSection] {
+        return PeopleSection.allCases
     }
     
     override func collectionViewDataWasLoaded() {
@@ -218,12 +221,11 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             
             self.allPeople.append(contentsOf: contacts)
 
-            let contactItems: [PeopleCollectionViewDataSource.ItemType] = contacts.map { person in
+            let contactItems: [PersonItem] = contacts.map { person in
                 return .person(person)
             }
 
             await self.dataSource.appendItems(contactItems, toSection: .people)
-            
         }.add(to: self.autocancelTaskPool)
     }
     
