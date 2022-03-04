@@ -104,11 +104,20 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     }
     
     private func scheduleUnreadMessagesNote(with notice: Notice) {
-        notice.unreadMessages.forEach { dict in
+        
+        let messages: [ChatMessage] = notice.unreadMessages.compactMap { dict in
             if let messageId = dict.keys.first,
                let cidValue = dict[messageId],
                let message = self.findMessage(with: messageId, cid: cidValue) {
-                self.scheduleNotification(with: message)
+                return message
+            } else {
+                return nil
+            }
+        }
+        
+        Task {
+            await messages.asyncForEach { message in
+                await self.scheduleNotification(with: message)
             }
         }
     }
@@ -117,11 +126,10 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         guard let client = self.client,
               let cid = try? ChannelId(cid: cid),
               let message = client.messageController(cid: cid, messageId: messageId).message else { return nil }
-        
         return message
     }
     
-    private func scheduleNotification(with message: ChatMessage) {
+    private func scheduleNotification(with message: ChatMessage) async {
         
         let content = UNMutableNotificationContent()
         
@@ -137,16 +145,59 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         content.setStreamData(value: "message.new", for: .type)
         content.setStreamData(value: message.author.id, for: .author)
         content.userInfo["mutable-content"] = 1
-        
         content.interruptionLevel = .active
-        let request = UNNotificationRequest(identifier: message.id,
-                                            content: content,
-                                            trigger: nil)
         
-        UNUserNotificationCenter.current().add(request)
+        let updated = await self.finalizeContent(with: message, content: content)
+        
+        let request = UNNotificationRequest(identifier: message.id,
+                                            content: updated,
+                                            trigger: nil)
+
+        try? await UNUserNotificationCenter.current().add(request)
     }
     
-    func getTimeAgoString(for date: Date) -> String {
+    private func finalizeContent(with message: ChatMessage, content: UNMutableNotificationContent) async -> UNNotificationContent {
+        
+        guard let cid = message.cid,
+                let conversation = self.client?.channelController(for: cid).channel,
+              let author = try? await User.getObject(with: message.author.id).iNPerson else { return content }
+                
+        let memberIds = conversation.lastActiveMembers.compactMap { member in
+            return member.id
+        }
+
+        // Map members to recipients
+        let recipients = try? await User.fetchAndUpdateLocalContainer(where: memberIds,
+                                                                           container: .users)
+            .compactMap({ user in
+                return user.iNPerson
+            })
+        
+        // Create the intent
+        let incomingMessageIntent
+        = INSendMessageIntent(recipients: recipients,
+                              outgoingMessageType: .outgoingMessageText,
+                              content: content.body,
+                              speakableGroupName: conversation.speakableGroupName,
+                              conversationIdentifier: conversation.cid.description,
+                              serviceName: nil,
+                              sender: author,
+                              attachments: nil)
+
+        let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
+        interaction.direction = .incoming
+
+        do {
+            // Update the content with the intent
+            let messageContent = try content.updating(from: incomingMessageIntent)
+            return messageContent
+        } catch {
+            logError(error)
+            return content
+        }
+    }
+    
+    private func getTimeAgoString(for date: Date) -> String {
         
         let now = Date()
         let aMinuteAgo = now.subtract(component: .minute, amount: 1)

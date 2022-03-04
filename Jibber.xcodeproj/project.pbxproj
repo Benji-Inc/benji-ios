@@ -125,6 +125,14 @@
 		D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C902732FFD00013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
+		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
+		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
+		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
+		D61A9B5327D2B14C008D8C57 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
+		D61A9B5427D2B160008D8C57 /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
+		D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E921D3111600204BEE /* String+Extensions.swift */; };
+		D61A9B5627D2B17C008D8C57 /* FontType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460A21D5547000CD8CE4 /* FontType.swift */; };
+		D61A9B5727D2B188008D8C57 /* Character+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */; };
 		D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D61EC0C221D3071400204BEE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0C121D3071400204BEE /* ViewController.swift */; };
 		D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
@@ -3143,19 +3151,27 @@
 				D6AE0FEC267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
 				D6CDA29227D16F9400823968 /* DeeplinkTarget.swift in Sources */,
 				D6AE0FE9267D2C1900C6B048 /* User.swift in Sources */,
+				D61A9B5727D2B188008D8C57 /* Character+Extensions.swift in Sources */,
 				D6AE0FF9267D2CE600C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FFE267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
 				D66ED457267D35E100332BA3 /* Config.swift in Sources */,
+				D61A9B5627D2B17C008D8C57 /* FontType.swift in Sources */,
 				D66ED45A267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
+				D61A9B5327D2B14C008D8C57 /* Avatar.swift in Sources */,
 				D6AE0FA4267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6CDA29427D170DA00823968 /* Date+Extensions.swift in Sources */,
 				D6CDA28E27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
+				D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */,
+				D61A9B5427D2B160008D8C57 /* ImageDisplayable.swift in Sources */,
+				D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */,
 				D65D460527A9FE620019301C /* Notice.swift in Sources */,
+				D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
 				D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */,
 				D66ED45D267D4B4000332BA3 /* Array+Extensions.swift in Sources */,
+				D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */,
 				D6AE0FF5267D2CD800C6B048 /* SessionManager.swift in Sources */,
 				D6AE0FF2267D2CCA00C6B048 /* ClientError.swift in Sources */,
 				D6AE0FFB267D2D9500C6B048 /* Objectable.swift in Sources */,
