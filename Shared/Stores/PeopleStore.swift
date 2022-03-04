@@ -104,7 +104,7 @@ class PeopleStore {
             }
 
             guard let contactId = reservation.contactId else { return }
-            guard let contact =
+            guard ContactsManager.shared.hasPermissions, let contact =
                     ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
                         return
                     }
@@ -181,7 +181,7 @@ class PeopleStore {
 
                 self.unclaimedReservations[reservation.objectId!] = reservation
 
-                guard let contact =
+                guard ContactsManager.shared.hasPermissions, let contact =
                         ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
                             return
                         }
