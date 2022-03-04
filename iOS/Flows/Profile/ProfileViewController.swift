@@ -76,11 +76,11 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.segmentControl.didSelectSegmentIndex = { [unowned self] index in
             switch index {
             case .recents:
-                self.loadRecents()
+                self.startLoadRecentTask()
             case .all:
-                self.loadAll()
+                self.startLoadAllTask()
             case .archive:
-                self.loadArchive()
+                self.startLoadArchiveTask()
             }
         }
     }
@@ -91,39 +91,27 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.collectionView.allowsMultipleSelection = false 
                 
         Task {
-            if let user = self.person as? User,
-               let updated = try? await user.retrieveDataIfNeeded() {
-                self.person = updated
-                self.header.configure(with: updated)
-                self.loadInitialData()
-                if !user.isCurrentUser {
-                    self.segmentControl.removeSegment(at: 0, animated: false)
-                    self.segmentControl.selectedSegmentIndex = 0
-                } else {
-                    self.segmentControl.selectedSegmentIndex = 1
-                }
-                self.loadRecents()
-                self.view.layoutNow()
-            } else if let user = try? await User.getObject(with: self.person.personId),
-                      let updated = try? await user.retrieveDataIfNeeded() {
-                self.person = updated
-                self.header.configure(with: updated)
-                self.loadInitialData()
-                if !user.isCurrentUser {
-                    self.segmentControl.removeSegment(at: 0, animated: false)
-                    self.segmentControl.selectedSegmentIndex = 0
-                } else {
-                    self.segmentControl.selectedSegmentIndex = 1
-                }
-                
-                self.loadRecents()
-                self.view.layoutNow()
+            guard let updatedPerson = await PeopleStore.shared.getPerson(withPersonId: self.person.personId) else {
+                return
             }
+
+            self.person = updatedPerson
+
+            self.header.configure(with: updatedPerson)
+            self.loadInitialData()
+            if !updatedPerson.isCurrentUser {
+                self.segmentControl.removeSegment(at: 0, animated: false)
+                self.segmentControl.selectedSegmentIndex = 0
+            } else {
+                self.segmentControl.selectedSegmentIndex = 1
+            }
+            self.startLoadRecentTask()
+
+            self.view.setNeedsLayout()
         }.add(to: self.autocancelTaskPool)
     }
     
     override func viewDidLayoutSubviews() {
-        
         self.header.expandToSuperviewWidth()
         self.header.height = 220
         self.header.pinToSafeAreaTop()
@@ -175,78 +163,89 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     override func retrieveDataForSnapshot() async -> [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] {
         return [:]
     }
-    
-    private func loadArchive() {
-        Task { [weak self] in
-            guard let `self` = self, let user = self.person as? User else { return }
+
+    // MARK: - Conversation Loading
+
+    /// The currently running task that is loading conversations.
+    private var loadConversationsTask: Task<Void, Never>?
+
+    private func startLoadArchiveTask() {
+        self.loadConversationsTask?.cancel()
+
+        self.loadConversationsTask = Task { [weak self] in
+            guard let user = self?.person as? User else { return }
+
             var userIds: [String] = []
-            
             if user.isCurrentUser {
                 userIds.append(user.objectId!)
             } else {
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
-            
-            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+
+            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: .and([.equal("hidden", to: true), filter]),
                                          sort: [Sorting(key: .createdAt, isAscending: true)],
                                          pageSize: .channelsPageSize,
                                          messagesLimit: 1)
-            
-            await self.loadConversations(with: query)
+
+            await self?.loadConversations(with: query)
         }.add(to: self.autocancelTaskPool)
     }
-    
-    private func loadRecents() {
-        Task { [weak self] in
-            guard let `self` = self, let user = self.person as? User else { return }
+
+    private func startLoadRecentTask() {
+        self.loadConversationsTask?.cancel()
+
+        self.loadConversationsTask = Task { [weak self] in
+            guard let user = self?.person as? User else { return }
+
             var userIds: [String] = []
-            
             if user.isCurrentUser {
                 userIds.append(user.objectId!)
             } else {
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
-            
-            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+
+            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
                                          sort: [Sorting(key: .updatedAt, isAscending: true)],
                                          pageSize: 5,
                                          messagesLimit: 1)
             
-            await self.loadConversations(with: query)
+            await self?.loadConversations(with: query)
         }.add(to: self.autocancelTaskPool)
     }
     
-    private func loadAll() {
-        Task { [weak self] in
-            guard let `self` = self, let user = self.person as? User else { return }
+    private func startLoadAllTask() {
+        self.loadConversationsTask?.cancel()
+
+        self.loadConversationsTask = Task { [weak self] in
+            guard let user = self?.person as? User else { return }
+
             var userIds: [String] = []
-            
             if user.isCurrentUser {
                 userIds.append(user.objectId!)
             } else {
                 userIds = [User.current()!.objectId!, user.objectId!]
             }
             
-            let filter = Filter<ChannelListFilterScope>.containMembers(userIds: userIds)
+            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
                                          sort: [Sorting(key: .createdAt, isAscending: true)],
                                          pageSize: .channelsPageSize,
                                          messagesLimit: 1)
             
-            await self.loadConversations(with: query)
+            await self?.loadConversations(with: query)
         }.add(to: self.autocancelTaskPool)
     }
     
     @MainActor
     private func loadConversations(with query: ChannelListQuery) async {
-        
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
 
         try? await self.conversationListController?.synchronize()
-        try? await self.conversationListController?.loadNextConversations(limit: .channelsPageSize)
+
+        guard !Task.isCancelled else { return }
 
         let conversations: [Conversation] = self.conversationListController?.conversations ?? []
                 

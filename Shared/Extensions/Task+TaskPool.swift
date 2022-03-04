@@ -35,7 +35,9 @@ class TaskPool {
 extension Task where Success == Void, Failure == Never {
 
     /// Adds the task to the given task pool. Once the task is finished, the task is removed from the pool.
-    func add(to taskPool: TaskPool) {
+    @discardableResult
+    func add(to taskPool: TaskPool) -> Task<Success, Failure> {
         taskPool.add(self)
+        return self
     }
 }

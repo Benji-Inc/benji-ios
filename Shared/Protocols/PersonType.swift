@@ -20,6 +20,10 @@ protocol PersonType: ImageDisplayable {
 }
 
 extension PersonType {
+
+    var isCurrentUser: Bool {
+        return self.personId == User.current()?.personId
+    }
     
     var fullName: String {
         if self.givenName.isEmpty && self.familyName.isEmpty {
