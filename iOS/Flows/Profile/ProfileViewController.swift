@@ -78,9 +78,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             case .recents:
                 self.startLoadRecentTask()
             case .all:
-                self.loadAll()
+                self.startLoadAllTask()
             case .archive:
-                self.loadArchive()
+                self.startLoadArchiveTask()
             }
         }
     }
@@ -169,7 +169,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     /// The currently running task that is loading conversations.
     private var loadConversationsTask: Task<Void, Never>?
 
-    private func loadArchive() {
+    private func startLoadArchiveTask() {
         self.loadConversationsTask?.cancel()
 
         self.loadConversationsTask = Task { [weak self] in
@@ -215,7 +215,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         }.add(to: self.autocancelTaskPool)
     }
     
-    private func loadAll() {
+    private func startLoadAllTask() {
         self.loadConversationsTask?.cancel()
 
         self.loadConversationsTask = Task { [weak self] in
