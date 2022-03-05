@@ -19,6 +19,10 @@ class CodeViewController: TextInputViewController<String?> {
     var reservationId: String?
     var passId: String?
     
+    override var analyticsIdentifier: String? {
+        return "SCREEN_CODE"
+    }
+    
     init() {
         super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "0000"))
     }

@@ -186,6 +186,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
                 logError(error)
             }
             
+            AnalyticsManager.shared.trackEvent(type: .finalizedOnboarding, properties: ["status": user.status?.rawValue ?? ""])
             await self.onboardingVC.hideLoading()
             self.finishFlow(with: ())
         }

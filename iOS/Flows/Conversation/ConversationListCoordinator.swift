@@ -138,6 +138,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                                                  extraData: [:])
         
         try await controller.synchronize()
+        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         ConversationsManager.shared.activeConversation = controller.conversation
     }
 }

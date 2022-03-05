@@ -31,6 +31,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private var errorOffset: CGFloat = -100
 
     lazy var cameraVC = FaceDetectionViewController()
+    
+    override var analyticsIdentifier: String? {
+        return "SCREEN_PHOTO"
+    }
 
     private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
         let vc = FaceDisclosureViewController(with: .smiling)

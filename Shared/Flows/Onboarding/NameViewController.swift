@@ -11,6 +11,10 @@ import Parse
 import Localization
 
 class NameViewController: TextInputViewController<String> {
+    
+    override var analyticsIdentifier: String? {
+        return "SCREEN_NAME"
+    }
 
     init() {
         super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "First Last"))

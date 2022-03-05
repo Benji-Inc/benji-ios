@@ -207,6 +207,7 @@ extension ConversationController {
                     Task {
                         await self.donateIntent(for: sendable)
                     }
+                    AnalyticsManager.shared.trackEvent(type: .messageSent, properties: nil)
                     continuation.resume(returning: messageID)
                 case .failure(let error):
                     continuation.resume(throwing: error)
@@ -352,6 +353,7 @@ extension ConversationController {
                     Task {
                         await self.donateIntent(for: sendable)
                     }
+                    AnalyticsManager.shared.trackEvent(type: .replySent, properties: nil)
                     continuation.resume(returning: messageId)
                 case .failure(let error):
                     continuation.resume(throwing: error)

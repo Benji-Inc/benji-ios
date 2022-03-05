@@ -230,6 +230,7 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
         case .cancelled, .failed:
             controller.dismiss(animated: true)
         case .sent:
+            AnalyticsManager.shared.trackEvent(type: .inviteSent, properties: nil)
             controller.dismiss(animated: true) {
                 // Get the person object for the person that was just invited with a text.
                 guard let phone = controller.recipients?.first else { return }
