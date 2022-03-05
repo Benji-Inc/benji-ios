@@ -37,6 +37,7 @@ class ContactsManager {
     }
     
     func searchForContact(with predicateType: ContactPredicateType) -> [CNContact] {
+        
         let predicate: NSPredicate
 
         let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey,
