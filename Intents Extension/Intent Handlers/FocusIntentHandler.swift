@@ -110,7 +110,6 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     private func scheduleUnreadMessagesNote(with notice: Notice) {
     
         Task {
-            
             let messages: [ChatMessage?] = await notice.unreadMessages.asyncMap { dict in
                 if let messageId = dict.keys.first,
                    let cidValue = dict[messageId],
@@ -218,26 +217,5 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         } else {
             return "A very long time ago..."
         }
-    }
-}
-
-extension UNNotificationAttachment {
-
-    static func create(identifier: String, image: UIImage, options: [NSObject : AnyObject]?) -> UNNotificationAttachment? {
-        let fileManager = FileManager.default
-        let tmpSubFolderName = ProcessInfo.processInfo.globallyUniqueString
-        let tmpSubFolderURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(tmpSubFolderName, isDirectory: true)
-        do {
-            try fileManager.createDirectory(at: tmpSubFolderURL, withIntermediateDirectories: true, attributes: nil)
-            let imageFileIdentifier = identifier+".png"
-            let fileURL = tmpSubFolderURL.appendingPathComponent(imageFileIdentifier)
-            let imageData = UIImage.pngData(image)
-            try imageData()?.write(to: fileURL)
-            let imageAttachment = try UNNotificationAttachment.init(identifier: imageFileIdentifier, url: fileURL, options: options)
-            return imageAttachment
-        } catch {
-            print("error " + error.localizedDescription)
-        }
-        return nil
     }
 }
