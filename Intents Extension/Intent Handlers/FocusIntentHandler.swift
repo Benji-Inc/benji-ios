@@ -153,7 +153,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
         content.setData(value: message.author.id, for: .author)
         content.setData(value: message.id, for: .messageId)
-        content.setData(value: message.cid?.id ?? "", for: .conversationId)
+        content.setData(value: message.cid?.description ?? "", for: .conversationId)
         content.setStreamData(value: message.cid?.id ?? "", for: .cid)
         content.setStreamData(value: message.id, for: .messageId)
         content.setStreamData(value: "message.new", for: .type)
