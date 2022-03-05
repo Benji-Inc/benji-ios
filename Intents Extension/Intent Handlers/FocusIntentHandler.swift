@@ -74,7 +74,11 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
                                      withParameters: [:]) { (object, error) in
                     
                     if let error = error {
-                        continuation.resume(throwing: error)
+                        if error.code == 209 {
+                            continuation.resume(throwing: ClientError.apiError(detail: "Invalid Session"))
+                        } else {
+                            continuation.resume(throwing: error)
+                        }
                     } else if let value = object as? String {
                         continuation.resume(returning: value)
                     } else {
@@ -104,37 +108,47 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     }
     
     private func scheduleUnreadMessagesNote(with notice: Notice) {
-        
-        let messages: [ChatMessage] = notice.unreadMessages.compactMap { dict in
-            if let messageId = dict.keys.first,
-               let cidValue = dict[messageId],
-               let message = self.findMessage(with: messageId, cid: cidValue) {
-                return message
-            } else {
+    
+        Task {
+            
+            let messages: [ChatMessage?] = await notice.unreadMessages.asyncMap { dict in
+                if let messageId = dict.keys.first,
+                   let cidValue = dict[messageId],
+                   let message = await self.findMessage(with: messageId, cid: cidValue) {
+                    return message
+                }
+                
                 return nil
             }
-        }
-        
-        Task {
+            
             await messages.asyncForEach { message in
-                await self.scheduleNotification(with: message)
+                if let msg = message {
+                    await self.scheduleNotification(with: msg)
+                }
             }
         }
     }
     
-    private func findMessage(with messageId: String, cid: String) -> ChatMessage? {
+    private func findMessage(with messageId: String, cid: String) async -> ChatMessage? {
         guard let client = self.client,
-              let cid = try? ChannelId(cid: cid),
-              let message = client.messageController(cid: cid, messageId: messageId).message else { return nil }
-        return message
+              let cid = try? ChannelId(cid: cid) else { return nil }
+        
+        let controller = client.messageController(cid: cid, messageId: messageId)
+        
+        return await withCheckedContinuation({ continuation in
+            controller.synchronize { error in
+                continuation.resume(returning: controller.message)
+            }
+        })
     }
     
     private func scheduleNotification(with message: ChatMessage) async {
+        guard let user = try? await User.getObject(with: message.author.id),
+        let author = try? await user.retrieveDataIfNeeded() else { return }
         
         let content = UNMutableNotificationContent()
-        
         content.title = "While you were focused..."
-        content.subtitle = self.getTimeAgoString(for: message.createdAt)
+        content.subtitle = "\(self.getTimeAgoString(for: message.createdAt)), \(author.fullName) said:" 
         content.body = message.text
         content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
         content.setData(value: message.author.id, for: .author)
@@ -146,58 +160,15 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         content.setStreamData(value: message.author.id, for: .author)
         content.interruptionLevel = .active
         
-        let updated = await self.finalizeContent(with: message, content: content)
-        
         let request = UNNotificationRequest(identifier: message.id,
-                                            content: updated,
+                                            content: content,
                                             trigger: nil)
 
         try? await UNUserNotificationCenter.current().add(request)
     }
     
-    private func finalizeContent(with message: ChatMessage, content: UNMutableNotificationContent) async -> UNNotificationContent {
-        
-        guard let cid = message.cid,
-                let conversation = self.client?.channelController(for: cid).channel,
-              let author = try? await User.getObject(with: message.author.id).iNPerson else { return content }
-                
-        let memberIds = conversation.lastActiveMembers.compactMap { member in
-            return member.id
-        }
-
-        // Map members to recipients
-        let recipients = try? await User.fetchAndUpdateLocalContainer(where: memberIds,
-                                                                           container: .users)
-            .compactMap({ user in
-                return user.iNPerson
-            })
-        
-        // Create the intent
-        let incomingMessageIntent
-        = INSendMessageIntent(recipients: recipients,
-                              outgoingMessageType: .outgoingMessageText,
-                              content: content.body,
-                              speakableGroupName: conversation.speakableGroupName,
-                              conversationIdentifier: conversation.cid.description,
-                              serviceName: nil,
-                              sender: author,
-                              attachments: nil)
-
-        let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
-        interaction.direction = .incoming
-
-        do {
-            // Update the content with the intent
-            let messageContent = try content.updating(from: incomingMessageIntent)
-            return messageContent
-        } catch {
-            logError(error)
-            return content
-        }
-    }
-    
     private func getTimeAgoString(for date: Date) -> String {
-        
+
         let now = Date()
         let aMinuteAgo = now.subtract(component: .minute, amount: 1)
         let anHourAgo = now.subtract(component: .hour, amount: 1)
@@ -205,10 +176,10 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         let aWeekAgo = now.subtract(component: .weekOfYear, amount: 1)
         let aMonthAgo = now.subtract(component: .month, amount: 1)
         let aYearAgo = now.subtract(component: .year, amount: 1)
-        
+
         if date.isBetween(now, and: aMinuteAgo!) {
             return "Just now"
-            
+
             // If less than hour - show # minutes
         } else if date.isBetween(now, and: anHourAgo!), let diff = date.minutes(from: now) {
             if abs(diff) == 1 {
@@ -247,5 +218,26 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         } else {
             return "A very long time ago..."
         }
+    }
+}
+
+extension UNNotificationAttachment {
+
+    static func create(identifier: String, image: UIImage, options: [NSObject : AnyObject]?) -> UNNotificationAttachment? {
+        let fileManager = FileManager.default
+        let tmpSubFolderName = ProcessInfo.processInfo.globallyUniqueString
+        let tmpSubFolderURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(tmpSubFolderName, isDirectory: true)
+        do {
+            try fileManager.createDirectory(at: tmpSubFolderURL, withIntermediateDirectories: true, attributes: nil)
+            let imageFileIdentifier = identifier+".png"
+            let fileURL = tmpSubFolderURL.appendingPathComponent(imageFileIdentifier)
+            let imageData = UIImage.pngData(image)
+            try imageData()?.write(to: fileURL)
+            let imageAttachment = try UNNotificationAttachment.init(identifier: imageFileIdentifier, url: fileURL, options: options)
+            return imageAttachment
+        } catch {
+            print("error " + error.localizedDescription)
+        }
+        return nil
     }
 }
