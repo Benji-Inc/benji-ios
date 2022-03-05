@@ -26,14 +26,14 @@ class AnalyticsManager {
     }
     
     init() {
-       // if isRelease {
+        if isRelease {
             let configuration = PHGPostHogConfiguration(apiKey: "phc_vOn43aOVi1hlzaOpFZqDe4BrKmMgVcz4wtW0LghCyYP",
                                                         host: "https://app.posthog.com")
-
+            
             configuration.captureApplicationLifecycleEvents = true; // Record certain application events automatically!
             PHGPostHog.setup(with: configuration)
             PHGPostHog.shared()?.capture("Test Event")
-       // }
+        }
     }
     
     func trackEvent(type: EventType, properties: [String: Any]? = nil) {
