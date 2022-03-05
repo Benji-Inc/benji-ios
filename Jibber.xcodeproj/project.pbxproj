@@ -456,6 +456,11 @@
 		D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E921D3111600204BEE /* String+Extensions.swift */; };
 		D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */; };
 		D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */; };
+		D68B723327D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
+		D68B723427D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
+		D68B723527D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
+		D68B723627D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
+		D68B723727D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
 		D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
@@ -982,6 +987,7 @@
 		D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6884B1E2587D25D00DA380E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6884B1F2587D25D00DA380E /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
+		D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureModalViewController.swift; sourceTree = "<group>"; };
 		D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCoordinator.swift; sourceTree = "<group>"; };
 		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
@@ -1611,9 +1617,10 @@
 		D66379DB25A39BB000A4A3B7 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */,
+				80632D92278534E600D3A65B /* EventLogger.swift */,
 				D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */,
 				D66379C725A3704300A4A3B7 /* LaunchManager.swift */,
-				80632D92278534E600D3A65B /* EventLogger.swift */,
 				D66379CD25A3704300A4A3B7 /* SessionManager.swift */,
 				D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */,
 			);
@@ -2846,6 +2853,7 @@
 				D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,
+				D68B723327D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
@@ -2942,6 +2950,7 @@
 				D66AB0F3277A498D007A35D1 /* ImageCaptureViewController.swift in Sources */,
 				D63DB25525E9995700F6B323 /* DeeplinkObject.swift in Sources */,
 				80A36AF3278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */,
+				D68B723427D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D63DB26D25E9997F00F6B323 /* PersonType.swift in Sources */,
 				D63DB26525E9997200F6B323 /* ThemeColor.swift in Sources */,
 				D63DB22325E9990500F6B323 /* Date+Extensions.swift in Sources */,
@@ -3132,6 +3141,7 @@
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
 				D61316B1273C85A200DC782B /* ThemeColor.swift in Sources */,
 				D687595E2728A4BA00AF7C07 /* User+INPerson.swift in Sources */,
+				D68B723527D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */,
 				D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */,
 				D6166C892731F79A0013E803 /* UIImage+Extensions.swift in Sources */,
@@ -3164,6 +3174,7 @@
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */,
 				D61A9B5427D2B160008D8C57 /* ImageDisplayable.swift in Sources */,
+				D68B723627D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */,
 				D65D460527A9FE620019301C /* Notice.swift in Sources */,
 				D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */,
@@ -3195,6 +3206,7 @@
 				D6CDA28F27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
 				D65D460627A9FEA00019301C /* Notice.swift in Sources */,
 				D6AE0FA1267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
+				D68B723727D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D6166C902732FFD00013E803 /* Logger.swift in Sources */,
 				D66ED45E267D4B4000332BA3 /* Array+Extensions.swift in Sources */,
 				D6AE0F8C267CFA6D00C6B048 /* IntentViewController.swift in Sources */,
