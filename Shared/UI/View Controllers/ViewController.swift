@@ -16,6 +16,7 @@ class ViewController: UIViewController, Dismissable {
     /// A pool of Tasks that are automatically cancelled when our view disappears
     var autocancelTaskPool = TaskPool()
     
+    /// Used to identify a screen
     var analyticsIdentifier: String? {
         return nil
     }
@@ -70,6 +71,7 @@ class ViewController: UIViewController, Dismissable {
     /// This will only be called once in the VC's lifecycle unless it presented and dismissed again.
     func viewWasDismissed() { }
     
+    /// Called in viewDidAppear. Used to track screens becoming visible.
     func trackScreenDidAppearEvent() {
         if let identifier = self.analyticsIdentifier {
             AnalyticsManager.shared.trackStreen(type: identifier, properties: nil)
