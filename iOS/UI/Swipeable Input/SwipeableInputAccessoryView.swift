@@ -74,7 +74,7 @@ class SwipeableInputAccessoryView: BaseView {
     static var inputTypeAvatarHeight: CGFloat = 56
 
     /// The current input state of the accessory view.
-    @Published private var inputState: InputState = .collapsed
+    @Published var inputState: InputState = .collapsed
 
     // MARK: - Message State
 

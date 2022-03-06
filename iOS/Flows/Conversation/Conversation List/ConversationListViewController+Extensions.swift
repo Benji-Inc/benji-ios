@@ -48,6 +48,14 @@ extension ConversationListViewController {
     }
 
     func subscribeToUIUpdates() {
+        self.messageInputAccessoryView.$inputState
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+                UIView.animate(withDuration: Theme.animationDurationFast) {
+                    self.headerVC.view.alpha = state == .collapsed ? 1.0 : 0.5
+                }
+            }.store(in: &self.cancellables)
+        
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
