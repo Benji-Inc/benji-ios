@@ -11,18 +11,20 @@ import Foundation
 class ContextCueCoordinator: PresentableCoordinator<Void> {
     
     lazy var creatorVC = ContextCueCreatorViewController()
+    
+    override init(router: Router, deepLink: DeepLinkable?) {
+        super.init(router: router, deepLink: deepLink)
+        
+        self.creatorVC.didCreateContextCue = { [unowned self] in
+            self.finishFlow(with: ())
+        }
+    }
+    
+    deinit {
+        logDebug("DEINIT")
+    }
 
     override func toPresentable() -> DismissableVC {
         return self.creatorVC
-    }
-    
-    override func start() {
-        super.start()
-        
-        self.creatorVC.didCreateContextCue = { [unowned self] in
-            self.creatorVC.dismiss(animated: true) { [unowned self] in
-                self.finishFlow(with: ())
-            }
-        }
     }
 }
