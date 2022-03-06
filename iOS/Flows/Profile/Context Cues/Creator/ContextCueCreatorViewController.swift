@@ -45,7 +45,7 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         
         self.$selectedItems.mainSink { [unowned self] items in
             
-            let emojis: [String] = items.compactMap { type in
+            let emojis: [Emoji] = items.compactMap { type in
                 switch type {
                 case .emoji(let emoji):
                     return emoji

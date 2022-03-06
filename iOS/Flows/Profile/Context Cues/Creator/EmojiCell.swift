@@ -9,9 +9,9 @@
 import Foundation
 
 class EmojiCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = String
+    typealias ItemType = Emoji
     
-    var currentItem: String?
+    var currentItem: Emoji?
     
     private let label = ThemeLabel(font: .reactionEmoji)
     
@@ -21,8 +21,8 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.label)
     }
     
-    func configure(with item: String) {
-        self.label.setText(item)
+    func configure(with item: Emoji) {
+        self.label.setText(item.emoji)
         self.layoutNow()
     }
     

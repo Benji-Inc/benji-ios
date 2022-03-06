@@ -16,7 +16,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     private var person: PersonType
     
     lazy var header = ProfileHeaderView()
-    private lazy var contextCuesVC = ContextCuesViewController()
+    lazy var contextCuesVC = ContextCuesViewController()
     
     private let segmentGradientView = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
                                                          ThemeColor.walletBackground.color.cgColor,

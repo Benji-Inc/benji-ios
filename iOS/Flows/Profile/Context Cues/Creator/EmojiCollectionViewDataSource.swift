@@ -16,7 +16,7 @@ class EmojiCollectionViewDataSource: CollectionViewDataSource<EmojiCollectionVie
     }
 
     enum ItemType: Hashable {
-        case emoji(String)
+        case emoji(Emoji)
     }
 
     private let config = ManageableCellRegistration<EmojiCell>().provider

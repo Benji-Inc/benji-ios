@@ -33,6 +33,10 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
             self.profileVC.header.personView.didSelect { [unowned self] in
                 self.presentProfilePicture()
             }
+            
+            self.profileVC.contextCuesVC.tempView.didSelect { [unowned self] in
+                self.presentContextCueCreator()
+            }
         }
         
         self.profileVC.$selectedItems.mainSink { [unowned self] items in
@@ -53,5 +57,11 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
         }
 
         self.router.present(vc, source: self.profileVC)
+    }
+    
+    func presentContextCueCreator() {
+        self.removeChild()
+        let coordinator = ContextCueCoordinator(router: self.router, deepLink: self.deepLink)
+        self.router.present(coordinator, source: self.profileVC)
     }
 }
