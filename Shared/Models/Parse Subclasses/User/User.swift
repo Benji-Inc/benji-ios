@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import ParseLiveQuery
 import Combine
+import SwiftUI
 
 enum ObjectKey: String {
     case objectId
@@ -30,6 +31,7 @@ enum UserKey: String {
     case connectionPreferences
     case focusStatus
     case timeZone
+    case latestContextCue
 }
 
 enum UserStatus: String {
@@ -111,5 +113,10 @@ final class User: PFUser {
     var timeZone: String {
         get { return self.getObject(for: .timeZone) ?? String() }
         set { self.setObject(for: .timeZone, with: newValue) }
+    }
+    
+    var latestContextCue: ContextCue? {
+        get { return self.getObject(for: .latestContextCue) }
+        set { self.setObject(for: .latestContextCue, with: newValue) }
     }
 }

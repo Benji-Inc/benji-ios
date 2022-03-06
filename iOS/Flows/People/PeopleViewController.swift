@@ -24,8 +24,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private(set) var reservations: [Reservation] = []
     
     let button = ThemeButton()
-    private let loadingView = InvitationLoadingView()
     private var showButton: Bool = true
+    
+    private let loadingView = InvitationLoadingView()
     
     private(set) var allPeople: [Person] = []
     

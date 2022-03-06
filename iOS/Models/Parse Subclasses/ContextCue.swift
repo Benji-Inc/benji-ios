@@ -11,7 +11,7 @@ import Parse
 
 enum ContextCueKey: String {
     case owner
-    case status
+    case emojis
     case message
     case attributes
 }
@@ -27,9 +27,9 @@ final class ContextCue: PFObject, PFSubclassing {
         set { self.setObject(for: .owner, with: newValue) }
     }
     
-    var status: String? {
-        get { self.getObject(for: .status) }
-        set { self.setObject(for: .status, with: newValue)}
+    var emojis: [String] {
+        get { self.getObject(for: .emojis) ?? [] }
+        set { self.setObject(for: .emojis, with: newValue)}
     }
     
     var message: String? {

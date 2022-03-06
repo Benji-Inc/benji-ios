@@ -82,14 +82,9 @@ class ThemeButton: UIButton, Statusable {
             self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
             self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
 
-            // Emojis wont show correctly with attributes
-            if localizedString.getEmojiRanges().count > 0 {
-                self.setTitle(localizedString, for: .normal)
-                self.setTitle(localizedString, for: .highlighted)
-            } else {
-                self.setAttributedTitle(normalString, for: .normal)
-                self.setAttributedTitle(highlightedString, for: .highlighted)
-            }
+            self.setAttributedTitle(normalString, for: .normal)
+            self.setAttributedTitle(highlightedString, for: .highlighted)
+            
         case .normal(let color, let text):
             self.setImage(nil, for: .normal)
             self.defaultColor = color
@@ -115,14 +110,8 @@ class ThemeButton: UIButton, Statusable {
             self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
             self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
 
-            // Emojis wont show correctly with attributes
-            if localizedString.getEmojiRanges().count > 0 {
-                self.setTitle(localizedString, for: .normal)
-                self.setTitle(localizedString, for: .highlighted)
-            } else {
-                self.setAttributedTitle(normalString, for: .normal)
-                self.setAttributedTitle(highlightedString, for: .highlighted)
-            }
+            self.setAttributedTitle(normalString, for: .normal)
+            self.setAttributedTitle(highlightedString, for: .highlighted)
         }
 
         self.layer.cornerRadius = Theme.cornerRadius

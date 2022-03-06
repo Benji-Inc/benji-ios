@@ -137,6 +137,10 @@
 		D61A33D527D4F85B00056242 /* ContextCueInputHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D427D4F85B00056242 /* ContextCueInputHeaderView.swift */; };
 		D61A33D727D4FAA900056242 /* ContextCueCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D627D4FAA900056242 /* ContextCueCoordinator.swift */; };
 		D61A33D927D4FE9E00056242 /* EmojiServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D827D4FE9E00056242 /* EmojiServiceManager.swift */; };
+		D61A33DA27D51D4C00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DC27D51D4D00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DD27D51D4E00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
 		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
@@ -3027,6 +3031,7 @@
 				D63DB23B25E9992600F6B323 /* UIView+Extensions.swift in Sources */,
 				D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */,
 				D62ED57A279CB4A400F7C08A /* BorderedPersoniew.swift in Sources */,
+				D61A33DA27D51D4C00056242 /* ContextCue.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
 				D63DB21D25E998F000F6B323 /* Coordinator.swift in Sources */,
 				D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */,
@@ -3173,6 +3178,7 @@
 				D68759642728A55A00AF7C07 /* FontType.swift in Sources */,
 				D68759672728A59600AF7C07 /* User+Extensions.swift in Sources */,
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
+				D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */,
 				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
 				D61316B0273C859700DC782B /* MessageContext.swift in Sources */,
 				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
@@ -3227,6 +3233,7 @@
 				D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6CDA29427D170DA00823968 /* Date+Extensions.swift in Sources */,
 				D6CDA28E27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
+				D61A33DC27D51D4D00056242 /* ContextCue.swift in Sources */,
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */,
 				D61A9B5427D2B160008D8C57 /* ImageDisplayable.swift in Sources */,
@@ -3258,6 +3265,7 @@
 				D66ED458267D35E200332BA3 /* Config.swift in Sources */,
 				D66ED45B267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0FEF267D2CBA00C6B048 /* Objectable.swift in Sources */,
+				D61A33DD27D51D4E00056242 /* ContextCue.swift in Sources */,
 				D6CDA29527D170DB00823968 /* Date+Extensions.swift in Sources */,
 				D6CDA28F27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
 				D65D460627A9FEA00019301C /* Notice.swift in Sources */,

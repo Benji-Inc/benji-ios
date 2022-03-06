@@ -19,6 +19,13 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
         
         self.contentView.addSubview(self.label)
+        self.contentView.layer.borderColor = ThemeColor.BORDER.color.cgColor
+        self.contentView.layer.borderWidth = 0.5
+        self.contentView.layer.cornerRadius = Theme.cornerRadius
+        self.contentView.layer.shadowColor = ThemeColor.gray.color.cgColor
+        self.contentView.layer.shadowOpacity = 0.35
+        self.contentView.layer.shadowOffset = .zero
+        self.contentView.layer.shadowRadius = 6
     }
     
     func configure(with item: Emoji) {
@@ -31,5 +38,11 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
         
         self.label.setSize(withWidth: self.contentView.width)
         self.label.centerOnXAndY()
+    }
+    
+    override func update(isSelected: Bool) {
+        super.update(isSelected: isSelected)
+        
+        self.contentView.backgroundColor = isSelected ? ThemeColor.D6.color.withAlphaComponent(0.25) : ThemeColor.clear.color
     }
 }

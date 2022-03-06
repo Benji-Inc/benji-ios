@@ -15,4 +15,14 @@ class ContextCueCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> DismissableVC {
         return self.creatorVC
     }
+    
+    override func start() {
+        super.start()
+        
+        self.creatorVC.didCreateContextCue = { [unowned self] in
+            self.creatorVC.dismiss(animated: true) { [unowned self] in
+                self.finishFlow(with: ())
+            }
+        }
+    }
 }

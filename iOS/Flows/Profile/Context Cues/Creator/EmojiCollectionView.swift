@@ -12,7 +12,7 @@ class EmojiCollectionView: CollectionView {
     
     init() {
         super.init(layout: EmojiCollectionViewLayout())
-        self.allowsMultipleSelection = true 
+        self.allowsMultipleSelection = false
     }
     
     required init?(coder aDecoder: NSCoder) {
