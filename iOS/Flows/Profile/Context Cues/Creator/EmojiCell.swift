@@ -13,7 +13,7 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: Emoji?
     
-    private let label = ThemeLabel(font: .reactionEmoji)
+    private let label = ThemeLabel(font: .systemLarge)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -30,5 +30,6 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
         
         self.label.setSize(withWidth: self.contentView.width)
+        self.label.centerOnXAndY()
     }
 }

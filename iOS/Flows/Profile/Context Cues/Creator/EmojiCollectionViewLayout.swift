@@ -21,9 +21,9 @@ class EmojiCollectionViewLayout: UICollectionViewCompositionalLayout {
             case .emojis:
                 
                 let inset = Theme.ContentOffset.short.value
-                
+                let fraction: CGFloat = 0.2
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalWidth(0.2))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                              leading: inset,
@@ -31,8 +31,8 @@ class EmojiCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                              trailing: inset)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(fraction))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)

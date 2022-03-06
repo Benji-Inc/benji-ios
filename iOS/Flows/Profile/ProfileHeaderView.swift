@@ -101,7 +101,7 @@ class ProfileHeaderView: BaseView {
         self.timeLabel.top = self.personView.centerY + 2
         
         self.bottomLabel.setSize(withWidth: self.width)
-        self.bottomLabel.match(.top, to: .bottom, of: self.personView, offset: .xtraLong)
+        self.bottomLabel.pin(.bottom, offset: .standard)
         self.bottomLabel.centerOnX()
         
         self.statusLabel.setSize(withWidth: self.width)

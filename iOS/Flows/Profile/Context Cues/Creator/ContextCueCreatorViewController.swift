@@ -56,6 +56,12 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         }.store(in: &self.cancellables)
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.loadInitialData()
+    }
+    
     override func viewDidLayoutSubviews() {
         
         self.header.expandToSuperviewWidth()
@@ -71,8 +77,8 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
     
     override func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.match(.top, to: .bottom, of: self.header, offset: .custom(34))
-        self.collectionView.height = self.view.height - self.header.bottom - 34
+        self.collectionView.match(.top, to: .bottom, of: self.header)
+        self.collectionView.height = self.view.height - self.header.bottom
         self.collectionView.centerOnX()
     }
     
@@ -82,6 +88,13 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
 
     override func retrieveDataForSnapshot() async -> [EmojiCollectionViewDataSource.SectionType : [EmojiCollectionViewDataSource.ItemType]] {
         var data: [EmojiCollectionViewDataSource.SectionType : [EmojiCollectionViewDataSource.ItemType]] = [:]
+        
+        guard let emojis = try? await EmojiServiceManager.fetchAllEmojis() else { return data }
+        
+        data[.emojis] = emojis.results.compactMap({ emoji in
+            return .emoji(emoji)
+        })
+        
         return data
     }
 }

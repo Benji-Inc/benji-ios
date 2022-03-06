@@ -31,7 +31,7 @@ class EmojiServiceManager {
     static func fetchAllEmojis() async throws -> Response {
         
         return try await withCheckedThrowingContinuation({ continuation in
-            let url = "https://api.emojisworld.fr/v1/"
+            let url = "https://api.emojisworld.fr/v1/random"//"https://api.emojisworld.fr/v1/categories"
             //let url = "https://api.emojisworld.fr/v1/search?q=\(query)&limit=\(limit)"
             guard let safeURL = URL(string: "\(url)") else {
                 continuation.resume(throwing: ClientError.apiError(detail: "Wrong URL"))

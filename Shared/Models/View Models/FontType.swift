@@ -24,6 +24,7 @@ enum FontType {
     case xtraSmall
     case reactionEmoji
     case system
+    case systemLarge
     case systemBold
 
     var font: UIFont {
@@ -31,7 +32,7 @@ enum FontType {
         return UIFont.systemFont(ofSize: self.size)
     #else
         switch self {
-        case .system:
+        case .system, .systemLarge:
             return UIFont.systemFont(ofSize: self.size)
         case .systemBold:
             return UIFont.systemFont(ofSize: self.size, weight: .bold)
@@ -47,7 +48,7 @@ enum FontType {
 
     var size: CGFloat {
         switch self {
-        case .display:
+        case .display, .systemLarge:
             return 30
         case .medium, .mediumBold:
             return 20
