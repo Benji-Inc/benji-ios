@@ -141,6 +141,10 @@
 		D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
 		D61A33DC27D51D4D00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
 		D61A33DD27D51D4E00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DF27D5703C00056242 /* ContextCueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33DE27D5703C00056242 /* ContextCueCell.swift */; };
+		D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E027D572F100056242 /* ContextCueCollectionView.swift */; };
+		D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */; };
+		D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */; };
 		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
@@ -852,6 +856,10 @@
 		D61A33D427D4F85B00056242 /* ContextCueInputHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueInputHeaderView.swift; sourceTree = "<group>"; };
 		D61A33D627D4FAA900056242 /* ContextCueCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCoordinator.swift; sourceTree = "<group>"; };
 		D61A33D827D4FE9E00056242 /* EmojiServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiServiceManager.swift; sourceTree = "<group>"; };
+		D61A33DE27D5703C00056242 /* ContextCueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCell.swift; sourceTree = "<group>"; };
+		D61A33E027D572F100056242 /* ContextCueCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionView.swift; sourceTree = "<group>"; };
+		D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Jibber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jibber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -2163,6 +2171,10 @@
 		D6D96EF227C5B0FD00BDCD01 /* Context Cues */ = {
 			isa = PBXGroup;
 			children = (
+				D61A33DE27D5703C00056242 /* ContextCueCell.swift */,
+				D61A33E027D572F100056242 /* ContextCueCollectionView.swift */,
+				D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */,
+				D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */,
 				D6D96EF327C5B11900BDCD01 /* ContextCuesViewController.swift */,
 				D61A33C727D4F21D00056242 /* Creator */,
 			);
@@ -2753,6 +2765,7 @@
 				D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */,
 				8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */,
 				D61EC0F721D316F100204BEE /* ThemeColor.swift in Sources */,
+				D61A33DF27D5703C00056242 /* ContextCueCell.swift in Sources */,
 				D6DEC3F127A1DDB70072D9D0 /* CircleView.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
@@ -2855,6 +2868,7 @@
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
+				D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */,
 				D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */,
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
@@ -2864,6 +2878,7 @@
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
+				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,
 				D6766C46274D50680046B449 /* MemberCell.swift in Sources */,
 				804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */,
 				80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */,
@@ -2952,6 +2967,7 @@
 				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
+				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,

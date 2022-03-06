@@ -8,31 +8,35 @@
 
 import Foundation
 
-class ContextCuesViewController: ViewController {
+
+class ContextCuesViewController: DiffableCollectionViewController<ContextCueCollectionViewDataSource.SectionType,
+                                 ContextCueCollectionViewDataSource.ItemType,
+                                 ContextCueCollectionViewDataSource> {
     
     let lineView = BaseView()
+    let person: PersonType
+        
+    init(person: PersonType) {
+        self.person = person
+        super.init(with: ContextCueCollectionView())
+    }
     
-    let tempView = BaseView()
-    let label = ThemeLabel(font: .regular)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func initializeViews() {
         super.initializeViews()
         
-        self.view.addSubview(self.lineView)
+        self.view.insertSubview(self.lineView, belowSubview: self.collectionView)
         self.lineView.set(backgroundColor: .B2)
         self.lineView.alpha = 0.5
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        self.view.addSubview(self.tempView)
-        self.tempView.set(backgroundColor: .B0)
-        self.tempView.layer.borderColor = ThemeColor.white.color.withAlphaComponent(0.3).cgColor
-        self.tempView.layer.borderWidth = 1
-        self.tempView.layer.cornerRadius = Theme.cornerRadius
-        self.tempView.layer.masksToBounds = true
-        
-        self.view.addSubview(self.label)
-        
-        self.label.textAlignment = .center
-        self.label.setText("Coming soon 😉")
+        self.loadInitialData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -41,12 +45,18 @@ class ContextCuesViewController: ViewController {
         self.lineView.expandToSuperviewWidth()
         self.lineView.height = 1
         self.lineView.centerOnXAndY()
+    }
+    
+    override func getAllSections() -> [ContextCueCollectionViewDataSource.SectionType] {
+        return ContextCueCollectionViewDataSource.SectionType.allCases
+    }
+
+    override func retrieveDataForSnapshot() async -> [ContextCueCollectionViewDataSource.SectionType : [ContextCueCollectionViewDataSource.ItemType]] {
+        var data: [ContextCueCollectionViewDataSource.SectionType : [ContextCueCollectionViewDataSource.ItemType]] = [:]
         
-        self.label.setSize(withWidth: self.view.width)
-        self.label.centerOnXAndY()
+        guard let user = self.person as? Person else { return data }
         
-        self.tempView.expandToSuperviewHeight()
-        self.tempView.width = self.label.width + Theme.ContentOffset.xtraLong.value.doubled
-        self.tempView.centerOnXAndY()
+        
+        return data
     }
 }

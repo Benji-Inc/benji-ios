@@ -34,9 +34,9 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
                 self.presentProfilePicture()
             }
             
-            self.profileVC.contextCuesVC.tempView.didSelect { [unowned self] in
-                self.presentContextCueCreator()
-            }
+//            self.profileVC.contextCuesVC.tempView.didSelect { [unowned self] in
+//                self.presentContextCueCreator()
+//            }
         }
         
         self.profileVC.$selectedItems.mainSink { [unowned self] items in
