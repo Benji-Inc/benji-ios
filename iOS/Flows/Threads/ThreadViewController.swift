@@ -24,9 +24,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     @ObservedObject private var messageState = MessageDetailViewState(message: nil)
     private lazy var detailView = MessageDetailView(config: self.messageState)
     lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
-    
-   // let detailView = old_MessageDetailView()
-    
+        
     /// If true we should scroll to the last item in the collection in layout subviews.
     private var scrollToLastItemOnLayout: Bool = true
     
@@ -105,8 +103,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         
         self.addChild(viewController: self.detailVC)
         self.detailVC.view.alpha = 0
-        //self.view.addSubview(self.detailView)
-        //self.detailView.alpha = 0
         
         self.view.addSubview(self.pullView)
 
