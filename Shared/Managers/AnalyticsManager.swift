@@ -37,10 +37,12 @@ class AnalyticsManager {
     }
     
     func trackEvent(type: EventType, properties: [String: Any]? = nil) {
+        guard isRelease else { return }
         PHGPostHog.shared()?.capture(type.rawValue, properties: properties)
     }
     
     func trackStreen(type: String, properties: [String: Any]? = nil) {
+        guard isRelease else { return }
         PHGPostHog.shared()?.screen(type, properties: properties)
     }
 }
