@@ -32,7 +32,6 @@ class AnalyticsManager {
             
             configuration.captureApplicationLifecycleEvents = true; // Record certain application events automatically!
             PHGPostHog.setup(with: configuration)
-            PHGPostHog.shared()?.capture("Test Event")
         }
     }
     
