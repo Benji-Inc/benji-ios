@@ -16,4 +16,5 @@ enum MicroAnimation: String {
     case alertCircle = "alertCircle"
     case checkMark = "checkmark"
     case doubleCheckMark = "doublecheckmark"
+    case maxToMin = "maxToMin"
 }

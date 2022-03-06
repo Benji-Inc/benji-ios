@@ -461,6 +461,11 @@
 		D68B723527D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
 		D68B723627D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
 		D68B723727D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */; };
+		D68B723927D4430500F04AB1 /* maxToMin.json in Resources */ = {isa = PBXBuildFile; fileRef = D68B723827D4430500F04AB1 /* maxToMin.json */; };
+		D68B723A27D4430500F04AB1 /* maxToMin.json in Resources */ = {isa = PBXBuildFile; fileRef = D68B723827D4430500F04AB1 /* maxToMin.json */; };
+		D68B723B27D4430500F04AB1 /* maxToMin.json in Resources */ = {isa = PBXBuildFile; fileRef = D68B723827D4430500F04AB1 /* maxToMin.json */; };
+		D68B723C27D4430500F04AB1 /* maxToMin.json in Resources */ = {isa = PBXBuildFile; fileRef = D68B723827D4430500F04AB1 /* maxToMin.json */; };
+		D68B723D27D4430500F04AB1 /* maxToMin.json in Resources */ = {isa = PBXBuildFile; fileRef = D68B723827D4430500F04AB1 /* maxToMin.json */; };
 		D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
@@ -988,6 +993,7 @@
 		D6884B1E2587D25D00DA380E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6884B1F2587D25D00DA380E /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
 		D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
+		D68B723827D4430500F04AB1 /* maxToMin.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = maxToMin.json; sourceTree = "<group>"; };
 		D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureModalViewController.swift; sourceTree = "<group>"; };
 		D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCoordinator.swift; sourceTree = "<group>"; };
 		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
@@ -1759,6 +1765,7 @@
 		D668893023F2741500FD2764 /* Animations */ = {
 			isa = PBXGroup;
 			children = (
+				D68B723827D4430500F04AB1 /* maxToMin.json */,
 				D656AF4927C8470E008175D7 /* doublecheckmark.json */,
 				806EDAA527BEF1A400ADD677 /* alertCircle.json */,
 				8060C86127BEE0A900E5FAB1 /* checkmark.json */,
@@ -2396,6 +2403,7 @@
 				D640329425AF3CA500139396 /* error.json in Resources */,
 				D640329025AF3CA500139396 /* face_scan.json in Resources */,
 				D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
+				D68B723927D4430500F04AB1 /* maxToMin.json in Resources */,
 				D6B00D3C2796480D00DF07B1 /* loading.json in Resources */,
 				D628B00927B47EEF00949154 /* TransactionContentView.xib in Resources */,
 				8020DD93272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib in Resources */,
@@ -2418,6 +2426,7 @@
 				8060C86327BEE0A900E5FAB1 /* checkmark.json in Resources */,
 				D656AF4B27C8470E008175D7 /* doublecheckmark.json in Resources */,
 				D63DB20125E968C300F6B323 /* MainInterface.storyboard in Resources */,
+				D68B723A27D4430500F04AB1 /* maxToMin.json in Resources */,
 				D6E974602756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6E974662756DB0000D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D63DB27B25E9998D00F6B323 /* Assets.xcassets in Resources */,
@@ -2436,6 +2445,7 @@
 				D61316B2273C85D000DC782B /* Assets.xcassets in Resources */,
 				D656AF4C27C8470E008175D7 /* doublecheckmark.json in Resources */,
 				D6E974672756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
+				D68B723B27D4430500F04AB1 /* maxToMin.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2444,6 +2454,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6E974682756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
+				D68B723C27D4430500F04AB1 /* maxToMin.json in Resources */,
 				D6E974622756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6FA27412767A67300315528 /* Localization in Resources */,
 			);
@@ -2453,6 +2464,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D68B723D27D4430500F04AB1 /* maxToMin.json in Resources */,
 				D6E974632756DAFD00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6FA27422767A67300315528 /* Localization in Resources */,
 				D6AE0F8F267CFA6D00C6B048 /* MainInterface.storyboard in Resources */,
