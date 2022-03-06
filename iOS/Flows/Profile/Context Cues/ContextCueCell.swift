@@ -15,7 +15,7 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: ContextCue?
     
     let container = BaseView()
-    let emojiLabel = ThemeLabel(font: .systemLarge)
+    let emojiLabel = ThemeLabel(font: .contextCues)
     
     override func initializeSubviews() {
         super.initializeSubviews()

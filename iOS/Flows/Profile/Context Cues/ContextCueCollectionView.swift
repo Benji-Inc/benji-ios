@@ -13,6 +13,7 @@ class ContextCueCollectionView: CollectionView {
     init() {
         super.init(layout: ContextCueCollectionViewLayout())
         self.semanticContentAttribute = .forceRightToLeft
+        self.showsHorizontalScrollIndicator = false 
     }
     
     required init?(coder aDecoder: NSCoder) {

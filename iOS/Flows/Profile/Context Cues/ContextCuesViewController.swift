@@ -54,8 +54,12 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
     override func retrieveDataForSnapshot() async -> [ContextCueCollectionViewDataSource.SectionType : [ContextCueCollectionViewDataSource.ItemType]] {
         var data: [ContextCueCollectionViewDataSource.SectionType : [ContextCueCollectionViewDataSource.ItemType]] = [:]
         
-        guard let user = self.person as? Person else { return data }
+        guard let user = self.person as? User,
+              let contextCues = try? await ContextCue.fetchAll(for: user) else { return data }
         
+        data[.contextCues] = contextCues.reversed().compactMap({ contextCue in
+            return .contextCue(contextCue)
+        })
         
         return data
     }

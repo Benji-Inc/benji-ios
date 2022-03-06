@@ -133,7 +133,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         super.viewDidLayoutSubviews()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
-        self.contextCuesVC.view.height = 40
+        self.contextCuesVC.view.height = 44
         self.contextCuesVC.view.match(.top, to: .bottom, of: self.header)
         
         self.bottomGradientView.expandToSuperviewWidth()
