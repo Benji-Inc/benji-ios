@@ -40,7 +40,7 @@ struct EmotionView: View {
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
-                      strokeColor: .D6withAlpha,
+                      strokeColor: .BORDER,
                       lineWidth: 0.5)
 
         )
@@ -50,9 +50,9 @@ struct EmotionView: View {
 struct EmotionView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let config = MessageDetailViewState(message: nil)
+            let config = MessageDetailViewState(message: MockMessage())
 
             EmotionView(config: config)
-        }
+        }.preferredColorScheme(.dark)
     }
 }

@@ -54,7 +54,7 @@ private struct MessageDeliveryStatusView: View {
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
-                      strokeColor: .D6withAlpha,
+                      strokeColor: .BORDER,
                       lineWidth: 0.5)
 
         )
@@ -78,7 +78,7 @@ private struct MessageReplyView: View {
         .background(
             RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
                 .fill(color: .B1withAlpha,
-                      strokeColor: .D6withAlpha,
+                      strokeColor: .BORDER,
                       lineWidth: 0.5)
 
         )
@@ -89,6 +89,6 @@ struct StatusView_Previews: PreviewProvider {
 
     static var previews: some View {
         let config = MessageDetailViewState(message: MockMessage())
-        MessageStatusView(config: config).preferredColorScheme(.dark)
+        MessageStatusView(config: config).preferredColorScheme(.light)
     }
 }

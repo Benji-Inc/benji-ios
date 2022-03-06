@@ -42,7 +42,7 @@ class old_MessageReadView: old_MessageStatusContainer {
         self.addSubview(self.label)
 
         self.progressView.width = 1
-        self.progressView.set(backgroundColor: .D6withAlpha)
+        self.progressView.set(backgroundColor: .BORDER)
         self.progressView.alpha = 0
         
         self.$state.mainSink { [weak self] state in

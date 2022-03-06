@@ -54,6 +54,10 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var inputHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
+    @IBOutlet var animationViewContainer: UIView!
+    
+    private let animationView = AnimationView.with(animation: .maxToMin)
+    
     @IBOutlet var collapseButton: UIButton!
     /// An invisible button to handle taps and pan gestures.
     @IBOutlet var gestureButton: UIButton!
@@ -70,7 +74,7 @@ class SwipeableInputAccessoryView: BaseView {
     static var inputTypeAvatarHeight: CGFloat = 56
 
     /// The current input state of the accessory view.
-    @Published private var inputState: InputState = .collapsed
+    @Published var inputState: InputState = .collapsed
 
     // MARK: - Message State
 
@@ -141,12 +145,26 @@ class SwipeableInputAccessoryView: BaseView {
         self.setupGestures()
         self.setupHandlers()
     }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        self.animationViewContainer.addSubview(self.animationView)
+        self.animationView.loopMode = .playOnce
+        let keypath = AnimationKeypath(keys: ["**", "Color"])
+        let colorProvider = ColorValueProvider(ThemeColor.D6.color.lottieColorValue)
+        self.animationView.animationSpeed = 0.5
+
+        self.animationView.setValueProvider(colorProvider, keypath: keypath)
+        self.animationView.contentMode = .scaleAspectFit
+    }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.emotionView.pin(.left)
         self.deliveryTypeView.pin(.right)
+        self.animationView.expandToSuperviewSize()
     }
     
     func resetDeliveryType() {
@@ -174,7 +192,7 @@ class SwipeableInputAccessoryView: BaseView {
 
         self.gestureButton.addGestureRecognizer(self.inputFieldTapRecognizer)
 
-        self.collapseButton.addAction(for: .touchUpInside) { [unowned self] in
+        self.collapseButton.didSelect { [unowned self] in
             self.inputState = .collapsed
         }
 
@@ -264,6 +282,8 @@ class SwipeableInputAccessoryView: BaseView {
 
             self.gestureButton.isVisible = true
             self.collapseButton.isVisible = false
+            self.animationView.isVisible = false
+            self.animationView.currentProgress = 0
 
             newInputHeight = SwipeableInputAccessoryView.minHeight
         case .expanded:
@@ -279,6 +299,11 @@ class SwipeableInputAccessoryView: BaseView {
             // Disable swipe gestures when expanded
             self.gestureButton.isVisible = false
             self.collapseButton.isVisible = true
+            self.animationView.isVisible = true
+            Task.onMainActorAsync {
+                await Task.sleep(seconds: 0.5)
+                self.animationView.play(fromFrame: 20, toFrame: 30, loopMode: .playOnce, completion: nil)
+            }
 
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }

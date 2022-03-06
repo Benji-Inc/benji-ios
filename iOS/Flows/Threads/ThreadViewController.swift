@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import Combine
 import StreamChat
+import SwiftUI
 
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,
@@ -18,8 +19,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
-    let detailView = old_MessageDetailView()
     
+    // Detail View
+    @ObservedObject private var messageState = MessageDetailViewState(message: nil)
+    private lazy var detailView = MessageDetailView(config: self.messageState)
+    lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
+        
     /// If true we should scroll to the last item in the collection in layout subviews.
     private var scrollToLastItemOnLayout: Bool = true
     
@@ -87,14 +92,17 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func initializeViews() {
         super.initializeViews()
         
+        self.messageInputAccessoryView.resetDeliveryType()
+        
         self.view.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.5)
 
         self.modalPresentationStyle = .overCurrentContext
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
-        self.view.addSubview(self.detailView)
-        self.detailView.alpha = 0
+        
+        self.addChild(viewController: self.detailVC)
+        self.detailVC.view.alpha = 0
         
         self.view.addSubview(self.pullView)
 
@@ -136,10 +144,10 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.parentMessageView.match(.top, to: .bottom, of: self.pullView)
         self.parentMessageView.centerOnX()
 
-        self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value
-        self.detailView.height = old_MessageDetailView.height
-        self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
-        self.detailView.centerOnX()
+        self.detailVC.view.width = self.parentMessageView.width
+        self.detailVC.view.height = 25
+        self.detailVC.view.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
+        self.detailVC.view.centerOnX()
     }
 
     override func layoutCollectionView(_ collectionView: UICollectionView) {
@@ -222,8 +230,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         // Setting this here fixes issue with recursion during presentation.
         if let msg = self.messageController.message {
-            self.detailView.configure(with: msg)
-            self.detailView.handleTopMessage(isAtTop: true)
+            self.messageState.message = msg
+            self.messageState.deliveryStatus = msg.deliveryStatus
         }
         
         if let replyId = self.startingReplyId {
@@ -280,6 +288,22 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                 })
             }
         }.add(to: self.autocancelTaskPool)
+    }
+    
+    private var statusTextTask: Task<Void, Never>?
+
+    func updateStatusText(for message: Message) {
+        guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
+        
+        self.statusTextTask = Task {
+            
+            self.messageState.statusText = message.context.displayName
+
+            await Task.snooze(seconds: 2)
+            guard !Task.isCancelled else { return }
+            
+            self.messageState.statusText = message.lastUpdatedAt?.getTimeAgoString() ?? ""
+        }
     }
 }
 // MARK: - Messaging
@@ -350,8 +374,8 @@ extension ThreadViewController {
         self.messageController.messageChangePublisher.mainSink { [unowned self] changes in
             if let msg = self.messageController.message {
                 self.parentMessageView.configure(with: msg)
-                self.detailView.update(with: msg)
-                self.detailView.handleTopMessage(isAtTop: true)
+                self.messageState.message = msg
+                self.messageState.deliveryStatus = msg.deliveryStatus
             }
         }.store(in: &self.cancellables)
 

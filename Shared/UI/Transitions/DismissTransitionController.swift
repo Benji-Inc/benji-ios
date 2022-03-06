@@ -72,12 +72,12 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
                     fromView.center = finalFrame.center
                     threadVC.pullView.bottom = fromView.top
-                    threadVC.detailView.top = fromView.bottom + Theme.ContentOffset.standard.value
+                    threadVC.detailVC.view.top = fromView.bottom + Theme.ContentOffset.standard.value
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                     threadVC.collectionView.alpha = 0
-                    threadVC.detailView.alpha = 0
+                    threadVC.detailVC.view.alpha = 0
                     threadVC.pullView.alpha = 0.0
                 }
                 

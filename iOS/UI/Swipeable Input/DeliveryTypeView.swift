@@ -25,7 +25,7 @@ class DeliveryTypeView: BaseView {
 
         self.set(backgroundColor: .B1withAlpha)
         self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.D6withAlpha.color.cgColor
+        self.layer.borderColor = ThemeColor.BORDER.color.cgColor
         self.layer.borderWidth = 0.5
 
         self.clipsToBounds = false
