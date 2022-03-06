@@ -303,7 +303,6 @@ class SwipeableInputAccessoryView: BaseView {
             Task.onMainActorAsync {
                 await Task.sleep(seconds: 0.5)
                 self.animationView.play(fromFrame: 20, toFrame: 30, loopMode: .playOnce, completion: nil)
-//                self.animationView.play(fromProgress: 0.5, toProgress: 1.0, loopMode: .playOnce, completion: nil)
             }
 
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
