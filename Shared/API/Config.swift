@@ -76,10 +76,6 @@ class Config: NSObject {
     let buildType: BuildType = {
         var buildTypeToReturn = BuildType.release
 
-        if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
-            return .debug
-        }
-
         if let bundledBuildTypeString = Bundle.main.infoDictionary!["RELEASE_TYPE"] as? String,
             let bundledBuildTypeEnum = BuildType.init(rawValue: bundledBuildTypeString.lowercased()) {
             buildTypeToReturn = bundledBuildTypeEnum
