@@ -14,6 +14,10 @@ import Combine
 class PhoneViewController: TextInputViewController<PhoneNumber> {
     
     private(set) var isSendingCode: Bool = false
+    
+    override var analyticsIdentifier: String? {
+        return "SCREEN_PHONE"
+    }
 
     var phoneTextField: PhoneTextField {
         return self.textField as! PhoneTextField

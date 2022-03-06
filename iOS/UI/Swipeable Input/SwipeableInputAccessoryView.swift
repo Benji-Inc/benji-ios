@@ -120,6 +120,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.emotionView.alpha = 0
         self.emotionView.configure(for: self.currentEmotion)
         self.emotionView.didSelectEmotion = { [unowned self] emotion in
+            AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
             self.currentEmotion = emotion
         }
         
@@ -127,6 +128,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.deliveryTypeView.alpha = 0
         
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
+            AnalyticsManager.shared.trackEvent(type: .deliveryTypeSelected, properties: ["value": context.rawValue])
             self.currentContext = context
         }
                 

@@ -153,6 +153,7 @@ extension MessageController {
 
                 switch result {
                 case .success(let messageID):
+                    AnalyticsManager.shared.trackEvent(type: .replySent, properties: nil)
                     continuation.resume(returning: messageID)
                 case .failure(let error):
                     continuation.resume(throwing: error)

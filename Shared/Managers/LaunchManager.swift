@@ -68,13 +68,8 @@ class LaunchManager {
             user.saveEventually()
         }
 #endif
-        let configuration = PHGPostHogConfiguration(apiKey: "phc_nTIZgY0M0QgX0QB14Ux428lvGVnUeddJCqEFEo4vt9n",
-                                                    host: "https://app.posthog.com")
-
-        configuration.captureApplicationLifecycleEvents = true; // Record certain application events automatically!
-        configuration.recordScreenViews = true; // Record screen views automatically!
-
-        PHGPostHog.setup(with: configuration)
+        // Initializes the analytics manager
+        _ = AnalyticsManager.shared
         
         let launchStatus = await self.initializeUserData(with: deepLink)
 

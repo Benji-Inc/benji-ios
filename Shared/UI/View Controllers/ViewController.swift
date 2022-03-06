@@ -15,6 +15,11 @@ class ViewController: UIViewController, Dismissable {
     var cancellables = Set<AnyCancellable>()
     /// A pool of Tasks that are automatically cancelled when our view disappears
     var autocancelTaskPool = TaskPool()
+    
+    /// Used to identify a screen
+    var analyticsIdentifier: String? {
+        return nil
+    }
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -40,6 +45,8 @@ class ViewController: UIViewController, Dismissable {
         if self.isBeingOpen {
             self.viewWasPresented()
         }
+        
+        self.trackScreenDidAppearEvent()
     }
 
     /// Called right after this VC's view is added to the view hierarchy from a presentation or a being added as a child view controller.
@@ -63,5 +70,12 @@ class ViewController: UIViewController, Dismissable {
     /// Called right after this VC's view is removed from the view hierarchy due to a dismiss/pop call or removed as a child view controller.
     /// This will only be called once in the VC's lifecycle unless it presented and dismissed again.
     func viewWasDismissed() { }
+    
+    /// Called in viewDidAppear. Used to track screens becoming visible.
+    func trackScreenDidAppearEvent() {
+        if let identifier = self.analyticsIdentifier {
+            AnalyticsManager.shared.trackStreen(type: identifier, properties: nil)
+        }
+    }
 }
 

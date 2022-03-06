@@ -36,6 +36,10 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     
     private(set) var conversationController: ConversationController?
     
+    override var analyticsIdentifier: String? {
+        return "SCREEN_WELCOME"
+    }
+    
     init() {
         super.init(with: WelcomeCollectionView())
     }
@@ -54,12 +58,14 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         self.view.addSubview(self.waitlistButton)
         self.waitlistButton.set(style: .custom(color: .D1, textColor: .white, text: "Begin"))
         self.waitlistButton.didSelect { [unowned self] in
+            AnalyticsManager.shared.trackEvent(type: .onboardingBeginTapped, properties: nil)
             self.onDidComplete?(.success((.waitlist)))
         }
         
         self.view.addSubview(self.rsvpButton)
         self.rsvpButton.set(style: .custom(color: .B5, textColor: .T4, text: "Enter Code"))
         self.rsvpButton.didSelect { [unowned self] in
+            AnalyticsManager.shared.trackEvent(type: .onboardingRSVPTapped, properties: nil)
             self.onDidComplete?(.success((.rsvp)))
         }
     }
