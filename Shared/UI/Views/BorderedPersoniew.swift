@@ -8,6 +8,62 @@
 
 import Foundation
 
+class ContextCueView: BaseView {
+    
+    enum Size {
+        case large
+        case small
+    }
+    
+    private let label = ThemeLabel(font: .systemSmall)
+    var currentSize: Size = .small {
+        didSet {
+            self.label.setFont(self.currentSize == .small ? .systemSmall : .system)
+            self.layoutNow()
+        }
+    }
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.label)
+        self.label.textAlignment = .center
+        self.set(backgroundColor: .white)
+        self.isHidden = true
+    }
+    
+    private var newContextCueTask: Task<Void, Never>?
+    
+    func configure(with person: PersonType) {
+        
+        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
+        self.newContextCueTask?.cancel()
+        
+        self.newContextCueTask = Task { [weak self] in
+            guard let user = person as? User,
+                  let updated = try? await user.latestContextCue?.retrieveDataIfNeeded(),
+                  let first = updated.emojis.first else {
+                      self?.isHidden = true
+                      return
+                  }
+            
+            self?.isHidden = false
+            self?.label.setText(first)
+            self?.layoutNow()
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.label.setSize(withWidth: self.height * 0.8)
+        self.label.centerOnXAndY()
+        
+        self.squaredSize = self.currentSize == .small ? 22 : 30
+        self.makeRound()
+    }
+}
+
 class BorderedPersoniew: PersonView {
     
     lazy var shadowLayer: CAShapeLayer = {
@@ -28,6 +84,8 @@ class BorderedPersoniew: PersonView {
         layer.borderWidth = 2
         return layer
     }()
+    
+    let contextCueView = ContextCueView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -36,6 +94,8 @@ class BorderedPersoniew: PersonView {
         
         self.layer.insertSublayer(self.shadowLayer, at: 0)
         self.layer.insertSublayer(self.pulseLayer, at: 2)
+        
+        self.addSubview(self.contextCueView)
     }
     
     override func layoutSubviews() {
@@ -45,6 +105,9 @@ class BorderedPersoniew: PersonView {
         self.pulseLayer.cornerRadius = Theme.innerCornerRadius
         self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        
+        self.contextCueView.pin(.right, offset: .negative(.short))
+        self.contextCueView.pin(.bottom, offset: .negative(.short))
     }
 
     override func set(person: PersonType?) {
@@ -52,11 +115,13 @@ class BorderedPersoniew: PersonView {
 
         guard let person = person else { return }
         self.setColors(for: person)
+        self.contextCueView.configure(with: person)
     }
 
     override func didRecieveUpdateFor(person: PersonType) {
         super.didRecieveUpdateFor(person: person)
         self.setColors(for: person)
+        self.contextCueView.configure(with: person)
     }
     
     private func setColors(for person: PersonType) {

@@ -27,6 +27,8 @@ class ProfileHeaderView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.personView.contextCueView.currentSize = .large
+        
         self.addSubview(self.nameLabel)
         self.nameLabel.textAlignment = .center
         self.addSubview(self.memberLabel)
