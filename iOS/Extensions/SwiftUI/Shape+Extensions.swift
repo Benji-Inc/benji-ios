@@ -23,7 +23,7 @@ extension Shape {
               strokeColor: ThemeColor,
               lineWidth: CGFloat) -> some View {
 
-        self.stroke(Color(color.color), lineWidth: lineWidth)
+        self.stroke(Color(strokeColor.color), lineWidth: lineWidth)
             .background(self.fill(Color(color.color)))
     }
 }
