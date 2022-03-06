@@ -7,3 +7,15 @@
 //
 
 import Foundation
+
+class EmojiCollectionView: CollectionView {
+    
+    init() {
+        super.init(layout: EmojiCollectionViewLayout())
+        self.allowsMultipleSelection = true 
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
