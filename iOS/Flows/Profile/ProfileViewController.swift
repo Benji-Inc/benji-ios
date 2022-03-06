@@ -84,7 +84,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             }
         }
         
-        PeopleStore.shared.$personUpdated
+        PeopleStore.shared
+            .$personUpdated
             .filter { [unowned self] updatedPerson in
                 // Only handle person updates related to the currently assigned person.
                 self.person.personId ==  updatedPerson?.personId

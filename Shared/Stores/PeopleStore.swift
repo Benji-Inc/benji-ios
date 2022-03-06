@@ -32,7 +32,13 @@ class PeopleStore {
         return allPeople
     }
     /// A dictionary of all the fetched users, keyed by their user id.
-    private(set) var usersDictionary: [String : User] = [:]
+    private(set) var usersDictionary: [String : User] = [:] {
+        didSet {
+            guard self.usersDictionary != oldValue else { return }
+            self.subscribeToUserUdpates()
+        }
+    }
+    
     private var contactsDictionary: [String : CNContact] = [:]
     private var unclaimedReservations: [String : Reservation] = [:]
     var usersArray: [User] {
@@ -58,7 +64,7 @@ class PeopleStore {
 
             await self.getAndStoreAllContactsWithUnclaimedReservations()
 
-            self.subscribeToParseUpdates()
+            self.subscribeToConnectionUpdates()
         }
 
         // In the background, find existing Jibber users in the contacts.
@@ -137,7 +143,7 @@ class PeopleStore {
         }
     }
 
-    private func subscribeToParseUpdates() {
+    private func subscribeToConnectionUpdates() {
         Client.shared.shouldPrintWebSocketLog = false
 
         // Query for all connections related to the user. Either sent to OR from.
@@ -198,6 +204,30 @@ class PeopleStore {
                             return
                         }
                 self.personDeleted = contact
+            }
+        }
+    }
+    
+    private func subscribeToUserUdpates() {
+        guard let query = User.query() else { return }
+        Client.shared.unsubscribe(query)
+
+        var connectedUsersObjectIds = self.usersArray.compactMap { user in
+            return user.objectId
+        }
+        
+        connectedUsersObjectIds.append(User.current()!.objectId!)
+        
+        query.whereKey("objectId", containedIn: connectedUsersObjectIds)
+        query.includeKey("latestContextCue")
+        let subscription = Client.shared.subscribe(query)
+        subscription.handleEvent { query, event in
+            switch event {
+            case .updated(let object):
+                guard let user = object as? User else { return }
+                self.personUpdated = user
+            default:
+                break
             }
         }
     }
