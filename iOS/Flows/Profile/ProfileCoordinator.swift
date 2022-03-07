@@ -68,8 +68,18 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
     
     func presentContextCueCreator() {
         self.removeChild()
+        
+        if let pop = self.profileVC.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.selectedDetentIdentifier = .large
+            sheet.animateChanges { [unowned self] in
+                self.profileVC.view.layoutNow()
+            }
+        }
+        
+
         let coordinator = ContextCueCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { [unowned self] _ in
+        self.addChildAndStart(coordinator) { _ in
             coordinator.toPresentable().dismiss(animated: true, completion: nil)
         }
 
