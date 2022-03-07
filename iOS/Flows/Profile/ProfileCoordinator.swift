@@ -43,7 +43,7 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
                 case .contextCue(_):
                     break
                 }
-            }
+            }.store(in: &self.cancellables)
         }
         
         self.profileVC.$selectedItems.mainSink { [unowned self] items in

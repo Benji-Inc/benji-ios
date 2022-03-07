@@ -91,11 +91,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 self.person.personId ==  updatedPerson?.personId
             }.mainSink { [unowned self] updatedPerson in
                 guard let user = updatedPerson as? User, let contextCue = user.latestContextCue else { return }
-                Task {
-                    guard let updated = try? await contextCue.retrieveDataIfNeeded() else { return }
-                    logDebug(updated.emojis)
-                }
-                //self.didRecieveUpdateFor(person: updatedPerson)
+                self.contextCuesVC.appendNew(contextCue: contextCue)
             }.store(in: &self.cancellables)
     }
     
