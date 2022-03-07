@@ -73,7 +73,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
         let filter: Filter<ChannelListFilterScope>
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
-        let query = ChannelListQuery(filter: filter,
+        let query = ChannelListQuery(filter: .and([.equal("hidden", to: false), filter]),
                                      sort: [Sorting(key: .createdAt, isAscending: true)],
                                      pageSize: .channelsPageSize,
                                      messagesLimit: .messagesPageSize)

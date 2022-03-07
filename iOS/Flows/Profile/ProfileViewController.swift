@@ -90,10 +90,12 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         
         self.collectionView.allowsMultipleSelection = false 
                 
-        Task {
+        Task { [unowned self] in
             guard let updatedPerson = await PeopleStore.shared.getPerson(withPersonId: self.person.personId) else {
                 return
             }
+
+            guard !Task.isCancelled else { return }
 
             self.person = updatedPerson
 
@@ -253,7 +255,6 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             return UserConversationsDataSource.ItemType.conversation(convo.cid)
         }
         var snapshot = self.dataSource.snapshot()
-        snapshot.setItems([], in: .conversations)
         snapshot.setItems(items, in: .conversations)
         
         await self.dataSource.apply(snapshot)
