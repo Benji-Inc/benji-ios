@@ -37,7 +37,7 @@ final class ContextCue: PFObject, PFSubclassing {
         self.emojis.forEach { emoji in
             value.append(emoji)
         }
-        return emojiString
+        return value
     }
     
     var message: String? {

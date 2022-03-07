@@ -63,16 +63,18 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
         self.emojiLabel.setSize(withWidth: self.contentView.width)
         self.container.size = CGSize(width: self.emojiLabel.width + Theme.ContentOffset.standard.value.doubled,
                                      height: self.contentView.height)
-        self.container.centerOnXAndY()
+        self.container.centerOnY()
+        self.container.pin(.left, offset: .custom(20))
+        
         self.emojiLabel.centerOnXAndY()
         
         self.daysAgoLabel.setSize(withWidth: self.contentView.width)
-        self.daysAgoLabel.centerOnX()
         self.daysAgoLabel.match(.top, to: .bottom, of: self.contentView, offset: .short)
+        self.daysAgoLabel.pin(.left, offset: .custom(30))
         
         self.timeLabel.setSize(withWidth: self.contentView.width)
-        self.timeLabel.centerOnX()
-        self.timeLabel.match(.top, to: .bottom, of: self.daysAgoLabel, offset: .short)
+        self.timeLabel.match(.top, to: .top, of: self.daysAgoLabel)
+        self.timeLabel.match(.left, to: .right, of: self.daysAgoLabel, offset: .short)
     }
     
     override func update(isSelected: Bool) {

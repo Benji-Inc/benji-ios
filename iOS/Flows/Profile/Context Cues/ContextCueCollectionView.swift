@@ -15,6 +15,7 @@ class ContextCueCollectionView: CollectionView {
         self.semanticContentAttribute = .forceRightToLeft
         self.showsHorizontalScrollIndicator = false
         self.clipsToBounds = false
+        self.decelerationRate = .fast
     }
     
     required init?(coder aDecoder: NSCoder) {
