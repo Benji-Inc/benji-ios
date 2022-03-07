@@ -16,6 +16,8 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
     
     let container = BaseView()
     let emojiLabel = ThemeLabel(font: .contextCues)
+    let daysAgoLabel = ThemeLabel(font: .xtraSmall)
+    let timeLabel = ThemeLabel(font: .xtraSmall)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -29,12 +31,28 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
         
         self.container.addSubview(self.emojiLabel)
         self.emojiLabel.textAlignment = .center
+        
+        self.contentView.addSubview(self.daysAgoLabel)
+        self.daysAgoLabel.textAlignment = .center
+        
+        self.contentView.addSubview(self.timeLabel)
+        self.timeLabel.textAlignment = .center
+        self.timeLabel.alpha = 0.5
+        
+        self.contentView.clipsToBounds = false
+        self.clipsToBounds = false 
     }
     
     func configure(with item: ContextCue) {
         Task {
             guard let updated = try? await item.retrieveDataIfNeeded() else { return }
             self.emojiLabel.setText(self.getEmojiText(for: updated))
+            
+            if let createdAt = updated.createdAt {
+                self.daysAgoLabel.setText(createdAt.getDaysAgoString())
+                self.timeLabel.setText(Date.hourMinuteTimeOfDay.string(from: createdAt))
+            }
+            
             self.layoutNow()
         }
     }
@@ -47,6 +65,14 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
                                      height: self.contentView.height)
         self.container.centerOnXAndY()
         self.emojiLabel.centerOnXAndY()
+        
+        self.daysAgoLabel.setSize(withWidth: self.contentView.width)
+        self.daysAgoLabel.centerOnX()
+        self.daysAgoLabel.match(.top, to: .bottom, of: self.contentView, offset: .short)
+        
+        self.timeLabel.setSize(withWidth: self.contentView.width)
+        self.timeLabel.centerOnX()
+        self.timeLabel.match(.top, to: .bottom, of: self.daysAgoLabel, offset: .short)
     }
     
     override func update(isSelected: Bool) {

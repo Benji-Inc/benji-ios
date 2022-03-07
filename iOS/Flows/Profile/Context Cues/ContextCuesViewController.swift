@@ -36,6 +36,7 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.collectionView.allowsMultipleSelection = false 
         self.loadInitialData()
     }
     
@@ -60,6 +61,10 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
         data[.contextCues] = contextCues.reversed().compactMap({ contextCue in
             return .contextCue(contextCue)
         })
+        
+        if user.isCurrentUser {
+            data[.contextCues]?.insert(.add(user), at: 0)
+        }
         
         return data
     }

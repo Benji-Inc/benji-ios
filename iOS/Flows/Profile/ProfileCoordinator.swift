@@ -34,9 +34,16 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
                 self.presentProfilePicture()
             }
             
-//            self.profileVC.contextCuesVC.tempView.didSelect { [unowned self] in
-//                self.presentContextCueCreator()
-//            }
+            self.profileVC.contextCuesVC.$selectedItems.mainSink { items in
+                guard let first = items.first else { return }
+                
+                switch first {
+                case .add(_):
+                    self.presentContextCueCreator()
+                case .contextCue(_):
+                    break
+                }
+            }
         }
         
         self.profileVC.$selectedItems.mainSink { [unowned self] items in

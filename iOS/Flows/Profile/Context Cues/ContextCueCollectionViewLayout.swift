@@ -35,7 +35,10 @@ class ContextCueCollectionViewLayout: UICollectionViewCompositionalLayout {
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: environment.container.contentSize.width.half.half, bottom: 0, trailing: environment.container.contentSize.width.half.half)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                leading: environment.container.contentSize.width.half.half,
+                                                                bottom: 0,
+                                                                trailing:0)
                 return section
             }
 
