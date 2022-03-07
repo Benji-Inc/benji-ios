@@ -32,6 +32,14 @@ final class ContextCue: PFObject, PFSubclassing {
         set { self.setObject(for: .emojis, with: newValue)}
     }
     
+    var emojiString: String {
+        var value: String = ""
+        self.emojis.forEach { emoji in
+            value.append(emoji)
+        }
+        return emojiString
+    }
+    
     var message: String? {
         get { self.getObject(for: .message) }
         set { self.setObject(for: .message, with: newValue) }

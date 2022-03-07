@@ -173,5 +173,7 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         await self.button.handleEvent(status: .complete)
         
         await ToastScheduler.shared.schedule(toastType: .newContextCue(saved))
+        
+        AnalyticsManager.shared.trackEvent(type: .contextCueCreated, properties: ["value": saved.emojiString])
     }
 }

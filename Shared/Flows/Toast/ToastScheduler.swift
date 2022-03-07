@@ -176,17 +176,11 @@ class ToastScheduler {
         guard let contextCue = try? await contextCue.retrieveDataIfNeeded(),
               let current = User.current(),
               let objectId = contextCue.objectId else { return nil }
-        
-        var emojiString: String = ""
-        
-        contextCue.emojis.forEach { emoji in
-            emojiString.append(emoji)
-        }
 
         let toast = Toast(id: objectId,
                           priority: 1,
                           title: "Context Updated",
-                          description: emojiString,
+                          description: contextCue.emojiString,
                           displayable: current,
                           deeplink: nil,
                           type: .banner,
