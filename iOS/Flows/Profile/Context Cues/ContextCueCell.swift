@@ -70,7 +70,7 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
         
         self.daysAgoLabel.setSize(withWidth: self.contentView.width)
         self.daysAgoLabel.match(.top, to: .bottom, of: self.contentView, offset: .short)
-        self.daysAgoLabel.pin(.left, offset: .custom(30))
+        self.daysAgoLabel.pin(.left, offset: .custom(26))
         
         self.timeLabel.setSize(withWidth: self.contentView.width)
         self.timeLabel.match(.top, to: .top, of: self.daysAgoLabel)

@@ -48,7 +48,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
+            sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
@@ -123,7 +123,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     override func viewDidLayoutSubviews() {
         self.header.expandToSuperviewWidth()
-        self.header.height = 220
+        self.header.height = 160
         self.header.pinToSafeAreaTop()
         
         super.viewDidLayoutSubviews()
