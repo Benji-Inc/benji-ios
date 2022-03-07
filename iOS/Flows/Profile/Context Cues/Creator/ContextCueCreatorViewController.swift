@@ -171,5 +171,7 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         try await User.current()?.saveToServer()
         
         await self.button.handleEvent(status: .complete)
+        
+        await ToastScheduler.shared.schedule(toastType: .newContextCue(saved))
     }
 }

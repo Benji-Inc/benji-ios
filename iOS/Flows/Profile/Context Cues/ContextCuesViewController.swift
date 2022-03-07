@@ -72,9 +72,7 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
     private var appendTask: Task<Void, Never>?
     
     //Add analytics
-    //Add toast
     //Add all emojis
-    //Add rotating emojis
     
     func appendNew(contextCue: ContextCue) {
         self.appendTask?.cancel()

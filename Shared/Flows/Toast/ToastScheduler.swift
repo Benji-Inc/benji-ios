@@ -11,6 +11,7 @@ import Combine
 import Localization
 
 enum ToastType {
+    case newContextCue(ContextCue)
     case newMessage(Messageable)
     case error(ClientError)
     case transaction(Transaction)
@@ -60,6 +61,10 @@ class ToastScheduler {
             toast = try? await self.createTransactionToast(for: transaction,
                                                               position: position,
                                                               duration: duration)
+        case .newContextCue(let contextCue):
+            toast = try? await self.createContextCueToast(for: contextCue,
+                                                             position: position,
+                                                             duration: duration)
         }
 
         if let t = toast {
@@ -160,6 +165,35 @@ class ToastScheduler {
                           duration: duration,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .transaction(transaction), deeplink: nil)
+        })
+
+        return toast
+    }
+    
+    private func createContextCueToast(for contextCue: ContextCue,
+                                        position: Toast.Position,
+                                        duration: TimeInterval) async throws -> Toast? {
+        guard let contextCue = try? await contextCue.retrieveDataIfNeeded(),
+              let current = User.current(),
+              let objectId = contextCue.objectId else { return nil }
+        
+        var emojiString: String = ""
+        
+        contextCue.emojis.forEach { emoji in
+            emojiString.append(emoji)
+        }
+
+        let toast = Toast(id: objectId,
+                          priority: 1,
+                          title: "Context Updated",
+                          description: emojiString,
+                          displayable: current,
+                          deeplink: nil,
+                          type: .banner,
+                          position: position,
+                          duration: duration,
+                          didTap: { [unowned self] in
+            self.delegate?.didInteractWith(type: .newContextCue(contextCue), deeplink: nil)
         })
 
         return toast
