@@ -69,6 +69,7 @@ class LaunchManager {
                 user.timeZone = TimeZone.current.identifier
                 user.saveEventually()
             } catch {
+                logError(error)
                 return LaunchStatus.failed(error: ClientError.apiError(detail: error.localizedDescription))
             }
         }
