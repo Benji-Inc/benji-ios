@@ -76,7 +76,6 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
                 self.profileVC.view.layoutNow()
             }
         }
-        
 
         let coordinator = ContextCueCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { _ in

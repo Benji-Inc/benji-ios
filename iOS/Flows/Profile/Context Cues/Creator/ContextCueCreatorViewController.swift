@@ -15,8 +15,19 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
                                        EmojiCollectionViewDataSource> {
     
     private let header = ContextCueInputHeaderView()
+    
+    private let segmentControl = EmojiCategorySegmentControl()
+    
     let button = ThemeButton()
     private var showButton: Bool = true
+    
+    private let segmentGradientView = GradientView(with: [ThemeColor.B0.color.cgColor,
+                                                         ThemeColor.B0.color.cgColor,
+                                                         ThemeColor.B0.color.cgColor,
+                                                         ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .topCenter,
+                                                  endPoint: .bottomCenter)
+    
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
@@ -48,6 +59,13 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.button)
         
+        self.view.addSubview(self.segmentControl)
+        self.view.insertSubview(self.segmentGradientView, belowSubview: self.segmentControl)
+        
+        self.segmentControl.didSelectCategory = { [unowned self] category in
+            self.loadEmojis(for: category)
+        }
+        
         self.collectionView.allowsMultipleSelection = true
         
         self.$selectedItems
@@ -67,7 +85,8 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.loadInitialData()
+        self.segmentControl.selectedSegmentIndex = 0
+        self.loadEmojis(for: .smiles)
     }
     
     override func viewDidLayoutSubviews() {
@@ -77,6 +96,14 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         self.header.pinToSafeAreaTop()
         
         super.viewDidLayoutSubviews()
+        
+        self.segmentControl.sizeToFit()
+        self.segmentControl.centerOnX()
+        self.segmentControl.pinToSafeAreaTop()
+        
+        self.segmentGradientView.expandToSuperviewWidth()
+        self.segmentGradientView.pin(.top)
+        self.segmentGradientView.height = self.segmentControl.bottom + Theme.ContentOffset.standard.value
         
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
@@ -104,15 +131,7 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
     }
 
     override func retrieveDataForSnapshot() async -> [EmojiCollectionViewDataSource.SectionType : [EmojiCollectionViewDataSource.ItemType]] {
-        var data: [EmojiCollectionViewDataSource.SectionType : [EmojiCollectionViewDataSource.ItemType]] = [:]
-        
-        guard let emojis = try? await EmojiServiceManager.fetchAllEmojis() else { return data }
-        
-        data[.emojis] = emojis.results.compactMap({ emoji in
-            return .emoji(emoji)
-        })
-        
-        return data
+        return [:]
     }
     
     private func updateButton() {
@@ -145,6 +164,31 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         }
         
         return "Add: \(emojiText)"
+    }
+    
+    /// The currently running task that is loading conversations.
+    private var loadEmojisTask: Task<Void, Never>?
+    
+    private func loadEmojis(for category: EmojiCategorySegmentControl.EmojiCategory) {
+        self.loadEmojisTask?.cancel()
+        
+        self.loadEmojisTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            guard let emojis = try? await EmojiServiceManager.fetchEmojis(for: category) else { return }
+            
+            let items: [EmojiCollectionViewDataSource.ItemType] = emojis.results.compactMap({ emoji in
+                return .emoji(emoji)
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            var snapshot = self.dataSource.snapshot()
+            snapshot.setItems([], in: .emojis)
+            snapshot.setItems(items, in: .emojis)
+            
+            await self.dataSource.apply(snapshot)
+        }
     }
     
     private func createContextCue() async throws {

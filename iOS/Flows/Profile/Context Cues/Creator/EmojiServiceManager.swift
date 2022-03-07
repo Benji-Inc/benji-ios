@@ -28,11 +28,19 @@ class EmojiServiceManager {
         case POST = "POST"
     }
     
+    static func fetchEmojis(for category: EmojiCategorySegmentControl.EmojiCategory) async throws -> Response {
+        let url = "https://api.emojisworld.fr/v1/popular?categories=\(category.rawValue)"
+        return try await self.fetchEmojis(withURL: url)
+    }
+    
     static func fetchAllEmojis() async throws -> Response {
-        
+        let url = "https://api.emojisworld.fr/v1/random"
+        return try await self.fetchEmojis(withURL: url)
+    }
+    
+    private static func fetchEmojis(withURL url: String) async throws -> Response {
         return try await withCheckedThrowingContinuation({ continuation in
-            let url = "https://api.emojisworld.fr/v1/random"//"https://api.emojisworld.fr/v1/categories"
-            //let url = "https://api.emojisworld.fr/v1/search?q=\(query)&limit=\(limit)"
+            
             guard let safeURL = URL(string: "\(url)") else {
                 continuation.resume(throwing: ClientError.apiError(detail: "Wrong URL"))
                 return
@@ -58,40 +66,5 @@ class EmojiServiceManager {
                 }
             }.resume()
         })
-        
     }
-    
-//    static func makeEmojiApiCall (
-//        for query: String,
-//        limit: Int,
-//        completionHandler: @escaping (Result<Response, NetworkError>) -> ()
-//    ) {
-//        let url = "https://api.emojisworld.fr/v1/"
-//        //let url = "https://api.emojisworld.fr/v1/search?q=\(query)&limit=\(limit)"
-//        guard let safeURL = URL(string: "\(url)") else {
-//            completionHandler(.failure(NetworkError.wrongURL))
-//            return
-//        }
-//
-//        var request = URLRequest(url: safeURL)
-//        request.httpMethod = NetworkMethods.GET.rawValue
-//
-//        let session = URLSession(configuration: .default)
-//
-//        session.dataTask(with: request) { data, response, error in
-//            guard let data = data else {
-//                completionHandler(.failure(NetworkError.timeOut))
-//                return
-//            }
-//
-//            do {
-//                let decoder = JSONDecoder()
-//                let decodedData = try decoder.decode(Response.self, from: data)
-//                completionHandler(.success(decodedData))
-//            } catch {
-//                completionHandler(.failure(NetworkError.emojiNotFound))
-//            }
-//        }.resume()
-//    }
-
 }
