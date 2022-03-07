@@ -45,12 +45,21 @@ enum FocusStatus: String {
     case focused
     case available
     
-    var image: UIImage {
+    var displayName: String {
         switch self {
         case .focused:
-            return UIImage(systemName: "moon.zzz.fill")!
+            return "Unavailable"
         case .available:
-            return UIImage(systemName: "hand.wave.fill")!
+            return "Available"
+        }
+    }
+    
+    var color: ThemeColor {
+        switch self {
+        case .focused:
+            return .yellow
+        case .available:
+            return .D6
         }
     }
 }

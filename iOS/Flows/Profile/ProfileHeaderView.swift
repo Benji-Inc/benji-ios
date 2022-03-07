@@ -72,7 +72,8 @@ class ProfileHeaderView: BaseView {
         }
 
         if let status = person.focusStatus {
-            self.focusLabel.setText(status.rawValue.firstCapitalized)
+            self.focusLabel.setText(status.displayName.firstCapitalized)
+            self.focusLabel.setTextColor(status.color)
         } else {
             self.focusLabel.setText("Unavailable")
         }

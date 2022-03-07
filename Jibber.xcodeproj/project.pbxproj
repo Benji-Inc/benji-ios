@@ -148,6 +148,8 @@
 		D61A33E727D57EFD00056242 /* ContextCueAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */; };
 		D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
 		D61A33EA27D5C4F200056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
+		D61A33EB27D6754F00056242 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
+		D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
@@ -3267,6 +3269,7 @@
 				D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */,
 				D65D460527A9FE620019301C /* Notice.swift in Sources */,
 				D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */,
+				D61A33EB27D6754F00056242 /* ThemeColor.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
 				D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */,
 				D67B00CA27D2D52500284564 /* DataController+Async.swift in Sources */,
@@ -3287,6 +3290,7 @@
 				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
 				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,
+				D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */,
 				D6AE0FFF267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
 				D66ED458267D35E200332BA3 /* Config.swift in Sources */,
 				D66ED45B267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,

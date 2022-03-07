@@ -12,7 +12,7 @@ class BorderedPersoniew: PersonView {
     
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
-        layer.shadowColor = ThemeColor.gray.color.cgColor
+        layer.shadowColor = ThemeColor.yellow.color.cgColor
         layer.shadowOpacity = 0.35
         layer.shadowOffset = .zero
         layer.shadowRadius = 6
@@ -24,7 +24,7 @@ class BorderedPersoniew: PersonView {
         layer.lineWidth = 2
         layer.lineCap = .round
         layer.fillColor = UIColor.clear.cgColor
-        layer.borderColor = ThemeColor.gray.color.cgColor
+        layer.borderColor = ThemeColor.yellow.color.cgColor
         layer.borderWidth = 2
         return layer
     }()
@@ -70,7 +70,7 @@ class BorderedPersoniew: PersonView {
     
     private func setColors(for person: PersonType) {
         let isAvailable = person.focusStatus == .available
-        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.gray.color.cgColor
+        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.yellow.color.cgColor
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.pulseLayer.borderColor = color
