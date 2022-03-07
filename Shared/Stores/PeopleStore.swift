@@ -42,19 +42,19 @@ class PeopleStore {
         return Array(self.contactsDictionary.values)
     }
 
-    private var initializeTask: Task<Void, Never>?
+    private var initializeTask: Task<Void, Error>?
 
-    func initializeIfNeeded() async {
+    func initializeIfNeeded() async throws {
         // If we already have an initialization task, wait for it to finish.
         if let initializeTask = self.initializeTask {
-            await initializeTask.value
+            try await initializeTask.value
             return
         }
 
         // Otherwise start a new initialization task and wait for it to finish.
         self.initializeTask = Task {
             // Get all of the connections and unclaimed reservations.
-            await self.getAndStoreAllConnectedUsers()
+            try await self.getAndStoreAllConnectedUsers()
 
             await self.getAndStoreAllContactsWithUnclaimedReservations()
 
@@ -66,33 +66,32 @@ class PeopleStore {
             await self.getAndStoreAllUsersThatAreContacts()
         }
 
-        await self.initializeTask?.value
+        try await self.initializeTask?.value
+
+        // Clean up the task so later calls to initialize don't think we're still running the task.
+        self.initializeTask = nil
     }
     
-    private func getAndStoreAllConnectedUsers() async {
-        do {
-            let connections = try await GetAllConnections().makeRequest(andUpdate: [],
-                                                                        viewsToIgnore: [])
-                .filter { (connection) -> Bool in
-                    return !connection.nonMeUser.isNil
-                }
-            
-            var unfetchedUserIds = connections.compactMap { connection in
-                return connection.nonMeUser?.objectId
+    private func getAndStoreAllConnectedUsers() async throws {
+        let connections = try await GetAllConnections().makeRequest(andUpdate: [],
+                                                                    viewsToIgnore: [])
+            .filter { (connection) -> Bool in
+                return !connection.nonMeUser.isNil
             }
-            
-            if let current = User.current()?.objectId {
-                unfetchedUserIds.append(current)
+
+        var unfetchedUserIds = connections.compactMap { connection in
+            return connection.nonMeUser?.objectId
+        }
+
+        if let current = User.current()?.objectId {
+            unfetchedUserIds.append(current)
+        }
+
+        if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
+                                                                         container: .users) {
+            users.forEach { user in
+                self.usersDictionary[user.personId] = user
             }
-            
-            if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
-                                                                             container: .users) {
-                users.forEach { user in
-                    self.usersDictionary[user.personId] = user
-                }
-            }
-        } catch {
-            logError(error)
         }
     }
 

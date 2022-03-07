@@ -51,7 +51,7 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
 
     private func presentErrorAlert(with error: ClientError?) {
         let alert = UIAlertController(title: "Unable to login",
-                                      message: "We were unable to login. Check your connection and please try again.",
+                                      message: "Check your connection and please try again.",
                                       preferredStyle: .alert)
         let ok = UIAlertAction(title: "Retry", style: .default) { [unowned self] (_) in
             self.startLaunchTask()
