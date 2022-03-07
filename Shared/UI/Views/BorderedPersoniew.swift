@@ -8,62 +8,6 @@
 
 import Foundation
 
-class ContextCueView: BaseView {
-    
-    enum Size {
-        case large
-        case small
-    }
-    
-    private let label = ThemeLabel(font: .systemSmall)
-    var currentSize: Size = .small {
-        didSet {
-            self.label.setFont(self.currentSize == .small ? .systemSmall : .system)
-            self.layoutNow()
-        }
-    }
-    
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.addSubview(self.label)
-        self.label.textAlignment = .center
-        self.set(backgroundColor: .white)
-        self.isHidden = true
-    }
-    
-    private var newContextCueTask: Task<Void, Never>?
-    
-    func configure(with person: PersonType) {
-        
-        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
-        self.newContextCueTask?.cancel()
-        
-        self.newContextCueTask = Task { [weak self] in
-            guard let user = person as? User,
-                  let updated = try? await user.latestContextCue?.retrieveDataIfNeeded(),
-                  let first = updated.emojis.first else {
-                      self?.isHidden = true
-                      return
-                  }
-            
-            self?.isHidden = false
-            self?.label.setText(first)
-            self?.layoutNow()
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.label.setSize(withWidth: self.height * 0.8)
-        self.label.centerOnXAndY()
-        
-        self.squaredSize = self.currentSize == .small ? 22 : 30
-        self.makeRound()
-    }
-}
-
 class BorderedPersoniew: PersonView {
     
     lazy var shadowLayer: CAShapeLayer = {

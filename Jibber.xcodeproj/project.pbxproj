@@ -146,6 +146,8 @@
 		D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */; };
 		D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */; };
 		D61A33E727D57EFD00056242 /* ContextCueAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */; };
+		D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
+		D61A33EA27D5C4F200056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
 		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
@@ -862,6 +864,7 @@
 		D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueAddCell.swift; sourceTree = "<group>"; };
+		D61A33E827D5C4CD00056242 /* ContextCueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueView.swift; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Jibber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jibber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -2179,6 +2182,7 @@
 				D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */,
 				D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */,
 				D6D96EF327C5B11900BDCD01 /* ContextCuesViewController.swift */,
+				D61A33E827D5C4CD00056242 /* ContextCueView.swift */,
 				D61A33C727D4F21D00056242 /* Creator */,
 			);
 			path = "Context Cues";
@@ -2979,6 +2983,7 @@
 				D65D460227A9B1400019301C /* old_MessageStatusContainer.swift in Sources */,
 				8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
+				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,
 				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
@@ -3120,6 +3125,7 @@
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,
 				D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D605AC9D27877F890015D800 /* MessageBubbleView.swift in Sources */,
+				D61A33EA27D5C4F200056242 /* ContextCueView.swift in Sources */,
 				D63DB21A25E998F000F6B323 /* Router.swift in Sources */,
 				8074DDCF27B1D0ED00594BAC /* Messageable.swift in Sources */,
 				D63DB23E25E9992900F6B323 /* UNNotification+Extensions.swift in Sources */,
