@@ -38,11 +38,11 @@ class MainCoordinator: Coordinator<Void> {
         self.launchAndDeepLinkTask?.cancel()
 
         self.launchAndDeepLinkTask = Task {
-            let launchStatus: LaunchStatus = await withCheckedContinuation { continuation in
+            let deepLink: DeepLinkable? = await withCheckedContinuation { continuation in
                 let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
                 self.router.setRootModule(launchCoordinator)
-                self.addChildAndStart(launchCoordinator) { launchStatus in
-                    continuation.resume(returning: launchStatus)
+                self.addChildAndStart(launchCoordinator) { deepLink in
+                    continuation.resume(returning: deepLink)
                 }
             }
 
@@ -50,24 +50,15 @@ class MainCoordinator: Coordinator<Void> {
             guard !Task.isCancelled else { return }
 
 #if IOS
-            self.handle(result: launchStatus)
-#elseif APPCLIP
-            // Code your App Clip may access.
-            self.handleAppClip(result: launchStatus)
-#endif
-        }
-    }
-
-    private func handle(result: LaunchStatus) {
-        switch result {
-        case .success(let deepLink):
             if let deepLink = deepLink {
                 self.handle(deeplink: deepLink)
             } else {
                 self.handle(deeplink: DeepLinkObject(target: .conversation))
             }
-        case .failed(_):
-            break
+#elseif APPCLIP
+            // Code your App Clip may access.
+            self.handleAppClip(result: launchStatus)
+#endif
         }
     }
 
