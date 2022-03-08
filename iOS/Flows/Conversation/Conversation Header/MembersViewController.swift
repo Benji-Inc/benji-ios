@@ -199,9 +199,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             return .member(member)
         })
 
-        if !isRelease {
-            data[.members]?.append(.add(conversation.cid))
-        }
+        data[.members]?.append(.add(conversation.cid))
 
         return data
     }
