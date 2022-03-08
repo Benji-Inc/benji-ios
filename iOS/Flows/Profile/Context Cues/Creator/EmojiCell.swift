@@ -13,7 +13,7 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: Emoji?
     
-    private let label = ThemeLabel(font: .systemLarge)
+    private let label = ThemeLabel(font: .contextCues)
     
     override func initializeSubviews() {
         super.initializeSubviews()

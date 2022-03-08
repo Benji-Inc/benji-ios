@@ -19,10 +19,6 @@ class ContextCueCoordinator: PresentableCoordinator<Void> {
             self.finishFlow(with: ())
         }
     }
-    
-    deinit {
-        logDebug("DEINIT")
-    }
 
     override func toPresentable() -> DismissableVC {
         return self.creatorVC

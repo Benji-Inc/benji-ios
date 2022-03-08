@@ -22,9 +22,7 @@ enum FontType {
     case small
     case smallBold
     case xtraSmall
-    case reactionEmoji
     case system
-    case systemLarge
     case systemSmall
     case systemBold
     case contextCues
@@ -34,7 +32,7 @@ enum FontType {
         return UIFont.systemFont(ofSize: self.size)
     #else
         switch self {
-        case .system, .systemLarge, .systemSmall, .contextCues:
+        case .system, .systemSmall, .contextCues:
             return UIFont.systemFont(ofSize: self.size)
         case .systemBold:
             return UIFont.systemFont(ofSize: self.size, weight: .bold)
@@ -42,15 +40,13 @@ enum FontType {
             return UIFont(name: regularFontName, size: self.size)!
         case .mediumBold, .regularBold, .smallBold:
             return UIFont(name: boldFontName, size: self.size)!
-        case .reactionEmoji:
-            return UIFont.systemFont(ofSize: self.size)
         }
     #endif
     }
 
     var size: CGFloat {
         switch self {
-        case .display, .systemLarge:
+        case .display:
             return 30
         case .contextCues:
             return 26
@@ -58,7 +54,7 @@ enum FontType {
             return 20
         case .regular, .regularBold:
             return 16
-        case .small, .smallBold, .reactionEmoji, .systemSmall:
+        case .small, .smallBold, .systemSmall:
             return 12
         case .xtraSmall:
             return 8

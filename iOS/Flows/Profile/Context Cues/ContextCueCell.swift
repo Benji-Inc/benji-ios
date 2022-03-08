@@ -77,10 +77,6 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
         self.timeLabel.match(.left, to: .right, of: self.daysAgoLabel, offset: .short)
     }
     
-    override func update(isSelected: Bool) {
-        super.update(isSelected: isSelected)
-    }
-    
     private func getEmojiText(for contextCue: ContextCue) -> Localized {
         
         var emojiText = ""
