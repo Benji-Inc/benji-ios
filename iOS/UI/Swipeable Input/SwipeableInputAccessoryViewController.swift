@@ -10,11 +10,37 @@ import Foundation
 import Lottie
 import Combine
 
+protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
+    /// The accessory has begun a swipe interaction.
+    func swipeableInputAccessoryDidBeginSwipe(_ controller: SwipeableInputAccessoryViewController)
+    /// The accessory view updated the position of the sendable's preview view's position.
+    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
+                                 didUpdatePreviewFrame frame: CGRect,
+                                 for sendable: Sendable)
+    /// The accessory view wants to send the sendable with the preview with the specified frame.
+    /// The delegate should return true if the sendable was sent.
+    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
+                                 triggeredSendFor sendable: Sendable,
+                                 withPreviewFrame frame: CGRect) -> Bool
+    /// The accessory view finished its swipe interaction.
+    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
+                                 didFinishSwipeSendingSendable didSend: Bool)
+
+    /// The avatar view in the accessory was tapped.
+    func swipeableInputAccessoryDidTapAvatar(_ controller: SwipeableInputAccessoryViewController)
+}
+
+
 class SwipeableInputAccessoryViewController: ViewController {
 
-    weak var delegate: SwipeableInputAccessoryViewDelegate?
+    enum InputState {
+        /// The input field is fit to the current input. Swipe to send is enabled.
+        case collapsed
+        /// The input field is expanded and can be tapped to edit/copy/paste. Swipe to send is disabled.
+        case expanded
+    }
 
-    typealias InputState = SwipeableInputAccessoryView.InputState
+    weak var delegate: SwipeableInputAccessoryViewControllerDelegate?
 
     // MARK: - Drag and Drop Properties
 
@@ -23,12 +49,8 @@ class SwipeableInputAccessoryViewController: ViewController {
 
     // MARK:  - Views
 
-    private lazy var swipeInputView: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
-    private lazy var panGestureHandler = SwipeInputPanGestureHandler(inputView: self.swipeInputView)
-
-    static var minHeight: CGFloat = 76
-    static var inputTypeMaxHeight: CGFloat = 25
-    static var inputTypeAvatarHeight: CGFloat = 56
+    lazy var swipeInputView: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
+    private lazy var panGestureHandler = SwipeInputPanGestureHandler(viewController: self)
 
     /// The current input state of the accessory view.
     @Published var inputState: InputState = .collapsed
@@ -71,7 +93,7 @@ class SwipeableInputAccessoryViewController: ViewController {
         }
 
         self.swipeInputView.avatarView.didSelect { [unowned self] in
-            self.delegate?.swipeableInputAccessoryDidTapAvatar(self.swipeInputView)
+            self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
         }
 
         self.setupGestures()
@@ -212,7 +234,7 @@ class SwipeableInputAccessoryViewController: ViewController {
     }
 
     func resetInputViews() {
-        self.swipeInputView.inputState = .collapsed
+        self.inputState = .collapsed
         self.swipeInputView.textView.reset()
         self.swipeInputView.inputContainerView.alpha = 1
         self.swipeInputView.countView.alpha = 0.0

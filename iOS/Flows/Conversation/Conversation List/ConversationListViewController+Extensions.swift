@@ -12,7 +12,6 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
-        
         self.dataSource.handleDidTapClose = { [unowned self] item in
             self.dataSource.deleteItems([item])
             switch item {

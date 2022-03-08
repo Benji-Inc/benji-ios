@@ -20,7 +20,7 @@ protocol MessageSendingCollectionViewType: CollectionView {
     func getNewConversationContentOffset() -> CGPoint
 }
 
-class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate {
+class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControllerDelegate {
     
     /// The type of message send method that the conversation VC is prepped for.
     private enum SendMode {

@@ -12,10 +12,13 @@ import Lottie
 /// Handles pan gesture input on behalf of the swipeable input accessory.
 class SwipeInputPanGestureHandler {
 
-    let inputView: SwipeableInputAccessoryView
+    let viewController: SwipeableInputAccessoryViewController
+    var inputView: SwipeableInputAccessoryView {
+        return self.viewController.swipeInputView
+    }
 
-    init(inputView: SwipeableInputAccessoryView) {
-        self.inputView = inputView
+    init(viewController: SwipeableInputAccessoryViewController) {
+        self.viewController = viewController
     }
 
     /// An object to give the user touch feedback when performing certain actions.
@@ -52,16 +55,16 @@ class SwipeInputPanGestureHandler {
     private func shouldHandlePan() -> Bool {
         // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.inputView.currentMessageKind,
-                                    context: self.inputView.currentContext,
-                                    emotion: self.inputView.currentEmotion,
+                                    context: self.viewController.currentContext,
+                                    emotion: self.viewController.currentEmotion,
                                     previousMessage: self.inputView.editableMessage)
         return object.isSendable
     }
 
     private func handlePanBegan() {
         let object = SendableObject(kind: self.inputView.currentMessageKind,
-                                    context: self.inputView.currentContext,
-                                    emotion: self.inputView.currentEmotion,
+                                    context: self.viewController.currentContext,
+                                    emotion: self.viewController.currentEmotion,
                                     previousMessage: self.inputView.editableMessage)
         self.inputView.sendable = object
 
@@ -69,11 +72,11 @@ class SwipeInputPanGestureHandler {
         self.inputView.inputContainerView.alpha = 0
 
         // Stop any swipe hint animations if they're playing.
-        self.inputView.updateSwipeHint(shouldPlay: false)
+        self.viewController.updateSwipeHint(shouldPlay: false)
 
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
-                                              bubbleColor: self.inputView.currentContext.color.color)
+                                              bubbleColor: self.viewController.currentContext.color.color)
         self.previewView?.frame = self.inputView.inputContainerView.frame
         self.previewView?.messageKind = self.inputView.currentMessageKind
         self.previewView?.showShadow(withOffset: 8)
@@ -88,7 +91,7 @@ class SwipeInputPanGestureHandler {
         
         self.animatePreviewScale(shouldScale: true)
         
-        self.inputView.delegate?.swipeableInputAccessoryDidBeginSwipe(self.inputView)
+        self.viewController.delegate?.swipeableInputAccessoryDidBeginSwipe(self.viewController)
     }
     
     private func animatePreviewScale(shouldScale: Bool, completion: CompletionOptional = nil) {
@@ -108,9 +111,9 @@ class SwipeInputPanGestureHandler {
 
         guard let sendable = self.inputView.sendable, let previewView = self.previewView else { return }
 
-        self.inputView.delegate?.swipeableInputAccessory(self.inputView,
-                                                         didUpdatePreviewFrame: previewView.frame,
-                                                         for: sendable)
+        self.viewController.delegate?.swipeableInputAccessory(self.viewController,
+                                                              didUpdatePreviewFrame: previewView.frame,
+                                                              for: sendable)
     }
 
     private func handlePanEnded(withOffset panOffset: CGPoint) {
@@ -120,24 +123,24 @@ class SwipeInputPanGestureHandler {
 
         if let sendable = self.inputView.sendable,
            let previewView = self.previewView,
-           let delegate = self.inputView.delegate {
+           let delegate = self.viewController.delegate {
 
-            sendableWillBeSent = delegate.swipeableInputAccessory(self.inputView,
+            sendableWillBeSent = delegate.swipeableInputAccessory(self.viewController,
                                                                   triggeredSendFor: sendable,
                                                                   withPreviewFrame: previewView.frame)
         }
 
         self.resetPreviewAndInputViews(didSend: sendableWillBeSent)
 
-        self.inputView.delegate?.swipeableInputAccessory(self.inputView,
-                                                         didFinishSwipeSendingSendable: sendableWillBeSent)
+        self.viewController.delegate?.swipeableInputAccessory(self.viewController,
+                                                              didFinishSwipeSendingSendable: sendableWillBeSent)
     }
 
     private func handlePanFailed() {
         self.inputView.inputContainerView.alpha = 1
         self.previewView?.removeFromSuperview()
-        self.inputView.delegate?.swipeableInputAccessory(self.inputView,
-                                                         didFinishSwipeSendingSendable: false)
+        self.viewController.delegate?.swipeableInputAccessory(self.viewController,
+                                                              didFinishSwipeSendingSendable: false)
     }
 
     /// Updates the position of the preview view based on the provided pan gesture offset. This function ensures that preview view's origin
@@ -151,10 +154,10 @@ class SwipeInputPanGestureHandler {
         var previewCenter = initialCenter + CGPoint(x: offsetX, y: panOffset.y)
 
         // As the user drags further up, gravitate the preview view toward the drop zone.
-        let dropZoneCenter = self.inputView.dropZoneFrame.center
+        let dropZoneCenter = self.viewController.dropZoneFrame.center
         let xGravityRange: CGFloat = 30
         // Range along y axis from the drop zone center within which we start gravitating the preview
-        let yGravityRange: CGFloat = self.inputView.dropZoneFrame.height
+        let yGravityRange: CGFloat = self.viewController.dropZoneFrame.height
 
         // Vector pointing from the current preview center to the drop zone center.
         var gravityVector = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter)
@@ -175,7 +178,7 @@ class SwipeInputPanGestureHandler {
 
         // Provide haptic and visual feedback when the message is ready to send.
         let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
-        if distanceToDropZone < self.inputView.dropZoneFrame.height * 0.5 {
+        if distanceToDropZone < self.viewController.dropZoneFrame.height * 0.5 {
             if !self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: false)
                 previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
@@ -207,7 +210,7 @@ class SwipeInputPanGestureHandler {
                     self.previewView?.alpha = 0
                 } completion: { completed in
                     self.previewView?.removeFromSuperview()
-                    self.inputView.resetInputViews()
+                    self.viewController.resetInputViews()
                 }
             }
             
