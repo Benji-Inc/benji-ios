@@ -93,14 +93,12 @@ class KeyboardManager {
             .mainSink { (notification) in
                 self.currentEvent = .willChangeFrame(notification)
                 self.cachedKeyboardEndFrame = notification.keyboardEndFrame
-                logDebug(notification.keyboardEndFrame.debugDescription)
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidChangeFrameNotification)
             .mainSink { (notification) in
                 self.currentEvent = .didChangeFrame(notification)
                 self.cachedKeyboardEndFrame = notification.keyboardEndFrame
-                logDebug(notification.keyboardEndFrame.debugDescription)
             }.store(in: &self.cancellables)
     }
 

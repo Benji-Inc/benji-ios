@@ -84,6 +84,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+
         self.swipeInputView.emotionView.didSelectEmotion = { [unowned self] emotion in
             AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
             self.currentEmotion = emotion
