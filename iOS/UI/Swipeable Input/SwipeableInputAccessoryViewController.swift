@@ -30,6 +30,21 @@ protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
     func swipeableInputAccessoryDidTapAvatar(_ controller: SwipeableInputAccessoryViewController)
 }
 
+//class SomeView: UIView {
+//
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//
+//        self.translatesAutoresizingMaskIntoConstraints = false
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    override var intrinsicContentSize: CGSize {
+//        return CGSize(width: UIView.noIntrinsicMetric, height: 100)
+//    }
+//}
 
 class SwipeableInputAccessoryViewController: UIInputViewController {
 

@@ -53,8 +53,14 @@ class SwipeableInputAccessoryView: BaseView {
 
     // MARK: BaseView Setup and Layout
 
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIView.noIntrinsicMetric, height: 200)
+    }
+    
     override func initializeSubviews() {
         super.initializeSubviews()
+
+        self.translatesAutoresizingMaskIntoConstraints = false
 
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
