@@ -57,15 +57,21 @@ class LaunchManager {
 
             // Pre-load contacts
             _ = ContactsManager.shared
-            async let first: Void
-            = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-            // Initialize the people store
-            async let second: Void = PeopleStore.shared.initializeIfNeeded()
-            let _: [Void] = await [first, second]
-            
-            // Update the timeZone
-            user.timeZone = TimeZone.current.identifier
-            user.saveEventually()
+
+            do {
+                async let first: Void
+                = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+                // Initialize the people store
+                async let second: Void = PeopleStore.shared.initializeIfNeeded()
+                let _: [Void] = try await [first, second]
+
+                // Update the timeZone
+                user.timeZone = TimeZone.current.identifier
+                user.saveEventually()
+            } catch {
+                logError(error)
+                return LaunchStatus.failed(error: ClientError.apiError(detail: error.localizedDescription))
+            }
         }
 #endif
         // Initializes the analytics manager
