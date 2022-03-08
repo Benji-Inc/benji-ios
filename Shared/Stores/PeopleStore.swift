@@ -66,10 +66,13 @@ class PeopleStore {
             await self.getAndStoreAllUsersThatAreContacts()
         }
 
-        try await self.initializeTask?.value
-
-        // Clean up the task so later calls to initialize don't think we're still running the task.
-        self.initializeTask = nil
+        do {
+            try await self.initializeTask?.value
+        } catch {
+            // Dispose of the task because it failed, then pass the error along.
+            self.initializeTask = nil
+            throw error
+        }
     }
     
     private func getAndStoreAllConnectedUsers() async throws {
