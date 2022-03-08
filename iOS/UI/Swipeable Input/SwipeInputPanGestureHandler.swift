@@ -54,19 +54,19 @@ class SwipeInputPanGestureHandler {
 
     private func shouldHandlePan() -> Bool {
         // Only handle pans if the user has input a sendable message.
-        let object = SendableObject(kind: self.inputView.currentMessageKind,
+        let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     context: self.viewController.currentContext,
                                     emotion: self.viewController.currentEmotion,
-                                    previousMessage: self.inputView.editableMessage)
+                                    previousMessage: self.viewController.editableMessage)
         return object.isSendable
     }
 
     private func handlePanBegan() {
-        let object = SendableObject(kind: self.inputView.currentMessageKind,
+        let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     context: self.viewController.currentContext,
                                     emotion: self.viewController.currentEmotion,
-                                    previousMessage: self.inputView.editableMessage)
-        self.inputView.sendable = object
+                                    previousMessage: self.viewController.editableMessage)
+        self.viewController.sendable = object
 
         // Hide the input area. The preview view will take its place during the pan.
         self.inputView.inputContainerView.alpha = 0
@@ -78,7 +78,7 @@ class SwipeInputPanGestureHandler {
         self.previewView = PreviewMessageView(orientation: .down,
                                               bubbleColor: self.viewController.currentContext.color.color)
         self.previewView?.frame = self.inputView.inputContainerView.frame
-        self.previewView?.messageKind = self.inputView.currentMessageKind
+        self.previewView?.messageKind = self.viewController.currentMessageKind
         self.previewView?.showShadow(withOffset: 8)
         self.inputView.addSubview(self.previewView!)
 
@@ -109,7 +109,7 @@ class SwipeInputPanGestureHandler {
     private func handlePanChanged(withOffset panOffset: CGPoint) {
         self.updatePreviewViewPosition(withOffset: panOffset)
 
-        guard let sendable = self.inputView.sendable, let previewView = self.previewView else { return }
+        guard let sendable = self.viewController.sendable, let previewView = self.previewView else { return }
 
         self.viewController.delegate?.swipeableInputAccessory(self.viewController,
                                                               didUpdatePreviewFrame: previewView.frame,
@@ -121,7 +121,7 @@ class SwipeInputPanGestureHandler {
 
         var sendableWillBeSent = false
 
-        if let sendable = self.inputView.sendable,
+        if let sendable = self.viewController.sendable,
            let previewView = self.previewView,
            let delegate = self.viewController.delegate {
 

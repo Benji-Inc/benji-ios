@@ -31,7 +31,7 @@ protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
 }
 
 
-class SwipeableInputAccessoryViewController: ViewController {
+class SwipeableInputAccessoryViewController: UIInputViewController {
 
     enum InputState {
         /// The input field is fit to the current input. Swipe to send is enabled.
@@ -49,11 +49,17 @@ class SwipeableInputAccessoryViewController: ViewController {
 
     // MARK:  - Views
 
+    override var inputAccessoryView: UIView? {
+        return self.swipeInputView
+    }
     lazy var swipeInputView: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
     private lazy var panGestureHandler = SwipeInputPanGestureHandler(viewController: self)
 
     /// The current input state of the accessory view.
     @Published var inputState: InputState = .collapsed
+
+    #warning("Figure out where to put this")
+    var cancellables = Set<AnyCancellable>()
 
     // MARK: - Message State
 
@@ -79,8 +85,8 @@ class SwipeableInputAccessoryViewController: ViewController {
         self.view = self.swipeInputView
     }
 
-    override func initializeViews() {
-        super.initializeViews()
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         self.swipeInputView.emotionView.didSelectEmotion = { [unowned self] emotion in
             AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])

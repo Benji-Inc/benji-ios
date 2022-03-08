@@ -44,22 +44,22 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     var indexPathForEditing: IndexPath?
 
     var inputTextView: InputTextView {
-        return self.messageInputAccessoryView.textView
+        return self.messageInputController.swipeInputView.textView
     }
 
     // Custom Input Accessory View
-    lazy var messageInputAccessoryView: SwipeableInputAccessoryView = {
-        let view: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
-        view.delegate = self.swipeInputDelegate
-        view.textView.restorationIdentifier = "thread"
-        return view
+    lazy var messageInputController: SwipeableInputAccessoryViewController = {
+        let inputController = SwipeableInputAccessoryViewController()
+        inputController.delegate = self.swipeInputDelegate
+        inputController.swipeInputView.textView.restorationIdentifier = "thread"
+        return inputController
     }()
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
                                                                        collectionView: self.threadCollectionView,
                                                                        isConversationList: false)
 
-    override var inputAccessoryView: UIView? {
-        return self.messageInputAccessoryView
+    override var inputAccessoryViewController: UIInputViewController? {
+        return self.messageInputController
     }
 
     override var canBecomeFirstResponder: Bool {
@@ -92,7 +92,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func initializeViews() {
         super.initializeViews()
         
-        self.messageInputAccessoryView.resetDeliveryType()
+        self.messageInputController.resetDeliveryType()
         
         self.view.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.5)
 
@@ -359,14 +359,14 @@ extension ThreadViewController {
         }
 
         self.collectionView.backView.didSelect { [unowned self] in
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
+            if self.messageInputController.swipeInputView.textView.isFirstResponder {
+                self.messageInputController.swipeInputView.textView.resignFirstResponder()
             } else {
-                self.messageInputAccessoryView.textView.becomeFirstResponder()
+                self.messageInputController.swipeInputView.textView.becomeFirstResponder()
             }
         }
 
-        self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] _ in
+        self.messageInputController.swipeInputView.textView.$inputText.mainSink { [unowned self] _ in
             guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
             self.conversationController?.sendKeystrokeEvent(completion: nil)
         }.store(in: &self.cancellables)
@@ -388,6 +388,6 @@ extension ThreadViewController {
             return member.personId != ChatClient.shared.currentUserId
         } ?? []
 
-        self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: true)
+        self.messageInputController.swipeInputView.textView.setPlaceholder(for: members, isReply: true)
     }
 }
