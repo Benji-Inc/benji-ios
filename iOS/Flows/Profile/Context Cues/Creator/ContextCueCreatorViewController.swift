@@ -21,6 +21,8 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
     let button = ThemeButton()
     private var showButton: Bool = true
     
+    @Published var selectedEmojis: [Emoji] = []
+    
     private let segmentGradientView = GradientView(with: [ThemeColor.B0.color.cgColor,
                                                          ThemeColor.B0.color.cgColor,
                                                          ThemeColor.B0.color.cgColor,
@@ -68,12 +70,6 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         
         self.collectionView.allowsMultipleSelection = true
         
-        self.$selectedItems
-            .removeDuplicates()
-            .mainSink { [unowned self] items in
-                self.updateButton()
-            }.store(in: &self.cancellables)
-        
         self.button.didSelect { [unowned self] in
             Task {
                 try await self.createContextCue()
@@ -87,6 +83,11 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         
         self.segmentControl.selectedSegmentIndex = 0
         self.loadEmojis(for: .smiles)
+        
+        self.$selectedEmojis.mainSink { [unowned self] items in
+            self.updateSelectedItems()
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -137,29 +138,43 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
     private func updateButton() {
         self.button.set(style: .custom(color: .B5, textColor: .T4, text: self.getButtonTitle()))
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.showButton = self.selectedItems.count > 0
+            self.showButton = self.selectedEmojis.count > 0
             self.view.layoutNow()
         }
     }
     
-    private func getButtonTitle() -> Localized {
-        let emojis: [Emoji] = self.selectedItems.compactMap { type in
-            switch type {
+    func updateSelectedItems() {
+        guard !self.dataSource.sectionIdentifier(for: 0).isNil else { return }
+        
+        let updatedItems: [EmojiCollectionViewDataSource.ItemType] = self.dataSource.itemIdentifiers(in: .emojis).compactMap { item in
+            switch item {
             case .emoji(let emoji):
-                return emoji
+                var copy = emoji
+                copy.isSelected = self.selectedEmojis.contains(where: { current in
+                    return current.id == emoji.id
+                })
+
+                return .emoji(copy)
             }
         }
         
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(updatedItems, in: .emojis)
+        self.dataSource.apply(snapshot)
+    }
+    
+    private func getButtonTitle() -> Localized {
+
         var emojiText = ""
         let max: Int = 3
-        for (index, value) in emojis.enumerated() {
+        for (index, value) in self.selectedEmojis.enumerated() {
             if index <= max - 1 {
                 emojiText.append(contentsOf: value.emoji)
             }
         }
         
-        if emojis.count > max {
-            let amount = emojis.count - max
+        if self.selectedEmojis.count > max {
+            let amount = self.selectedEmojis.count - max
             emojiText.append(contentsOf: " +\(amount)")
         }
         
@@ -178,7 +193,15 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
             guard let emojis = try? await EmojiServiceManager.fetchEmojis(for: category) else { return }
             
             let items: [EmojiCollectionViewDataSource.ItemType] = emojis.results.compactMap({ emoji in
-                return .emoji(emoji)
+                var copy = emoji
+
+                if self.selectedEmojis.contains(where: { selected in
+                    return selected.id == copy.id
+                }) {
+                    copy.isSelected = true
+                }
+                
+                return .emoji(copy)
             })
             
             guard !Task.isCancelled else { return }
@@ -195,11 +218,8 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         
         await self.button.handleEvent(status: .loading)
         
-        let emojis: [String] = self.selectedItems.compactMap { type in
-            switch type {
-            case .emoji(let emoji):
-                return emoji.emoji
-            }
+        let emojis: [String] = self.selectedEmojis.compactMap { type in
+            return type.emoji
         }
         
         let contextCue = ContextCue()
@@ -219,5 +239,37 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         await ToastScheduler.shared.schedule(toastType: .newContextCue(saved))
         
         AnalyticsManager.shared.trackEvent(type: .contextCueCreated, properties: ["value": saved.emojiString])
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didSelectItemAt: indexPath)
+        guard let emoji: Emoji = self.dataSource.itemIdentifier(for: indexPath).map({ item in
+            switch item {
+            case .emoji(let emoji):
+                return emoji
+            }
+        }) else { return }
+        
+        if let existing = self.selectedEmojis.first(where: { value in
+            return value.id == emoji.id
+        }) {
+            self.selectedEmojis.remove(object: existing)
+        } else {
+            self.selectedEmojis.append(emoji)
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didDeselectItemAt: indexPath)
+        guard let emoji: Emoji = self.dataSource.itemIdentifier(for: indexPath).map({ item in
+            switch item {
+            case .emoji(let emoji):
+                return emoji
+            }
+        }), self.selectedEmojis.contains(where: { value in
+            return value.id == emoji.id
+        }) else { return }
+        
+        self.selectedEmojis.remove(object: emoji)
     }
 }

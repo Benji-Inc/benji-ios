@@ -30,6 +30,7 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
     
     func configure(with item: Emoji) {
         self.label.setText(item.emoji)
+        self.contentView.backgroundColor = item.isSelected ? ThemeColor.D6.color.withAlphaComponent(0.25) : ThemeColor.clear.color
         self.layoutNow()
     }
     
@@ -38,11 +39,5 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
         
         self.label.setSize(withWidth: self.contentView.width)
         self.label.centerOnXAndY()
-    }
-    
-    override func update(isSelected: Bool) {
-        super.update(isSelected: isSelected)
-        
-        self.contentView.backgroundColor = isSelected ? ThemeColor.D6.color.withAlphaComponent(0.25) : ThemeColor.clear.color
     }
 }

@@ -9,11 +9,13 @@
 import Foundation
 
 struct Emoji: Decodable, Hashable {
-    var id = UUID()
+    var id: Int
     var emoji: String
+    var isSelected: Bool = false 
 
     private enum CodingKeys: String, CodingKey {
         case emoji
+        case id
     }
 }
 
