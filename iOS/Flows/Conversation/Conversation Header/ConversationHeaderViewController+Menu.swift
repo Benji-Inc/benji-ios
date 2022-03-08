@@ -50,7 +50,7 @@ extension ConversationHeaderViewController {
             Task {
                 let controller = ChatClient.shared.channelController(for: self.activeConversation!.cid)
                 do {
-                    try await controller.hideChannel(clearHistory: true)
+                    try await controller.hideChannel(clearHistory: false)
                 } catch {
                     logError(error)
                 }
