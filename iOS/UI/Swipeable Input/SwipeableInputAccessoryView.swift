@@ -18,8 +18,6 @@ class SwipeableInputAccessoryView: BaseView {
 
     /// A view that contains and provides a background for the input view.
     @IBOutlet var inputContainerView: SpeechBubbleView!
-    /// Height constraint for the input container view.
-    @IBOutlet var inputHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
     @IBOutlet var animationViewContainer: UIView!
@@ -32,20 +30,35 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var countView: CharacterCountView!
     @IBOutlet var avatarView: BorderedPersoniew!
 
+    /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
-    @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
-
-    static var minHeight: CGFloat = 76
-    static var inputTypeMaxHeight: CGFloat = 25
-    static var inputTypeAvatarHeight: CGFloat = 56
-
-    // MARK: - Message State
-
-    let deliveryTypeView = DeliveryTypeView()
     let emotionView = old_EmotionView()
+    let deliveryTypeView = DeliveryTypeView()
+
+    // MARK: - Height Accessors
+
+    var collapsedWithoutKeyboard: CGFloat = 144
+    var collapsedWithKeyboard: CGFloat = 104
+    var expandedHeight: CGFloat = 400
 
     // MARK: - Layout/Animation Properties
 
+    private lazy var contentHeight: CGFloat = self.collapsedWithoutKeyboard {
+        didSet {
+            // Whenever the content height changes, we need to adjust the size of our containing superviews.
+            self.invalidateIntrinsicContentSize()
+            // Use layout now so animations are smooth.
+            self.window?.layoutNow()
+        }
+    }
+
+    override var intrinsicContentSize: CGSize {
+        let windowHeight = self.window?.safeAreaInsets.bottom ?? 0
+        return CGSize(width: UIView.noIntrinsicMetric,
+                      height: self.contentHeight + windowHeight)
+    }
+
+    @IBOutlet var avatarHeightConstraint: NSLayoutConstraint!
     @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
     @IBOutlet var textViewCollapsedMaxHeightConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
@@ -53,16 +66,10 @@ class SwipeableInputAccessoryView: BaseView {
 
     // MARK: BaseView Setup and Layout
 
-    var contentHeight: CGFloat = 176 {
-        didSet { self.invalidateIntrinsicContentSize() }
-    }
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: self.contentHeight)
-    }
-
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        // This allows the accessory container to respect intrinsic content size.
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.inputContainerView.showShadow(withOffset: 8)
@@ -119,7 +126,8 @@ class SwipeableInputAccessoryView: BaseView {
             self.animationView.isVisible = false
             self.animationView.currentProgress = 0
 
-            newInputHeight = SwipeableInputAccessoryView.minHeight
+
+            newInputHeight = 76
         case .expanded:
             NSLayoutConstraint.deactivate([self.textViewCollapsedVerticalCenterConstraint,
                                            self.textViewCollapsedMaxHeightConstraint])
@@ -143,27 +151,27 @@ class SwipeableInputAccessoryView: BaseView {
         }
 
         // There's no need to animate the height if it hasn't changed.
-        guard newInputHeight != self.inputHeightConstraint.constant else { return }
+        guard self.contentHeight != newInputHeight else { return }
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.inputHeightConstraint.constant = newInputHeight
+            self.contentHeight = newInputHeight
             self.layoutNow()
         }
     }
 
-    func showDetail(shouldShow: Bool) {
+    func setShowMessageDetailOptions(_ shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputTypeHeightConstraint.constant
-            = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : SwipeableInputAccessoryView.inputTypeAvatarHeight
-            
             self.emotionView.alpha = shouldShow ? 1.0 : 0.0
             self.deliveryTypeView.alpha = shouldShow ? 1.0 : 0.0
             self.avatarView.alpha = shouldShow ? 0.0 : 1.0
+            self.avatarHeightConstraint.constant = shouldShow ? 0 : 44
             
             if shouldShow {
                 self.countView.update(with: self.textView.text.count, max: self.textView.maxLength)
+                self.contentHeight = self.collapsedWithKeyboard
             } else {
                 self.countView.alpha = 0.0
+                self.contentHeight = self.collapsedWithoutKeyboard
             }
         }
     }

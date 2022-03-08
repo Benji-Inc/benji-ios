@@ -84,7 +84,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
         self.swipeInputView.emotionView.didSelectEmotion = { [unowned self] emotion in
             AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
             self.currentEmotion = emotion
@@ -161,10 +160,10 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             .mainSink { [unowned self] currentEvent in
                 switch currentEvent {
                 case .willShow:
-                    self.showDetail(shouldShow: true)
+                    self.swipeInputView.setShowDetail(_ shouldShow: true)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .willHide:
-                    self.showDetail(shouldShow: false)
+                    self.swipeInputView.setShowDetail(_ shouldShow: false)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .didHide:
                     self.swipeInputView.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
@@ -205,10 +204,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     private func updateLayout(for inputState: InputState) {
         self.swipeInputView.updateLayout(for: inputState)
-    }
-
-    private func showDetail(shouldShow: Bool) {
-        self.swipeInputView.showDetail(shouldShow: shouldShow)
     }
 
     func updateSwipeHint(shouldPlay: Bool) {
