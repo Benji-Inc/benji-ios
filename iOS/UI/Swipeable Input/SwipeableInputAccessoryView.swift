@@ -266,7 +266,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.inputState = .expanded
     }
 
-    private func updateLayout(for inputState: InputState) {
+    func updateLayout(for inputState: InputState) {
         let newInputHeight: CGFloat
 
         switch inputState {
@@ -317,7 +317,7 @@ class SwipeableInputAccessoryView: BaseView {
         }
     }
 
-    private func showDetail(shouldShow: Bool) {
+    func showDetail(shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputTypeHeightConstraint.constant
             = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : SwipeableInputAccessoryView.inputTypeAvatarHeight
