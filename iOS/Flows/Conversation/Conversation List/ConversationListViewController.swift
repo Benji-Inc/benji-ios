@@ -47,10 +47,12 @@ class ConversationListViewController: ViewController, ConversationListCollection
                                                                        isConversationList: true)
 
     override var inputAccessoryViewController: UIInputViewController? {
-        return self.presentedViewController.isNil ? self.messageInputController : nil
+        return self.messageInputController
+//        return self.presentedViewController.isNil ? self.messageInputController : nil
     }
     override var canBecomeFirstResponder: Bool {
-        return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
+        return true
+//        return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
     }
 
     @Published var state: ConversationUIState = .read

@@ -53,17 +53,8 @@ class SwipeableInputAccessoryView: BaseView {
 
     // MARK: BaseView Setup and Layout
 
-    // Override intrinsic content size so that height is adjusted for safe areas and text input.
-    // https://stackoverflow.com/questions/46282987/iphone-x-how-to-handle-view-controller-inputaccessoryview
-    override var intrinsicContentSize: CGSize {
-        return .zero
-    }
-
     override func initializeSubviews() {
         super.initializeSubviews()
-
-        // Use flexible height autoresizing mask to account for changes in text input.
-        self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)

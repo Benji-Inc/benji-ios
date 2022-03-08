@@ -49,9 +49,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     // MARK:  - Views
 
-    override var inputAccessoryView: UIView? {
-        return self.swipeInputView
-    }
     lazy var swipeInputView: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
     private lazy var panGestureHandler = SwipeInputPanGestureHandler(viewController: self)
 
@@ -83,6 +80,8 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     override func loadView() {
         self.view = self.swipeInputView
+        #warning("Remove this")
+        self.view.backgroundColor = .red
     }
 
     override func viewDidLoad() {
