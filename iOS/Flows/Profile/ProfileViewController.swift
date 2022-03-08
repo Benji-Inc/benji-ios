@@ -16,7 +16,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     private var person: PersonType
     
     lazy var header = ProfileHeaderView()
-    private lazy var contextCuesVC = ContextCuesViewController()
+    lazy var contextCuesVC = ContextCuesViewController(person: self.person)
     
     private let segmentGradientView = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
                                                          ThemeColor.walletBackground.color.cgColor,
@@ -48,7 +48,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
+            sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
@@ -83,6 +83,16 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 self.startLoadArchiveTask()
             }
         }
+        
+        PeopleStore.shared
+            .$personUpdated
+            .filter { [unowned self] updatedPerson in
+                // Only handle person updates related to the currently assigned person.
+                self.person.personId ==  updatedPerson?.personId
+            }.mainSink { [unowned self] updatedPerson in
+                guard let user = updatedPerson as? User, let contextCue = user.latestContextCue else { return }
+                self.contextCuesVC.appendNew(contextCue: contextCue)
+            }.store(in: &self.cancellables)
     }
     
     override func viewDidLoad() {
@@ -115,13 +125,13 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     override func viewDidLayoutSubviews() {
         self.header.expandToSuperviewWidth()
-        self.header.height = 220
+        self.header.height = 160
         self.header.pinToSafeAreaTop()
         
         super.viewDidLayoutSubviews()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
-        self.contextCuesVC.view.height = 40
+        self.contextCuesVC.view.height = 44
         self.contextCuesVC.view.match(.top, to: .bottom, of: self.header)
         
         self.bottomGradientView.expandToSuperviewWidth()

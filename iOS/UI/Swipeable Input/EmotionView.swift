@@ -29,7 +29,7 @@ struct EmotionView: View {
             if let emotion = self.config.emotion {
                 Spacer.length(.standard)
                 Text(emotion.emoji)
-                    .fontType(.reactionEmoji)
+                    .fontType(.systemSmall)
                 Spacer.length(.standard)
                 Text(emotion.rawValue.firstCapitalized)
                     .fontType(.small)

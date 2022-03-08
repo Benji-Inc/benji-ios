@@ -12,7 +12,7 @@ class BorderedPersoniew: PersonView {
     
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
-        layer.shadowColor = ThemeColor.gray.color.cgColor
+        layer.shadowColor = ThemeColor.yellow.color.cgColor
         layer.shadowOpacity = 0.35
         layer.shadowOffset = .zero
         layer.shadowRadius = 6
@@ -24,10 +24,12 @@ class BorderedPersoniew: PersonView {
         layer.lineWidth = 2
         layer.lineCap = .round
         layer.fillColor = UIColor.clear.cgColor
-        layer.borderColor = ThemeColor.gray.color.cgColor
+        layer.borderColor = ThemeColor.yellow.color.cgColor
         layer.borderWidth = 2
         return layer
     }()
+    
+    let contextCueView = ContextCueView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -36,6 +38,8 @@ class BorderedPersoniew: PersonView {
         
         self.layer.insertSublayer(self.shadowLayer, at: 0)
         self.layer.insertSublayer(self.pulseLayer, at: 2)
+        
+        self.addSubview(self.contextCueView)
     }
     
     override func layoutSubviews() {
@@ -45,6 +49,9 @@ class BorderedPersoniew: PersonView {
         self.pulseLayer.cornerRadius = Theme.innerCornerRadius
         self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        
+        self.contextCueView.pin(.right, offset: .negative(.short))
+        self.contextCueView.pin(.bottom, offset: .negative(.short))
     }
 
     override func set(person: PersonType?) {
@@ -52,16 +59,18 @@ class BorderedPersoniew: PersonView {
 
         guard let person = person else { return }
         self.setColors(for: person)
+        self.contextCueView.configure(with: person)
     }
 
     override func didRecieveUpdateFor(person: PersonType) {
         super.didRecieveUpdateFor(person: person)
         self.setColors(for: person)
+        self.contextCueView.configure(with: person)
     }
     
     private func setColors(for person: PersonType) {
         let isAvailable = person.focusStatus == .available
-        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.gray.color.cgColor
+        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.yellow.color.cgColor
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.pulseLayer.borderColor = color

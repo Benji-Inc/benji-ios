@@ -33,6 +33,17 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
             self.profileVC.header.personView.didSelect { [unowned self] in
                 self.presentProfilePicture()
             }
+            
+            self.profileVC.contextCuesVC.$selectedItems.mainSink { items in
+                guard let first = items.first else { return }
+                
+                switch first {
+                case .add(_):
+                    self.presentContextCueCreator()
+                case .contextCue(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
         }
         
         self.profileVC.$selectedItems.mainSink { [unowned self] items in
@@ -53,5 +64,24 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
         }
 
         self.router.present(vc, source: self.profileVC)
+    }
+    
+    func presentContextCueCreator() {
+        self.removeChild()
+        
+        if let pop = self.profileVC.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.selectedDetentIdentifier = .large
+            sheet.animateChanges { [unowned self] in
+                self.profileVC.view.layoutNow()
+            }
+        }
+
+        let coordinator = ContextCueCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { _ in
+            coordinator.toPresentable().dismiss(animated: true, completion: nil)
+        }
+
+        self.router.present(coordinator, source: self.profileVC)
     }
 }

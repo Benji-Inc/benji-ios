@@ -128,6 +128,29 @@
 		D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C902732FFD00013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
+		D61A33C627D4F21700056242 /* ContextCueCreatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33C527D4F21700056242 /* ContextCueCreatorViewController.swift */; };
+		D61A33CB27D4F25F00056242 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33CA27D4F25F00056242 /* EmojiCell.swift */; };
+		D61A33CD27D4F27000056242 /* EmojiCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33CC27D4F27000056242 /* EmojiCollectionViewDataSource.swift */; };
+		D61A33CF27D4F28800056242 /* EmojiCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33CE27D4F28800056242 /* EmojiCollectionView.swift */; };
+		D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33D327D4F5C200056242 /* EmojiCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D227D4F5C200056242 /* EmojiCollectionViewLayout.swift */; };
+		D61A33D527D4F85B00056242 /* ContextCueInputHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D427D4F85B00056242 /* ContextCueInputHeaderView.swift */; };
+		D61A33D727D4FAA900056242 /* ContextCueCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D627D4FAA900056242 /* ContextCueCoordinator.swift */; };
+		D61A33D927D4FE9E00056242 /* EmojiServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D827D4FE9E00056242 /* EmojiServiceManager.swift */; };
+		D61A33DA27D51D4C00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DC27D51D4D00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DD27D51D4E00056242 /* ContextCue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33D027D4F2AE00056242 /* ContextCue.swift */; };
+		D61A33DF27D5703C00056242 /* ContextCueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33DE27D5703C00056242 /* ContextCueCell.swift */; };
+		D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E027D572F100056242 /* ContextCueCollectionView.swift */; };
+		D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */; };
+		D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */; };
+		D61A33E727D57EFD00056242 /* ContextCueAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */; };
+		D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
+		D61A33EA27D5C4F200056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
+		D61A33EB27D6754F00056242 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
+		D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
+		D61A33EE27D695F500056242 /* EmojiCategorySegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */; };
 		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
@@ -830,6 +853,22 @@
 		D61553612746E62D00B08459 /* TransitionRouter+Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Message.swift"; sourceTree = "<group>"; };
 		D61592DF24FC195D00B63412 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+MediaItem.swift"; sourceTree = "<group>"; };
+		D61A33C527D4F21700056242 /* ContextCueCreatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCreatorViewController.swift; sourceTree = "<group>"; };
+		D61A33CA27D4F25F00056242 /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
+		D61A33CC27D4F27000056242 /* EmojiCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D61A33CE27D4F28800056242 /* EmojiCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionView.swift; sourceTree = "<group>"; };
+		D61A33D027D4F2AE00056242 /* ContextCue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCue.swift; sourceTree = "<group>"; };
+		D61A33D227D4F5C200056242 /* EmojiCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D61A33D427D4F85B00056242 /* ContextCueInputHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueInputHeaderView.swift; sourceTree = "<group>"; };
+		D61A33D627D4FAA900056242 /* ContextCueCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCoordinator.swift; sourceTree = "<group>"; };
+		D61A33D827D4FE9E00056242 /* EmojiServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiServiceManager.swift; sourceTree = "<group>"; };
+		D61A33DE27D5703C00056242 /* ContextCueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCell.swift; sourceTree = "<group>"; };
+		D61A33E027D572F100056242 /* ContextCueCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionView.swift; sourceTree = "<group>"; };
+		D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueAddCell.swift; sourceTree = "<group>"; };
+		D61A33E827D5C4CD00056242 /* ContextCueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueView.swift; sourceTree = "<group>"; };
+		D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategorySegmentControl.swift; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Jibber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jibber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -1320,6 +1359,22 @@
 			path = "Transtion Types";
 			sourceTree = "<group>";
 		};
+		D61A33C727D4F21D00056242 /* Creator */ = {
+			isa = PBXGroup;
+			children = (
+				D61A33C527D4F21700056242 /* ContextCueCreatorViewController.swift */,
+				D61A33D427D4F85B00056242 /* ContextCueInputHeaderView.swift */,
+				D61A33D627D4FAA900056242 /* ContextCueCoordinator.swift */,
+				D61A33CA27D4F25F00056242 /* EmojiCell.swift */,
+				D61A33CE27D4F28800056242 /* EmojiCollectionView.swift */,
+				D61A33CC27D4F27000056242 /* EmojiCollectionViewDataSource.swift */,
+				D61A33D227D4F5C200056242 /* EmojiCollectionViewLayout.swift */,
+				D61A33D827D4FE9E00056242 /* EmojiServiceManager.swift */,
+				D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */,
+			);
+			path = Creator;
+			sourceTree = "<group>";
+		};
 		D61EC0B321D3071400204BEE = {
 			isa = PBXGroup;
 			children = (
@@ -1616,6 +1671,7 @@
 				D678EC2326F530850071DB0D /* Circle.swift */,
 				D6129FB327ADC72E0058811C /* Transaction.swift */,
 				D69D2F9927C0070C001D8855 /* Achievement.swift */,
+				D61A33D027D4F2AE00056242 /* ContextCue.swift */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -2125,7 +2181,14 @@
 		D6D96EF227C5B0FD00BDCD01 /* Context Cues */ = {
 			isa = PBXGroup;
 			children = (
+				D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */,
+				D61A33DE27D5703C00056242 /* ContextCueCell.swift */,
+				D61A33E027D572F100056242 /* ContextCueCollectionView.swift */,
+				D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */,
+				D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */,
 				D6D96EF327C5B11900BDCD01 /* ContextCuesViewController.swift */,
+				D61A33E827D5C4CD00056242 /* ContextCueView.swift */,
+				D61A33C727D4F21D00056242 /* Creator */,
 			);
 			path = "Context Cues";
 			sourceTree = "<group>";
@@ -2622,6 +2685,7 @@
 				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
 				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				8060C86027BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift in Sources */,
+				D61A33CB27D4F25F00056242 /* EmojiCell.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				D6129FA327AC5F510058811C /* CenterConversationDetailView.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
@@ -2639,6 +2703,7 @@
 				D6850D5A2798967E001327D3 /* PullView.swift in Sources */,
 				D68072EB2730462F004657E7 /* old_MessageDetailView.swift in Sources */,
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,
+				D61A33E727D57EFD00056242 /* ContextCueAddCell.swift in Sources */,
 				D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */,
@@ -2693,6 +2758,7 @@
 				D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
+				D61A33EE27D695F500056242 /* EmojiCategorySegmentControl.swift in Sources */,
 				D62D16322736F60400C542CE /* ToastErrorView.swift in Sources */,
 				D6E974362752C47F00D95F08 /* ReactionType.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
@@ -2709,12 +2775,15 @@
 				D64C6A7E23294A8600DB7257 /* ConversationKey.swift in Sources */,
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
 				D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */,
+				D61A33D927D4FE9E00056242 /* EmojiServiceManager.swift in Sources */,
 				D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */,
 				8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */,
 				D61EC0F721D316F100204BEE /* ThemeColor.swift in Sources */,
+				D61A33DF27D5703C00056242 /* ContextCueCell.swift in Sources */,
 				D6DEC3F127A1DDB70072D9D0 /* CircleView.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
+				D61A33C627D4F21700056242 /* ContextCueCreatorViewController.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
 				D6D1502921D6085200CD8CE4 /* ResourceObject.swift in Sources */,
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
@@ -2751,6 +2820,7 @@
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D6CC148F276C1323005F617F /* MessageStatusView.swift in Sources */,
+				D61A33CD27D4F27000056242 /* EmojiCollectionViewDataSource.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,
@@ -2804,6 +2874,7 @@
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,
 				D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */,
+				D61A33D527D4F85B00056242 /* ContextCueInputHeaderView.swift in Sources */,
 				80F1C4D6270E505E00616F01 /* Equatable+Extensions.swift in Sources */,
 				D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */,
 				8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */,
@@ -2811,14 +2882,17 @@
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
+				D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */,
 				D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */,
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
+				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
+				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,
 				D6766C46274D50680046B449 /* MemberCell.swift in Sources */,
 				804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */,
 				80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */,
@@ -2836,6 +2910,7 @@
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
+				D61A33D727D4FAA900056242 /* ContextCueCoordinator.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* BaseView.swift in Sources */,
 				D660C4C92793626700221F76 /* AddView.swift in Sources */,
 				80FA868C26F111830053101B /* ChatMessage+Extensions.swift in Sources */,
@@ -2874,6 +2949,7 @@
 				803DECCA27BDBCA40029A734 /* UIResponder+Extensions.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
+				D61A33CF27D4F28800056242 /* EmojiCollectionView.swift in Sources */,
 				8028C9E9273ECB1200520465 /* ConversationListViewController.swift in Sources */,
 				D6DEC3F727A212940072D9D0 /* InitialsCircleView.swift in Sources */,
 				D682F02F278E09200016A24E /* ConversationHeaderViewController+Menu.swift in Sources */,
@@ -2883,6 +2959,7 @@
 				D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */,
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
+				D61A33D327D4F5C200056242 /* EmojiCollectionViewLayout.swift in Sources */,
 				D6D96EF127C5A07C00BDCD01 /* ProfileHeaderView.swift in Sources */,
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
 				80FA869226F117C20053101B /* ChatUser+PersonType.swift in Sources */,
@@ -2904,6 +2981,7 @@
 				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
+				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
@@ -2911,6 +2989,7 @@
 				D65D460227A9B1400019301C /* old_MessageStatusContainer.swift in Sources */,
 				8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
+				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,
 				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
@@ -2983,6 +3062,7 @@
 				D63DB23B25E9992600F6B323 /* UIView+Extensions.swift in Sources */,
 				D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */,
 				D62ED57A279CB4A400F7C08A /* BorderedPersoniew.swift in Sources */,
+				D61A33DA27D51D4C00056242 /* ContextCue.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
 				D63DB21D25E998F000F6B323 /* Coordinator.swift in Sources */,
 				D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */,
@@ -3051,6 +3131,7 @@
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,
 				D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D605AC9D27877F890015D800 /* MessageBubbleView.swift in Sources */,
+				D61A33EA27D5C4F200056242 /* ContextCueView.swift in Sources */,
 				D63DB21A25E998F000F6B323 /* Router.swift in Sources */,
 				8074DDCF27B1D0ED00594BAC /* Messageable.swift in Sources */,
 				D63DB23E25E9992900F6B323 /* UNNotification+Extensions.swift in Sources */,
@@ -3129,6 +3210,7 @@
 				D68759642728A55A00AF7C07 /* FontType.swift in Sources */,
 				D68759672728A59600AF7C07 /* User+Extensions.swift in Sources */,
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
+				D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */,
 				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
 				D61316B0273C859700DC782B /* MessageContext.swift in Sources */,
 				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
@@ -3183,6 +3265,7 @@
 				D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6CDA29427D170DA00823968 /* Date+Extensions.swift in Sources */,
 				D6CDA28E27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
+				D61A33DC27D51D4D00056242 /* ContextCue.swift in Sources */,
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */,
 				D61A9B5427D2B160008D8C57 /* ImageDisplayable.swift in Sources */,
@@ -3190,6 +3273,7 @@
 				D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */,
 				D65D460527A9FE620019301C /* Notice.swift in Sources */,
 				D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */,
+				D61A33EB27D6754F00056242 /* ThemeColor.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
 				D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */,
 				D67B00CA27D2D52500284564 /* DataController+Async.swift in Sources */,
@@ -3210,10 +3294,12 @@
 				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
 				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,
+				D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */,
 				D6AE0FFF267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
 				D66ED458267D35E200332BA3 /* Config.swift in Sources */,
 				D66ED45B267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0FEF267D2CBA00C6B048 /* Objectable.swift in Sources */,
+				D61A33DD27D51D4E00056242 /* ContextCue.swift in Sources */,
 				D6CDA29527D170DB00823968 /* Date+Extensions.swift in Sources */,
 				D6CDA28F27D16F8100823968 /* UNNotificationContent+Extensions.swift in Sources */,
 				D65D460627A9FEA00019301C /* Notice.swift in Sources */,

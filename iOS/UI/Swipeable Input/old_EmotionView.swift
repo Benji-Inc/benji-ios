@@ -12,7 +12,7 @@ import StreamChat
 
 class old_EmotionView: BaseView {
     
-    let emojiLabel = ThemeLabel(font: .reactionEmoji)
+    let emojiLabel = ThemeLabel(font: .systemSmall)
     
     let label = ThemeLabel(font: .small)
     let button = ThemeButton()

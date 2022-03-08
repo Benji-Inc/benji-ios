@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import ParseLiveQuery
 import Combine
+import SwiftUI
 
 enum ObjectKey: String {
     case objectId
@@ -30,6 +31,7 @@ enum UserKey: String {
     case connectionPreferences
     case focusStatus
     case timeZone
+    case latestContextCue
 }
 
 enum UserStatus: String {
@@ -43,12 +45,21 @@ enum FocusStatus: String {
     case focused
     case available
     
-    var image: UIImage {
+    var displayName: String {
         switch self {
         case .focused:
-            return UIImage(systemName: "moon.zzz.fill")!
+            return "Unavailable"
         case .available:
-            return UIImage(systemName: "hand.wave.fill")!
+            return "Available"
+        }
+    }
+    
+    var color: ThemeColor {
+        switch self {
+        case .focused:
+            return .yellow
+        case .available:
+            return .D6
         }
     }
 }
@@ -111,5 +122,10 @@ final class User: PFUser {
     var timeZone: String {
         get { return self.getObject(for: .timeZone) ?? String() }
         set { self.setObject(for: .timeZone, with: newValue) }
+    }
+    
+    var latestContextCue: ContextCue? {
+        get { return self.getObject(for: .latestContextCue) }
+        set { self.setObject(for: .latestContextCue, with: newValue) }
     }
 }
