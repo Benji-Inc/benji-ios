@@ -93,20 +93,25 @@ class KeyboardManager {
             .mainSink { (notification) in
                 self.currentEvent = .willChangeFrame(notification)
                 self.cachedKeyboardEndFrame = notification.keyboardEndFrame
+                logDebug(notification.keyboardEndFrame.debugDescription)
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidChangeFrameNotification)
             .mainSink { (notification) in
                 self.currentEvent = .didChangeFrame(notification)
                 self.cachedKeyboardEndFrame = notification.keyboardEndFrame
+                logDebug(notification.keyboardEndFrame.debugDescription)
             }.store(in: &self.cancellables)
     }
 
     private func getInputAccessoryHeight() -> CGFloat {
         var inputAccessoryHeight: CGFloat = 0
-        if let responder = UIResponder.firstResponder,
-           let inputAccessoryView = responder.inputAccessoryView {
-
+        guard let responder = UIResponder.firstResponder else {
+            return inputAccessoryHeight
+        }
+        if let inputAccessoryView = responder.inputAccessoryView {
+            inputAccessoryHeight = inputAccessoryView.height
+        } else if let inputAccessoryView = responder.inputAccessoryViewController?.view {
             inputAccessoryHeight = inputAccessoryView.height
         }
 

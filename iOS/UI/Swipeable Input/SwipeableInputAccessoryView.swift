@@ -54,9 +54,9 @@ class SwipeableInputAccessoryView: BaseView {
     // MARK: BaseView Setup and Layout
 
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: 200)
+        return CGSize(width: UIView.noIntrinsicMetric, height: 176)
     }
-    
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
