@@ -35,12 +35,12 @@ class SwipeableInputAccessoryView: BaseView {
     let emotionView = old_EmotionView()
     let deliveryTypeView = DeliveryTypeView()
 
-    // MARK: - Height Accessors
-
-    static var inputContainerCollapsedHeight: CGFloat = 76
-
     // MARK: - Layout/Animation Properties
 
+    static let inputContainerCollapsedHeight: CGFloat = 76
+
+    // Override intrinsic content size so that height is adjusted for safe areas and text input.
+    // https://stackoverflow.com/questions/46282987/iphone-x-how-to-handle-view-controller-inputaccessoryview
     override var intrinsicContentSize: CGSize {
         return .zero
     }
@@ -66,6 +66,7 @@ class SwipeableInputAccessoryView: BaseView {
 
         self.inputTypeContainer.addSubview(self.emotionView)
         self.emotionView.alpha = 0
+        self.emotionView.configure(for: nil)
         
         self.inputTypeContainer.addSubview(self.deliveryTypeView)
         self.deliveryTypeView.alpha = 0
@@ -143,6 +144,7 @@ class SwipeableInputAccessoryView: BaseView {
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.inputContainerHeightConstraint.constant = newInputHeight
+            // Layout the window so that our container view also animates
             self.window?.layoutNow()
         }
     }
@@ -160,6 +162,7 @@ class SwipeableInputAccessoryView: BaseView {
                 self.countView.alpha = 0.0
             }
 
+            // Layout the window so that our container view also animates
             self.window?.layoutNow()
         }
     }
