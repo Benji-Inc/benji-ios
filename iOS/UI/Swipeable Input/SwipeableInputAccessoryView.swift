@@ -46,7 +46,7 @@ class SwipeableInputAccessoryView: BaseView {
     }
 
     // The input container and avatar height together determine the height of the whole view.
-    // When either of these two constraints are changed, the superview will resize to fix the new height.
+    // When either of these two constraints are changed, the superview will resize to fit the new height.
     @IBOutlet var inputContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var avatarHeightConstraint: NSLayoutConstraint!
 
