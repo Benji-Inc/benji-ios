@@ -104,9 +104,12 @@ class KeyboardManager {
 
     private func getInputAccessoryHeight() -> CGFloat {
         var inputAccessoryHeight: CGFloat = 0
-        if let responder = UIResponder.firstResponder,
-           let inputAccessoryView = responder.inputAccessoryView {
-
+        guard let responder = UIResponder.firstResponder else {
+            return inputAccessoryHeight
+        }
+        if let inputAccessoryView = responder.inputAccessoryView {
+            inputAccessoryHeight = inputAccessoryView.height
+        } else if let inputAccessoryView = responder.inputAccessoryViewController?.view {
             inputAccessoryHeight = inputAccessoryView.height
         }
 

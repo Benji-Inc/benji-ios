@@ -36,20 +36,19 @@ class ConversationListViewController: ViewController, ConversationListCollection
     var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?
 
     // Custom Input Accessory View
-    lazy var messageInputAccessoryView: SwipeableInputAccessoryView = {
-        let inputView: SwipeableInputAccessoryView = SwipeableInputAccessoryView.fromNib()
-        inputView.delegate = self.swipeInputDelegate
-        inputView.textView.restorationIdentifier = "list"
-        return inputView
+    lazy var messageInputController: SwipeableInputAccessoryViewController = {
+        let inputController = SwipeableInputAccessoryViewController()
+        inputController.delegate = self.swipeInputDelegate
+        inputController.swipeInputView.textView.restorationIdentifier = "list"
+        return inputController
     }()
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
                                                                        collectionView: self.collectionView,
                                                                        isConversationList: true)
 
-    override var inputAccessoryView: UIView? {
-        return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil
+    override var inputAccessoryViewController: UIInputViewController? {
+        return self.presentedViewController.isNil ? self.messageInputController : nil
     }
-
     override var canBecomeFirstResponder: Bool {
         return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
     }
@@ -276,7 +275,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
         self.firstResponderTask?.cancel()
 
         // Reset the input accessory view.
-        self.messageInputAccessoryView.updateSwipeHint(shouldPlay: false)
+        self.messageInputController.updateSwipeHint(shouldPlay: false)
 
         if let cid = cid {
             let conversation = Conversation.conversation(cid)
@@ -288,9 +287,9 @@ class ConversationListViewController: ViewController, ConversationListCollection
 
                 guard !Task.isCancelled else { return }
 
-                self?.messageInputAccessoryView.resetDeliveryType()
-                self?.messageInputAccessoryView.textView.setPlaceholder(for: people, isReply: false)
-                self?.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
+                self?.messageInputController.resetDeliveryType()
+                self?.messageInputController.swipeInputView.textView.setPlaceholder(for: people, isReply: false)
+                self?.messageInputController.updateSwipeHint(shouldPlay: true)
             }
 
             self.firstResponderTask = Task { [weak self] in
@@ -307,7 +306,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
         } else {
             ConversationsManager.shared.activeConversation = nil
 
-            self.messageInputAccessoryView.updateSwipeHint(shouldPlay: true)
+            self.messageInputController.updateSwipeHint(shouldPlay: true)
 
             self.firstResponderTask = Task {
                 await Task.sleep(seconds: 0.25)

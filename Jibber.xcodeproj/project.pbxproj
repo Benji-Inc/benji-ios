@@ -10,6 +10,7 @@
 		2C9DC2F4715948651C293215 /* Pods_Notification_Content.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8815B0EA9F1296FC57545F /* Pods_Notification_Content.framework */; };
 		6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */; };
 		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
+		8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */; };
 		800718DD27861507005DD884 /* EventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800718DC27861507005DD884 /* EventLog.swift */; };
 		800718DE27861507005DD884 /* EventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800718DC27861507005DD884 /* EventLog.swift */; };
 		800718DF278620F1005DD884 /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
@@ -756,6 +757,7 @@
 		37E2F7DB90EF2AB2CB1624D0 /* Pods_Jibber.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Jibber.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EBB237D17BE8FEF541EA89F /* Pods-Notification Service.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notification Service.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Notification Service/Pods-Notification Service.debug.xcconfig"; sourceTree = "<group>"; };
 		6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Service.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryViewController.swift; sourceTree = "<group>"; };
 		800718DC27861507005DD884 /* EventLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLog.swift; sourceTree = "<group>"; };
 		800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Extensions.swift"; sourceTree = "<group>"; };
 		8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessagesCell.swift; sourceTree = "<group>"; };
@@ -2112,8 +2114,9 @@
 				D6FE05212767B2BC00137EEA /* old_EmotionView.swift */,
 				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
 				8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */,
-				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
+				8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */,
 				80E228D727C6C70000AF37AC /* SwipeInputHintAnimator.swift */,
+				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
@@ -2991,6 +2994,7 @@
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
+				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,
 				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,

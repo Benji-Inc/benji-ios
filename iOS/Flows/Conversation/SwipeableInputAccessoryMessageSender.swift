@@ -20,7 +20,7 @@ protocol MessageSendingCollectionViewType: CollectionView {
     func getNewConversationContentOffset() -> CGPoint
 }
 
-class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate {
+class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControllerDelegate {
     
     /// The type of message send method that the conversation VC is prepped for.
     private enum SendMode {
@@ -56,10 +56,10 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
+    func swipeableInputAccessoryDidBeginSwipe(_ controller: SwipeableInputAccessoryViewController) {
         // Set the drop zone frame on the swipe view so it knows where to gravitate the message toward.
-        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: view)
-        view.dropZoneFrame = overlayFrame
+        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: controller.view)
+        controller.dropZoneFrame = overlayFrame
 
         self.collectionView.isUserInteractionEnabled = false
 
@@ -71,7 +71,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         self.viewController.set(messageSequencePreparingToSend: currentMessageSequence)
     }
 
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  didUpdatePreviewFrame frame: CGRect,
                                  for sendable: Sendable) {
 
@@ -96,12 +96,12 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         }
     }
 
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  triggeredSendFor sendable: Sendable,
                                  withPreviewFrame frame: CGRect) -> Bool {
 
         // Ensure that the preview has been dragged far up enough to send.
-        let dropZoneFrame = view.dropZoneFrame
+        let dropZoneFrame = controller.dropZoneFrame
         let shouldSend = dropZoneFrame.bottom > frame.centerY
 
         guard shouldSend else {
@@ -125,7 +125,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         return true
     }
 
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  didFinishSwipeSendingSendable didSend: Bool) {
 
         self.collectionView.isUserInteractionEnabled = true
@@ -162,7 +162,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 //        }
     }
     
-    func swipeableInputAccessoryDidTapAvatar(_ view: SwipeableInputAccessoryView) {
+    func swipeableInputAccessoryDidTapAvatar(_ controller: SwipeableInputAccessoryViewController) {
         self.didTapAvatar?()
     }
 }

@@ -10,48 +10,14 @@ import Foundation
 import Lottie
 import Combine
 
-protocol SwipeableInputAccessoryViewDelegate: AnyObject {
-    /// The accessory has begun a swipe interaction.
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
-    /// The accessory view updated the position of the sendable's preview view's position.
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdatePreviewFrame frame: CGRect,
-                                 for sendable: Sendable)
-    /// The accessory view wants to send the sendable with the preview with the specified frame.
-    /// The delegate should return true if the sendable was sent.
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 triggeredSendFor sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) -> Bool
-    /// The accessory view finished its swipe interaction.
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didFinishSwipeSendingSendable didSend: Bool)
-    
-    /// The avatar view in the accessory was tapped.
-    func swipeableInputAccessoryDidTapAvatar(_ view: SwipeableInputAccessoryView)
-}
-
 class SwipeableInputAccessoryView: BaseView {
 
-    weak var delegate: SwipeableInputAccessoryViewDelegate?
-
-    enum InputState {
-        /// The input field is fit to the current input. Swipe to send is enabled.
-        case collapsed
-        /// The input field is expanded and can be tapped to edit/copy/paste. Swipe to send is disabled.
-        case expanded
-    }
-
-    // MARK: - Drag and Drop Properties
-
-    /// The rough area that we need to drag and drop messages to send them.
-    var dropZoneFrame: CGRect = .zero
+    typealias InputState = SwipeableInputAccessoryViewController.InputState
 
     // MARK:  - Views
 
     /// A view that contains and provides a background for the input view.
     @IBOutlet var inputContainerView: SpeechBubbleView!
-    /// Height constraint for the input container view.
-    @IBOutlet var inputHeightConstraint: NSLayoutConstraint!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
     @IBOutlet var animationViewContainer: UIView!
@@ -64,46 +30,14 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var countView: CharacterCountView!
     @IBOutlet var avatarView: BorderedPersoniew!
 
+    /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
-    @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
-
-    private lazy var panGestureHandler = SwipeInputPanGestureHandler(inputView: self)
-
-    static var minHeight: CGFloat = 76
-    static var inputTypeMaxHeight: CGFloat = 25
-    static var inputTypeAvatarHeight: CGFloat = 56
-
-    /// The current input state of the accessory view.
-    @Published var inputState: InputState = .collapsed
-
-    // MARK: - Message State
-
-    var currentContext: MessageContext = .respectful {
-        didSet {
-            self.deliveryTypeView.configure(for: self.currentContext)
-        }
-    }
-    
-    var currentEmotion: Emotion? 
-
-    var editableMessage: Messageable?
-    var currentMessageKind: MessageKind = .text(String())
-    var sendable: SendableObject?
-    let deliveryTypeView = DeliveryTypeView()
     let emotionView = old_EmotionView()
-
-    private var cancellables = Set<AnyCancellable>()
+    let deliveryTypeView = DeliveryTypeView()
 
     // MARK: - Layout/Animation Properties
 
-    @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
-    @IBOutlet var textViewCollapsedMaxHeightConstraint: NSLayoutConstraint!
-    @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
-    @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
-
-    private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self)
-
-    // MARK: BaseView Setup and Layout
+    static let inputContainerCollapsedHeight: CGFloat = 76
 
     // Override intrinsic content size so that height is adjusted for safe areas and text input.
     // https://stackoverflow.com/questions/46282987/iphone-x-how-to-handle-view-controller-inputaccessoryview
@@ -111,10 +45,24 @@ class SwipeableInputAccessoryView: BaseView {
         return .zero
     }
 
+    // The input container and avatar height together determine the height of the whole view.
+    // When either of these two constraints are changed, the superview will resize to fit the new height.
+    @IBOutlet var inputContainerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var avatarHeightConstraint: NSLayoutConstraint!
+
+    @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewCollapsedMaxHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
+
+    // MARK: BaseView Setup and Layout
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        // Use flexible height autoresizing mask to account for changes in text input.
+        // A flexible height autoresizing mask allows our superview to resize in response to
+        // changes to our internal content's height.
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.showShadow(withOffset: 8)
@@ -122,28 +70,12 @@ class SwipeableInputAccessoryView: BaseView {
 
         self.inputTypeContainer.addSubview(self.emotionView)
         self.emotionView.alpha = 0
-        self.emotionView.configure(for: self.currentEmotion)
-        self.emotionView.didSelectEmotion = { [unowned self] emotion in
-            AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
-            self.currentEmotion = emotion
-        }
+        self.emotionView.configure(for: nil)
         
         self.inputTypeContainer.addSubview(self.deliveryTypeView)
         self.deliveryTypeView.alpha = 0
-        
-        self.deliveryTypeView.didSelectContext = { [unowned self] context in
-            AnalyticsManager.shared.trackEvent(type: .deliveryTypeSelected, properties: ["value": context.rawValue])
-            self.currentContext = context
-        }
                 
         self.avatarView.set(person: User.current()!)
-        
-        self.avatarView.didSelect { [unowned self] in
-            self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
-        }
-
-        self.setupGestures()
-        self.setupHandlers()
     }
     
     override func awakeFromNib() {
@@ -166,107 +98,10 @@ class SwipeableInputAccessoryView: BaseView {
         self.deliveryTypeView.pin(.right)
         self.animationView.expandToSuperviewSize()
     }
-    
-    func resetDeliveryType() {
-        self.currentContext = .respectful
-        self.deliveryTypeView.reset()
-    }
-
-    private lazy var panRecognizer
-    = SwipeGestureRecognizer { [unowned self] (recognizer) in
-        self.panGestureHandler.handle(pan: recognizer)
-    }
-    private lazy var inputFieldTapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] recognizer in
-        self.handleInputTap()
-    }
-    private lazy var backgroundTapRecognizer = TapGestureRecognizer { [unowned self] recognizer in
-        self.handleBackgroundTap()
-    }
-
-    func setupGestures() {
-        self.panRecognizer.touchesDidBegin = { [unowned self] in
-            // Stop playing animations when the user interacts with the view.
-            self.hintAnimator.updateSwipeHint(shouldPlay: false)
-        }
-        self.gestureButton.addGestureRecognizer(self.panRecognizer)
-
-        self.gestureButton.addGestureRecognizer(self.inputFieldTapRecognizer)
-
-        self.collapseButton.didSelect { [unowned self] in
-            self.inputState = .collapsed
-        }
-
-        self.addGestureRecognizer(self.backgroundTapRecognizer)
-    }
-
-    private func handleInputTap() {
-        if self.textView.isFirstResponder {
-            // When the text view is editing, double taps should expand it.
-            self.inputState = .expanded
-        } else {
-            // If we're not editing, a tap starts editing.
-            self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
-        }
-    }
-
-    private func handleBackgroundTap() {
-        if self.inputState == .expanded {
-            self.inputState = .collapsed
-        } else if self.textView.isFirstResponder {
-            self.textView.resignFirstResponder()
-        }
-    }
-
-    private func setupHandlers() {
-        self.updateInputType(with: .keyboard)
-        
-        KeyboardManager.shared
-            .$currentEvent
-            .mainSink { [unowned self] currentEvent in
-                switch currentEvent {
-                case .willShow:
-                    self.showDetail(shouldShow: true)
-                    self.hintAnimator.updateSwipeHint(shouldPlay: false)
-                case .willHide:
-                    self.showDetail(shouldShow: false)
-                    self.hintAnimator.updateSwipeHint(shouldPlay: false)
-                case .didHide:
-                    self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
-                    self.inputState = .collapsed
-                default:
-                    break
-                }
-            }.store(in: &self.cancellables)
-        
-        self.textView.$inputText.mainSink { [unowned self] text in
-            self.handleTextChange(text)
-            self.updateInputState(with: self.textView.numberOfLines)
-            self.countView.update(with: text.count, max: self.textView.maxLength)
-        }.store(in: &self.cancellables)
-
-        self.textView.$isEditing.mainSink { [unowned self] isEditing in
-            // If we are editing, a double tap should trigger the expanded state.
-            // If we're not editing, it takes 1 tap to start.
-            self.inputFieldTapRecognizer.numberOfTapsRequired = isEditing ? 2 : 1
-        }.store(in: &self.cancellables)
-
-        self.$inputState
-            .removeDuplicates()
-            .mainSink { [unowned self] inputState in
-                self.updateLayout(for: inputState)
-            }.store(in: &self.cancellables)
-    }
 
     // MARK: - State Updates
 
-    private func updateInputState(with numberOfLines: Int) {
-        // When the text hits 3 lines, transition to the expanded state.
-        // However don't automatically go back to the collapsed state when the line count is less than 3.
-        guard numberOfLines > 2 else { return }
-        self.inputState = .expanded
-    }
-
-    private func updateLayout(for inputState: InputState) {
+    func updateLayout(for inputState: InputState) {
         let newInputHeight: CGFloat
 
         switch inputState {
@@ -285,7 +120,7 @@ class SwipeableInputAccessoryView: BaseView {
             self.animationView.isVisible = false
             self.animationView.currentProgress = 0
 
-            newInputHeight = SwipeableInputAccessoryView.minHeight
+            newInputHeight = SwipeableInputAccessoryView.inputContainerCollapsedHeight
         case .expanded:
             NSLayoutConstraint.deactivate([self.textViewCollapsedVerticalCenterConstraint,
                                            self.textViewCollapsedMaxHeightConstraint])
@@ -309,60 +144,34 @@ class SwipeableInputAccessoryView: BaseView {
         }
 
         // There's no need to animate the height if it hasn't changed.
-        guard newInputHeight != self.inputHeightConstraint.constant else { return }
+        guard self.inputContainerHeightConstraint.constant != newInputHeight else { return }
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.inputHeightConstraint.constant = newInputHeight
-            self.layoutNow()
+            self.inputContainerHeightConstraint.constant = newInputHeight
+            // Layout the window so that our container view also animates
+            self.window?.layoutNow()
         }
     }
 
-    private func showDetail(shouldShow: Bool) {
+    func setShowMessageDetailOptions(_ shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputTypeHeightConstraint.constant
-            = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : SwipeableInputAccessoryView.inputTypeAvatarHeight
-            
             self.emotionView.alpha = shouldShow ? 1.0 : 0.0
             self.deliveryTypeView.alpha = shouldShow ? 1.0 : 0.0
             self.avatarView.alpha = shouldShow ? 0.0 : 1.0
+            self.avatarHeightConstraint.constant = shouldShow ? 0 : 44
             
             if shouldShow {
                 self.countView.update(with: self.textView.text.count, max: self.textView.maxLength)
             } else {
                 self.countView.alpha = 0.0
             }
+
+            // Layout the window so that our container view also animates
+            self.window?.layoutNow()
         }
     }
-
-    func updateSwipeHint(shouldPlay: Bool) {
-        self.hintAnimator.updateSwipeHint(shouldPlay: shouldPlay)
-    }
-
-    private func handleTextChange(_ text: String) {
-        switch self.currentMessageKind {
-        case .text(_):
-            self.currentMessageKind = .text(text)
-        case .photo(photo: let photo, _):
-            self.currentMessageKind = .photo(photo: photo, body: text)
-        case .video(video: let video, _):
-            self.currentMessageKind = .video(video: video, body: text)
-        default:
-            break
-        }
-
-        // After the user enters text, the swipe hint can play to show them how to send it.
-        let shouldPlay = !text.isEmpty && self.inputState == .collapsed
-        self.hintAnimator.updateSwipeHint(shouldPlay: shouldPlay)
-    }
-
+    
     func updateInputType(with type: InputType) {
         self.textView.updateInputView(type: type)
-    }
-
-    func resetInputViews() {
-        self.inputState = .collapsed
-        self.textView.reset()
-        self.inputContainerView.alpha = 1
-        self.countView.alpha = 0.0
     }
 }

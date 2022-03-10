@@ -12,7 +12,6 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
-        
         self.dataSource.handleDidTapClose = { [unowned self] item in
             self.dataSource.deleteItems([item])
             switch item {
@@ -38,17 +37,17 @@ extension ConversationListViewController {
             self.loadMoreConversationsIfNeeded()
         }
         
-        self.dataSource.handleCollectionViewTapped = {
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
+        self.dataSource.handleCollectionViewTapped = { [unowned self] in
+            if self.messageInputController.swipeInputView.textView.isFirstResponder {
+                self.messageInputController.swipeInputView.textView.resignFirstResponder()
             } else {
-                self.messageInputAccessoryView.textView.becomeFirstResponder()
+                self.messageInputController.swipeInputView.textView.becomeFirstResponder()
             }
         }
     }
 
     func subscribeToUIUpdates() {
-        self.messageInputAccessoryView.$inputState
+        self.messageInputController.$inputState
             .removeDuplicates()
             .mainSink { [unowned self] state in
                 UIView.animate(withDuration: Theme.animationDurationFast) {
@@ -89,7 +88,7 @@ extension ConversationListViewController {
                 }.add(to: self.autocancelTaskPool)
             }.store(in: &self.cancellables)
 
-        self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
+        self.messageInputController.swipeInputView.textView.$inputText.mainSink { [unowned self] text in
             guard let conversationController = self.getCurrentConversationController() else { return }
 
             guard conversationController.areTypingEventsEnabled else { return }
