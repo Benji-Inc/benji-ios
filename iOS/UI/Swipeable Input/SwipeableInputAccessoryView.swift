@@ -60,9 +60,10 @@ class SwipeableInputAccessoryView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        // This allows the accessory view's container to respect its intrinsic content size.
+        // A flexible height autoresizing mask allows our superview to resize in response to
+        // changes to our internal content's height.
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.autoresizingMask = [.flexibleHeight]
+        self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
