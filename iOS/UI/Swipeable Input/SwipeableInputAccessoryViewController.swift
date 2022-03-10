@@ -160,10 +160,10 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             .mainSink { [unowned self] currentEvent in
                 switch currentEvent {
                 case .willShow:
-                    self.swipeInputView.setShowDetail(_ shouldShow: true)
+                    self.swipeInputView.setShowMessageDetailOptions(true)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .willHide:
-                    self.swipeInputView.setShowDetail(_ shouldShow: false)
+                    self.swipeInputView.setShowMessageDetailOptions(false)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .didHide:
                     self.swipeInputView.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)

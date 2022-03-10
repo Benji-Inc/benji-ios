@@ -37,27 +37,15 @@ class SwipeableInputAccessoryView: BaseView {
 
     // MARK: - Height Accessors
 
-    var collapsedWithoutKeyboard: CGFloat = 144
-    var collapsedWithKeyboard: CGFloat = 104
-    var expandedHeight: CGFloat = 400
+    static var inputContainerCollapsedHeight: CGFloat = 76
 
     // MARK: - Layout/Animation Properties
 
-    private lazy var contentHeight: CGFloat = self.collapsedWithoutKeyboard {
-        didSet {
-            // Whenever the content height changes, we need to adjust the size of our containing superviews.
-            self.invalidateIntrinsicContentSize()
-            // Use layout now so animations are smooth.
-            self.window?.layoutNow()
-        }
-    }
-
     override var intrinsicContentSize: CGSize {
-        let windowHeight = self.window?.safeAreaInsets.bottom ?? 0
-        return CGSize(width: UIView.noIntrinsicMetric,
-                      height: self.contentHeight + windowHeight)
+        return .zero
     }
 
+    @IBOutlet var inputContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var avatarHeightConstraint: NSLayoutConstraint!
     @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
     @IBOutlet var textViewCollapsedMaxHeightConstraint: NSLayoutConstraint!
@@ -69,8 +57,9 @@ class SwipeableInputAccessoryView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        // This allows the accessory container to respect intrinsic content size.
+        // This allows the accessory view's container to respect its intrinsic content size.
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.autoresizingMask = [.flexibleHeight]
 
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
@@ -126,8 +115,7 @@ class SwipeableInputAccessoryView: BaseView {
             self.animationView.isVisible = false
             self.animationView.currentProgress = 0
 
-
-            newInputHeight = 76
+            newInputHeight = SwipeableInputAccessoryView.inputContainerCollapsedHeight
         case .expanded:
             NSLayoutConstraint.deactivate([self.textViewCollapsedVerticalCenterConstraint,
                                            self.textViewCollapsedMaxHeightConstraint])
@@ -151,11 +139,11 @@ class SwipeableInputAccessoryView: BaseView {
         }
 
         // There's no need to animate the height if it hasn't changed.
-        guard self.contentHeight != newInputHeight else { return }
+        guard self.inputContainerHeightConstraint.constant != newInputHeight else { return }
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.contentHeight = newInputHeight
-            self.layoutNow()
+            self.inputContainerHeightConstraint.constant = newInputHeight
+            self.window?.layoutNow()
         }
     }
 
@@ -168,11 +156,11 @@ class SwipeableInputAccessoryView: BaseView {
             
             if shouldShow {
                 self.countView.update(with: self.textView.text.count, max: self.textView.maxLength)
-                self.contentHeight = self.collapsedWithKeyboard
             } else {
                 self.countView.alpha = 0.0
-                self.contentHeight = self.collapsedWithoutKeyboard
             }
+
+            self.window?.layoutNow()
         }
     }
     

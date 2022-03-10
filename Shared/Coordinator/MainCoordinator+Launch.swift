@@ -37,7 +37,7 @@ extension MainCoordinator {
     }
 
     func logOutChat() {
-        ChatClient.shared.disconnect()
+        ChatClient.shared?.disconnect()
     }
 }
 #endif

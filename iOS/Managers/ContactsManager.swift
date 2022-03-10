@@ -49,7 +49,7 @@ class ContactsManager {
         case .email(let email):
             predicate = CNContact.predicateForContacts(matchingEmailAddress: email)
         case .phone(let phone):
-            let cnNumber = CNPhoneNumber.init(stringValue: phone)
+            let cnNumber = CNPhoneNumber(stringValue: phone)
             predicate = CNContact.predicateForContacts(matching: cnNumber)
         case .identifier(let identifier):
             predicate = CNContact.predicateForContacts(withIdentifiers: [identifier])
