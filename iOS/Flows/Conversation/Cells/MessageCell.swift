@@ -119,23 +119,20 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
-        let areDetailsShown = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
+        let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
         let isSectionInFocus = messageLayoutAttributes.sectionFocusAmount == 1
-        self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsShown,
+        self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible,
                                                      isSectionInFocus: isSectionInFocus)
 
-        let detailVisibility = self.shouldShowDetailBar ? messageLayoutAttributes.detailAlpha : 0
-        self.handleDetailVisibility(detailVisibility)
+        self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
     }
 
     // MARK: - Message Detail Tasks
 
     private var messageDetailTasks = TaskPool()
 
-    /// Handles changes to the message detail view's visibility. Visibility is a value between 0 and 1.
-    /// 0 == not visible
-    /// 1 == fully visible
-    private func handleDetailVisibility(_ detailVisibility: CGFloat) {
+    /// Handles changes to the message detail view's visibility.
+    private func handleDetailVisibility(areDetailsFullyVisible: Bool) {
         // If the detail visibility changes for a message, we always want to cancel its tasks.
         self.messageDetailTasks.cancelAndRemoveAll()
 
@@ -143,8 +140,7 @@ class MessageCell: UICollectionViewCell {
               let cid = try? ConversationId(cid: messageable.conversationId) else { return }
 
         // If this item is showing its details, we may want to start the consumption process for it.
-        #warning("Do we need this anonymous check?")
-        guard detailVisibility == 1, ChatUser.currentUserRole != .anonymous else { return }
+        guard areDetailsFullyVisible, ChatUser.currentUserRole != .anonymous else { return }
 
         let message = ChatClient.shared.message(cid: cid, id: messageable.id)
 
@@ -170,6 +166,7 @@ class MessageCell: UICollectionViewCell {
         }.add(to: self.messageDetailTasks)
     }
 
+    /// If necessary for the message, starts a task that sets the delivery status to reading, then consumes the message after a delay.
     private func startConsumptionTaskIfNeeded(for message: Message) {
         guard message.canBeConsumed else { return }
 
