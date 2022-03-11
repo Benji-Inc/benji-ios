@@ -49,7 +49,7 @@ class MessageCell: UICollectionViewCell {
             .mainSink { [unowned self] activeConversation in
                 // If this cell's conversation becomes active,
                 // then start message consumption if needed.
-                self.handleDetailVisibility(self.detailVC.view.alpha)
+                self.handleDetailVisibility(areDetailsFullyVisible: self.detailVC.view.alpha == 1)
             }.store(in: &self.subscriptions)
     }
 
