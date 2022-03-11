@@ -144,7 +144,10 @@ class MessageCell: UICollectionViewCell {
 
         let message = ChatClient.shared.message(cid: cid, id: messageable.id)
 
-        self.startDeliveryStatusTextTask(for: message)
+        // Show the time sent text if needed.
+        if message.lastUpdatedAt?.getTimeAgoString() != self.messageState.statusText {
+            self.startTimeSentTextTask(for: message)
+        }
 
         // Don't consume messages unless they're a part of the active conversation.
         if ConversationsManager.shared.activeConversation?.cid == cid {
@@ -152,13 +155,11 @@ class MessageCell: UICollectionViewCell {
         }
     }
 
-    /// Starts a task that sets the delivery type text, then replaces it with the last updated text.
-    private func startDeliveryStatusTextTask(for message: Message) {
+    /// Starts a task that replaces the delivery type text with the last updated text.
+    private func startTimeSentTextTask(for message: Message) {
         guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
         
         Task { [weak self] in
-            self?.messageState.statusText = message.context.displayName
-
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
             
