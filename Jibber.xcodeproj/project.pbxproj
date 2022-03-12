@@ -1572,10 +1572,11 @@
 		D635F0A927136C2600A02D17 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				D6129FA227AC5F510058811C /* CenterConversationDetailView.swift */,
 				8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */,
 				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
+				D6129FA427ACAA4A0058811C /* DecorationViewLayoutAttributes.swift */,
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
-				D6129F9F27AB23650058811C /* Upsell */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
@@ -1583,8 +1584,7 @@
 				8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */,
 				804E5859276D484900700923 /* PlaceholderMessageCell.swift */,
 				806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */,
-				D6129FA227AC5F510058811C /* CenterConversationDetailView.swift */,
-				D6129FA427ACAA4A0058811C /* DecorationViewLayoutAttributes.swift */,
+				D6129F9F27AB23650058811C /* Upsell */,
 			);
 			path = Cells;
 			sourceTree = "<group>";

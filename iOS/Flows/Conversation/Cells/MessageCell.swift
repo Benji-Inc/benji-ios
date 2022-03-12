@@ -12,8 +12,8 @@ import StreamChat
 import Combine
 
 struct MessageDetailState: Equatable {
-    var detailShown: Bool = false
-    var isInFocus: Bool = false
+    var areDetailsFullyVisible: Bool = false
+    var isSectionInFocus: Bool = false
 }
 
 /// A cell for displaying individual messages, author and reactions.
@@ -49,7 +49,7 @@ class MessageCell: UICollectionViewCell {
             .mainSink { [unowned self] activeConversation in
                 // If this cell's conversation becomes active,
                 // then start message consumption if needed.
-                self.handleDetailsShown(self.detailVC.view.alpha == 1)
+                self.handleDetailVisibility(areDetailsFullyVisible: self.detailVC.view.alpha == 1)
             }.store(in: &self.subscriptions)
     }
 
@@ -62,10 +62,9 @@ class MessageCell: UICollectionViewCell {
     override func didMoveToWindow() {
         super.didMoveToWindow()
 
-        if self.window.exists {
-            self.parentViewController()?.addChild(viewController: self.detailVC,
-                                                  toView: self.contentView)
-        }
+        guard self.window.exists else { return }
+
+        self.parentViewController()?.addChild(viewController: self.detailVC, toView: self.contentView)
     }
 
     override func layoutSubviews() {
@@ -87,11 +86,14 @@ class MessageCell: UICollectionViewCell {
         }
     }
 
+    // MARK: Configuration
+
     func configure(with message: Messageable) {
         self.content.configure(with: message)
         
         self.messageState.message = message
         self.messageState.deliveryStatus = message.deliveryStatus
+        self.messageState.statusText = message.context.displayName
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
@@ -117,69 +119,66 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
-        let areDetailsShown = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
-        let isInfocus = messageLayoutAttributes.sectionFocusAmount == 1
-        self.messageDetailState = MessageDetailState(detailShown: areDetailsShown, isInFocus: isInfocus)
-        self.handleDetailsShown(areDetailsShown)
+        let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
+        let isSectionInFocus = messageLayoutAttributes.sectionFocusAmount == 1
+        self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible,
+                                                     isSectionInFocus: isSectionInFocus)
+
+        self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
     }
 
-    // MARK: - Message Consumption
+    // MARK: - Message Detail Tasks
 
-    private var consumeMessageTask: Task<Void, Never>?
-    private var statusTextTask: Task<Void, Never>?
+    private var messageDetailTasks = TaskPool()
 
-    private func handleDetailsShown(_ areDetailsShown: Bool) {
+    /// Handles changes to the message detail view's visibility.
+    private func handleDetailVisibility(areDetailsFullyVisible: Bool) {
         // If the detail visibility changes for a message, we always want to cancel its tasks.
-        self.consumeMessageTask?.cancel()
-        self.consumeMessageTask = nil
-        
-        self.statusTextTask?.cancel()
-        self.statusTextTask = nil
-
-        if !areDetailsShown, let message = self.messageState.message {
-            self.messageState.deliveryStatus = message.deliveryStatus
-        }
-
-        // If this item is showing its details, we may want to start the consumption process for it.
-        guard areDetailsShown, ChatUser.currentUserRole != .anonymous else { return}
+        self.messageDetailTasks.cancelAndRemoveAll()
 
         guard let messageable = self.messageState.message,
               let cid = try? ConversationId(cid: messageable.conversationId) else { return }
 
-        // Don't consume messages unless they're a part of the active conversation.
-        guard ConversationsManager.shared.activeConversation?.cid == cid else { return }
+        // If this item is showing its details, we may want to start the consumption process for it.
+        guard areDetailsFullyVisible, ChatUser.currentUserRole != .anonymous else { return }
 
         let message = ChatClient.shared.message(cid: cid, id: messageable.id)
 
-        self.startConsumptionIfNeeded(for: message)
-        self.updateStatusText(for: message)
-    }
-        
-    private func updateStatusText(for message: Message) {
-        guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
-        
-        self.statusTextTask = Task {
-            
-            self.messageState.statusText = message.context.displayName
+        // Show the time sent text if needed.
+        if message.lastUpdatedAt?.getTimeAgoString() != self.messageState.statusText {
+            self.startTimeSentTextTask(for: message)
+        }
 
-            await Task.snooze(seconds: 2)
-            guard !Task.isCancelled else { return }
-            
-            self.messageState.statusText = message.lastUpdatedAt?.getTimeAgoString() ?? ""
+        // Don't consume messages unless they're a part of the active conversation.
+        if ConversationsManager.shared.activeConversation?.cid == cid {
+            self.startConsumptionTaskIfNeeded(for: message)
         }
     }
 
-    private func startConsumptionIfNeeded(for message: Message) {
+    /// Starts a task that replaces the delivery type text with the last updated text.
+    private func startTimeSentTextTask(for message: Message) {
+        guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
+        
+        Task { [weak self] in
+            await Task.snooze(seconds: 2)
+            guard !Task.isCancelled else { return }
+            
+            self?.messageState.statusText = message.lastUpdatedAt?.getTimeAgoString() ?? ""
+        }.add(to: self.messageDetailTasks)
+    }
+
+    /// If necessary for the message, starts a task that sets the delivery status to reading, then consumes the message after a delay.
+    private func startConsumptionTaskIfNeeded(for message: Message) {
         guard message.canBeConsumed else { return }
 
-        self.consumeMessageTask = Task {
-            self.messageState.deliveryStatus = .reading
-            await Task.snooze(seconds: 2)
+        Task { [weak self] in
+            self?.messageState.deliveryStatus = .reading
 
+            await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
 
             try? await message.setToConsumed()
-        }
+        }.add(to: self.messageDetailTasks)
     }
 }
 
