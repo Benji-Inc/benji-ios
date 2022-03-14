@@ -92,8 +92,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.textColor = ThemeColor.T3.color
 
         attributes.brightness = backgroundBrightness
-        attributes.shouldShowTail = indexPath.section == 0
-        attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
+        attributes.shouldShowTail = false
+        attributes.bubbleTailOrientation = .down
         attributes.detailAlpha = detailAlpha
         attributes.state = self.messageContentState
 

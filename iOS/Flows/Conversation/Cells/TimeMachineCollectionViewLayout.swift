@@ -46,7 +46,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 100
+    var itemHeight: CGFloat = 200
     /// Keypoints used to gradually shrink down items as they move away.
     var scalingKeyPoints: [CGFloat] = [1, 0.84, 0.65, 0.4]
     /// The amount of vertical space between the tops of adjacent items.
@@ -286,7 +286,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
 
-        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + 300)
+        let maxSpacing = self.spacingKeyPoints.last ?? 0
+        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + maxSpacing + self.itemHeight)
 
         centerPoint.y -= self.itemHeight.half
         centerPoint.y -= self.itemHeight.half - self.itemHeight.half * scale
