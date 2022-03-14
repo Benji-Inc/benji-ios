@@ -29,6 +29,7 @@ class ProfileHeaderView: BaseView {
         super.initializeSubviews()
         
         self.personView.contextCueView.currentSize = .large
+        self.personView.contextCueView.isVisible = false
         
         self.addSubview(self.nameLabel)
         
@@ -80,6 +81,7 @@ class ProfileHeaderView: BaseView {
             self.focusLabel.setTextColor(status.color)
             self.focusCircle.set(backgroundColor: status.color)
         } else {
+            self.focusLabel.setTextColor(.yellow)
             self.focusLabel.setText("Unavailable")
             self.focusCircle.set(backgroundColor: FocusStatus.focused.color)
         }
