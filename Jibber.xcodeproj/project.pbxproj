@@ -146,7 +146,6 @@
 		D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E027D572F100056242 /* ContextCueCollectionView.swift */; };
 		D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */; };
 		D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */; };
-		D61A33E727D57EFD00056242 /* ContextCueAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */; };
 		D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
 		D61A33EA27D5C4F200056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
 		D61A33EB27D6754F00056242 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
@@ -868,7 +867,6 @@
 		D61A33E027D572F100056242 /* ContextCueCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionView.swift; sourceTree = "<group>"; };
 		D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueAddCell.swift; sourceTree = "<group>"; };
 		D61A33E827D5C4CD00056242 /* ContextCueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueView.swift; sourceTree = "<group>"; };
 		D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategorySegmentControl.swift; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Jibber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jibber.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2184,7 +2182,6 @@
 		D6D96EF227C5B0FD00BDCD01 /* Context Cues */ = {
 			isa = PBXGroup;
 			children = (
-				D61A33E627D57EFD00056242 /* ContextCueAddCell.swift */,
 				D61A33DE27D5703C00056242 /* ContextCueCell.swift */,
 				D61A33E027D572F100056242 /* ContextCueCollectionView.swift */,
 				D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */,
@@ -2706,7 +2703,6 @@
 				D6850D5A2798967E001327D3 /* PullView.swift in Sources */,
 				D68072EB2730462F004657E7 /* old_MessageDetailView.swift in Sources */,
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,
-				D61A33E727D57EFD00056242 /* ContextCueAddCell.swift in Sources */,
 				D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */,
