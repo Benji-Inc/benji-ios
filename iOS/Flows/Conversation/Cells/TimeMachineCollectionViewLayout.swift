@@ -66,7 +66,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var zPosition: CGFloat {
         return self.collectionView?.contentOffset.y ?? 0
     }
-    /// The focus position of the last item in the collection, as determined by sort value.
+    /// The focus position of the last item in the collection.
     var maxZPosition: CGFloat {
         let itemCount = self.numberOfItems(inSection: 0)
         return CGFloat(clamp(itemCount - 1, min: 0)) * self.itemHeight
@@ -75,14 +75,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
-    /// A cache of all the sort values for each item.
+    /// A cache of the ids for all items.
     private(set) var itemIds: [IndexPath : String] = [:]
 
     // MARK: - Private State Management
 
-    /// The sort value of the focused right before the most recent invalidation.
-    /// This can be used to keep the focused item in place when items are inserted before it.
-    private var sortValueOfFocusedItemBeforeInvalidation: String?
+    /// The ids of all items that existed before the latest invalidation.
     private var itemIdsBeforeInvalidation: [IndexPath : String] = [:]
 
     // MARK: - UICollectionViewLayout Overrides
@@ -132,15 +130,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         if customContext.shouldRecalculateZRanges {
-            // Before we recalculate the z ranges, save the sort value of the current focused item.
-            if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
-                return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
-            })?.key {
-                self.sortValueOfFocusedItemBeforeInvalidation = self.itemIds[focusedIndexPath]
-            } else {
-                self.sortValueOfFocusedItemBeforeInvalidation = nil
-            }
-
             self.itemIdsBeforeInvalidation = self.itemIds
 
             self.itemIds.removeAll()
@@ -162,7 +151,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Updates the z ranges dictionary for all items.
     private func prepareZPositionsAndRanges() {
-        // Initialize all of the sort values
+        // Store all the item focus positions for efficiency.
         self.forEachIndexPath { indexPath in
             self.itemFocusPositions[indexPath] = CGFloat(indexPath.item) * self.itemHeight
         }
@@ -297,23 +286,23 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
 
-        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top)
+        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + 300)
 
-        centerPoint.y += self.itemHeight.half
-        centerPoint.y += self.itemHeight.half - self.itemHeight.half * scale
-        centerPoint.y += yOffset
+        centerPoint.y -= self.itemHeight.half
+        centerPoint.y -= self.itemHeight.half - self.itemHeight.half * scale
+        centerPoint.y -= yOffset
         
         return centerPoint
     }
 
     // MARK: - Update Animation Handling
 
-    /// Sort values of items that are being inserted.
-    private var insertedSortValues: Set<String> = []
-    /// Sort values of items that are being deleted.
-    private var deletedSortValues: Set<String> = []
-    /// Items that that were visible before the animation started.
-    private var sortValuesVisibleBeforeAnimation: Set<String> = []
+    /// Ids of items that are being inserted.
+    private var insertedIds: Set<String> = []
+    /// Ids of items that are being deleted.
+    private var deletedIds: Set<String> = []
+    /// Ids of items that that were visible before the animation started.
+    private var idsVisibleBeforeAnimation: Set<String> = []
     /// How much to adjust the proposed scroll offset.
     private var scrollOffsetAdjustment: CGFloat = 0
     /// The z position before update animations started
@@ -331,7 +320,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 guard let insertedId
                         = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
 
-                self.insertedSortValues.insert(insertedId)
+                self.insertedIds.insert(insertedId)
 
                 let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
                 if itemFocusPosition < self.zPosition {
@@ -340,10 +329,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate else { break }
-                guard let deletedSortValue
+                guard let deletedId
                         = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
 
-                self.deletedSortValues.insert(deletedSortValue)
+                self.deletedIds.insert(deletedId)
 
                 let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
 
@@ -365,12 +354,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Remember which items were visible before the animation started so we don't attempt to modify
         // their animations later.
-        if let sortValue = self.itemIdsBeforeInvalidation[itemIndexPath] {
-            self.sortValuesVisibleBeforeAnimation.insert(sortValue)
+        if let itemId = self.itemIdsBeforeInvalidation[itemIndexPath] {
+            self.idsVisibleBeforeAnimation.insert(itemId)
 
             // Items that are just moving are marked as "disappearing" by the collection view.
             // Don't animate changes to these items or else weird animation issues will arise.
-            guard self.deletedSortValues.contains(sortValue) else { return nil }
+            guard self.deletedIds.contains(itemId) else { return nil }
         }
 
         return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
@@ -384,13 +373,13 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
         // Don't modify the attributes of items that were visible before the animation started.
-        guard let appearingSortValue = self.itemIds[itemIndexPath],
-              !self.sortValuesVisibleBeforeAnimation.contains(appearingSortValue) else { return attributes }
+        guard let appearingId = self.itemIds[itemIndexPath],
+              !self.idsVisibleBeforeAnimation.contains(appearingId) else { return attributes }
 
         // Items moving into visibility
         // If the item existed before (wasn't just inserted), but was not visible,
         // modify it's attributes to make it appear properly.
-        if !self.insertedSortValues.contains(appearingSortValue) {
+        if !self.insertedIds.contains(appearingId) {
             var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
                                                                      givenZPosition: self.zPositionBeforeAnimation)
             normalizedZOffset = clamp(normalizedZOffset, -1, 1)
@@ -424,9 +413,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func finalizeCollectionViewUpdates() {
         super.finalizeCollectionViewUpdates()
 
-        self.insertedSortValues.removeAll()
-        self.deletedSortValues.removeAll()
-        self.sortValuesVisibleBeforeAnimation.removeAll()
+        self.insertedIds.removeAll()
+        self.deletedIds.removeAll()
+        self.idsVisibleBeforeAnimation.removeAll()
         self.zPositionBeforeAnimation = 0
         self.scrollOffsetAdjustment = 0
     }
