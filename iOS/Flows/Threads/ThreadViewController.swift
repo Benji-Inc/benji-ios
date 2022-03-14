@@ -186,10 +186,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         switch state {
         case .read:
-            threadLayout.secondSectionBottomY = 350
             threadLayout.spacingKeyPoints = [0, 40, 74, 86]
         case .write:
-            threadLayout.secondSectionBottomY = 300
             threadLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
     }

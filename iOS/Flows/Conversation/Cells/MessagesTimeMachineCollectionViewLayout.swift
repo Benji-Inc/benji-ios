@@ -166,12 +166,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     private func getMostRecentItemContentOffset() -> CGPoint? {
-        guard let mostRecentIndex = self.itemZRanges.max(by: { kvp1, kvp2 in
-            return kvp1.value.lowerBound < kvp2.value.lowerBound
-        })?.key else { return nil }
-
-        guard let upperBound = self.itemZRanges[mostRecentIndex]?.upperBound else { return nil }
-        return CGPoint(x: 0, y: upperBound)
+        return CGPoint(x: 0, y: self.maxZPosition)
     }
 
     private func getCenterOfItems() -> CGPoint {
