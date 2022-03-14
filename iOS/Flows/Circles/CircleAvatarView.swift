@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class CircleAvatarView: BorderedPersoniew {
+class CircleAvatarView: BorderedPersonView {
     
     override func initializeSubviews() {
         super.initializeSubviews()

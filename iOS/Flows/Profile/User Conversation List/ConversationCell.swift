@@ -217,7 +217,7 @@ private class StackedAvatarView: BaseView {
         
         for (index, person) in people.enumerated() {
             if index <= 3 {
-                let view = BorderedPersoniew()
+                let view = BorderedPersonView()
                 view.set(person: person)
                 self.addSubview(view)
             }
@@ -238,7 +238,7 @@ private class StackedAvatarView: BaseView {
         
         var xOffset: CGFloat = 0
         self.subviews.forEach { view in
-            if view is BorderedPersoniew {
+            if view is BorderedPersonView {
                 view.frame = CGRect(x: xOffset,
                                     y: 0,
                                     width: 20,
