@@ -70,7 +70,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// The focus position of the last item in the collection, as determined by sort value.
     var maxZPosition: CGFloat {
         let itemCount = self.numberOfItems(inSection: 0)
-        return CGFloat(itemCount) * self.itemHeight
+        return CGFloat(clamp(itemCount - 1, min: 0)) * self.itemHeight
     }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
