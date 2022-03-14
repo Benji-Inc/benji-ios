@@ -8,9 +8,8 @@
 import UIKit
 
 protocol TimeMachineLayoutItemType {
-    /// Used to determine the order of the time machine items.
-    /// A lower value means the item is older and should appear closer to the back.
-    var sortValue: Double { get }
+    /// A unique identifier for the item.
+    var layoutId: String { get }
 }
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
@@ -77,14 +76,14 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A cache of all the sort values for each item.
-    private(set) var itemSortValues: [IndexPath : Double] = [:]
+    private(set) var itemIds: [IndexPath : String] = [:]
 
     // MARK: - Private State Management
 
     /// The sort value of the focused right before the most recent invalidation.
     /// This can be used to keep the focused item in place when items are inserted before it.
-    private var sortValueOfFocusedItemBeforeInvalidation: Double?
-    private var sortValuesBeforeInvalidation: [IndexPath : Double] = [:]
+    private var sortValueOfFocusedItemBeforeInvalidation: String?
+    private var itemIdsBeforeInvalidation: [IndexPath : String] = [:]
 
     // MARK: - UICollectionViewLayout Overrides
 
@@ -137,14 +136,14 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
                 return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
             })?.key {
-                self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
+                self.sortValueOfFocusedItemBeforeInvalidation = self.itemIds[focusedIndexPath]
             } else {
                 self.sortValueOfFocusedItemBeforeInvalidation = nil
             }
 
-            self.sortValuesBeforeInvalidation = self.itemSortValues
+            self.itemIdsBeforeInvalidation = self.itemIds
 
-            self.itemSortValues.removeAll()
+            self.itemIds.removeAll()
             self.itemFocusPositions.removeAll()
         }
     }
@@ -310,11 +309,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Update Animation Handling
 
     /// Sort values of items that are being inserted.
-    private var insertedSortValues: Set<Double> = []
+    private var insertedSortValues: Set<String> = []
     /// Sort values of items that are being deleted.
-    private var deletedSortValues: Set<Double> = []
+    private var deletedSortValues: Set<String> = []
     /// Items that that were visible before the animation started.
-    private var sortValuesVisibleBeforeAnimation: Set<Double> = []
+    private var sortValuesVisibleBeforeAnimation: Set<String> = []
     /// How much to adjust the proposed scroll offset.
     private var scrollOffsetAdjustment: CGFloat = 0
     /// The z position before update animations started
@@ -329,10 +328,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
-                guard let insertedSortValue
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).sortValue else { break }
+                guard let insertedId
+                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
 
-                self.insertedSortValues.insert(Double(insertedSortValue))
+                self.insertedSortValues.insert(insertedId)
 
                 let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
                 if itemFocusPosition < self.zPosition {
@@ -342,7 +341,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate else { break }
                 guard let deletedSortValue
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).sortValue else { break }
+                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
 
                 self.deletedSortValues.insert(deletedSortValue)
 
@@ -366,7 +365,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Remember which items were visible before the animation started so we don't attempt to modify
         // their animations later.
-        if let sortValue = self.sortValuesBeforeInvalidation[itemIndexPath] {
+        if let sortValue = self.itemIdsBeforeInvalidation[itemIndexPath] {
             self.sortValuesVisibleBeforeAnimation.insert(sortValue)
 
             // Items that are just moving are marked as "disappearing" by the collection view.
@@ -385,7 +384,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
         // Don't modify the attributes of items that were visible before the animation started.
-        guard let appearingSortValue = self.itemSortValues[itemIndexPath],
+        guard let appearingSortValue = self.itemIds[itemIndexPath],
               !self.sortValuesVisibleBeforeAnimation.contains(appearingSortValue) else { return attributes }
 
         // Items moving into visibility
