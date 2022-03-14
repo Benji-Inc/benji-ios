@@ -87,7 +87,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     }
     
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {
-        let count = (snapshot.numberOfItems(inSection: .topMessages) + snapshot.numberOfItems(inSection: .bottomMessages)) - 1
+        let count = snapshot.numberOfItems(inSection: .messages) - 1
         let maxOffset = CGFloat(count) * self.welcomeCollectionView.timeMachineLayout.itemHeight
         
         return AnimationCycle(inFromPosition: nil,
@@ -144,7 +144,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     // MARK: Data Loading
 
     override func getAllSections() -> [MessageSequenceSection] {
-        return [.topMessages, .bottomMessages]
+        return [.messages]
     }
 
     override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
@@ -174,26 +174,19 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
 
             // Put Benji's messages at the top, and all other messages below.
             var benjiMessages: [MessageSequenceItem] = []
-            var otherMessages: [MessageSequenceItem] = []
 
             let allMessages = conversationController.messages.filter { message in
                 return !message.isDeleted
             }
 
             allMessages.forEach({ message in
-                if message.authorId == PFConfig.current().adminUserId {
-                    benjiMessages.append(MessageSequenceItem.message(cid: cid,
-                                                                     messageID: message.id,
-                                                                     showDetail: false))
-                } else {
-                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID:
-                                                                        message.id,
-                                                                     showDetail: false))
-                }
+                guard message.authorId == PFConfig.current().adminUserId else { return }
+                benjiMessages.append(MessageSequenceItem.message(cid: cid,
+                                                                 messageID: message.id,
+                                                                 showDetail: false))
             })
 
-            data[.topMessages] = benjiMessages.reversed()
-            data[.bottomMessages] = otherMessages.reversed()
+            data[.messages] = benjiMessages.reversed()
         } catch {
             logError(error)
         }

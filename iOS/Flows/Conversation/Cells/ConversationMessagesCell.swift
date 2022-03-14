@@ -104,8 +104,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
     
     private func scrollToFirstUnread() {
-        
-        let firstUnread: Message? = self.dataSource.itemIdentifiers(in: .topMessages)
+        let firstUnread: Message? = self.dataSource.itemIdentifiers(in: .messages)
             .compactMap({ type in
             switch type {
             case .message(cid: let cid, messageID: let messageID, _):

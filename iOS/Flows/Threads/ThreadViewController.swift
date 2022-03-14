@@ -195,7 +195,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     // MARK: Data Loading
 
     override func getAllSections() -> [MessageSequenceSection] {
-        return [.topMessages, .bottomMessages]
+        return [.messages]
     }
 
     override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
@@ -213,7 +213,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             let messages = self.messageController.replies.map { message in
                 return MessageSequenceItem.message(cid: cid, messageID: message.id)
             }
-            data[.bottomMessages] = Array(messages)
+            data[.messages] = Array(messages)
         } catch {
             logError(error)
         }

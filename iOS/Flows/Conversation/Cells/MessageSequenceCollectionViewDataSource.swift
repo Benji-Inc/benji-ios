@@ -16,8 +16,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                                                MessageSequenceItem> {
 
     enum SectionType: Int, Hashable, CaseIterable {
-        case topMessages = 0
-        case bottomMessages = 1
+        case messages
     }
 
     enum ItemType: Hashable {
@@ -114,16 +113,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
              itemsToReconfigure: [ItemType] = [],
              showLoadMore: Bool = false) {
 
-        // Separate the user messages from other message.
-        let userMessages = messageSequence.messages.filter { message in
-            return message.isFromCurrentUser
-        }.filter { message in
-            return !message.isDeleted
-        }
-
-        let otherMessages = messageSequence.messages.filter { message in
-            return !message.isFromCurrentUser
-        }.filter { message in
+        // Don't show deleted messages
+        let messages = messageSequence.messages.filter { message in
             return !message.isDeleted
         }
 
@@ -133,23 +124,19 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         }
 
         // The newest message is at the bottom, so reverse the order.
-        var userMessageItems = userMessages.map { message in
+        var messageItems = messages.map { message in
             return ItemType.message(cid: cid, messageID: message.id)
         }
-        userMessageItems = userMessageItems.reversed()
+        messageItems = messageItems.reversed()
 
         if self.shouldPrepareToSend {
-            userMessageItems.append(.placeholder)
+            messageItems.append(.placeholder)
         }
 
-        var otherMessageItems = otherMessages.reversed().map { message in
-            return ItemType.message(cid: cid, messageID: message.id)
-        }
-        
         if showLoadMore {
-            userMessageItems.insert(.loadMore(cid: cid), at: 0)
+            messageItems.insert(.loadMore(cid: cid), at: 0)
         } else {
-            otherMessageItems.insert(.initial(cid: cid), at: 0)
+            messageItems.insert(.initial(cid: cid), at: 0)
         }
         
         var snapshot = self.snapshot()
@@ -163,8 +150,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         snapshot.deleteSections(MessageSequenceSection.allCases)
         snapshot.appendSections(MessageSequenceSection.allCases)
 
-        snapshot.appendItems(otherMessageItems, toSection: .topMessages)
-        snapshot.appendItems(userMessageItems, toSection: .bottomMessages)
+        snapshot.appendItems(messageItems, toSection: .messages)
 
         snapshot.reconfigureItems(itemsToReconfigure)
 
