@@ -320,8 +320,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                     self.frontmostNonUserMessage = message
                 }
 
-                if state.isSectionInFocus,
-                   state.areDetailsFullyVisible,
+                if state.areDetailsFullyVisible,
                    let centerView = collectionView.supplementaryView(forElementKind: CenterConversationDetailView.kind,
                                                                      at: IndexPath(row: 0, section: 0)) as? CenterConversationDetailView {
                     centerView.configure(for: message)

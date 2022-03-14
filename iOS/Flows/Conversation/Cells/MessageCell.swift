@@ -13,7 +13,6 @@ import Combine
 
 struct MessageDetailState: Equatable {
     var areDetailsFullyVisible: Bool = false
-    var isSectionInFocus: Bool = false
 }
 
 /// A cell for displaying individual messages, author and reactions.
@@ -109,7 +108,6 @@ class MessageCell: UICollectionViewCell {
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                          textColor: messageLayoutAttributes.textColor,
                                          brightness: messageLayoutAttributes.brightness,
-                                         focusAmount: messageLayoutAttributes.sectionFocusAmount,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
 
@@ -120,9 +118,7 @@ class MessageCell: UICollectionViewCell {
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
-        let isSectionInFocus = messageLayoutAttributes.sectionFocusAmount == 1
-        self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible,
-                                                     isSectionInFocus: isSectionInFocus)
+        self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
 
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
     }

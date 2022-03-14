@@ -32,7 +32,6 @@ class UserOnboardingViewController: ViewController {
         self.messageContent.configureBackground(color: ThemeColor.D1.color,
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1,
-                                                focusAmount: 1,
                                                 showBubbleTail: true,
                                                 tailOrientation: .up)
 

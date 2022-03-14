@@ -102,7 +102,6 @@ class MessageContentView: BaseView {
     func configureBackground(color: UIColor,
                              textColor: UIColor,
                              brightness: CGFloat,
-                             focusAmount: CGFloat,
                              showBubbleTail: Bool,
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
@@ -117,10 +116,8 @@ class MessageContentView: BaseView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
 
-        self.bubbleView.lightGradientLayer.opacity
-        = Float(1 - focusAmount) * 0.2 * Float(1 - brightness)
-        self.bubbleView.darkGradientLayer.opacity
-        = Float(focusAmount) * 0.2 * Float(1 - brightness)
+        self.bubbleView.lightGradientLayer.opacity = 0
+        self.bubbleView.darkGradientLayer.opacity = 0.2 * Float(1 - brightness)
 
         CATransaction.commit()
     }
