@@ -111,7 +111,6 @@ class MessageCell: UICollectionViewCell {
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
 
-        self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
         self.detailVC.view.height = old_MessageDetailView.height

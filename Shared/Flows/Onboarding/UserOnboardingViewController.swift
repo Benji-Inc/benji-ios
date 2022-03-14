@@ -66,7 +66,7 @@ class UserOnboardingViewController: ViewController {
 
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
-        self.messageContent.size = self.messageContent.getSize(for: .collapsed, with: maxWidth)
+        self.messageContent.size = self.messageContent.getSize(with: maxWidth)
         self.messageContent.match(.top, to: .bottom, of: self.personView, offset: .standard)
         self.messageContent.centerOnX()
     }

@@ -42,7 +42,6 @@ class MessagePreviewViewController: ViewController {
         
         self.view.set(backgroundColor: .L1)
 
-        self.content.state = .expanded
         self.content.configureBackground(color: ThemeColor.clear.color,
                                          textColor: ThemeColor.T2.color,
                                          brightness: 0.0,
@@ -63,7 +62,7 @@ class MessagePreviewViewController: ViewController {
         }
 
         let maxWidth = Theme.getPaddedWidth(with: window.width)
-        var size = self.content.getSize(for: .expanded, with: maxWidth)
+        var size = self.content.getSize(with: maxWidth)
 
         if size.width < maxWidth {
             size.width = maxWidth
@@ -89,7 +88,7 @@ class MessagePreviewViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.content.size = self.content.getSize(for: .expanded, with: self.view.width)
+        self.content.size = self.content.getSize(with: self.view.width)
         self.content.width = self.view.width
         self.content.centerOnX()
         self.content.pin(.top)

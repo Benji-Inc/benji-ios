@@ -21,8 +21,6 @@ class ConversationCollectionView: CollectionView {
         self.clipsToBounds = false
         self.set(backgroundColor: .clear)
 
-        self.conversationLayout.messageContentState = .collapsed
-
         self.showsVerticalScrollIndicator = false
         self.automaticallyAdjustsScrollIndicatorInsets = true
         self.decelerationRate = .fast

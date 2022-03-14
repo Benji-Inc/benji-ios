@@ -26,7 +26,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.2
     }
     
-    var messageContentState: MessageContentView.State = .collapsed
     var decorationAttributes: DecorationViewLayoutAttributes?
     var uiState: ConversationUIState = .read
     var hideCenterDecorationView: Bool = false
@@ -95,7 +94,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.shouldShowTail = false
         attributes.bubbleTailOrientation = .down
         attributes.detailAlpha = detailAlpha
-        attributes.state = self.messageContentState
 
         return attributes
     }

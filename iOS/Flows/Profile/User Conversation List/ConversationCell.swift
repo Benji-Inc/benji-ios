@@ -55,7 +55,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.bottomBubble)
         self.contentView.addSubview(self.middleBubble)
-        self.messageContent.state = .thread
         self.contentView.addSubview(self.messageContent)
         
         self.contentView.addSubview(self.leftLabel)

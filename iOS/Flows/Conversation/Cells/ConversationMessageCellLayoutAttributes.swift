@@ -21,7 +21,6 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
     var bubbleTailOrientation: SpeechBubbleView.TailOrientation = .down
     /// The alpha of the detial view.
     var detailAlpha: CGFloat = 0
-    var state: MessageContentView.State = .collapsed
 
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! ConversationMessageCellLayoutAttributes
@@ -31,7 +30,6 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
         copy.shouldShowTail = self.shouldShowTail
         copy.bubbleTailOrientation = self.bubbleTailOrientation
         copy.detailAlpha = self.detailAlpha
-        copy.state = self.state
         return copy
     }
 
@@ -44,7 +42,6 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
             && layoutAttributes.shouldShowTail == self.shouldShowTail
             && layoutAttributes.bubbleTailOrientation == self.bubbleTailOrientation
             && layoutAttributes.detailAlpha == self.detailAlpha
-            && layoutAttributes.state == self.state
         }
 
         return false
