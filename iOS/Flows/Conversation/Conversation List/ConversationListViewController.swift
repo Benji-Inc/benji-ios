@@ -21,6 +21,10 @@ enum ConversationUIState: String {
 
 class ConversationListViewController: ViewController, ConversationListCollectionViewLayoutDelegate {
     
+    override var analyticsIdentifier: String? {
+        return "SCREEN_CONVERSATION_LIST"
+    }
+    
     // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()

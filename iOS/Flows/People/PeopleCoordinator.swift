@@ -17,6 +17,7 @@ class PeopleCoordinator: PresentableCoordinator<[Person]> {
 
     private lazy var peopleNavController = PeopleNavigationController()
     private var messageController: MessageComposerViewController?
+    var selectedReservation: Reservation?
 
     var peopleToInvite: [Person] {
         return self.peopleNavController.peopleVC.selectedPeople
@@ -176,7 +177,10 @@ extension PeopleCoordinator {
         // This user doesn't exist yet so they'll need the reservation to store the cid
         // in order to access the conversation.
         reservation.conversationCid = self.selectedConversationCID?.description
-
+        
+        // Used to track invites
+        self.selectedReservation = reservation
+        
         // If this reservation was already used to invite the contact, then just send an invite reminder text.
         if reservation.contactId == contact.identifier {
             _ = try? await reservation.saveLocalThenServer()
@@ -223,14 +227,18 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
             }
         }
     }
-
+    
     func messageComposeViewController(_ controller: MFMessageComposeViewController,
                                       didFinishWith result: MessageComposeResult) {
         switch result {
         case .cancelled, .failed:
             controller.dismiss(animated: true)
         case .sent:
-            AnalyticsManager.shared.trackEvent(type: .inviteSent, properties: nil)
+            var properties: [String: Any] = [:]
+            if let rsvp = self.selectedReservation?.objectId {
+                properties = ["value": rsvp]
+            }
+            AnalyticsManager.shared.trackEvent(type: .inviteSent, properties: properties)
             controller.dismiss(animated: true) {
                 // Get the person object for the person that was just invited with a text.
                 guard let phone = controller.recipients?.first else { return }
