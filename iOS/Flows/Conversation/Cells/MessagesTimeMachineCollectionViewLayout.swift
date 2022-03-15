@@ -25,45 +25,9 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     var backmostBrightness: CGFloat {
         return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.2
     }
-    
-    var decorationAttributes: DecorationViewLayoutAttributes?
-    var uiState: ConversationUIState = .read
-    var hideCenterDecorationView: Bool = false
-        
-    override func prepare() {
-        super.prepare()
-        
-        self.decorationAttributes = DecorationViewLayoutAttributes.init(forSupplementaryViewOfKind: CenterConversationDetailView.kind, with: IndexPath(row: 0, section: 0))
-        self.decorationAttributes?.bounds.size = CGSize(width: self.collectionView?.width ?? .zero,
-                                                        height: 14)
-    }
-    
-    override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
-                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        switch elementKind {
-        case CenterConversationDetailView.kind:
-            if self.sectionCount > 0 {
-                self.decorationAttributes?.center = self.getCenterOfItems()
-                self.decorationAttributes?.state = self.uiState
-                self.decorationAttributes?.isHidden = self.hideCenterDecorationView
-                return self.decorationAttributes
-            } else {
-                return super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
-            }
-        default:
-            return super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
-        }
-    }
-    
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        var all = super.layoutAttributesForElements(in: rect)
-        if let decorationAttributes = self.layoutAttributesForSupplementaryView(ofKind: CenterConversationDetailView.kind, at: IndexPath(item: 0, section: 0)) {
-            all?.append(decorationAttributes)
-        }
-        
-        return all
-    }
 
+    var uiState: ConversationUIState = .read
+    
     override func layoutAttributesForItemAt(indexPath: IndexPath,
                                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
 

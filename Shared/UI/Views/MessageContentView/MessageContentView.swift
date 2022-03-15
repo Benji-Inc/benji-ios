@@ -21,7 +21,7 @@ class MessageContentView: BaseView {
     #endif
 
     // Sizing
-    static let bubbleHeight: CGFloat = 168
+    static let bubbleHeight: CGFloat = 148
     static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
     static let padding = Theme.ContentOffset.long
     static var textViewPadding: CGFloat { return MessageContentView.padding.value * 2 }
@@ -113,7 +113,7 @@ class MessageContentView: BaseView {
     }
 
     func getAuthorSize() -> CGSize {
-        let authorHeight: CGFloat = MessageContentView.standardHeight.half
+        let authorHeight: CGFloat = MessageContentView.standardHeight * 0.33
         return self.authorView.getSize(for: authorHeight)
     }
 

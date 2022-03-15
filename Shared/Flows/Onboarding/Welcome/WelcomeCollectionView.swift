@@ -17,7 +17,6 @@ class WelcomeCollectionView: CollectionView {
 
     init() {
         let layout = MessagesTimeMachineCollectionViewLayout()
-        layout.hideCenterDecorationView = true 
         super.init(layout: layout)
         self.showsVerticalScrollIndicator = false
         self.keyboardDismissMode = .interactive

@@ -50,8 +50,6 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     private let initialCellRegistration
     = MessageSequenceCollectionViewDataSource.createInitialCellRegistration()
     
-    private let centerConfig = ManageableSupplementaryViewRegistration<CenterConversationDetailView>().provider
-    
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
                               section: SectionType,
@@ -91,20 +89,6 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                                                                             item: (conversationID, collectionView))
             return cell
         }
-    }
-    
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String,
-                                           section: MessageSequenceSection,
-                                           indexPath: IndexPath) -> UICollectionReusableView? {
-        
-        if kind == CenterConversationDetailView.kind {
-            let view = collectionView.dequeueConfiguredReusableSupplementary(using: self.centerConfig,
-                                                                             for: indexPath)
-            return view
-        }
-        
-        return nil
     }
 
     /// Updates the datasource to display the given message sequence.
