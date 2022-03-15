@@ -55,6 +55,8 @@ class MessageCell: UICollectionViewCell {
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
 
+        guard newWindow.isNil else { return }
+
         self.detailVC.removeFromParentAndSuperviewIfNeeded()
     }
 

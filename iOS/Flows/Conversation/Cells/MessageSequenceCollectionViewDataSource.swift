@@ -68,7 +68,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                 self.handleEditMessage?(cid, messageID)
             }
 
-            messageCell.content.handleTappedMessage = { [unowned self] cid, messageID in
+            messageCell.content.handleTappedMessage = { [unowned self, unowned messageCell] cid, messageID in
                 self.handleTappedMessage?(cid, messageID, messageCell.content)
             }
 
