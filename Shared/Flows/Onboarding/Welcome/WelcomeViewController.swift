@@ -172,21 +172,15 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
 
             try await conversationController.loadPreviousMessages()
 
-            // Put Benji's messages at the top, and all other messages below.
-            var benjiMessages: [MessageSequenceItem] = []
+            let allMessageItems: [MessageSequenceItem] = conversationController.messages.compactMap({ message in
+                guard !message.isDeleted else { return nil }
 
-            let allMessages = conversationController.messages.filter { message in
-                return !message.isDeleted
-            }
-
-            allMessages.forEach({ message in
-                guard message.authorId == PFConfig.current().adminUserId else { return }
-                benjiMessages.append(MessageSequenceItem.message(cid: cid,
-                                                                 messageID: message.id,
-                                                                 showDetail: false))
+                return MessageSequenceItem.message(cid: cid,
+                                                   messageID: message.id,
+                                                   showDetail: false)
             })
 
-            data[.messages] = benjiMessages.reversed()
+            data[.messages] = allMessageItems
         } catch {
             logError(error)
         }
