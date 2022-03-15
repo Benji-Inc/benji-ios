@@ -86,37 +86,36 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         self.updateContentOffset()
     }
     
-    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {
-        let count = snapshot.numberOfItems(inSection: .messages) - 1
-        let maxOffset = CGFloat(count) * self.welcomeCollectionView.timeMachineLayout.itemHeight
-        
-        return AnimationCycle(inFromPosition: nil,
-                              outToPosition: nil,
-                              shouldConcatenate: false,
-                              scrollToOffset: CGPoint(x: 0, y: maxOffset))
-    }
-    
-    var scrollTask: Task<Void, Never>?
+    private var scrollTask: Task<Void, Never>?
     func updateContentOffset() {
         // Cancel any currently running scroll tasks.
         self.scrollTask?.cancel()
         
         self.scrollTask = Task { [weak self] in
-            guard let `self` = self else { return }
-            var currentOffset = self.welcomeCollectionView.contentOffset
-            currentOffset.y = round(currentOffset.y / self.welcomeCollectionView.timeMachineLayout.itemHeight) * self.welcomeCollectionView.timeMachineLayout.itemHeight
-            
+            guard let collectionView = self?.welcomeCollectionView else { return }
+
             // Wait 2 seconds before scrolling
             await Task.snooze(seconds: 2)
+
             // Don't scroll if cancelled.
             guard !Task.isCancelled else { return }
-            let yOffset = currentOffset.y - self.welcomeCollectionView.timeMachineLayout.itemHeight
-            let newOffset = clamp(yOffset, min: 0)
-            self.welcomeCollectionView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: true)
+
+            let itemHeight = collectionView.timeMachineLayout.itemHeight
+            var currentOffset = collectionView.contentOffset
+            // Make sure that the collection view is focused on an item.
+            currentOffset.y = round(currentOffset.y / itemHeight) * itemHeight
+            let maxYOffset = collectionView.timeMachineLayout.maxZPosition
+
+            // Scroll to the next message
+            let yOffset = currentOffset.y + itemHeight
+            let newOffset = clamp(yOffset, max: maxYOffset)
+            self?.welcomeCollectionView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: true)
             
             guard !Task.isCancelled else { return }
+
             await Task.snooze(seconds: 0.3)
-            self.updateContentOffset()
+
+            self?.updateContentOffset()
         }
     }
     
@@ -180,7 +179,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
                                                    showDetail: false)
             })
 
-            data[.messages] = allMessageItems
+            data[.messages] = allMessageItems.reversed()
         } catch {
             logError(error)
         }
