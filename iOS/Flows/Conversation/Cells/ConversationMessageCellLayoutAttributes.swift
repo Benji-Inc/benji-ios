@@ -15,26 +15,21 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
     var textColor: UIColor = ThemeColor.T3.color
     /// How bright the background color is. 0 is black. 1 is full brightness of the given color
     var brightness: CGFloat = 1
-    /// How in focus this cell's section is. 0 means not in focus at all. 1 means fully in focus.
-    var sectionFocusAmount: CGFloat = 1
     /// If true, the speechbubble tail should be shown.
     var shouldShowTail: Bool = false
     /// The direction the speech bubble tail should be pointed.
     var bubbleTailOrientation: SpeechBubbleView.TailOrientation = .down
     /// The alpha of the detial view.
     var detailAlpha: CGFloat = 0
-    var state: MessageContentView.State = .collapsed
 
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! ConversationMessageCellLayoutAttributes
         copy.backgroundColor = self.backgroundColor
         copy.textColor = self.textColor
         copy.brightness = self.brightness
-        copy.sectionFocusAmount = self.sectionFocusAmount
         copy.shouldShowTail = self.shouldShowTail
         copy.bubbleTailOrientation = self.bubbleTailOrientation
         copy.detailAlpha = self.detailAlpha
-        copy.state = self.state
         return copy
     }
 
@@ -44,11 +39,9 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
             && layoutAttributes.backgroundColor == self.backgroundColor
             && layoutAttributes.textColor == self.textColor
             && layoutAttributes.brightness == self.brightness
-            && layoutAttributes.sectionFocusAmount == self.sectionFocusAmount
             && layoutAttributes.shouldShowTail == self.shouldShowTail
             && layoutAttributes.bubbleTailOrientation == self.bubbleTailOrientation
             && layoutAttributes.detailAlpha == self.detailAlpha
-            && layoutAttributes.state == self.state
         }
 
         return false

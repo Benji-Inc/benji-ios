@@ -46,7 +46,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
     }
     
     func loadInitialData() {
-        Task {
+        Task { [unowned self] in
             await self.loadData()
         }.add(to: self.autocancelTaskPool)
     }

@@ -104,8 +104,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
     
     private func scrollToFirstUnread() {
-        
-        let firstUnread: Message? = self.dataSource.itemIdentifiers(in: .topMessages)
+        let firstUnread: Message? = self.dataSource.itemIdentifiers(in: .messages)
             .compactMap({ type in
             switch type {
             case .message(cid: let cid, messageID: let messageID, _):
@@ -172,14 +171,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         switch state {
         case .read:
-            self.collectionLayout.secondSectionBottomY = 390
             self.collectionLayout.spacingKeyPoints = [0, 40, 74, 86]
         case .write:
             if UIScreen.main.isLargerThan(screenSize: .phoneExtraLarge) {
-                self.collectionLayout.secondSectionBottomY = 260
                 self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
             } else {
-                self.collectionLayout.secondSectionBottomY = 230
                 self.collectionLayout.spacingKeyPoints = [0, 6, 10, 12]
             }
         }
@@ -324,8 +320,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                     self.frontmostNonUserMessage = message
                 }
 
-                if state.isSectionInFocus,
-                   state.areDetailsFullyVisible,
+                if state.areDetailsFullyVisible,
                    let centerView = collectionView.supplementaryView(forElementKind: CenterConversationDetailView.kind,
                                                                      at: IndexPath(row: 0, section: 0)) as? CenterConversationDetailView {
                     centerView.configure(for: message)

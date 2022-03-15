@@ -12,6 +12,7 @@ import StreamChat
 import Combine
 
 class ConversationCell: CollectionViewManagerCell, ManageableCell {
+    
     typealias ItemType = ConversationId
     
     var currentItem: ConversationId?
@@ -54,7 +55,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.bottomBubble)
         self.contentView.addSubview(self.middleBubble)
-        self.messageContent.state = .thread
         self.contentView.addSubview(self.messageContent)
         
         self.contentView.addSubview(self.leftLabel)
@@ -66,7 +66,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.messageContent.configureBackground(color: bubbleColor,
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1.0,
-                                                focusAmount: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
         
