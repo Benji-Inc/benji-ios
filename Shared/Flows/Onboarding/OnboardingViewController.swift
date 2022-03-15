@@ -120,6 +120,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 break
             }
         }
+        
+        self.nameVC.$state
+            .mainSink { [unowned self] _ in
+                self.updateUI()
+            }.store(in: &self.cancellables)
 
         self.photoVC.$currentState
             .filter({ state in
