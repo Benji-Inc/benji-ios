@@ -15,10 +15,10 @@ import StreamChat
 
 class MessageContentView: BaseView {
 
-    #if IOS
+#if IOS
     var handleTappedMessage: ((ConversationId, MessageId) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
-    #endif
+#endif
 
     // Sizing
     static let bubbleHeight: CGFloat = 148
@@ -62,9 +62,9 @@ class MessageContentView: BaseView {
             self.textView.setText(with: message)
         }
 
-        #if IOS
+#if IOS
         self.configureConsumption(for: message)
-        #endif
+#endif
 
         self.authorView.set(person: message.person)
 
@@ -103,13 +103,16 @@ class MessageContentView: BaseView {
         self.authorView.size = self.getAuthorSize()
         self.authorView.pin(.top, offset: MessageContentView.padding)
         self.authorView.pin(.left, offset: MessageContentView.padding)
-        self.authorView.centerOnY()
 
         self.textView.size = self.textView.getSize(width: self.bubbleView.bubbleFrame.width)
-
-        self.textView.textAlignment = .left
         self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.textView.centerOnY()
+        if self.textView.numberOfLines > 2 {
+            self.textView.pin(.top, offset: MessageContentView.padding)
+            self.textView.textAlignment = .left
+        } else {
+            self.textView.centerOnY()
+            self.textView.textAlignment = .center
+        }
     }
 
     func getAuthorSize() -> CGSize {
@@ -121,7 +124,7 @@ class MessageContentView: BaseView {
         var size = self.textView.getSize(width: width)
         size.width += MessageContentView.textViewPadding
         size.height += self.bubbleView.tailLength + MessageContentView.textViewPadding
-        return size 
+        return size
     }
 }
 
