@@ -28,8 +28,8 @@ class SwipeInputHintAnimator {
         self.view?.emotionView.alpha = 1.0
         self.view?.deliveryTypeView.alpha = 1.0
 
-        guard shouldPlay else { return }
-
+        guard shouldPlay, UserDefaultsManager.getInt(for: .numberOfSwipeHints) < 3 else { return }
+            
         self.swipeHintTask = Task { [weak self] in
             // Wait a bit before playing the hint
             await Task.snooze(seconds: 3)
