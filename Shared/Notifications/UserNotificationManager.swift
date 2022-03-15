@@ -150,6 +150,7 @@ class UserNotificationManager: NSObject {
         // It was suggested that in order for this to work it needs to be called on a background thread.
         Task {
             self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
         }
     }
 }
