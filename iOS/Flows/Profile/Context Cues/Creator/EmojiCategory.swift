@@ -70,14 +70,6 @@ enum EmojiCategory: Int, CaseIterable {
         }
     }
     
-    func unicodeAvailable() -> Bool {
-        if let refUnicodePng = Character.refUnicodePng,
-            let myPng = self.png(ofSize: Character.refUnicodeSize) {
-            return refUnicodePng != myPng
-        }
-        return false
-    }
-    
     var image: UIImage? {
         switch self {
         case .emoticons:
