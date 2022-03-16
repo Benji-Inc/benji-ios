@@ -15,7 +15,7 @@ enum ConversationUIState: String {
     case write // Keyboard IS shown
 
     var headerHeight: CGFloat {
-        return 106
+        return 46
     }
 }
 
@@ -30,7 +30,6 @@ class ConversationListViewController: ViewController, ConversationListCollection
     private(set) var conversationListController: ConversationListController
 
     var selectedMessageView: MessageContentView?
-    var frontmostNonUserMessageSubscription: AnyCancellable?
 
     // Input handlers
     var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?
