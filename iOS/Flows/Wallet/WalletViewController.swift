@@ -186,8 +186,19 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     }
     
     private func loadAchievements() async {
-        let items: [WalletCollectionViewDataSource.ItemType] = AchievementType.allCases.map { type in
-            return .achievement(AchievementViewModel(type: type, count: 1))
+        guard let achievements = try? await Achievement.fetchAll(),
+            let types = try? await AchievementType.fetchAll() else { return }
+        
+        let items: [WalletCollectionViewDataSource.ItemType] = types.map { type in
+            let count: Int = achievements.filter { achievement in
+                return achievement.type == type
+            }.count
+            
+            return AchievementViewModel(type: type, count: count)
+        }.sorted { lhs, rhs in
+            return lhs.count > rhs.count
+        }.compactMap { model in
+            return .achievement(model)
         }
         
         var snapshot = self.dataSource.snapshot()
