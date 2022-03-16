@@ -27,9 +27,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func initializeViews() {
         super.initializeViews()
 
-        #warning("Remove")
-        self.view.backgroundColor = .red
-
         self.view.clipsToBounds = false
         
         self.view.addSubview(self.menuImageView)
