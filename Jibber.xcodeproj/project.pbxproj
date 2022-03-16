@@ -202,7 +202,6 @@
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
 		D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
-		D6381D7A27E1843B00102FB4 /* emoji.json in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7927E1843B00102FB4 /* emoji.json */; };
 		D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
 		D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
@@ -348,6 +347,11 @@
 		D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */; };
 		D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8AF23CE3E7F0039DC5A /* OnboardingContent.swift */; };
 		D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8B123CE403D0039DC5A /* SwitchableContentViewController.swift */; };
+		D64ED05127E264B400B40B6E /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = D64ED05027E264B400B40B6E /* emoji.json */; };
+		D64ED05227E264B400B40B6E /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = D64ED05027E264B400B40B6E /* emoji.json */; };
+		D64ED05327E264B400B40B6E /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = D64ED05027E264B400B40B6E /* emoji.json */; };
+		D64ED05427E264B400B40B6E /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = D64ED05027E264B400B40B6E /* emoji.json */; };
+		D64ED05527E264B400B40B6E /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = D64ED05027E264B400B40B6E /* emoji.json */; };
 		D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C1D925B5EE3D0037C59A /* AvatarContextDelegate.swift */; };
 		D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */; };
 		D650C21025B7D6F20037C59A /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C20F25B7D6F20037C59A /* Attachment.swift */; };
@@ -910,7 +914,6 @@
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
 		D6381D7227E1666100102FB4 /* EmojiCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategory.swift; sourceTree = "<group>"; };
-		D6381D7927E1843B00102FB4 /* emoji.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emoji.json; sourceTree = "<group>"; };
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
 		D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FaceDetectionViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -949,6 +952,7 @@
 		D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		D64DD8AF23CE3E7F0039DC5A /* OnboardingContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContent.swift; sourceTree = "<group>"; };
 		D64DD8B123CE403D0039DC5A /* SwitchableContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableContentViewController.swift; sourceTree = "<group>"; };
+		D64ED05027E264B400B40B6E /* emoji.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emoji.json; sourceTree = "<group>"; };
 		D650C1D925B5EE3D0037C59A /* AvatarContextDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarContextDelegate.swift; sourceTree = "<group>"; };
 		D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AvatarView+Extensions.swift"; sourceTree = "<group>"; };
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
@@ -1373,7 +1377,6 @@
 				D61A33D227D4F5C200056242 /* EmojiCollectionViewLayout.swift */,
 				D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */,
 				D6381D7227E1666100102FB4 /* EmojiCategory.swift */,
-				D6381D7927E1843B00102FB4 /* emoji.json */,
 			);
 			path = Creator;
 			sourceTree = "<group>";
@@ -1441,6 +1444,7 @@
 		D61EC0FA21D3180200204BEE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D64ED05027E264B400B40B6E /* emoji.json */,
 				D668893023F2741500FD2764 /* Animations */,
 				D61EC0C621D3071500204BEE /* Assets.xcassets */,
 				D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */,
@@ -2473,6 +2477,7 @@
 				D6B00D3C2796480D00DF07B1 /* loading.json in Resources */,
 				D628B00927B47EEF00949154 /* TransactionContentView.xib in Resources */,
 				8020DD93272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib in Resources */,
+				D64ED05127E264B400B40B6E /* emoji.json in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
 				D6E974642756DAFF00D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				806EDAA627BEF1A400ADD677 /* alertCircle.json in Resources */,
@@ -2488,6 +2493,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D63DB27525E9998A00F6B323 /* error.json in Resources */,
+				D64ED05227E264B400B40B6E /* emoji.json in Resources */,
 				806EDAA727BEF1A400ADD677 /* alertCircle.json in Resources */,
 				8060C86327BEE0A900E5FAB1 /* checkmark.json in Resources */,
 				D656AF4B27C8470E008175D7 /* doublecheckmark.json in Resources */,
@@ -2507,6 +2513,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6E974612756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
+				D64ED05327E264B400B40B6E /* emoji.json in Resources */,
 				D6FA27402767A67300315528 /* Localization in Resources */,
 				D61316B2273C85D000DC782B /* Assets.xcassets in Resources */,
 				D656AF4C27C8470E008175D7 /* doublecheckmark.json in Resources */,
@@ -2521,6 +2528,7 @@
 			files = (
 				D6E974682756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D68B723C27D4430500F04AB1 /* maxToMin.json in Resources */,
+				D64ED05427E264B400B40B6E /* emoji.json in Resources */,
 				D6E974622756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6FA27412767A67300315528 /* Localization in Resources */,
 			);
@@ -2534,6 +2542,7 @@
 				D6E974632756DAFD00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6FA27422767A67300315528 /* Localization in Resources */,
 				D6AE0F8F267CFA6D00C6B048 /* MainInterface.storyboard in Resources */,
+				D64ED05527E264B400B40B6E /* emoji.json in Resources */,
 				D6E974692756DB0200D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2725,7 +2734,6 @@
 				D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */,
 				D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
-				D6381D7A27E1843B00102FB4 /* emoji.json in Sources */,
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* PersonView.swift in Sources */,

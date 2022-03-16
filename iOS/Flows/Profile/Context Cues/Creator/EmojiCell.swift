@@ -22,10 +22,6 @@ class EmojiCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.layer.borderColor = ThemeColor.BORDER.color.cgColor
         self.contentView.layer.borderWidth = 0.5
         self.contentView.layer.cornerRadius = Theme.cornerRadius
-        self.contentView.layer.shadowColor = ThemeColor.gray.color.cgColor
-        self.contentView.layer.shadowOpacity = 0.35
-        self.contentView.layer.shadowOffset = .zero
-        self.contentView.layer.shadowRadius = 6
     }
     
     func configure(with item: Emoji) {

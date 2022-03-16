@@ -9,7 +9,7 @@
 import Foundation
 
 struct Emoji: Decodable, Hashable {
-    var id: Int
+    var id: String
     var emoji: String
     var isSelected: Bool = false
 }
@@ -26,24 +26,7 @@ enum EmojiCategory: Int, CaseIterable {
     case flags
     
     var emojis: [Emoji] {
-        switch self {
-        case .smileysAndPeople:
-            return []
-        case .animalsAndNature:
-            return []
-        case .foodAndDrink:
-            return []
-        case .activity:
-            return []
-        case .travelAndPlaces:
-            return []
-        case .objects:
-            return []
-        case .symbols:
-            return []
-        case .flags:
-            return []
-        }
+        return self.getEmojis()
     }
     
     var image: UIImage? {
@@ -55,7 +38,7 @@ enum EmojiCategory: Int, CaseIterable {
         case .travelAndPlaces:
             return UIImage(systemName: "airplane")
         case .activity:
-            return UIImage(systemName: "figure.walk")
+            return UIImage(systemName: "globe.americas")
         case .symbols:
             return UIImage(systemName: "asterisk")
         case .flags:
@@ -66,6 +49,35 @@ enum EmojiCategory: Int, CaseIterable {
             return UIImage(systemName: "book")
         }
     }
+    
+    private func getEmojis() -> [Emoji] {
+        guard let res = self.loadJson(filename:"emoji", model: [CategoryModel].self),
+              let category = res[safe: self.rawValue] else { return [] }
+    
+        let emojis = category.emojis.compactMap { model in
+            return Emoji(id: model.code, emoji: model.emoji)
+        }
+        
+        return emojis
+    }
+    
+    private func loadJson<E: Decodable>(filename: String, model: E.Type) -> E? {
+        
+        guard let path = Bundle.main.url(forResource: filename, withExtension: "json") else { return nil }
+
+        let decoder = JSONDecoder()
+
+        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: path.path))
+          let res = try decoder.decode(model,
+                                      from: data)
+          return res
+        } catch {
+          logError(error)
+        }
+
+        return nil
+      }
 }
 
 struct CategoryModel: Hashable, Identifiable, Decodable {
