@@ -62,26 +62,13 @@ enum Emotion: String, CaseIterable, Identifiable {
     case appreciated
     case amused
     case angry
-    case anxious
-    case awe
     case awkward
-    case bored
-    case calm
-    case confused
-    case craving
-    case disgusted
-    case empathetic
-    case entranced
     case excited
     case fearful
-    case horrorified
     case interested
     case joyful
-    case nostalgic
-    case relieved
     case romantic
     case sad
-    case satisfied
     case desired
     case suprised
     
@@ -93,46 +80,20 @@ enum Emotion: String, CaseIterable, Identifiable {
             return "😂"
         case .angry:
             return "😡"
-        case .anxious:
-            return "😓"
-        case .awe:
-            return "😳"
         case .awkward:
             return "🥴"
-        case .bored:
-            return "🥱"
-        case .calm:
-            return "😌"
-        case .confused:
-            return "🤔"
-        case .craving:
-            return "😋"
-        case .disgusted:
-            return "😖"
-        case .empathetic:
-            return "😔"
-        case .entranced:
-            return "🤪"
         case .excited:
             return "🤩"
         case .fearful:
             return "😰"
-        case .horrorified:
-            return "😱"
         case .interested:
             return "🧐"
         case .joyful:
             return "🥳"
-        case .nostalgic:
-            return "🤠"
-        case .relieved:
-            return "😅"
         case .romantic:
             return "😍"
         case .sad:
             return "😥"
-        case .satisfied:
-            return "🥰"
         case .desired:
             return "😈"
         case .suprised:

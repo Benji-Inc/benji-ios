@@ -66,6 +66,7 @@ class old_EmotionView: BaseView {
             self.emojiLabel.setText(emotion.emoji)
             self.label.setText(emotion.rawValue.firstCapitalized)
         } else {
+            self.emojiLabel.setText("")
             self.label.setText("I'm feeling...")
         }
         

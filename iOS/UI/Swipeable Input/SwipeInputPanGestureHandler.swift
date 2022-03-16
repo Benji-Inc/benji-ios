@@ -209,6 +209,7 @@ class SwipeInputPanGestureHandler {
                 value += 1
                 UserDefaultsManager.update(key: .numberOfSwipeHints, with: value)
             }
+            
             self.impactFeedback.impactOccurred()
             self.animatePreviewScale(shouldScale: false) { [unowned self] in
                 UIView.animate(withDuration: Theme.animationDurationStandard) {
