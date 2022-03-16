@@ -103,7 +103,7 @@
                                 <constraint firstAttribute="height" constant="25" id="W3f-8z-1Rm"/>
                             </constraints>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdi-8g-wyi" customClass="BorderedPersoniew" customModule="Jibber" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdi-8g-wyi" customClass="BorderedPersonView" customModule="Jibber" customModuleProvider="target">
                             <rect key="frame" x="146.5" y="120" width="44" height="44"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
