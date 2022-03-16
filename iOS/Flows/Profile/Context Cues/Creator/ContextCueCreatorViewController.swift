@@ -82,7 +82,7 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         super.viewDidLoad()
         
         self.segmentControl.selectedSegmentIndex = 0
-        self.loadEmojis(for: .emoticons)
+        self.loadEmojis(for: .smileysAndPeople)
         
         self.$selectedEmojis.mainSink { [unowned self] items in
             self.updateSelectedItems()

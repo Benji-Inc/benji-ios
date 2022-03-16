@@ -16,74 +16,138 @@ struct Emoji: Decodable, Hashable {
 
 enum EmojiCategory: Int, CaseIterable {
     
-    case emoticons
-    case miscSymbols
-    case transportAndMap
+    case smileysAndPeople
+    case animalsAndNature
+    case foodAndDrink
+    case activity
+    case travelAndPlaces
+    case objects
+    case symbols
     case flags
-    case misc
-    case dingbats
     
     var emojis: [Emoji] {
         switch self {
-        case .emoticons:
-            var emojis: [Emoji] = []
-            for i in 0x1F601...0x1F64F {
-                let c = String(UnicodeScalar(i) ?? "-")
-                emojis.append(Emoji(id: i, emoji: c))
-            }
-            return emojis
-        case .miscSymbols:
-            var emojis: [Emoji] = []
-            for i in 0x1F300...0x1F5FF {
-                let c = String(UnicodeScalar(i) ?? "-")
-                emojis.append(Emoji(id: i, emoji: c))
-            }
-            return emojis
-        case .transportAndMap:
-            var emojis: [Emoji] = []
-            for i in 0x1F680...0x1F6FF {
-                let c = String(UnicodeScalar(i) ?? "-")
-                emojis.append(Emoji(id: i, emoji: c))
-            }
-            return emojis
+        case .smileysAndPeople:
+            return []
+        case .animalsAndNature:
+            return []
+        case .foodAndDrink:
+            return []
+        case .activity:
+            return []
+        case .travelAndPlaces:
+            return []
+        case .objects:
+            return []
+        case .symbols:
+            return []
         case .flags:
-            var emojis: [Emoji] = []
-            for i in 0x1F1E6...0x1F1FF {
-                let c = String(UnicodeScalar(i) ?? "-")
-                emojis.append(Emoji(id: i, emoji: c))
-            }
-            return emojis
-        case .misc:
-            var emojis: [Emoji] = []
-            for i in 0x2600...0x26FF {
-                let c = String(UnicodeScalar(i) ?? "-")
-                emojis.append(Emoji(id: i, emoji: c))
-            }
-            return emojis
-        case .dingbats:
-            var emojis: [Emoji] = []
-            for i in 0x2700...0x27BF {
-                let c = String(UnicodeScalar(i) ?? "-")
-                emojis.append(Emoji(id: i, emoji: c))
-            }
-            return emojis
+            return []
         }
     }
     
     var image: UIImage? {
         switch self {
-        case .emoticons:
-            return UIImage(systemName: "face.smiling")?.withTintColor(ThemeColor.T1.color.withAlphaComponent(0.6))
-        case .miscSymbols:
-            return UIImage(systemName: "hare")?.withTintColor(ThemeColor.T1.color.withAlphaComponent(0.6))
-        case .transportAndMap:
-            return UIImage(systemName: "airplane")?.withTintColor(ThemeColor.T1.color.withAlphaComponent(0.6))
-        case .dingbats:
-            return UIImage(systemName: "figure.walk")?.withTintColor(ThemeColor.T1.color.withAlphaComponent(0.6))
-        case .misc:
+        case .smileysAndPeople:
+            return UIImage(systemName: "face.smiling")
+        case .animalsAndNature:
+            return UIImage(systemName: "hare")
+        case .travelAndPlaces:
+            return UIImage(systemName: "airplane")
+        case .activity:
+            return UIImage(systemName: "figure.walk")
+        case .symbols:
             return UIImage(systemName: "asterisk")
         case .flags:
             return UIImage(systemName: "flag")
+        case .foodAndDrink:
+            return UIImage(systemName: "cup.and.saucer")
+        case .objects:
+            return UIImage(systemName: "book")
         }
     }
+}
+
+struct CategoryModel: Hashable, Identifiable, Decodable {
+    var id = UUID()
+    let title: String
+    let emojis: [EmojiModel]
+    
+    enum CodingKeys: CodingKey {
+        case title, emojis
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.emojis = try container.decode([EmojiModel].self, forKey: .emojis)
+    }
+}
+
+extension EmojiCategory {
+    var displayString: String {
+        switch self {
+        case .smileysAndPeople:
+            return "smileys and people"
+        case .animalsAndNature:
+            return "animals and nature"
+        case .foodAndDrink:
+            return "food and drink"
+        case .activity:
+            return "activity"
+        case .travelAndPlaces:
+            return "travel and places"
+        case .objects:
+            return "objects"
+        case .symbols:
+            return "symbols"
+        case .flags:
+            return "flags"
+        }
+    }
+}
+
+extension EmojiCategory: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case smileyAndPeople = "smileys and people"
+        case animalAndNature = "animals and nature"
+        case foodAndDrink = "food and drink"
+        case activity = "activity"
+        case travelAndPlaces = "travel and places"
+        case objects = "objects"
+        case symbols = "symbols"
+        case flags = "flags"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        if let _ = try? container.decode(String.self, forKey: .activity) {
+            self = .activity
+        } else if let _ = try? container.decode(String.self, forKey: .animalAndNature) {
+            self = .animalsAndNature
+        } else if let _ = try? container.decode(String.self, forKey: .flags) {
+            self = .flags
+        } else if let _ = try? container.decode(String.self, forKey: .foodAndDrink) {
+            self = .foodAndDrink
+        } else if let _ = try? container.decode(String.self, forKey: .objects) {
+            self = .objects
+        } else if let _ = try? container.decode(String.self, forKey: .smileyAndPeople) {
+            self = .smileysAndPeople
+        } else if let _ = try? container.decode(String.self, forKey: .symbols) {
+            self = .symbols
+        } else if let _ = try? container.decode(String.self, forKey: .travelAndPlaces) {
+            self = .travelAndPlaces
+        }
+        throw ClientError.message(detail: "Failed")
+    }
+}
+
+struct EmojiModel: Decodable, Hashable {
+    let no: Int
+    let code: String
+    let emoji: String
+    let description: String
+    let flagged: Bool
+    let keywords: [String]
+    let types: [String]?
 }
