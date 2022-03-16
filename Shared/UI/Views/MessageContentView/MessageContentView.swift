@@ -106,13 +106,8 @@ class MessageContentView: BaseView {
 
         self.textView.size = self.textView.getSize(width: self.bubbleView.bubbleFrame.width)
         self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        if self.textView.numberOfLines > 2 {
-            self.textView.pin(.top, offset: MessageContentView.padding)
-            self.textView.textAlignment = .left
-        } else {
-            self.textView.centerOnY()
-            self.textView.textAlignment = .center
-        }
+        self.textView.pin(.top, offset: MessageContentView.padding)
+        self.textView.textAlignment = .left
     }
 
     func getAuthorSize() -> CGSize {
