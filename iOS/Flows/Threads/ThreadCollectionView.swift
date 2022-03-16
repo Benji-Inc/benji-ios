@@ -16,8 +16,7 @@ class ThreadCollectionView: CollectionView {
 
     init() {
         super.init(layout: MessagesTimeMachineCollectionViewLayout())
-
-        self.threadLayout.hideCenterDecorationView = true 
+ 
         self.showsVerticalScrollIndicator = false
         self.automaticallyAdjustsScrollIndicatorInsets = true
         self.decelerationRate = .fast

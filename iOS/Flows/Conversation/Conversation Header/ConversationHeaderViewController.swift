@@ -13,8 +13,7 @@ import Lottie
 import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
-    
-    lazy var membersVC = MembersViewController()
+
     let menuImageView = UIImageView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .regular)
@@ -27,9 +26,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
     override func initializeViews() {
         super.initializeViews()
-        
-        self.addChild(viewController: self.membersVC)
-        
+
         self.view.clipsToBounds = false
         
         self.view.addSubview(self.menuImageView)
@@ -61,24 +58,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
-        
-        self.membersVC.$selectedItems.mainSink { [unowned self] items in
-            guard let first = items.first else { return }
-            switch first {
-            case .member(_):
-                break
-            case .add(_):
-                self.didTapAddPeople?()
-            }
-        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        self.membersVC.view.height = 43
-        self.membersVC.view.expandToSuperviewWidth()
-        self.membersVC.view.pin(.bottom, offset: .custom(22))
         
         self.menuImageView.height = 16
         self.menuImageView.width = 20
@@ -101,7 +84,20 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         if let title = conversation.title {
             self.topicLabel.setText(title)
         } else {
-            self.topicLabel.setText("")
+            // If there is no title, then list the members of the conversation.
+            let members = conversation.lastActiveMembers.filter { member in
+                return !member.isCurrentUser
+            }
+
+            var membersString = ""
+            members.forEach { member in
+                if membersString.isEmpty {
+                    membersString = member.givenName
+                } else {
+                    membersString.append(", \(member.givenName)")
+                }
+            }
+            self.topicLabel.setText(membersString)
         }
     }
     

@@ -54,8 +54,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     /// The current input state of the accessory view.
     @Published var inputState: InputState = .collapsed
 
-    #warning("Figure out where to put this")
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Message State
 
@@ -189,21 +188,17 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.$inputState
             .removeDuplicates()
             .mainSink { [unowned self] inputState in
-                self.updateLayout(for: inputState)
+                self.swipeInputView.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
     }
 
     // MARK: - State Updates
 
     private func updateInputState(with numberOfLines: Int) {
-        // When the text hits 3 lines, transition to the expanded state.
+        // When the text hits 4 lines, transition to the expanded state.
         // However don't automatically go back to the collapsed state when the line count is less than 3.
-        guard numberOfLines > 2 else { return }
+        guard numberOfLines > 3 else { return }
         self.inputState = .expanded
-    }
-
-    private func updateLayout(for inputState: InputState) {
-        self.swipeInputView.updateLayout(for: inputState)
     }
 
     func updateSwipeHint(shouldPlay: Bool) {
