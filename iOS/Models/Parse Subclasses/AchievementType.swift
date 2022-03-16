@@ -27,12 +27,12 @@ final class AchievementType: PFObject, PFSubclassing {
         get { return self.getObject(for: .bounty) ?? 0 }
     }
 
-    var title: String? {
-        get { self.getObject(for: .title) }
+    var title: String {
+        get { self.getObject(for: .title) ?? "" }
     }
 
-    var descriptionText: String? {
-        get { self.getObject(for: .description) }
+    var descriptionText: String {
+        get { self.getObject(for: .description) ?? "" }
     }
     
     var isRepeatable: Bool {

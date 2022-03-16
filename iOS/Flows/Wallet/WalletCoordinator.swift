@@ -50,7 +50,7 @@ class WalletCoordinator: PresentableCoordinator<Void> {
     
     private func presentAlert(for achievement: AchievementViewModel) {
                 
-        let description = achievement.type.isAvailable ? achievement.type.description : "\(achievement.type.description)\n\n(Coming Soon)"
+        let description = achievement.type.isAvailable ? achievement.type.descriptionText : "\(achievement.type.descriptionText)\n\n(Coming Soon)"
         let alertController = UIAlertController(title: achievement.type.title,
                                                 message: description,
                                                 preferredStyle: .alert)
