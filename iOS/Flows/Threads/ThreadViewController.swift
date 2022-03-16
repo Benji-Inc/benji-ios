@@ -92,6 +92,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func initializeViews() {
         super.initializeViews()
         
+        self.messageInputController.resetEmotion()
         self.messageInputController.resetDeliveryType()
         
         self.view.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.5)
