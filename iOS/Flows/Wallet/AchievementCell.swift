@@ -8,10 +8,16 @@
 
 import Foundation
 
+struct AchievementViewModel: Hashable {
+    var type: AchievementType
+    var count: Int = 0
+}
+
 class AchievementCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = AchievementType
     
-    var currentItem: AchievementType?
+    typealias ItemType = AchievementViewModel
+    
+    var currentItem: AchievementViewModel?
     
     private let badgeView = BadgeDetailView()
     
@@ -21,7 +27,7 @@ class AchievementCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.badgeView)
     }
     
-    func configure(with item: AchievementType) {
+    func configure(with item: AchievementViewModel) {
         self.currentItem = item
         self.badgeView.configure(with: item)
     }
@@ -62,9 +68,10 @@ private class BadgeDetailView: BaseView {
         self.label.centerOnX()
     }
     
-    func configure(with type: AchievementType) {
-        self.badgeView.configure(with: type)
-        self.label.setText(type.title)
+    func configure(with model: AchievementViewModel) {
+        // get achievements for type
+        self.badgeView.configure(with: model)
+        self.label.setText(model.type.title)
         self.setNeedsLayout()
     }
 }
@@ -116,8 +123,8 @@ private class BadgeView: BaseView {
         self.imageView.centerOnXAndY()
     }
     
-    func configure(with type: AchievementType) {
-        self.amountLabel.setText("+\(type.bounty)")
+    func configure(with model: AchievementViewModel) {
+        self.amountLabel.setText("+\(model.type.bounty)")
         self.layoutNow()
     }
 }
