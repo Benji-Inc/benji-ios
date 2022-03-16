@@ -96,29 +96,6 @@ struct CategoryModel: Hashable, Identifiable, Decodable {
     }
 }
 
-extension EmojiCategory {
-    var displayString: String {
-        switch self {
-        case .smileysAndPeople:
-            return "smileys and people"
-        case .animalsAndNature:
-            return "animals and nature"
-        case .foodAndDrink:
-            return "food and drink"
-        case .activity:
-            return "activity"
-        case .travelAndPlaces:
-            return "travel and places"
-        case .objects:
-            return "objects"
-        case .symbols:
-            return "symbols"
-        case .flags:
-            return "flags"
-        }
-    }
-}
-
 extension EmojiCategory: Decodable {
     enum CodingKeys: String, CodingKey {
         case smileyAndPeople = "smileys and people"
