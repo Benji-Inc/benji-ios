@@ -190,11 +190,12 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             let types = try? await AchievementType.fetchAll() else { return }
         
         let items: [WalletCollectionViewDataSource.ItemType] = types.map { type in
-            let count: Int = achievements.filter { achievement in
-                return achievement.type == type
-            }.count
             
-            return AchievementViewModel(type: type, count: count)
+            let selected = achievements.filter { achievement in
+                return achievement.type == type
+            }
+            
+            return AchievementViewModel(type: type, achievements: selected)
         }.sorted { lhs, rhs in
             return lhs.count > rhs.count
         }.compactMap { model in

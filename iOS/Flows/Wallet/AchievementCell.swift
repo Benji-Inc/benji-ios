@@ -10,7 +10,11 @@ import Foundation
 
 struct AchievementViewModel: Hashable {
     var type: AchievementType
-    var count: Int = 0
+    var count: Int {
+        return self.achievements.count
+    }
+    
+    var achievements: [Achievement] = []
 }
 
 class AchievementCell: CollectionViewManagerCell, ManageableCell {
