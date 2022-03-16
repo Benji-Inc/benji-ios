@@ -40,7 +40,7 @@ class AchievementCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
         
         let padding = Theme.ContentOffset.xtraLong.value
-        self.badgeView.width = self.contentView.width - padding.doubled
+        self.badgeView.width = self.contentView.width - padding.doubled - Theme.ContentOffset.long.value
         self.badgeView.height = self.contentView.height - padding.doubled
         self.badgeView.centerOnXAndY()
     }

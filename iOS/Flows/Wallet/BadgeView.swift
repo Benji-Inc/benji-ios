@@ -27,12 +27,11 @@ class BadgeView: BaseView {
         self.topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
         
-        self.addSubview(self.bottomView)
+        self.insertSubview(self.bottomView, at: 0)
         self.bottomView.set(backgroundColor: .badgeBottom)
         self.bottomView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
         
-        self.bottomView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
     override func layoutSubviews() {
@@ -45,14 +44,15 @@ class BadgeView: BaseView {
         self.amountLabel.setSize(withWidth: self.width)
         self.amountLabel.centerOnXAndY()
         
-        self.bottomView.height = self.halfHeight
+        self.bottomView.height = self.height
         self.bottomView.expandToSuperviewWidth()
         self.bottomView.pin(.bottom)
         
-        self.bottomView.layer.cornerRadius = self.halfWidth - Theme.ContentOffset.xtraLong.value
+        self.bottomView.layer.cornerRadius = self.halfWidth 
 
         self.imageView.squaredSize = 44
-        self.imageView.centerOnXAndY()
+        self.imageView.centerOnX()
+        self.imageView.centerY = (self.height * 0.75)
     }
     
     func configure(with model: AchievementViewModel) {
