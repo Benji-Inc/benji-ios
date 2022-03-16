@@ -204,6 +204,11 @@ class SwipeInputPanGestureHandler {
 
     private func resetPreviewAndInputViews(didSend: Bool) {
         if didSend {
+            var value: Int = UserDefaultsManager.getInt(for: .numberOfSwipeHints)
+            if value < 3 {
+                value += 1
+                UserDefaultsManager.update(key: .numberOfSwipeHints, with: value)
+            }
             self.impactFeedback.impactOccurred()
             self.animatePreviewScale(shouldScale: false) { [unowned self] in
                 UIView.animate(withDuration: Theme.animationDurationStandard) {
