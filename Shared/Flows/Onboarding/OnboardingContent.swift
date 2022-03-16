@@ -45,10 +45,22 @@ enum OnboardingContent: Switchable {
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "Enter the code Jibber texted you")
-        case .name(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "Jibber uses real names. What's yours?")
+        case .name(let vc):
+            switch vc.state {
+            case .noName:
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Jibber uses real names. What's yours?")
+            case .givenNameValid:
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Now add your last name.")
+            case .validFullName:
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "\(vc.textEntry.textField.text!) is it? Tap next to continue.")
+            }
+            
         case .photo(let vc):
             switch vc.currentState {
             case .initial:

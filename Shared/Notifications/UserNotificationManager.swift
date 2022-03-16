@@ -139,9 +139,18 @@ class UserNotificationManager: NSObject {
                     }
                 }
 
+                // Must be called on Main thread or will crash
                 self.application?.applicationIconBadgeNumber = badgeCount
-                self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+                self.removedNotifications(with: identifiers)
             }
+        }
+    }
+    
+    private func removedNotifications(with identifiers: [String]) {
+        // It was suggested that in order for this to work it needs to be called on a background thread.
+        Task {
+            self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
         }
     }
 }

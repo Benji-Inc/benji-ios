@@ -66,8 +66,19 @@ extension String {
     func trimWhitespace() -> String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
+    
+    var isValidGivenName: Bool {
+        let components: [String] = self.extraWhitespaceRemoved()
+            .components(separatedBy: CharacterSet.whitespaces)
 
-    var isValidPersonName: Bool {
+        if components.all(test: { (element: String) -> Bool in return !element.isEmpty }) {
+            return components.first?.count ?? 0 > 1
+        }
+
+        return false
+    }
+
+    var isValidFullName: Bool {
         let components: [String] = self.extraWhitespaceRemoved()
             .components(separatedBy: CharacterSet.whitespaces)
 

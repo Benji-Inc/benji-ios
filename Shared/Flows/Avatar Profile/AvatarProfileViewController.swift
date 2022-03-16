@@ -11,7 +11,7 @@ import Combine
 
 class AvatarProfileViewController: ViewController {
 
-    private let personView = BorderedPersoniew()
+    private let personView = BorderedPersonView()
     private let nameLabel = ThemeLabel(font: .mediumBold)
     private let focusLabel = ThemeLabel(font: .regular)
     private let vibrancyView = VibrancyView()

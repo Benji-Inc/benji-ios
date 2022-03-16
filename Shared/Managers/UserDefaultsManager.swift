@@ -15,10 +15,18 @@ class UserDefaultsManager {
         case hasShownKeyboardInstructions
         case shouldShowInvestUpsell
         case shouldShowGroupsUpsell
+        case numberOfSwipeHints
     }
 
     static func update(key: Key, with value: Any) {
         UserDefaults.standard.setValue(value, forKey: key.rawValue)
+    }
+    
+    static func getInt(for key: Key, defaultValue: Int = 0) -> Int {
+        if UserDefaults.standard.value(forKey: key.rawValue).isNil {
+            return defaultValue
+        }
+        return UserDefaults.standard.integer(forKey: key.rawValue)
     }
 
     static func getBool(for key: Key, defaultValue: Bool = true) -> Bool {

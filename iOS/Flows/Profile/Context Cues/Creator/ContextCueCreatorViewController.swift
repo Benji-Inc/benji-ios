@@ -99,8 +99,13 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         super.viewDidLayoutSubviews()
         
         self.segmentControl.sizeToFit()
-        self.segmentControl.centerOnX()
         self.segmentControl.pinToSafeAreaTop()
+        
+        let segmentWidth = (self.view.width - Theme.ContentOffset.standard.value.doubled) * 0.125
+        for i in 0...self.segmentControl.numberOfSegments - 1 {
+            self.segmentControl.setWidth(segmentWidth, forSegmentAt: i)
+        }
+        self.segmentControl.pin(.left, offset: .standard)
         
         self.segmentGradientView.expandToSuperviewWidth()
         self.segmentGradientView.pin(.top)
