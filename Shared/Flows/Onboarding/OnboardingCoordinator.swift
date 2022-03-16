@@ -61,7 +61,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         case .needsVerification:
             return .code(self.onboardingVC.codeVC)
         case .inactive:
-            if !current.fullName.isValidPersonName {
+            if !current.fullName.isValidFullName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
                 #if targetEnvironment(simulator)

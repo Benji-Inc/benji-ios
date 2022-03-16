@@ -15,6 +15,7 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
     
     let lineView = BaseView()
     let person: PersonType
+    let addButton = AddView()
         
     init(person: PersonType) {
         self.person = person
@@ -31,6 +32,10 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
         self.view.insertSubview(self.lineView, belowSubview: self.collectionView)
         self.lineView.set(backgroundColor: .B2)
         self.lineView.alpha = 0.5
+        
+        if let user = self.person as? User, user.isCurrentUser {
+            self.view.insertSubview(self.addButton, aboveSubview: self.collectionView)
+        }
     }
     
     override func viewDidLoad() {
@@ -46,6 +51,10 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
         self.lineView.expandToSuperviewWidth()
         self.lineView.height = 1
         self.lineView.centerOnXAndY()
+        
+        self.addButton.squaredSize = self.view.height
+        self.addButton.pin(.right, offset: .xtraLong)
+        self.addButton.centerOnY()
     }
     
     override func getAllSections() -> [ContextCueCollectionViewDataSource.SectionType] {
@@ -61,10 +70,6 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
         data[.contextCues] = contextCues.reversed().compactMap({ contextCue in
             return .contextCue(contextCue)
         })
-        
-        if user.isCurrentUser {
-            data[.contextCues]?.insert(.add(user), at: 0)
-        }
         
         return data
     }

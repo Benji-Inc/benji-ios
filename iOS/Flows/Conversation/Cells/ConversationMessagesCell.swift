@@ -312,10 +312,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             .mainSink { [unowned self] state in
 
                 guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .message(let cid, let messageID, _) = item else { return }
+                      case .message(let cid, let messageID, _) = item,
+                let message = ChatClient.shared.message(cid: cid, id: messageID) else { return }
 
-                let message = ChatClient.shared.message(cid: cid, id: messageID)
-
+                
                 if !message.isFromCurrentUser && state.areDetailsFullyVisible {
                     self.frontmostNonUserMessage = message
                 }

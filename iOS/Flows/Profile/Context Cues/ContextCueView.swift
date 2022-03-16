@@ -44,6 +44,8 @@ class ContextCueView: BaseView {
         self.newContextCueTask = Task { [weak self] in
             guard let user = person as? User,
                   let updated = try? await user.latestContextCue?.retrieveDataIfNeeded(),
+                  let createdAt = updated.createdAt,
+                  createdAt.isSameDay(as: Date.today),
                   !updated.emojis.isEmpty else {
                       self?.isHidden = true
                       return
