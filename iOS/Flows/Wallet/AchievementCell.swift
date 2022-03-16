@@ -50,6 +50,7 @@ private class BadgeDetailView: BaseView {
     
     private let badgeView = BadgeView()
     private let label = ThemeLabel(font: .small)
+    private let bottomLabel = ThemeLabel(font: .xtraSmall)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -58,6 +59,10 @@ private class BadgeDetailView: BaseView {
         self.addSubview(self.label)
         self.label.textAlignment = .center
         self.label.alpha = 0.5
+        
+        self.addSubview(self.bottomLabel)
+        self.label.textAlignment = .center
+        self.label.alpha = 0.0
     }
     
     override func layoutSubviews() {
@@ -70,12 +75,25 @@ private class BadgeDetailView: BaseView {
         self.label.setSize(withWidth: self.width + 40)
         self.label.pin(.bottom)
         self.label.centerOnX()
+        
+        self.bottomLabel.setSize(withWidth: self.width + 40)
+        self.bottomLabel.match(.top, to: .bottom, of: self.label, offset: .short)
+        self.bottomLabel.centerOnX()
     }
     
     func configure(with model: AchievementViewModel) {
-        // get achievements for type
         self.badgeView.configure(with: model)
         self.label.setText(model.type.title)
+        
+        if let firstDate = model.achievements.first?.createdAt {
+            self.label.alpha = 1.0
+            self.bottomLabel.setText(Date.monthDayYear.string(from: firstDate))
+            self.bottomLabel.alpha = 0.5
+        } else {
+            self.bottomLabel.alpha = 0.0
+            self.label.alpha = 0.5
+        }
+        
         self.setNeedsLayout()
     }
 }
