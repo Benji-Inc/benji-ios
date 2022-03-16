@@ -17,11 +17,9 @@ class ContextCueCollectionViewDataSource: CollectionViewDataSource<ContextCueCol
 
     enum ItemType: Hashable {
         case contextCue(ContextCue)
-        case add(User)
     }
 
     private let config = ManageableCellRegistration<ContextCueCell>().provider
-    private let addConfig = ManageableCellRegistration<ContextCueAddCell>().provider
     
     // MARK: - Cell Dequeueing
 
@@ -35,10 +33,6 @@ class ContextCueCollectionViewDataSource: CollectionViewDataSource<ContextCueCol
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
                                                                 item: contextCue)
-        case .add(let user):
-            return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
-                                                                for: indexPath,
-                                                                item: user)
         }
     }
 }

@@ -137,12 +137,11 @@ class MessageCell: UICollectionViewCell {
         self.messageDetailTasks.cancelAndRemoveAll()
 
         guard let messageable = self.messageState.message,
-              let cid = try? ConversationId(cid: messageable.conversationId) else { return }
+              let cid = try? ConversationId(cid: messageable.conversationId),
+        let message = ChatClient.shared.message(cid: cid, id: messageable.id) else { return }
 
         // If this item is showing its details, we may want to start the consumption process for it.
         guard areDetailsFullyVisible, ChatUser.currentUserRole != .anonymous else { return }
-
-        let message = ChatClient.shared.message(cid: cid, id: messageable.id)
 
         // Show the time sent text if needed.
         if message.lastUpdatedAt?.getTimeAgoString() != self.messageState.statusText {

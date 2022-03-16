@@ -12,9 +12,17 @@ import Localization
 
 class NameViewController: TextInputViewController<String> {
     
+    enum State {
+        case noName
+        case givenNameValid
+        case validFullName
+    }
+    
     override var analyticsIdentifier: String? {
         return "SCREEN_NAME"
     }
+    
+    @Published var state: State = .noName
 
     init() {
         super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "First Last"))
@@ -33,7 +41,15 @@ class NameViewController: TextInputViewController<String> {
     }
 
     override func validate(text: String) -> Bool {
-        return text.isValidPersonName
+        if text.isValidGivenName, !text.isValidFullName {
+            self.state = .givenNameValid
+        } else if text.isValidFullName {
+            self.state = .validFullName
+        } else {
+            self.state = .noName
+        }
+        
+        return text.isValidFullName
     }
 
     override func didTapButton() {
@@ -43,7 +59,7 @@ class NameViewController: TextInputViewController<String> {
     private func updateUserName() {
         guard let text = self.textField.text, !text.isEmpty else { return }
 
-        guard text.isValidPersonName else { return }
+        guard text.isValidFullName else { return }
         self.complete(with: .success(text))
     }
 }
