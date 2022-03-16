@@ -171,13 +171,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         switch state {
         case .read:
-            self.collectionLayout.spacingKeyPoints = [0, 40, 74, 86]
+            self.collectionLayout.spacingKeyPoints = [0, 96, 144, 192]
         case .write:
-            if UIScreen.main.isLargerThan(screenSize: .phoneExtraLarge) {
-                self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
-            } else {
-                self.collectionLayout.spacingKeyPoints = [0, 6, 10, 12]
-            }
+            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
         
         self.collectionLayout.uiState = state

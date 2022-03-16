@@ -105,7 +105,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
         self.headerVC.view.pinToSafeArea(.top, offset: .noOffset)
 
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.top = self.headerVC.view.bottom - Theme.ContentOffset.xtraLong.value
+        self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .standard)
         self.collectionView.height = self.view.height - self.headerVC.view.bottom
     }
 
