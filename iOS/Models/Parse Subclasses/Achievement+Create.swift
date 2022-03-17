@@ -24,23 +24,38 @@ extension Achievement {
             return t.type == type.rawValue
         }) else { return }
         
+        var achievement: Achievement?
         if selectedType.isRepeatable {
-            await self.createAchievement(with: selectedType)
-        } else {
-            
-            
+            achievement = await self.createAchievement(with: selectedType)
+        } else if let query = Achievement.query() {
+            query.whereKey("type", equalTo: selectedType)
+            if let _ = try? await query.firstObjectInBackground() {
+                //If one exists do nothing.
+            } else {
+                //Otherwise create one.
+                achievement = await self.createAchievement(with: selectedType)
+            }            
         }
         
-        // Get existing achievements
-        // Filter by type
-        
+        if let value = achievement {
+            await ToastScheduler.shared.schedule(toastType: .achievement(value))
+        }
     }
     
-    private static func createAchievement(with type: AchievementType) async {
-//        
-//        let transaction = Transaction()
-//        tra
-        // If type is not unique, create transaction with type data
-        // Then create achievement with transaction and type.
+    private static func createAchievement(with type: AchievementType) async -> Achievement? {
+        guard let transaction = try? await Transaction.createTransaction(from: type) else { return nil }
+        
+        let achievement = Achievement()
+        achievement.type = type
+        achievement.amount = Double(type.bounty)
+        achievement.transaction = transaction
+        
+        guard let saved = try? await achievement.saveToServer() else { return achievement }
+        
+        transaction.achievement = saved
+        
+        _ = try? await transaction.saveToServer()
+        
+        return achievement
     }
 }

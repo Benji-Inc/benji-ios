@@ -13,6 +13,7 @@ enum AchievementKey: String {
     case type
     case attributes
     case amount
+    case transaction
 }
 
 final class Achievement: PFObject, PFSubclassing {
@@ -23,6 +24,12 @@ final class Achievement: PFObject, PFSubclassing {
 
     var type: AchievementType? {
         get { self.getObject(for: .type) }
+        set { self.setObject(for: .type, with: newValue) }
+    }
+    
+    var transaction: Transaction? {
+        get { self.getObject(for: .transaction) }
+        set { self.setObject(for: .transaction, with: newValue) }
     }
 
     var attributes: [String: AnyHashable]? {
@@ -31,6 +38,7 @@ final class Achievement: PFObject, PFSubclassing {
 
     var amount: Double? {
         get { self.getObject(for: .amount) }
+        set { self.setObject(for: .amount, with: newValue) }
     }
 }
 
