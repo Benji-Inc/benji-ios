@@ -27,7 +27,7 @@ class TextView: UITextView {
         let textHeight = self.getTextContentSize(withMaxWidth: self.width - horizontalPadding).height
         return Int(textHeight / lineHeight)
     }
-
+    
     override var text: String! {
         get { return super.text }
         set {
@@ -68,7 +68,7 @@ class TextView: UITextView {
                 .foregroundColor: textColor,
                 .paragraphStyle: paragraphStyle]
     }
-
+    
     private var attributedPlaceholder: NSAttributedString? {
         didSet { self.setNeedsDisplay() }
     }
@@ -99,7 +99,6 @@ class TextView: UITextView {
         self.textColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
 
         self.initializeViews()
-
     }
 
     convenience init() {
@@ -124,7 +123,15 @@ class TextView: UITextView {
         self.set(backgroundColor: .clear)
 
         NotificationCenter.default.publisher(for: UITextView.textDidChangeNotification)
-            .mainSink { [unowned self] (text) in
+            .filter({ notification in
+                if let tv = notification.object as? TextView,
+                    tv === self {
+                    return true
+                }
+                
+                return false 
+            })
+            .mainSink { [unowned self] (value) in
                 self.textDidChange()
             }.store(in: &self.cancellables)
 

@@ -200,6 +200,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     // MARK: - State Updates
 
     private func updateInputState(with numberOfLines: Int) {
+        guard self.inputState != .expanded else { return }
         // When the text hits 4 lines, transition to the expanded state.
         // However don't automatically go back to the collapsed state when the line count is less than 3.
         if numberOfLines > 4 {

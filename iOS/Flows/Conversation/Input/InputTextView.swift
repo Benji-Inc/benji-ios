@@ -59,7 +59,7 @@ class InputTextView: ExpandingTextView {
 
     override func textDidChange() {
         super.textDidChange()
-
+        
         self.inputText = self.text
     }
 }

@@ -50,8 +50,8 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var inputContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var avatarHeightConstraint: NSLayoutConstraint!
 
+    @IBOutlet var textViewCollapsedVerticalHeightContstraint: NSLayoutConstraint!
     @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
-    @IBOutlet var textViewCollapsedMaxHeightConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
 
@@ -109,11 +109,11 @@ class SwipeableInputAccessoryView: BaseView {
             NSLayoutConstraint.deactivate([self.textViewExpandedTopPinConstraint,
                                            self.textViewExpandedBottomPinConstraint])
             NSLayoutConstraint.activate([self.textViewCollapsedVerticalCenterConstraint,
-                                         self.textViewCollapsedMaxHeightConstraint])
+                                         self.textViewCollapsedVerticalHeightContstraint])
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
             self.textView.isScrollEnabled = false
-            self.textView.textAlignment = .center
+            self.textView.textAlignment = .left
 
             self.gestureButton.isVisible = true
             self.collapseButton.isVisible = false
@@ -122,13 +122,14 @@ class SwipeableInputAccessoryView: BaseView {
 
             var proposedHeight = SwipeableInputAccessoryView.inputContainerCollapsedHeight
             if self.textView.numberOfLines > 2, let lineHeight = self.textView.font?.lineHeight {
-                let multiplier: CGFloat = CGFloat(self.textView.numberOfLines) - 2
+                let multiplier: CGFloat = clamp(CGFloat(self.textView.numberOfLines) - 2, 0, 2)
                 proposedHeight += lineHeight * multiplier
             }
+            
             newInputHeight = proposedHeight
         case .expanded:
             NSLayoutConstraint.deactivate([self.textViewCollapsedVerticalCenterConstraint,
-                                           self.textViewCollapsedMaxHeightConstraint])
+                                           self.textViewCollapsedVerticalHeightContstraint])
             NSLayoutConstraint.activate([self.textViewExpandedTopPinConstraint,
                                          self.textViewExpandedBottomPinConstraint])
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -29,8 +30,8 @@
                                     <rect key="frame" x="0.0" y="15.5" width="273" height="33"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="66" id="9Hx-7h-Yqq"/>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="DYI-6o-w2X"/>
+                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="102" id="uIT-mU-AJz"/>
                                     </constraints>
                                     <color key="textColor" name="RED"/>
                                     <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="14"/>
@@ -146,8 +147,8 @@
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="waN-uG-qvj"/>
                 <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="TBm-Q0-wqy"/>
                 <outlet property="textView" destination="Ads-9e-WJh" id="meA-CW-ppC"/>
-                <outlet property="textViewCollapsedMaxHeightConstraint" destination="9Hx-7h-Yqq" id="c4E-c9-4Kg"/>
                 <outlet property="textViewCollapsedVerticalCenterConstraint" destination="jrV-3k-sUT" id="cyF-hj-Elk"/>
+                <outlet property="textViewCollapsedVerticalHeightContstraint" destination="uIT-mU-AJz" id="YrR-dH-Tsk"/>
                 <outlet property="textViewExpandedBottomPinConstraint" destination="g4Y-rU-cRa" id="e7c-Pe-EIY"/>
                 <outlet property="textViewExpandedTopPinConstraint" destination="hq5-LO-hrU" id="8XH-mH-x2P"/>
             </connections>
