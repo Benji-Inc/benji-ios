@@ -384,6 +384,7 @@
 		D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CD25A3704300A4A3B7 /* SessionManager.swift */; };
 		D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D666126A27E2871E006CDF3D /* BadgeView.swift */; };
 		D666126D27E29AED006CDF3D /* AchievementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D666126C27E29AED006CDF3D /* AchievementType.swift */; };
+		D666126F27E2AA35006CDF3D /* Achievement+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = D666126E27E2AA35006CDF3D /* Achievement+Create.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
 		D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
 		D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */; };
@@ -975,6 +976,7 @@
 		D66379CD25A3704300A4A3B7 /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		D666126A27E2871E006CDF3D /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
 		D666126C27E29AED006CDF3D /* AchievementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementType.swift; sourceTree = "<group>"; };
+		D666126E27E2AA35006CDF3D /* Achievement+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Achievement+Create.swift"; sourceTree = "<group>"; };
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
 		D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
@@ -1679,12 +1681,13 @@
 		D6617CF326743DFE00439C06 /* Parse Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				D6617CF426743DFE00439C06 /* Notice.swift */,
-				D678EC2326F530850071DB0D /* Circle.swift */,
-				D6129FB327ADC72E0058811C /* Transaction.swift */,
 				D69D2F9927C0070C001D8855 /* Achievement.swift */,
-				D61A33D027D4F2AE00056242 /* ContextCue.swift */,
+				D666126E27E2AA35006CDF3D /* Achievement+Create.swift */,
 				D666126C27E29AED006CDF3D /* AchievementType.swift */,
+				D678EC2326F530850071DB0D /* Circle.swift */,
+				D61A33D027D4F2AE00056242 /* ContextCue.swift */,
+				D6617CF426743DFE00439C06 /* Notice.swift */,
+				D6129FB327ADC72E0058811C /* Transaction.swift */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -2709,6 +2712,7 @@
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D687595C2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */,
+				D666126F27E2AA35006CDF3D /* Achievement+Create.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
