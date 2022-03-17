@@ -8,6 +8,7 @@
 
 import Foundation
 import ParseLiveQuery
+import Parse
 
 class AchievementsManager {
     
@@ -24,9 +25,7 @@ class AchievementsManager {
     
     private(set) var achievements: [Achievement] = []
     private(set) var types: [AchievementType] = []
-    
-    //private var identifiers = Set<String>()
-    
+        
     private var initializeTask: Task<Void, Error>?
     
     init() {

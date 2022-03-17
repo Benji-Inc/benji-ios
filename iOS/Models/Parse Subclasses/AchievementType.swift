@@ -42,10 +42,6 @@ final class AchievementType: PFObject, PFSubclassing {
     var type: String? {
         get { self.getObject(for: .type) }
     }
-    
-    var isAvailable: Bool {
-        return false 
-    }
 }
 
 extension AchievementType: Objectable {
