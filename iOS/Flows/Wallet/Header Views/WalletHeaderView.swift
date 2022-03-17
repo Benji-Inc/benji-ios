@@ -83,7 +83,7 @@ class WalletHeaderView: BaseView {
             guard let jibsEarned = try? await calculator.calculateJibsEarned(for: transactions),
                   !Task.isCancelled else { return }
             
-            let projectedInterest = calculator.calculateInterestEarned(for: transactions)
+            let projectedInterest = calculator.calculateInterestEarned()
             let totalEarned = jibsEarned + projectedInterest
             
             self?.topRightDetailView.configure(with: totalEarned)

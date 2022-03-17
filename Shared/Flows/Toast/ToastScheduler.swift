@@ -15,6 +15,7 @@ enum ToastType {
     case newMessage(Messageable)
     case error(ClientError)
     case transaction(Transaction)
+    case achievement(Achievement)
     case basic(identifier: String,
                displayable: ImageDisplayable,
                title: Localized,
@@ -63,6 +64,10 @@ class ToastScheduler {
                                                               duration: duration)
         case .newContextCue(let contextCue):
             toast = try? await self.createContextCueToast(for: contextCue,
+                                                             position: position,
+                                                             duration: duration)
+        case .achievement(let achievement):
+            toast = try? await self.createAchievementToast(for: achievement,
                                                              position: position,
                                                              duration: duration)
         }
@@ -165,6 +170,29 @@ class ToastScheduler {
                           duration: duration,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .transaction(transaction), deeplink: nil)
+        })
+
+        return toast
+    }
+    
+    private func createAchievementToast(for achievement: Achievement,
+                                        position: Toast.Position,
+                                        duration: TimeInterval) async throws -> Toast? {
+        guard let updated = try? await achievement.retrieveDataIfNeeded(),
+              let type = try? await updated.type?.retrieveDataIfNeeded(),
+              let objectId = achievement.objectId else { return nil }
+
+        let toast = Toast(id: objectId,
+                          priority: 1,
+                          title: "\(type.bounty) Jibs earned 🤑",
+                          description: type.descriptionText,
+                          displayable: User.current()!,
+                          deeplink: nil,
+                          type: .banner,
+                          position: position,
+                          duration: duration,
+                          didTap: { [unowned self] in
+            self.delegate?.didInteractWith(type: .achievement(updated), deeplink: nil)
         })
 
         return toast

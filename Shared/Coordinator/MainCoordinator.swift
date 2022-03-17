@@ -95,7 +95,7 @@ class MainCoordinator: Coordinator<Void> {
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .home, .conversation:
+        case .home, .conversation, .wallet:
 #if IOS
             Task {
                 await self.runConversationListFlow(with: deeplink)
