@@ -8,10 +8,20 @@
 
 import Foundation
 
-class AchievementCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = AchievementType
+struct AchievementViewModel: Hashable {
+    var type: AchievementType
+    var count: Int {
+        return self.achievements.count
+    }
     
-    var currentItem: AchievementType?
+    var achievements: [Achievement] = []
+}
+
+class AchievementCell: CollectionViewManagerCell, ManageableCell {
+    
+    typealias ItemType = AchievementViewModel
+    
+    var currentItem: AchievementViewModel?
     
     private let badgeView = BadgeDetailView()
     
@@ -21,7 +31,7 @@ class AchievementCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.badgeView)
     }
     
-    func configure(with item: AchievementType) {
+    func configure(with item: AchievementViewModel) {
         self.currentItem = item
         self.badgeView.configure(with: item)
     }
@@ -30,7 +40,7 @@ class AchievementCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
         
         let padding = Theme.ContentOffset.xtraLong.value
-        self.badgeView.width = self.contentView.width - padding.doubled
+        self.badgeView.width = self.contentView.width - padding.doubled - Theme.ContentOffset.long.value
         self.badgeView.height = self.contentView.height - padding.doubled
         self.badgeView.centerOnXAndY()
     }
@@ -40,6 +50,7 @@ private class BadgeDetailView: BaseView {
     
     private let badgeView = BadgeView()
     private let label = ThemeLabel(font: .small)
+    private let bottomLabel = ThemeLabel(font: .xtraSmall)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -48,6 +59,10 @@ private class BadgeDetailView: BaseView {
         self.addSubview(self.label)
         self.label.textAlignment = .center
         self.label.alpha = 0.5
+        
+        self.addSubview(self.bottomLabel)
+        self.label.textAlignment = .center
+        self.label.alpha = 0.0
     }
     
     override func layoutSubviews() {
@@ -60,64 +75,25 @@ private class BadgeDetailView: BaseView {
         self.label.setSize(withWidth: self.width + 40)
         self.label.pin(.bottom)
         self.label.centerOnX()
+        
+        self.bottomLabel.setSize(withWidth: self.width + 40)
+        self.bottomLabel.match(.top, to: .bottom, of: self.label, offset: .short)
+        self.bottomLabel.centerOnX()
     }
     
-    func configure(with type: AchievementType) {
-        self.badgeView.configure(with: type)
-        self.label.setText(type.title)
+    func configure(with model: AchievementViewModel) {
+        self.badgeView.configure(with: model)
+        self.label.setText(model.type.title)
+        
+        if let firstDate = model.achievements.first?.createdAt {
+            self.label.alpha = 1.0
+            self.bottomLabel.setText(Date.monthDayYear.string(from: firstDate))
+            self.bottomLabel.alpha = 0.5
+        } else {
+            self.bottomLabel.alpha = 0.0
+            self.label.alpha = 0.5
+        }
+        
         self.setNeedsLayout()
-    }
-}
-
-private class BadgeView: BaseView {
-    
-    private let topView = BaseView()
-    private let bottomView = BaseView()
-    
-    private let amountLabel = ThemeLabel(font: .mediumBold)
-    private let imageView = UIImageView(image: UIImage(named: "Jib"))
-    
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.addSubview(self.topView)
-        self.topView.addSubview(self.amountLabel)
-        self.amountLabel.alpha = 0.5
-        self.topView.set(backgroundColor: .badgeTop)
-        self.topView.layer.cornerRadius = Theme.innerCornerRadius
-        self.topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-
-        
-        self.addSubview(self.bottomView)
-        self.bottomView.set(backgroundColor: .badgeBottom)
-        self.bottomView.addSubview(self.imageView)
-        self.imageView.contentMode = .scaleAspectFit
-        
-        self.bottomView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.topView.height = self.halfHeight
-        self.topView.expandToSuperviewWidth()
-        self.topView.pin(.top)
-        
-        self.amountLabel.setSize(withWidth: self.width)
-        self.amountLabel.centerOnXAndY()
-        
-        self.bottomView.height = self.halfHeight
-        self.bottomView.expandToSuperviewWidth()
-        self.bottomView.pin(.bottom)
-        
-        self.bottomView.layer.cornerRadius = self.halfWidth - Theme.ContentOffset.xtraLong.value
-
-        self.imageView.squaredSize = 44
-        self.imageView.centerOnXAndY()
-    }
-    
-    func configure(with type: AchievementType) {
-        self.amountLabel.setText("+\(type.bounty)")
-        self.layoutNow()
     }
 }

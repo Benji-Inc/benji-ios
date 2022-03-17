@@ -18,7 +18,7 @@ class WalletCollectionViewDataSource: CollectionViewDataSource<WalletCollectionV
 
     enum ItemType: Hashable {
         case transaction(Transaction)
-        case achievement(AchievementType)
+        case achievement(AchievementViewModel)
     }
 
     private let transactionConfig = ManageableCellRegistration<TransactionCell>().provider

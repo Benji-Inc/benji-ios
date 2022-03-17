@@ -48,10 +48,17 @@ class WalletCoordinator: PresentableCoordinator<Void> {
         self.walletVC.present(alertController, animated: true, completion: nil)
     }
     
-    private func presentAlert(for achievement: AchievementType) {
-                
-        let description = achievement.isAvailable ? achievement.description : "\(achievement.description)\n\n(Coming Soon)"
-        let alertController = UIAlertController(title: achievement.title,
+    private func presentAlert(for achievement: AchievementViewModel) {
+        
+        var description: String = ""
+        
+        if let firstDate = achievement.achievements.first?.createdAt {
+            description = "Earned: \(achievement.type.descriptionText)\n\n\(Date.monthDayYear.string(from: firstDate))"
+        } else {
+            description = "\(achievement.type.descriptionText)\n\n(Coming Soon)"
+        }
+
+        let alertController = UIAlertController(title: achievement.type.title,
                                                 message: description,
                                                 preferredStyle: .alert)
 

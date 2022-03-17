@@ -382,6 +382,8 @@
 		D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C725A3704300A4A3B7 /* LaunchManager.swift */; };
 		D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */; };
 		D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CD25A3704300A4A3B7 /* SessionManager.swift */; };
+		D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D666126A27E2871E006CDF3D /* BadgeView.swift */; };
+		D666126D27E29AED006CDF3D /* AchievementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D666126C27E29AED006CDF3D /* AchievementType.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
 		D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
 		D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */; };
@@ -971,6 +973,8 @@
 		D66379C725A3704300A4A3B7 /* LaunchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchManager.swift; sourceTree = "<group>"; };
 		D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D66379CD25A3704300A4A3B7 /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		D666126A27E2871E006CDF3D /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
+		D666126C27E29AED006CDF3D /* AchievementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementType.swift; sourceTree = "<group>"; };
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
 		D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
@@ -1341,6 +1345,7 @@
 			isa = PBXGroup;
 			children = (
 				D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */,
+				D666126A27E2871E006CDF3D /* BadgeView.swift */,
 				D6739A6127BC45500047BBCA /* Header Views */,
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
 				D628B00827B47EEF00949154 /* TransactionContentView.xib */,
@@ -1679,6 +1684,7 @@
 				D6129FB327ADC72E0058811C /* Transaction.swift */,
 				D69D2F9927C0070C001D8855 /* Achievement.swift */,
 				D61A33D027D4F2AE00056242 /* ContextCue.swift */,
+				D666126C27E29AED006CDF3D /* AchievementType.swift */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -2741,6 +2747,7 @@
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
 				D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */,
 				D6D1460721D552B100CD8CE4 /* Character+Extensions.swift in Sources */,
+				D666126D27E29AED006CDF3D /* AchievementType.swift in Sources */,
 				D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D6A6691D271A44FB0001D218 /* Pass.swift in Sources */,
 				D6DEC3ED27A1D9520072D9D0 /* CircleViewController.swift in Sources */,
@@ -2877,6 +2884,7 @@
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
+				D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */,
 				D6DEC40627A22F790072D9D0 /* CircleCollectionViewLayout.swift in Sources */,
 				809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
