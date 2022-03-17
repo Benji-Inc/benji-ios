@@ -30,7 +30,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
         if Parse.currentConfiguration == nil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
                 configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.iOS"
+                configuration.containingApplicationBundleIdentifier = Config.shared.environment.bundleId
                 configuration.server = Config.shared.environment.url
                 configuration.applicationId = Config.shared.environment.appId
                 configuration.isLocalDatastoreEnabled = true

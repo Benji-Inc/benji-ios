@@ -27,6 +27,15 @@ enum Environment: String {
         }
     }
 
+    var bundleId: String {
+        switch self {
+        case .staging:
+            return "com.Jibber-Inc.iOS-staging"
+        case .production:
+            return "com.Jibber-Inc.iOS"
+        }
+    }
+
     var displayName: String {
         switch self {
         case .staging: return "stag"
@@ -35,7 +44,12 @@ enum Environment: String {
     }
 
     var groupId: String {
-        return "group.Jibber"
+        switch self {
+        case .staging:
+            return "group.Jibber-staging"
+        case .production:
+            return "group.Jibber"
+        }
     }
 
     var chatAPIKey: String {
