@@ -150,9 +150,9 @@ struct TransactionsCalculator {
     
     func calculateInterestEarned() -> Double {
         
-        #warning("Update to use achievement type")
-        
-        guard let latestCreateAt = User.current()?.createdAt else { return 0.0 }
+        guard let latestCreateAt = AchievementsManager.shared.achievements.first(where: { achievement in
+            achievement.type?.type == "INTEREST_PAYMENT"
+        })?.createdAt else { return 0.0 }
         
         let timeSince = -latestCreateAt.timeIntervalSinceNow
         let jibsEarned = (timeSince / 86400) * self.interestRate

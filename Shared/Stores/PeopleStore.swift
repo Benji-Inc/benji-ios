@@ -35,7 +35,7 @@ class PeopleStore {
     private(set) var usersDictionary: [String : User] = [:] {
         didSet {
             guard self.usersDictionary != oldValue else { return }
-            self.subscribeToUserUdpates()
+            self.subscribeToUserUpdates()
         }
     }
     
@@ -210,7 +210,7 @@ class PeopleStore {
         }
     }
     
-    private func subscribeToUserUdpates() {
+    private func subscribeToUserUpdates() {
         guard let query = User.query() else { return }
         Client.shared.unsubscribe(query)
 

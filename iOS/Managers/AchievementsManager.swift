@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ParseLiveQuery
 
 class AchievementsManager {
     
@@ -44,13 +45,43 @@ class AchievementsManager {
             
             self.achievements = achievements
         }
+        
+        self.subscribeToUpdates()
     }
     
-    func createIfNeeded(with type: LocalAchievementType, identifier: String) async {
+    private func subscribeToUpdates() {
+        guard let query = Achievement.query() else { return }
+        Client.shared.unsubscribe(query)
+        
+        query.includeKey("type")
+        let subscription = Client.shared.subscribe(query)
+        subscription.handleEvent { query, event in
+            switch event {
+            case .updated(let object):
+                guard let achievement = object as? Achievement,
+                        !self.achievements.contains(achievement) else { return }
+                
+                Task {
+                    await ToastScheduler.shared.schedule(toastType: .achievement(achievement))
+                }
+                self.achievements.append(achievement)
+            default:
+                break
+            }
+        }
+    }
+    
+    func createIfNeeded(with type: LocalAchievementType, identifier: String) {
         let id = type.rawValue + identifier
         guard !self.identifiers.contains(id) else { return }
         self.identifiers.insert(id)
         
+        Task {
+            await self.create(with: type)
+        }
+    }
+    
+    private func create(with type: LocalAchievementType) async {
         guard let selectedType = self.types.first(where: { t in
             return t.type == type.rawValue
         }) else { return }
@@ -68,8 +99,7 @@ class AchievementsManager {
             }
         }
         
-        if let value = achievement {
-            await ToastScheduler.shared.schedule(toastType: .achievement(value))
+        if let _ = achievement {
             AnalyticsManager.shared.trackEvent(type: .achievementCreated, properties: ["value": selectedType.type!])
         }
     }
