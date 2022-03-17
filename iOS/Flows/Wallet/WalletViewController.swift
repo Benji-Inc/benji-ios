@@ -186,8 +186,9 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     }
     
     private func loadAchievements() async {
-        guard let achievements = try? await Achievement.fetchAll(),
-            let types = try? await AchievementType.fetchAll() else { return }
+        
+        let achievements = AchievementsManager.shared.achievements
+        let types = AchievementsManager.shared.types
         
         let items: [WalletCollectionViewDataSource.ItemType] = types.map { type in
             

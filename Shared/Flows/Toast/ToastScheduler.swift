@@ -169,7 +169,7 @@ class ToastScheduler {
                           position: position,
                           duration: duration,
                           didTap: { [unowned self] in
-            self.delegate?.didInteractWith(type: .transaction(transaction), deeplink: nil)
+            self.delegate?.didInteractWith(type: .transaction(transaction), deeplink: DeepLinkObject(target: .wallet))
         })
 
         return toast
@@ -192,7 +192,7 @@ class ToastScheduler {
                           position: position,
                           duration: duration,
                           didTap: { [unowned self] in
-            self.delegate?.didInteractWith(type: .achievement(updated), deeplink: nil)
+            self.delegate?.didInteractWith(type: .achievement(updated), deeplink: DeepLinkObject(target: .wallet))
         })
 
         return toast
