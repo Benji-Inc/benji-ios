@@ -52,6 +52,8 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
         super.initializeViews()
         
         self.welcomeCollectionView.timeMachineLayout.dataSource = self.dataSource
+        self.welcomeCollectionView.timeMachineLayout.itemHeight
+        = MessageContentView.bubbleHeight + old_MessageDetailView.height + Theme.ContentOffset.short.value
         
         self.collectionView.clipsToBounds = false
         
@@ -83,41 +85,7 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
             self.didLoadConversation?(convo)
         }
         
-        self.updateContentOffset()
-    }
-    
-    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection, MessageSequenceItem>) -> AnimationCycle? {
-        let count = (snapshot.numberOfItems(inSection: .topMessages) + snapshot.numberOfItems(inSection: .bottomMessages)) - 1
-        let maxOffset = CGFloat(count) * self.welcomeCollectionView.timeMachineLayout.itemHeight
-        
-        return AnimationCycle(inFromPosition: nil,
-                              outToPosition: nil,
-                              shouldConcatenate: false,
-                              scrollToOffset: CGPoint(x: 0, y: maxOffset))
-    }
-    
-    var scrollTask: Task<Void, Never>?
-    func updateContentOffset() {
-        // Cancel any currently running scroll tasks.
-        self.scrollTask?.cancel()
-        
-        self.scrollTask = Task { [weak self] in
-            guard let `self` = self else { return }
-            var currentOffset = self.welcomeCollectionView.contentOffset
-            currentOffset.y = round(currentOffset.y / self.welcomeCollectionView.timeMachineLayout.itemHeight) * self.welcomeCollectionView.timeMachineLayout.itemHeight
-            
-            // Wait 2 seconds before scrolling
-            await Task.snooze(seconds: 2)
-            // Don't scroll if cancelled.
-            guard !Task.isCancelled else { return }
-            let yOffset = currentOffset.y - self.welcomeCollectionView.timeMachineLayout.itemHeight
-            let newOffset = clamp(yOffset, min: 0)
-            self.welcomeCollectionView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: true)
-            
-            guard !Task.isCancelled else { return }
-            await Task.snooze(seconds: 0.3)
-            self.updateContentOffset()
-        }
+        self.startScrollToNextMessageTask()
     }
     
     override func viewDidLayoutSubviews() {
@@ -135,16 +103,45 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     
     override func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.25))
+        self.collectionView.pin(.top, offset: .custom(self.view.height * 0.3))
         self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.height = self.view.height - self.collectionView.top
         self.collectionView.centerOnX()
+    }
+
+    private var scrollTask: Task<Void, Never>?
+    func startScrollToNextMessageTask() {
+        // Cancel any currently running scroll tasks.
+        self.scrollTask?.cancel()
+
+        self.scrollTask = Task { [weak self] in
+            // Wait 2 seconds before scrolling
+            await Task.snooze(seconds: 6)
+
+            // Don't scroll if cancelled.
+            guard !Task.isCancelled else { return }
+
+            guard let collectionView = self?.welcomeCollectionView else { return }
+
+            let itemHeight = collectionView.timeMachineLayout.itemHeight
+            var currentOffset = collectionView.contentOffset
+            // Make sure that the collection view is focused on an item.
+            currentOffset.y = round(currentOffset.y / itemHeight) * itemHeight
+            let maxYOffset = collectionView.timeMachineLayout.maxZPosition
+
+            // Scroll to the next message
+            let yOffset = currentOffset.y + itemHeight
+            let newOffset = clamp(yOffset, max: maxYOffset)
+            collectionView.setContentOffset(CGPoint(x: 0, y: newOffset), animated: true)
+
+            self?.startScrollToNextMessageTask()
+        }
     }
     
     // MARK: Data Loading
 
     override func getAllSections() -> [MessageSequenceSection] {
-        return [.topMessages, .bottomMessages]
+        return [.messages]
     }
 
     override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
@@ -172,28 +169,15 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
 
             try await conversationController.loadPreviousMessages()
 
-            // Put Benji's messages at the top, and all other messages below.
-            var benjiMessages: [MessageSequenceItem] = []
-            var otherMessages: [MessageSequenceItem] = []
+            let allMessageItems: [MessageSequenceItem] = conversationController.messages.compactMap({ message in
+                guard !message.isDeleted else { return nil }
 
-            let allMessages = conversationController.messages.filter { message in
-                return !message.isDeleted
-            }
-
-            allMessages.forEach({ message in
-                if message.authorId == PFConfig.current().adminUserId {
-                    benjiMessages.append(MessageSequenceItem.message(cid: cid,
-                                                                     messageID: message.id,
-                                                                     showDetail: false))
-                } else {
-                    otherMessages.append(MessageSequenceItem.message(cid: cid, messageID:
-                                                                        message.id,
-                                                                     showDetail: false))
-                }
+                return MessageSequenceItem.message(cid: cid,
+                                                   messageID: message.id,
+                                                   showDetail: false)
             })
 
-            data[.topMessages] = benjiMessages.reversed()
-            data[.bottomMessages] = otherMessages.reversed()
+            data[.messages] = allMessageItems.reversed()
         } catch {
             logError(error)
         }
@@ -208,6 +192,6 @@ class WelcomeViewController: DiffableCollectionViewController<MessageSequenceSec
     
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         super.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
-        self.updateContentOffset()
+        self.startScrollToNextMessageTask()
     }
 }

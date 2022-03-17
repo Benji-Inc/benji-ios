@@ -35,7 +35,6 @@ extension TransitionRouter {
         snapshot.bubbleView.setBubbleColor(fromView.bubbleView.bubbleColor, animated: false)
         snapshot.bubbleView.tailLength = 0
         snapshot.bubbleView.orientation = fromView.bubbleView.orientation
-        snapshot.state = fromView.state
         snapshot.size = fromView.bubbleView.bubbleFrame.size
         snapshot.authorView.alpha = 0
         
@@ -44,7 +43,6 @@ extension TransitionRouter {
         toView.textView.setTextColor(.T2)
         toView.bubbleView.tailLength = 0
         toView.bubbleView.orientation = fromView.bubbleView.orientation
-        toView.state = .thread
         toView.size = fromView.bubbleView.bubbleFrame.size
         toView.layoutNow()
         
