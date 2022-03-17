@@ -24,10 +24,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="337" height="160"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
-                            <rect key="frame" x="32" y="8" width="273" height="76"/>
+                            <rect key="frame" x="16" y="8" width="305" height="76"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="15.5" width="273" height="33"/>
+                                    <rect key="frame" x="0.0" y="15.5" width="305" height="33"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="DYI-6o-w2X"/>
@@ -38,7 +38,7 @@
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz8-yd-98E">
-                                    <rect key="frame" x="241" y="32" width="24" height="24"/>
+                                    <rect key="frame" x="273" y="32" width="24" height="24"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="24" id="8f3-v1-aia"/>
@@ -49,7 +49,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-jA-Yqp">
-                                    <rect key="frame" x="0.0" y="18" width="273" height="44"/>
+                                    <rect key="frame" x="0.0" y="18" width="305" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="44" id="Cq9-5y-qrp"/>
                                     </constraints>
@@ -57,7 +57,7 @@
                                     <buttonConfiguration key="configuration" style="plain"/>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
-                                    <rect key="frame" x="0.0" y="0.0" width="273" height="76"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="305" height="76"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title=""/>
                                 </button>
@@ -97,7 +97,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vaX-xP-i7k">
-                            <rect key="frame" x="36" y="84" width="265" height="25"/>
+                            <rect key="frame" x="24" y="80" width="289" height="25"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="25" id="W3f-8z-1Rm"/>
@@ -114,16 +114,16 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="sdi-8g-wyi" secondAttribute="bottom" constant="16" id="3oC-aC-u1w"/>
-                        <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="36" id="7ML-EV-mbN"/>
+                        <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="24" id="7ML-EV-mbN"/>
                         <constraint firstItem="sdi-8g-wyi" firstAttribute="centerX" secondItem="CP8-gi-eym" secondAttribute="centerX" id="Kf4-la-9nS"/>
-                        <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" id="LBl-C0-7ZV"/>
+                        <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="-4" id="LBl-C0-7ZV"/>
                         <constraint firstItem="TRK-Tt-Z8M" firstAttribute="centerX" secondItem="CP8-gi-eym" secondAttribute="centerX" id="NE3-Ya-SRn"/>
-                        <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="32" id="Tgi-A5-L3c"/>
-                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="32" id="Zve-FB-6La"/>
+                        <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="16" id="Tgi-A5-L3c"/>
+                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="16" id="Zve-FB-6La"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" constant="8" id="byR-VP-Ldn"/>
                         <constraint firstItem="TRK-Tt-Z8M" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" id="iLP-o7-ACF"/>
                         <constraint firstItem="sdi-8g-wyi" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="16" id="ldY-gW-Nqp"/>
-                        <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" constant="36" id="y13-oz-083"/>
+                        <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" constant="24" id="y13-oz-083"/>
                     </constraints>
                 </view>
             </subviews>
