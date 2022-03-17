@@ -53,7 +53,7 @@ class WalletCoordinator: PresentableCoordinator<Void> {
         var description: String = ""
         
         if let firstDate = achievement.achievements.first?.createdAt {
-            description = "Earned: \(achievement.type.descriptionText)\n\n\(Date.monthDayYear.string(from: firstDate))"
+            description = "\(achievement.type.descriptionText)\n\nEarned: \(Date.monthDayYear.string(from: firstDate))"
         } else {
             description = "\(achievement.type.descriptionText)\n\n(Coming Soon)"
         }

@@ -16,10 +16,18 @@ class UserDefaultsManager {
         case shouldShowInvestUpsell
         case shouldShowGroupsUpsell
         case numberOfSwipeHints
+        case localAchievements
     }
 
     static func update(key: Key, with value: Any) {
         UserDefaults.standard.setValue(value, forKey: key.rawValue)
+    }
+    
+    static func getStrings(for key: Key, defaultValue: [String] = []) -> [String] {
+        if UserDefaults.standard.value(forKey: key.rawValue).isNil {
+            return defaultValue
+        }
+        return UserDefaults.standard.stringArray(forKey: key.rawValue) ?? defaultValue
     }
     
     static func getInt(for key: Key, defaultValue: Int = 0) -> Int {
