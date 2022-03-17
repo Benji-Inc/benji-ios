@@ -25,7 +25,9 @@ class AchievementsManager {
     private(set) var achievements: [Achievement] = []
     private(set) var types: [AchievementType] = []
     
-    private var identifiers = Set<String>()
+    //private var identifiers = Set<String>()
+    
+    private var initializeTask: Task<Void, Error>?
     
     init() {
         Task {
@@ -34,19 +36,29 @@ class AchievementsManager {
     }
     
     private func fetchAll() async throws {
-        if let types = try? await AchievementType.fetchAll() {
-            self.types = types
+        
+        // If we already have an initialization task, wait for it to finish.
+        if let initializeTask = self.initializeTask {
+            try await initializeTask.value
+            return
         }
         
-        if let achievements = try? await Achievement.fetchAll() {
-            await achievements.asyncForEach { achievement in
-                _ = try? await achievement.retrieveDataIfNeeded()
+        // Otherwise start a new initialization task and wait for it to finish.
+        self.initializeTask = Task {
+            if let types = try? await AchievementType.fetchAll() {
+                self.types = types
             }
             
-            self.achievements = achievements
+            if let achievements = try? await Achievement.fetchAll() {
+                await achievements.asyncForEach { achievement in
+                    _ = try? await achievement.retrieveDataIfNeeded()
+                }
+                
+                self.achievements = achievements
+            }
+            
+            self.subscribeToUpdates()
         }
-        
-        self.subscribeToUpdates()
     }
     
     private func subscribeToUpdates() {
@@ -72,31 +84,40 @@ class AchievementsManager {
     }
     
     func createIfNeeded(with type: LocalAchievementType, identifier: String) {
+        
         let id = type.rawValue + identifier
-        guard !self.identifiers.contains(id) else { return }
-        self.identifiers.insert(id)
+        var current = UserDefaultsManager.getStrings(for: .localAchievements)
+        guard !current.contains(id) else { return }
+        
+        current.append(id)
+        UserDefaultsManager.update(key: .localAchievements, with: current)
         
         Task {
+            
+            // If we already have an initialization task, wait for it to finish.
+            if let initializeTask = self.initializeTask {
+                try await initializeTask.value
+                return
+            }
+            
             await self.create(with: type)
         }
     }
     
     private func create(with type: LocalAchievementType) async {
+        
         guard let selectedType = self.types.first(where: { t in
             return t.type == type.rawValue
         }) else { return }
         
         var achievement: Achievement?
+        
         if selectedType.isRepeatable {
             achievement = await self.createAchievement(with: selectedType)
-        } else if let query = Achievement.query() {
-            query.whereKey("type", equalTo: selectedType)
-            if let _ = try? await query.firstObjectInBackground() {
-                //If one exists do nothing.
-            } else {
-                //Otherwise create one.
-                achievement = await self.createAchievement(with: selectedType)
-            }
+        } else if self.achievements.first(where: { achievement in
+            return achievement.type == selectedType
+        }).isNil {
+            achievement = await self.createAchievement(with: selectedType)
         }
         
         if let _ = achievement {

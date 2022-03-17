@@ -26,12 +26,10 @@ class BadgeView: BaseView {
         self.topView.layer.cornerRadius = Theme.innerCornerRadius
         self.topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
-        
         self.insertSubview(self.bottomView, at: 0)
         self.bottomView.set(backgroundColor: .badgeBottom)
         self.bottomView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        
     }
     
     override func layoutSubviews() {
