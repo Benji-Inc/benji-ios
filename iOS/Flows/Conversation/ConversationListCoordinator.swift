@@ -118,7 +118,8 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             Task {
                 await self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
             }.add(to: self.taskPool)
-
+        case .wallet:
+            self.showWallet()
         default:
             break
         }

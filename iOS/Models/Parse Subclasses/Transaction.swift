@@ -15,65 +15,13 @@ enum TransactionKey: String {
     case note
     case amount
     case eventType
+    case achievement
 }
 
 final class Transaction: PFObject, PFSubclassing {
 
     static func parseClassName() -> String {
         return String(describing: self)
-    }
-    
-    enum EventType: String {
-        case newUser = "NEW_USER"
-        case swipeToSend = "SWIPE_TO_SEND"
-        case invite = "INVITE"
-        case bugReport = "BUG_REPORT"
-        case interestPayment = "INTEREST_PAYMENT"
-        
-        var isUnique: Bool {
-            switch self {
-            case .newUser:
-                return true
-            case .swipeToSend:
-                return true
-            case .invite:
-                return false
-            case .bugReport:
-                return false
-            case .interestPayment:
-                return false
-            }
-        }
-        
-        var amount: Double {
-            switch self {
-            case .newUser:
-                return 10.0
-            case .swipeToSend:
-                return 1.0
-            case .invite:
-                return 5.0
-            case .bugReport:
-                return 2.0
-            case .interestPayment:
-                return 0.0
-            }
-        }
-        
-        var note: String {
-            switch self {
-            case .newUser:
-                return "For joining Jibber, and just being awesome. 🥳"
-            case .swipeToSend:
-                return "For swiping like a pro. 😎"
-            case .invite:
-                return "For being a team player. 🤝"
-            case .bugReport:
-                return "For hepling us find 🕵️‍♀️ and smash those 🐛."
-            case .interestPayment:
-                return ""
-            }
-        }
     }
     
     var to: User? {
@@ -86,6 +34,11 @@ final class Transaction: PFObject, PFSubclassing {
         set { self.setObject(for: .from, with: newValue)}
     }
     
+    var achievement: Achievement? {
+        get { self.getObject(for: .achievement) }
+        set { self.setObject(for: .achievement, with: newValue)}
+    }
+    
     var amount: Double {
         get { self.getObject(for: .amount) ?? 0 }
         set { self.setObject(for: .amount, with: newValue) }
@@ -94,21 +47,6 @@ final class Transaction: PFObject, PFSubclassing {
     var note: String {
         get { self.getObject(for: .note) ?? "" }
         set { self.setObject(for: .note, with: newValue) }
-    }
-    
-    var eventType: EventType? {
-        get {
-            guard let string: String = self.getObject(for: .eventType),
-                    let type = EventType.init(rawValue: string) else {
-                return nil
-            }
-
-            return type
-        }
-        
-        set {
-            self.setObject(for: .eventType, with: newValue?.rawValue)
-        }
     }
     
     static func fetchAllCurrentTransactions() async throws -> [Transaction] {
@@ -162,28 +100,14 @@ final class Transaction: PFObject, PFSubclassing {
         return objects
     }
     
-    static func createIfNeeded(for type: EventType) async throws {
-        
-        if type.isUnique {
-            _ = try await Transaction.getFirstObject(where: TransactionKey.eventType.rawValue,
-                                                                         contains: type.rawValue,
-                                                                         forUserId: User.current()?.objectId)
-            try await createTransaction()
-        } else {
-            try await createTransaction()
-        }
-        
-        func createTransaction() async throws {
-            let transaction = Transaction()
-            transaction.eventType = type
-            transaction.to = User.current()
-            transaction.from = User.current()
-            transaction.amount = type.amount
-            transaction.note = type.note
-            try await transaction.saveToServer()
-            
-            await ToastScheduler.shared.schedule(toastType: .transaction(transaction))
-        }
+    static func createTransaction(from type: AchievementType) async throws -> Transaction? {
+        guard let updated = try? await type.retrieveDataIfNeeded() else { return nil }
+        let transaction = Transaction()
+        transaction.to = User.current()
+        transaction.from = User.current()
+        transaction.amount = Double(updated.bounty)
+        transaction.note = updated.descriptionText
+        return try await transaction.saveToServer()
     }
 }
 
@@ -224,20 +148,11 @@ struct TransactionsCalculator {
         return total
     }
     
-    func calculateInterestEarned(for transactions: [Transaction]) -> Double {
-        let interestTransaction: Transaction? = transactions.compactMap({ transaction in
-            if transaction.eventType == .interestPayment {
-                return transaction
-            } else {
-                return nil
-            }
-        }).sorted { lhs, rhs in
-            let lhsDate = lhs.createdAt ?? Date.distantFuture
-            let rhsDate = rhs.createdAt ?? Date.distantFuture
-            return lhsDate < rhsDate
-        }.last
+    func calculateInterestEarned() -> Double {
         
-        guard let latestCreateAt = interestTransaction?.createdAt else { return 0.0 }
+        guard let latestCreateAt = AchievementsManager.shared.achievements.first(where: { achievement in
+            achievement.type?.type == "INTEREST_PAYMENT"
+        })?.createdAt else { return 0.0 }
         
         let timeSince = -latestCreateAt.timeIntervalSinceNow
         let jibsEarned = (timeSince / 86400) * self.interestRate

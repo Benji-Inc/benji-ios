@@ -82,7 +82,7 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
         super.viewDidLoad()
         
         self.segmentControl.selectedSegmentIndex = 0
-        self.loadEmojis(for: .smiles)
+        self.loadEmojis(for: .smileysAndPeople)
         
         self.$selectedEmojis.mainSink { [unowned self] items in
             self.updateSelectedItems()
@@ -189,15 +189,13 @@ class ContextCueCreatorViewController: DiffableCollectionViewController<EmojiCol
     /// The currently running task that is loading conversations.
     private var loadEmojisTask: Task<Void, Never>?
     
-    private func loadEmojis(for category: EmojiCategorySegmentControl.EmojiCategory) {
+    private func loadEmojis(for category: EmojiCategory) {
         self.loadEmojisTask?.cancel()
         
         self.loadEmojisTask = Task { [weak self] in
             guard let `self` = self else { return }
-            
-            guard let emojis = try? await EmojiServiceManager.fetchEmojis(for: category) else { return }
-            
-            let items: [EmojiCollectionViewDataSource.ItemType] = emojis.results.compactMap({ emoji in
+                        
+            let items: [EmojiCollectionViewDataSource.ItemType] = category.emojis.compactMap({ emoji in
                 var copy = emoji
 
                 if self.selectedEmojis.contains(where: { selected in

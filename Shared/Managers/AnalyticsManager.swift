@@ -24,6 +24,7 @@ class AnalyticsManager {
         case inviteSent = "INVITE_SENT"
         case conversationCreated = "CONVERSATION_CREATED"
         case contextCueCreated = "CONTEXT_CUE_CREATED"
+        case achievementCreated = "ACHIEVEMENT_CREATED"
     }
     
     init() {

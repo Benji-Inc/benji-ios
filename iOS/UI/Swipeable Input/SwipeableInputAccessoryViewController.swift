@@ -100,6 +100,11 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.setupGestures()
         self.setupHandlers()
     }
+    
+    func resetEmotion() {
+        self.currentEmotion = nil
+        self.swipeInputView.emotionView.configure(for: nil)
+    }
 
     func resetDeliveryType() {
         self.currentContext = .respectful
@@ -231,5 +236,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.swipeInputView.textView.reset()
         self.swipeInputView.inputContainerView.alpha = 1
         self.swipeInputView.countView.alpha = 0.0
+        
+        self.resetEmotion()
     }
 }

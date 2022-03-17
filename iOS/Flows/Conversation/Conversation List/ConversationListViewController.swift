@@ -290,6 +290,7 @@ class ConversationListViewController: ViewController, ConversationListCollection
 
                 guard !Task.isCancelled else { return }
 
+                self?.messageInputController.resetEmotion()
                 self?.messageInputController.resetDeliveryType()
                 self?.messageInputController.swipeInputView.textView.setPlaceholder(for: people, isReply: false)
                 self?.messageInputController.updateSwipeHint(shouldPlay: true)

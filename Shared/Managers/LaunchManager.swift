@@ -57,6 +57,7 @@ class LaunchManager {
 
             // Pre-load contacts
             _ = ContactsManager.shared
+            _ = AchievementsManager.shared
 
             do {
                 async let first: Void
