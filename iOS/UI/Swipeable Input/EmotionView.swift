@@ -33,6 +33,7 @@ struct EmotionView: View {
                 Spacer.length(.standard)
                 Text(emotion.rawValue.firstCapitalized)
                     .fontType(.small)
+                    .color(.white)
                 Spacer.length(.standard)
             }
         }

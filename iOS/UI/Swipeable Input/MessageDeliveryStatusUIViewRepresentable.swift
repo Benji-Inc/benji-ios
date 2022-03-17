@@ -36,7 +36,7 @@ class MessageDeliveryStatusUIView: BaseView {
         super.initializeSubviews()
 
         let keypath = AnimationKeypath(keys: ["**", "Color"])
-        let colorProvider = ColorValueProvider(ThemeColor.D6.color.lottieColorValue)
+        let colorProvider = ColorValueProvider(ThemeColor.white.color.lottieColorValue)
 
         self.addSubview(self.sendStatus)
         self.sendStatus.currentProgress = 0
@@ -46,6 +46,7 @@ class MessageDeliveryStatusUIView: BaseView {
         self.addSubview(self.readStatusView)
         self.readStatusView.currentProgress = 0
         self.readStatusView.animationSpeed = 0.25
+        self.readStatusView.setValueProvider(colorProvider, keypath: keypath)
         self.readStatusView.contentMode = .scaleAspectFit
 
         let errorColorProvider = ColorValueProvider(ThemeColor.red.color.lottieColorValue)
