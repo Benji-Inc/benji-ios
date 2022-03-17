@@ -120,7 +120,12 @@ class SwipeableInputAccessoryView: BaseView {
             self.animationView.isVisible = false
             self.animationView.currentProgress = 0
 
-            newInputHeight = SwipeableInputAccessoryView.inputContainerCollapsedHeight
+            var proposedHeight = SwipeableInputAccessoryView.inputContainerCollapsedHeight
+            if self.textView.numberOfLines > 2, let lineHeight = self.textView.font?.lineHeight {
+                let multiplier: CGFloat = CGFloat(self.textView.numberOfLines) - 2
+                proposedHeight += lineHeight * multiplier
+            }
+            newInputHeight = proposedHeight
         case .expanded:
             NSLayoutConstraint.deactivate([self.textViewCollapsedVerticalCenterConstraint,
                                            self.textViewCollapsedMaxHeightConstraint])

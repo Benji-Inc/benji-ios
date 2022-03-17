@@ -192,7 +192,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         }.store(in: &self.cancellables)
 
         self.$inputState
-            .removeDuplicates()
             .mainSink { [unowned self] inputState in
                 self.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
@@ -201,10 +200,13 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     // MARK: - State Updates
 
     private func updateInputState(with numberOfLines: Int) {
-        // When the text hits 3 lines, transition to the expanded state.
+        // When the text hits 4 lines, transition to the expanded state.
         // However don't automatically go back to the collapsed state when the line count is less than 3.
-        guard numberOfLines > 2 else { return }
-        self.inputState = .expanded
+        if numberOfLines > 4 {
+            self.inputState = .expanded
+        } else {
+            self.inputState = .collapsed
+        }
     }
 
     private func updateLayout(for inputState: InputState) {
