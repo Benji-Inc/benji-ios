@@ -71,20 +71,11 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        self.content.expandToSuperviewSize()
+
         self.detailVC.view.expandToSuperviewWidth()
         self.detailVC.view.height = 25
-
-        self.content.expandToSuperviewWidth()
-        self.content.height
-        = self.bounds.height - (self.detailVC.view.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
-
-        if self.content.bubbleView.orientation == .down {
-            self.content.pin(.top)
-            self.detailVC.view.pin(.bottom)
-        } else if self.content.bubbleView.orientation == .up {
-            self.detailVC.view.pin(.top)
-            self.content.pin(.bottom)
-        }
+        self.detailVC.view.pin(.bottom, offset: .standard)
     }
 
     // MARK: Configuration

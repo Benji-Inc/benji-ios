@@ -39,7 +39,7 @@ private struct MessageDeliveryStatusView: View {
             
             Text(config.statusText)
                 .fontType(.small)
-                .color(.T1)
+                .color(.white)
                 .animation(.linear(duration: Theme.animationDurationFast), value: config.statusText)
             
             Spacer.length(.short)
@@ -47,17 +47,8 @@ private struct MessageDeliveryStatusView: View {
             MessageDeliveryStatusUIViewRepresentable(message: self.$config.message,
                                                      deliveryStatus: self.$config.deliveryStatus)
                 .frame(width: 25)
-
-            Spacer.length(.short)
         }
         .frame(minHeight: 25, idealHeight: 25, maxHeight: 25)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                .fill(color: .B1withAlpha,
-                      strokeColor: .BORDER,
-                      lineWidth: 0.5)
-
-        )
     }
 }
 
