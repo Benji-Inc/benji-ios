@@ -171,7 +171,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
                 case .willShow:
                     self.swipeInputView.setShowMessageDetailOptions(true)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
-                    self.updateLayout(for: self.inputState)
+                    self.swipeInputView.updateLayout(for: self.inputState)
                 case .willHide:
                     self.swipeInputView.setShowMessageDetailOptions(false)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
