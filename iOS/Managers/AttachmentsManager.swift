@@ -39,8 +39,8 @@ class AttachmentsManager {
         }
     }
 
-    func requestAttachments() async throws {
-        return try await withCheckedThrowingContinuation { continuation in
+    func requestAttachments() async {
+        return await withCheckedContinuation({ continuation in
             if self.isAuthorized {
                 self.fetchAttachments()
                 continuation.resume(returning: ())
@@ -51,11 +51,11 @@ class AttachmentsManager {
                         self.fetchAttachments()
                         continuation.resume(returning: ())
                     } catch {
-                        continuation.resume(throwing: error)
+                        continuation.resume(returning: ())
                     }
                 }
             }
-        }
+        })
     }
 
 
