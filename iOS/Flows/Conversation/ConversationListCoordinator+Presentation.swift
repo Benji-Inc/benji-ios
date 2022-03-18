@@ -134,7 +134,6 @@ extension ConversationListCoordinator {
             self.showPeopleAddedToast(for: acceptedConnections)
             Task {
                 try await controller.synchronize()
-                await self.conversationListVC.headerVC.membersVC.loadData()
             }
         }
     }

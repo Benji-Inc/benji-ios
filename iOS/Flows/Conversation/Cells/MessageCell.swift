@@ -13,7 +13,6 @@ import Combine
 
 struct MessageDetailState: Equatable {
     var areDetailsFullyVisible: Bool = false
-    var isSectionInFocus: Bool = false
 }
 
 /// A cell for displaying individual messages, author and reactions.
@@ -56,6 +55,8 @@ class MessageCell: UICollectionViewCell {
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
 
+        guard newWindow.isNil else { return }
+
         self.detailVC.removeFromParentAndSuperviewIfNeeded()
     }
 
@@ -70,20 +71,11 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        self.content.expandToSuperviewSize()
+
         self.detailVC.view.expandToSuperviewWidth()
         self.detailVC.view.height = 25
-
-        self.content.expandToSuperviewWidth()
-        self.content.height
-        = self.bounds.height - (self.detailVC.view.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.standard.value))
-
-        if self.content.bubbleView.orientation == .down {
-            self.content.pin(.top)
-            self.detailVC.view.pin(.bottom)
-        } else if self.content.bubbleView.orientation == .up {
-            self.detailVC.view.pin(.top)
-            self.content.pin(.bottom)
-        }
+        self.detailVC.view.pin(.bottom, offset: .standard)
     }
 
     // MARK: Configuration
@@ -109,20 +101,16 @@ class MessageCell: UICollectionViewCell {
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                          textColor: messageLayoutAttributes.textColor,
                                          brightness: messageLayoutAttributes.brightness,
-                                         focusAmount: messageLayoutAttributes.sectionFocusAmount,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
 
-        self.content.state = messageLayoutAttributes.state
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
 
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
-        let isSectionInFocus = messageLayoutAttributes.sectionFocusAmount == 1
-        self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible,
-                                                     isSectionInFocus: isSectionInFocus)
+        self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
 
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
     }

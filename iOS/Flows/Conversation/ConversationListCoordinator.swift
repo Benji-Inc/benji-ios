@@ -63,20 +63,21 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfile(for: User.current()!)
         }
-        
-        self.conversationListVC.headerVC.membersVC.$selectedItems.mainSink { items in
-            guard let first = items.first else { return }
-            switch first {
-            case .member(let member):
-                guard let person = PeopleStore.shared.people.first(where: { person in
-                    return person.personId == member.personId
-                }) else { return }
 
-                self.presentProfile(for: person)
-            default:
-                break 
-            }
-        }.store(in: &self.cancellables)
+        #warning("Implement profile presentation another way.")
+//        self.conversationListVC.headerVC.membersVC.$selectedItems.mainSink { items in
+//            guard let first = items.first else { return }
+//            switch first {
+//            case .member(let member):
+//                guard let person = PeopleStore.shared.people.first(where: { person in
+//                    return person.personId == member.personId
+//                }) else { return }
+//
+//                self.presentProfile(for: person)
+//            default:
+//                break
+//            }
+//        }.store(in: &self.cancellables)
 
         self.conversationListVC.headerVC.didTapUpdateTopic = { [unowned self] in
             guard let conversation = self.activeConversation else {

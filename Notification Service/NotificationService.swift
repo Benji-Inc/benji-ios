@@ -209,7 +209,6 @@ class NotificationService: UNNotificationServiceExtension {
         self.setUserDefaultsBadgeNumber(to: badgeNumber)
     }
 
-
     private func finalizeContent(_ content: UNMutableNotificationContent) async -> UNNotificationContent {
         // Create the intent
         let incomingMessageIntent

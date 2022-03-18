@@ -48,7 +48,7 @@ class RepliesSequenceCollectionViewDataSource: MessageSequenceCollectionViewData
         snapshot.deleteSections(MessageSequenceSection.allCases)
         snapshot.appendSections(MessageSequenceSection.allCases)
 
-        snapshot.appendItems(allMessageItems, toSection: .bottomMessages)
+        snapshot.appendItems(allMessageItems, toSection: .messages)
 
         snapshot.reconfigureItems(itemsToReconfigure)
 

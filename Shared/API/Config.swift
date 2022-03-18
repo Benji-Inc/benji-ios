@@ -91,7 +91,7 @@ class Config: NSObject {
         var buildTypeToReturn = BuildType.release
 
         if let bundledBuildTypeString = Bundle.main.infoDictionary!["RELEASE_TYPE"] as? String,
-            let bundledBuildTypeEnum = BuildType.init(rawValue: bundledBuildTypeString.lowercased()) {
+            let bundledBuildTypeEnum = BuildType(rawValue: bundledBuildTypeString.lowercased()) {
             buildTypeToReturn = bundledBuildTypeEnum
         } else {
             fatalError("Info.plist (Or Info-dev.plist) not properly configured to have "

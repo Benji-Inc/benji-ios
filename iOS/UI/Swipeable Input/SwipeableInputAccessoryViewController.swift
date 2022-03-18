@@ -54,8 +54,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     /// The current input state of the accessory view.
     @Published var inputState: InputState = .collapsed
 
-    #warning("Figure out where to put this")
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Message State
 
@@ -193,7 +192,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
         self.$inputState
             .mainSink { [unowned self] inputState in
-                self.updateLayout(for: inputState)
+                self.swipeInputView.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
     }
 
@@ -208,10 +207,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         } else {
             self.inputState = .collapsed
         }
-    }
-
-    private func updateLayout(for inputState: InputState) {
-        self.swipeInputView.updateLayout(for: inputState)
     }
 
     func updateSwipeHint(shouldPlay: Bool) {

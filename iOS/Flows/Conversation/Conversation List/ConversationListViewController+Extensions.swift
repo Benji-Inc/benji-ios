@@ -99,26 +99,5 @@ extension ConversationListViewController {
                 conversationController.sendKeystrokeEvent()
             }
         }.store(in: &self.cancellables)
-        
-        ConversationsManager.shared.$activeConversation.mainSink { [weak self] conversation in
-            guard let `self` = self else { return }
-
-            if let convo = conversation,
-               let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-                self.subscribeToTopMessageUpdates(for: convo, cell: cell)
-            }
-        }.store(in: &self.cancellables)
-    }
-    
-    func subscribeToTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
-        // didUpdate is called before this is ever set.
-        // Also looks like a non centered conversation is being used
-        self.frontmostNonUserMessageSubscription = cell.$frontmostNonUserMessage
-            .removeDuplicates()
-            .mainSink { [unowned self] message in
-                guard let author = message?.author else { return }
-
-                self.headerVC.membersVC.scroll(to: author)
-            }
     }
 }

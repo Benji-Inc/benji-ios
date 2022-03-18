@@ -187,10 +187,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         switch state {
         case .read:
-            threadLayout.secondSectionBottomY = 350
             threadLayout.spacingKeyPoints = [0, 40, 74, 86]
         case .write:
-            threadLayout.secondSectionBottomY = 300
             threadLayout.spacingKeyPoints = [0, 8, 16, 20]
         }
     }
@@ -198,7 +196,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     // MARK: Data Loading
 
     override func getAllSections() -> [MessageSequenceSection] {
-        return [.topMessages, .bottomMessages]
+        return [.messages]
     }
 
     override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
@@ -216,7 +214,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             let messages = self.messageController.replies.map { message in
                 return MessageSequenceItem.message(cid: cid, messageID: message.id)
             }
-            data[.bottomMessages] = Array(messages)
+            data[.messages] = Array(messages)
         } catch {
             logError(error)
         }

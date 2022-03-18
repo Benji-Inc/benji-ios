@@ -32,7 +32,6 @@ class UserOnboardingViewController: ViewController {
         self.messageContent.configureBackground(color: ThemeColor.D1.color,
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1,
-                                                focusAmount: 1,
                                                 showBubbleTail: true,
                                                 tailOrientation: .up)
 
@@ -67,7 +66,7 @@ class UserOnboardingViewController: ViewController {
 
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
-        self.messageContent.size = self.messageContent.getSize(for: .collapsed, with: maxWidth)
+        self.messageContent.size = self.messageContent.getSize(with: maxWidth)
         self.messageContent.match(.top, to: .bottom, of: self.personView, offset: .standard)
         self.messageContent.centerOnX()
     }

@@ -8,9 +8,8 @@
 import UIKit
 
 protocol TimeMachineLayoutItemType {
-    /// Used to determine the order of the time machine items.
-    /// A lower value means the item is older and should appear closer to the back.
-    var sortValue: Double { get }
+    /// A unique identifier for the item.
+    var layoutId: String { get }
 }
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
@@ -22,7 +21,7 @@ class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayout
     var shouldRecalculateZRanges = true
 }
 
-/// A custom layout for data sorted by time. Up to two cell sections are each displayed as a stack along the z axis.
+/// A custom layout for a stack of cells laid out along the z axis.
 /// The stacks appear similar to Apple's Time Machine interface, with the newest item in front and older items going out into the distance.
 /// As the collection view scrolls up and down, the items move away and toward the user respectively.
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
@@ -52,8 +51,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var scalingKeyPoints: [CGFloat] = [1, 0.84, 0.65, 0.4]
     /// The amount of vertical space between the tops of adjacent items.
     var spacingKeyPoints: [CGFloat] = [0, 8, 16, 20]
-    var firstSectionTopY: CGFloat = 0
-    var secondSectionBottomY: CGFloat = 300
 
     /// Key points used for the gradually alpha out items further back in the message stack.
     var alphaKeyPoints: [CGFloat] = [1, 1, 1, 0]
@@ -69,37 +66,22 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var zPosition: CGFloat {
         return self.collectionView?.contentOffset.y ?? 0
     }
-    /// The focus position of the last item in the collection, as determined by sort value.
+    /// The focus position of the last item in the collection.
     var maxZPosition: CGFloat {
-        return self.itemFocusPositions.values.max() ?? 0
+        let itemCount = self.numberOfItems(inSection: 0)
+        return CGFloat(clamp(itemCount - 1, min: 0)) * self.itemHeight
     }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
-    /// A cache of all the sort values for each item.
-    private(set) var itemSortValues: [IndexPath : Double] = [:]
-    /// A dictionary of z ranges for all the items. A z-range represents the range that each item will be frontmost in its section
-    /// and its scale and position will be unaltered.
-    private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
+    /// A cache of the ids for all items.
+    private(set) var itemIds: [IndexPath : String] = [:]
 
     // MARK: - Private State Management
 
-    /// The sort value of the focused right before the most recent invalidation.
-    /// This can be used to keep the focused item in place when items are inserted before it.
-    private var sortValueOfFocusedItemBeforeInvalidation: Double?
-    private var sortValuesBeforeInvalidation: [IndexPath : Double] = [:]
-    
-    override init() {
-        super.init()
-        self.initializeLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func initializeLayout() {}
+    /// The ids of all items that existed before the latest invalidation.
+    private var itemIdsBeforeInvalidation: [IndexPath : String] = [:]
 
     // MARK: - UICollectionViewLayout Overrides
 
@@ -107,7 +89,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         get {
             guard let collectionView = collectionView else { return .zero }
 
-            let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
+            let itemCount = CGFloat(self.numberOfItems(inSection: 0))
             var height = clamp((itemCount - 1), min: 0) * self.itemHeight
 
             // Adding 1 ensures that we will still receive the pan gesture if the content height is less than
@@ -148,26 +130,16 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         if customContext.shouldRecalculateZRanges {
-            // Before we recalculate the z ranges, save the sort value of the current focused item.
-            if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
-                return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
-            })?.key {
-                self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
-            } else {
-                self.sortValueOfFocusedItemBeforeInvalidation = nil
-            }
+            self.itemIdsBeforeInvalidation = self.itemIds
 
-            self.sortValuesBeforeInvalidation = self.itemSortValues
-
-            self.itemSortValues.removeAll()
+            self.itemIds.removeAll()
             self.itemFocusPositions.removeAll()
-            self.itemZRanges.removeAll()
         }
     }
 
     override func prepare() {
         // Don't recalculate z ranges if we already have them cached.
-        if self.itemZRanges.isEmpty {
+        if self.itemFocusPositions.isEmpty {
             self.prepareZPositionsAndRanges()
         }
 
@@ -179,61 +151,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Updates the z ranges dictionary for all items.
     private func prepareZPositionsAndRanges() {
-        guard let dataSource = self.dataSource else {
-            logDebug("Warning: Data source not initialized in \(self)")
-            return
-        }
-
-        // Initialize all of the sort values
+        // Store all the item focus positions for efficiency.
         self.forEachIndexPath { indexPath in
-            let timeMachineItem = dataSource.getTimeMachineItem(forItemAt: indexPath)
-            self.itemSortValues[indexPath] = timeMachineItem.sortValue
-        }
-
-        // Get all of the items and sort them by value. This combines all the sections into a flat list.
-        var sortedItemIndexPaths: [IndexPath] = []
-        self.forEachIndexPath { indexPath in
-            sortedItemIndexPaths.append(indexPath)
-        }
-        sortedItemIndexPaths = sortedItemIndexPaths.sorted(by: { indexPath1, indexPath2 in
-            let sortValue1 = self.itemSortValues[indexPath1] ?? 0
-            let sortValue2 = self.itemSortValues[indexPath2] ?? 0
-            return sortValue1 < sortValue2
-        })
-
-        // Calculate the z range for each item.
-        for (sortedItemsIndex, indexPath) in sortedItemIndexPaths.enumerated() {
-            self.itemFocusPositions[indexPath] = CGFloat(sortedItemsIndex) * self.itemHeight
-
-            let currentSectionIndex = indexPath.section
-            let currentItemIndex = indexPath.item
-
-            var startZ = CGFloat(sortedItemsIndex) * self.itemHeight
-
-            // Each item's z range starts after the end of the previous item's range within its section.
-            if let previousRangeInSection = self.itemZRanges[IndexPath(item: currentItemIndex - 1,
-                                                                       section: currentSectionIndex)] {
-
-                startZ = previousRangeInSection.upperBound + self.itemHeight
-            }
-
-            var endZ = startZ
-            for nextSortedItemsIndex in (sortedItemsIndex+1)..<sortedItemIndexPaths.count {
-                let nextIndexPath = sortedItemIndexPaths[nextSortedItemsIndex]
-
-                // Each item's z range ends before the beginning of the
-                // next item's range from within its section.
-                if currentSectionIndex == nextIndexPath.section {
-                    endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight - self.itemHeight
-                    break
-                } else if nextSortedItemsIndex == sortedItemIndexPaths.count - 1 {
-                    // If we've hit the last item we must be at the end of the range.
-                    endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight
-                    break
-                }
-            }
-            
-            self.itemZRanges[indexPath] = startZ..<endZ
+            self.itemFocusPositions[indexPath] = CGFloat(indexPath.item) * self.itemHeight
         }
     }
 
@@ -261,13 +181,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                               withNormalizedZOffset: normalizedZOffset)
     }
 
-    final func getNormalizedZOffsetForItem(at indexPath: IndexPath, givenZPosition zPosition: CGFloat)
-    -> CGFloat {
+    private func getNormalizedZOffsetForItem(at indexPath: IndexPath,
+                                             givenZPosition zPosition: CGFloat) -> CGFloat {
 
-        // All items are positioned relative to the frontmost item in their section.
-        guard let itemZRange = self.itemZRanges[indexPath] else { return -1 }
-
-        let vectorToCurrentZ = itemZRange.vector(to: zPosition)
+        guard let focusPosition = self.itemFocusPositions[indexPath] else { return 0 }
+        let vectorToCurrentZ = zPosition - focusPosition
 
         let normalizedZOffset: CGFloat
 
@@ -347,8 +265,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 continue
             }
 
-            guard let range = self.itemZRanges[indexPath] else { continue }
-            if range.vector(to: self.zPosition) <= 0 {
+            let itemZPosition = CGFloat(i) * self.itemHeight
+
+            if itemZPosition - self.zPosition <= 0 {
                 indexPathCandidate = indexPath
             }
         }
@@ -367,29 +286,24 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
 
-        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top)
+        let maxSpacing = self.spacingKeyPoints.last ?? 0
+        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + maxSpacing + self.itemHeight)
 
-        if section == 0 {
-            centerPoint.y += self.firstSectionTopY + self.itemHeight.half
-            centerPoint.y += self.itemHeight.half - self.itemHeight.half * scale
-            centerPoint.y += yOffset
-        } else {
-            centerPoint.y += self.secondSectionBottomY - self.itemHeight.half
-            centerPoint.y -= self.itemHeight.half - self.itemHeight.half * scale
-            centerPoint.y -= yOffset
-        }
+        centerPoint.y -= self.itemHeight.half
+        centerPoint.y -= self.itemHeight.half - self.itemHeight.half * scale
+        centerPoint.y -= yOffset
         
         return centerPoint
     }
 
     // MARK: - Update Animation Handling
 
-    /// Sort values of items that are being inserted.
-    private var insertedSortValues: Set<Double> = []
-    /// Sort values of items that are being deleted.
-    private var deletedSortValues: Set<Double> = []
-    /// Items that that were visible before the animation started.
-    private var sortValuesVisibleBeforeAnimation: Set<Double> = []
+    /// Ids of items that are being inserted.
+    private var insertedIds: Set<String> = []
+    /// Ids of items that are being deleted.
+    private var deletedIds: Set<String> = []
+    /// Ids of items that that were visible before the animation started.
+    private var idsVisibleBeforeAnimation: Set<String> = []
     /// How much to adjust the proposed scroll offset.
     private var scrollOffsetAdjustment: CGFloat = 0
     /// The z position before update animations started
@@ -404,23 +318,26 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
-                guard let insertedSortValue = self.itemSortValues[indexPath] else { break }
+                guard let insertedId
+                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
 
-                self.insertedSortValues.insert(insertedSortValue)
+                self.insertedIds.insert(insertedId)
 
-                if let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
-                   insertedSortValue < previousFocusedSortValue {
+                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
+                if itemFocusPosition < self.zPosition {
                     self.scrollOffsetAdjustment += self.itemHeight
                 }
 
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate else { break }
-                guard let deletedSortValue = self.sortValuesBeforeInvalidation[indexPath] else { break }
+                guard let deletedId
+                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
 
-                self.deletedSortValues.insert(deletedSortValue)
+                self.deletedIds.insert(deletedId)
 
-                if let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
-                   deletedSortValue < previousFocusedSortValue {
+                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
+
+                if itemFocusPosition < self.zPosition {
                     self.scrollOffsetAdjustment -= self.itemHeight
                 }
             case .reload, .move, .none:
@@ -438,13 +355,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Remember which items were visible before the animation started so we don't attempt to modify
         // their animations later.
-        if let sortValue = self.sortValuesBeforeInvalidation[itemIndexPath] {
-            self.sortValuesVisibleBeforeAnimation.insert(sortValue)
+        if let itemId = self.itemIdsBeforeInvalidation[itemIndexPath] {
+            self.idsVisibleBeforeAnimation.insert(itemId)
 
-            // Items that are just moving are marked as "disappearing"" by the collection view.
-            // Only animate changes to items that are actually being deleted otherwise weird animation issues
-            // will arise.
-            guard self.deletedSortValues.contains(sortValue) else { return nil }
+            // Items that are just moving are marked as "disappearing" by the collection view.
+            // Don't animate changes to these items or else weird animation issues will arise.
+            guard self.deletedIds.contains(itemId) else { return nil }
         }
 
         return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
@@ -458,13 +374,13 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
         // Don't modify the attributes of items that were visible before the animation started.
-        guard let appearingSortValue = self.itemSortValues[itemIndexPath],
-            !self.sortValuesVisibleBeforeAnimation.contains(appearingSortValue) else { return attributes }
+        guard let appearingId = self.itemIds[itemIndexPath],
+              !self.idsVisibleBeforeAnimation.contains(appearingId) else { return attributes }
 
         // Items moving into visibility
         // If the item existed before (wasn't just inserted), but was not visible,
         // modify it's attributes to make it appear properly.
-        if !self.insertedSortValues.contains(appearingSortValue) {
+        if !self.insertedIds.contains(appearingId) {
             var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
                                                                      givenZPosition: self.zPositionBeforeAnimation)
             normalizedZOffset = clamp(normalizedZOffset, -1, 1)
@@ -498,9 +414,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func finalizeCollectionViewUpdates() {
         super.finalizeCollectionViewUpdates()
 
-        self.insertedSortValues.removeAll()
-        self.deletedSortValues.removeAll()
-        self.sortValuesVisibleBeforeAnimation.removeAll()
+        self.insertedIds.removeAll()
+        self.deletedIds.removeAll()
+        self.idsVisibleBeforeAnimation.removeAll()
         self.zPositionBeforeAnimation = 0
         self.scrollOffsetAdjustment = 0
     }
