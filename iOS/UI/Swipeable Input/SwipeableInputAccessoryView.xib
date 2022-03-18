@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -24,10 +24,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="337" height="180"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
-                            <rect key="frame" x="16" y="8" width="305" height="76"/>
+                            <rect key="frame" x="16" y="8" width="305" height="96"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="15.5" width="305" height="33"/>
+                                    <rect key="frame" x="0.0" y="25.5" width="305" height="33"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="DYI-6o-w2X"/>
@@ -38,7 +38,7 @@
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz8-yd-98E">
-                                    <rect key="frame" x="273" y="32" width="24" height="24"/>
+                                    <rect key="frame" x="273" y="52" width="24" height="24"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="24" id="8f3-v1-aia"/>
@@ -49,7 +49,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-jA-Yqp">
-                                    <rect key="frame" x="0.0" y="18" width="305" height="44"/>
+                                    <rect key="frame" x="0.0" y="38" width="305" height="44"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="44" id="Cq9-5y-qrp"/>
                                     </constraints>
@@ -57,12 +57,12 @@
                                     <buttonConfiguration key="configuration" style="plain"/>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
-                                    <rect key="frame" x="0.0" y="0.0" width="305" height="76"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="305" height="96"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title=""/>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MFc-dt-fdD" customClass="AddView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="12" y="12" width="40" height="40"/>
+                                    <rect key="frame" x="12" y="32" width="40" height="40"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="40" id="Iff-SO-qMR"/>
@@ -107,7 +107,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vaX-xP-i7k">
-                            <rect key="frame" x="24" y="80" width="289" height="25"/>
+                            <rect key="frame" x="24" y="100" width="289" height="25"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="25" id="W3f-8z-1Rm"/>
