@@ -18,13 +18,14 @@ class AttachmentCollectionViewLayout: UICollectionViewCompositionalLayout {
             
             guard let section = AttachmentsCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
             
+            let screenPadding = Theme.ContentOffset.xtraLong.value
             switch section {
             case .photoVideo:
                 
                 let inset = Theme.ContentOffset.short.value
                 let fraction: CGFloat = 0.33
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1.0))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                              leading: inset,
@@ -32,27 +33,32 @@ class AttachmentCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                              trailing: inset)
                 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(fraction))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalWidth(fraction))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: inset,
+                                                                leading: screenPadding,
                                                                 bottom: 0,
-                                                                trailing: inset)
+                                                                trailing: screenPadding)
                 
                 let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
                 let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                   leading: 0,
+                                                                   bottom: 0,
+                                                                   trailing: 0)
                 section.boundarySupplementaryItems = [headerItem]
+                section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
                 
                 return section
-
+                
             case .other:
                 
                 let inset = Theme.ContentOffset.short.value
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(60))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                              leading: 0,
@@ -66,9 +72,9 @@ class AttachmentCollectionViewLayout: UICollectionViewCompositionalLayout {
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: inset,
+                                                                leading: screenPadding,
                                                                 bottom: 0,
-                                                                trailing: inset)
+                                                                trailing: screenPadding)
                 
                 return section
             }

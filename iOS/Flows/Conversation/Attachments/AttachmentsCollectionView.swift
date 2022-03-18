@@ -13,11 +13,11 @@ class AttachmentsCollectionView: CollectionView {
     init() {
         super.init(layout: AttachmentCollectionViewLayout())
         let padding = Theme.ContentOffset.xtraLong.value
-        let topOffset = padding.doubled 
-        self.contentInset = UIEdgeInsets(top: topOffset,
+        self.contentInset = UIEdgeInsets(top: padding,
                                          left: 0,
                                          bottom: 100,
                                          right: 0)
+        self.isScrollEnabled = false 
     }
     
     required init?(coder aDecoder: NSCoder) {

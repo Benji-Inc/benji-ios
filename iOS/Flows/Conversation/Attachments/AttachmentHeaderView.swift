@@ -11,8 +11,8 @@ import Foundation
 
 class AttachmentHeaderView: UICollectionReusableView {
     
-    let leftLabel = ThemeLabel(font: .mediumBold)
-    let rightLabel = ThemeLabel(font: .mediumBold, textColor: .D1)
+    let leftLabel = ThemeLabel(font: .regular)
+    let rightLabel = ThemeLabel(font: .regular, textColor: .D1)
     
     let button = ThemeButton()
     
