@@ -26,6 +26,14 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
                             <rect key="frame" x="16" y="8" width="305" height="76"/>
                             <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MFc-dt-fdD" customClass="AddView" customModule="Jibber" customModuleProvider="target">
+                                    <rect key="frame" x="12" y="12" width="40" height="40"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="Iff-SO-qMR"/>
+                                        <constraint firstAttribute="width" constant="40" id="fIY-Wg-9pF"/>
+                                    </constraints>
+                                </view>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="15.5" width="305" height="33"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -69,8 +77,10 @@
                                 <constraint firstAttribute="height" constant="76" id="6vC-6Q-TU9"/>
                                 <constraint firstItem="wxD-jA-Yqp" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="7Qi-P2-Vbz"/>
                                 <constraint firstItem="wxD-jA-Yqp" firstAttribute="centerX" secondItem="VuQ-5S-h7F" secondAttribute="centerX" id="E5T-lW-ZLU"/>
+                                <constraint firstAttribute="bottom" secondItem="MFc-dt-fdD" secondAttribute="bottom" constant="24" id="HDZ-pY-p0J"/>
                                 <constraint firstAttribute="bottom" secondItem="wxD-jA-Yqp" secondAttribute="bottom" constant="14" id="IYW-9o-rq4"/>
                                 <constraint firstAttribute="bottom" secondItem="sz8-yd-98E" secondAttribute="bottom" constant="20" id="N2E-UN-TiW"/>
+                                <constraint firstItem="MFc-dt-fdD" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" constant="12" id="ZNb-0N-B5x"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="fhu-x1-1GA"/>
                                 <constraint firstAttribute="bottom" secondItem="Ads-9e-WJh" secondAttribute="bottom" constant="20" id="g4Y-rU-cRa"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="hq5-LO-hrU"/>
@@ -137,6 +147,7 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="addView" destination="MFc-dt-fdD" id="Lri-JN-EeW"/>
                 <outlet property="animationViewContainer" destination="sz8-yd-98E" id="PSU-J6-1el"/>
                 <outlet property="avatarHeightConstraint" destination="cuN-Y3-dkq" id="Yoz-hx-5eh"/>
                 <outlet property="avatarView" destination="sdi-8g-wyi" id="1zf-uD-U28"/>
@@ -151,6 +162,7 @@
                 <outlet property="textViewCollapsedVerticalHeightContstraint" destination="uIT-mU-AJz" id="YrR-dH-Tsk"/>
                 <outlet property="textViewExpandedBottomPinConstraint" destination="g4Y-rU-cRa" id="e7c-Pe-EIY"/>
                 <outlet property="textViewExpandedTopPinConstraint" destination="hq5-LO-hrU" id="8XH-mH-x2P"/>
+                <outlet property="textViewLeadingConstraint" destination="3E0-AT-Kum" id="Hbz-Bc-the"/>
             </connections>
             <point key="canvasLocation" x="81.884057971014499" y="-57.254464285714285"/>
         </view>

@@ -20,6 +20,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var inputContainerView: SpeechBubbleView!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
+    @IBOutlet var addView: AddView!
     @IBOutlet var animationViewContainer: UIView!
     
     private let animationView = AnimationView.with(animation: .maxToMin)
@@ -54,6 +55,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewLeadingConstraint: NSLayoutConstraint!
 
     // MARK: BaseView Setup and Layout
 
