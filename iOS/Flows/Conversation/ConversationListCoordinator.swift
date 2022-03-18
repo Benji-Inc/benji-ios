@@ -63,6 +63,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfile(for: User.current()!)
         }
+        
+        self.conversationListVC.messageInputController.swipeInputView.addView.didSelect { [unowned self] in
+            logDebug("did tap")
+        }
 
         #warning("Implement profile presentation another way.")
 //        self.conversationListVC.headerVC.membersVC.$selectedItems.mainSink { items in

@@ -124,10 +124,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     func setupGestures() {
         
-        self.swipeInputView.addView.didSelect { [unowned self] in
-            logDebug("did tap")
-        }
-        
         self.panRecognizer.touchesDidBegin = { [unowned self] in
             // Stop playing animations when the user interacts with the view.
             self.hintAnimator.updateSwipeHint(shouldPlay: false)

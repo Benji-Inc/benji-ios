@@ -2098,6 +2098,11 @@
 		D6B2603622E6AA3800143CF0 /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
+				8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */,
+				8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */,
+				80E228D727C6C70000AF37AC /* SwipeInputHintAnimator.swift */,
+				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
 				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
 				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
 				D61592DF24FC195D00B63412 /* InputTextView.swift */,
@@ -2123,11 +2128,6 @@
 				D6C20127276CFDAC0085B187 /* MessageDetailView.swift */,
 				D6CC148E276C1323005F617F /* MessageStatusView.swift */,
 				D6FE05212767B2BC00137EEA /* old_EmotionView.swift */,
-				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
-				8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */,
-				8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */,
-				80E228D727C6C70000AF37AC /* SwipeInputHintAnimator.swift */,
-				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
