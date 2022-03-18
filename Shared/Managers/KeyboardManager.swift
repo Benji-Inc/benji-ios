@@ -20,6 +20,25 @@ class KeyboardManager {
         case willChangeFrame(NotificationCenter.Publisher.Output)
         case didChangeFrame(NotificationCenter.Publisher.Output)
         case none // No event has happened
+        
+        var name: String {
+            switch self {
+            case .willShow(_):
+                return "willShow"
+            case .didShow(_):
+                return "didShow"
+            case .willHide(_):
+                return "willHide"
+            case .didHide(_):
+                return "didHide"
+            case .willChangeFrame(_):
+                return "willChangeFrame"
+            case .didChangeFrame(_):
+                return "didChangeFrame"
+            case .none:
+                return "none"
+            }
+        }
     }
 
     static let shared = KeyboardManager()

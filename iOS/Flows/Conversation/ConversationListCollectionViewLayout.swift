@@ -47,7 +47,7 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
     override func prepare() {
         guard let collectionView = self.collectionView else { return }
 
-        let itemWidth: CGFloat = Theme.getPaddedWidth(with: collectionView.width)
+        let itemWidth: CGFloat = collectionView.width - Theme.ContentOffset.xtraLong.value.doubled
         let itemHeight: CGFloat = collectionView.height - collectionView.adjustedContentInset.vertical
         self.itemSize = CGSize(width: itemWidth, height: itemHeight)
 
