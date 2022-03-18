@@ -105,13 +105,17 @@ class SwipeableInputAccessoryView: BaseView {
 
     func updateLayout(for inputState: InputState) {
         let newInputHeight: CGFloat
-
+        var textViewLeadingValue: CGFloat = 0
         switch inputState {
         case .collapsed:
             NSLayoutConstraint.deactivate([self.textViewExpandedTopPinConstraint,
                                            self.textViewExpandedBottomPinConstraint])
             NSLayoutConstraint.activate([self.textViewCollapsedVerticalCenterConstraint,
                                          self.textViewCollapsedVerticalHeightContstraint])
+            
+            if !self.textView.text.isEmpty || self.textView.isFirstResponder {
+                textViewLeadingValue = self.addView.right + Theme.ContentOffset.short.value
+            }
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
             self.textView.isScrollEnabled = false
@@ -152,10 +156,11 @@ class SwipeableInputAccessoryView: BaseView {
         }
 
         // There's no need to animate the height if it hasn't changed.
-        guard self.inputContainerHeightConstraint.constant != newInputHeight else { return }
+        //guard self.inputContainerHeightConstraint.constant != newInputHeight else { return }
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.inputContainerHeightConstraint.constant = newInputHeight
+            self.textViewLeadingConstraint.constant = textViewLeadingValue
             // Layout the window so that our container view also animates
             self.window?.layoutNow()
         }
