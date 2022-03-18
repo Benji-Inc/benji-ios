@@ -65,7 +65,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
         
         self.conversationListVC.messageInputController.swipeInputView.addView.didSelect { [unowned self] in
-            logDebug("did tap")
+            self.presentAttachements()
         }
 
         #warning("Implement profile presentation another way.")
