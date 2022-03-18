@@ -14,7 +14,7 @@ class AttachmentOptionCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: AttachmentsCollectionViewDataSource.OptionType?
     
     private let imageView = UIImageView()
-    private let label = ThemeLabel(font: .medium)
+    private let label = ThemeLabel(font: .regular)
     
     override func initializeSubviews() {
         super.initializeSubviews()

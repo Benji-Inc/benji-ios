@@ -67,6 +67,7 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
     private let captureConfig = ManageableCellRegistration<CaptureCell>().provider
     private let optionConfig = ManageableCellRegistration<AttachmentOptionCell>().provider
     private let headerConfig = ManageableHeaderRegistration<AttachmentHeaderView>().provider
+    private let lineConfig = ManageableHeaderRegistration<AttachmentLineView>().provider
     
     var didSelectLibrary: CompletionOptional = nil
     
@@ -96,14 +97,21 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
         }
     }
     
-    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String, section: SectionType, indexPath: IndexPath) -> UICollectionReusableView? {
+    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+                                           section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
         
-        let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-        
-        header.didSelectButton = { [unowned self] in
-            self.didSelectLibrary?()
+        switch section {
+        case .photoVideo:
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            
+            header.didSelectButton = { [unowned self] in
+                self.didSelectLibrary?()
+            }
+            
+            return header
+        case .other:
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.lineConfig, for: indexPath)
         }
-        
-        return header
     }
 }

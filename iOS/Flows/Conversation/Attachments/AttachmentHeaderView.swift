@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class AttachmentHeaderView: UICollectionReusableView {
     
     let leftLabel = ThemeLabel(font: .regular)

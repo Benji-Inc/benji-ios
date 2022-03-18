@@ -76,6 +76,14 @@ class AttachmentCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                 bottom: 0,
                                                                 trailing: screenPadding)
                 
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(Theme.ContentOffset.xtraLong.value))
+                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                   leading: 0,
+                                                                   bottom: 0,
+                                                                   trailing: 0)
+                section.boundarySupplementaryItems = [headerItem]
+                
                 return section
             }
             

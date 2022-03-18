@@ -13,29 +13,26 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: Attachment?
     
-    //private let label = ThemeLabel(font: .contextCues)
-    
+    private let imageView = DisplayableImageView()
+        
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.contentView.set(backgroundColor: .red)
-        
-//        self.contentView.addSubview(self.label)
-//        self.contentView.layer.borderColor = ThemeColor.BORDER.color.cgColor
-//        self.contentView.layer.borderWidth = 0.5
-//        self.contentView.layer.cornerRadius = Theme.cornerRadius
+        self.contentView.addSubview(self.imageView)
+        self.imageView.roundCorners()
     }
     
     func configure(with item: Attachment) {
-//        self.label.setText(item.emoji)
-//        self.contentView.backgroundColor = item.isSelected ? ThemeColor.D6.color.withAlphaComponent(0.25) : ThemeColor.clear.color
-//        self.layoutNow()
+        
+        Task {
+            guard let result = try? await AttachmentsManager.shared.getImage(for: item, size: self.size) else { return }
+            self.imageView.displayable = result.0
+        }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-//        self.label.setSize(withWidth: self.contentView.width)
-//        self.label.centerOnXAndY()
+        self.imageView.expandToSuperviewSize()
     }
 }

@@ -82,7 +82,7 @@ class AttachmentsManager {
 
         return messageKind
     }
-
+    
     func getImage(for attachment: Attachment,
                   contentMode: PHImageContentMode = .aspectFill,
                   size: CGSize) async throws -> (UIImage, [AnyHashable: Any]?) {
