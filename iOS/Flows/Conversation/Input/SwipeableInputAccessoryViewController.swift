@@ -274,8 +274,8 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.inputState = .collapsed
         self.swipeInputView.textView.reset()
         self.swipeInputView.inputContainerView.alpha = 1
-        self.swipeInputView.countView.alpha = 0.0
-        
+        self.swipeInputView.countView.alpha = 0.0        
+        self.currentMessageKind = .text("")
         self.resetEmotion()
     }
 }

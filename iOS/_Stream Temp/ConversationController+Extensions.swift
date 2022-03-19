@@ -147,8 +147,19 @@ extension ConversationController {
             return try await self.createNewMessage(sendable: sendable, text: text)
         case .attributedText:
             break
-        case .photo:
-            break
+        case .photo(let item, let body):
+            
+            var attachments: [AnyAttachmentPayload] = []
+            if let url = item.url {
+                let attachement = try AnyAttachmentPayload.init(localFileURL: url,
+                                                                attachmentType: .image,
+                                                                extraData: nil)
+                attachments.append(attachement)
+            }
+            
+            return try await self.createNewMessage(sendable: sendable,
+                                                   text: body,
+                                                   attachments: attachments)
         case .video:
             break
         case .location:

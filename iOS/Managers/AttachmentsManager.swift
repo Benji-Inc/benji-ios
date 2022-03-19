@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 class PhotoRequestOptions: PHImageRequestOptions {
-
+    
     override init() {
         super.init()
         self.deliveryMode = .highQualityFormat
@@ -21,12 +21,12 @@ class PhotoRequestOptions: PHImageRequestOptions {
 }
 
 class AttachmentsManager {
-
+    
     static let shared = AttachmentsManager()
     private let manager = PHImageManager()
-
+    
     private(set) var attachments: [Attachment] = []
-
+    
     var isAuthorized: Bool {
         let status = PHPhotoLibrary.authorizationStatus()
         switch (status) {
@@ -35,10 +35,10 @@ class AttachmentsManager {
         case .notDetermined:
             return false
         default:
-            return false 
+            return false
         }
     }
-
+    
     func requestAttachments() async {
         return await withCheckedContinuation({ continuation in
             if self.isAuthorized {
@@ -57,8 +57,8 @@ class AttachmentsManager {
             }
         })
     }
-
-
+    
+    
     func getMessageKind(for attachment: Attachment, body: String) async throws -> MessageKind {
         let messageKind: MessageKind = try await withCheckedThrowingContinuation { continuation in
             switch attachment.asset.mediaType {
@@ -68,8 +68,11 @@ class AttachmentsManager {
                 self.manager.requestImageDataAndOrientation(for: attachment.asset,
                                                                options: PhotoRequestOptions())
                 { (data, type, orientation, info) in
-                    let item = PhotoAttachment(url: nil, _data: data, info: info)
-                    continuation.resume(returning: .photo(photo: item, body: body))
+                    Task {
+                        let url = try await self.getAssetURL(for: attachment.asset)
+                        let item = PhotoAttachment(url: url, _data: data, info: info)
+                        continuation.resume(returning: .photo(photo: item, body: body))
+                    }
                 }
             case .video:
                 continuation.resume(throwing: ClientError.message(detail: "Video not supported."))
@@ -79,21 +82,50 @@ class AttachmentsManager {
                 continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
             }
         }
-
+        
         return messageKind
+    }
+    
+    private func getAssetURL(for asset: PHAsset) async throws -> URL {
+        return try await withCheckedThrowingContinuation({ continuation in
+            if asset.mediaType == .image {
+                let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
+                options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
+                    return true
+                }
+                asset.requestContentEditingInput(with: options, completionHandler: { (contentEditingInput, info) in
+                    if let url = contentEditingInput?.fullSizeImageURL {
+                        continuation.resume(returning: url)
+                    } else {
+                        continuation.resume(throwing: ClientError.message(detail: "No URL for image"))
+                    }
+                })
+            } else if asset.mediaType == .video {
+                let options: PHVideoRequestOptions = PHVideoRequestOptions()
+                options.version = .original
+                PHImageManager.default().requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset, audioMix, info) in
+                    if let urlAsset = asset as? AVURLAsset {
+                        let localVideoUrl = urlAsset.url
+                        continuation.resume(returning: localVideoUrl)
+                    } else {
+                        continuation.resume(throwing: ClientError.message(detail: "No URL for Video"))
+                    }
+                })
+            }
+        })
     }
     
     func getImage(for attachment: Attachment,
                   contentMode: PHImageContentMode = .aspectFill,
                   size: CGSize) async throws -> (UIImage, [AnyHashable: Any]?) {
-
+        
         let result: (UIImage, [AnyHashable: Any]?) = try await withCheckedThrowingContinuation { continuation in
             let options = PhotoRequestOptions()
-
+            
             self.manager.requestImage(for: attachment.asset,
-                                           targetSize: size,
-                                           contentMode: contentMode,
-                                           options: options) { (image, info) in
+                                         targetSize: size,
+                                         contentMode: contentMode,
+                                         options: options) { (image, info) in
                 if let img = image {
                     continuation.resume(returning: (img, info))
                 } else {
@@ -101,10 +133,10 @@ class AttachmentsManager {
                 }
             }
         }
-
+        
         return result
     }
-
+    
     func getVideoAsset(for attachment: Attachment) async -> AVAsset? {
         let asset: AVAsset? = await withCheckedContinuation { continuation in
             let options = PHVideoRequestOptions()
@@ -115,20 +147,20 @@ class AttachmentsManager {
         }
         return asset
     }
-
+    
     private func requestAuthorization() async throws {
-         return try await withCheckedThrowingContinuation { continuation in
-             PHPhotoLibrary.requestAuthorization({ (status) in
-                 switch status {
-                 case .authorized, .limited:
-                     continuation.resume(returning: ())
-                 default:
-                     continuation.resume(throwing: ClientError.message(detail: "Failed to authorize"))
-                 }
-             })
+        return try await withCheckedThrowingContinuation { continuation in
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                switch status {
+                case .authorized, .limited:
+                    continuation.resume(returning: ())
+                default:
+                    continuation.resume(throwing: ClientError.message(detail: "Failed to authorize"))
+                }
+            })
         }
     }
-
+    
     private func fetchAttachments() {
         let photosOptions = PHFetchOptions()
         photosOptions.fetchLimit = 20
@@ -136,18 +168,18 @@ class AttachmentsManager {
                                               PHAssetMediaType.image.rawValue)
         photosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let result = PHAsset.fetchAssets(with: photosOptions)
-
+        
         var attachments: [Attachment] = []
-
+        
         var assets: [PHAsset] = []
-
+        
         for index in 0...result.count - 1 {
             let asset = result.object(at: index)
             assets.append(asset)
             let attachement = Attachment(asset: asset)
             attachments.append(attachement)
         }
-
+        
         self.attachments = attachments
     }
 }
