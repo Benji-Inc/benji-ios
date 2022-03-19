@@ -261,6 +261,9 @@ extension ConversationListCoordinator {
     
     func presentAttachements() {
         let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator, finishedHandler: nil)
+        
+        self.present(coordinator) { [unowned self] result in
+            self.handle(attachmentOption: result)
+        }
     }
 }

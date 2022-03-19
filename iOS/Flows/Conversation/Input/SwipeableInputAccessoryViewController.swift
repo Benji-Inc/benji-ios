@@ -67,7 +67,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     var currentEmotion: Emotion?
 
     var editableMessage: Messageable?
-    var currentMessageKind: MessageKind = .text(String())
+    @Published var currentMessageKind: MessageKind = .text(String())
     var sendable: SendableObject?
 
     // MARK: - Layout/Animation Properties
@@ -196,9 +196,39 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             .mainSink { [unowned self] inputState in
                 self.swipeInputView.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
+        
+        self.$currentMessageKind
+            .removeDuplicates()
+            .mainSink { [unowned self] kind in
+                self.updateLayout(for: kind)
+            }.store(in: &self.cancellables)
     }
 
     // MARK: - State Updates
+    
+    /// Used to update the layout when the message kind is changed. 
+    private func updateLayout(for kind: MessageKind) {
+        switch kind {
+        case .text(_):
+            break
+        case .attributedText(_):
+            break
+        case .photo(photo: let photo, body: let body):
+            break
+        case .video(video: let video, body: let body):
+            break
+        case .location(_):
+            break
+        case .emoji(_):
+            break
+        case .audio(_):
+            break
+        case .contact(_):
+            break
+        case .link(_):
+            break
+        }
+    }
 
     private func updateInputState(with numberOfLines: Int) {
         guard self.inputState != .expanded else { return }

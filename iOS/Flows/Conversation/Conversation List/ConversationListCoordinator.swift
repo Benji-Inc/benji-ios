@@ -14,6 +14,16 @@ import StreamChat
 import Localization
 
 class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
+    
+    lazy var pickerVC: PHPickerViewController = {
+        var filter = PHPickerFilter.any(of: [.images])
+        var config = PHPickerConfiguration(photoLibrary: .shared())
+        config.filter = filter
+        config.selectionLimit = 1
+        let vc = PHPickerViewController(configuration: config)
+        vc.delegate = self
+        return vc
+    }()
 
     lazy var conversationListVC
     = ConversationListViewController(members: self.conversationMembers,

@@ -10,18 +10,12 @@ import Foundation
 
 enum InputType {
 
-    case photo
-    case video
     case keyboard
     case calendar
     case jibs
 
     var image: UIImage? {
         switch self {
-        case .photo:
-            return UIImage(systemName: "photo")
-        case .video:
-            return UIImage(systemName: "video")
         case .keyboard:
             return UIImage(systemName: "abc")
         case .calendar:
@@ -49,7 +43,7 @@ class InputTextView: ExpandingTextView {
         switch type {
         case .keyboard:
             self.inputView = nil
-        case .photo, .video, .calendar, .jibs:
+        case .calendar, .jibs:
             self.inputView = nil
         }
 
