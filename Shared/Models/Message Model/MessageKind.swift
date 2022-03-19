@@ -137,7 +137,7 @@ struct EmptyMediaItem: MediaItem {
 }
 
 /// A protocol used to represent the data for a media message.
-protocol MediaItem {
+protocol MediaItem: ImageDisplayable {
 
     /// The url where the media is located.
     var url: URL? { get }

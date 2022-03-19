@@ -350,6 +350,7 @@
 		D646D37027E544990077D20B /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36F27E544990077D20B /* AttachmentHeaderView.swift */; };
 		D646D37227E54DFC0077D20B /* AttachementLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37127E54DFC0077D20B /* AttachementLineView.swift */; };
 		D646D37427E553E30077D20B /* ConversationListCoordinator+Attachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */; };
+		D646D37627E579310077D20B /* AddMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37527E579310077D20B /* AddMediaView.swift */; };
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
 		D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
 		D64C323E270391AE004BC1BD /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Person.swift */; };
@@ -969,6 +970,7 @@
 		D646D36F27E544990077D20B /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
 		D646D37127E54DFC0077D20B /* AttachementLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementLineView.swift; sourceTree = "<group>"; };
 		D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Attachments.swift"; sourceTree = "<group>"; };
+		D646D37527E579310077D20B /* AddMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMediaView.swift; sourceTree = "<group>"; };
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
 		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D64C323D270391AE004BC1BD /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
@@ -2139,15 +2141,16 @@
 		D6B2603622E6AA3800143CF0 /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				D646D37527E579310077D20B /* AddMediaView.swift */,
+				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
+				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
+				D61592DF24FC195D00B63412 /* InputTextView.swift */,
+				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
 				8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */,
 				8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */,
 				80E228D727C6C70000AF37AC /* SwipeInputHintAnimator.swift */,
 				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
-				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
-				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
-				D61592DF24FC195D00B63412 /* InputTextView.swift */,
-				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -3034,6 +3037,7 @@
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
 				D6FE05222767B2BC00137EEA /* old_EmotionView.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
+				D646D37627E579310077D20B /* AddMediaView.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,

@@ -124,6 +124,14 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     func setupGestures() {
         
+        self.swipeInputView.addView.didSelectRemove = { [unowned self] in
+            self.currentMessageKind = .text(self.swipeInputView.textView.text)
+        }
+        
+        self.swipeInputView.addView.didSelectExpand = { [unowned self] in
+            self.inputState = .expanded
+        }
+        
         self.panRecognizer.touchesDidBegin = { [unowned self] in
             // Stop playing animations when the user interacts with the view.
             self.hintAnimator.updateSwipeHint(shouldPlay: false)
@@ -206,15 +214,15 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     // MARK: - State Updates
     
-    /// Used to update the layout when the message kind is changed. 
+    /// Used to update the layout when the message kind is changed.
     private func updateLayout(for kind: MessageKind) {
         switch kind {
         case .text(_):
-            break
+            self.swipeInputView.addView.configure(with: nil)
         case .attributedText(_):
-            break
-        case .photo(photo: let photo, body: let body):
-            break
+            self.swipeInputView.addView.configure(with: nil)
+        case .photo(photo: let item, body: let body):
+            self.swipeInputView.addView.configure(with: item)
         case .video(video: let video, body: let body):
             break
         case .location(_):
