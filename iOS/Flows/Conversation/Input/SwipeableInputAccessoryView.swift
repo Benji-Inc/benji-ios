@@ -119,7 +119,7 @@ class SwipeableInputAccessoryView: BaseView {
                                          self.textViewCollapsedVerticalHeightContstraint])
             
             if !self.textView.text.isEmpty || self.textView.isFirstResponder {
-                textViewLeadingValue = self.addView.left + 40 + Theme.ContentOffset.short.value
+                textViewLeadingValue = self.addView.left + 40 
             }
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
