@@ -8,40 +8,17 @@
 
 import Foundation
 
-private class AttachmentGradientLayer: CAGradientLayer {
-    
-    override init() {
-        
-        let cgColors = [ThemeColor.B3.color.cgColor, ThemeColor.gray.color.cgColor]
-        
-        super.init()
-        self.startPoint = CAGradientLayer.Point.topLeft.point
-        self.endPoint = CAGradientLayer.Point.bottomRight.point
-        self.colors = cgColors
-        self.type = .axial
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(layer: Any) {
-        super.init()
-    }
-}
-
 class AddMediaView: ThemeButton {
     
     let plusImageView = UIImageView()
     let displayableImageView = DisplayableImageView()
     
     var didSelectRemove: CompletionOptional = nil
-    var didSelectExpand: CompletionOptional = nil
-    
-    private let gradientLayer = AttachmentGradientLayer()
-    
+        
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.set(backgroundColor: .gray)
         
         self.addSubview(self.plusImageView)
         self.plusImageView.image = UIImage(systemName: "plus")
@@ -51,9 +28,7 @@ class AddMediaView: ThemeButton {
         self.layer.borderWidth = 2
         self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.innerCornerRadius
-        
-        self.layer.insertSublayer(self.gradientLayer, at: 0)
-        
+                
         self.addSubview(self.displayableImageView)
     }
     
@@ -64,10 +39,6 @@ class AddMediaView: ThemeButton {
         
         self.plusImageView.squaredSize = self.height * 0.5
         self.plusImageView.centerOnXAndY()
-        
-        CATransaction.begin()
-        self.gradientLayer.frame = self.bounds
-        CATransaction.commit()
     }
     
     func configure(with item: MediaItem?) {
@@ -86,10 +57,6 @@ class AddMediaView: ThemeButton {
     
     private func createMenu(for item: MediaItem) -> UIMenu {
         
-        let expand = UIAction(title: "Expand", image: UIImage(systemName: "arrow.up.left.and.arrow.down.right")) { action in
-            self.didSelectExpand?()
-        }
-        
         let remove = UIAction(title: "Remove",
                               image: UIImage(systemName: "trash"),
                               attributes: .destructive) { action in
@@ -100,6 +67,6 @@ class AddMediaView: ThemeButton {
                            image: nil,
                            identifier: nil,
                            options: [],
-                           children: [expand, remove])
+                           children: [remove])
     }
 }

@@ -148,6 +148,8 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="addView" destination="MFc-dt-fdD" id="Pm4-Sg-FFc"/>
+                <outlet property="addViewHeightContstrain" destination="Iff-SO-qMR" id="gLl-ra-BM4"/>
+                <outlet property="addViewWidthContstrain" destination="fIY-Wg-9pF" id="Mnx-Ik-CeA"/>
                 <outlet property="animationViewContainer" destination="sz8-yd-98E" id="PSU-J6-1el"/>
                 <outlet property="avatarHeightConstraint" destination="cuN-Y3-dkq" id="Yoz-hx-5eh"/>
                 <outlet property="avatarView" destination="sdi-8g-wyi" id="1zf-uD-U28"/>

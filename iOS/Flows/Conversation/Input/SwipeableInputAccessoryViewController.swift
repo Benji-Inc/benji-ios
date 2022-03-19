@@ -128,10 +128,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             self.currentMessageKind = .text(self.swipeInputView.textView.text)
         }
         
-        self.swipeInputView.addView.didSelectExpand = { [unowned self] in
-            self.inputState = .expanded
-        }
-        
         self.panRecognizer.touchesDidBegin = { [unowned self] in
             // Stop playing animations when the user interacts with the view.
             self.hintAnimator.updateSwipeHint(shouldPlay: false)
