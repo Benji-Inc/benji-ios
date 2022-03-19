@@ -349,6 +349,7 @@
 		D646D36E27E53D750077D20B /* AttachementOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36D27E53D750077D20B /* AttachementOptionCell.swift */; };
 		D646D37027E544990077D20B /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36F27E544990077D20B /* AttachmentHeaderView.swift */; };
 		D646D37227E54DFC0077D20B /* AttachementLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37127E54DFC0077D20B /* AttachementLineView.swift */; };
+		D646D37427E553E30077D20B /* ConversationListCoordinator+Attachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */; };
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
 		D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
 		D64C323E270391AE004BC1BD /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Person.swift */; };
@@ -967,6 +968,7 @@
 		D646D36D27E53D750077D20B /* AttachementOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementOptionCell.swift; sourceTree = "<group>"; };
 		D646D36F27E544990077D20B /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
 		D646D37127E54DFC0077D20B /* AttachementLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementLineView.swift; sourceTree = "<group>"; };
+		D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Attachments.swift"; sourceTree = "<group>"; };
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
 		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D64C323D270391AE004BC1BD /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
@@ -1259,8 +1261,17 @@
 		8028C9EA273ECB1900520465 /* Conversation List */ = {
 			isa = PBXGroup;
 			children = (
+				80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */,
+				8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */,
+				8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */,
+				80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */,
+				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
+				D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */,
+				D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */,
+				D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */,
 				8028C9E8273ECB1200520465 /* ConversationListViewController.swift */,
 				809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */,
+				D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */,
 			);
 			path = "Conversation List";
 			sourceTree = "<group>";
@@ -1681,14 +1692,6 @@
 				D635F0A927136C2600A02D17 /* Cells */,
 				D6766C44274D50360046B449 /* Conversation Header */,
 				8028C9EA273ECB1900520465 /* Conversation List */,
-				80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */,
-				8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */,
-				8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */,
-				80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */,
-				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
-				D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */,
-				D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */,
-				D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6E9746C2757353800D95F08 /* Status View */,
 				80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */,
@@ -3078,6 +3081,7 @@
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */,
 				D646D37227E54DFC0077D20B /* AttachementLineView.swift in Sources */,
+				D646D37427E553E30077D20B /* ConversationListCoordinator+Attachments.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				80E228D827C6C70000AF37AC /* SwipeInputHintAnimator.swift in Sources */,
 				D6129FB227ADC6680058811C /* WalletCollectionViewDataSource.swift in Sources */,

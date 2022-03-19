@@ -14,6 +14,7 @@ enum AttachmentOption {
     case audio
     case giphy
     case video
+    case library
 }
 
 class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
@@ -43,6 +44,10 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
             }
             
         }.store(in: &self.cancellables)
+        
+        self.attachementsVC.dataSource.didSelectLibrary = { [unowned self] in
+            self.finishFlow(with: .library)
+        }
     }
 
     override func toPresentable() -> DismissableVC {
