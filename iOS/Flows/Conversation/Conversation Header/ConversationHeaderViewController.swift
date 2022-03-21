@@ -16,7 +16,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .regular)
+    let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.down"))
     let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
+    
+    let membersLabel = ThemeLabel(font: .small)
     
     // Add menu to text
     // Add "Members(5) >"
@@ -39,6 +42,14 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.jibImageView.isUserInteractionEnabled = true 
         
         self.view.addSubview(self.topicLabel)
+        self.topicLabel.textAlignment = .center
+        
+        self.view.addSubview(self.chevronImageView)
+        self.chevronImageView.tintColor = ThemeColor.T1.color
+        self.chevronImageView.contentMode = .scaleAspectFit
+        
+        self.view.addSubview(self.membersLabel)
+        self.membersLabel.textAlignment = .center
         
         self.button.showsMenuAsPrimaryAction = true
                 
@@ -47,10 +58,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .mainSink { conversation in
                 guard let convo = conversation else {
                     self.topicLabel.isVisible = false
+                    self.membersLabel.isVisible = false
                     return
                 }
                 
                 self.setTopic(for: convo)
+                self.membersLabel.isVisible = true
                 self.topicLabel.isVisible = true
                 self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
@@ -66,12 +79,20 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()
-        self.topicLabel.centerY = self.jibImageView.centerY
+        self.topicLabel.bottom = self.jibImageView.centerY
         
-        self.button.size = self.topicLabel.size
-        self.button.center = self.topicLabel.center
+        self.chevronImageView.squaredSize = self.topicLabel.height
+        self.chevronImageView.match(.left, to: .right, of: self.topicLabel, offset: .short)
+        self.chevronImageView.match(.bottom, to: .bottom, of: self.topicLabel)
         
+        self.membersLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.membersLabel.centerOnX()
+        self.membersLabel.top = self.jibImageView.centerY
         
+        self.button.size = CGSize(width: self.topicLabel.width + self.chevronImageView.width + Theme.ContentOffset.short.value,
+                                  height: self.topicLabel.height + self.membersLabel.height)
+        self.button.left = self.topicLabel.left
+        self.button.top = self.topicLabel.top
     }
     
     private func setTopic(for conversation: Conversation) {
