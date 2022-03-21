@@ -8,47 +8,22 @@
 
 import Foundation
 
-private class AddGradientLayer: CAGradientLayer {
-    
-    override init() {
-        
-        let cgColors = [ThemeColor.B3.color.cgColor, ThemeColor.gray.color.cgColor]
-        
-        super.init()
-        self.startPoint = CAGradientLayer.Point.topLeft.point
-        self.endPoint = CAGradientLayer.Point.bottomRight.point
-        self.colors = cgColors
-        self.type = .axial
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(layer: Any) {
-        super.init()
-    }
-}
-
 class AddView: BaseView {
     
     let imageView = UIImageView()
-    
-    private let gradientLayer = AddGradientLayer()
-    
+        
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.set(backgroundColor: .B6)
         self.addSubview(self.imageView)
         self.imageView.image = UIImage(systemName: "plus")
         self.imageView.tintColor = UIColor.white.withAlphaComponent(0.8)
         
-        self.layer.borderColor = ThemeColor.gray.color.cgColor
-        self.layer.borderWidth = 2
+        self.layer.borderColor = ThemeColor.white.color.withAlphaComponent(0.3).cgColor
+        self.layer.borderWidth = 1
         self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.innerCornerRadius
-        
-        self.layer.insertSublayer(self.gradientLayer, at: 0)
     }
     
     override func layoutSubviews() {
@@ -56,9 +31,5 @@ class AddView: BaseView {
         
         self.imageView.squaredSize = self.height * 0.5
         self.imageView.centerOnXAndY()
-        
-        CATransaction.begin()
-        self.gradientLayer.frame = self.bounds
-        CATransaction.commit()
     }
 }
