@@ -25,61 +25,7 @@ class MessageTextView: TextView {
     }
 
     func setText(with message: Messageable) {
-        switch message.kind {
-        case .text(_):
-            self.setText(message.kind.text)
-        case .attributedText(_):
-            break
-        case .photo(photo: let photo, body: let body):
-            guard let url = photo.url else { return }
-            self.loadImage(with: url, with: body)
-        case .video(video: let video, body: let body):
-            break
-        case .location(_):
-            break
-        case .emoji(_):
-            break
-        case .audio(_):
-            break
-        case .contact(_):
-            break
-        case .link(_):
-            break
-        }
-        
-    }
-
-    private var loadImageTask: Task<Void, Never>?
-
-    private func loadImage(with url: URL, with body: String) {
-        self.loadImageTask?.cancel()
-
-        self.loadImageTask = Task { [weak self] in
-            guard !Task.isCancelled else { return }
-
-            self?.text = body
-
-            guard let data: Data = try? await URLSession.shared.dataTask(with: url).0 else { return }
-
-            guard !Task.isCancelled else { return }
-
-            // Contruct the image from the returned data
-            guard let image = UIImage(data: data) else { return }
-
-            // Create an image attachment and insert it into the text.
-            let attachment = NSTextAttachment()
-            attachment.image = image
-            attachment.setImageHeight(height: 100)
-
-
-            let fullText = NSMutableAttributedString(self!.attributedText)
-
-            let imageString = NSAttributedString(attachment: attachment)
-            fullText.append(NSAttributedString(string: "\n"))
-            fullText.append(imageString)
-
-            self!.attributedText = fullText
-        }
+        self.setText(message.kind.text)
     }
 
     // Allows us to interact with links if they exist or pass the touch to the next receiver if they do not
@@ -102,16 +48,5 @@ class MessageTextView: TextView {
 
         // Return nil to pass touch to next receiver
         return nil
-    }
-}
-
-extension NSTextAttachment {
-
-    func setImageHeight(height: CGFloat) {
-        guard let image = self.image else { return }
-
-        let ratio = image.size.width / image.size.height
-
-        self.bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: ratio * height, height: height)
     }
 }

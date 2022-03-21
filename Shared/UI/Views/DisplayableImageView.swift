@@ -110,8 +110,8 @@ class DisplayableImageView: BaseView {
             await self.set(image: photo, state: .success)
         } else if let fileObject = displayable?.fileObject {
             await self.downloadAndSetImage(for: fileObject)
-        } else if let file = displayable as? PFFileObject {
-            await self.downloadAndSet(file: file)
+        } else if let url = displayable?.url  {
+            await self.downloadAndSetImage(for: url)
         } else {
             await self.set(image: nil, state: .initial)
         }
@@ -142,6 +142,20 @@ class DisplayableImageView: BaseView {
             await self.set(image: nil, state: .error)
         }
     }
+
+    private func downloadAndSetImage(for url: URL) async {
+        guard !Task.isCancelled else { return }
+
+        guard let data: Data = try? await URLSession.shared.dataTask(with: url).0 else { return }
+
+        guard !Task.isCancelled else { return }
+
+        // Contruct the image from the returned data
+        guard let image = UIImage(data: data) else { return }
+
+        await self.set(image: image, state: .success)
+    }
+
 
     @MainActor
     private func set(image: UIImage?, state: State) async {
