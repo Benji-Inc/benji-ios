@@ -18,13 +18,8 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let topicLabel = ThemeLabel(font: .regularBold)
     let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.down"))
     let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
-    
     let membersLabel = ThemeLabel(font: .small)
-    
-    // Add menu to text
-    // Add "Members(5) >"
-    // Add square button to left
-    // Move Jibs to right
+    let roomsButton = RoomNavigationButton()
     
     private var state: ConversationUIState = .read
     
@@ -38,7 +33,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.button)
         
         self.view.addSubview(self.jibImageView)
-        self.jibImageView.contentMode = .scaleAspectFit
+        self.jibImageView.contentMode = .scaleToFill
         self.jibImageView.isUserInteractionEnabled = true 
         
         self.view.addSubview(self.topicLabel)
@@ -50,6 +45,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.view.addSubview(self.membersLabel)
         self.membersLabel.textAlignment = .center
+        
+        self.view.addSubview(self.roomsButton)
+        self.roomsButton.configure(for: .inner)
         
         self.button.showsMenuAsPrimaryAction = true
                 
@@ -97,6 +95,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                                   height: self.topicLabel.height + self.membersLabel.height)
         self.button.left = self.topicLabel.left
         self.button.top = self.topicLabel.top
+        
+        self.roomsButton.pin(.left, offset: .custom(6))
+        self.roomsButton.centerY = self.jibImageView.centerY
     }
     
     private func setTopic(for conversation: Conversation) {
