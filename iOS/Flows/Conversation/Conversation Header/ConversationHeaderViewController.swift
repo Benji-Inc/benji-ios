@@ -14,10 +14,14 @@ import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
-    let menuImageView = UIImageView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .regular)
     let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
+    
+    // Add menu to text
+    // Add "Members(5) >"
+    // Add square button to left
+    // Move Jibs to right
     
     private var state: ConversationUIState = .read
     
@@ -28,11 +32,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         super.initializeViews()
 
         self.view.clipsToBounds = false
-        
-        self.view.addSubview(self.menuImageView)
-        self.menuImageView.image = UIImage(systemName: "ellipsis")
-        self.menuImageView.contentMode = .scaleAspectFit
-        self.menuImageView.tintColor = ThemeColor.B2.color
         self.view.addSubview(self.button)
         
         self.view.addSubview(self.jibImageView)
@@ -48,12 +47,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .mainSink { conversation in
                 guard let convo = conversation else {
                     self.topicLabel.isVisible = false
-                    self.menuImageView.isVisible = false
                     return
                 }
                 
                 self.setTopic(for: convo)
-                self.menuImageView.isVisible = true
                 self.topicLabel.isVisible = true
                 self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
@@ -63,21 +60,18 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.menuImageView.height = 16
-        self.menuImageView.width = 20
-        self.menuImageView.pinToSafeAreaRight()
-        self.menuImageView.pin(.top, offset: .custom(16))
+        self.jibImageView.squaredSize = 44
+        self.jibImageView.pin(.right, offset: .custom(6))
+        self.jibImageView.pin(.top, offset: .custom(16))
         
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()
-        self.topicLabel.centerY = self.menuImageView.centerY
+        self.topicLabel.centerY = self.jibImageView.centerY
         
-        self.button.size = CGSize(width: 44, height: 44)
-        self.button.center = self.menuImageView.center
+        self.button.size = self.topicLabel.size
+        self.button.center = self.topicLabel.center
         
-        self.jibImageView.squaredSize = 44
-        self.jibImageView.pin(.left, offset: .custom(6))
-        self.jibImageView.centerY = self.menuImageView.centerY
+        
     }
     
     private func setTopic(for conversation: Conversation) {
