@@ -205,6 +205,7 @@
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
 		D637651527E8FC8000CCDA7F /* RoomNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */; };
 		D637651827E92B5900CCDA7F /* ConversationDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */; };
+		D637651A27E936CB00CCDA7F /* SectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651927E936CB00CCDA7F /* SectionBackgroundView.swift */; };
 		D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
@@ -934,6 +935,7 @@
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
 		D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNavigationButton.swift; sourceTree = "<group>"; };
 		D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailCoordinator.swift; sourceTree = "<group>"; };
+		D637651927E936CB00CCDA7F /* SectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionBackgroundView.swift; sourceTree = "<group>"; };
 		D6381D7227E1666100102FB4 /* EmojiCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategory.swift; sourceTree = "<group>"; };
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
@@ -1642,6 +1644,7 @@
 				8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */,
 				8057B59A27E2A10600B23D0D /* MemberAddCell.swift */,
 				8057B59627E2A10600B23D0D /* MemberCell.swift */,
+				D637651927E936CB00CCDA7F /* SectionBackgroundView.swift */,
 			);
 			path = "Conversation Detail";
 			sourceTree = "<group>";
@@ -2980,6 +2983,7 @@
 				D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				D6CC1487276BF08F005F617F /* Spacer+Extensions.swift in Sources */,
 				D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
+				D637651A27E936CB00CCDA7F /* SectionBackgroundView.swift in Sources */,
 				80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,

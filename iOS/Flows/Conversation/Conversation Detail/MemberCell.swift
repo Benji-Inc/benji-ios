@@ -94,6 +94,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
                 self.focusCircle.set(backgroundColor: FocusStatus.focused.color)
             }
             
+            self.setNeedsLayout()
+            
             let typingUsers = item.conversationController.conversation.currentlyTypingUsers
             if typingUsers.contains(where: { typingUser in
                 typingUser.personId == personId

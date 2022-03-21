@@ -41,6 +41,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
     private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
+    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -66,5 +67,17 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         case .delete(let cid):
             return nil 
         }
+    }
+    
+    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+                                           section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+        
+        if kind == SectionBackgroundView.kind {
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
+                                                                         for: indexPath)
+        }
+        
+        return nil
     }
 }
