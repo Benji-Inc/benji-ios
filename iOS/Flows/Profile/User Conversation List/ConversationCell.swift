@@ -157,7 +157,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         let maxWidth = self.width * 0.9
         
         self.messageContent.width = maxWidth
-        self.messageContent.height = SwipeableInputAccessoryView.inputContainerCollapsedHeight - self.messageContent.bubbleView.tailLength - 4
+        self.messageContent.height = MessageContentView.collapseHeight
         self.messageContent.centerOnXAndY()
         
         self.middleBubble.width = maxWidth * 0.8
