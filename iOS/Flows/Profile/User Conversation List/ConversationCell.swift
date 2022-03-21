@@ -45,7 +45,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-                
+        
         self.contentView.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .white)
         self.lineView.alpha = 0.1
@@ -71,13 +71,13 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.middleBubble.setBubbleColor(bubbleColor, animated: false)
         self.middleBubble.lightGradientLayer.opacity
-        = 0.6
+        = 0.8
         self.middleBubble.darkGradientLayer.opacity
-        = 0.2
+        = 0.6
         self.middleBubble.tailLength = 0
         self.middleBubble.layer.masksToBounds = true
         self.middleBubble.layer.cornerRadius = Theme.cornerRadius
-
+        
         self.bottomBubble.setBubbleColor(bubbleColor, animated: false)
         self.bottomBubble.lightGradientLayer.opacity
         = 0.4
@@ -89,7 +89,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.stackedAvatarView)
     }
-
+    
     func configure(with item: ConversationId) {
         
         Task.onMainActorAsync {
@@ -123,7 +123,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         guard new != self.rightLabel.currentValue else { return }
         self.rightLabel.setValue(new, animated: true)
     }
- 
+    
     @MainActor
     private func update(for message: Message) {
         self.messageContent.configure(with: message)
@@ -164,7 +164,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.middleBubble.height = self.messageContent.height
         self.middleBubble.centerOnX()
         self.middleBubble.match(.bottom, to: .bottom, of: self.messageContent, offset: .standard)
-
+        
         self.bottomBubble.width = maxWidth * 0.6
         self.bottomBubble.height = self.messageContent.height
         self.bottomBubble.centerOnX()
@@ -210,12 +210,12 @@ private class StackedAvatarView: BaseView {
         
         self.clipsToBounds = false
     }
-
+    
     func configure(with people: [PersonType]) {
         self.removeAllSubviews()
         
         for (index, person) in people.enumerated() {
-            if index <= 3 {
+            if index <= 2 {
                 let view = BorderedPersonView()
                 view.set(person: person)
                 self.addSubview(view)
@@ -225,33 +225,41 @@ private class StackedAvatarView: BaseView {
         if people.count > 3 {
             let remainder = people.count - 3
             self.label.setText("+\(remainder)")
+            self.addSubview(self.label)
         }
-      
+        
         self.layoutNow()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.height = 20
+        self.height = 22
         
         var xOffset: CGFloat = 0
+        var count: Int = 0
         self.subviews.forEach { view in
-            if view is BorderedPersonView {
-                view.frame = CGRect(x: xOffset,
-                                    y: 0,
-                                    width: 20,
-                                    height: 20)
+            if let personView = view as? BorderedPersonView {
+                personView.pulseLayer.borderWidth = 1
+                personView.shadowLayer.opacity = 0.0
+                personView.frame = CGRect(x: xOffset,
+                                          y: 0,
+                                          width: self.height,
+                                          height: self.height)
                 xOffset += view.width + Theme.ContentOffset.short.value
+                count += 1
             }
         }
         
         xOffset -= Theme.ContentOffset.short.value
+         
+        if count == 3 {
+            self.label.setSize(withWidth: 30)
+            xOffset += self.label.width + Theme.ContentOffset.short.value
+            self.label.centerOnY()
+            self.label.right = xOffset
+        }
         
         self.width = xOffset
-        
-        self.label.setSize(withWidth: 30)
-        self.label.match(.left, to: .right, of: self)
-        self.label.centerOnY()
     }
 }

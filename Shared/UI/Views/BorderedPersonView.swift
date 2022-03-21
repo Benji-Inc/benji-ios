@@ -57,7 +57,11 @@ class BorderedPersonView: PersonView {
     override func set(person: PersonType?) {
         super.set(person: person)
 
-        guard let person = person else { return }
+        guard let person = person else {
+            self.pulseLayer.borderColor = ThemeColor.gray.color.cgColor
+            return
+        }
+        
         self.setColors(for: person)
         self.contextCueView.configure(with: person)
     }
