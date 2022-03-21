@@ -11,6 +11,9 @@
 		6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */; };
 		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
 		8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */; };
+		8004EE5427E8FE970086E010 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004EE5327E8FE970086E010 /* URLSession+Extension.swift */; };
+		8004EE5527E8FE970086E010 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004EE5327E8FE970086E010 /* URLSession+Extension.swift */; };
+		8004EE5627E8FE970086E010 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004EE5327E8FE970086E010 /* URLSession+Extension.swift */; };
 		800718DD27861507005DD884 /* EventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800718DC27861507005DD884 /* EventLog.swift */; };
 		800718DE27861507005DD884 /* EventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800718DC27861507005DD884 /* EventLog.swift */; };
 		800718DF278620F1005DD884 /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
@@ -778,6 +781,7 @@
 		6EBB237D17BE8FEF541EA89F /* Pods-Notification Service.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notification Service.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Notification Service/Pods-Notification Service.debug.xcconfig"; sourceTree = "<group>"; };
 		6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Service.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryViewController.swift; sourceTree = "<group>"; };
+		8004EE5327E8FE970086E010 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
 		800718DC27861507005DD884 /* EventLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLog.swift; sourceTree = "<group>"; };
 		800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Extensions.swift"; sourceTree = "<group>"; };
 		8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessagesCell.swift; sourceTree = "<group>"; };
@@ -1609,6 +1613,7 @@
 				D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */,
 				D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */,
 				D63D5C96265811B000543200 /* URL+Extensions.swift */,
+				8004EE5327E8FE970086E010 /* URLSession+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2768,6 +2773,7 @@
 				D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */,
+				8004EE5427E8FE970086E010 /* URLSession+Extension.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
@@ -3274,6 +3280,7 @@
 				D63DB25625E9995700F6B323 /* ClientError.swift in Sources */,
 				D68C082A2729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
+				8004EE5527E8FE970086E010 /* URLSession+Extension.swift in Sources */,
 				D63DB22725E9990900F6B323 /* MathFunctions.swift in Sources */,
 				D6BF81512721EEE1006D7760 /* ToastBannerView.swift in Sources */,
 				D63DB28F25E999AB00F6B323 /* FullScreenViewController.swift in Sources */,
@@ -3316,6 +3323,7 @@
 				D68B723527D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */,
 				D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */,
+				8004EE5627E8FE970086E010 /* URLSession+Extension.swift in Sources */,
 				D6166C892731F79A0013E803 /* UIImage+Extensions.swift in Sources */,
 				D6AE0FFC267D2D9500C6B048 /* Objectable.swift in Sources */,
 				D68759612728A54000AF7C07 /* PersonType.swift in Sources */,

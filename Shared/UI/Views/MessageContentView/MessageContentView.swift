@@ -44,6 +44,7 @@ class MessageContentView: BaseView {
         
         self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
+        self.textView.textAlignment = .left
 
         self.bubbleView.addSubview(self.authorView)
 
@@ -51,6 +52,21 @@ class MessageContentView: BaseView {
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
         self.bubbleView.addInteraction(contextMenuInteraction)
 #endif
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.bubbleView.expandToSuperviewSize()
+
+        self.authorView.size = self.getAuthorSize()
+        self.authorView.pin(.top, offset: MessageContentView.padding)
+        self.authorView.pin(.left, offset: MessageContentView.padding)
+
+        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.textView.pin(.top, offset: MessageContentView.padding)
+        self.textView.expand(.right, to: self.width - MessageContentView.padding.value)
+        self.textView.expand(.bottom, to: self.height - MessageContentView.padding.value)
     }
 
     func configure(with message: Messageable) {
@@ -80,6 +96,7 @@ class MessageContentView: BaseView {
 
         self.textView.textColor = textColor
         self.textView.linkTextAttributes = [.foregroundColor: textColor.withAlphaComponent(0.5), .underlineStyle: 0]
+
         self.bubbleView.setBubbleColor(color.withAlphaComponent(brightness), animated: false)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
@@ -93,21 +110,6 @@ class MessageContentView: BaseView {
         self.bubbleView.darkGradientLayer.opacity = 0.2 * Float(1 - brightness)
 
         CATransaction.commit()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.bubbleView.expandToSuperviewSize()
-
-        self.authorView.size = self.getAuthorSize()
-        self.authorView.pin(.top, offset: MessageContentView.padding)
-        self.authorView.pin(.left, offset: MessageContentView.padding)
-
-        self.textView.size = self.textView.getSize(width: self.bubbleView.bubbleFrame.width)
-        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.textView.pin(.top, offset: MessageContentView.padding)
-        self.textView.textAlignment = .left
     }
 
     func getAuthorSize() -> CGSize {

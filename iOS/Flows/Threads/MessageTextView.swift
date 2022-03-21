@@ -8,7 +8,7 @@
 
 import Foundation
 import Localization
- 
+
 class MessageTextView: TextView {
 
     override func initializeViews() {
@@ -48,31 +48,38 @@ class MessageTextView: TextView {
         }
         
     }
-    
-    private func loadImage(with url: URL, with body: String) {
-        
-        // Create Data Task
-           let dataTask = URLSession.shared.dataTask(with: url) { [weak self] (data, _, _) in
-               if let data = data {
-                   // Create Image and Update Image View
-                   guard let image = UIImage(data: data) else { return }
-                   let attachment = NSTextAttachment()
-                   attachment.image = image
-                   let imageString = NSAttributedString(attachment: attachment)
-                   
-                   DispatchQueue.main.async {
-                       self?.text = body
-                       self?.textStorage.insert(imageString, at: body.count)
-                   }
-                   
-                   
-                   
-                   //textView.textStorage.insert(imageString, at: indexWhereYouWantTheImage)
-               }
-           }
 
-           // Start Data Task
-           dataTask.resume()
+    private var loadImageTask: Task<Void, Never>?
+
+    private func loadImage(with url: URL, with body: String) {
+        self.loadImageTask?.cancel()
+
+        self.loadImageTask = Task { [weak self] in
+            guard !Task.isCancelled else { return }
+
+            self?.text = body
+
+            guard let data: Data = try? await URLSession.shared.dataTask(with: url).0 else { return }
+
+            guard !Task.isCancelled else { return }
+
+            // Contruct the image from the returned data
+            guard let image = UIImage(data: data) else { return }
+
+            // Create an image attachment and insert it into the text.
+            let attachment = NSTextAttachment()
+            attachment.image = image
+            attachment.setImageHeight(height: 100)
+
+
+            let fullText = NSMutableAttributedString(self!.attributedText)
+
+            let imageString = NSAttributedString(attachment: attachment)
+            fullText.append(NSAttributedString(string: "\n"))
+            fullText.append(imageString)
+
+            self!.attributedText = fullText
+        }
     }
 
     // Allows us to interact with links if they exist or pass the touch to the next receiver if they do not
@@ -95,5 +102,16 @@ class MessageTextView: TextView {
 
         // Return nil to pass touch to next receiver
         return nil
+    }
+}
+
+extension NSTextAttachment {
+
+    func setImageHeight(height: CGFloat) {
+        guard let image = self.image else { return }
+
+        let ratio = image.size.width / image.size.height
+
+        self.bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: ratio * height, height: height)
     }
 }
