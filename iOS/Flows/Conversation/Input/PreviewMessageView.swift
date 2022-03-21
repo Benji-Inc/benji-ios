@@ -21,8 +21,14 @@ class PreviewMessageView: SpeechBubbleView {
         super.initializeSubviews()
 
         self.addSubview(self.textView)
+        self.textView.textAlignment = .left
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.addSubview(self.imageView)
+        
+        self.imageView.layer.borderColor = ThemeColor.gray.color.cgColor
+        self.imageView.layer.borderWidth = 2
+        self.imageView.layer.masksToBounds = true
+        self.imageView.layer.cornerRadius = Theme.innerCornerRadius
 
         self.$messageKind.mainSink { (kind) in
             guard let messageKind = kind else { return }
@@ -56,13 +62,20 @@ class PreviewMessageView: SpeechBubbleView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.imageView.expandToSuperviewWidth()
-        self.imageView.pin(.top)
-        self.imageView.height = self.imageView.displayable.isNil ? 0 : 100
+        self.imageView.squaredSize = self.imageView.displayable.isNil ? 0 : 40
         self.imageView.centerOnX()
+        self.imageView.pin(.bottom, offset: .custom(24))
+        self.imageView.pin(.left, offset: .long)
         
-        self.textView.setSize(withMaxWidth: self.width, maxHeight: self.height)
-        self.textView.centerOnX()
+        if self.imageView.displayable.exists {
+            let maxWidth: CGFloat = self.width - self.imageView.right - Theme.ContentOffset.long.value
+            self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height)
+            self.textView.match(.left, to: .right, of: self.imageView)
+        } else {
+            self.textView.setSize(withMaxWidth: self.width, maxHeight: self.height)
+            self.textView.pin(.left)
+        }
+        
         self.textView.center.y = self.halfHeight - 6
     }
 }

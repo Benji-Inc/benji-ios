@@ -20,7 +20,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var inputContainerView: SpeechBubbleView!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
-    @IBOutlet var addView: AddView!
+    @IBOutlet var addView: AddMediaView!
     @IBOutlet var animationViewContainer: UIView!
     
     private let animationView = AnimationView.with(animation: .maxToMin)
@@ -38,7 +38,7 @@ class SwipeableInputAccessoryView: BaseView {
 
     // MARK: - Layout/Animation Properties
 
-    static let inputContainerCollapsedHeight: CGFloat = 96
+    static let inputContainerCollapsedHeight: CGFloat = 76
 
     // Override intrinsic content size so that height is adjusted for safe areas and text input.
     // https://stackoverflow.com/questions/46282987/iphone-x-how-to-handle-view-controller-inputaccessoryview
@@ -56,7 +56,10 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
     @IBOutlet var textViewLeadingConstraint: NSLayoutConstraint!
-
+    
+    @IBOutlet var addViewHeightContstrain: NSLayoutConstraint!
+    @IBOutlet var addViewWidthContstrain: NSLayoutConstraint!
+    
     // MARK: BaseView Setup and Layout
 
     override func initializeSubviews() {
@@ -106,6 +109,8 @@ class SwipeableInputAccessoryView: BaseView {
     func updateLayout(for inputState: InputState) {
         let newInputHeight: CGFloat
         var textViewLeadingValue: CGFloat = 0
+        var newAddViewSize: CGFloat = 0
+        
         switch inputState {
         case .collapsed:
             NSLayoutConstraint.deactivate([self.textViewExpandedTopPinConstraint,
@@ -114,7 +119,7 @@ class SwipeableInputAccessoryView: BaseView {
                                          self.textViewCollapsedVerticalHeightContstraint])
             
             if !self.textView.text.isEmpty || self.textView.isFirstResponder {
-                textViewLeadingValue = self.addView.right + Theme.ContentOffset.short.value
+                textViewLeadingValue = self.addView.left + 40 
             }
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
@@ -132,8 +137,13 @@ class SwipeableInputAccessoryView: BaseView {
                 proposedHeight += lineHeight * multiplier
             }
             
+            newAddViewSize = 40
             newInputHeight = proposedHeight
         case .expanded:
+            if !self.textView.isFirstResponder {
+                self.textView.becomeFirstResponder()
+            }
+            
             NSLayoutConstraint.deactivate([self.textViewCollapsedVerticalCenterConstraint,
                                            self.textViewCollapsedVerticalHeightContstraint])
             NSLayoutConstraint.activate([self.textViewExpandedTopPinConstraint,
@@ -152,6 +162,7 @@ class SwipeableInputAccessoryView: BaseView {
                 self.animationView.play(fromFrame: 20, toFrame: 30, loopMode: .playOnce, completion: nil)
             }
 
+            newAddViewSize = 100
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }
 
@@ -159,6 +170,9 @@ class SwipeableInputAccessoryView: BaseView {
         //guard self.inputContainerHeightConstraint.constant != newInputHeight else { return }
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.addViewWidthContstrain.constant = newAddViewSize
+            self.addViewHeightContstrain.constant = newAddViewSize
+            
             self.inputContainerHeightConstraint.constant = newInputHeight
             self.textViewLeadingConstraint.constant = textViewLeadingValue
             // Layout the window so that our container view also animates

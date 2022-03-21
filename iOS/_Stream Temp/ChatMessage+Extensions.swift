@@ -88,6 +88,28 @@ extension Message: Messageable {
     }
 
     var kind: MessageKind {
+        if let key = self.attachmentCounts.keys.first {
+            switch key {
+            case AttachmentType.image:
+                if let streamAttachement = self.imageAttachments.first {
+                    let attachment = PhotoAttachment(url: streamAttachement.imageURL,
+                                                     _data: nil,
+                                                     info: nil)
+                    return .photo(photo: attachment, body: self.text)
+                }
+                return .text(self.text)
+            case AttachmentType.audio:
+                break
+            case AttachmentType.file:
+                break
+            case AttachmentType.giphy:
+                break
+            case AttachmentType.linkPreview:
+                break
+            default:
+                return .text(self.text)
+            }
+        }
         return .text(self.text)
     }
 

@@ -258,4 +258,12 @@ extension ConversationListCoordinator {
         let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
         self.present(coordinator, finishedHandler: nil)
     }
+    
+    func presentAttachements() {
+        let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)
+        
+        self.present(coordinator) { [unowned self] result in
+            self.handle(attachmentOption: result)
+        }
+    }
 }
