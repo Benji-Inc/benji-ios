@@ -48,9 +48,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.view.addSubview(self.roomsButton)
         self.roomsButton.configure(for: .inner)
-        
-        self.button.showsMenuAsPrimaryAction = true
-                
+                        
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { conversation in
@@ -67,7 +65,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 self.membersLabel.isVisible = true
                 self.topicLabel.isVisible = true
                 self.chevronImageView.isVisible = true
-                self.updateMenu(with: convo)
+                //self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
     }

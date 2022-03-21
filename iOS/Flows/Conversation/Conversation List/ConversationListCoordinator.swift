@@ -77,6 +77,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.messageInputController.swipeInputView.addView.didSelect { [unowned self] in
             self.presentAttachements()
         }
+        
+        self.conversationListVC.headerVC.button.didSelect { [unowned self] in
+            self.presentConversationDetail()
+        }
 
         #warning("Implement profile presentation another way.")
 //        self.conversationListVC.headerVC.membersVC.$selectedItems.mainSink { items in

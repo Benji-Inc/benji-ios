@@ -266,4 +266,9 @@ extension ConversationListCoordinator {
             self.handle(attachmentOption: result)
         }
     }
+    
+    func presentConversationDetail() {
+        let coordinator = ConversationDetailCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator, finishedHandler: nil, cancelHandler: nil)
+    }
 }
