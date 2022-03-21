@@ -368,6 +368,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             self.createNewConversation(message)
             return
         }
+        
 
         let conversationController = ChatClient.shared.channelController(for: cid)
 
