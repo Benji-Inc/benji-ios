@@ -63,8 +63,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     return
                 }
                 
+                self.startLoadDataTask(with: conversation)
+                
                 self.setTopic(for: convo)
-                self.setMembers(for: convo)
                 self.membersLabel.isVisible = true
                 self.topicLabel.isVisible = true
                 self.chevronImageView.isVisible = true
@@ -98,11 +99,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.button.top = self.topicLabel.top
     }
     
-    private func setMembers(for conversation: Conversation) {
-        self.membersLabel.setText(" 5 Members")
-        self.view.setNeedsLayout()
-    }
-    
     private func setTopic(for conversation: Conversation) {
         if let title = conversation.title {
             self.topicLabel.setText(title)
@@ -132,5 +128,84 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         } completion: { completed in
             
         }
+    }
+    
+    // Mark: Members
+    
+    var conversationController: ConversationController?
+    
+    /// A task for loading data and subscribing to conversation updates.
+    private var loadDataTask: Task<Void, Never>?
+    
+    private func startLoadDataTask(with conversation: Conversation?) {
+        self.loadDataTask?.cancel()
+
+        if let cid = conversation?.cid {
+            self.conversationController = ConversationController.controller(cid)
+        } else {
+            self.conversationController = nil
+        }
+
+        self.loadDataTask = Task { [weak self] in
+            guard let conversationController = self?.conversationController else {
+                // If there's no current conversation, then there's nothing to show.
+                return
+            }
+
+            self?.setMembers(for: conversationController.conversation)
+
+            guard !Task.isCancelled else { return }
+
+            self?.subscribeToUpdates(for: conversationController)
+        }
+    }
+    
+    /// A task for loading data and subscribing to conversation updates.
+    private var loadPeopleTask: Task<Void, Never>?
+    
+    private func setMembers(for conversation: Conversation) {
+        self.loadPeopleTask?.cancel()
+        
+        self.loadPeopleTask = Task { [weak self] in
+            let members = await PeopleStore.shared.getPeople(for: conversation)
+            if members.count == 0 {
+                self?.membersLabel.setText("Just You")
+            } else if members.count == 1 {
+                self?.membersLabel.setText("1 Member")
+            } else {
+                self?.membersLabel.setText("\(members.count) Members")
+            }
+            self?.view.setNeedsLayout()
+        }
+    }
+
+    /// The subscriptions for the current conversation.
+    private var conversationCancellables = Set<AnyCancellable>()
+
+    private func subscribeToUpdates(for conversationController: ConversationController) {
+        // Clear out previous subscriptions.
+        self.conversationCancellables.removeAll()
+
+//        conversationController
+//            .typingUsersPublisher
+//            .mainSink(receiveValue: { [unowned self] typingUsers in
+//                self.dataSource.reconfigureAllItems()
+//            }).store(in: &self.conversationCancellables)
+
+        conversationController
+            .memberEventPublisher
+            .mainSink(receiveValue: { [unowned self] event in
+                switch event as MemberEvent {
+                case _ as MemberAddedEvent:
+                    self.setMembers(for: conversationController.conversation)
+                case _ as MemberRemovedEvent:
+                    guard let conversationController = self.conversationController else { return }
+                    self.setMembers(for: conversationController.conversation)
+                case _ as MemberUpdatedEvent:
+                    break
+                default:
+                    break
+                }
+            }).store(in: &self.conversationCancellables)
     }
 }
