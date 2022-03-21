@@ -204,6 +204,7 @@
 		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
+		D637651527E8FC8000CCDA7F /* RoomNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */; };
 		D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
@@ -932,6 +933,7 @@
 		D6347395241EBF6F0071E9DA /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
+		D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNavigationButton.swift; sourceTree = "<group>"; };
 		D6381D7227E1666100102FB4 /* EmojiCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategory.swift; sourceTree = "<group>"; };
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
@@ -1965,6 +1967,7 @@
 				8057B59927E2A10600B23D0D /* MembersCollectionViewDataSource.swift */,
 				8057B59527E2A10500B23D0D /* MembersCollectionViewLayout.swift */,
 				8057B59727E2A10600B23D0D /* MembersViewController.swift */,
+				D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */,
 			);
 			path = "Conversation Header";
 			sourceTree = "<group>";
@@ -3058,6 +3061,7 @@
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
+				D637651527E8FC8000CCDA7F /* RoomNavigationButton.swift in Sources */,
 				D65D460227A9B1400019301C /* old_MessageStatusContainer.swift in Sources */,
 				8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,

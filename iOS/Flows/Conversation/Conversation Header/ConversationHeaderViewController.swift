@@ -14,10 +14,12 @@ import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
-    let menuImageView = UIImageView()
     let button = ThemeButton()
-    let topicLabel = ThemeLabel(font: .regular)
+    let topicLabel = ThemeLabel(font: .regularBold)
+    let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.down"))
     let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
+    let membersLabel = ThemeLabel(font: .small)
+    let roomsButton = RoomNavigationButton()
     
     private var state: ConversationUIState = .read
     
@@ -28,18 +30,24 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         super.initializeViews()
 
         self.view.clipsToBounds = false
-        
-        self.view.addSubview(self.menuImageView)
-        self.menuImageView.image = UIImage(systemName: "ellipsis")
-        self.menuImageView.contentMode = .scaleAspectFit
-        self.menuImageView.tintColor = ThemeColor.B2.color
         self.view.addSubview(self.button)
         
         self.view.addSubview(self.jibImageView)
-        self.jibImageView.contentMode = .scaleAspectFit
+        self.jibImageView.contentMode = .scaleToFill
         self.jibImageView.isUserInteractionEnabled = true 
         
         self.view.addSubview(self.topicLabel)
+        self.topicLabel.textAlignment = .center
+        
+        self.view.addSubview(self.chevronImageView)
+        self.chevronImageView.tintColor = ThemeColor.T1.color
+        self.chevronImageView.contentMode = .scaleAspectFit
+        
+        self.view.addSubview(self.membersLabel)
+        self.membersLabel.textAlignment = .center
+        
+        self.view.addSubview(self.roomsButton)
+        self.roomsButton.configure(for: .inner)
         
         self.button.showsMenuAsPrimaryAction = true
                 
@@ -48,13 +56,17 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .mainSink { conversation in
                 guard let convo = conversation else {
                     self.topicLabel.isVisible = false
-                    self.menuImageView.isVisible = false
+                    self.membersLabel.isVisible = false
+                    self.chevronImageView.isVisible = false
                     return
                 }
                 
+                self.startLoadDataTask(with: conversation)
+                
                 self.setTopic(for: convo)
-                self.menuImageView.isVisible = true
+                self.membersLabel.isVisible = true
                 self.topicLabel.isVisible = true
+                self.chevronImageView.isVisible = true
                 self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
@@ -63,21 +75,29 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.menuImageView.height = 16
-        self.menuImageView.width = 20
-        self.menuImageView.pinToSafeAreaRight()
-        self.menuImageView.pin(.top, offset: .custom(16))
+        self.jibImageView.squaredSize = 44
+        self.jibImageView.pin(.right, offset: .custom(6))
+        self.jibImageView.pin(.top, offset: .custom(16))
         
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()
-        self.topicLabel.centerY = self.menuImageView.centerY
+        self.topicLabel.bottom = self.jibImageView.centerY - 2
         
-        self.button.size = CGSize(width: 44, height: 44)
-        self.button.center = self.menuImageView.center
+        self.membersLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.membersLabel.centerOnX()
+        self.membersLabel.top = self.jibImageView.centerY + 2
         
-        self.jibImageView.squaredSize = 44
-        self.jibImageView.pin(.left, offset: .custom(6))
-        self.jibImageView.centerY = self.menuImageView.centerY
+        self.chevronImageView.squaredSize = self.membersLabel.height * 0.8
+        self.chevronImageView.match(.left, to: .right, of: self.membersLabel, offset: .short)
+        self.chevronImageView.match(.bottom, to: .bottom, of: self.membersLabel)
+        
+        self.button.size = CGSize(width: self.topicLabel.width + self.chevronImageView.width + Theme.ContentOffset.short.value,
+                                  height: self.topicLabel.height + self.membersLabel.height)
+        self.button.left = self.topicLabel.left
+        self.button.top = self.topicLabel.top
+        
+        self.roomsButton.pin(.left, offset: .custom(6))
+        self.roomsButton.centerY = self.jibImageView.centerY
     }
     
     private func setTopic(for conversation: Conversation) {
@@ -109,5 +129,84 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         } completion: { completed in
             
         }
+    }
+    
+    // Mark: Members
+    
+    var conversationController: ConversationController?
+    
+    /// A task for loading data and subscribing to conversation updates.
+    private var loadDataTask: Task<Void, Never>?
+    
+    private func startLoadDataTask(with conversation: Conversation?) {
+        self.loadDataTask?.cancel()
+
+        if let cid = conversation?.cid {
+            self.conversationController = ConversationController.controller(cid)
+        } else {
+            self.conversationController = nil
+        }
+
+        self.loadDataTask = Task { [weak self] in
+            guard let conversationController = self?.conversationController else {
+                // If there's no current conversation, then there's nothing to show.
+                return
+            }
+
+            self?.setMembers(for: conversationController.conversation)
+
+            guard !Task.isCancelled else { return }
+
+            self?.subscribeToUpdates(for: conversationController)
+        }
+    }
+    
+    /// A task for loading data and subscribing to conversation updates.
+    private var loadPeopleTask: Task<Void, Never>?
+    
+    private func setMembers(for conversation: Conversation) {
+        self.loadPeopleTask?.cancel()
+        
+        self.loadPeopleTask = Task { [weak self] in
+            let members = await PeopleStore.shared.getPeople(for: conversation)
+            if members.count == 0 {
+                self?.membersLabel.setText("Just You")
+            } else if members.count == 1 {
+                self?.membersLabel.setText("1 Member")
+            } else {
+                self?.membersLabel.setText("\(members.count) Members")
+            }
+            self?.view.setNeedsLayout()
+        }
+    }
+
+    /// The subscriptions for the current conversation.
+    private var conversationCancellables = Set<AnyCancellable>()
+
+    private func subscribeToUpdates(for conversationController: ConversationController) {
+        // Clear out previous subscriptions.
+        self.conversationCancellables.removeAll()
+
+//        conversationController
+//            .typingUsersPublisher
+//            .mainSink(receiveValue: { [unowned self] typingUsers in
+//                self.dataSource.reconfigureAllItems()
+//            }).store(in: &self.conversationCancellables)
+
+        conversationController
+            .memberEventPublisher
+            .mainSink(receiveValue: { [unowned self] event in
+                switch event as MemberEvent {
+                case _ as MemberAddedEvent:
+                    self.setMembers(for: conversationController.conversation)
+                case _ as MemberRemovedEvent:
+                    guard let conversationController = self.conversationController else { return }
+                    self.setMembers(for: conversationController.conversation)
+                case _ as MemberUpdatedEvent:
+                    break
+                default:
+                    break
+                }
+            }).store(in: &self.conversationCancellables)
     }
 }
