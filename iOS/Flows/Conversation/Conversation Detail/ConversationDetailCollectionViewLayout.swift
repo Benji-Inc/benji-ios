@@ -24,20 +24,30 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
         super.init(sectionProvider: { sectionIndex, environment in
             guard let sectionType = ConversationDetailCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
+            let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
+            
             switch sectionType {
             case .people:
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(70))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                             leading: sectionInset,
+                                                             bottom: 0,
+                                                             trailing: sectionInset)
+
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.14), heightDimension: .fractionalHeight(1))
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-                
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                              leading: 0,
+                                                              bottom: 0,
+                                                              trailing: 0)
+
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: environment.container.contentSize.width.half, bottom: 0, trailing: environment.container.contentSize.width.half)
                 return section
+                
             case .info:
                 return nil
             case .options:
