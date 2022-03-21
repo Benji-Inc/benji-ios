@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
+class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
     
     override class var layoutAttributesClass: AnyClass {
         return MemberCellLayoutAttributes.self
@@ -19,7 +19,7 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
         config.scrollDirection = .horizontal
 
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = MembersCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = ConversationDetailCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
             switch sectionType {
             case .members:

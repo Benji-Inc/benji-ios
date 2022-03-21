@@ -9,10 +9,10 @@
 import Foundation
 import StreamChat
 
-typealias MembersSectionType = MembersCollectionViewDataSource.SectionType
-typealias MembersItemType = MembersCollectionViewDataSource.ItemType
+typealias ConversationDetailSectionType = ConversationDetailCollectionViewDataSource.SectionType
+typealias ConversationDetailItemType = ConversationDetailCollectionViewDataSource.ItemType
 
-class MembersCollectionViewDataSource: CollectionViewDataSource<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType> {
+class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<ConversationDetailCollectionViewDataSource.SectionType, ConversationDetailCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
         case members

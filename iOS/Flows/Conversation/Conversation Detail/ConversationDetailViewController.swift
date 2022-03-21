@@ -11,15 +11,15 @@ import StreamChat
 import Combine
 import ParseLiveQuery
 
-class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType,
-                             MembersCollectionViewDataSource.ItemType,
-                             MembersCollectionViewDataSource>,
+class ConversationDetailViewController: DiffableCollectionViewController<ConversationDetailCollectionViewDataSource.SectionType,
+                             ConversationDetailCollectionViewDataSource.ItemType,
+                             ConversationDetailCollectionViewDataSource>,
                              ActiveConversationable {
 
     var conversationController: ConversationController?
 
     init() {
-        let cv = CollectionView(layout: MembersCollectionViewLayout())
+        let cv = CollectionView(layout: ConversationDetailCollectionViewLayout())
         cv.showsHorizontalScrollIndicator = false
         super.init(with: cv)
     }
@@ -157,7 +157,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     // MARK: - Data Loading
 
-    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersSectionType, MembersItemType>)
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<ConversationDetailSectionType, ConversationDetailItemType>)
     -> AnimationCycle? {
 
         // Center on the user who sent the most recent message.
@@ -180,13 +180,13 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
                               scrollToIndexPath: centeredIndexPath)
     }
 
-    override func getAllSections() -> [MembersCollectionViewDataSource.SectionType] {
-        return MembersCollectionViewDataSource.SectionType.allCases
+    override func getAllSections() -> [ConversationDetailCollectionViewDataSource.SectionType] {
+        return ConversationDetailCollectionViewDataSource.SectionType.allCases
     }
 
-    override func retrieveDataForSnapshot() async -> [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] {
+    override func retrieveDataForSnapshot() async -> [ConversationDetailCollectionViewDataSource.SectionType: [ConversationDetailCollectionViewDataSource.ItemType]] {
 
-        var data: [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] = [:]
+        var data: [ConversationDetailCollectionViewDataSource.SectionType: [ConversationDetailCollectionViewDataSource.ItemType]] = [:]
 
         guard let conversationController = self.conversationController else { return data }
         let conversation = conversationController.conversation
