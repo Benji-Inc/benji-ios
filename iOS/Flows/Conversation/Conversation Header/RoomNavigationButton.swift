@@ -24,11 +24,11 @@ class RoomNavigationButton: BaseView {
         self.addSubview(self.outerRoomView)
         self.addSubview(self.innerRoomView)
         
-        self.outerRoomView.layer.borderWidth = 3
+        self.outerRoomView.layer.borderWidth = 2
         self.outerRoomView.layer.borderColor = ThemeColor.white.color.cgColor
         self.outerRoomView.layer.cornerRadius = 1
         
-        self.innerRoomView.layer.borderWidth = 3
+        self.innerRoomView.layer.borderWidth = 2
         self.innerRoomView.layer.borderColor = ThemeColor.white.color.cgColor
         self.innerRoomView.layer.cornerRadius = 1
     }
