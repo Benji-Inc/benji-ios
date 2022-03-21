@@ -13,14 +13,30 @@ typealias ConversationDetailSectionType = ConversationDetailCollectionViewDataSo
 typealias ConversationDetailItemType = ConversationDetailCollectionViewDataSource.ItemType
 
 class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<ConversationDetailCollectionViewDataSource.SectionType, ConversationDetailCollectionViewDataSource.ItemType> {
+    
+    // Show people
+    // Add people
+    
+    // Conversation Info -> who created, when, topic
+    
+    // Leave conversation
+    // Hide conversation (show toggle)
+    // Delete conversation
+
 
     enum SectionType: Int, CaseIterable {
-        case members
+        case people
+        case info
+        case options
     }
 
     enum ItemType: Hashable {
         case member(Member)
         case add(ChannelId)
+        case info(ChannelId)
+        case leave(ChannelId)
+        case hide(ChannelId)
+        case delete(ChannelId)
     }
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
@@ -41,6 +57,14 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
                                                                 for: indexPath,
                                                                 item: cid)
+        case .info(let cid):
+            return nil
+        case .leave(let cid):
+            return nil
+        case .hide(let cid):
+            return nil
+        case .delete(let cid):
+            return nil 
         }
     }
 }

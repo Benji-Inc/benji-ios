@@ -38,7 +38,6 @@
 		8057B59B27E2A10600B23D0D /* ConversationDetailCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59527E2A10500B23D0D /* ConversationDetailCollectionViewLayout.swift */; };
 		8057B59C27E2A10600B23D0D /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59627E2A10600B23D0D /* MemberCell.swift */; };
 		8057B59D27E2A10600B23D0D /* ConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */; };
-		8057B59E27E2A10600B23D0D /* MemberCellLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59827E2A10600B23D0D /* MemberCellLayoutAttributes.swift */; };
 		8057B59F27E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */; };
 		8057B5A027E2A10600B23D0D /* MemberAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59A27E2A10600B23D0D /* MemberAddCell.swift */; };
 		805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
@@ -205,6 +204,7 @@
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
 		D637651527E8FC8000CCDA7F /* RoomNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */; };
+		D637651827E92B5900CCDA7F /* ConversationDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */; };
 		D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
@@ -800,7 +800,6 @@
 		8057B59527E2A10500B23D0D /* ConversationDetailCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailCollectionViewLayout.swift; sourceTree = "<group>"; };
 		8057B59627E2A10600B23D0D /* MemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailViewController.swift; sourceTree = "<group>"; };
-		8057B59827E2A10600B23D0D /* MemberCellLayoutAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberCellLayoutAttributes.swift; sourceTree = "<group>"; };
 		8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		8057B59A27E2A10600B23D0D /* MemberAddCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberAddCell.swift; sourceTree = "<group>"; };
 		805881552743008D0004F2EA /* ConversationMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationMember+Extensions.swift"; sourceTree = "<group>"; };
@@ -934,6 +933,7 @@
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
 		D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNavigationButton.swift; sourceTree = "<group>"; };
+		D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailCoordinator.swift; sourceTree = "<group>"; };
 		D6381D7227E1666100102FB4 /* EmojiCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategory.swift; sourceTree = "<group>"; };
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
@@ -1636,12 +1636,12 @@
 		D637651627E9295100CCDA7F /* Conversation Detail */ = {
 			isa = PBXGroup;
 			children = (
-				8057B59A27E2A10600B23D0D /* MemberAddCell.swift */,
-				8057B59627E2A10600B23D0D /* MemberCell.swift */,
-				8057B59827E2A10600B23D0D /* MemberCellLayoutAttributes.swift */,
 				8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */,
 				8057B59527E2A10500B23D0D /* ConversationDetailCollectionViewLayout.swift */,
+				D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */,
 				8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */,
+				8057B59A27E2A10600B23D0D /* MemberAddCell.swift */,
+				8057B59627E2A10600B23D0D /* MemberCell.swift */,
 			);
 			path = "Conversation Detail";
 			sourceTree = "<group>";
@@ -2816,7 +2816,6 @@
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
 				D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
-				8057B59E27E2A10600B23D0D /* MemberCellLayoutAttributes.swift in Sources */,
 				D666127427E2EA38006CDF3D /* AchievementsManager.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */,
@@ -2926,6 +2925,7 @@
 				D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */,
 				D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */,
 				D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */,
+				D637651827E92B5900CCDA7F /* ConversationDetailCoordinator.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
 				806DA16A27307FA400843C4E /* MessageCell.swift in Sources */,
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
