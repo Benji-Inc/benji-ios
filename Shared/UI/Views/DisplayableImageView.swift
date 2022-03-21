@@ -35,7 +35,11 @@ class DisplayableImageView: BaseView {
         didSet {
             self.displayableTask?.cancel()
 
-            let displayableRef = self.displayable
+            // A nil displayable can be applied immediately without creating a task.
+            guard let displayableRef = self.displayable else {
+                self.imageView.image = nil
+                return
+            }
 
             self.displayableTask = Task {
                 await self.updateImageView(with: displayableRef)

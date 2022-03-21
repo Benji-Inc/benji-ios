@@ -32,7 +32,7 @@ class MessageContentView: BaseView {
     let bubbleView = MessageBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .T1)
-    let imageView = DisplayableImageView()
+    let displayableView = DisplayableImageView()
     private (set) var message: Messageable?
 
     let authorView = PersonView()
@@ -45,8 +45,9 @@ class MessageContentView: BaseView {
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
 
-        self.bubbleView.addSubview(self.imageView)
-        self.imageView.contentMode = .scaleAspectFill
+        self.bubbleView.addSubview(self.displayableView)
+        self.displayableView.imageView.contentMode = .scaleAspectFit
+        self.displayableView.roundCorners()
 
         self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
@@ -67,19 +68,23 @@ class MessageContentView: BaseView {
         self.authorView.pin(.top, offset: MessageContentView.padding)
         self.authorView.pin(.left, offset: MessageContentView.padding)
 
-        self.imageView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.imageView.pin(.top, offset: MessageContentView.padding)
-        self.imageView.width = 100
-        self.imageView.height = self.height - MessageContentView.padding.value.doubled
+        self.displayableView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.displayableView.pin(.top, offset: MessageContentView.padding)
+        if self.textView.text.isEmpty {
+            self.displayableView.expand(.right, to: self.width - MessageContentView.padding.value)
+        } else {
+            self.displayableView.width = self.width * 0.3
+        }
+        self.displayableView.height = self.height - MessageContentView.padding.value.doubled - 25
 
-        if imageView.displayable.exists {
-            self.textView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
+        if self.displayableView.displayable.exists {
+            self.textView.match(.left, to: .right, of: self.displayableView, offset: MessageContentView.padding)
         } else {
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         }
         self.textView.pin(.top, offset: MessageContentView.padding)
         self.textView.expand(.right, to: self.width - MessageContentView.padding.value)
-        self.textView.expand(.bottom, to: self.height - MessageContentView.padding.value)
+        self.textView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
     }
 
     func configure(with message: Messageable) {
@@ -90,12 +95,15 @@ class MessageContentView: BaseView {
         } else {
             self.textView.setText(with: message)
 
-            self.imageView.displayable = nil
+            self.displayableView.displayable = nil
+
             switch message.kind {
             case .photo(photo: let photo, _):
+                self.displayableView.isVisible = true
                 guard let url = photo.url else { break }
-                self.imageView.displayable = url
+                self.displayableView.displayable = url
             case .text, .attributedText, .video, .location, .emoji, .audio, .contact, .link:
+                self.displayableView.isVisible = false
                 break
             }
         }
@@ -107,10 +115,6 @@ class MessageContentView: BaseView {
 
         self.setNeedsLayout()
     }
-
-    private var loadImageTask: Task<Void, Never>?
-
-  
 
     /// Sets the background color and shows/hides the bubble tail.
     func configureBackground(color: UIColor,

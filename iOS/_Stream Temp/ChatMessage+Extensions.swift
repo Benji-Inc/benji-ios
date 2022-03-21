@@ -92,7 +92,7 @@ extension Message: Messageable {
             switch key {
             case AttachmentType.image:
                 if let streamAttachement = self.imageAttachments.first {
-                    let attachment = PhotoAttachment(url: streamAttachement.imageURL,
+                    let attachment = PhotoAttachment(url: streamAttachement.imagePreviewURL,
                                                      _data: nil,
                                                      info: nil)
                     return .photo(photo: attachment, body: self.text)
