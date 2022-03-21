@@ -56,6 +56,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.bottomBubble)
         self.contentView.addSubview(self.middleBubble)
         self.contentView.addSubview(self.messageContent)
+        self.messageContent.layoutState = .collapsed
         
         self.contentView.addSubview(self.leftLabel)
         self.leftLabel.textAlignment = .left
@@ -157,7 +158,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         let maxWidth = self.width * 0.9
         
         self.messageContent.width = maxWidth
-        self.messageContent.height = MessageContentView.collapseHeight
+        self.messageContent.height = MessageContentView.collapsedHeight
         self.messageContent.centerOnXAndY()
         
         self.middleBubble.width = maxWidth * 0.8
