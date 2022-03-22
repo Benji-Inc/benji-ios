@@ -153,7 +153,7 @@ class ToastBannerView: ToastView {
         self.blurView.expandToSuperviewSize()
         self.blurView.roundCorners()
 
-        self.imageView.setSize(for: 44)
+        self.imageView.setSize(forHeight: 44)
         self.imageView.pin(.left, offset: .standard)
         self.imageView.pin(.top, offset: .standard)
 

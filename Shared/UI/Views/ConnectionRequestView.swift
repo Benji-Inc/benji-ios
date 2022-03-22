@@ -89,7 +89,7 @@ class ConnectionRequestView: BaseView {
 
         self.personView.left = Theme.contentOffset.half
         self.personView.top = Theme.contentOffset.half
-        self.personView.setSize(for: self.containerView.height - Theme.contentOffset)
+        self.personView.setSize(forHeight: self.containerView.height - Theme.contentOffset)
 
         let maxLabelWidth = self.containerView.width - self.personView.right - Theme.contentOffset
         self.textView.setSize(withMaxWidth: maxLabelWidth)

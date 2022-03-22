@@ -54,7 +54,7 @@ class AvatarProfileViewController: ViewController {
 
         self.vibrancyView.expandToSuperviewSize()
 
-        self.personView.setSize(for: 120)
+        self.personView.setSize(forHeight: 120)
         self.personView.pinToSafeAreaTop()
         self.personView.centerOnX()
 

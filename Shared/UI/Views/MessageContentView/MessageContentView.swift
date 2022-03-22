@@ -31,6 +31,7 @@ class MessageContentView: BaseView {
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
     }
+    static let authorViewHeight: CGFloat = 40
 
     static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
     static let padding = Theme.ContentOffset.long
@@ -76,23 +77,29 @@ class MessageContentView: BaseView {
 
         self.bubbleView.expandToSuperviewSize()
 
-        self.authorView.size = self.getAuthorSize()
+        self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         self.authorView.pin(.top, offset: MessageContentView.padding)
         self.authorView.pin(.left, offset: MessageContentView.padding)
 
-        self.displayableView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.displayableView.pin(.top, offset: MessageContentView.padding)
-        self.displayableView.width = self.width * 0.3
-        self.displayableView.height = self.height - MessageContentView.padding.value.doubled - 25
-
-        if self.displayableView.displayable.exists {
-            self.textView.match(.left, to: .right, of: self.displayableView, offset: MessageContentView.padding)
-        } else {
-            self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        }
+        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.textView.pin(.top, offset: MessageContentView.padding)
-        self.textView.expand(.right, to: self.width - MessageContentView.padding.value)
-        self.textView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
+        if self.displayableView.displayable.exists {
+            let maxHeight = MessageContentView.authorViewHeight
+            self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
+                                  maxHeight: maxHeight)
+        } else {
+            self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
+                                  maxHeight: self.height - self.textView.top - MessageContentView.padding.value - 25)
+        }
+
+        self.displayableView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        if self.textView.text.isEmpty {
+            self.displayableView.match(.top, to: .top, of: self.authorView)
+        } else {
+            self.displayableView.match(.top, to: .bottom, of: self.textView, offset: MessageContentView.padding)
+        }
+        self.displayableView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
+        self.displayableView.width = self.displayableView.height
     }
 
     func configure(with message: Messageable) {
@@ -147,11 +154,6 @@ class MessageContentView: BaseView {
         CATransaction.commit()
     }
 
-    func getAuthorSize() -> CGSize {
-        let authorHeight: CGFloat = MessageContentView.standardHeight * 0.33
-        return self.authorView.getSize(for: authorHeight)
-    }
-
     func getSize(with width: CGFloat) -> CGSize {
         var size = self.textView.getSize(width: width, layout: self.layoutState)
         size.width += MessageContentView.textViewPadding
@@ -195,7 +197,8 @@ extension MessageTextView {
             maxTextHeight = MessageContentView.collapsedBubbleHeight
         }
         
-        let size = MessageContentView().getAuthorSize()
+        let size = CGSize(width: MessageContentView.authorViewHeight,
+                          height: MessageContentView.authorViewHeight)
         maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
 
         return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)

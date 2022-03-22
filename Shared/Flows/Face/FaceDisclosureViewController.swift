@@ -37,7 +37,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         }
     }
 
-    private let imageView = PersonView()
+    private let personView = PersonView()
     let button = ThemeButton()
 
     private let captureType: CaptureType
@@ -54,9 +54,9 @@ class FaceDisclosureViewController: DisclosureModalViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.imageView)
-        self.imageView.state = .loading
-        self.imageView.tintColor = .white
+        self.view.addSubview(self.personView)
+        self.personView.state = .loading
+        self.personView.tintColor = .white
 
         self.titleLabel.setText("Uploading")
 
@@ -68,11 +68,11 @@ class FaceDisclosureViewController: DisclosureModalViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.imageView.setSize(for: self.view.width * 0.25)
-        self.imageView.match(.top, to: .bottom, of: self.titleLabel, offset: .xtraLong)
-        self.imageView.centerOnX()
+        self.personView.setSize(forHeight: self.view.width * 0.25)
+        self.personView.match(.top, to: .bottom, of: self.titleLabel, offset: .xtraLong)
+        self.personView.centerOnX()
 
-        self.descriptionLabel.match(.top, to: .bottom, of: self.imageView, offset: .xtraLong)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.personView, offset: .xtraLong)
 
         self.button.expandToSuperviewWidth()
         self.button.height = Theme.buttonHeight
@@ -94,7 +94,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
                 self.updateUI(data: data)
             }
         } catch {
-            self.imageView.state = .error
+            self.personView.state = .error
             self.titleLabel.setText("Error")
             throw error
         }
@@ -103,7 +103,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
     private func updateUI(data: Data) {
         self.titleLabel.setText(self.captureType.title)
         self.updateDescription(with: self.captureType.description)
-        self.imageView.displayable = UIImage(data: data)
+        self.personView.displayable = UIImage(data: data)
         self.button.isHidden = false
         self.view.layoutNow()
     }

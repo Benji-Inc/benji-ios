@@ -57,7 +57,6 @@ class DisplayableImageView: BaseView {
     private lazy var urlSession: URLSession = {
         let configuration = URLSessionConfiguration.default
         configuration.requestCachePolicy = .returnCacheDataElseLoad
-
         return URLSession(configuration: configuration)
     }()
 
