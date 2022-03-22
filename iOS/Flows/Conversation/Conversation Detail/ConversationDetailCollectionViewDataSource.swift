@@ -82,12 +82,12 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                                                                     item: cid)
             switch type {
             case .hide:
-                cell.imageView.image = UIImage(systemName: "hand.wave")
-                cell.label.setText("Leave Conversation")
-                cell.rightImageView.image = nil
-            case .leave:
                 cell.imageView.image = UIImage(systemName: "eye.slash")
                 cell.label.setText("Hide Conversation")
+                cell.rightImageView.image = nil
+            case .leave:
+                cell.imageView.image = UIImage(systemName: "hand.wave")
+                cell.label.setText("Leave Conversation")
                 cell.rightImageView.image = nil
                 return cell
             case .delete:

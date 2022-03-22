@@ -48,10 +48,9 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             case .info(_):
                 break
             case .editTopic(let cid):
-                let conversation = ChatClient.shared.channelController(for: cid).conversation
-                self.presentConversationTitleAlert(for: conversation)
-            case .detail(_, _):
-                break
+                self.presentConversationTitleAlert(for: cid)
+            case .detail(let cid, let option):
+                self.presentDetail(option: option, cid: cid)
             }
         }.store(in: &self.cancellables)
     }
@@ -70,19 +69,19 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         self.router.present(coordinator, source: self.detailVC, cancelHandler: nil)
     }
     
-    func presentConversationTitleAlert(for conversation: Conversation) {
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
+    func presentConversationTitleAlert(for cid: ConversationId) {
+        let controller = ChatClient.shared.channelController(for: cid)
 
         let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Name"
         }
-        let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { [unowned self] alert -> Void in
+        let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { alert -> Void in
             if let textField = alertController.textFields?.first,
                let text = textField.text,
                !text.isEmpty {
 
-                controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
+                controller.updateChannel(name: text, imageURL: nil, team: nil) { _ in
                     alertController.dismiss(animated: true, completion: {
                     })
                 }
@@ -100,20 +99,55 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         self.detailVC.present(alertController, animated: true, completion: nil)
     }
     
-    func presentDeleteConversationAlert(cid: ConversationId?) {
-        guard let cid = cid else { return }
-        
+    func presentDetail(option: ConversationDetailCollectionViewDataSource.OptionType, cid: ConversationId) {
+                
         let controller = ChatClient.shared.channelController(for: cid)
         
-        guard controller.conversation.memberCount <= 1 else { return }
-
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        var title: String = ""
+        var message: String = ""
+        var style: UIAlertAction.Style = .default
         
-        let deleteAction = UIAlertAction(title: "Delete Conversation", style: .destructive, handler: {
+        switch option {
+        case .hide:
+            title = "Hide"
+            message = "Hiding this conversation will archive the conversation until a new message is sent to it."
+        case .leave:
+            title = "Leave"
+            message = "Leaving the conversation will remove you as a participant."
+        case .delete:
+            title = "Delete"
+            message = "Deleting a conversation will remove all members and data associated with this conversation."
+            style = .destructive
+        }
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        
+        let primaryAction = UIAlertAction(title: "Confirm", style: style, handler: {
             (action : UIAlertAction!) -> Void in
-            Task {
-                try await controller.deleteChannel()
-                // Dismiss???
+            
+            switch option {
+            case .hide:
+                Task {
+                    try? await controller.hideChannel(clearHistory: false)
+                    Task.onMainActor {
+                        self.finishFlow(with: nil)
+                    }
+                }.add(to: self.taskPool)
+            case .leave:
+                Task {
+                    let user = User.current()!.objectId!
+                    try? await controller.removeMembers(userIds: Set.init([user]))
+                    Task.onMainActor {
+                        self.finishFlow(with: nil)
+                    }
+                }.add(to: self.taskPool)
+            case .delete:
+                Task {
+                    try? await controller.deleteChannel()
+                    Task.onMainActor {
+                        self.finishFlow(with: nil)
+                    }
+                }.add(to: self.taskPool)
             }
         })
 
@@ -122,7 +156,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             
         })
 
-        alertController.addAction(deleteAction)
+        alertController.addAction(primaryAction)
         alertController.addAction(cancelAction)
         
         self.detailVC.present(alertController, animated: true, completion: nil)
