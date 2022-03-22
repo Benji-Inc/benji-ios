@@ -25,13 +25,12 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
 
 
     enum SectionType: Int, CaseIterable {
-        case people
         case info
+        case people
         case options
     }
     
     enum OptionType: Int {
-        case info
         case hide
         case leave
         case delete
@@ -40,6 +39,8 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
     enum ItemType: Hashable {
         case member(Member)
         case add(ChannelId)
+        case info(ChannelId)
+        case editTopic(ChannelId)
         case detail(ChannelId, OptionType)
     }
 
@@ -47,6 +48,8 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
     private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
+    private let infoConfig = ManageableCellRegistration<ConversationInfoCell>().provider
+    private let editConfig = ManageableCellRegistration<ConversationEditCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -55,6 +58,16 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
         switch item {
+        case .info(let cid):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.infoConfig,
+                                                                    for: indexPath,
+                                                                    item: cid)
+            return cell
+        case .editTopic(let cid):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.editConfig,
+                                                                    for: indexPath,
+                                                                    item: cid)
+            return cell
         case .member(let member):
             return collectionView.dequeueConfiguredReusableCell(using: self.memberConfig,
                                                                 for: indexPath,
@@ -68,8 +81,6 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                                                                     for: indexPath,
                                                                     item: cid)
             switch type {
-            case .info:
-                return nil
             case .hide:
                 cell.imageView.image = UIImage(systemName: "hand.wave")
                 cell.label.setText("Leave Conversation")

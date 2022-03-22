@@ -207,6 +207,8 @@
 		D637651827E92B5900CCDA7F /* ConversationDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */; };
 		D637651A27E936CB00CCDA7F /* SectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651927E936CB00CCDA7F /* SectionBackgroundView.swift */; };
 		D637651C27E959E200CCDA7F /* ConversationDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651B27E959E200CCDA7F /* ConversationDetailCell.swift */; };
+		D637651E27E983FC00CCDA7F /* ConversationInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651D27E983FC00CCDA7F /* ConversationInfoCell.swift */; };
+		D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651F27E98CB400CCDA7F /* ConversationEditCell.swift */; };
 		D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
@@ -938,6 +940,8 @@
 		D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailCoordinator.swift; sourceTree = "<group>"; };
 		D637651927E936CB00CCDA7F /* SectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionBackgroundView.swift; sourceTree = "<group>"; };
 		D637651B27E959E200CCDA7F /* ConversationDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailCell.swift; sourceTree = "<group>"; };
+		D637651D27E983FC00CCDA7F /* ConversationInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationInfoCell.swift; sourceTree = "<group>"; };
+		D637651F27E98CB400CCDA7F /* ConversationEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationEditCell.swift; sourceTree = "<group>"; };
 		D6381D7227E1666100102FB4 /* EmojiCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategory.swift; sourceTree = "<group>"; };
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
@@ -1645,6 +1649,8 @@
 				8057B59527E2A10500B23D0D /* ConversationDetailCollectionViewLayout.swift */,
 				D637651727E92B5900CCDA7F /* ConversationDetailCoordinator.swift */,
 				8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */,
+				D637651F27E98CB400CCDA7F /* ConversationEditCell.swift */,
+				D637651D27E983FC00CCDA7F /* ConversationInfoCell.swift */,
 				8057B59A27E2A10600B23D0D /* MemberAddCell.swift */,
 				8057B59627E2A10600B23D0D /* MemberCell.swift */,
 				D637651927E936CB00CCDA7F /* SectionBackgroundView.swift */,
@@ -2969,6 +2975,7 @@
 				D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
 				D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */,
+				D637651E27E983FC00CCDA7F /* ConversationInfoCell.swift in Sources */,
 				D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */,
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
@@ -3060,6 +3067,7 @@
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
+				D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */,
 				D646D36827E5053A0077D20B /* AttachmentsCollectionViewDataSource.swift in Sources */,
 				D6CC1489276BFA89005F617F /* Shape+Extensions.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,

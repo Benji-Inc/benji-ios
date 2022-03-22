@@ -42,7 +42,7 @@ class ConversationDetailCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.imageView.squaredSize = 26
+        self.imageView.squaredSize = 22
         self.imageView.centerOnY()
         self.imageView.pin(.left)
         
