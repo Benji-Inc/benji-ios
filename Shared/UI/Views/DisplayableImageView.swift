@@ -132,6 +132,8 @@ class DisplayableImageView: BaseView {
 
     private func downloadAndSetImage(for file: PFFileObject) async {
         do {
+            guard !Task.isCancelled else { return }
+
             if !file.isDataAvailable {
                 self.state = .loading
             }
@@ -140,9 +142,7 @@ class DisplayableImageView: BaseView {
 
             guard !Task.isCancelled else { return }
 
-            let image = await UIImage(data: data)?.byPreparingForDisplay()
-
-            guard !Task.isCancelled else { return }
+            let image = UIImage(data: data)
 
             await self.set(image: image, state: image.exists ? .success : .error)
         } catch {
@@ -153,16 +153,24 @@ class DisplayableImageView: BaseView {
     }
 
     private func downloadAndSetImage(for url: URL) async {
-        guard !Task.isCancelled else { return }
+        do {
+            guard !Task.isCancelled else { return }
 
-        guard let data: Data = try? await self.urlSession.dataTask(with: url).0 else { return }
+            self.state = .loading
 
-        guard !Task.isCancelled else { return }
+            let data: Data = try await self.urlSession.dataTask(with: url).0
 
-        // Contruct the image from the returned data
-        guard let image = UIImage(data: data) else { return }
+            guard !Task.isCancelled else { return }
 
-        await self.set(image: image, state: .success)
+            // Contruct the image from the returned data
+            guard let image = UIImage(data: data) else { return }
+
+            await self.set(image: image, state: .success)
+        } catch {
+            guard !Task.isCancelled else { return }
+
+            await self.set(image: nil, state: .error)
+        }
     }
 
     @MainActor
