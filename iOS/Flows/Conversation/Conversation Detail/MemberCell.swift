@@ -130,7 +130,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.focusLabel.centerY = self.focusCircle.centerY
         
         self.timeLabel.setSize(withWidth: self.width)
-        self.timeLabel.pin(.right)//.match(.left, to: .right, of: self.focusLabel, offset: .short)
+        self.timeLabel.pin(.right)
         self.timeLabel.centerY = self.focusLabel.centerY
         
         self.nameLabel.setSize(withWidth: self.width)

@@ -81,15 +81,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.headerVC.button.didSelect { [unowned self] in
             self.presentConversationDetail()
         }
-
-        self.conversationListVC.headerVC.didTapUpdateTopic = { [unowned self] in
-            guard let conversation = self.activeConversation else {
-                logDebug("Unable to change topic because no conversation is selected.")
-                return
-            }
-
-            self.presentConversationTitleAlert(for: conversation)
-        }
         
         self.conversationListVC.dataSource.handleAddPeopleSelected = { [unowned self] in
             Task {
