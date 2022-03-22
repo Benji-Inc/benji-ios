@@ -261,7 +261,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
 
         let conversations: [Conversation] = self.conversationListController?.conversations ?? []
                 
-        let items = conversations.map { convo in
+        let items = conversations.filter({ conversation in
+            return conversation.messages.count > 0
+        }).map { convo in
             return UserConversationsDataSource.ItemType.conversation(convo.cid)
         }
         var snapshot = self.dataSource.snapshot()

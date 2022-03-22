@@ -19,9 +19,19 @@ class MessageContentView: BaseView {
     var handleTappedMessage: ((ConversationId, MessageId) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
 #endif
+    
+    enum Layout {
+        case collapsed
+        case expanded
+    }
 
     // Sizing
     static let bubbleHeight: CGFloat = 168
+    static let collapsedHeight: CGFloat = 78 - MessageContentView.bubbleTailLength
+    static var collapsedBubbleHeight: CGFloat {
+        return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
+    }
+
     static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
     static let padding = Theme.ContentOffset.long
     static var textViewPadding: CGFloat { return MessageContentView.padding.value * 2 }
@@ -36,6 +46,8 @@ class MessageContentView: BaseView {
     private (set) var message: Messageable?
 
     let authorView = PersonView()
+    
+    var layoutState: Layout = .expanded
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -143,7 +155,7 @@ class MessageContentView: BaseView {
     }
 
     func getSize(with width: CGFloat) -> CGSize {
-        var size = self.textView.getSize(width: width)
+        var size = self.textView.getSize(width: width, layout: self.layoutState)
         size.width += MessageContentView.textViewPadding
         size.height += self.bubbleView.tailLength + MessageContentView.textViewPadding
         return size
@@ -181,10 +193,14 @@ extension MessageContentView {
 
 extension MessageTextView {
 
-    func getSize(width: CGFloat) -> CGSize {
+    func getSize(width: CGFloat, layout: MessageContentView.Layout = .expanded) -> CGSize {
         let maxTextWidth: CGFloat
-        let maxTextHeight: CGFloat = MessageContentView.standardHeight
-
+        var maxTextHeight: CGFloat = MessageContentView.standardHeight
+        
+        if layout == .collapsed {
+            maxTextHeight = MessageContentView.collapsedBubbleHeight
+        }
+        
         let size = MessageContentView().getAuthorSize()
         maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
 

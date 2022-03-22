@@ -180,19 +180,19 @@ class SwipeableInputAccessoryView: BaseView {
         }
     }
 
-    func setShowMessageDetailOptions(_ shouldShow: Bool) {
+    func setShowMessageDetailOptions(shouldShowDetail: Bool, showAvatar: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.emotionView.alpha = shouldShow ? 1.0 : 0.0
-            self.deliveryTypeView.alpha = shouldShow ? 1.0 : 0.0
-            self.avatarView.alpha = shouldShow ? 0.0 : 1.0
-            self.avatarHeightConstraint.constant = shouldShow ? 0 : 44
-            
-            if shouldShow {
+            self.emotionView.alpha = shouldShowDetail ? 1.0 : 0.0
+            self.deliveryTypeView.alpha = shouldShowDetail ? 1.0 : 0.0
+            self.avatarView.alpha = showAvatar ? 1.0 : 0.0
+            self.avatarHeightConstraint.constant = showAvatar ? 44 : 0
+                                    
+            if shouldShowDetail {
                 self.countView.update(with: self.textView.text.count, max: self.textView.maxLength)
             } else {
                 self.countView.alpha = 0.0
             }
-
+            
             // Layout the window so that our container view also animates
             self.window?.layoutNow()
         }

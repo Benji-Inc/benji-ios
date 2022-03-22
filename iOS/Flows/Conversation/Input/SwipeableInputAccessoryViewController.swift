@@ -123,7 +123,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     }
 
     func setupGestures() {
-        
+                
         self.swipeInputView.addView.didSelectRemove = { [unowned self] in
             self.currentMessageKind = .text(self.swipeInputView.textView.text)
         }
@@ -169,11 +169,13 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             .mainSink { [unowned self] currentEvent in
                 switch currentEvent {
                 case .willShow:
-                    self.swipeInputView.setShowMessageDetailOptions(true)
+                    self.swipeInputView.setShowMessageDetailOptions(shouldShowDetail: true, showAvatar: false)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
                     self.swipeInputView.updateLayout(for: self.inputState)
+                case .didShow:
+                    break 
                 case .willHide:
-                    self.swipeInputView.setShowMessageDetailOptions(false)
+                    self.swipeInputView.setShowMessageDetailOptions(shouldShowDetail: true, showAvatar: true)
                     self.hintAnimator.updateSwipeHint(shouldPlay: false)
                 case .didHide:
                     self.swipeInputView.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)

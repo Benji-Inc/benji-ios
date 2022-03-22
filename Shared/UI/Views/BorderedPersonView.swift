@@ -58,6 +58,7 @@ class BorderedPersonView: PersonView {
         super.set(person: person)
 
         guard let person = person else { return }
+        
         self.setColors(for: person)
         self.contextCueView.configure(with: person)
     }
@@ -103,5 +104,16 @@ class BorderedPersonView: PersonView {
     func endTyping() {
         self.pulseLayer.strokeColor = ThemeColor.clear.color.cgColor
         self.pulseLayer.removeAllAnimations()
+    }
+    
+    @MainActor
+    override func set(image: UIImage?, state: State) async {
+        await super.set(image: image, state: state)
+        
+        if image.isNil {
+            self.shadowLayer.shadowColor = ThemeColor.B6.color.cgColor
+            self.pulseLayer.borderColor = ThemeColor.B6.color.cgColor
+            self.pulseLayer.borderWidth = 2
+        }
     }
 }
