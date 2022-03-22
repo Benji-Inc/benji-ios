@@ -84,20 +84,26 @@ class MessageContentView: BaseView {
         self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.textView.pin(.top, offset: MessageContentView.padding)
         if self.displayableView.displayable.exists {
+            // If there's also an image to display, then limit the text view height.
             let maxHeight = MessageContentView.authorViewHeight
             self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
                                   maxHeight: maxHeight)
         } else {
+            // If there's no image to display, the text view can take up all the available vertical space.
             self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
                                   maxHeight: self.height - self.textView.top - MessageContentView.padding.value - 25)
         }
 
         self.displayableView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         if self.textView.text.isEmpty {
+            // If there's no text, then the image will take up all available vertical space.
             self.displayableView.match(.top, to: .top, of: self.authorView)
         } else {
+            // If there is text, then fit the image in the remaining vertical space under the image.
             self.displayableView.match(.top, to: .bottom, of: self.textView, offset: MessageContentView.padding)
         }
+
+        // Expand the image to fill in the remaining height.
         self.displayableView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
         self.displayableView.width = self.displayableView.height
     }
