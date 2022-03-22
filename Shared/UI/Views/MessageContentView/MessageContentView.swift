@@ -113,8 +113,8 @@ class MessageContentView: BaseView {
             switch message.kind {
             case .photo(photo: let photo, _):
                 self.displayableView.isVisible = true
-                guard let url = photo.url else { break }
-                self.displayableView.displayable = url
+                guard let previewUrl = photo.previewUrl else { break }
+                self.displayableView.displayable = previewUrl
             case .text, .attributedText, .video, .location, .emoji, .audio, .contact, .link:
                 self.displayableView.isVisible = false
                 break

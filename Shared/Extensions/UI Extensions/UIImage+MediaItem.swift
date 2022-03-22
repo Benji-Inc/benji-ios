@@ -16,6 +16,10 @@ extension UIImage: MediaItem {
         return nil
     }
 
+    var previewUrl: URL? {
+        return nil
+    }
+
     var fileName: String {
         return ""
     }
