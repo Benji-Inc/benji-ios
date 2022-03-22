@@ -16,12 +16,23 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
                                         ConversationDetailCollectionViewDataSource>,
                                         ActiveConversationable {
     
+    private let topGradientView
+    = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                   startPoint: .topCenter,
+                   endPoint: .bottomCenter)
+    
+    private let titleLabel = ThemeLabel(font: .regularBold)
+    
     let conversationController: ConversationController
     
     init(with cid: ConversationId) {
         self.conversationController = ConversationController.controller(cid)
         let cv = CollectionView(layout: ConversationDetailCollectionViewLayout())
         cv.showsHorizontalScrollIndicator = false
+        cv.contentInset = UIEdgeInsets(top: 60,
+                                       left: 0,
+                                       bottom: 100,
+                                       right: 0)
         super.init(with: cv)
     }
     
@@ -41,6 +52,10 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         }
         
         self.view.set(backgroundColor: .B0)
+        
+        self.view.addSubview(self.topGradientView)
+        self.view.addSubview(self.titleLabel)
+        self.titleLabel.textAlignment = .center
         
         self.collectionView.allowsMultipleSelection = false
         
@@ -71,6 +86,41 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         self.startLoadDataTask(with: self.conversationController.conversation)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.titleLabel.setSize(withWidth: self.view.width)
+        self.titleLabel.centerOnX()
+        self.titleLabel.pin(.top, offset: .screenPadding)
+        
+        self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = self.titleLabel.bottom + 4
+        self.topGradientView.pin(.top)
+    }
+    
+    private func setTopic(for conversation: Conversation) {
+        if let title = conversation.title {
+            self.titleLabel.setText(title)
+        } else {
+            // If there is no title, then list the members of the conversation.
+            let members = conversation.lastActiveMembers.filter { member in
+                return !member.isCurrentUser
+            }
+
+            var membersString = ""
+            members.forEach { member in
+                if membersString.isEmpty {
+                    membersString = member.givenName
+                } else {
+                    membersString.append(", \(member.givenName)")
+                }
+            }
+            self.titleLabel.setText(membersString)
+        }
+        
+        self.view.setNeedsLayout()
+    }
+    
     /// A task for loading data and subscribing to conversation updates.
     private var loadDataTask: Task<Void, Never>?
     
@@ -83,6 +133,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
                 await self?.dataSource.deleteAllItems()
                 return
             }
+            
+            self?.setTopic(for: conversationController.conversation)
             
             await self?.loadData()
             

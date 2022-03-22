@@ -15,13 +15,17 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: ChannelId?
     
-    let addView = AddView()
+    private let imageView = UIImageView(image: UIImage(systemName: "person.badge.plus"))
+    private let label = ThemeLabel(font: .medium)
     
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.clipsToBounds = false
-        self.contentView.addSubview(self.addView)
+        self.contentView.addSubview(self.imageView)
+        self.imageView.tintColor = ThemeColor.T1.color
+        
+        self.contentView.addSubview(self.label)
+        self.label.setText("Add People")
     }
     
     func configure(with item: ChannelId) {}
@@ -29,7 +33,12 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.addView.squaredSize = self.contentView.height
-        self.addView.centerOnXAndY()
+        self.imageView.squaredSize = 26
+        self.imageView.centerOnY()
+        self.imageView.pin(.left)
+        
+        self.label.setSize(withWidth: self.width)
+        self.label.match(.left, to: .right, of: self.imageView, offset: .long)
+        self.label.centerOnY()
     }
 }

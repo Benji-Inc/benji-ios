@@ -38,6 +38,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     
     let focusLabel = ThemeLabel(font: .small)
     let focusCircle = BaseView()
+    
+    let lineView = BaseView()
         
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -56,6 +58,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.focusLabel.setTextColor(.D1)
         
         self.addSubview(self.focusCircle)
+        
+        self.addSubview(self.lineView)
+        self.lineView.set(backgroundColor: .white)
+        self.lineView.alpha = 0.1
         
         self.subscribeToUpdates()
     }
@@ -110,7 +116,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.personView.squaredSize = self.contentView.height - Theme.ContentOffset.xtraLong.value.doubled
+        self.personView.squaredSize = self.contentView.height - Theme.ContentOffset.long.value.doubled
         self.personView.centerOnY()
         self.personView.pin(.left)
         
@@ -130,6 +136,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.nameLabel.setSize(withWidth: self.width)
         self.nameLabel.match(.bottom, to: .top, of: self.focusCircle, offset: .negative(.standard))
         self.nameLabel.match(.left, to: .left, of: self.focusCircle)
+        
+        self.lineView.expandToSuperviewWidth()
+        self.lineView.height = 1
+        self.lineView.pin(.bottom)
     }
 
     override func prepareForReuse() {
