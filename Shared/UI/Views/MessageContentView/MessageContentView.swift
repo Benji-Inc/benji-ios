@@ -21,7 +21,7 @@ class MessageContentView: BaseView {
 #endif
 
     // Sizing
-    static let bubbleHeight: CGFloat = 148
+    static let bubbleHeight: CGFloat = 188
     static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
     static let padding = Theme.ContentOffset.long
     static var textViewPadding: CGFloat { return MessageContentView.padding.value * 2 }
