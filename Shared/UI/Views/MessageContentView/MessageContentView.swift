@@ -166,11 +166,7 @@ class MessageContentView: BaseView {
 extension MessageContentView {
 
     func configureConsumption(for message: Messageable) {
-        if message.isConsumedByMe {
-            self.textView.setFont(.regular)
-        } else {
-            self.textView.setFont(.regular)
-        }
+        self.textView.setFont(.regular)
     }
 
     func setToRead() {
