@@ -47,10 +47,18 @@ class DisplayableImageView: BaseView {
         }
     }
 
+    /// A custom configured url session for retrieving displayables with a url.
+    private lazy var urlSession: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        configuration.requestCachePolicy = .returnCacheDataElseLoad
+
+        return URLSession(configuration: configuration)
+    }()
+
+    // MARK: - Life cycle
+
     override func initializeSubviews() {
         super.initializeSubviews()
-
-        self.set(backgroundColor: .clear)
 
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFill
@@ -67,7 +75,7 @@ class DisplayableImageView: BaseView {
                 self.animationView.stop()
                 self.blurView.showBlur(true)
             case .loading:
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
                     self.blurView.showBlur(true)
                 }
                 if self.animationView.isAnimationPlaying {
@@ -80,7 +88,7 @@ class DisplayableImageView: BaseView {
                 self.animationView.load(animation: .error)
                 self.animationView.loopMode = .loop
                 self.animationView.play()
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
                     self.blurView.showBlur(true)
                 }
             case .success:
@@ -89,7 +97,7 @@ class DisplayableImageView: BaseView {
                 }
                 self.animationView.reset()
 
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
                     self.blurView.showBlur(false)
                 }
             }
@@ -108,7 +116,8 @@ class DisplayableImageView: BaseView {
         self.animationView.centerOnXAndY()
     }
 
-    @MainActor
+    // MARK: - Image Retrieval/Setting
+
     private func updateImageView(with displayable: ImageDisplayable?) async {
         if let photo = displayable?.image {
             await self.set(image: photo, state: .success)
@@ -121,11 +130,7 @@ class DisplayableImageView: BaseView {
         }
     }
 
-    private func downloadAndSetImage(for fileObject: PFFileObject) async {
-        await self.downloadAndSet(file: fileObject)
-    }
-
-    private func downloadAndSet(file: PFFileObject) async {
+    private func downloadAndSetImage(for file: PFFileObject) async {
         do {
             if !file.isDataAvailable {
                 self.state = .loading
@@ -150,7 +155,7 @@ class DisplayableImageView: BaseView {
     private func downloadAndSetImage(for url: URL) async {
         guard !Task.isCancelled else { return }
 
-        guard let data: Data = try? await URLSession.shared.dataTask(with: url).0 else { return }
+        guard let data: Data = try? await self.urlSession.dataTask(with: url).0 else { return }
 
         guard !Task.isCancelled else { return }
 
@@ -159,7 +164,6 @@ class DisplayableImageView: BaseView {
 
         await self.set(image: image, state: .success)
     }
-
 
     @MainActor
     private func set(image: UIImage?, state: State) async {

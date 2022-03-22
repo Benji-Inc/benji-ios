@@ -21,7 +21,7 @@ class MessageContentView: BaseView {
 #endif
 
     // Sizing
-    static let bubbleHeight: CGFloat = 188
+    static let bubbleHeight: CGFloat = 168
     static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
     static let padding = Theme.ContentOffset.long
     static var textViewPadding: CGFloat { return MessageContentView.padding.value * 2 }
@@ -46,7 +46,7 @@ class MessageContentView: BaseView {
         self.bubbleView.roundCorners()
 
         self.bubbleView.addSubview(self.displayableView)
-        self.displayableView.imageView.contentMode = .scaleAspectFit
+        self.displayableView.imageView.contentMode = .scaleAspectFill
         self.displayableView.roundCorners()
 
         self.bubbleView.addSubview(self.textView)
@@ -70,11 +70,7 @@ class MessageContentView: BaseView {
 
         self.displayableView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.displayableView.pin(.top, offset: MessageContentView.padding)
-        if self.textView.text.isEmpty {
-            self.displayableView.expand(.right, to: self.width - MessageContentView.padding.value)
-        } else {
-            self.displayableView.width = self.width * 0.3
-        }
+        self.displayableView.width = self.width * 0.3
         self.displayableView.height = self.height - MessageContentView.padding.value.doubled - 25
 
         if self.displayableView.displayable.exists {
