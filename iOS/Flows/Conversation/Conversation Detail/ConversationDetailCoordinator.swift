@@ -47,8 +47,9 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 break
             case .info(_):
                 break
-            case .editTopic(_):
-                break
+            case .editTopic(let cid):
+                let conversation = ChatClient.shared.channelController(for: cid).conversation
+                self.presentConversationTitleAlert(for: conversation)
             case .detail(_, _):
                 break
             }
