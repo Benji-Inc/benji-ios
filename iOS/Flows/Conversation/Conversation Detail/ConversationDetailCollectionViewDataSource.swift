@@ -85,6 +85,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                 cell.label.setTextColor(.red)
                 cell.label.setText("Delete Conversation")
                 cell.rightImageView.image = nil
+                cell.lineView.isHidden = true 
             }
             
             return cell

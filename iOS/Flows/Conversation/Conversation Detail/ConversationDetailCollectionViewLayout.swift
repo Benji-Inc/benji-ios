@@ -37,7 +37,7 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
                                                              trailing: sectionInset)
                 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(74))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(60))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                               leading: 0,

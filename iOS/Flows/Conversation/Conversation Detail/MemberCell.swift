@@ -134,7 +134,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.timeLabel.centerY = self.focusLabel.centerY
         
         self.nameLabel.setSize(withWidth: self.width)
-        self.nameLabel.match(.bottom, to: .top, of: self.focusCircle, offset: .negative(.standard))
+        self.nameLabel.match(.bottom, to: .top, of: self.focusCircle, offset: .negative(.short))
         self.nameLabel.match(.left, to: .left, of: self.focusCircle)
         
         self.lineView.expandToSuperviewWidth()
