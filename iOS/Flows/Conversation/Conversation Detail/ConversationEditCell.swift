@@ -15,7 +15,7 @@ class ConversationEditCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: ChannelId?
     
-    private let label = ThemeLabel(font: .regularBold, textColor: .D6)
+    private let label = ThemeLabel(font: .regular, textColor: .D6)
     private let lineView = BaseView()
     
     override func initializeSubviews() {

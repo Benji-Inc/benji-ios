@@ -34,6 +34,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     
     let nameLabel = ThemeLabel(font: .medium)
     
+    let localTimeLabel = ThemeLabel(font: .small)
     let timeLabel = ThemeLabel(font: .small)
     
     let focusLabel = ThemeLabel(font: .small)
@@ -52,7 +53,13 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         
         self.addSubview(self.nameLabel)
         
+        self.addSubview(self.localTimeLabel)
+        self.localTimeLabel.setText("Local Time")
+        self.localTimeLabel.alpha = 0.25
+        self.localTimeLabel.isHidden = true
+        
         self.addSubview(self.timeLabel)
+        self.timeLabel.isHidden = true 
     
         self.addSubview(self.focusLabel)
         self.focusLabel.setTextColor(.D1)
@@ -88,6 +95,9 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
                 } else {
                     self.timeLabel.setText(user.getLocalTime())
                 }
+                
+                self.localTimeLabel.isHidden = false
+                self.timeLabel.isHidden = false
             }
             
             if let status = person.focusStatus {
@@ -132,6 +142,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.timeLabel.setSize(withWidth: self.width)
         self.timeLabel.pin(.right)
         self.timeLabel.centerY = self.focusLabel.centerY
+        
+        self.localTimeLabel.setSize(withWidth: self.width)
+        self.localTimeLabel.pin(.right)
+        self.localTimeLabel.match(.bottom, to: .top, of: self.timeLabel, offset: .negative(.short))
         
         self.nameLabel.setSize(withWidth: self.width)
         self.nameLabel.match(.bottom, to: .top, of: self.focusCircle, offset: .negative(.short))
