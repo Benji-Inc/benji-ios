@@ -77,29 +77,9 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         self.conversationListVC.messageInputController.swipeInputView.addView.didSelect { [unowned self] in
             self.presentAttachements()
         }
-
-        #warning("Implement profile presentation another way.")
-//        self.conversationListVC.headerVC.membersVC.$selectedItems.mainSink { items in
-//            guard let first = items.first else { return }
-//            switch first {
-//            case .member(let member):
-//                guard let person = PeopleStore.shared.people.first(where: { person in
-//                    return person.personId == member.personId
-//                }) else { return }
-//
-//                self.presentProfile(for: person)
-//            default:
-//                break
-//            }
-//        }.store(in: &self.cancellables)
-
-        self.conversationListVC.headerVC.didTapUpdateTopic = { [unowned self] in
-            guard let conversation = self.activeConversation else {
-                logDebug("Unable to change topic because no conversation is selected.")
-                return
-            }
-
-            self.presentConversationTitleAlert(for: conversation)
+        
+        self.conversationListVC.headerVC.button.didSelect { [unowned self] in
+            self.presentConversationDetail()
         }
         
         self.conversationListVC.dataSource.handleAddPeopleSelected = { [unowned self] in
