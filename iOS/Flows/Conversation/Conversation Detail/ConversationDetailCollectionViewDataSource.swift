@@ -13,16 +13,6 @@ typealias ConversationDetailSectionType = ConversationDetailCollectionViewDataSo
 typealias ConversationDetailItemType = ConversationDetailCollectionViewDataSource.ItemType
 
 class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<ConversationDetailCollectionViewDataSource.SectionType, ConversationDetailCollectionViewDataSource.ItemType> {
-    
-    // Show people
-    // Add people
-    
-    // Conversation Info -> who created, when, topic
-    
-    // Leave conversation
-    // Hide conversation (show toggle)
-    // Delete conversation
-
 
     enum SectionType: Int, CaseIterable {
         case info

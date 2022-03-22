@@ -20,6 +20,11 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                    startPoint: .topCenter,
                    endPoint: .bottomCenter)
+    
+    private let bottomGradientView
+      = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                     startPoint: .bottomCenter,
+                     endPoint: .topCenter)
         
     let conversationController: ConversationController
     
@@ -52,6 +57,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.topGradientView)
+        self.view.addSubview(self.bottomGradientView)
         
         self.collectionView.allowsMultipleSelection = false
         
@@ -88,6 +94,10 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         self.topGradientView.expandToSuperviewWidth()
         self.topGradientView.height = Theme.ContentOffset.screenPadding.value
         self.topGradientView.pin(.top)
+        
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
     }
     
     /// A task for loading data and subscribing to conversation updates.

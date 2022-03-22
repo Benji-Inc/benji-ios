@@ -10,13 +10,6 @@ import Foundation
 
 class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
     
-    // Show people
-    // Add people
-    // Conversation Info -> who created, when, topic
-    // Leave conversation
-    // Hide conversation (show toggle)
-    // Delete conversation
-    
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
