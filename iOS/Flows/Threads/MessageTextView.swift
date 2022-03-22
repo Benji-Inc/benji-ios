@@ -8,7 +8,7 @@
 
 import Foundation
 import Localization
- 
+
 class MessageTextView: TextView {
 
     override func initializeViews() {
@@ -25,54 +25,7 @@ class MessageTextView: TextView {
     }
 
     func setText(with message: Messageable) {
-        switch message.kind {
-        case .text(_):
-            self.setText(message.kind.text)
-        case .attributedText(_):
-            break
-        case .photo(photo: let photo, body: let body):
-            guard let url = photo.url else { return }
-            self.loadImage(with: url, with: body)
-        case .video(video: let video, body: let body):
-            break
-        case .location(_):
-            break
-        case .emoji(_):
-            break
-        case .audio(_):
-            break
-        case .contact(_):
-            break
-        case .link(_):
-            break
-        }
-        
-    }
-    
-    private func loadImage(with url: URL, with body: String) {
-        
-        // Create Data Task
-           let dataTask = URLSession.shared.dataTask(with: url) { [weak self] (data, _, _) in
-               if let data = data {
-                   // Create Image and Update Image View
-                   guard let image = UIImage(data: data) else { return }
-                   let attachment = NSTextAttachment()
-                   attachment.image = image
-                   let imageString = NSAttributedString(attachment: attachment)
-                   
-                   DispatchQueue.main.async {
-                       self?.text = body
-                       self?.textStorage.insert(imageString, at: body.count)
-                   }
-                   
-                   
-                   
-                   //textView.textStorage.insert(imageString, at: indexWhereYouWantTheImage)
-               }
-           }
-
-           // Start Data Task
-           dataTask.resume()
+        self.setText(message.kind.text)
     }
 
     // Allows us to interact with links if they exist or pass the touch to the next receiver if they do not

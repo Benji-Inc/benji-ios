@@ -75,6 +75,9 @@ class LaunchManager {
             }
         }
 #endif
+        // Increase the size of the cache so it can accommodate a decent amound of media.
+        URLCache.shared.memoryCapacity = 512 * 1024 * 1024 // 512 MB
+
         // Initializes the analytics manager
         _ = AnalyticsManager.shared
         

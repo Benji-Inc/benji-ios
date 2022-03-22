@@ -13,12 +13,12 @@ class PersonView: DisplayableImageView {
     
     // MARK: - Properties
 
-    func getSize(for height: CGFloat) -> CGSize {
+    func getSize(forHeight height: CGFloat) -> CGSize {
         return CGSize(width: height, height: height)
     }
 
-    func setSize(for height: CGFloat) {
-        self.size = self.getSize(for: height)
+    func setSize(forHeight height: CGFloat) {
+        self.size = self.getSize(forHeight: height)
     }
     
     override func initializeSubviews() {

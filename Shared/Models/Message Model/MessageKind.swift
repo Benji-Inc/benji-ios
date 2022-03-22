@@ -115,6 +115,10 @@ struct EmptyMediaItem: MediaItem {
         return nil
     }
 
+    var previewUrl: URL? {
+        return nil
+    }
+
     var image: UIImage? {
         return nil
     }
@@ -142,6 +146,9 @@ protocol MediaItem: ImageDisplayable {
     /// The url where the media is located.
     var url: URL? { get }
 
+    /// Url to a preview of the media item.
+    var previewUrl: URL? { get }
+
     /// The image.
     var image: UIImage? { get }
 
@@ -156,9 +163,13 @@ protocol MediaItem: ImageDisplayable {
 }
 
 private func ==(lhs: MediaItem, rhs: MediaItem) -> Bool {
-    return lhs.url == rhs.url &&
-        lhs.image == rhs.image &&
-        lhs.size == rhs.size
+    return lhs.url == rhs.url
+    && lhs.previewUrl == rhs.previewUrl
+    && lhs.image == rhs.image
+    && lhs.size == rhs.size
+    && lhs.fileName == rhs.fileName
+    && lhs.type == rhs.type
+    && lhs.data == rhs.data
 }
 
 /// A protocol used to represent the data for a location message.
@@ -173,7 +184,7 @@ protocol LocationItem {
 
 private func ==(lhs: LocationItem, rhs: LocationItem) -> Bool {
     return lhs.location == rhs.location &&
-        lhs.size == rhs.size
+    lhs.size == rhs.size
 }
 
 /// A protocol used to represent the data for an audio message.
@@ -191,8 +202,8 @@ protocol AudioItem {
 
 private func ==(lhs: AudioItem, rhs: AudioItem) -> Bool {
     return lhs.url == rhs.url &&
-        lhs.duration == rhs.duration &&
-        lhs.size == rhs.size
+    lhs.duration == rhs.duration &&
+    lhs.size == rhs.size
 }
 
 
@@ -214,7 +225,7 @@ protocol ContactItem {
 
 private func ==(lhs: ContactItem, rhs: ContactItem) -> Bool {
     return lhs.displayName == rhs.displayName &&
-        lhs.initials == rhs.initials &&
-        lhs.phoneNumbers == rhs.phoneNumbers &&
-        lhs.emails == rhs.emails
+    lhs.initials == rhs.initials &&
+    lhs.phoneNumbers == rhs.phoneNumbers &&
+    lhs.emails == rhs.emails
 }

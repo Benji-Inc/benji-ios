@@ -35,7 +35,17 @@ class DisplayableImageView: BaseView {
         didSet {
             self.displayableTask?.cancel()
 
-            let displayableRef = self.displayable
+            // There's no need to load the displayable if we're already displaying it.
+            let isAlreadyDisplayed = self.displayable?.isEqual(to: oldValue) ?? false
+            if isAlreadyDisplayed && self.state == .success {
+                return
+            }
+
+            // A nil displayable can be applied immediately without creating a task.
+            guard let displayableRef = self.displayable else {
+                self.imageView.image = nil
+                return
+            }
 
             self.displayableTask = Task {
                 await self.updateImageView(with: displayableRef)
@@ -43,10 +53,17 @@ class DisplayableImageView: BaseView {
         }
     }
 
+    /// A custom configured url session for retrieving displayables with a url.
+    private lazy var urlSession: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        configuration.requestCachePolicy = .returnCacheDataElseLoad
+        return URLSession(configuration: configuration)
+    }()
+
+    // MARK: - Life cycle
+
     override func initializeSubviews() {
         super.initializeSubviews()
-
-        self.set(backgroundColor: .clear)
 
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFill
@@ -63,7 +80,7 @@ class DisplayableImageView: BaseView {
                 self.animationView.stop()
                 self.blurView.showBlur(true)
             case .loading:
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
                     self.blurView.showBlur(true)
                 }
                 if self.animationView.isAnimationPlaying {
@@ -76,7 +93,7 @@ class DisplayableImageView: BaseView {
                 self.animationView.load(animation: .error)
                 self.animationView.loopMode = .loop
                 self.animationView.play()
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
                     self.blurView.showBlur(true)
                 }
             case .success:
@@ -85,7 +102,7 @@ class DisplayableImageView: BaseView {
                 }
                 self.animationView.reset()
 
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
                     self.blurView.showBlur(false)
                 }
             }
@@ -104,25 +121,24 @@ class DisplayableImageView: BaseView {
         self.animationView.centerOnXAndY()
     }
 
-    @MainActor
+    // MARK: - Image Retrieval/Setting
+
     private func updateImageView(with displayable: ImageDisplayable?) async {
         if let photo = displayable?.image {
             await self.set(image: photo, state: .success)
         } else if let fileObject = displayable?.fileObject {
             await self.downloadAndSetImage(for: fileObject)
-        } else if let file = displayable as? PFFileObject {
-            await self.downloadAndSet(file: file)
+        } else if let url = displayable?.url  {
+            await self.downloadAndSetImage(for: url)
         } else {
             await self.set(image: nil, state: .initial)
         }
     }
 
-    private func downloadAndSetImage(for fileObject: PFFileObject) async {
-        await self.downloadAndSet(file: fileObject)
-    }
-
-    private func downloadAndSet(file: PFFileObject) async {
+    private func downloadAndSetImage(for file: PFFileObject) async {
         do {
+            guard !Task.isCancelled else { return }
+
             if !file.isDataAvailable {
                 self.state = .loading
             }
@@ -131,11 +147,30 @@ class DisplayableImageView: BaseView {
 
             guard !Task.isCancelled else { return }
 
-            let image = await UIImage(data: data)?.byPreparingForDisplay()
+            let image = UIImage(data: data)
+
+            await self.set(image: image, state: image.exists ? .success : .error)
+        } catch {
+            guard !Task.isCancelled else { return }
+
+            await self.set(image: nil, state: .error)
+        }
+    }
+
+    private func downloadAndSetImage(for url: URL) async {
+        do {
+            guard !Task.isCancelled else { return }
+
+            self.state = .loading
+
+            let data: Data = try await self.urlSession.dataTask(with: url).0
 
             guard !Task.isCancelled else { return }
 
-            await self.set(image: image, state: image.exists ? .success : .error)
+            // Contruct the image from the returned data
+            guard let image = UIImage(data: data) else { return }
+
+            await self.set(image: image, state: .success)
         } catch {
             guard !Task.isCancelled else { return }
 

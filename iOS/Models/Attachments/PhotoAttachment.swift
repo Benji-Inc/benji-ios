@@ -12,6 +12,7 @@ import Photos
 struct PhotoAttachment: MediaItem {
 
     var url: URL?
+    var previewUrl: URL?
 
     var image: UIImage? {
         guard let data = self.data else { return nil }

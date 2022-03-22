@@ -173,7 +173,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         case .read:
             self.collectionLayout.spacingKeyPoints = [0, 96, 144, 192]
         case .write:
-            self.collectionLayout.spacingKeyPoints = [0, 8, 16, 20]
+            self.collectionLayout.spacingKeyPoints = [0, 8, 14, 16]
         }
         
         self.collectionLayout.uiState = state

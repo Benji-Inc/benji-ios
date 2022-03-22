@@ -26,11 +26,13 @@ class MessageContentView: BaseView {
     }
 
     // Sizing
+    static let bubbleHeight: CGFloat = 168
     static let collapsedHeight: CGFloat = 78 - MessageContentView.bubbleTailLength
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
     }
-    static let bubbleHeight: CGFloat = 148
+    static let authorViewHeight: CGFloat = 40
+
     static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
     static let padding = Theme.ContentOffset.long
     static var textViewPadding: CGFloat { return MessageContentView.padding.value * 2 }
@@ -41,6 +43,7 @@ class MessageContentView: BaseView {
     let bubbleView = MessageBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .T1)
+    let displayableView = DisplayableImageView()
     private (set) var message: Messageable?
 
     let authorView = PersonView()
@@ -50,18 +53,59 @@ class MessageContentView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.bubbleView.addSubview(self.authorView)
+
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
-        
+
+        self.bubbleView.addSubview(self.displayableView)
+        self.displayableView.imageView.contentMode = .scaleAspectFill
+        self.displayableView.roundCorners()
+
         self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
-
-        self.bubbleView.addSubview(self.authorView)
+        self.textView.textAlignment = .left
 
 #if IOS
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
         self.bubbleView.addInteraction(contextMenuInteraction)
 #endif
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.bubbleView.expandToSuperviewSize()
+
+        self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
+        self.authorView.pin(.top, offset: MessageContentView.padding)
+        self.authorView.pin(.left, offset: MessageContentView.padding)
+
+        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.textView.pin(.top, offset: MessageContentView.padding)
+        if self.displayableView.displayable.exists {
+            // If there's also an image to display, then limit the text view height.
+            let maxHeight = MessageContentView.authorViewHeight
+            self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
+                                  maxHeight: maxHeight)
+        } else {
+            // If there's no image to display, the text view can take up all the available vertical space.
+            self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
+                                  maxHeight: self.height - self.textView.top - MessageContentView.padding.value - 25)
+        }
+
+        self.displayableView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        if self.textView.text.isEmpty {
+            // If there's no text, then the image will take up all available vertical space.
+            self.displayableView.match(.top, to: .top, of: self.authorView)
+        } else {
+            // If there is text, then fit the image in the remaining vertical space under the image.
+            self.displayableView.match(.top, to: .bottom, of: self.textView, offset: MessageContentView.padding)
+        }
+
+        // Expand the image to fill in the remaining height.
+        self.displayableView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
+        self.displayableView.width = self.displayableView.height
     }
 
     func configure(with message: Messageable) {
@@ -71,12 +115,21 @@ class MessageContentView: BaseView {
             self.textView.text = "DELETED"
         } else {
             self.textView.setText(with: message)
+
+            switch message.kind {
+            case .photo(photo: let photo, _):
+                self.displayableView.isVisible = true
+                guard let previewUrl = photo.previewUrl else { break }
+                self.displayableView.displayable = previewUrl
+            case .text, .attributedText, .video, .location, .emoji, .audio, .contact, .link:
+                self.displayableView.isVisible = false
+                break
+            }
         }
 
 #if IOS
         self.configureConsumption(for: message)
 #endif
-
         self.authorView.set(person: message.person)
 
         self.setNeedsLayout()
@@ -91,6 +144,7 @@ class MessageContentView: BaseView {
 
         self.textView.textColor = textColor
         self.textView.linkTextAttributes = [.foregroundColor: textColor.withAlphaComponent(0.5), .underlineStyle: 0]
+
         self.bubbleView.setBubbleColor(color.withAlphaComponent(brightness), animated: false)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
@@ -104,26 +158,6 @@ class MessageContentView: BaseView {
         self.bubbleView.darkGradientLayer.opacity = 0.2 * Float(1 - brightness)
 
         CATransaction.commit()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.bubbleView.expandToSuperviewSize()
-
-        self.authorView.size = self.getAuthorSize()
-        self.authorView.pin(.top, offset: MessageContentView.padding)
-        self.authorView.pin(.left, offset: MessageContentView.padding)
-
-        self.textView.size = self.textView.getSize(width: self.bubbleView.bubbleFrame.width, layout: self.layoutState)
-        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.textView.pin(.top, offset: MessageContentView.padding)
-        self.textView.textAlignment = .left
-    }
-
-    func getAuthorSize() -> CGSize {
-        let authorHeight: CGFloat = MessageContentView.standardHeight * 0.33
-        return self.authorView.getSize(for: authorHeight)
     }
 
     func getSize(with width: CGFloat) -> CGSize {
@@ -140,11 +174,7 @@ class MessageContentView: BaseView {
 extension MessageContentView {
 
     func configureConsumption(for message: Messageable) {
-        if message.isConsumedByMe {
-            self.textView.setFont(.regular)
-        } else {
-            self.textView.setFont(.regular)
-        }
+        self.textView.setFont(.regular)
     }
 
     func setToRead() {
@@ -173,7 +203,8 @@ extension MessageTextView {
             maxTextHeight = MessageContentView.collapsedBubbleHeight
         }
         
-        let size = MessageContentView().getAuthorSize()
+        let size = CGSize(width: MessageContentView.authorViewHeight,
+                          height: MessageContentView.authorViewHeight)
         maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
 
         return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
