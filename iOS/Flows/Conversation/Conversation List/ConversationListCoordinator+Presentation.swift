@@ -238,6 +238,15 @@ extension ConversationListCoordinator {
         let coordinator = ConversationDetailCoordinator(with: cid,
                                                         router: self.router,
                                                         deepLink: self.deepLink)
-        self.present(coordinator, finishedHandler: nil, cancelHandler: nil)
+        self.present(coordinator) { [unowned self] result in
+            guard let option = result else { return }
+            
+            switch option {
+            case .conversation(let cid):
+                Task.onMainActorAsync {
+                    await self.conversationListVC.scrollToConversation(with: cid, messageID: nil)
+                }
+            }
+        }
     }
 }

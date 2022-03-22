@@ -10,7 +10,11 @@ import Foundation
 import Combine
 import StreamChat
 
-class ConversationDetailCoordinator: PresentableCoordinator<Void> {
+enum DetailCoordinatorResult {
+    case conversation(ConversationId)
+}
+
+class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorResult?> {
     
     lazy var detailVC = ConversationDetailViewController(with: self.cid)
     let cid: ConversationId
@@ -58,9 +62,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<Void> {
         
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                //            Task.onMainActorAsync {
-                //                await self.detailVC.scrollToConversation(with: result, messageID: nil)
-                //            }
+                self.finishFlow(with: .conversation(result))
             }
         }
         
