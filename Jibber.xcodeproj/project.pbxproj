@@ -481,7 +481,6 @@
 		D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
 		D682B4162792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
 		D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
-		D682F02F278E09200016A24E /* ConversationHeaderViewController+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */; };
 		D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
@@ -1064,7 +1063,6 @@
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
 		D68072EA2730462F004657E7 /* old_MessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_MessageDetailView.swift; sourceTree = "<group>"; };
 		D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
-		D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationHeaderViewController+Menu.swift"; sourceTree = "<group>"; };
 		D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsMessagesCellAttributes.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
@@ -1986,7 +1984,6 @@
 			isa = PBXGroup;
 			children = (
 				D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */,
-				D682F02E278E09200016A24E /* ConversationHeaderViewController+Menu.swift */,
 				D637651427E8FC8000CCDA7F /* RoomNavigationButton.swift */,
 			);
 			path = "Conversation Header";
@@ -3046,7 +3043,6 @@
 				D61A33CF27D4F28800056242 /* EmojiCollectionView.swift in Sources */,
 				8028C9E9273ECB1200520465 /* ConversationListViewController.swift in Sources */,
 				D6DEC3F727A212940072D9D0 /* InitialsCircleView.swift in Sources */,
-				D682F02F278E09200016A24E /* ConversationHeaderViewController+Menu.swift in Sources */,
 				D6D557FE27C9B8AE0024D1CD /* UserConversationsCollectionView.swift in Sources */,
 				D66A580525DD68F9001B3F64 /* PeopleCoordinator.swift in Sources */,
 				8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */,

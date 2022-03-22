@@ -35,6 +35,7 @@ class ConversationDetailCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .white)
         self.lineView.alpha = 0.1
+        self.lineView.isHidden = true 
     }
     
     func configure(with item: ChannelId) {}

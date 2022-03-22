@@ -65,7 +65,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 self.membersLabel.isVisible = true
                 self.topicLabel.isVisible = true
                 self.chevronImageView.isVisible = true
-                //self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
     }
@@ -184,12 +183,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     private func subscribeToUpdates(for conversationController: ConversationController) {
         // Clear out previous subscriptions.
         self.conversationCancellables.removeAll()
-
-//        conversationController
-//            .typingUsersPublisher
-//            .mainSink(receiveValue: { [unowned self] typingUsers in
-//                self.dataSource.reconfigureAllItems()
-//            }).store(in: &self.conversationCancellables)
 
         conversationController
             .memberEventPublisher

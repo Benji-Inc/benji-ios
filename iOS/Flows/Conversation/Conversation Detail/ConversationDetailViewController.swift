@@ -169,9 +169,12 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             return .member(member)
         })
         
-        data[.people]?.append(.add(conversation.cid))
-        
-        data[.options] = [.detail(conversation.cid, .hide), .detail(conversation.cid, .leave), .detail(conversation.cid, .delete)]
+        if conversation.isOwnedByMe {
+            data[.people]?.append(.add(conversation.cid))
+            data[.options] = [.detail(conversation.cid, .hide), .detail(conversation.cid, .leave), .detail(conversation.cid, .delete)]
+        } else {
+            data[.options] = [.detail(conversation.cid, .hide), .detail(conversation.cid, .leave)]
+        }
         
         return data
     }

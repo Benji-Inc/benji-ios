@@ -57,6 +57,10 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                               indexPath: IndexPath,
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
+        
+        let lastIndex = self.snapshot().numberOfItems(inSection: section) - 1
+        let shouldHideLine = lastIndex == indexPath.row
+        
         switch item {
         case .info(let cid):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.infoConfig,
@@ -69,9 +73,11 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                                                                     item: cid)
             return cell
         case .member(let member):
-            return collectionView.dequeueConfiguredReusableCell(using: self.memberConfig,
-                                                                for: indexPath,
-                                                                item: member)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.memberConfig,
+                                                                    for: indexPath,
+                                                                    item: member)
+            cell.lineView.isHidden = shouldHideLine
+            return cell
         case .add(let cid):
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
                                                                 for: indexPath,
@@ -96,9 +102,10 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                 cell.label.setTextColor(.red)
                 cell.label.setText("Delete Conversation")
                 cell.rightImageView.image = nil
-                cell.lineView.isHidden = true 
             }
             
+            cell.lineView.isHidden = shouldHideLine
+
             return cell
         }
     }
