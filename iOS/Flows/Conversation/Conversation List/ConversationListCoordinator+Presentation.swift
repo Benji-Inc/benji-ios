@@ -268,7 +268,12 @@ extension ConversationListCoordinator {
     }
     
     func presentConversationDetail() {
-        let coordinator = ConversationDetailCoordinator(router: self.router, deepLink: self.deepLink)
+        guard let cid = self.activeConversation?.cid else { return }
+        
+        let coordinator = ConversationDetailCoordinator(with: cid,
+                                                        router: self.router,
+                                                        deepLink: self.deepLink)
+        
         self.present(coordinator, finishedHandler: nil, cancelHandler: nil)
     }
 }

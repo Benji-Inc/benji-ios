@@ -19,7 +19,7 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
     
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.scrollDirection = .horizontal
+        config.scrollDirection = .vertical
         
         super.init(sectionProvider: { sectionIndex, environment in
             guard let sectionType = ConversationDetailCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
@@ -29,7 +29,7 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
             switch sectionType {
             case .people:
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(74))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                              leading: sectionInset,
@@ -37,7 +37,7 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
                                                              trailing: sectionInset)
                 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(74))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                               leading: 0,

@@ -11,7 +11,15 @@ import Combine
 
 class ConversationDetailCoordinator: PresentableCoordinator<Void> {
     
-    lazy var detailVC = ConversationDetailViewController()
+    lazy var detailVC = ConversationDetailViewController(with: self.cid)
+    let cid: ConversationId
+    
+    init(with cid: ConversationId,
+         router: Router,
+         deepLink: DeepLinkable?) {
+        self.cid = cid 
+        super.init(router: router, deepLink: deepLink)
+    }
 
     override func toPresentable() -> DismissableVC {
         return self.detailVC

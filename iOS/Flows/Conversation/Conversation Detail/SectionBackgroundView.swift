@@ -22,6 +22,9 @@ class SectionBackgroundView: UICollectionReusableView, ElementKind {
     }
     
     func initializeViews() {
-        self.set(backgroundColor: .red)
+        self.set(backgroundColor: .walletBackground)
+        
+        self.layer.cornerRadius = Theme.cornerRadius
+        self.clipsToBounds = true
     }
 }
