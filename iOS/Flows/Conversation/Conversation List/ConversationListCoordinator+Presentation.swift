@@ -149,41 +149,6 @@ extension ConversationListCoordinator {
             }
         }.add(to: self.taskPool)
     }
-
-    func presentConversationTitleAlert(for conversation: Conversation) {
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
-
-        let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
-        alertController.addTextField { (textField : UITextField!) -> Void in
-            textField.placeholder = "Name"
-        }
-        let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { [unowned self] alert -> Void in
-            if let textField = alertController.textFields?.first,
-               let text = textField.text,
-               !text.isEmpty {
-
-                controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
-                    self.conversationListVC.headerVC.topicLabel.setText(text)
-                    self.conversationListVC.headerVC.view.layoutNow()
-                    alertController.dismiss(animated: true, completion: {
-                        self.conversationListVC.becomeFirstResponder()
-                    })
-                }
-            }
-        })
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            (action : UIAlertAction!) -> Void in
-            self.conversationListVC.becomeFirstResponder()
-        })
-
-        alertController.addAction(saveAction)
-        alertController.addAction(cancelAction)
-        
-        self.conversationListVC.resignFirstResponder()
-
-        self.conversationListVC.present(alertController, animated: true, completion: nil)
-    }
     
     func presentDeleteConversationAlert(cid: ConversationId?) {
         guard let cid = cid else { return }
@@ -264,6 +229,24 @@ extension ConversationListCoordinator {
         
         self.present(coordinator) { [unowned self] result in
             self.handle(attachmentOption: result)
+        }
+    }
+    
+    func presentConversationDetail() {
+        guard let cid = self.activeConversation?.cid else { return }
+        
+        let coordinator = ConversationDetailCoordinator(with: cid,
+                                                        router: self.router,
+                                                        deepLink: self.deepLink)
+        self.present(coordinator) { [unowned self] result in
+            guard let option = result else { return }
+            
+            switch option {
+            case .conversation(let cid):
+                Task.onMainActorAsync {
+                    await self.conversationListVC.scrollToConversation(with: cid, messageID: nil)
+                }
+            }
         }
     }
 }

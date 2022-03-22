@@ -48,9 +48,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.view.addSubview(self.roomsButton)
         self.roomsButton.configure(for: .inner)
-        
-        self.button.showsMenuAsPrimaryAction = true
-                
+                        
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { conversation in
@@ -67,7 +65,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 self.membersLabel.isVisible = true
                 self.topicLabel.isVisible = true
                 self.chevronImageView.isVisible = true
-                self.updateMenu(with: convo)
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
     }
@@ -91,10 +88,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.chevronImageView.match(.left, to: .right, of: self.membersLabel, offset: .short)
         self.chevronImageView.match(.bottom, to: .bottom, of: self.membersLabel)
         
-        self.button.size = CGSize(width: self.topicLabel.width + self.chevronImageView.width + Theme.ContentOffset.short.value,
-                                  height: self.topicLabel.height + self.membersLabel.height)
-        self.button.left = self.topicLabel.left
-        self.button.top = self.topicLabel.top
+        self.button.height = self.view.height
+        self.button.width = 200
+        self.button.centerOnXAndY()
         
         self.roomsButton.pin(.left, offset: .custom(6))
         self.roomsButton.centerY = self.jibImageView.centerY
@@ -117,7 +113,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     membersString.append(", \(member.givenName)")
                 }
             }
-            self.topicLabel.setText(membersString)
+            
+            if membersString.isEmpty {
+                self.topicLabel.setText("No Topic")
+            } else {
+                self.topicLabel.setText(membersString)
+            }
         }
     }
     
@@ -186,12 +187,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     private func subscribeToUpdates(for conversationController: ConversationController) {
         // Clear out previous subscriptions.
         self.conversationCancellables.removeAll()
-
-//        conversationController
-//            .typingUsersPublisher
-//            .mainSink(receiveValue: { [unowned self] typingUsers in
-//                self.dataSource.reconfigureAllItems()
-//            }).store(in: &self.conversationCancellables)
 
         conversationController
             .memberEventPublisher
