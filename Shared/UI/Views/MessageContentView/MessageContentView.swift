@@ -103,8 +103,6 @@ class MessageContentView: BaseView {
         } else {
             self.textView.setText(with: message)
 
-            self.displayableView.displayable = nil
-
             switch message.kind {
             case .photo(photo: let photo, _):
                 self.displayableView.isVisible = true

@@ -13,7 +13,7 @@ protocol ImageDisplayable {
     var image: UIImage? { get }
     var url: URL? { get }
     var fileObject: PFFileObject? { get }
-}
+ }
 
 extension ImageDisplayable {
 
@@ -23,5 +23,11 @@ extension ImageDisplayable {
 
     var fileObject: PFFileObject? {
         return nil
+    }
+
+    func isEqual(to other: ImageDisplayable?) -> Bool {
+        return self.image == other?.image
+        && self.url == other?.url
+        && self.fileObject == other?.fileObject
     }
 }

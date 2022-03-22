@@ -35,6 +35,12 @@ class DisplayableImageView: BaseView {
         didSet {
             self.displayableTask?.cancel()
 
+            // There's no need to load the displayable if we're already displaying it.
+            let isAlreadyDisplayed = self.displayable?.isEqual(to: oldValue) ?? false
+            if isAlreadyDisplayed && self.state == .success {
+                return
+            }
+
             // A nil displayable can be applied immediately without creating a task.
             guard let displayableRef = self.displayable else {
                 self.imageView.image = nil
