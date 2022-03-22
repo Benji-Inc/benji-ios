@@ -27,7 +27,7 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
             let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
             
             switch sectionType {
-            case .people:
+            case .people, .options:
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -62,8 +62,6 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
                 return section
                 
             case .info:
-                return nil
-            case .options:
                 return nil
             }
             

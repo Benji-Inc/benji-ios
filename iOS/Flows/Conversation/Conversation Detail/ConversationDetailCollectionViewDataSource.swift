@@ -29,19 +29,24 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         case info
         case options
     }
+    
+    enum OptionType: Int {
+        case info
+        case hide
+        case leave
+        case delete
+    }
 
     enum ItemType: Hashable {
         case member(Member)
         case add(ChannelId)
-        case info(ChannelId)
-        case leave(ChannelId)
-        case hide(ChannelId)
-        case delete(ChannelId)
+        case detail(ChannelId, OptionType)
     }
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
     private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
+    private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -58,14 +63,31 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
                                                                 for: indexPath,
                                                                 item: cid)
-        case .info(let cid):
-            return nil
-        case .leave(let cid):
-            return nil
-        case .hide(let cid):
-            return nil
-        case .delete(let cid):
-            return nil 
+        case .detail(let cid, let type):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.detailConfig,
+                                                                    for: indexPath,
+                                                                    item: cid)
+            switch type {
+            case .info:
+                return nil
+            case .hide:
+                cell.imageView.image = UIImage(systemName: "hand.wave")
+                cell.label.setText("Leave Conversation")
+                cell.rightImageView.image = nil
+            case .leave:
+                cell.imageView.image = UIImage(systemName: "eye.slash")
+                cell.label.setText("Hide Conversation")
+                cell.rightImageView.image = nil
+                return cell
+            case .delete:
+                cell.imageView.image = UIImage(systemName: "trash")
+                cell.imageView.tintColor = ThemeColor.red.color
+                cell.label.setTextColor(.red)
+                cell.label.setText("Delete Conversation")
+                cell.rightImageView.image = nil
+            }
+            
+            return cell
         }
     }
     

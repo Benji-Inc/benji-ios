@@ -16,7 +16,7 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: ChannelId?
     
     private let imageView = UIImageView(image: UIImage(systemName: "person.badge.plus"))
-    private let label = ThemeLabel(font: .medium)
+    private let label = ThemeLabel(font: .regular)
     
     override func initializeSubviews() {
         super.initializeSubviews()

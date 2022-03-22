@@ -202,6 +202,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         
         data[.people]?.append(.add(conversation.cid))
         
+        data[.options] = [.detail(conversation.cid, .hide), .detail(conversation.cid, .leave), .detail(conversation.cid, .delete)]
+        
         return data
     }
 }
