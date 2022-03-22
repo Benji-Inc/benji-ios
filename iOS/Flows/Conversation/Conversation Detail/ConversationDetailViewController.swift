@@ -155,7 +155,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     }
     
     func reloadPeople(with people: [Person]) async {
-        let items: [ConversationDetailCollectionViewDataSource.ItemType] = people.compactMap({ member in
+        let items: [ConversationDetailItemType] = people.compactMap({ member in
             let member = Member(personId: member.personId,
                                 conversationController: self.conversationController)
             return .member(member)
@@ -177,7 +177,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     
     override func retrieveDataForSnapshot() async -> [ConversationDetailCollectionViewDataSource.SectionType: [ConversationDetailCollectionViewDataSource.ItemType]] {
         
-        var data: [ConversationDetailCollectionViewDataSource.SectionType: [ConversationDetailCollectionViewDataSource.ItemType]] = [:]
+        var data: [ConversationDetailSectionType: [ConversationDetailItemType]] = [:]
         
         let conversation = self.conversationController.conversation
         
