@@ -144,6 +144,18 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             }).store(in: &self.conversationCancellables)
     }
     
+    func reloadPeople(with people: [Person]) async {
+        let items: [ConversationDetailCollectionViewDataSource.ItemType] = people.compactMap({ member in
+            let member = Member(personId: member.personId,
+                                conversationController: self.conversationController)
+            return .member(member)
+        })
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems([], in: .people)
+        snapshot.setItems(items, in: .people)
+        await self.dataSource.apply(snapshot)
+    }
+    
     private func add(member: ChatChannelMember) {
         let member = Member(personId: member.personId, conversationController: self.conversationController)
         self.dataSource.appendItems([.member(member)], toSection: .people)

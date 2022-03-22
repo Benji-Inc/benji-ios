@@ -88,10 +88,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.chevronImageView.match(.left, to: .right, of: self.membersLabel, offset: .short)
         self.chevronImageView.match(.bottom, to: .bottom, of: self.membersLabel)
         
-        self.button.size = CGSize(width: self.topicLabel.width + self.chevronImageView.width + Theme.ContentOffset.short.value,
-                                  height: self.topicLabel.height + self.membersLabel.height)
-        self.button.left = self.topicLabel.left
-        self.button.top = self.topicLabel.top
+        self.button.height = self.view.height
+        self.button.width = 200
+        self.button.centerOnXAndY()
         
         self.roomsButton.pin(.left, offset: .custom(6))
         self.roomsButton.centerY = self.jibImageView.centerY
@@ -114,7 +113,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     membersString.append(", \(member.givenName)")
                 }
             }
-            self.topicLabel.setText(membersString)
+            
+            if membersString.isEmpty {
+                self.topicLabel.setText("No Topic")
+            } else {
+                self.topicLabel.setText(membersString)
+            }
         }
     }
     

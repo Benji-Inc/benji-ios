@@ -78,7 +78,12 @@ class ConversationInfoCell: CollectionViewManagerCell, ManageableCell {
                     membersString.append(", \(member.givenName)")
                 }
             }
-            self.topicLabel.setText(membersString)
+            
+            if membersString.isEmpty {
+                self.topicLabel.setText("No Topic")
+            } else {
+                self.topicLabel.setText(membersString)
+            }
         }
     }
     

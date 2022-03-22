@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import StreamChat
+import Localization
 
 enum DetailCoordinatorResult {
     case conversation(ConversationId)
@@ -44,7 +45,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
 
                 self.presentProfile(for: person)
             case .add(_):
-                break
+                self.presentPeoplePicker()
             case .info(_):
                 break
             case .editTopic(let cid):
@@ -160,5 +161,74 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         alertController.addAction(cancelAction)
         
         self.detailVC.present(alertController, animated: true, completion: nil)
+    }
+    
+    func presentPeoplePicker() {
+        
+        self.removeChild()
+
+        let conversation = ConversationController.controller(self.cid).conversation
+
+        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
+        coordinator.selectedConversationCID = self.cid
+        
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
+        coordinator.toPresentable().dismissHandlers.append { [unowned self, unowned cor = coordinator] in
+            let invitedPeople = cor.invitedPeople
+            self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
+        }
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+        }
+        
+        self.router.present(coordinator, source: self.detailVC)
+    }
+    
+    private func handleInviteFlowEnded(givenInvitedPeople invitedPeople: [Person],
+                                                       activeConversation: Conversation) {
+
+        if !invitedPeople.isEmpty {
+            self.add(people: invitedPeople, to: activeConversation)
+            Task {
+                await self.detailVC.reloadPeople(with: invitedPeople)
+            }
+        } 
+    }
+    
+    func add(people: [Person], to conversation: Conversation) {
+        let controller = ChatClient.shared.channelController(for: conversation.cid)
+
+        let acceptedConnections = people.compactMap { person in
+            return person.connection
+        }.filter { connection in
+            return connection.status == .accepted
+        }
+
+        guard !acceptedConnections.isEmpty else { return }
+
+        let members = acceptedConnections.compactMap { connection in
+            return connection.nonMeUser?.objectId
+        }
+        controller.addMembers(userIds: Set(members)) { error in
+            guard error.isNil else { return }
+
+            self.showPeopleAddedToast(for: acceptedConnections)
+            Task {
+                try await controller.synchronize()
+            }
+        }
+    }
+    
+    private func showPeopleAddedToast(for connections: [Connection]) {
+        Task {
+            if connections.count == 1, let first = connections.first?.nonMeUser {
+                let text = LocalizedString(id: "", arguments: [first.fullName], default: "@(name) has been added to the conversation.")
+                await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: first, title: "\(first.givenName.capitalized) Added", description: text, deepLink: nil))
+            } else {
+                let text = LocalizedString(id: "", arguments: [String(connections.count)], default: " @(count) people have been added to the conversation.")
+                await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current()!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
+            }
+        }.add(to: self.taskPool)
     }
 }
