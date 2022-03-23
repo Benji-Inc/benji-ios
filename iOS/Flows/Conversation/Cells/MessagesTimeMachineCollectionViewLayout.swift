@@ -64,8 +64,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
-    func getBottomFrontmostCell() -> MessageCell? {
-        guard let ip = self.getFrontmostIndexPath(in: 1),
+    func getFrontmostCell() -> MessageCell? {
+        guard let ip = self.getFrontmostIndexPath(in: 0),
               let cell = self.collectionView?.cellForItem(at: ip) as? MessageCell else {
                   return nil
               }
@@ -73,7 +73,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     func getDropZoneFrame() -> CGRect {
-        let center = self.getItemCenterPoint(in: 1, withYOffset: 0, scale: 1)
+        let center = self.getItemCenterPoint(in: 0, withYOffset: 0, scale: 1)
         let padding = Theme.ContentOffset.short.value.doubled
         var frame = CGRect(x: padding.half,
                            y: 0,

@@ -54,7 +54,7 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
                else { return }
 
         let fromView = threadVC.parentMessageView
-        let toView = listVC.selectedMessageView!
+        let toView = listVC.getCentmostMessageCellContent()!
 
         let containerView = transitionContext.containerView
 

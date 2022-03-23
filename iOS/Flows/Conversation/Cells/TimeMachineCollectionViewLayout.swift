@@ -267,7 +267,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
             let itemZPosition = CGFloat(i) * self.itemHeight
 
-            if itemZPosition - self.zPosition <= 0 {
+            if itemZPosition - self.zPosition >= 0 {
                 indexPathCandidate = indexPath
             }
         }
