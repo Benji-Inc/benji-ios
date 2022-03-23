@@ -37,7 +37,28 @@ extension ConversationListCoordinator {
     }
     
     func presentPhotoCapture() {
-        
+        let cameraMediaType = AVMediaType.video
+        let status = AVCaptureDevice.authorizationStatus(for: cameraMediaType)
+            
+        switch status {
+        case .denied:
+            break
+        case .authorized:
+            self.conversationListVC.present(self.captureVC, animated: true, completion: nil)
+        case .restricted:
+            break
+        case .notDetermined:
+            // Prompting user for the permission to use the camera.
+            AVCaptureDevice.requestAccess(for: cameraMediaType) { granted in
+                if granted {
+                    self.conversationListVC.present(self.captureVC, animated: true, completion: nil)
+                } else {
+                    print("Denied access to \(cameraMediaType)")
+                }
+            }
+        @unknown default:
+            break
+        }
     }
     
     func presentPhotoLibrary() {
@@ -53,6 +74,28 @@ extension ConversationListCoordinator: PHPickerViewControllerDelegate {
         Task.onMainActor {
             self.conversationListVC.dismiss(animated: true) {
                 self.conversationListVC.becomeFirstResponder()
+            }
+        }
+    }
+}
+
+extension ConversationListCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true) { [unowned self] in
+            self.conversationListVC.becomeFirstResponder()
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        picker.dismiss(animated: true) { [unowned self] in
+            self.conversationListVC.becomeFirstResponder()
+            
+            Task.onMainActorAsync {
+                let text = self.conversationListVC.messageInputController.swipeInputView.textView.text ?? ""
+                guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else { return }
+                self.conversationListVC.messageInputController.currentMessageKind = kind
             }
         }
     }

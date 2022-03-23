@@ -24,6 +24,14 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         vc.delegate = self
         return vc
     }()
+    
+    lazy var captureVC: UIImagePickerController = {
+        let vc = UIImagePickerController()
+        vc.sourceType = .camera
+        vc.allowsEditing = true
+        vc.delegate = self
+        return vc
+    }()
 
     lazy var conversationListVC
     = ConversationListViewController(members: self.conversationMembers,
