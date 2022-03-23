@@ -22,9 +22,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let roomsButton = RoomNavigationButton()
     
     private var state: ConversationUIState = .read
-    
-    var didTapAddPeople: CompletionOptional = nil
-    var didTapUpdateTopic: CompletionOptional = nil
         
     override func initializeViews() {
         super.initializeViews()

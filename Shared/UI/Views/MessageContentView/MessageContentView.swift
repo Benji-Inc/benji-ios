@@ -18,6 +18,7 @@ class MessageContentView: BaseView {
 #if IOS
     var handleTappedMessage: ((ConversationId, MessageId) -> Void)?
     var handleEditMessage: ((ConversationId, MessageId) -> Void)?
+    var handleTappedAttachment: ((MediaItem) -> Void)?
 #endif
     
     enum Layout {
