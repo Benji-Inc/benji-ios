@@ -11,6 +11,12 @@ import PhotosUI
 import Photos
 import Localization
 
+protocol SwipeableInputControllerHandler {
+    var swipeableVC: SwipeableInputAccessoryViewController { get }
+}
+
+typealias InputHandlerViewContoller = SwipeableInputControllerHandler & ViewController
+
 class InputHandlerCoordinator: PresentableCoordinator<Void>,
                                 ActiveConversationable,
                                 PHPickerViewControllerDelegate,
@@ -35,15 +41,25 @@ class InputHandlerCoordinator: PresentableCoordinator<Void>,
         return vc
     }()
     
+    let inputHandlerViewController: InputHandlerViewContoller
+    
+    init(with viewContoller: InputHandlerViewContoller,
+         router: Router,
+         deepLink: DeepLinkObject?) {
+        
+        self.inputHandlerViewController = viewContoller
+        super.init(router: router, deepLink: deepLink)
+    }
+    
     func handle(attachmentOption option: AttachmentOption) {
         
         switch option {
         case .attachements(let array):
             guard let first = array.first else { return }
-           // let text = self.conversationListVC.messageInputController.swipeInputView.textView.text ?? ""
+            let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             Task.onMainActorAsync {
-               // guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: first, body: text) else { return }
-               // self.conversationListVC.messageInputController.currentMessageKind = kind
+                guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: first, body: text) else { return }
+                self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
             }
         case .capture:
             self.presentPhotoCapture()
@@ -111,9 +127,9 @@ class InputHandlerCoordinator: PresentableCoordinator<Void>,
             self.toPresentable().becomeFirstResponder()
             
             Task.onMainActorAsync {
-                //let text = self.conversationListVC.messageInputController.swipeInputView.textView.text ?? ""
-               // guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else { return }
-               // self.conversationListVC.messageInputController.currentMessageKind = kind
+                let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
+                guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else { return }
+                self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
             }
         }
     }
