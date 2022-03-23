@@ -283,14 +283,14 @@ extension MessageCell {
     func setToRead() {
         guard let msg = self.messageState.message, msg.canBeConsumed else { return }
         Task {
-            try await self.messageState.message?.setToConsumed()
+            try await msg.setToConsumed()
         }
     }
 
     func setToUnread() {
         guard let msg = self.messageState.message, msg.isConsumedByMe else { return }
         Task {
-            try await self.messageState.message?.setToUnconsumed()
+            try await msg.setToUnconsumed()
         }
     }
 }
