@@ -119,7 +119,7 @@ class SwipeableInputAccessoryView: BaseView {
                                          self.textViewCollapsedVerticalHeightContstraint])
             
             if !self.textView.text.isEmpty || self.textView.isFirstResponder {
-                textViewLeadingValue = self.addView.left + 40 
+                textViewLeadingValue = self.addView.left + AddMediaView.collapsedHeight
             }
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
@@ -135,9 +135,12 @@ class SwipeableInputAccessoryView: BaseView {
             if self.textView.numberOfLines > 2, let lineHeight = self.textView.font?.lineHeight {
                 let multiplier: CGFloat = clamp(CGFloat(self.textView.numberOfLines) - 2, 0, 2)
                 proposedHeight += lineHeight * multiplier
+                if proposedHeight > self.inputContainerHeightConstraint.constant - MessageContentView.textViewPadding {
+                    proposedHeight = (lineHeight * CGFloat(self.textView.numberOfLines)) + MessageContentView.textViewPadding
+                }
             }
             
-            newAddViewSize = 40
+            newAddViewSize = AddMediaView.collapsedHeight
             newInputHeight = proposedHeight
         case .expanded:
             if !self.textView.isFirstResponder {
@@ -162,7 +165,7 @@ class SwipeableInputAccessoryView: BaseView {
                 self.animationView.play(fromFrame: 20, toFrame: 30, loopMode: .playOnce, completion: nil)
             }
 
-            newAddViewSize = 100
+            newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }
 

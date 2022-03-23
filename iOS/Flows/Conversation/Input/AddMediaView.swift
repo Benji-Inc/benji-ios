@@ -10,10 +10,17 @@ import Foundation
 
 class AddMediaView: ThemeButton {
     
+    static let expandedHeight: CGFloat = 100
+    static let collapsedHeight: CGFloat = 40 
+    
     let plusImageView = UIImageView()
     let displayableImageView = DisplayableImageView()
     
     var didSelectRemove: CompletionOptional = nil
+    
+    var hasMedia: Bool {
+        return self.displayableImageView.displayable.exists 
+    }
         
     override func initializeSubviews() {
         super.initializeSubviews()
