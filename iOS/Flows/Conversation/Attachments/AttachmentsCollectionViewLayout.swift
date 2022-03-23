@@ -15,13 +15,11 @@ class AttachmentCollectionViewLayout: UICollectionViewCompositionalLayout {
         config.scrollDirection = .vertical
         
         super.init(sectionProvider: { sectionIndex, environment in
-            
             guard let section = AttachmentsCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
             
             let screenPadding = Theme.ContentOffset.xtraLong.value
             switch section {
             case .photoVideo:
-                
                 let inset = Theme.ContentOffset.short.value
                 let fraction: CGFloat = 0.33
                 // Item
