@@ -24,7 +24,12 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     override var analyticsIdentifier: String? {
         return "SCREEN_CONVERSATION_LIST"
     }
-    
+
+    var messageCellDelegate: MesssageCellDelegate? {
+        get { return self.dataSource.messageCellDelegate}
+        set { self.dataSource.messageCellDelegate = newValue }
+    }
+
     // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
@@ -33,13 +38,8 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
 
     private(set) var conversationListController: ConversationListController
 
-    var selectedMessageView: MessageContentView?
-
-    // Input handlers
-    var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?
-
     var swipeableVC: SwipeableInputAccessoryViewController {
-        return messageInputController
+        return self.messageInputController
     }
 
     // Custom Input Accessory View
@@ -185,25 +185,25 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         guard let startingConversationID = self.startingConversationID else { return }
 
         Task {
-            await self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
+            await self.scrollToConversation(with: startingConversationID, messageId: self.startingMessageID)
         }.add(to: self.autocancelTaskPool)
     }
 
     @MainActor
-    func scrollToConversation(with cid: ConversationId, messageID: MessageId?) async {
+    func scrollToConversation(with cid: ConversationId, messageId: MessageId?) async {
         guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(cid)) else { return }
         self.collectionView.scrollToItem(at: conversationIndexPath,
                                          at: .centeredHorizontally,
                                          animated: true)
 
-        guard let messageID = messageID else { return }
+        guard let messageId = messageId else { return }
 
         guard let cell = self.collectionView.cellForItem(at: conversationIndexPath),
               let messagesCell = cell as? ConversationMessagesCell else {
                   return
               }
 
-        let messageController = ChatClient.shared.messageController(cid: cid, messageId: messageID)
+        let messageController = ChatClient.shared.messageController(cid: cid, messageId: messageId)
 
         try? await messageController.synchronize()
 
@@ -212,12 +212,13 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         // Determine if this is a reply message or regular message. If it's a reply, select the parent
         // message so we can open the thread experience.
         if let parentMessageId = message.parentMessageId {
-            await messagesCell.scrollToMessage(with:  parentMessageId, animateSelection: true)
-            self.selectedMessageView = messagesCell.getBottomFrontmostCell()?.content
-            self.onSelectedMessage?(cid, parentMessageId, messageID)
+            await messagesCell.scrollToMessage(with: parentMessageId, animateSelection: true)
+
+            if let messageCell = messagesCell.getFrontmostCell() {
+                self.messageCellDelegate?.messageCell(messageCell, didTapMessage: (cid, messageId))
+            }
         } else {
-            await messagesCell.scrollToMessage(with: messageID, animateSelection: true)
-            
+            await messagesCell.scrollToMessage(with: messageId, animateSelection: true)
         }
     }
 
@@ -394,16 +395,26 @@ extension ConversationListViewController: TransitionableViewController {
     }
 
     var receivingDismissalType: TransitionType {
-        if let view = self.selectedMessageView {
-            return .message(view)
+        guard let messageContent = self.getCentmostMessageCellContent() else {
+            return .fade
         }
-        return .fade
+
+        return .message(messageContent)
     }
 
     var sendingPresentationType: TransitionType {
-        if let view = self.selectedMessageView {
-            return .message(view)
+        guard let messageContent = self.getCentmostMessageCellContent() else {
+            return .fade
         }
-        return .fade
+
+        return .message(messageContent)
+    }
+
+    func getCentmostMessageCellContent() -> MessageContentView? {
+        guard let messagesCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return nil
+        }
+
+        return messagesCell.getFrontmostCell()?.content
     }
 }

@@ -10,8 +10,10 @@ import Foundation
 import PhotosUI
 import Photos
 import Localization
+import Lightbox
 
 protocol SwipeableInputControllerHandler where Self: ViewController {
+    var messageCellDelegate: MesssageCellDelegate? { get set }
     var swipeableVC: SwipeableInputAccessoryViewController { get }
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
 }
@@ -50,11 +52,11 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         super.start()
         
         self.inputHandlerViewController.swipeableVC.swipeInputView.addView.didSelect { [unowned self] in
-            self.presentAttachements()
+            self.presentAttachments()
         }
     }
     
-    func presentAttachements() {
+    func presentAttachments() {
         let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)
         
         self.present(coordinator) { [unowned self] result in
@@ -72,7 +74,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             self.inputHandlerViewController.becomeFirstResponder()
         }
         
-        self.addChildAndStart(coordinator) { [unowned self] result in
+        self.addChildAndStart(coordinator) { [unowned self, unowned coordinator] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 self.inputHandlerViewController.becomeFirstResponder()
                 finishedHandler?(result)
@@ -85,9 +87,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func handle(attachmentOption option: AttachmentOption) {
-        
         switch option {
-        case .attachements(let array):
+        case .attachments(let array):
             guard let first = array.first else { return }
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             Task.onMainActorAsync {
@@ -147,7 +148,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        
         Task.onMainActor {
             picker.dismiss(animated: true) {
                 self.toPresentable().becomeFirstResponder()
@@ -173,5 +173,19 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }
         }
+    }
+}
+
+// MARK: - Image View Flow
+
+extension ConversationListCoordinator {
+
+    func presentImageFlow(for imageURLs: [URL], startingURL: URL?) {
+        let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
+                                                    startURL: startingURL,
+                                                    router: self.router,
+                                                    deepLink: self.deepLink)
+
+        self.present(imageCoordinator)
     }
 }

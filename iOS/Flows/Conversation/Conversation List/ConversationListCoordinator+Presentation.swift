@@ -37,7 +37,7 @@ extension ConversationListCoordinator {
         
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageID: nil)
+                await self.listVC.scrollToConversation(with: result, messageId: nil)
             }
         }
     }
@@ -59,7 +59,7 @@ extension ConversationListCoordinator {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageID: nil)
+                await self.listVC.scrollToConversation(with: result, messageId: nil)
             }
         }
     }
@@ -219,7 +219,7 @@ extension ConversationListCoordinator {
             switch option {
             case .conversation(let cid):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: cid, messageID: nil)
+                    await self.listVC.scrollToConversation(with: cid, messageId: nil)
                 }
             }
         }
