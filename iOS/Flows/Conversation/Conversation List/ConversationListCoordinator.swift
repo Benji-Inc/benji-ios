@@ -15,19 +15,10 @@ import Localization
 import Intents
 import Lightbox
 
-class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
-
-    lazy var conversationListVC
-    = ConversationListViewController(members: self.conversationMembers,
-                                     startingConversationID: self.startingConversationID,
-                                     startingMessageID: self.startMessageID)
-
-    private let conversationMembers: [ConversationMember]
-    private let startingConversationID: ConversationId?
-    private let startMessageID: MessageId?
-
-    override func toPresentable() -> DismissableVC {
-        return self.conversationListVC
+class ConversationListCoordinator: InputHandlerCoordinator<Void> {
+    
+    var listVC: ConversationListViewController {
+        return self.inputHandlerViewController as! ConversationListViewController
     }
 
     init(router: Router,
@@ -35,18 +26,18 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
          conversationMembers: [ConversationMember],
          startingConversationId: ConversationId?,
          startingMessageId: MessageId?) {
+        
+        let vc = ConversationListViewController(members: conversationMembers,
+                                                startingConversationID: startingConversationId,
+                                                startingMessageID: startingMessageId)
 
-        self.conversationMembers = conversationMembers
-        self.startingConversationID = startingConversationId
-        self.startMessageID = startingMessageId
-
-        super.init(router: router, deepLink: deepLink)
+        super.init(with: vc, router: router, deepLink: deepLink)
     }
 
     override func start() {
         super.start()
         
-        self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
+        self.listVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
             if let replyId = replyId {
                 self.presentThread(for: channelId, messageId: messageId, startingReplyId: replyId)
             } else {
@@ -54,23 +45,19 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             }
         }
         
-        self.conversationListVC.headerVC.jibImageView.didSelect { [unowned self] in
+        self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
             self.showWallet() 
         }
-        
-        self.conversationListVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
+
+        self.listVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfile(for: User.current()!)
         }
         
-        self.conversationListVC.messageInputController.swipeInputView.addView.didSelect { [unowned self] in
-            self.presentAttachments()
-        }
-        
-        self.conversationListVC.headerVC.button.didSelect { [unowned self] in
+        self.listVC.headerVC.button.didSelect { [unowned self] in
             self.presentConversationDetail()
         }
         
-        self.conversationListVC.dataSource.handleAddPeopleSelected = { [unowned self] in
+        self.listVC.dataSource.handleAddPeopleSelected = { [unowned self] in
             Task {
                 try await self.createNewConversation()
                 Task.onMainActor {
@@ -79,7 +66,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             }
         }
         
-        self.conversationListVC.dataSource.handleInvestmentSelected = { [unowned self] in
+        self.listVC.dataSource.handleInvestmentSelected = { [unowned self] in
             self.presentEmailAlert() 
         }
 
@@ -98,7 +85,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             let messageID = deeplink.messageId
             guard let cid = deeplink.conversationId else { break }
             Task {
-                await self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
+                await self.listVC.scrollToConversation(with: cid, messageID: messageID)
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()
@@ -129,7 +116,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
 // MARK: - Permissions Flow
 
-
 extension ConversationListCoordinator {
 
     @MainActor
@@ -144,49 +130,7 @@ extension ConversationListCoordinator {
     @MainActor
     private func presentPermissions() {
         let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-
-        /// Because of how the Permissions are presented, we need to properly reset the KeyboardManager.
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            self.conversationListVC.becomeFirstResponder()
-        }
-
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: self.conversationListVC, animated: true)
-        }
-
-        self.conversationListVC.resignFirstResponder()
-        self.router.present(coordinator, source: self.conversationListVC)
-    }
-}
-
-// MARK: - Photo Attachment Flow
-
-extension ConversationListCoordinator: PHPickerViewControllerDelegate {
-
-    func presentPhotoCapture() {
-
-    }
-
-    func presentPhotoLibrary() {
-        let filter = PHPickerFilter.any(of: [.images])
-        var config = PHPickerConfiguration(photoLibrary: .shared())
-        config.filter = filter
-        config.selectionLimit = 1
-        let vc = PHPickerViewController(configuration: config)
-        vc.delegate = self
-
-        self.conversationListVC.present(vc, animated: true)
-    }
-}
-
-extension ConversationListCoordinator {
-
-    nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        Task.onMainActor {
-            self.conversationListVC.dismiss(animated: true) {
-                self.conversationListVC.becomeFirstResponder()
-            }
-        }
+        self.present(coordinator, finishedHandler: nil, cancelHandler: nil)
     }
 }
 
@@ -206,7 +150,7 @@ extension ConversationListCoordinator: LightboxControllerDismissalDelegate {
         // Use dynamic background.
         controller.dynamicBackground = true
 
-        self.conversationListVC.present(controller, animated: true)
+        self.listVC.present(controller, animated: true)
     }
 
     func lightboxControllerWillDismiss(_ controller: LightboxController) {

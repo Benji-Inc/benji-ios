@@ -15,7 +15,13 @@ import SwiftUI
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,
                             RepliesSequenceCollectionViewDataSource>,
-                            DismissInteractableController {
+                            DismissInteractableController,
+                            SwipeableInputControllerHandler {
+    
+    
+    var swipeableVC: SwipeableInputAccessoryViewController {
+        return self.messageInputController
+    }
     
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
@@ -132,7 +138,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
-                self.updateUI(for: state)
+                self.updateUI(for: state, forceLayout: false)
             }.store(in: &self.cancellables)
     }
 
@@ -168,7 +174,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         }
     }
     
-    func updateUI(for state: ConversationUIState) {
+    func updateUI(for state: ConversationUIState, forceLayout: Bool) {
         guard !self.isBeingOpen && !self.isBeingClosed else { return }
 
         self.configureCollectionLayout(for: state)

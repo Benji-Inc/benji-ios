@@ -58,6 +58,39 @@ class AttachmentsManager {
         })
     }
     
+    func getMessageKind(for info: [UIImagePickerController.InfoKey : Any], body: String) async throws -> MessageKind {
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            if let mediaType = info[.mediaType] as? String {
+                switch mediaType {
+                case "public.image":
+                    
+                    do {
+                        /// https://nshipster.com/temporary-files/
+                        // Cache the image to get the urls for sending
+                        let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+                                      isDirectory: true).appendingPathComponent(UUID().uuidString)
+                        let previewURL = URL(fileURLWithPath: NSTemporaryDirectory(),
+                                             isDirectory: true).appendingPathComponent(UUID().uuidString)
+            
+                        let image = info[.editedImage] as? UIImage
+                        let data = image?.jpegData(compressionQuality: 1.0)
+                        let previewData = image?.previewData
+                        
+                        try data?.write(to: url, options: .atomic)
+                        try previewData?.write(to: previewURL, options: .atomic)
+                        let item = PhotoAttachment(url: url, previewUrl: previewURL, _data: data, info: info)
+                        continuation.resume(returning: .photo(photo: item, body: body))
+                    } catch  {
+                        logError(error)
+                        continuation.resume(throwing: error)
+                    }
+                default:
+                    continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
+                }
+            }
+        }
+    }
     
     func getMessageKind(for attachment: Attachment, body: String) async throws -> MessageKind {
         let messageKind: MessageKind = try await withCheckedThrowingContinuation { continuation in
