@@ -7,10 +7,15 @@ def shared_pods
   pod 'PostHog'
 end
 
+def ios_pods
+  pod 'Lightbox'
+end
+
 target 'Jibber' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
+  ios_pods
 end
 
 #target 'AppClip' do

@@ -1,6 +1,11 @@
 PODS:
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
+  - Cache (6.0.0)
+  - Imaginary (5.0.0):
+    - Cache (~> 6.0.0)
+  - Lightbox (2.5.0):
+    - Imaginary (~> 5.0.0)
   - Parse (1.19.3):
     - Parse/Core (= 1.19.3)
   - Parse/Core (1.19.3):
@@ -14,6 +19,7 @@ PODS:
   - Starscream (4.0.4)
 
 DEPENDENCIES:
+  - Lightbox
   - ParseLiveQuery
   - PostHog
   - ScrollCounter
@@ -22,6 +28,9 @@ SPEC REPOS:
   trunk:
     - Bolts
     - Bolts-Swift
+    - Cache
+    - Imaginary
+    - Lightbox
     - Parse
     - ParseLiveQuery
     - PostHog
@@ -31,12 +40,15 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
+  Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
+  Imaginary: cf5e3a7dd6ab1dcbd47ba8ce5edf2307c4e99eb3
+  Lightbox: cc3d5124f024fa8197fd23f913160db1c61a1852
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
   ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
   PostHog: 4b6321b521569092d4ef3a02238d9435dbaeb99f
   ScrollCounter: 22ba58449addef7ed242cdf2e4b46aa9dbbe3a49
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: 327dd526980eb1c4b2abe3a2e3054df9ab63dfda
+PODFILE CHECKSUM: 42c4081c2db0a47c1a395784c34f6b438d9c2850
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
