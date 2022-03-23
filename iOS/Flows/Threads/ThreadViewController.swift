@@ -26,7 +26,10 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
 
-    #warning("Add input delegate")
+    weak var messageCellDelegate: MesssageCellDelegate? {
+        get { return self.dataSource.messageCellDelegate }
+        set { self.dataSource.messageCellDelegate = newValue }
+    }
 
     // Detail View
     @ObservedObject private var messageState = MessageDetailViewState(message: nil)

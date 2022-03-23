@@ -64,12 +64,12 @@ class MessageCellContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate
 
         let read = UIAction(title: "Set to read",
                             image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
-            self.messageCell.setToRead()
+            self.setToRead()
         }
 
         let unread = UIAction(title: "Set to unread",
                             image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
-            self.messageCell.setToUnread()
+            self.setToUnread()
         }
 
         var menuElements: [UIMenuElement] = []
