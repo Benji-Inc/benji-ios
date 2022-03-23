@@ -12,6 +12,8 @@ import PhotosUI
 import Combine
 import StreamChat
 import Localization
+import Intents
+import Lightbox
 
 class ConversationListCoordinator: InputHandlerCoordinator<Void> {
     
@@ -46,7 +48,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
             self.showWallet() 
         }
-        
+
         self.listVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfile(for: User.current()!)
         }
@@ -109,5 +111,49 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         ConversationsManager.shared.activeConversation = controller.conversation
+    }
+}
+
+// MARK: - Permissions Flow
+
+extension ConversationListCoordinator {
+
+    @MainActor
+    func checkForPermissions() async {
+        if INFocusStatusCenter.default.authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+            self.presentPermissions()
+        }
+    }
+
+    @MainActor
+    private func presentPermissions() {
+        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator, finishedHandler: nil, cancelHandler: nil)
+    }
+}
+
+// MARK: - Image View Flow
+
+extension ConversationListCoordinator: LightboxControllerDismissalDelegate {
+
+    func presentImageFlow(for imageURL: URL) {
+        let images = [LightboxImage(imageURL: imageURL)]
+
+        // Create an instance of LightboxController.
+        let controller = LightboxController(images: images)
+
+        // Set delegates.
+        controller.dismissalDelegate = self
+
+        // Use dynamic background.
+        controller.dynamicBackground = true
+
+        self.listVC.present(controller, animated: true)
+    }
+
+    func lightboxControllerWillDismiss(_ controller: LightboxController) {
+
     }
 }

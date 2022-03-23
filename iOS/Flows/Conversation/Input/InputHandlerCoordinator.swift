@@ -24,16 +24,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                        UIImagePickerControllerDelegate,
                                        UINavigationControllerDelegate {
     
-    lazy var pickerVC: PHPickerViewController = {
-        var filter = PHPickerFilter.any(of: [.images])
-        var config = PHPickerConfiguration(photoLibrary: .shared())
-        config.filter = filter
-        config.selectionLimit = 1
-        let vc = PHPickerViewController(configuration: config)
-        vc.delegate = self
-        return vc
-    }()
-    
     lazy var captureVC: UIImagePickerController = {
         let vc = UIImagePickerController()
         vc.sourceType = .camera
@@ -145,8 +135,14 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func presentPhotoLibrary() {
-        self.toPresentable().present(self.pickerVC, animated: true) {
-        }
+        let filter = PHPickerFilter.any(of: [.images])
+        var config = PHPickerConfiguration(photoLibrary: .shared())
+        config.filter = filter
+        config.selectionLimit = 1
+        let vc = PHPickerViewController(configuration: config)
+        vc.delegate = self
+        
+        self.toPresentable().present(vc, animated: true)
     }
     
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {

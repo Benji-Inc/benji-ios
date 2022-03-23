@@ -21,21 +21,18 @@ protocol ConversationUIStateSettable {
 class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable, UICollectionViewDelegate {
 
     // Interaction handling
-    var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
-    var handleCollectionViewTapped: CompletionOptional = nil 
-
-    var handleTappedConversation: ((MessageSequence) -> Void)?
-    var handleDeleteConversation: ((MessageSequence) -> Void)?
-
-    @Published var frontmostNonUserMessage: ChatMessage?
+    var messageCellDelegate: MesssageCellDelegate? {
+        get { return self.dataSource.messageCellDelegate }
+        set { self.dataSource.messageCellDelegate = newValue }
+    }
+    var handleCollectionViewTapped: CompletionOptional = nil
     
-    // CollectionView
-    var collectionLayout: MessagesTimeMachineCollectionViewLayout {
+    // Collection View
+
+    private var collectionLayout: MessagesTimeMachineCollectionViewLayout {
         return self.collectionView.conversationLayout
     }
-    lazy var collectionView = ConversationCollectionView()
-    
+    private lazy var collectionView = ConversationCollectionView()
     private lazy var dataSource = MessageSequenceCollectionViewDataSource(collectionView: self.collectionView)
 
     /// The conversation containing all the messages.
@@ -75,14 +72,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             self.handleCollectionViewTapped?()
         }
 
-        self.dataSource.handleTappedMessage = { [unowned self] cid, messageID, content in
-            self.handleTappedMessage?(cid, messageID, content)
-        }
-
-        self.dataSource.handleEditMessage = { [unowned self] cid, messageID in
-            self.handleEditMessage?(cid, messageID)
-        }
-
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
             self.conversationController?.loadPreviousMessages()
         }
@@ -97,6 +86,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         self.collectionView.expandToSuperviewSize()
 
+        #warning("Do this when the conversation is loaded.")
         if self.scrollToFirstUnreadIfNeccessary {
             self.scrollToFirstUnreadIfNeccessary = false
             self.scrollToFirstUnread()
@@ -216,9 +206,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                 for change in changes {
                     switch change {
                     case .update(let message, _):
-                        if !message.isDeleted {
-                            itemsToReconfigure.append(.message(cid: cid, messageID: message.id))
-                        }
+                        guard !message.isDeleted else  { break }
+                        itemsToReconfigure.append(.message(cid: cid, messageID: message.id))
                     default:
                         break
                     }
@@ -287,41 +276,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         switch item {
         case .message(cid: let cid, messageID: let messageID, _):
-            self.handleTappedMessage?(cid, messageID, cell.content)
+            self.messageCellDelegate?.messageCell(cell, didTapMessage: (cid, messageID))
         case .loadMore, .placeholder, .initial:
             break
         }
-    }
-
-    /// Subscriptions for details-shown events on the message cells.
-    private var detailsShownEventHandlers: [IndexPath : AnyCancellable] = [:]
-
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-
-        guard let messageCell = cell as? MessageCell else { return }
-
-        self.detailsShownEventHandlers[indexPath]
-        = messageCell.$messageDetailState
-            .removeDuplicates()
-            .mainSink { [unowned self] state in
-
-                guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                      case .message(let cid, let messageID, _) = item,
-                let message = ChatClient.shared.message(cid: cid, id: messageID) else { return }
-
-                
-                if !message.isFromCurrentUser && state.areDetailsFullyVisible {
-                    self.frontmostNonUserMessage = message
-                }
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        didEndDisplaying cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-
-        self.detailsShownEventHandlers.removeValue(forKey: indexPath)
     }
 }

@@ -12,6 +12,8 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
+        self.dataSource.messageCellDelegate = self
+
         self.dataSource.handleDidTapClose = { [unowned self] item in
             self.dataSource.deleteItems([item])
             switch item {
@@ -22,15 +24,6 @@ extension ConversationListViewController {
             default:
                 break
             }
-        }
-        
-        self.dataSource.handleSelectedMessage = { [unowned self] (cid, messageID, view) in
-            self.selectedMessageView = view
-            self.onSelectedMessage?(cid, messageID, nil)
-        }
-
-        self.dataSource.handleEditMessage = { cid, messagerID in
-            // TODO
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] in
@@ -99,5 +92,21 @@ extension ConversationListViewController {
                 conversationController.sendKeystrokeEvent()
             }
         }.store(in: &self.cancellables)
+    }
+}
+
+extension ConversationListViewController: MesssageCellDelegate {
+
+    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        self.selectedMessageView = cell.content
+        self.onSelectedMessage?(messageInfo.0, messageInfo.1, nil)
+    }
+
+    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+
+    }
+
+    func messageCell(_ cell: MessageCell, didTapAttachment attachment: MediaItem) {
+
     }
 }

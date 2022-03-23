@@ -1,38 +1,43 @@
 //
-//  MessageContentView+Menu.swift
+//  MessageContextMenuDelegate.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 11/28/21.
-//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
+//  Created by Martin Young on 3/23/22.
+//  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
-
-#if IOS
 import StreamChat
-import UIKit
 
-extension MessageContentView: UIContextMenuInteractionDelegate {
+class MessageCellContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
+
+    unowned let messageCell: MessageCell
+
+    init(messageCell: MessageCell) {
+        self.messageCell = messageCell
+    }
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 
-        return UIContextMenuConfiguration(identifier: nil) { () -> UIViewController? in
-            guard let message = self.message else { return nil }
+        return UIContextMenuConfiguration(identifier: nil) { [unowned self] () -> UIViewController? in
+            guard let message = self.messageCell.messageState.message else { return nil }
             return MessagePreviewViewController(with: message)
-        } actionProvider: { (suggestions) -> UIMenu? in
+        } actionProvider: { [unowned self] (suggestions) -> UIMenu? in
             return self.makeContextMenu()
         }
     }
 
     private func makeContextMenu() -> UIMenu {
-        guard let message = self.message as? Message, let cid = message.cid else { return UIMenu() }
+        guard let message = self.messageCell.messageState.message as? Message, let cid = message.cid else {
+            return UIMenu()
+        }
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
-                                     attributes: .destructive) { [unowned self] action in
+                                     attributes: .destructive) { action in
             Task {
                 let controller = ChatClient.shared.messageController(cid: cid, messageId: message.id)
                 do {
@@ -40,7 +45,7 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
                 } catch {
                     logError(error)
                 }
-            }.add(to: self.taskPool)
+            }
         }
 
         let deleteMenu = UIMenu(title: "Delete Message",
@@ -49,12 +54,12 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
                                 children: [confirmDelete, neverMind])
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            self.handleTappedMessage?(cid, message.id)
+            self.messageCell.delegate?.messageCell(self.messageCell, didTapMessage: (cid, message.id))
         }
 
         let edit = UIAction(title: "Edit",
                             image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
-            self.handleEditMessage?(cid, message.id)
+            self.messageCell.delegate?.messageCell(self.messageCell, didTapEditMessage: (cid, message.id))
         }
 
         let read = UIAction(title: "Set to read",
@@ -94,15 +99,32 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
                            children: menuElements)
     }
 
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+
         let params = UIPreviewParameters()
         params.backgroundColor = ThemeColor.clear.color
-        params.shadowPath = UIBezierPath.init(rect: .zero)
+        params.shadowPath = UIBezierPath(rect: .zero)
         if let bubble = interaction.view as? SpeechBubbleView, let path = bubble.bubbleLayer.path {
-            params.visiblePath = UIBezierPath.init(cgPath: path)
+            params.visiblePath = UIBezierPath(cgPath: path)
         }
         let preview = UITargetedPreview(view: interaction.view!, parameters: params)
         return preview
     }
+
+    // MARK: - Message Consumption
+
+    func setToRead() {
+        guard let msg = self.messageCell.messageState.message, msg.canBeConsumed else { return }
+        Task {
+            try await msg.setToConsumed()
+        }
+    }
+
+    func setToUnread() {
+        guard let msg = self.messageCell.messageState.message, msg.isConsumedByMe else { return }
+        Task {
+            try await msg.setToUnconsumed()
+        }
+    }
 }
-#endif

@@ -17,12 +17,11 @@ extension ConversationListCoordinator {
         guard let query = Circle.query() else { return }
         query.whereKey("owner", equalTo: User.current()!)
         query.getFirstObjectInBackground { [unowned self] object, error in
-            if let circle = object as? Circle {
-                let coordinator = CircleCoordinator(with: circle,
-                                                    router: self.router,
-                                                    deepLink: self.deepLink)
-                self.present(coordinator)
-            }
+            guard let circle = object as? Circle else { return }
+            let coordinator = CircleCoordinator(with: circle,
+                                                router: self.router,
+                                                deepLink: self.deepLink)
+            self.present(coordinator)
         }
     }
     

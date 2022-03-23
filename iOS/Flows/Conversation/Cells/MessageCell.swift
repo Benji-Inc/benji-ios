@@ -11,6 +11,12 @@ import SwiftUI
 import StreamChat
 import Combine
 
+protocol MesssageCellDelegate: AnyObject {
+    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapAttachment attachment: MediaItem)
+}
+
 struct MessageDetailState: Equatable {
     var areDetailsFullyVisible: Bool = false
 }
@@ -18,10 +24,12 @@ struct MessageDetailState: Equatable {
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
+    weak var delegate: MesssageCellDelegate?
+
     let content = MessageContentView()
 
     // Detail View
-    @ObservedObject private var messageState = MessageDetailViewState(message: nil)
+    @ObservedObject var messageState = MessageDetailViewState(message: nil)
     private lazy var detailView = MessageDetailView(config: self.messageState)
     private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
     var shouldShowDetailBar: Bool = true
@@ -29,6 +37,9 @@ class MessageCell: UICollectionViewCell {
     /// If true, this cell's message details are fully visible.
     @Published private(set) var messageDetailState = MessageDetailState()
     private var subscriptions = Set<AnyCancellable>()
+
+    // Context menu
+    private lazy var contextMenuDelegate = MessageCellContextMenuDelegate(messageCell: self)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,6 +53,9 @@ class MessageCell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
+
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
+        self.content.bubbleView.addInteraction(contextMenuInteraction)
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
@@ -117,6 +131,7 @@ class MessageCell: UICollectionViewCell {
 
     // MARK: - Message Detail Tasks
 
+    /// A pool of tasks related to updating the message details.
     private var messageDetailTasks = TaskPool()
 
     /// Handles changes to the message detail view's visibility.
@@ -168,6 +183,8 @@ class MessageCell: UICollectionViewCell {
         }.add(to: self.messageDetailTasks)
     }
 }
+
+// MARK: - Helper Functions
 
 extension UIView {
     

@@ -28,10 +28,9 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         case initial(cid: ConversationId)
     }
 
-    var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
+    // Input handling
+    weak var messageCellDelegate: MesssageCellDelegate?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
-    var handleCollectionViewTapped: CompletionOptional?
 
     /// If true, show the detail bar for each message
     var shouldShowDetailBar = true
@@ -62,13 +61,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                                                            for: indexPath,
                                                            item: (cid, messageID, showDetail, collectionView))
             messageCell.shouldShowDetailBar = self.shouldShowDetailBar
-            messageCell.content.handleEditMessage = { [unowned self] cid, messageID in
-                self.handleEditMessage?(cid, messageID)
-            }
-
-            messageCell.content.handleTappedMessage = { [unowned self, unowned messageCell] cid, messageID in
-                self.handleTappedMessage?(cid, messageID, messageCell.content)
-            }
+            messageCell.delegate = self.messageCellDelegate
 
             return messageCell
         case .loadMore(cid: let conversationID):
@@ -142,7 +135,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 }
 
-// MARK: - Cell registration
+// MARK: - Cell Registration
 
 extension MessageSequenceCollectionViewDataSource {
 

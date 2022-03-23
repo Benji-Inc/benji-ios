@@ -219,9 +219,9 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             self.swipeInputView.addView.configure(with: nil)
         case .attributedText(_):
             self.swipeInputView.addView.configure(with: nil)
-        case .photo(photo: let item, body: let body):
+        case .photo(photo: let item, _):
             self.swipeInputView.addView.configure(with: item)
-        case .video(video: let video, body: let body):
+        case .video(_, _):
             break
         case .location(_):
             break

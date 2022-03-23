@@ -25,7 +25,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
-    
+
+    weak var messageCellDelegate: MesssageCellDelegate? {
+        get { return self.dataSource.messageCellDelegate }
+        set { self.dataSource.messageCellDelegate = newValue }
+    }
+
     // Detail View
     @ObservedObject private var messageState = MessageDetailViewState(message: nil)
     private lazy var detailView = MessageDetailView(config: self.messageState)
@@ -359,10 +364,6 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
-        self.dataSource.handleEditMessage = { cid, messageID in
-            // TODO
-        }
-
         self.collectionView.backView.didSelect { [unowned self] in
             if self.messageInputController.swipeInputView.textView.isFirstResponder {
                 self.messageInputController.swipeInputView.textView.resignFirstResponder()
@@ -377,11 +378,10 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         self.messageController.messageChangePublisher.mainSink { [unowned self] changes in
-            if let msg = self.messageController.message {
-                self.parentMessageView.configure(with: msg)
-                self.messageState.message = msg
-                self.messageState.deliveryStatus = msg.deliveryStatus
-            }
+            guard let msg = self.messageController.message else { return }
+            self.parentMessageView.configure(with: msg)
+            self.messageState.message = msg
+            self.messageState.deliveryStatus = msg.deliveryStatus
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
