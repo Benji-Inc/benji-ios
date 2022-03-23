@@ -47,10 +47,6 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
             self.showWallet() 
         }
         
-        self.listVC.headerVC.didTapAddPeople = { [unowned self] in
-            self.presentPeoplePicker()
-        }
-        
         self.listVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfile(for: User.current()!)
         }
