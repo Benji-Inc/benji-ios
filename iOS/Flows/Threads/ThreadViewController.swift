@@ -361,6 +361,16 @@ extension ThreadViewController: TransitionableViewController {
     var sendingDismissalType: TransitionType {
         return .message(self.parentMessageView)
     }
+    
+    func handleFinalTransition() {
+        self.detailVC.view.alpha = 1.0
+    }
+    
+    func handleTransitionCompleted() {
+        guard let message = self.messageController.message else { return }
+        self.updateStatusText(for: message)
+        self.loadInitialData()
+    }
 }
 
 // MARK: - Updates and Subscription

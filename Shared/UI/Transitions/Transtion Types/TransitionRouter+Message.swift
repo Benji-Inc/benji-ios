@@ -12,6 +12,8 @@ import UIKit
 protocol MessageInteractableController where Self: DismissInteractableController {
     var blurView: BlurView { get set }
     var messageContent: MessageContentView { get }
+    func handleFinalTransition()
+    func handleTransitionCompleted()
 }
 
 extension TransitionRouter {
@@ -80,17 +82,12 @@ extension TransitionRouter {
             
             async let second: () = UIView.awaitAnimation(with: .fast, delay: 0.25, animations: {
                 toView.alpha = 1
-                if let threadVC = interactableVC as? ThreadViewController {
-                    threadVC.detailVC.view.alpha = 1.0
-                }
+                interactableVC.handleFinalTransition()
             })
             
             let _: [()] = await [first, second]
             
-            if let threadVC = interactableVC as? ThreadViewController {
-                threadVC.updateStatusText(for: message as! Message)
-                threadVC.loadInitialData()
-            }
+            interactableVC.handleTransitionCompleted()
             
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)

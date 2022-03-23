@@ -94,4 +94,10 @@ extension MessageDetailViewController: TransitionableViewController {
     var sendingDismissalType: TransitionType {
         return .message(self.messageContentView)
     }
+    
+    func handleFinalTransition() {
+        //self.detailVC.view.alpha = 1.0
+    }
+    
+    func handleTransitionCompleted() {}
 }
