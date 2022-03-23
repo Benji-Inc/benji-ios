@@ -8,18 +8,8 @@
 
 import Foundation
 import Combine
-#if IOS
-import SwiftUI
-import StreamChat
-#endif
 
 class MessageContentView: BaseView {
-
-#if IOS
-    var handleTappedMessage: ((ConversationId, MessageId) -> Void)?
-    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
-    var handleTappedAttachment: ((MediaItem) -> Void)?
-#endif
     
     enum Layout {
         case collapsed
@@ -66,11 +56,6 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.textView.textAlignment = .left
-
-#if IOS
-        let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
-        self.bubbleView.addInteraction(contextMenuInteraction)
-#endif
     }
 
     override func layoutSubviews() {
@@ -128,9 +113,6 @@ class MessageContentView: BaseView {
             }
         }
 
-#if IOS
-        self.configureConsumption(for: message)
-#endif
         self.authorView.set(person: message.person)
 
         self.setNeedsLayout()
@@ -169,31 +151,6 @@ class MessageContentView: BaseView {
     }
 }
 
-// MARK: - Message Consumption
-
-#if IOS
-extension MessageContentView {
-
-    func configureConsumption(for message: Messageable) {
-        self.textView.setFont(.regular)
-    }
-
-    func setToRead() {
-        guard let msg = self.message, msg.canBeConsumed else { return }
-        Task {
-            try await self.message?.setToConsumed()
-        }
-    }
-
-    func setToUnread() {
-        guard let msg = self.message, msg.isConsumedByMe else { return }
-        Task {
-            try await self.message?.setToUnconsumed()
-        }
-    }
-}
-#endif
-
 extension MessageTextView {
 
     func getSize(width: CGFloat, layout: MessageContentView.Layout = .expanded) -> CGSize {
@@ -211,4 +168,3 @@ extension MessageTextView {
         return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
     }
 }
-

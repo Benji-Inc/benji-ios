@@ -62,11 +62,11 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                                                            for: indexPath,
                                                            item: (cid, messageID, showDetail, collectionView))
             messageCell.shouldShowDetailBar = self.shouldShowDetailBar
-            messageCell.content.handleEditMessage = { [unowned self] cid, messageID in
+            messageCell.handleEditMessage = { [unowned self] cid, messageID in
                 self.handleEditMessage?(cid, messageID)
             }
 
-            messageCell.content.handleTappedMessage = { [unowned self, unowned messageCell] cid, messageID in
+            messageCell.handleTappedMessage = { [unowned self, unowned messageCell] cid, messageID in
                 self.handleTappedMessage?(cid, messageID, messageCell.content)
             }
 
