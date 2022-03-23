@@ -25,17 +25,6 @@ extension ConversationListCoordinator {
     @MainActor
     private func presentPermissions() {
         let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-        
-        /// Because of how the Permissions are presented, we need to properly reset the KeyboardManager.
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            self.conversationListVC.becomeFirstResponder()
-        }
-        
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: self.conversationListVC, animated: true)
-        }
-        
-        self.conversationListVC.resignFirstResponder()
-        self.router.present(coordinator, source: self.conversationListVC)
+        self.present(coordinator, finishedHandler: nil, cancelHandler: nil)
     }
 }

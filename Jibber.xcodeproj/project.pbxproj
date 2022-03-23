@@ -358,7 +358,6 @@
 		D646D36E27E53D750077D20B /* AttachementOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36D27E53D750077D20B /* AttachementOptionCell.swift */; };
 		D646D37027E544990077D20B /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36F27E544990077D20B /* AttachmentHeaderView.swift */; };
 		D646D37227E54DFC0077D20B /* AttachementLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37127E54DFC0077D20B /* AttachementLineView.swift */; };
-		D646D37427E553E30077D20B /* ConversationListCoordinator+Attachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */; };
 		D646D37627E579310077D20B /* AddMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37527E579310077D20B /* AddMediaView.swift */; };
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
 		D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
@@ -984,7 +983,6 @@
 		D646D36D27E53D750077D20B /* AttachementOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementOptionCell.swift; sourceTree = "<group>"; };
 		D646D36F27E544990077D20B /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
 		D646D37127E54DFC0077D20B /* AttachementLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementLineView.swift; sourceTree = "<group>"; };
-		D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Attachments.swift"; sourceTree = "<group>"; };
 		D646D37527E579310077D20B /* AddMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMediaView.swift; sourceTree = "<group>"; };
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
 		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
@@ -1282,7 +1280,6 @@
 				8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */,
 				80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */,
 				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
-				D646D37327E553E30077D20B /* ConversationListCoordinator+Attachments.swift */,
 				D6DEC3F827A21E630072D9D0 /* ConversationListCoordinator+Permissions.swift */,
 				D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */,
 				8028C9E8273ECB1200520465 /* ConversationListViewController.swift */,
@@ -3119,7 +3116,6 @@
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */,
 				D646D37227E54DFC0077D20B /* AttachementLineView.swift in Sources */,
-				D646D37427E553E30077D20B /* ConversationListCoordinator+Attachments.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				80E228D827C6C70000AF37AC /* SwipeInputHintAnimator.swift in Sources */,
 				D6129FB227ADC6680058811C /* WalletCollectionViewDataSource.swift in Sources */,

@@ -13,15 +13,16 @@ import Localization
 
 protocol SwipeableInputControllerHandler {
     var swipeableVC: SwipeableInputAccessoryViewController { get }
+    func updateUI(for state: ConversationUIState, forceLayout: Bool)
 }
 
 typealias InputHandlerViewContoller = SwipeableInputControllerHandler & ViewController
 
 class InputHandlerCoordinator: PresentableCoordinator<Void>,
-                                ActiveConversationable,
-                                PHPickerViewControllerDelegate,
-                                UIImagePickerControllerDelegate,
-                                UINavigationControllerDelegate {
+                               ActiveConversationable,
+                               PHPickerViewControllerDelegate,
+                               UIImagePickerControllerDelegate,
+                               UINavigationControllerDelegate {
     
     lazy var pickerVC: PHPickerViewController = {
         var filter = PHPickerFilter.any(of: [.images])
@@ -45,10 +46,52 @@ class InputHandlerCoordinator: PresentableCoordinator<Void>,
     
     init(with viewContoller: InputHandlerViewContoller,
          router: Router,
-         deepLink: DeepLinkObject?) {
+         deepLink: DeepLinkable?) {
         
         self.inputHandlerViewController = viewContoller
         super.init(router: router, deepLink: deepLink)
+    }
+    
+    override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
+        return self.inputHandlerViewController
+    }
+    
+    override func start() {
+        super.start()
+        
+        self.inputHandlerViewController.swipeableVC.swipeInputView.addView.didSelect { [unowned self] in
+            self.presentAttachements()
+        }
+    }
+    
+    func presentAttachements() {
+        let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)
+        
+        self.present(coordinator) { [unowned self] result in
+            self.handle(attachmentOption: result)
+        }
+    }
+    
+    func present<ChildResult>(_ coordinator: PresentableCoordinator<ChildResult>,
+                              finishedHandler: ((ChildResult) -> Void)? = nil,
+                              cancelHandler: (() -> Void)? = nil) {
+        self.removeChild()
+        
+        // Because of how the People are presented, we need to properly reset the KeyboardManager.
+        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+            self.inputHandlerViewController.becomeFirstResponder()
+        }
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                self.inputHandlerViewController.becomeFirstResponder()
+                finishedHandler?(result)
+            }
+        }
+        
+        self.inputHandlerViewController.resignFirstResponder()
+        self.inputHandlerViewController.updateUI(for: .read, forceLayout: true)
+        self.router.present(coordinator, source: self.inputHandlerViewController, cancelHandler: cancelHandler)
     }
     
     func handle(attachmentOption option: AttachmentOption) {
@@ -71,7 +114,7 @@ class InputHandlerCoordinator: PresentableCoordinator<Void>,
             break
         case .library:
             break
-            #warning("Problem when dismissing picker, and not being able to assign first responder")
+#warning("Problem when dismissing picker, and not being able to assign first responder")
             //self.presentPhotoLibrary()
         }
     }
@@ -79,7 +122,7 @@ class InputHandlerCoordinator: PresentableCoordinator<Void>,
     func presentPhotoCapture() {
         let cameraMediaType = AVMediaType.video
         let status = AVCaptureDevice.authorizationStatus(for: cameraMediaType)
-            
+        
         switch status {
         case .denied:
             break
@@ -107,7 +150,7 @@ class InputHandlerCoordinator: PresentableCoordinator<Void>,
     }
     
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-
+        
         Task.onMainActor {
             picker.dismiss(animated: true) {
                 self.toPresentable().becomeFirstResponder()

@@ -55,7 +55,7 @@ extension ConversationListCoordinator {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
-                await self.conversationListVC.scrollToConversation(with: result, messageID: nil)
+                await self.listVC.scrollToConversation(with: result, messageID: nil)
             }
         }
     }
@@ -91,28 +91,6 @@ extension ConversationListCoordinator {
             // Add all of the invited people to the conversation.
             self.add(people: invitedPeople, to: activeConversation)
         }
-    }
-    
-    private func present<ChildResult>(_ coordinator: PresentableCoordinator<ChildResult>,
-                                      finishedHandler: ((ChildResult) -> Void)? = nil,
-                                      cancelHandler: (() -> Void)? = nil) {
-        self.removeChild()
-        
-        // Because of how the People are presented, we need to properly reset the KeyboardManager.
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            self.conversationListVC.becomeFirstResponder()
-        }
-        
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.conversationListVC.becomeFirstResponder()
-                finishedHandler?(result)
-            }
-        }
-        
-        self.conversationListVC.resignFirstResponder()
-        self.conversationListVC.updateUI(for: .read, forceLayout: true)
-        self.router.present(coordinator, source: self.conversationListVC, cancelHandler: cancelHandler)
     }
     
     func add(people: [Person], to conversation: Conversation) {
@@ -165,19 +143,19 @@ extension ConversationListCoordinator {
             Task {
                 try await controller.deleteChannel()
             }
-            self.conversationListVC.becomeFirstResponder()
+            self.listVC.becomeFirstResponder()
         })
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
-            self.conversationListVC.becomeFirstResponder()
+            self.listVC.becomeFirstResponder()
         })
 
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
         
-        self.conversationListVC.resignFirstResponder()
-        self.conversationListVC.present(alertController, animated: true, completion: nil)
+        self.listVC.resignFirstResponder()
+        self.listVC.present(alertController, animated: true, completion: nil)
     }
     
     func presentEmailAlert() {
@@ -199,8 +177,8 @@ extension ConversationListCoordinator {
                     
                     Task.onMainActor {
                         alertController.dismiss(animated: true, completion: {
-                            self.conversationListVC.dataSource.reloadItems([.invest])
-                            self.conversationListVC.becomeFirstResponder()
+                            self.listVC.dataSource.reloadItems([.invest])
+                            self.listVC.becomeFirstResponder()
                         })
                     }
                 }
@@ -209,28 +187,20 @@ extension ConversationListCoordinator {
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
-            self.conversationListVC.becomeFirstResponder()
+            self.listVC.becomeFirstResponder()
         })
 
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
         
-        self.conversationListVC.resignFirstResponder()
+        self.listVC.resignFirstResponder()
 
-        self.conversationListVC.present(alertController, animated: true, completion: nil)
+        self.listVC.present(alertController, animated: true, completion: nil)
     }
     
     func showWallet() {
         let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
         self.present(coordinator, finishedHandler: nil)
-    }
-    
-    func presentAttachements() {
-        let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)
-        
-        self.present(coordinator) { [unowned self] result in
-            self.handle(attachmentOption: result)
-        }
     }
     
     func presentConversationDetail() {
@@ -245,7 +215,7 @@ extension ConversationListCoordinator {
             switch option {
             case .conversation(let cid):
                 Task.onMainActorAsync {
-                    await self.conversationListVC.scrollToConversation(with: cid, messageID: nil)
+                    await self.listVC.scrollToConversation(with: cid, messageID: nil)
                 }
             }
         }
