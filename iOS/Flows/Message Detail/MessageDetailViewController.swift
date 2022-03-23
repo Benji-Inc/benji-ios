@@ -14,81 +14,84 @@ protocol MessageDetailViewControllerDelegate: AnyObject {
                                      didSelectThreadFor message: Messageable)
 }
 
-class MessageDetailViewController: ViewController {
+class MessageDetailViewController: ViewController, MessageInteractableController {
+    
+    var blurView = BlurView()
+    
+    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     let message: Messageable
     unowned let delegate: MessageDetailViewControllerDelegate
-
-    private let textView = TextView(font: .regular, textColor: .T3)
-    private let bubbleView = MessageBubbleView(orientation: .down, bubbleColor: ThemeColor.D1.color)
+    
+    var messageContent: MessageContentView {
+        return self.messageContentView
+    }
+    
+    private let messageContentView = MessageContentView()
     private let backgroundView = BaseView()
     private let threadButton = ThemeButton()
-
+    
     init(message: Messageable, delegate: MessageDetailViewControllerDelegate) {
         self.message = message
         self.delegate = delegate
-
+        
         super.init()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func initializeViews() {
         super.initializeViews()
-
-        self.modalPresentationStyle = .popover
-        if let popoverPresentationController = self.popoverPresentationController {
-            let sheet = popoverPresentationController.adaptiveSheetPresentationController
-            sheet.detents = [.medium()]
-        }
-
-        self.view.addSubview(self.bubbleView)
-        self.bubbleView.tailLength = 0
-
-        self.bubbleView.addSubview(self.textView)
-        self.textView.text = self.message.kind.text
-        self.textView.isEditable = false
-        self.textView.isSelectable = true
-        if self.textView.numberOfLines > 1 {
-            self.textView.textAlignment = .left
-        } else {
-            self.textView.textAlignment = .center
-        }
-
+        
+        self.modalPresentationStyle = .overCurrentContext
+        
+        self.dismissInteractionController.handlePan(for: self.messageContentView)
+        self.dismissInteractionController.handlePan(for: self.view)
+        
+        self.view.addSubview(self.blurView)
+        
+        self.view.addSubview(self.messageContentView)
+        self.messageContentView.configure(with: self.message)
+        
+        
         self.view.addSubview(self.backgroundView)
         self.backgroundView.set(backgroundColor: .B0)
         self.backgroundView.layer.cornerRadius = Theme.cornerRadius
         self.backgroundView.clipsToBounds = true
-
+        
         self.backgroundView.addSubview(self.threadButton)
         self.threadButton.set(style: .normal(color: .gray, text: "Open Thread"))
         self.threadButton.addAction(for: .touchUpInside) { [unowned self] in
             self.delegate.messageDetailViewController(self, didSelectThreadFor: self.message)
         }
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        let horizontalMargins = Theme.ContentOffset.screenPadding.value.doubled
-        self.bubbleView.width = self.view.width - horizontalMargins
-
-        self.textView.setSize(withMaxWidth: self.bubbleView.width - MessageContentView.textViewPadding)
-        self.textView.pin(.top, offset: .long)
-        self.textView.centerOnX()
-
-        self.bubbleView.height = self.textView.height + Theme.ContentOffset.long.value.doubled
-        self.bubbleView.centerOnX()
-        self.bubbleView.pin(.top, offset: .screenPadding)
-
-        self.backgroundView.match(.top, to: .bottom, of: self.bubbleView, offset: .xtraLong)
+        
+        self.blurView.expandToSuperviewSize()
+        
+        self.messageContentView.centerOnX()
+        self.messageContentView.bottom = self.view.height * 0.6
+        
+        self.backgroundView.match(.top, to: .bottom, of: self.messageContentView, offset: .xtraLong)
         self.backgroundView.expandToSuperviewWidth()
         self.backgroundView.expand(.bottom)
-
+        
         self.threadButton.width = 150
         self.threadButton.height = Theme.buttonHeight
         self.threadButton.centerOnXAndY()
+    }
+}
+
+extension MessageDetailViewController: TransitionableViewController {
+    var receivingPresentationType: TransitionType {
+        return .message(self.messageContentView)
+    }
+    
+    var sendingDismissalType: TransitionType {
+        return .message(self.messageContentView)
     }
 }

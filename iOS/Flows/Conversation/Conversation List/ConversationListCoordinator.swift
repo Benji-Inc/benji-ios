@@ -153,7 +153,7 @@ extension ConversationListCoordinator: LightboxControllerDismissalDelegate {
         self.listVC.present(controller, animated: true)
     }
 
-    func lightboxControllerWillDismiss(_ controller: LightboxController) {
+    nonisolated func lightboxControllerWillDismiss(_ controller: LightboxController) {
 
     }
 }

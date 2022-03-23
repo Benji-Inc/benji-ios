@@ -15,7 +15,7 @@ import SwiftUI
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,
                             RepliesSequenceCollectionViewDataSource>,
-                            DismissInteractableController,
+                            MessageInteractableController,
                             SwipeableInputControllerHandler {
     
     
@@ -23,8 +23,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return self.messageInputController
     }
     
-    let blurView = BlurView()
+    var blurView = BlurView()
     let parentMessageView = MessageContentView()
+    
+    var messageContent: MessageContentView {
+        return self.parentMessageView
+    }
 
     weak var messageCellDelegate: MesssageCellDelegate? {
         get { return self.dataSource.messageCellDelegate }
