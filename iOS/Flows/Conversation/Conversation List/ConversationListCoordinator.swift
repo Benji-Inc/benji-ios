@@ -153,7 +153,6 @@ extension ConversationListCoordinator: MesssageCellDelegate {
         switch message.kind {
         case .photo(photo: let photo, _):
             guard let url = photo.url else { return }
-
             self.presentImageFlow(for: [url], startingURL: url)
         case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
             break

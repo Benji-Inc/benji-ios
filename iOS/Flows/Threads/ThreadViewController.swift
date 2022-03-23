@@ -15,7 +15,7 @@ import SwiftUI
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,
                             RepliesSequenceCollectionViewDataSource>,
-                            DismissInteractableController,
+                            MessageInteractableController,
                             SwipeableInputControllerHandler {
     
     
@@ -23,8 +23,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return self.messageInputController
     }
     
-    let blurView = BlurView()
+    var blurView = BlurView()
     let parentMessageView = MessageContentView()
+    
+    var messageContent: MessageContentView {
+        return self.parentMessageView
+    }
 
     weak var messageCellDelegate: MesssageCellDelegate? {
         get { return self.dataSource.messageCellDelegate }
@@ -356,6 +360,27 @@ extension ThreadViewController: TransitionableViewController {
 
     var sendingDismissalType: TransitionType {
         return .message(self.parentMessageView)
+    }
+    
+    func handleFinalPresentation() {
+        self.detailVC.view.alpha = 1.0
+    }
+    
+    func handlePresentationCompleted() {
+        guard let message = self.messageController.message else { return }
+        self.updateStatusText(for: message)
+        self.loadInitialData()
+    }
+    
+    func handleInitialDismissal() {
+        self.collectionView.alpha = 0
+        self.detailVC.view.alpha = 0
+        self.pullView.alpha = 0.0
+    }
+    
+    func handleDismissal() {
+        self.pullView.bottom = self.messageContent.top
+        self.detailVC.view.top = self.messageContent.bottom + Theme.ContentOffset.standard.value
     }
 }
 

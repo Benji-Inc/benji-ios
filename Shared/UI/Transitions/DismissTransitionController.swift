@@ -50,44 +50,38 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
               let listVC = rootVC.viewControllers.first(where: { controller in
                   return controller is ConversationListViewController
               }) as? ConversationListViewController,
-              let threadVC = transitionContext.viewController(forKey: .from) as? ThreadViewController
+              let interactableVC = transitionContext.viewController(forKey: .from) as? MessageInteractableController
                else { return }
 
-        let fromView = threadVC.parentMessageView
+        let fromView = interactableVC.messageContent
         let toView = listVC.getCentmostMessageCellContent()!
 
         let containerView = transitionContext.containerView
 
-        containerView.addSubview(threadVC.view)
+        containerView.addSubview(interactableVC.view)
 
         let finalFrame = toView.convert(toView.bounds, to: containerView)
 
         let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
                                               curve: .linear)
 
+        let threadVC = interactableVC as? ThreadViewController
+        
         animator.addAnimations {
 
             UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, animations: {
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
                     fromView.center = finalFrame.center
-                    threadVC.pullView.bottom = fromView.top
-                    threadVC.detailVC.view.top = fromView.bottom + Theme.ContentOffset.standard.value
+                    interactableVC.handleDismissal()
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                    threadVC.collectionView.alpha = 0
-                    threadVC.detailVC.view.alpha = 0
-                    threadVC.pullView.alpha = 0.0
+                    interactableVC.handleInitialDismissal()
                 }
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
-                    threadVC.blurView.showBlur(false)
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3) {
-                    fromView.textView.alpha = 0
-                    fromView.authorView.alpha = 0
+                    interactableVC.blurView.showBlur(false)
                 }
               })
         }
