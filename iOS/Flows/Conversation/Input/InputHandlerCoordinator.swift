@@ -87,7 +87,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func handle(attachmentOption option: AttachmentOption) {
-        
         switch option {
         case .attachments(let array):
             guard let first = array.first else { return }
@@ -179,24 +178,14 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
 // MARK: - Image View Flow
 
-extension ConversationListCoordinator: LightboxControllerDismissalDelegate {
+extension ConversationListCoordinator {
 
-    func presentImageFlow(for imageURL: URL) {
-        let images = [LightboxImage(imageURL: imageURL)]
+    func presentImageFlow(for imageURLs: [URL], startingURL: URL?) {
+        let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
+                                                    startURL: startingURL,
+                                                    router: self.router,
+                                                    deepLink: self.deepLink)
 
-        // Create an instance of LightboxController.
-        let controller = LightboxController(images: images)
-
-        // Set delegates.
-        controller.dismissalDelegate = self
-
-        // Use dynamic background.
-        controller.dynamicBackground = true
-
-        self.listVC.present(controller, animated: true)
-    }
-
-    func lightboxControllerWillDismiss(_ controller: LightboxController) {
-
+        self.present(imageCoordinator)
     }
 }

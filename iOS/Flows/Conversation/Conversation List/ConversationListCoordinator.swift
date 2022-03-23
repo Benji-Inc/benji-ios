@@ -145,7 +145,18 @@ extension ConversationListCoordinator: MesssageCellDelegate {
 
     }
 
-    func messageCell(_ cell: MessageCell, didTapAttachment attachment: MediaItem) {
+    func messageCell(_ cell: MessageCell,
+                     didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
 
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, _):
+            guard let url = photo.url else { return }
+
+            self.presentImageFlow(for: [url], startingURL: url)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
+        }
     }
 }

@@ -253,12 +253,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
-    /// Gets the index path of the frontmost item in the given section.
-    func getFrontmostIndexPath(in section: SectionIndex) -> IndexPath? {
+    /// Gets the index path of the frontmost item in the collection.
+    func getFrontmostIndexPath() -> IndexPath? {
         var indexPathCandidate: IndexPath?
 
-        for i in (0..<self.numberOfItems(inSection: section)).reversed() {
-            let indexPath = IndexPath(item: i, section: section)
+        for i in (0..<self.numberOfItems(inSection: 0)).reversed() {
+            let indexPath = IndexPath(item: i, section: 0)
 
             if indexPathCandidate == nil {
                 indexPathCandidate = indexPath
