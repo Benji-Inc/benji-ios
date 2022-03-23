@@ -241,9 +241,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.zIndex = indexPath.item
         attributes.bounds.size = CGSize(width: collectionView.width, height: self.itemHeight)
 
-        let centerPoint = self.getItemCenterPoint(in: indexPath.section,
-                                                  withYOffset: yOffset,
-                                                  scale: scale)
+        let centerPoint = self.getItemCenterPoint(withYOffset: yOffset, scale: scale)
         attributes.center = centerPoint
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
@@ -275,9 +273,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
-    func getItemCenterPoint(in section: SectionIndex,
-                            withYOffset yOffset: CGFloat,
-                            scale: CGFloat) -> CGPoint {
+    func getItemCenterPoint(withYOffset yOffset: CGFloat, scale: CGFloat) -> CGPoint {
         
         guard let collectionView = self.collectionView else { return .zero }
         

@@ -65,7 +65,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     // MARK: - Attribute Helpers
 
     func getFrontmostCell() -> MessageCell? {
-        guard let ip = self.getFrontmostIndexPath(in: 0),
+        guard let ip = self.getFrontmostIndexPath(),
               let cell = self.collectionView?.cellForItem(at: ip) as? MessageCell else {
                   return nil
               }
@@ -73,7 +73,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     func getDropZoneFrame() -> CGRect {
-        let center = self.getItemCenterPoint(in: 0, withYOffset: 0, scale: 1)
+        let center = self.getItemCenterPoint(withYOffset: 0, scale: 1)
         let padding = Theme.ContentOffset.short.value.doubled
         var frame = CGRect(x: padding.half,
                            y: 0,
@@ -85,13 +85,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     private func getMostRecentItemContentOffset() -> CGPoint? {
         return CGPoint(x: 0, y: self.maxZPosition)
-    }
-
-    private func getCenterOfItems() -> CGPoint {
-        let topCenter = self.getItemCenterPoint(in: 0, withYOffset: 0, scale: 1.0)
-        let bottomCenter = self.getItemCenterPoint(in: 1, withYOffset: 0, scale: 1.0)
-        let center = CGPoint(x: topCenter.x, y: (topCenter.y + bottomCenter.y) / 2)
-        return center
     }
 
     // MARK: - Content Offset and Update Animation Handling
