@@ -121,7 +121,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
             }
             
             await messages.asyncForEach { message in
-                if let msg = message {
+                if let msg = message, msg.author.id != User.current()?.personId {
                     await self.scheduleNotification(with: msg)
                 }
             }
@@ -146,9 +146,9 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         let author = try? await user.retrieveDataIfNeeded() else { return }
         
         let content = UNMutableNotificationContent()
-        content.title = "While you were focused..."
-        content.subtitle = "\(self.getTimeAgoString(for: message.createdAt)), \(author.fullName) said:" 
-        content.body = message.text
+        content.title = "While you were away..."
+        content.subtitle = "\(self.getTimeAgoString(for: message.createdAt))" 
+        content.body = "\(author.givenName) said: \(message.text)"
         content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
         content.setData(value: message.author.id, for: .author)
         content.setData(value: message.id, for: .messageId)
