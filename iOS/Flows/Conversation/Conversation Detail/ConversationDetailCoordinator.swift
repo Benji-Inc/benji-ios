@@ -124,7 +124,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         
-        let primaryAction = UIAlertAction(title: "Confirm", style: style, handler: {
+        let primaryAction = UIAlertAction(title: title, style: style, handler: {
             (action : UIAlertAction!) -> Void in
             
             switch option {
