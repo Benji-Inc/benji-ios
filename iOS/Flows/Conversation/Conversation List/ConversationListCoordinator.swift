@@ -13,7 +13,7 @@ import Combine
 import StreamChat
 import Localization
 
-class ConversationListCoordinator: InputHandlerCoordinator {
+class ConversationListCoordinator: InputHandlerCoordinator<Void> {
     
     var listVC: ConversationListViewController {
         return self.inputHandlerViewController as! ConversationListViewController

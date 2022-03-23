@@ -11,18 +11,18 @@ import PhotosUI
 import Photos
 import Localization
 
-protocol SwipeableInputControllerHandler {
+protocol SwipeableInputControllerHandler where Self: ViewController {
     var swipeableVC: SwipeableInputAccessoryViewController { get }
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
 }
 
 typealias InputHandlerViewContoller = SwipeableInputControllerHandler & ViewController
 
-class InputHandlerCoordinator: PresentableCoordinator<Void>,
-                               ActiveConversationable,
-                               PHPickerViewControllerDelegate,
-                               UIImagePickerControllerDelegate,
-                               UINavigationControllerDelegate {
+class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
+                                       ActiveConversationable,
+                                       PHPickerViewControllerDelegate,
+                                       UIImagePickerControllerDelegate,
+                                       UINavigationControllerDelegate {
     
     lazy var pickerVC: PHPickerViewController = {
         var filter = PHPickerFilter.any(of: [.images])

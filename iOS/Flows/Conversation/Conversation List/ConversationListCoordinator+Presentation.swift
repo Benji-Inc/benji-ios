@@ -25,19 +25,24 @@ extension ConversationListCoordinator {
             }
         }
     }
-
+    
     func presentThread(for cid: ConversationId,
                        messageId: MessageId,
                        startingReplyId: MessageId?) {
-
+        
         let coordinator = ThreadCoordinator(with: cid,
                                             messageId: messageId,
                                             startingReplyId: startingReplyId,
                                             router: self.router,
                                             deepLink: self.deepLink)
-        self.present(coordinator) { _ in }
+        
+        self.present(coordinator) { [unowned self] result in
+            Task.onMainActorAsync {
+                await self.listVC.scrollToConversation(with: result, messageID: nil)
+            }
+        }
     }
-
+    
     func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
         let message = Message.message(with: channelId, messageId: messageId)
         let coordinator = MessageDetailCoordinator(with: message,
@@ -59,14 +64,14 @@ extension ConversationListCoordinator {
             }
         }
     }
-
+    
     func presentPeoplePicker() {
         // If there is no conversation to invite people to, then do nothing.
         guard let conversation = self.activeConversation else { return }
-
+        
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.selectedConversationCID = self.activeConversation?.cid
-
+        
         self.present(coordinator, finishedHandler: { [unowned self] invitedPeople in
             self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
         }, cancelHandler: { [unowned self, unowned coordinator = coordinator] in
@@ -74,17 +79,17 @@ extension ConversationListCoordinator {
             self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
         })
     }
-
+    
     private func handleInviteFlowEnded(givenInvitedPeople invitedPeople: [Person],
-                                                       activeConversation: Conversation) {
-
+                                       activeConversation: Conversation) {
+        
         if invitedPeople.isEmpty {
             // If the user didn't invite anyone to the conversation and the conversation doesn't have
             // any existing members, ask them if they'd like to delete it.
             Task {
                 let peopleInConversation = await PeopleStore.shared.getPeople(for: activeConversation)
                 guard peopleInConversation.isEmpty else { return }
-
+                
                 self.presentDeleteConversationAlert(cid: activeConversation.cid)
             }
         } else {
@@ -95,28 +100,28 @@ extension ConversationListCoordinator {
     
     func add(people: [Person], to conversation: Conversation) {
         let controller = ChatClient.shared.channelController(for: conversation.cid)
-
+        
         let acceptedConnections = people.compactMap { person in
             return person.connection
         }.filter { connection in
             return connection.status == .accepted
         }
-
+        
         guard !acceptedConnections.isEmpty else { return }
-
+        
         let members = acceptedConnections.compactMap { connection in
             return connection.nonMeUser?.objectId
         }
         controller.addMembers(userIds: Set(members)) { error in
             guard error.isNil else { return }
-
+            
             self.showPeopleAddedToast(for: acceptedConnections)
             Task {
                 try await controller.synchronize()
             }
         }
     }
-
+    
     private func showPeopleAddedToast(for connections: [Connection]) {
         Task {
             if connections.count == 1, let first = connections.first?.nonMeUser {
@@ -135,7 +140,7 @@ extension ConversationListCoordinator {
         let controller = ChatClient.shared.channelController(for: cid)
         
         guard controller.conversation.memberCount <= 1 else { return }
-
+        
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let deleteAction = UIAlertAction(title: "Delete Conversation", style: .destructive, handler: {
@@ -145,12 +150,12 @@ extension ConversationListCoordinator {
             }
             self.listVC.becomeFirstResponder()
         })
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
             self.listVC.becomeFirstResponder()
         })
-
+        
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
         
@@ -170,7 +175,7 @@ extension ConversationListCoordinator {
             if let textField = alertController.textFields?.first,
                let text = textField.text,
                !text.isEmpty {
-
+                
                 Task {
                     User.current()?.email = text
                     try await User.current()?.saveToServer()
@@ -184,17 +189,17 @@ extension ConversationListCoordinator {
                 }
             }
         })
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
             self.listVC.becomeFirstResponder()
         })
-
+        
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
         
         self.listVC.resignFirstResponder()
-
+        
         self.listVC.present(alertController, animated: true, completion: nil)
     }
     
