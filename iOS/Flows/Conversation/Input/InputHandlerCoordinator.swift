@@ -93,6 +93,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             Task.onMainActorAsync {
                 guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: first, body: text) else { return }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
+                self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }
         case .capture:
             self.presentPhotoCapture()
@@ -169,6 +170,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                 let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
                 guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else { return }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
+                self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }
         }
     }
