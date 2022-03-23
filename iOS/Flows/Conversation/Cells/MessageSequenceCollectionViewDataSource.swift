@@ -62,13 +62,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                                                            for: indexPath,
                                                            item: (cid, messageID, showDetail, collectionView))
             messageCell.shouldShowDetailBar = self.shouldShowDetailBar
-            messageCell.handleEditMessage = { [unowned self] cid, messageID in
-                self.handleEditMessage?(cid, messageID)
-            }
-
-            messageCell.handleTappedMessage = { [unowned self, unowned messageCell] cid, messageID in
-                self.handleTappedMessage?(cid, messageID, messageCell.content)
-            }
+            messageCell.delegate = self
 
             return messageCell
         case .loadMore(cid: let conversationID):
@@ -142,7 +136,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 }
 
-// MARK: - Cell registration
+// MARK: - Cell Registration
 
 extension MessageSequenceCollectionViewDataSource {
 
@@ -182,6 +176,23 @@ extension MessageSequenceCollectionViewDataSource {
             let controller = ChatClient.shared.channelController(for: item.channelID)
             cell.configure(with: controller.conversation)
         }
+    }
+}
+
+// MARK: - MessageCellDelegate
+
+extension MessageSequenceCollectionViewDataSource: MesssageCellDelegate {
+
+    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        self.handleTappedMessage?(messageInfo.0, messageInfo.1, cell.content)
+    }
+
+    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+        self.handleEditMessage?(messageInfo.0, messageInfo.1)
+    }
+
+    func messageCell(_ cell: MessageCell, didTapAttachment attachment: MediaItem) {
+
     }
 }
 

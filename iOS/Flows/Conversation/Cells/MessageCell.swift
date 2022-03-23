@@ -11,6 +11,12 @@ import SwiftUI
 import StreamChat
 import Combine
 
+protocol MesssageCellDelegate: AnyObject {
+    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapAttachment attachment: MediaItem)
+}
+
 struct MessageDetailState: Equatable {
     var areDetailsFullyVisible: Bool = false
 }
@@ -18,10 +24,7 @@ struct MessageDetailState: Equatable {
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
-    // Input handlers
-    var handleTappedMessage: ((ConversationId, MessageId) -> Void)?
-    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
-    var handleTappedAttachment: ((MediaItem) -> Void)?
+    weak var delegate: MesssageCellDelegate?
 
     let content = MessageContentView()
 
