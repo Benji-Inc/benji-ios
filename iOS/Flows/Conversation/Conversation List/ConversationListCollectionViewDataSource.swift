@@ -28,9 +28,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         case invest
     }
 
-    var handleSelectedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
-    var handleTopicTapped: ((ConversationId) -> Void)?
+    // Input handling
+    var messageCellDelegate: MesssageCellDelegate?
     var handleCollectionViewTapped: CompletionOptional = nil 
     
     var handleLoadMoreMessages: CompletionOptional = nil
@@ -67,12 +66,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
                                                            for: indexPath,
                                                            item: (cid, self.uiState, self))
-            conversationCell.handleTappedMessage = { [unowned self] cid, messageID, content in
-                self.handleSelectedMessage?(cid, messageID, content)
-            }
-            conversationCell.handleEditMessage = { [unowned self] cid, messageID in
-                self.handleEditMessage?(cid, messageID)
-            }
+            conversationCell.messageCellDelegate = self.messageCellDelegate
             conversationCell.handleCollectionViewTapped = { [unowned self] in
                 self.handleCollectionViewTapped?()
             }

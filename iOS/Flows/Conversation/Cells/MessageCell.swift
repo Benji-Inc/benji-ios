@@ -131,6 +131,7 @@ class MessageCell: UICollectionViewCell {
 
     // MARK: - Message Detail Tasks
 
+    /// A pool of tasks related to updating the message details.
     private var messageDetailTasks = TaskPool()
 
     /// Handles changes to the message detail view's visibility.
