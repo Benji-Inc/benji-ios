@@ -12,18 +12,10 @@ import PhotosUI
 import Combine
 import StreamChat
 import Localization
+import Intents
+import Lightbox
 
 class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
-    
-    lazy var pickerVC: PHPickerViewController = {
-        var filter = PHPickerFilter.any(of: [.images])
-        var config = PHPickerConfiguration(photoLibrary: .shared())
-        config.filter = filter
-        config.selectionLimit = 1
-        let vc = PHPickerViewController(configuration: config)
-        vc.delegate = self
-        return vc
-    }()
 
     lazy var conversationListVC
     = ConversationListViewController(members: self.conversationMembers,
@@ -71,7 +63,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
         
         self.conversationListVC.messageInputController.swipeInputView.addView.didSelect { [unowned self] in
-            self.presentAttachements()
+            self.presentAttachments()
         }
         
         self.conversationListVC.headerVC.button.didSelect { [unowned self] in
@@ -132,5 +124,92 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         ConversationsManager.shared.activeConversation = controller.conversation
+    }
+}
+
+// MARK: - Permissions Flow
+
+
+extension ConversationListCoordinator {
+
+    @MainActor
+    func checkForPermissions() async {
+        if INFocusStatusCenter.default.authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+            self.presentPermissions()
+        }
+    }
+
+    @MainActor
+    private func presentPermissions() {
+        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+
+        /// Because of how the Permissions are presented, we need to properly reset the KeyboardManager.
+        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+            self.conversationListVC.becomeFirstResponder()
+        }
+
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: self.conversationListVC, animated: true)
+        }
+
+        self.conversationListVC.resignFirstResponder()
+        self.router.present(coordinator, source: self.conversationListVC)
+    }
+}
+
+// MARK: - Photo Attachment Flow
+
+extension ConversationListCoordinator: PHPickerViewControllerDelegate {
+
+    func presentPhotoCapture() {
+
+    }
+
+    func presentPhotoLibrary() {
+        let filter = PHPickerFilter.any(of: [.images])
+        var config = PHPickerConfiguration(photoLibrary: .shared())
+        config.filter = filter
+        config.selectionLimit = 1
+        let vc = PHPickerViewController(configuration: config)
+        vc.delegate = self
+
+        self.conversationListVC.present(vc, animated: true)
+    }
+}
+
+extension ConversationListCoordinator {
+
+    nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        Task.onMainActor {
+            self.conversationListVC.dismiss(animated: true) {
+                self.conversationListVC.becomeFirstResponder()
+            }
+        }
+    }
+}
+
+// MARK: - Image View Flow
+
+extension ConversationListCoordinator: LightboxControllerDismissalDelegate {
+
+    func presentImageFlow(for imageURL: URL) {
+        let images = [LightboxImage(imageURL: imageURL)]
+
+        // Create an instance of LightboxController.
+        let controller = LightboxController(images: images)
+
+        // Set delegates.
+        controller.dismissalDelegate = self
+
+        // Use dynamic background.
+        controller.dynamicBackground = true
+
+        self.conversationListVC.present(controller, animated: true)
+    }
+
+    func lightboxControllerWillDismiss(_ controller: LightboxController) {
+
     }
 }
