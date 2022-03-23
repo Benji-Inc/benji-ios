@@ -111,4 +111,20 @@ class MessageCellContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate
         let preview = UITargetedPreview(view: interaction.view!, parameters: params)
         return preview
     }
+
+    // MARK: - Message Consumption
+
+    func setToRead() {
+        guard let msg = self.messageCell.messageState.message, msg.canBeConsumed else { return }
+        Task {
+            try await msg.setToConsumed()
+        }
+    }
+
+    func setToUnread() {
+        guard let msg = self.messageCell.messageState.message, msg.isConsumedByMe else { return }
+        Task {
+            try await msg.setToUnconsumed()
+        }
+    }
 }

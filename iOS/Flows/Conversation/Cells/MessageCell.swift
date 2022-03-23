@@ -184,25 +184,6 @@ class MessageCell: UICollectionViewCell {
     }
 }
 
-// MARK: - Message Consumption
-
-extension MessageCell {
-
-    func setToRead() {
-        guard let msg = self.messageState.message, msg.canBeConsumed else { return }
-        Task {
-            try await msg.setToConsumed()
-        }
-    }
-
-    func setToUnread() {
-        guard let msg = self.messageState.message, msg.isConsumedByMe else { return }
-        Task {
-            try await msg.setToUnconsumed()
-        }
-    }
-}
-
 // MARK: - Helper Functions
 
 extension UIView {
