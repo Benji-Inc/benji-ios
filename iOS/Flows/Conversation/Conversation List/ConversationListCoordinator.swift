@@ -13,7 +13,6 @@ import Combine
 import StreamChat
 import Localization
 import Intents
-import Lightbox
 
 class ConversationListCoordinator: InputHandlerCoordinator<Void> {
     
@@ -32,18 +31,12 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
                                                 startingMessageID: startingMessageId)
 
         super.init(with: vc, router: router, deepLink: deepLink)
+
+        vc.messageCellDelegate = self
     }
 
     override func start() {
         super.start()
-        
-        self.listVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
-            if let replyId = replyId {
-                self.presentThread(for: channelId, messageId: messageId, startingReplyId: replyId)
-            } else {
-                self.presentMessageDetail(for: channelId, messageId: messageId)
-            }
-        }
         
         self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
             self.showWallet() 
@@ -85,7 +78,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
             let messageID = deeplink.messageId
             guard let cid = deeplink.conversationId else { break }
             Task {
-                await self.listVC.scrollToConversation(with: cid, messageID: messageID)
+                await self.listVC.scrollToConversation(with: cid, messageId: messageID)
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()
@@ -134,26 +127,35 @@ extension ConversationListCoordinator {
     }
 }
 
-// MARK: - Image View Flow
+// MARK: - MessageCellDelegate
 
-extension ConversationListCoordinator: LightboxControllerDismissalDelegate {
+extension ConversationListCoordinator: MesssageCellDelegate {
 
-    func presentImageFlow(for imageURL: URL) {
-        let images = [LightboxImage(imageURL: imageURL)]
+    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
-        // Create an instance of LightboxController.
-        let controller = LightboxController(images: images)
-
-        // Set delegates.
-        controller.dismissalDelegate = self
-
-        // Use dynamic background.
-        controller.dynamicBackground = true
-
-        self.listVC.present(controller, animated: true)
+        if let parentId = message.parentMessageId {
+            self.presentThread(for: messageInfo.0, messageId: parentId, startingReplyId: messageInfo.1)
+        } else {
+            self.presentMessageDetail(for: messageInfo.0, messageId: messageInfo.1)
+        }
     }
 
-    nonisolated func lightboxControllerWillDismiss(_ controller: LightboxController) {
+    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
 
+    }
+
+    func messageCell(_ cell: MessageCell,
+                     didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, _):
+            guard let url = photo.url else { return }
+            self.presentImageFlow(for: [url], startingURL: url)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
+        }
     }
 }

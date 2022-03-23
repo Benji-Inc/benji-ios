@@ -263,8 +263,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         return self.collectionView.convert(dropZoneFrame, to: targetView)
     }
 
-    func getBottomFrontmostCell() -> MessageCell? {
-        return self.collectionLayout.getBottomFrontmostCell()
+    func getFrontmostCell() -> MessageCell? {
+        return self.collectionLayout.getFrontmostCell()
     }
 
     // MARK: - UICollectionViewDelegate

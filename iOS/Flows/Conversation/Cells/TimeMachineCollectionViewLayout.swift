@@ -241,9 +241,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.zIndex = indexPath.item
         attributes.bounds.size = CGSize(width: collectionView.width, height: self.itemHeight)
 
-        let centerPoint = self.getItemCenterPoint(in: indexPath.section,
-                                                  withYOffset: yOffset,
-                                                  scale: scale)
+        let centerPoint = self.getItemCenterPoint(withYOffset: yOffset, scale: scale)
         attributes.center = centerPoint
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
@@ -253,12 +251,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
-    /// Gets the index path of the frontmost item in the given section.
-    func getFrontmostIndexPath(in section: SectionIndex) -> IndexPath? {
+    /// Gets the index path of the frontmost item in the collection.
+    func getFrontmostIndexPath() -> IndexPath? {
         var indexPathCandidate: IndexPath?
 
-        for i in (0..<self.numberOfItems(inSection: section)).reversed() {
-            let indexPath = IndexPath(item: i, section: section)
+        for i in (0..<self.numberOfItems(inSection: 0)).reversed() {
+            let indexPath = IndexPath(item: i, section: 0)
 
             if indexPathCandidate == nil {
                 indexPathCandidate = indexPath
@@ -267,7 +265,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
             let itemZPosition = CGFloat(i) * self.itemHeight
 
-            if itemZPosition - self.zPosition <= 0 {
+            if itemZPosition - self.zPosition >= 0 {
                 indexPathCandidate = indexPath
             }
         }
@@ -275,9 +273,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
-    func getItemCenterPoint(in section: SectionIndex,
-                            withYOffset yOffset: CGFloat,
-                            scale: CGFloat) -> CGPoint {
+    func getItemCenterPoint(withYOffset yOffset: CGFloat, scale: CGFloat) -> CGPoint {
         
         guard let collectionView = self.collectionView else { return .zero }
         

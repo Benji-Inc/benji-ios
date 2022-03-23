@@ -9,7 +9,7 @@
 import Foundation
 
 enum AttachmentOption {
-    case attachements([Attachment])
+    case attachments([Attachment])
     case capture
     case audio
     case giphy
@@ -29,7 +29,7 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
         
             switch first {
             case .attachment(let attachment):
-                self.finishFlow(with: .attachements([attachment]))
+                self.finishFlow(with: .attachments([attachment]))
             case .option(let option):
                 switch option {
                 case .capture:

@@ -14,7 +14,7 @@ import Combine
 protocol MesssageCellDelegate: AnyObject {
     func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
     func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
-    func messageCell(_ cell: MessageCell, didTapAttachment attachment: MediaItem)
+    func messageCell(_ cell: MessageCell, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
 }
 
 struct MessageDetailState: Equatable {
@@ -56,6 +56,12 @@ class MessageCell: UICollectionViewCell {
 
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
         self.content.bubbleView.addInteraction(contextMenuInteraction)
+
+        self.content.displayableView.didSelect { [unowned self] in
+            guard let message = self.messageState.message else { return }
+
+            self.delegate?.messageCell(self, didTapAttachmentForMessage: (message.streamCid, message.id))
+        }
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
