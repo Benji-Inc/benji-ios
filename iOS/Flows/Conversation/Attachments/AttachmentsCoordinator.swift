@@ -19,12 +19,12 @@ enum AttachmentOption {
 
 class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
     
-    lazy var attachementsVC = AttachmentsViewController()
+    lazy var attachmentsVC = AttachmentsViewController()
     
     override init(router: Router, deepLink: DeepLinkable?) {
         super.init(router: router, deepLink: deepLink)
         
-        self.attachementsVC.$selectedItems.mainSink { [unowned self] items in
+        self.attachmentsVC.$selectedItems.mainSink { [unowned self] items in
             guard let first = items.first else { return }
         
             switch first {
@@ -45,13 +45,13 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
             
         }.store(in: &self.cancellables)
         
-        self.attachementsVC.dataSource.didSelectLibrary = { [unowned self] in
+        self.attachmentsVC.dataSource.didSelectLibrary = { [unowned self] in
             self.finishFlow(with: .library)
         }
     }
 
     override func toPresentable() -> DismissableVC {
-        return self.attachementsVC
+        return self.attachmentsVC
     }
     
     private func presentAlert(for option: AttachmentsCollectionViewDataSource.OptionType) {
@@ -66,6 +66,6 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
         })
 
         alertController.addAction(cancelAction)
-        self.attachementsVC.present(alertController, animated: true, completion: nil)
+        self.attachmentsVC.present(alertController, animated: true, completion: nil)
     }
 }

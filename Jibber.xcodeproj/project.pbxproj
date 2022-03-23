@@ -353,13 +353,13 @@
 		D646D36027E504F10077D20B /* AttachmentsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D35F27E504F10077D20B /* AttachmentsCoordinator.swift */; };
 		D646D36227E505030077D20B /* AttachmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36127E505030077D20B /* AttachmentsViewController.swift */; };
 		D646D36427E505190077D20B /* AttachmentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36327E505190077D20B /* AttachmentsCollectionView.swift */; };
-		D646D36627E505280077D20B /* AttachementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36527E505280077D20B /* AttachementCell.swift */; };
+		D646D36627E505280077D20B /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36527E505280077D20B /* AttachmentCell.swift */; };
 		D646D36827E5053A0077D20B /* AttachmentsCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36727E5053A0077D20B /* AttachmentsCollectionViewDataSource.swift */; };
 		D646D36A27E5055D0077D20B /* AttachmentsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36927E5055D0077D20B /* AttachmentsCollectionViewLayout.swift */; };
 		D646D36C27E53B880077D20B /* CaptureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36B27E53B880077D20B /* CaptureCell.swift */; };
-		D646D36E27E53D750077D20B /* AttachementOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36D27E53D750077D20B /* AttachementOptionCell.swift */; };
+		D646D36E27E53D750077D20B /* AttachmentOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36D27E53D750077D20B /* AttachmentOptionCell.swift */; };
 		D646D37027E544990077D20B /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36F27E544990077D20B /* AttachmentHeaderView.swift */; };
-		D646D37227E54DFC0077D20B /* AttachementLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37127E54DFC0077D20B /* AttachementLineView.swift */; };
+		D646D37227E54DFC0077D20B /* AttachmentLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37127E54DFC0077D20B /* AttachmentLineView.swift */; };
 		D646D37627E579310077D20B /* AddMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37527E579310077D20B /* AddMediaView.swift */; };
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
 		D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
@@ -978,13 +978,13 @@
 		D646D35F27E504F10077D20B /* AttachmentsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsCoordinator.swift; sourceTree = "<group>"; };
 		D646D36127E505030077D20B /* AttachmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsViewController.swift; sourceTree = "<group>"; };
 		D646D36327E505190077D20B /* AttachmentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsCollectionView.swift; sourceTree = "<group>"; };
-		D646D36527E505280077D20B /* AttachementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementCell.swift; sourceTree = "<group>"; };
+		D646D36527E505280077D20B /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		D646D36727E5053A0077D20B /* AttachmentsCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D646D36927E5055D0077D20B /* AttachmentsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D646D36B27E53B880077D20B /* CaptureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCell.swift; sourceTree = "<group>"; };
-		D646D36D27E53D750077D20B /* AttachementOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementOptionCell.swift; sourceTree = "<group>"; };
+		D646D36D27E53D750077D20B /* AttachmentOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentOptionCell.swift; sourceTree = "<group>"; };
 		D646D36F27E544990077D20B /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
-		D646D37127E54DFC0077D20B /* AttachementLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementLineView.swift; sourceTree = "<group>"; };
+		D646D37127E54DFC0077D20B /* AttachmentLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentLineView.swift; sourceTree = "<group>"; };
 		D646D37527E579310077D20B /* AddMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMediaView.swift; sourceTree = "<group>"; };
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
 		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
@@ -1742,10 +1742,10 @@
 		D646D35E27E504D70077D20B /* Attachments */ = {
 			isa = PBXGroup;
 			children = (
-				D646D36527E505280077D20B /* AttachementCell.swift */,
-				D646D37127E54DFC0077D20B /* AttachementLineView.swift */,
-				D646D36D27E53D750077D20B /* AttachementOptionCell.swift */,
+				D646D36527E505280077D20B /* AttachmentCell.swift */,
 				D646D36F27E544990077D20B /* AttachmentHeaderView.swift */,
+				D646D37127E54DFC0077D20B /* AttachmentLineView.swift */,
+				D646D36D27E53D750077D20B /* AttachmentOptionCell.swift */,
 				D646D36327E505190077D20B /* AttachmentsCollectionView.swift */,
 				D646D36727E5053A0077D20B /* AttachmentsCollectionViewDataSource.swift */,
 				D646D36927E5055D0077D20B /* AttachmentsCollectionViewLayout.swift */,
@@ -2775,7 +2775,7 @@
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				8015CA7726F3D907000F3C60 /* ConversationMessagesCell.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
-				D646D36627E505280077D20B /* AttachementCell.swift in Sources */,
+				D646D36627E505280077D20B /* AttachmentCell.swift in Sources */,
 				D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */,
 				D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */,
 				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
@@ -2946,7 +2946,7 @@
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
 				80F88BAE26F11F02006C7677 /* ConversationController+Extensions.swift in Sources */,
 				D6DEC40227A22F540072D9D0 /* CircleCell.swift in Sources */,
-				D646D36E27E53D750077D20B /* AttachementOptionCell.swift in Sources */,
+				D646D36E27E53D750077D20B /* AttachmentOptionCell.swift in Sources */,
 				D6DEC3F327A1DEE60072D9D0 /* CircleAvatarView.swift in Sources */,
 				D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */,
 				D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */,
@@ -3123,7 +3123,7 @@
 				D64C323E270391AE004BC1BD /* Person.swift in Sources */,
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */,
-				D646D37227E54DFC0077D20B /* AttachementLineView.swift in Sources */,
+				D646D37227E54DFC0077D20B /* AttachmentLineView.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				80E228D827C6C70000AF37AC /* SwipeInputHintAnimator.swift in Sources */,
 				D6129FB227ADC6680058811C /* WalletCollectionViewDataSource.swift in Sources */,
