@@ -362,14 +362,25 @@ extension ThreadViewController: TransitionableViewController {
         return .message(self.parentMessageView)
     }
     
-    func handleFinalTransition() {
+    func handleFinalPresentation() {
         self.detailVC.view.alpha = 1.0
     }
     
-    func handleTransitionCompleted() {
+    func handlePresentationCompleted() {
         guard let message = self.messageController.message else { return }
         self.updateStatusText(for: message)
         self.loadInitialData()
+    }
+    
+    func handleInitialDismissal() {
+        self.collectionView.alpha = 0
+        self.detailVC.view.alpha = 0
+        self.pullView.alpha = 0.0
+    }
+    
+    func handleDismissal() {
+        self.pullView.bottom = self.messageContent.top
+        self.detailVC.view.top = self.messageContent.bottom + Theme.ContentOffset.standard.value
     }
 }
 

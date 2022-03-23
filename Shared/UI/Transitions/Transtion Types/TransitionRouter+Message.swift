@@ -12,8 +12,15 @@ import UIKit
 protocol MessageInteractableController where Self: DismissInteractableController {
     var blurView: BlurView { get set }
     var messageContent: MessageContentView { get }
-    func handleFinalTransition()
-    func handleTransitionCompleted()
+    func handleDismissal()
+    func handleInitialDismissal()
+    func prepareForPresentation()
+    func handleFinalPresentation()
+    func handlePresentationCompleted()
+}
+
+extension MessageInteractableController {
+    func prepareForPresentation() {}
 }
 
 extension TransitionRouter {
@@ -73,6 +80,7 @@ extension TransitionRouter {
         
         toView.alpha = 0
         
+        interactableVC.prepareForPresentation()
         Task {
             async let first: () = UIView.awaitSpringAnimation(with: .slow, animations: {
                 snapshot.frame = finalFrame
@@ -82,12 +90,12 @@ extension TransitionRouter {
             
             async let second: () = UIView.awaitAnimation(with: .fast, delay: 0.25, animations: {
                 toView.alpha = 1
-                interactableVC.handleFinalTransition()
+                interactableVC.handleFinalPresentation()
             })
             
             let _: [()] = await [first, second]
             
-            interactableVC.handleTransitionCompleted()
+            interactableVC.handlePresentationCompleted()
             
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)

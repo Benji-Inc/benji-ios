@@ -73,23 +73,15 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
                     fromView.center = finalFrame.center
-                    threadVC?.pullView.bottom = fromView.top
-                    threadVC?.detailVC.view.top = fromView.bottom + Theme.ContentOffset.standard.value
+                    interactableVC.handleDismissal()
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                    threadVC?.collectionView.alpha = 0
-                    threadVC?.detailVC.view.alpha = 0
-                    threadVC?.pullView.alpha = 0.0
+                    interactableVC.handleInitialDismissal()
                 }
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
                     interactableVC.blurView.showBlur(false)
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3) {
-                    //fromView.textView.alpha = 0
-                    //fromView.authorView.alpha = 0
                 }
               })
         }

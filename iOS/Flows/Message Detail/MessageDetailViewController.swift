@@ -15,7 +15,6 @@ protocol MessageDetailViewControllerDelegate: AnyObject {
 }
 
 class MessageDetailViewController: ViewController, MessageInteractableController {
-    
     var blurView = BlurView()
     
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
@@ -76,7 +75,6 @@ class MessageDetailViewController: ViewController, MessageInteractableController
         self.messageContentView.centerOnX()
         self.messageContentView.bottom = self.view.height * 0.6
         
-        self.backgroundView.match(.top, to: .bottom, of: self.messageContentView, offset: .xtraLong)
         self.backgroundView.expandToSuperviewWidth()
         self.backgroundView.expand(.bottom)
         
@@ -95,9 +93,19 @@ extension MessageDetailViewController: TransitionableViewController {
         return .message(self.messageContentView)
     }
     
-    func handleFinalTransition() {
-        //self.detailVC.view.alpha = 1.0
+    func prepareForPresentation() {
+        self.backgroundView.top = self.view.height
     }
     
-    func handleTransitionCompleted() {}
+    func handlePresentationCompleted() {}
+    
+    func handleFinalPresentation() {
+        self.backgroundView.match(.top, to: .bottom, of: self.messageContentView, offset: .xtraLong)
+        self.view.setNeedsLayout()
+    }
+    func handleInitialDismissal() {}
+    
+    func handleDismissal() {
+        self.backgroundView.top = self.view.height 
+    }
 }
