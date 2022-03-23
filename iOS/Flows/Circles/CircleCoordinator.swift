@@ -68,6 +68,7 @@ class CircleCoordinator: PresentableCoordinator<Void> {
         let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Name"
+            textField.autocapitalizationType = .words
         }
         let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { [unowned self] alert -> Void in
             if let textField = alertController.textFields?.first,

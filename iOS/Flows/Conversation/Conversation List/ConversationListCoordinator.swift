@@ -66,10 +66,6 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             self.showWallet() 
         }
         
-        self.conversationListVC.headerVC.didTapAddPeople = { [unowned self] in
-            self.presentPeoplePicker()
-        }
-        
         self.conversationListVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfile(for: User.current()!)
         }
