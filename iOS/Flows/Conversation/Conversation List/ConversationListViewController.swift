@@ -19,7 +19,7 @@ enum ConversationUIState: String {
     }
 }
 
-class ConversationListViewController: ViewController, ConversationListCollectionViewLayoutDelegate {
+class ConversationListViewController: InputHandlerViewContoller, ConversationListCollectionViewLayoutDelegate {
     
     override var analyticsIdentifier: String? {
         return "SCREEN_CONVERSATION_LIST"
@@ -37,6 +37,10 @@ class ConversationListViewController: ViewController, ConversationListCollection
 
     // Input handlers
     var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?
+
+    var swipeableVC: SwipeableInputAccessoryViewController {
+        return messageInputController
+    }
 
     // Custom Input Accessory View
     lazy var messageInputController: SwipeableInputAccessoryViewController = {

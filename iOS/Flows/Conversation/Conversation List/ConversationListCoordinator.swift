@@ -13,37 +13,10 @@ import Combine
 import StreamChat
 import Localization
 
-class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
+class ConversationListCoordinator: InputHandlerCoordinator<Void> {
     
-    lazy var pickerVC: PHPickerViewController = {
-        var filter = PHPickerFilter.any(of: [.images])
-        var config = PHPickerConfiguration(photoLibrary: .shared())
-        config.filter = filter
-        config.selectionLimit = 1
-        let vc = PHPickerViewController(configuration: config)
-        vc.delegate = self
-        return vc
-    }()
-    
-    lazy var captureVC: UIImagePickerController = {
-        let vc = UIImagePickerController()
-        vc.sourceType = .camera
-        vc.allowsEditing = true
-        vc.delegate = self
-        return vc
-    }()
-
-    lazy var conversationListVC
-    = ConversationListViewController(members: self.conversationMembers,
-                                     startingConversationID: self.startingConversationID,
-                                     startingMessageID: self.startMessageID)
-
-    private let conversationMembers: [ConversationMember]
-    private let startingConversationID: ConversationId?
-    private let startMessageID: MessageId?
-
-    override func toPresentable() -> DismissableVC {
-        return self.conversationListVC
+    var listVC: ConversationListViewController {
+        return self.inputHandlerViewController as! ConversationListViewController
     }
 
     init(router: Router,
@@ -51,18 +24,18 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
          conversationMembers: [ConversationMember],
          startingConversationId: ConversationId?,
          startingMessageId: MessageId?) {
+        
+        let vc = ConversationListViewController(members: conversationMembers,
+                                                startingConversationID: startingConversationId,
+                                                startingMessageID: startingMessageId)
 
-        self.conversationMembers = conversationMembers
-        self.startingConversationID = startingConversationId
-        self.startMessageID = startingMessageId
-
-        super.init(router: router, deepLink: deepLink)
+        super.init(with: vc, router: router, deepLink: deepLink)
     }
 
     override func start() {
         super.start()
         
-        self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
+        self.listVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
             if let replyId = replyId {
                 self.presentThread(for: channelId, messageId: messageId, startingReplyId: replyId)
             } else {
@@ -70,23 +43,19 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             }
         }
         
-        self.conversationListVC.headerVC.jibImageView.didSelect { [unowned self] in
+        self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
             self.showWallet() 
         }
         
-        self.conversationListVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
+        self.listVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
             self.presentProfile(for: User.current()!)
         }
         
-        self.conversationListVC.messageInputController.swipeInputView.addView.didSelect { [unowned self] in
-            self.presentAttachements()
-        }
-        
-        self.conversationListVC.headerVC.button.didSelect { [unowned self] in
+        self.listVC.headerVC.button.didSelect { [unowned self] in
             self.presentConversationDetail()
         }
         
-        self.conversationListVC.dataSource.handleAddPeopleSelected = { [unowned self] in
+        self.listVC.dataSource.handleAddPeopleSelected = { [unowned self] in
             Task {
                 try await self.createNewConversation()
                 Task.onMainActor {
@@ -95,7 +64,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             }
         }
         
-        self.conversationListVC.dataSource.handleInvestmentSelected = { [unowned self] in
+        self.listVC.dataSource.handleInvestmentSelected = { [unowned self] in
             self.presentEmailAlert() 
         }
 
@@ -114,7 +83,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             let messageID = deeplink.messageId
             guard let cid = deeplink.conversationId else { break }
             Task {
-                await self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
+                await self.listVC.scrollToConversation(with: cid, messageID: messageID)
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()

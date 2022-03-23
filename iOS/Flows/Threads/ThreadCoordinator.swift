@@ -9,26 +9,23 @@
 import Foundation
 import StreamChat
 
-class ThreadCoordinator: PresentableCoordinator<Void> {
-
-    lazy var threadVC = ThreadViewController(channelID: self.channelId,
-                                             messageID: self.messageId,
-                                             startingReplyId: self.startingReplyId)
-    let messageId: MessageId
-    let channelId: ChannelId
-    let startingReplyId: MessageId?
+class ThreadCoordinator: InputHandlerCoordinator<ConversationId> {
+    
+    var threadVC: ThreadViewController {
+        return self.inputHandlerViewController as! ThreadViewController
+    }
 
     init(with channelId: ChannelId,
          messageId: MessageId,
          startingReplyId: MessageId?,
          router: Router,
          deepLink: DeepLinkable?) {
+        
+        let vc = ThreadViewController(channelID: channelId,
+                                      messageID: messageId,
+                                      startingReplyId: startingReplyId)
 
-        self.channelId = channelId
-        self.messageId = messageId
-        self.startingReplyId = startingReplyId
-
-        super.init(router: router, deepLink: deepLink)
+        super.init(with: vc, router: router, deepLink: deepLink)
     }
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
@@ -39,23 +36,14 @@ class ThreadCoordinator: PresentableCoordinator<Void> {
         super.start()
         
         self.threadVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
-            self.presentProfilePicture()
+            self.presentProfile(for: User.current()!)
         }
     }
     
-    func presentProfilePicture() {
-        let vc = ModalPhotoViewController()
-        
-        // Because of how the People are presented, we need to properly reset the KeyboardManager.
-        vc.dismissHandlers.append { [unowned self] in
-            self.threadVC.becomeFirstResponder()
+    func presentProfile(for person: PersonType) {
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+        self.present(coordinator) { [unowned self] result in
+            self.finishFlow(with: result)
         }
-        
-        vc.onDidComplete = { _ in
-            vc.dismiss(animated: true, completion: nil)
-        }
-
-        self.threadVC.resignFirstResponder()
-        self.router.present(vc, source: self.threadVC)
     }
 }
