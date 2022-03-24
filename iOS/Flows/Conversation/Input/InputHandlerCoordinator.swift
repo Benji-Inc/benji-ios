@@ -143,6 +143,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         vc.delegate = self
         
         self.toPresentable().present(vc, animated: true) {
+            // Important to call as this picker lives outside the current responder chain. 
             self.inputHandlerViewController.resignFirstResponder()
         }
     }
