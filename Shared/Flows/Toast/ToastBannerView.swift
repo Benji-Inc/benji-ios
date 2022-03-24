@@ -11,10 +11,12 @@ import Localization
 
 class ToastBannerView: ToastView {
     
-    private let minimumHeight: CGFloat = Theme.ContentOffset.standard.value.doubled + 44
+    private static let personHeight: CGFloat = 38
+    private static let padding: Theme.ContentOffset = .long
+    private let minimumHeight: CGFloat = ToastBannerView.padding.value.doubled + ToastBannerView.personHeight
 
     private let blurView = BlurView()
-    private let titleLabel = ThemeLabel(font: .regular, textColor: .T1)
+    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .T1)
     private let descriptionLabel = ThemeLabel(font: .small, textColor: .T1)
     private let imageView = BorderedPersonView()
 
@@ -122,19 +124,19 @@ class ToastBannerView: ToastView {
         guard let superView = UIWindow.topWindow() else { return }
         switch state {
         case .hidden:
-            self.width =  (60 * 0.74) + (Theme.contentOffset)
+            self.width = ToastBannerView.personHeight + ToastBannerView.padding.value.doubled
             self.maxHeight = self.minimumHeight
             self.centerOnX()
         case .left:
             if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-                self.left = superView.width * 0.025
+                self.left = ToastBannerView.padding.value
             } else {
                 self.left = superView.width * 0.175
             }
         case .expanded:
             self.maxHeight = nil
             if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-                self.width = superView.width * 0.95
+                self.width = superView.width - ToastBannerView.padding.value.doubled
             } else {
                 self.width = superView.width * Theme.iPadPortraitWidthRatio
             }
@@ -153,9 +155,9 @@ class ToastBannerView: ToastView {
         self.blurView.expandToSuperviewSize()
         self.blurView.roundCorners()
 
-        self.imageView.setSize(forHeight: 44)
-        self.imageView.pin(.left, offset: .standard)
-        self.imageView.pin(.top, offset: .standard)
+        self.imageView.setSize(forHeight: ToastBannerView.personHeight)
+        self.imageView.pin(.left, offset: ToastBannerView.padding)
+        self.imageView.pin(.top, offset: ToastBannerView.padding)
 
         if self.imageView.displayable is UIImage {
             self.imageView.layer.borderColor = ThemeColor.clear.color.cgColor
@@ -169,17 +171,17 @@ class ToastBannerView: ToastView {
 
         let maxTitleWidth: CGFloat
         if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-            maxTitleWidth = self.width - (self.imageView.right + Theme.ContentOffset.standard.value.doubled)
+            maxTitleWidth = self.width - (self.imageView.right + ToastBannerView.padding.value.doubled)
         } else {
             maxTitleWidth = (self.width * Theme.iPadPortraitWidthRatio) - (self.imageView.right + 22)
         }
 
         self.titleLabel.setSize(withWidth: maxTitleWidth)
-        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: .standard)
+        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: ToastBannerView.padding)
         self.titleLabel.match(.top, to: .top, of: self.imageView)
 
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
-        self.descriptionLabel.match(.left, to: .right, of: self.imageView, offset: .standard)
+        self.descriptionLabel.match(.left, to: .left, of: self.titleLabel)
         self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .short)
         if self.descriptionLabel.height > self.minimumHeight {
             self.descriptionLabel.height = self.minimumHeight
@@ -187,10 +189,10 @@ class ToastBannerView: ToastView {
 
         if let height = self.maxHeight {
             self.height = height
-        } else if self.descriptionLabel.bottom + Theme.ContentOffset.standard.value < self.minimumHeight {
+        } else if self.descriptionLabel.bottom + ToastBannerView.padding.value < self.minimumHeight {
             self.height = self.minimumHeight
         } else {
-            self.height = self.descriptionLabel.bottom + Theme.ContentOffset.standard.value
+            self.height = self.descriptionLabel.bottom + ToastBannerView.padding.value
         }
     }
 }
