@@ -73,7 +73,7 @@ class MessageDetailViewController: ViewController, MessageInteractableController
         self.blurView.expandToSuperviewSize()
         
         self.messageContentView.centerOnX()
-        self.messageContentView.bottom = self.view.height * 0.6
+        self.messageContentView.bottom = self.view.height * 0.5
         
         self.backgroundView.expandToSuperviewWidth()
         self.backgroundView.expand(.bottom)

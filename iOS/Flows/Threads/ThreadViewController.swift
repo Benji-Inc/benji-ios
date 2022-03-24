@@ -162,14 +162,13 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.detailVC.view.width = self.parentMessageView.width
         self.detailVC.view.height = 25
-        self.detailVC.view.match(.top, to: .bottom, of: self.parentMessageView, offset: .standard)
+        self.detailVC.view.match(.bottom, to: .bottom, of: self.parentMessageView, offset: .negative(.long))
         self.detailVC.view.centerOnX()
     }
 
     override func layoutCollectionView(_ collectionView: UICollectionView) {
-        collectionView.pinToSafeArea(.top, offset: .noOffset)
-        collectionView.width = Theme.getPaddedWidth(with: self.view.width)
-        collectionView.expand(.bottom, padding: self.view.safeAreaInsets.bottom)
+        collectionView.expandToSuperviewHeight()
+        collectionView.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
         collectionView.centerOnX()
 
         if self.scrollToLastItemOnLayout {
@@ -198,13 +197,35 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private func configureCollectionLayout(for state: ConversationUIState) {
         let threadLayout = self.threadCollectionView.threadLayout
         threadLayout.itemHeight
-        = MessageContentView.bubbleHeight + old_MessageDetailView.height + Theme.ContentOffset.short.value
-
+        = MessageContentView.bubbleHeight + old_MessageDetailView.height + Theme.ContentOffset.long.value
+        
         switch state {
         case .read:
-            threadLayout.spacingKeyPoints = [0, 40, 74, 86]
+            let topOfStack = UIWindow.topWindow()!.safeAreaInsets.top + PullView.height + threadLayout.itemHeight + 20
+            threadLayout.topOfStackY = topOfStack
+            threadLayout.spacingKeyPoints = [0, 20, 40, 54]
+            
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.parentMessageView.alpha = 1.0
+                self.detailVC.view.alpha = 1.0
+            } completion: { _ in
+                self.view.bringSubviewToFront(self.parentMessageView)
+                self.view.bringSubviewToFront(self.detailVC.view)
+                self.view.bringSubviewToFront(self.pullView)
+            }
+
         case .write:
-            threadLayout.spacingKeyPoints = [0, 8, 16, 20]
+            let topOfStack = self.pullView.bottom
+            threadLayout.topOfStackY = topOfStack
+            threadLayout.spacingKeyPoints = [0, 8, 14, 16]
+            
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.parentMessageView.alpha = 0
+                self.detailVC.view.alpha = 0
+            } completion: { _ in
+                self.view.bringSubviewToFront(self.collectionView)
+                self.view.bringSubviewToFront(self.pullView)
+            }
         }
     }
 

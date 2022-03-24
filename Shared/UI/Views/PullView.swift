@@ -10,6 +10,8 @@ import Foundation
 
 class PullView: BaseView {
     
+    static let height: CGFloat = 24
+    
     private let imageView = UIImageView()
     
     override func initializeSubviews() {
@@ -28,7 +30,7 @@ class PullView: BaseView {
         self.imageView.width = 20
         self.imageView.centerOnXAndY()
         
-        self.height = 24
+        self.height = PullView.height
         self.width = 44
     }
 }
