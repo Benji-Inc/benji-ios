@@ -25,11 +25,4 @@ extension UIResponder {
     @objc private func findFirstResponder(sender: AnyObject) {
         UIResponder.currentFirstResponder = self
     }
-    
-    func responderChain() -> String {
-        guard let next = next else {
-            return NSStringFromClass(type(of: self))//String(describing: self)
-        }
-        return NSStringFromClass(type(of: self)) + " -> " + next.responderChain()
-    }
 }
