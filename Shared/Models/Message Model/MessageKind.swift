@@ -37,7 +37,7 @@ enum MessageKind {
     /// A contact message.
     case contact(ContactItem)
 
-    case link(URL)
+    case link(url: URL, body: String)
 
     var isSendable: Bool {
         switch self {
@@ -60,17 +60,10 @@ enum MessageKind {
             return body
         case .emoji(let emoji):
             return emoji
+        case .link(_, body: let body):
+            return body
         default:
             return String()
-        }
-    }
-
-    var displayable: ImageDisplayable? {
-        switch self {
-        case .photo(photo: let photo, _):
-            return photo.image
-        default:
-            return nil
         }
     }
 }
@@ -94,8 +87,8 @@ extension MessageKind: Equatable {
             return lhsAudio == rhsAudio
         case (.contact(let lhsContact), .contact(let rhsContact)):
             return lhsContact == rhsContact
-        case (.link(let lhsLink), .link(let rhsLink)):
-            return lhsLink == rhsLink
+        case (.link(let lhsURL, let lhsBody), .link(let rhsURL, let rhsBody)):
+            return lhsURL == rhsURL && lhsBody == rhsBody
         default:
             return false
         }
