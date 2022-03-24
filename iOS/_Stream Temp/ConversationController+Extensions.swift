@@ -142,39 +142,30 @@ extension ConversationController {
 
     @discardableResult
     func createNewMessage(with sendable: Sendable) async throws -> MessageId {
+        let messageBody: String
+        var attachments: [AnyAttachmentPayload] = []
+
         switch sendable.kind {
         case .text(let text):
-            return try await self.createNewMessage(sendable: sendable, text: text)
-        case .attributedText:
-            break
+            messageBody = text
         case .photo(let item, let body):
-            
-            var attachments: [AnyAttachmentPayload] = []
             if let url = item.url {
-                let attachement = try AnyAttachmentPayload.init(localFileURL: url,
-                                                                attachmentType: .image,
-                                                                extraData: nil)
+                let attachement = try AnyAttachmentPayload(localFileURL: url,
+                                                           attachmentType: .image,
+                                                           extraData: nil)
                 attachments.append(attachement)
             }
-            
-            return try await self.createNewMessage(sendable: sendable,
-                                                   text: body,
-                                                   attachments: attachments)
-        case .video:
-            break
-        case .location:
-            break
-        case .emoji:
-            break
-        case .audio:
-            break
-        case .contact:
-            break
-        case .link:
-            break
+            messageBody = body
+        case .link(_, let body):
+            // The link URL is automatically detected by stream and added as an attachment.
+            messageBody = body
+        case .attributedText, .video, .location, .emoji, .audio, .contact:
+            throw(ClientError.apiError(detail: "Message type not supported."))
         }
 
-        throw(ClientError.apiError(detail: "Message type not supported."))
+        return try await self.createNewMessage(sendable: sendable,
+                                               text: messageBody,
+                                               attachments: attachments)
     }
 
     /// Creates a new message locally and schedules it for send.
