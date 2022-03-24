@@ -11,6 +11,7 @@ import SwiftUI
 import StreamChat
 import Combine
 
+@MainActor
 protocol MesssageCellDelegate: AnyObject {
     func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
     func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
