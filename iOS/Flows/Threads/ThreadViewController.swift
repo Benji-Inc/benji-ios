@@ -117,7 +117,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
         
-        self.addChild(viewController: self.detailVC)
+        self.addChild(viewController: self.detailVC, toView: self.parentMessageView)
         self.detailVC.view.alpha = 0
         
         self.view.addSubview(self.pullView)
@@ -160,9 +160,9 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.parentMessageView.match(.top, to: .bottom, of: self.pullView)
         self.parentMessageView.centerOnX()
 
-        self.detailVC.view.width = self.parentMessageView.width
+        self.detailVC.view.expandToSuperviewWidth()
         self.detailVC.view.height = 25
-        self.detailVC.view.match(.bottom, to: .bottom, of: self.parentMessageView, offset: .negative(.long))
+        self.detailVC.view.pin(.bottom, offset: .long)
         self.detailVC.view.centerOnX()
     }
 
@@ -203,14 +203,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         case .read:
             let topOfStack = UIWindow.topWindow()!.safeAreaInsets.top + PullView.height + threadLayout.itemHeight + 20
             threadLayout.topOfStackY = topOfStack
-            threadLayout.spacingKeyPoints = [0, 20, 40, 54]
+            threadLayout.spacingKeyPoints = [0, 20, 40, 64]
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.parentMessageView.alpha = 1.0
-                self.detailVC.view.alpha = 1.0
             } completion: { _ in
                 self.view.bringSubviewToFront(self.parentMessageView)
-                self.view.bringSubviewToFront(self.detailVC.view)
                 self.view.bringSubviewToFront(self.pullView)
             }
 
@@ -221,7 +219,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.parentMessageView.alpha = 0
-                self.detailVC.view.alpha = 0
             } completion: { _ in
                 self.view.bringSubviewToFront(self.collectionView)
                 self.view.bringSubviewToFront(self.pullView)
@@ -401,7 +398,6 @@ extension ThreadViewController: TransitionableViewController {
     
     func handleDismissal() {
         self.pullView.bottom = self.messageContent.top
-        self.detailVC.view.top = self.messageContent.bottom + Theme.ContentOffset.standard.value
     }
 }
 
