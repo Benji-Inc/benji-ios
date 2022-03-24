@@ -37,7 +37,7 @@ class InputTextView: ExpandingTextView {
                 self.becomeFirstResponder()
             }
         }
-
+        
         guard self.currentInputType != type else { return }
 
         switch type {

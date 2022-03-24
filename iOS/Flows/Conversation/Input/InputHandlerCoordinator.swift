@@ -105,9 +105,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         case .video:
             break
         case .library:
-            break
-#warning("Problem when dismissing picker, and not being able to assign first responder")
-            //self.presentPhotoLibrary()
+            self.presentPhotoLibrary()
         }
     }
     
@@ -144,14 +142,29 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         let vc = PHPickerViewController(configuration: config)
         vc.delegate = self
         
-        self.toPresentable().present(vc, animated: true)
+        self.toPresentable().present(vc, animated: true) {
+            // Important to call as this picker lives outside the current responder chain. 
+            self.inputHandlerViewController.resignFirstResponder()
+        }
     }
     
+    // https://developer.apple.com/documentation/photokit/selecting_photos_and_videos_in_ios
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        Task.onMainActor {
-            picker.dismiss(animated: true) {
-                self.toPresentable().becomeFirstResponder()
+        
+        Task.onMainActorAsync {
+    
+            self.inputHandlerViewController.dismiss(animated: true) { 
+                self.inputHandlerViewController.becomeFirstResponder()
             }
+            
+            let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
+            
+            guard let indentifier = results.first?.assetIdentifier,
+                    let asset = PHAsset.fetchAssets(withLocalIdentifiers: [indentifier], options: nil).firstObject,
+                  let kind = try? await AttachmentsManager.shared.getMessageKind(for: Attachment(asset: asset), body: text) else { return }
+            
+            self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
+            self.inputHandlerViewController.swipeableVC.inputState = .collapsed
         }
     }
     
