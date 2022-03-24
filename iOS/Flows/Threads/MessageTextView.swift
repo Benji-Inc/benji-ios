@@ -36,7 +36,9 @@ class MessageTextView: TextView {
         location.y -= self.textContainerInset.top
 
         // Find the character that's been tapped
-        let characterIndex = self.layoutManager.characterIndex(for: location, in: self.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        let characterIndex = self.layoutManager.characterIndex(for: location,
+                                                               in: self.textContainer,
+                                                               fractionOfDistanceBetweenInsertionPoints: nil)
         if characterIndex < self.textStorage.length {
             // Check if character is a link and handle normally
             if self.textStorage.attribute(NSAttributedString.Key.link,

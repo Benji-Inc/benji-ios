@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import LinkPresentation
 
 class MessageContentView: BaseView {
     
@@ -37,6 +38,7 @@ class MessageContentView: BaseView {
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .T1)
     let displayableView = DisplayableImageView()
+    let linkView = LPLinkView()
     private (set) var message: Messageable?
 
     let authorView = PersonView()
@@ -45,8 +47,6 @@ class MessageContentView: BaseView {
 
     override func initializeSubviews() {
         super.initializeSubviews()
-
-        self.bubbleView.addSubview(self.authorView)
 
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
@@ -58,6 +58,10 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.textView.textAlignment = .left
+
+        self.bubbleView.addSubview(self.linkView)
+
+        self.bubbleView.addSubview(self.authorView)
     }
 
     override func layoutSubviews() {
@@ -91,13 +95,24 @@ class MessageContentView: BaseView {
             self.displayableView.match(.top, to: .bottom, of: self.textView, offset: MessageContentView.padding)
         }
 
+        self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.linkView.pin(.top, offset: MessageContentView.padding)
+        self.linkView.expand(.right, to: self.width - MessageContentView.padding.value)
+        self.linkView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
+
         // Expand the image to fill in the remaining height.
         self.displayableView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
         self.displayableView.width = self.displayableView.height
     }
 
+    private var linkProvider: LPMetadataProvider?
+
     func configure(with message: Messageable) {
         self.message = message
+
+        self.textView.isVisible = message.kind.hasText
+        self.displayableView.isVisible = message.kind.isImage
+        self.linkView.isVisible = message.kind.isLink
 
         if message.isDeleted {
             self.textView.text = "DELETED"
@@ -106,11 +121,27 @@ class MessageContentView: BaseView {
 
             switch message.kind {
             case .photo(photo: let photo, _):
-                self.displayableView.isVisible = true
                 guard let previewUrl = photo.previewUrl else { break }
                 self.displayableView.displayable = previewUrl
-            case .text, .attributedText, .video, .location, .emoji, .audio, .contact, .link:
+            case .link(url: let url, _):
+                self.linkProvider?.cancel()
+
+                logDebug("loading \(url)")
+
+                let initialMetadata = LPLinkMetadata()
+                initialMetadata.originalURL = url
+                self.linkView.metadata = initialMetadata
+
+                self.linkProvider = LPMetadataProvider()
+                self.linkProvider?.startFetchingMetadata(for: url) { (metadata, error) in
+                    guard let metadata = metadata else { return }
+                    Task.onMainActor {
+                        self.linkView.metadata = metadata
+                    }
+                }
+            case .text, .attributedText, .video, .location, .emoji, .audio, .contact:
                 self.displayableView.isVisible = false
+                self.linkView.isVisible = false
                 break
             }
         }
@@ -150,6 +181,18 @@ class MessageContentView: BaseView {
         size.width += MessageContentView.textViewPadding
         size.height += self.bubbleView.tailLength + MessageContentView.textViewPadding
         return size
+    }
+}
+
+extension MessageContentView: UITextViewDelegate {
+
+    func textView(_ textView: UITextView,
+                  shouldInteractWith URL: URL,
+                  in characterRange: NSRange,
+                  interaction: UITextItemInteraction) -> Bool {
+
+
+        return true
     }
 }
 

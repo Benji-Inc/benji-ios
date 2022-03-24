@@ -94,8 +94,23 @@ extension Message: Messageable {
                                              _data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
-        } else if let linkAttachment = self.linkAttachments.first {
-            return .link(url: linkAttachment.originalURL, body: self.text)
+        } else if self.text.isSingleLink,
+                  self.linkAttachments.count == 1,
+                  let linkAttachment = self.linkAttachments.first {
+            
+            guard var urlComponents = URLComponents(url: linkAttachment.originalURL,
+                                                    resolvingAgainstBaseURL: false) else {
+                return .text(self.text)
+            }
+
+            // Make sure the url has a scheme.
+            if urlComponents.scheme.isNil {
+                urlComponents.scheme = "https"
+            }
+
+            guard let url = urlComponents.url else { return .text(self.text) }
+
+            return .link(url: url, stringURL: self.text)
         }
 
         return .text(self.text)

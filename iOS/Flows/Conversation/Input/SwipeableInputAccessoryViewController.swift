@@ -231,7 +231,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         case .contact(_):
             break
         case .link(_, _):
-            break
+            self.swipeInputView.addView.configure(with: nil)
         }
     }
 
@@ -254,8 +254,8 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         switch self.currentMessageKind {
         case .text, .link:
             // If there's URL in the text, then this becomes a link message.
-            if let url = text.getURLs().first {
-                self.currentMessageKind = .link(url: url, body: text)
+            if text.isSingleLink, let url = text.getURLs().first {
+                self.currentMessageKind = .link(url: url, stringURL: text)
             } else {
                 // No URL means we're just sending plain text.
                 self.currentMessageKind = .text(text)

@@ -52,8 +52,8 @@ class PreviewMessageView: SpeechBubbleView {
                 break
             case .contact(_):
                 break
-            case .link(_, let body):
-                self.textView.text = body
+            case .link(_, let stringURL):
+                self.textView.text = stringURL
             }
             self.layoutNow()
         }.store(in: &self.cancellables)

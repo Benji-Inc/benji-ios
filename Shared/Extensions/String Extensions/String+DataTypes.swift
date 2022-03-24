@@ -29,6 +29,14 @@ extension String {
         return results
     }
 
+    // MARK: - URLs
+
+    /// Returns true if the string represents a single valid link url and contains no other characters.
+    var isSingleLink: Bool {
+        let trimmedString = self.trimWhitespace()
+        return URL(string: trimmedString).exists
+    }
+
     /// Returns all the URLs found in the string.
     func getURLs() -> [URL] {
         let results = self.getDataTypes(with: NSTextCheckingResult.CheckingType.link.rawValue)
