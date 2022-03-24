@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Combine
+import PhotosUI
 
 enum ConversationUIState: String {
     case read // Keyboard is NOT shown
@@ -54,10 +55,18 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
                                                                        isConversationList: true)
 
     override var inputAccessoryViewController: UIInputViewController? {
+        // This check is a little hack to ensure input is displayed after the picker is dismissed. Seems to be called prior to becomeFirstResponder, but before the presentViewController is nil, resulting in the input not being displayed after pickers dismissal
+        if self.presentedViewController is PHPickerViewController {
+            return self.messageInputController
+        }
         return self.presentedViewController.isNil ? self.messageInputController : nil
     }
     override var canBecomeFirstResponder: Bool {
         return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        return super.becomeFirstResponder()
     }
 
     @Published var state: ConversationUIState = .read

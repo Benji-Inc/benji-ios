@@ -50,7 +50,7 @@ class RoomNavigationButton: BaseView {
         
         self.squaredSize = 40
         
-        self.outerRoomView.squaredSize = self.height - Theme.ContentOffset.standard.value
+        self.outerRoomView.squaredSize = self.height - Theme.ContentOffset.long.value
         self.outerRoomView.centerOnXAndY()
         
         self.innerRoomView.squaredSize = self.outerRoomView.height - Theme.ContentOffset.long.value
