@@ -50,23 +50,16 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         inputController.swipeInputView.textView.restorationIdentifier = "list"
         return inputController
     }()
+    
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
                                                                        collectionView: self.collectionView,
                                                                        isConversationList: true)
 
     override var inputAccessoryViewController: UIInputViewController? {
-        // This check is a little hack to ensure input is displayed after the picker is dismissed. Seems to be called prior to becomeFirstResponder, but before the presentViewController is nil, resulting in the input not being displayed after pickers dismissal
-        if self.presentedViewController is PHPickerViewController {
-            return self.messageInputController
-        }
         return self.presentedViewController.isNil ? self.messageInputController : nil
     }
     override var canBecomeFirstResponder: Bool {
         return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
-    }
-    
-    override func becomeFirstResponder() -> Bool {
-        return super.becomeFirstResponder()
     }
 
     @Published var state: ConversationUIState = .read
@@ -80,7 +73,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     init(members: [ConversationMember],
          startingConversationID: ConversationId?,
          startingMessageID: MessageId?) {
-
+        
         self.members = members
         self.startingConversationID = startingConversationID
         self.startingMessageID = startingMessageID

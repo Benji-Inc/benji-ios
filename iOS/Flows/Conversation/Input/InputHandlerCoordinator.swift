@@ -142,15 +142,19 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         let vc = PHPickerViewController(configuration: config)
         vc.delegate = self
         
-        self.toPresentable().present(vc, animated: true)
+        self.toPresentable().present(vc, animated: true) {
+            self.inputHandlerViewController.resignFirstResponder()
+        }
     }
     
     // https://developer.apple.com/documentation/photokit/selecting_photos_and_videos_in_ios
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         
         Task.onMainActorAsync {
-            
-            self.inputHandlerViewController.dismiss(animated: true)
+    
+            self.inputHandlerViewController.dismiss(animated: true) { 
+                self.inputHandlerViewController.becomeFirstResponder()
+            }
             
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             
