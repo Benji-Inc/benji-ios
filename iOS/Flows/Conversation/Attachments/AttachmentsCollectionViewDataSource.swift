@@ -11,7 +11,7 @@ import Foundation
 class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsCollectionViewDataSource.SectionType,
                                             AttachmentsCollectionViewDataSource.ItemType> {
     
-    enum OptionType: String {
+    enum OptionType: String, OptionDisplayable {
         case capture
         case audio
         case video
@@ -42,15 +42,6 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
                 return "Choose a GIF"
             }
         }
-        
-        var isAvailable: Bool {
-            switch self {
-            case .capture:
-                return true
-            default:
-                return false 
-            }
-        }
     }
 
     enum SectionType: Int, CaseIterable {
@@ -67,7 +58,7 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
     private let captureConfig = ManageableCellRegistration<CaptureCell>().provider
     private let optionConfig = ManageableCellRegistration<AttachmentOptionCell>().provider
     private let headerConfig = ManageableHeaderRegistration<AttachmentHeaderView>().provider
-    private let lineConfig = ManageableHeaderRegistration<AttachmentLineView>().provider
+    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     
     var didSelectLibrary: CompletionOptional = nil
     
@@ -90,14 +81,19 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
                                                                     for: indexPath,
                                                                     item: option)
             default:
-                return collectionView.dequeueConfiguredReusableCell(using: self.optionConfig,
-                                                                    for: indexPath,
-                                                                    item: option)
+                let lastIndex = self.snapshot().numberOfItems(inSection: section) - 1
+                let shouldHideLine = lastIndex == indexPath.row
+                let cell = collectionView.dequeueConfiguredReusableCell(using: self.optionConfig,
+                                                                        for: indexPath,
+                                                                        item: option)
+                cell.lineView.isHidden = shouldHideLine
+                return cell 
             }
         }
     }
     
-    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         
@@ -111,7 +107,11 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
             
             return header
         case .other:
-            return collectionView.dequeueConfiguredReusableSupplementary(using: self.lineConfig, for: indexPath)
+            if kind == SectionBackgroundView.kind {
+                return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
+                                                                             for: indexPath)
+            }
+            return nil
         }
     }
 }
