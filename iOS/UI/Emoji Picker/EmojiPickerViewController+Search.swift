@@ -25,44 +25,26 @@ extension EmojiPickerViewController: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsScope(true, animated: true)
-      //  var snapshot = self.dataSource.snapshot()
-//        let items: [PeopleCollectionViewDataSource.ItemType] = self.allPeople.sorted().map { person in
-//            var copy = person
-//            copy.isSelected = self.selectedPeople.contains(where: { current in
-//                return current.personId == person.personId
-//            })
-//            return .person(copy)
-//        }
-//
-//        snapshot.setItems(items, in: .people)
-//        self.dataSource.apply(snapshot)
+        searchBar.selectedScopeButtonIndex = 0
     }
     
     func performQuery(with filter: String?) {
+        guard let text = filter,
+                !text.isEmpty || !text.replacingOccurrences(of: " ", with: "").isEmpty else { return }
         
-//        let filtered: [PeopleCollectionViewDataSource.ItemType] = self.filtered(people: self.allPeople, filter: filter).sorted { lhs, rhs in
-//            lhs.familyName < rhs.familyName
-//        }.map { person in
-//            var copy = person
-//            copy.updateHighlight(text: filter)
-//            return .person(copy)
-//        }
-//
-//        var snapshot = self.dataSource.snapshot()
-//        snapshot.setItems(filtered, in: .people)
-//        self.dataSource.apply(snapshot)
+        let filtered: [EmojiCollectionViewDataSource.ItemType] = self.filtered(emojis: EmojiCategory.allEmojis, filter: filter).map { emoji in
+            return .emoji(emoji)
+        }
+
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(filtered, in: .emojis)
+        self.dataSource.apply(snapshot)
     }
     
-    func filtered(people: [Person], filter: String? = nil, limit: Int? = nil) -> [Person] {
-        return []
-//        let filtered = people.filter { person in
-//            person.contains(filter) && !self.selectedPeople.contains(person)
-//        }
-//
-//        if let limit = limit {
-//            return Array(filtered.prefix(through: limit))
-//        } else {
-//            return filtered
-//        }
+    func filtered(emojis: [Emoji], filter: String? = nil, limit: Int? = nil) -> [Emoji] {
+
+        return emojis.filter { emoji in
+            emoji.contains(filter) && !self.selectedEmojis.contains(emoji)
+        }
     }
 }

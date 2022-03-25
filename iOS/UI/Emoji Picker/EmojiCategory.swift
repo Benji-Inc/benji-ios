@@ -12,6 +12,17 @@ struct Emoji: Decodable, Hashable {
     var id: String
     var emoji: String
     var isSelected: Bool = false
+    var keywords: [String]
+    var types: [String]?
+    
+    func contains(_ filter: String?) -> Bool {
+        guard let filterText = filter else { return true }
+        if filterText.isEmpty { return true }
+        let lowercasedFilter = filterText.lowercased()
+        return self.keywords.contains { element in
+            return element.contains(lowercasedFilter)
+        }
+    }
 }
 
 enum EmojiCategory: Int, CaseIterable {
@@ -24,6 +35,16 @@ enum EmojiCategory: Int, CaseIterable {
     case objects
     case symbols
     case flags
+    
+    static var allEmojis: [Emoji] {
+        var all: [Emoji] = []
+        
+        self.allCases.forEach { category in
+            all.append(contentsOf: category.emojis)
+        }
+        
+        return all
+    }
     
     var emojis: [Emoji] {
         return self.getEmojis()
@@ -55,7 +76,10 @@ enum EmojiCategory: Int, CaseIterable {
               let category = res[safe: self.rawValue] else { return [] }
     
         let emojis = category.emojis.compactMap { model in
-            return Emoji(id: model.code, emoji: model.emoji)
+            return Emoji(id: model.code,
+                         emoji: model.emoji,
+                         keywords: model.keywords,
+                         types: model.types)
         }
         
         return emojis
