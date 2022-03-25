@@ -32,7 +32,7 @@ extension EmojiPickerViewController: UISearchBarDelegate {
         guard let text = filter,
                 !text.isEmpty || !text.replacingOccurrences(of: " ", with: "").isEmpty else { return }
         
-        let filtered: [EmojiCollectionViewDataSource.ItemType] = self.filtered(emojis: EmojiCategory.allEmojis, filter: filter).map { emoji in
+        let filtered: [EmojiCollectionViewDataSource.ItemType] = self.filtered(emojis: self.getAllAvailableEmojis(), filter: filter).map { emoji in
             return .emoji(emoji)
         }
 

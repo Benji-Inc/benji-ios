@@ -40,7 +40,9 @@ class ExpressionView: BaseView {
             return
         }
 
-        guard case .string(let emoji) = expressionJSON else {
+        guard case .string(let value) = expressionJSON, let emoji = EmojiCategory.allEmojis.first(where: { emoji in
+            return emoji.emoji == value 
+        }) else {
             self.isVisible = false
             return
         }
@@ -49,11 +51,11 @@ class ExpressionView: BaseView {
         self.configure(for: emoji)
     }
     
-    func configure(for emoji: String?) {
-        if let e = emoji {
+    func configure(for emoji: Emoji?) {
+        if let e = emoji?.emoji {
             self.label.setText(e)
         } else {
-            self.label.setText("Say it...")
+            self.label.setText("Express it...")
         }
         
         self.setNeedsLayout()

@@ -18,4 +18,15 @@ class ExpressionViewController: EmojiPickerViewController {
 
         self.collectionView.allowsMultipleSelection = false
     }
+    
+    override func setupNavigationBar() {
+        super.setupNavigationBar()
+        
+        self.navigationItem.title = "Choose Expression"
+        self.navigationItem.searchController?.searchBar.scopeButtonTitles = []
+    }
+    
+    override func getAllAvailableEmojis() -> [Emoji] {
+        return EmojiCategory.smileysAndPeople.emojis
+    }
 }
