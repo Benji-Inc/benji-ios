@@ -69,6 +69,7 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
         search.searchBar.scopeButtonTitles = EmojiCategory.allCases.map({ category in
             return category.scopeTitle
         })
+        search.searchBar.placeholder = "Search Emojis"
         search.searchBar.selectedScopeButtonIndex = 0
         search.searchBar.showsScopeBar = true
         search.searchBar.tintColor = ThemeColor.D1.color
@@ -80,7 +81,6 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        self.segmentControl.selectedSegmentIndex = 0
         self.loadEmojis(for: .smileysAndPeople)
         
         self.$selectedEmojis.mainSink { [unowned self] items in
@@ -90,19 +90,6 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-//        self.segmentControl.sizeToFit()
-//        self.segmentControl.pinToSafeAreaTop()
-//
-//        let segmentWidth = (self.view.width - Theme.ContentOffset.standard.value.doubled) * 0.125
-//        for i in 0...self.segmentControl.numberOfSegments - 1 {
-//            self.segmentControl.setWidth(segmentWidth, forSegmentAt: i)
-//        }
-//        self.segmentControl.pin(.left, offset: .standard)
-//
-//        self.segmentGradientView.expandToSuperviewWidth()
-//        self.segmentGradientView.pin(.top)
-//        self.segmentGradientView.height = self.segmentControl.bottom + Theme.ContentOffset.standard.value
         
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94

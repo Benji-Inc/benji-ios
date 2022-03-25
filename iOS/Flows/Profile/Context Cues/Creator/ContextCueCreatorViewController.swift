@@ -33,6 +33,10 @@ class ContextCueCreatorViewController: EmojiPickerViewController {
         self.$selectedEmojis.mainSink { [unowned self] items in
             self.updateButton()
         }.store(in: &self.cancellables)
+        
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self] _ in
+            self.view.setNeedsLayout()
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -42,7 +46,11 @@ class ContextCueCreatorViewController: EmojiPickerViewController {
         self.button.centerOnX()
         
         if self.showButton {
-            self.button.pinToSafeAreaBottom()
+            if KeyboardManager.shared.isKeyboardShowing {
+                self.button.bottom = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.long.value
+            } else {
+                self.button.pinToSafeAreaBottom()
+            }
         } else {
             self.button.top = self.view.height
         }
