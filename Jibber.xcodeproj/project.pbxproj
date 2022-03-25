@@ -687,16 +687,6 @@
 		D6E9742D27514BCB00D95F08 /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
 		D6E974362752C47F00D95F08 /* ReactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* ReactionType.swift */; };
 		D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */; };
-		D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
-		D6E974602756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
-		D6E974612756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
-		D6E974622756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
-		D6E974632756DAFD00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
-		D6E974642756DAFF00D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
-		D6E974662756DB0000D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
-		D6E974672756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
-		D6E974682756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
-		D6E974692756DB0200D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E9746E2757356C00D95F08 /* old_MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746D2757356C00D95F08 /* old_MessageStatusView.swift */; };
 		D6EA3FA72759AF7C002BDD0E /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
@@ -1197,8 +1187,6 @@
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
 		D6E974352752C47F00D95F08 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
 		D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewManager.swift; sourceTree = "<group>"; };
-		D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
-		D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		D6E9746D2757356C00D95F08 /* old_MessageStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_MessageStatusView.swift; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
@@ -1532,8 +1520,6 @@
 				D64ED05027E264B400B40B6E /* emoji.json */,
 				D668893023F2741500FD2764 /* Animations */,
 				D61EC0C621D3071500204BEE /* Assets.xcassets */,
-				D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */,
-				D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -2583,14 +2569,12 @@
 			files = (
 				D640329425AF3CA500139396 /* error.json in Resources */,
 				D640329025AF3CA500139396 /* face_scan.json in Resources */,
-				D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D68B723927D4430500F04AB1 /* maxToMin.json in Resources */,
 				D6B00D3C2796480D00DF07B1 /* loading.json in Resources */,
 				D628B00927B47EEF00949154 /* TransactionContentView.xib in Resources */,
 				8020DD93272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib in Resources */,
 				D64ED05127E264B400B40B6E /* emoji.json in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
-				D6E974642756DAFF00D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				806EDAA627BEF1A400ADD677 /* alertCircle.json in Resources */,
 				D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */,
 				D6FA273D2767A67300315528 /* Localization in Resources */,
@@ -2610,8 +2594,6 @@
 				D656AF4B27C8470E008175D7 /* doublecheckmark.json in Resources */,
 				D63DB20125E968C300F6B323 /* MainInterface.storyboard in Resources */,
 				D68B723A27D4430500F04AB1 /* maxToMin.json in Resources */,
-				D6E974602756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
-				D6E974662756DB0000D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D63DB27B25E9998D00F6B323 /* Assets.xcassets in Resources */,
 				D6FA273F2767A67300315528 /* Localization in Resources */,
 				D63DB27925E9998A00F6B323 /* face_scan.json in Resources */,
@@ -2623,12 +2605,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6E974612756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D64ED05327E264B400B40B6E /* emoji.json in Resources */,
 				D6FA27402767A67300315528 /* Localization in Resources */,
 				D61316B2273C85D000DC782B /* Assets.xcassets in Resources */,
 				D656AF4C27C8470E008175D7 /* doublecheckmark.json in Resources */,
-				D6E974672756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D68B723B27D4430500F04AB1 /* maxToMin.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2637,10 +2617,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6E974682756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D68B723C27D4430500F04AB1 /* maxToMin.json in Resources */,
 				D64ED05427E264B400B40B6E /* emoji.json in Resources */,
-				D6E974622756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6FA27412767A67300315528 /* Localization in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2650,11 +2628,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D68B723D27D4430500F04AB1 /* maxToMin.json in Resources */,
-				D6E974632756DAFD00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6FA27422767A67300315528 /* Localization in Resources */,
 				D6AE0F8F267CFA6D00C6B048 /* MainInterface.storyboard in Resources */,
 				D64ED05527E264B400B40B6E /* emoji.json in Resources */,
-				D6E974692756DB0200D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
