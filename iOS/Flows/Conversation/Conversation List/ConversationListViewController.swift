@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Combine
+import PhotosUI
 
 enum ConversationUIState: String {
     case read // Keyboard is NOT shown
@@ -49,6 +50,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         inputController.swipeInputView.textView.restorationIdentifier = "list"
         return inputController
     }()
+    
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
                                                                        collectionView: self.collectionView,
                                                                        isConversationList: true)
@@ -71,7 +73,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     init(members: [ConversationMember],
          startingConversationID: ConversationId?,
          startingMessageID: MessageId?) {
-
+        
         self.members = members
         self.startingConversationID = startingConversationID
         self.startingMessageID = startingMessageID

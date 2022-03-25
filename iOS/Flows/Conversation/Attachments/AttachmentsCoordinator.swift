@@ -55,7 +55,7 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
     }
     
     private func presentAlert(for option: AttachmentsCollectionViewDataSource.OptionType) {
-        guard !option.isAvailable else { return }
+        guard option != .capture else { return }
         
         let alertController = UIAlertController(title: option.title,
                                                 message: "(Coming Soon)",

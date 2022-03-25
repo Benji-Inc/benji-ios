@@ -44,14 +44,16 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 }) else { return }
 
                 self.presentProfile(for: person)
-            case .add(_):
-                self.presentPeoplePicker()
             case .info(_):
                 break
             case .editTopic(let cid):
                 self.presentConversationTitleAlert(for: cid)
-            case .detail(let cid, let option):
-                self.presentDetail(option: option, cid: cid)
+            case .detail(let option):
+                if option == .add {
+                    self.presentPeoplePicker()
+                } else {
+                    self.presentDetail(option: option)
+                }
             }
         }.store(in: &self.cancellables)
     }
@@ -101,9 +103,9 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         self.detailVC.present(alertController, animated: true, completion: nil)
     }
     
-    func presentDetail(option: ConversationDetailCollectionViewDataSource.OptionType, cid: ConversationId) {
+    func presentDetail(option: ConversationDetailCollectionViewDataSource.OptionType) {
                 
-        let controller = ChatClient.shared.channelController(for: cid)
+        let controller = ChatClient.shared.channelController(for: self.cid)
         
         var title: String = ""
         var message: String = ""
@@ -120,6 +122,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             title = "Delete"
             message = "Deleting a conversation will remove all members and data associated with this conversation."
             style = .destructive
+        case .add:
+            return
         }
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
@@ -150,6 +154,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                         self.finishFlow(with: nil)
                     }
                 }.add(to: self.taskPool)
+            case .add:
+                return 
             }
         })
 

@@ -192,10 +192,10 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         })
         
         if conversation.isOwnedByMe {
-            data[.people]?.append(.add(conversation.cid))
-            data[.options] = [.detail(conversation.cid, .hide), .detail(conversation.cid, .leave), .detail(conversation.cid, .delete)]
+            data[.people]?.append(.detail(.add))
+            data[.options] = [.detail(.hide), .detail(.leave), .detail(.delete)]
         } else {
-            data[.options] = [.detail(conversation.cid, .hide), .detail(conversation.cid, .leave)]
+            data[.options] = [.detail(.hide), .detail(.leave)]
         }
         
         return data
