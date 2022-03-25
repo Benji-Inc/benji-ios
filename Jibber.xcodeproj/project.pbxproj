@@ -163,7 +163,6 @@
 		D61A33EA27D5C4F200056242 /* ContextCueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33E827D5C4CD00056242 /* ContextCueView.swift */; };
 		D61A33EB27D6754F00056242 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
-		D61A33EE27D695F500056242 /* EmojiCategorySegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */; };
 		D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D61A9B5227D2ABB6008D8C57 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
@@ -900,7 +899,6 @@
 		D61A33E227D5730500056242 /* ContextCueCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D61A33E427D5731B00056242 /* ContextCueCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D61A33E827D5C4CD00056242 /* ContextCueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueView.swift; sourceTree = "<group>"; };
-		D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategorySegmentControl.swift; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Jibber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jibber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -1394,7 +1392,6 @@
 			isa = PBXGroup;
 			children = (
 				D6381D7227E1666100102FB4 /* EmojiCategory.swift */,
-				D61A33ED27D695F500056242 /* EmojiCategorySegmentControl.swift */,
 				D61A33CA27D4F25F00056242 /* EmojiCell.swift */,
 				D61A33CE27D4F28800056242 /* EmojiCollectionView.swift */,
 				D61A33CC27D4F27000056242 /* EmojiCollectionViewDataSource.swift */,
@@ -2860,7 +2857,6 @@
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D60CA47827EE299A00F0871A /* EmojiPickerViewController.swift in Sources */,
 				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
-				D61A33EE27D695F500056242 /* EmojiCategorySegmentControl.swift in Sources */,
 				D62D16322736F60400C542CE /* ToastErrorView.swift in Sources */,
 				D6E974362752C47F00D95F08 /* ReactionType.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,

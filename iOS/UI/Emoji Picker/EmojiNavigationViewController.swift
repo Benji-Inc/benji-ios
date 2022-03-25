@@ -28,7 +28,7 @@ class EmojiNavigationViewController: NavigationController {
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium(), .large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
                 
         self.setViewControllers([self.emojiVC], animated: false)
