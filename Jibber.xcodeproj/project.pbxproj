@@ -115,6 +115,8 @@
 		D60CA47827EE299A00F0871A /* EmojiPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47727EE299A00F0871A /* EmojiPickerViewController.swift */; };
 		D60CA47A27EE2C6500F0871A /* EmojiNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47927EE2C6500F0871A /* EmojiNavigationViewController.swift */; };
 		D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */; };
+		D60CA47F27EE74AD00F0871A /* ExpressionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */; };
+		D60CA48127EE74FC00F0871A /* ExpressionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA48027EE74FC00F0871A /* ExpressionViewController.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
@@ -707,7 +709,7 @@
 		D6FA27422767A67300315528 /* Localization in Resources */ = {isa = PBXBuildFile; fileRef = D6FA273C2767A67300315528 /* Localization */; };
 		D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622123F067A300048C4A /* AnimationDuration.swift */; };
 		D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622323F06AEF00048C4A /* AnimationCycle.swift */; };
-		D6FE05222767B2BC00137EEA /* old_EmotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FE05212767B2BC00137EEA /* old_EmotionView.swift */; };
+		D6FE05222767B2BC00137EEA /* ExpressionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FE05212767B2BC00137EEA /* ExpressionView.swift */; };
 		D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF02C257EB71700F9789B /* Button+Extensions.swift */; };
 		D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */; };
 		E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E2F7DB90EF2AB2CB1624D0 /* Pods_Jibber.framework */; };
@@ -867,6 +869,8 @@
 		D60CA47727EE299A00F0871A /* EmojiPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerViewController.swift; sourceTree = "<group>"; };
 		D60CA47927EE2C6500F0871A /* EmojiNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiNavigationViewController.swift; sourceTree = "<group>"; };
 		D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmojiPickerViewController+Search.swift"; sourceTree = "<group>"; };
+		D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCoordinator.swift; sourceTree = "<group>"; };
+		D60CA48027EE74FC00F0871A /* ExpressionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionViewController.swift; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
 		D6129F9D27AB21720058811C /* UpsellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsellContentView.swift; sourceTree = "<group>"; };
 		D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestmentUpsellCell.swift; sourceTree = "<group>"; };
@@ -1200,7 +1204,7 @@
 		D6FA273C2767A67300315528 /* Localization */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Localization; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
 		D6FA622323F06AEF00048C4A /* AnimationCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationCycle.swift; sourceTree = "<group>"; };
-		D6FE05212767B2BC00137EEA /* old_EmotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_EmotionView.swift; sourceTree = "<group>"; };
+		D6FE05212767B2BC00137EEA /* ExpressionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionView.swift; sourceTree = "<group>"; };
 		D6FEF02C257EB71700F9789B /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extensions.swift"; sourceTree = "<group>"; };
 		F3CB2AFC202AF9758DB4EBDE /* Pods-Intents Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Intents Extension/Pods-Intents Extension.release.xcconfig"; sourceTree = "<group>"; };
@@ -1401,6 +1405,15 @@
 				D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */,
 			);
 			path = "Emoji Picker";
+			sourceTree = "<group>";
+		};
+		D60CA47D27EE747D00F0871A /* Expressions */ = {
+			isa = PBXGroup;
+			children = (
+				D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */,
+				D60CA48027EE74FC00F0871A /* ExpressionViewController.swift */,
+			);
+			path = Expressions;
 			sourceTree = "<group>";
 		};
 		D6129F9F27AB23650058811C /* Upsell */ = {
@@ -1736,6 +1749,7 @@
 		D6432BF122D8282E0016001A /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				D60CA47D27EE747D00F0871A /* Expressions */,
 				D637651627E9295100CCDA7F /* Conversation Detail */,
 				D646D35E27E504D70077D20B /* Attachments */,
 				D635F0A927136C2600A02D17 /* Cells */,
@@ -2215,7 +2229,7 @@
 				8060C85F27BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift */,
 				D6C20127276CFDAC0085B187 /* MessageDetailView.swift */,
 				D6CC148E276C1323005F617F /* MessageStatusView.swift */,
-				D6FE05212767B2BC00137EEA /* old_EmotionView.swift */,
+				D6FE05212767B2BC00137EEA /* ExpressionView.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
@@ -3030,6 +3044,7 @@
 				D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */,
 				801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
+				D60CA47F27EE74AD00F0871A /* ExpressionCoordinator.swift in Sources */,
 				D6DEC40427A22F660072D9D0 /* CircleCollectionViewDataSource.swift in Sources */,
 				802EDDAB27ECD496005ECA9C /* String+DataTypes.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
@@ -3051,6 +3066,7 @@
 				D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,
 				D68B723327D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
+				D60CA48127EE74FC00F0871A /* ExpressionViewController.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
@@ -3074,7 +3090,7 @@
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
 				D61592E024FC195D00B63412 /* InputTextView.swift in Sources */,
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
-				D6FE05222767B2BC00137EEA /* old_EmotionView.swift in Sources */,
+				D6FE05222767B2BC00137EEA /* ExpressionView.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
 				D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */,
 				D646D37627E579310077D20B /* AddMediaView.swift in Sources */,

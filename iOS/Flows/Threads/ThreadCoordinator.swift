@@ -32,15 +32,7 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId> {
         return self.threadVC
     }
     
-    override func start() {
-        super.start()
-        
-        self.threadVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
-            self.presentProfile(for: User.current()!)
-        }
-    }
-    
-    func presentProfile(for person: PersonType) {
+    override func presentProfile(for person: PersonType) {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             self.finishFlow(with: result)

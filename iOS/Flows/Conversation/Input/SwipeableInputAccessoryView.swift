@@ -32,7 +32,7 @@ class SwipeableInputAccessoryView: BaseView {
 
     /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
-    let emotionView = old_EmotionView()
+    let expressionView = ExpressionView()
     let deliveryTypeView = DeliveryTypeView()
 
     // MARK: - Layout/Animation Properties
@@ -72,9 +72,9 @@ class SwipeableInputAccessoryView: BaseView {
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
 
-        self.inputTypeContainer.addSubview(self.emotionView)
-        self.emotionView.alpha = 0
-        self.emotionView.configure(for: nil)
+        self.inputTypeContainer.addSubview(self.expressionView)
+        self.expressionView.alpha = 0
+        self.expressionView.configure(for: nil)
         
         self.inputTypeContainer.addSubview(self.deliveryTypeView)
         self.deliveryTypeView.alpha = 0
@@ -92,7 +92,7 @@ class SwipeableInputAccessoryView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.emotionView.pin(.left)
+        self.expressionView.pin(.left)
         self.deliveryTypeView.pin(.right)
     }
 
@@ -170,7 +170,7 @@ class SwipeableInputAccessoryView: BaseView {
 
     func setShowMessageDetailOptions(shouldShowDetail: Bool, showAvatar: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.emotionView.alpha = shouldShowDetail ? 1.0 : 0.0
+            self.expressionView.alpha = shouldShowDetail ? 1.0 : 0.0
             self.deliveryTypeView.alpha = shouldShowDetail ? 1.0 : 0.0
             self.avatarView.alpha = showAvatar ? 1.0 : 0.0
             self.avatarHeightConstraint.constant = showAvatar ? 44 : 0

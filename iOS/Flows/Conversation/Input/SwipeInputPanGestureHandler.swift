@@ -86,7 +86,7 @@ class SwipeInputPanGestureHandler {
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputView.deliveryTypeView.alpha = 0.0
-            self.inputView.emotionView.alpha = 0.0
+            self.inputView.expressionView.alpha = 0.0
         }
         
         self.animatePreviewScale(shouldScale: true)
@@ -240,7 +240,7 @@ class SwipeInputPanGestureHandler {
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputView.deliveryTypeView.alpha = 1.0
-            self.inputView.emotionView.alpha = 1.0
+            self.inputView.expressionView.alpha = 1.0
         }
     }
 }

@@ -25,9 +25,6 @@ protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
     /// The accessory view finished its swipe interaction.
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  didFinishSwipeSendingSendable didSend: Bool)
-
-    /// The avatar view in the accessory was tapped.
-    func swipeableInputAccessoryDidTapAvatar(_ controller: SwipeableInputAccessoryViewController)
 }
 
 class SwipeableInputAccessoryViewController: UIInputViewController {
@@ -83,18 +80,14 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.swipeInputView.emotionView.didSelectEmotion = { [unowned self] emotion in
-            AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
-            self.currentEmotion = emotion
-        }
+//        self.swipeInputView.emotionView.didSelectEmotion = { [unowned self] emotion in
+//            AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
+//            self.currentEmotion = emotion
+//        }
 
         self.swipeInputView.deliveryTypeView.didSelectContext = { [unowned self] context in
             AnalyticsManager.shared.trackEvent(type: .deliveryTypeSelected, properties: ["value": context.rawValue])
             self.currentContext = context
-        }
-
-        self.swipeInputView.avatarView.didSelect { [unowned self] in
-            self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
         }
 
         self.setupGestures()
@@ -103,7 +96,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     
     func resetEmotion() {
         self.currentEmotion = nil
-        self.swipeInputView.emotionView.configure(for: nil)
+        self.swipeInputView.expressionView.configure(for: nil)
     }
 
     func resetDeliveryType() {

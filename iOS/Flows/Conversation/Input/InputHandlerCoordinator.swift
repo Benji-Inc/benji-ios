@@ -51,10 +51,24 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     override func start() {
         super.start()
         
+        self.inputHandlerViewController.swipeableVC.swipeInputView.expressionView.didSelect { [unowned self] in
+            self.presentExpressions()
+        }
+        
         self.inputHandlerViewController.swipeableVC.swipeInputView.addView.didSelect { [unowned self] in
             self.presentAttachments()
         }
+        
+        self.inputHandlerViewController.swipeableVC.swipeInputView.avatarView.didSelect { [unowned self] in
+            self.presentProfile(for: User.current()!)
+        }
     }
+    
+    func presentExpressions() {
+        
+    }
+    
+    func presentProfile(for person: PersonType) {}
     
     func presentAttachments() {
         let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)

@@ -34,8 +34,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     unowned let collectionView: MessageSendingCollectionViewType
     let isConversationList: Bool
     
-    var didTapAvatar: CompletionOptional = nil
-
     private var contentContainer: UIView? {
         return self.collectionView.superview
     }
@@ -160,9 +158,5 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
 //                return .newConversation
 //            }
 //        }
-    }
-    
-    func swipeableInputAccessoryDidTapAvatar(_ controller: SwipeableInputAccessoryViewController) {
-        self.didTapAvatar?()
     }
 }
