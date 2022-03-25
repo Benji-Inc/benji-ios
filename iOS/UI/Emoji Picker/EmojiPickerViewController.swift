@@ -13,17 +13,8 @@ import Localization
 class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectionViewDataSource.SectionType,
                                        EmojiCollectionViewDataSource.ItemType,
                                        EmojiCollectionViewDataSource> {
-        
-//    private let segmentControl = EmojiCategorySegmentControl()
-    
+            
     @Published var selectedEmojis: [Emoji] = []
-    
-//    private let segmentGradientView = GradientView(with: [ThemeColor.B0.color.cgColor,
-//                                                         ThemeColor.B0.color.cgColor,
-//                                                         ThemeColor.B0.color.cgColor,
-//                                                         ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-//                                                  startPoint: .topCenter,
-//                                                  endPoint: .bottomCenter)
     
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
@@ -43,13 +34,6 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
         self.view.set(backgroundColor: .B0)
                         
         self.view.addSubview(self.bottomGradientView)
-        
-       // self.view.addSubview(self.segmentControl)
-       // self.view.insertSubview(self.segmentGradientView, belowSubview: self.segmentControl)
-        
-//        self.segmentControl.didSelectCategory = { [unowned self] category in
-//            self.loadEmojis(for: category)
-//        }
         
         self.collectionView.allowsMultipleSelection = true
         
