@@ -14,16 +14,16 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
                                        EmojiCollectionViewDataSource.ItemType,
                                        EmojiCollectionViewDataSource> {
         
-    private let segmentControl = EmojiCategorySegmentControl()
+//    private let segmentControl = EmojiCategorySegmentControl()
     
     @Published var selectedEmojis: [Emoji] = []
     
-    private let segmentGradientView = GradientView(with: [ThemeColor.B0.color.cgColor,
-                                                         ThemeColor.B0.color.cgColor,
-                                                         ThemeColor.B0.color.cgColor,
-                                                         ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .topCenter,
-                                                  endPoint: .bottomCenter)
+//    private let segmentGradientView = GradientView(with: [ThemeColor.B0.color.cgColor,
+//                                                         ThemeColor.B0.color.cgColor,
+//                                                         ThemeColor.B0.color.cgColor,
+//                                                         ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+//                                                  startPoint: .topCenter,
+//                                                  endPoint: .bottomCenter)
     
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
@@ -44,12 +44,12 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
                         
         self.view.addSubview(self.bottomGradientView)
         
-        self.view.addSubview(self.segmentControl)
-        self.view.insertSubview(self.segmentGradientView, belowSubview: self.segmentControl)
+       // self.view.addSubview(self.segmentControl)
+       // self.view.insertSubview(self.segmentGradientView, belowSubview: self.segmentControl)
         
-        self.segmentControl.didSelectCategory = { [unowned self] category in
-            self.loadEmojis(for: category)
-        }
+//        self.segmentControl.didSelectCategory = { [unowned self] category in
+//            self.loadEmojis(for: category)
+//        }
         
         self.collectionView.allowsMultipleSelection = true
         
@@ -66,6 +66,11 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
         rightItem.tintColor = ThemeColor.D1.color
         let search = UISearchController(searchResultsController: nil)
         search.searchBar.delegate = self
+        search.searchBar.scopeButtonTitles = EmojiCategory.allCases.map({ category in
+            return category.scopeTitle
+        })
+        search.searchBar.selectedScopeButtonIndex = 0
+        search.searchBar.showsScopeBar = true
         search.searchBar.tintColor = ThemeColor.D1.color
         self.navigationItem.searchController = search
             
@@ -75,7 +80,7 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.segmentControl.selectedSegmentIndex = 0
+//        self.segmentControl.selectedSegmentIndex = 0
         self.loadEmojis(for: .smileysAndPeople)
         
         self.$selectedEmojis.mainSink { [unowned self] items in
@@ -86,18 +91,18 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.segmentControl.sizeToFit()
-        self.segmentControl.pinToSafeAreaTop()
-        
-        let segmentWidth = (self.view.width - Theme.ContentOffset.standard.value.doubled) * 0.125
-        for i in 0...self.segmentControl.numberOfSegments - 1 {
-            self.segmentControl.setWidth(segmentWidth, forSegmentAt: i)
-        }
-        self.segmentControl.pin(.left, offset: .standard)
-        
-        self.segmentGradientView.expandToSuperviewWidth()
-        self.segmentGradientView.pin(.top)
-        self.segmentGradientView.height = self.segmentControl.bottom + Theme.ContentOffset.standard.value
+//        self.segmentControl.sizeToFit()
+//        self.segmentControl.pinToSafeAreaTop()
+//
+//        let segmentWidth = (self.view.width - Theme.ContentOffset.standard.value.doubled) * 0.125
+//        for i in 0...self.segmentControl.numberOfSegments - 1 {
+//            self.segmentControl.setWidth(segmentWidth, forSegmentAt: i)
+//        }
+//        self.segmentControl.pin(.left, offset: .standard)
+//
+//        self.segmentGradientView.expandToSuperviewWidth()
+//        self.segmentGradientView.pin(.top)
+//        self.segmentGradientView.height = self.segmentControl.bottom + Theme.ContentOffset.standard.value
         
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
@@ -135,7 +140,7 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
     /// The currently running task that is loading conversations.
     private var loadEmojisTask: Task<Void, Never>?
     
-    private func loadEmojis(for category: EmojiCategory) {
+    func loadEmojis(for category: EmojiCategory) {
         self.loadEmojisTask?.cancel()
         
         self.loadEmojisTask = Task { [weak self] in

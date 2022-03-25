@@ -1411,8 +1411,8 @@
 				D61A33CE27D4F28800056242 /* EmojiCollectionView.swift */,
 				D61A33CC27D4F27000056242 /* EmojiCollectionViewDataSource.swift */,
 				D61A33D227D4F5C200056242 /* EmojiCollectionViewLayout.swift */,
-				D60CA47727EE299A00F0871A /* EmojiPickerViewController.swift */,
 				D60CA47927EE2C6500F0871A /* EmojiNavigationViewController.swift */,
+				D60CA47727EE299A00F0871A /* EmojiPickerViewController.swift */,
 				D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */,
 			);
 			path = "Emoji Picker";

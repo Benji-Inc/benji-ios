@@ -14,7 +14,17 @@ extension EmojiPickerViewController: UISearchBarDelegate {
         self.performQuery(with: searchText)
     }
     
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        guard let category = EmojiCategory.init(rawValue: selectedScope) else { return }
+        self.loadEmojis(for: category)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsScope(false, animated: true)
+    }
+    
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsScope(true, animated: true)
       //  var snapshot = self.dataSource.snapshot()
 //        let items: [PeopleCollectionViewDataSource.ItemType] = self.allPeople.sorted().map { person in
 //            var copy = person

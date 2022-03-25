@@ -19,8 +19,8 @@ enum EmojiCategory: Int, CaseIterable {
     case smileysAndPeople
     case animalsAndNature
     case foodAndDrink
-    case activity
     case travelAndPlaces
+    case activity
     case objects
     case symbols
     case flags
@@ -29,24 +29,24 @@ enum EmojiCategory: Int, CaseIterable {
         return self.getEmojis()
     }
     
-    var image: UIImage? {
+    var scopeTitle: String {
         switch self {
         case .smileysAndPeople:
-            return UIImage(systemName: "face.smiling")
+            return "😀"
         case .animalsAndNature:
-            return UIImage(systemName: "hare")
+            return "🐻‍❄️"
         case .travelAndPlaces:
-            return UIImage(systemName: "airplane")
+            return "✈️"
         case .activity:
-            return UIImage(systemName: "globe.americas")
+            return "⚾️"
         case .symbols:
-            return UIImage(systemName: "asterisk")
+            return "❗️"
         case .flags:
-            return UIImage(systemName: "flag")
+            return "🏳️"
         case .foodAndDrink:
-            return UIImage(systemName: "cup.and.saucer")
+            return "☕️"
         case .objects:
-            return UIImage(systemName: "book")
+            return "💡"
         }
     }
     

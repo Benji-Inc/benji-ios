@@ -16,12 +16,12 @@ class EmojiCategorySegmentControl: UISegmentedControl {
         
         super.init(frame: .zero)
         
-        EmojiCategory.allCases.forEach { category in
-            let action = UIAction(image: category.image) { _ in
-                self.didSelectCategory?(category)
-            }
-            self.insertSegment(action: action, at: category.rawValue, animated: false)
-        }
+//        EmojiCategory.allCases.forEach { category in
+//            let action = UIAction(image: category.image) { _ in
+//                self.didSelectCategory?(category)
+//            }
+//            self.insertSegment(action: action, at: category.rawValue, animated: false)
+//        }
 
         self.selectedSegmentTintColor = ThemeColor.B5.color.withAlphaComponent(0.1)
     }
