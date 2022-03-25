@@ -15,10 +15,10 @@ class ContextCueView: BaseView {
         case small
     }
     
-    private let label = ThemeLabel(font: .systemSmall)
+    private let label = ThemeLabel(font: .small)
     var currentSize: Size = .small {
         didSet {
-            self.label.setFont(self.currentSize == .small ? .systemSmall : .system)
+            self.label.setFont(self.currentSize == .small ? .small : .regular)
             self.layoutNow()
         }
     }

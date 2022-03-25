@@ -13,8 +13,8 @@ class EmojiCollectionView: CollectionView {
     init() {
         super.init(layout: EmojiCollectionViewLayout())
         self.allowsMultipleSelection = false
-        let padding = Theme.ContentOffset.xtraLong.value
-        let topOffset = padding.doubled 
+        let padding = Theme.ContentOffset.standard.value
+        let topOffset = padding
         self.contentInset = UIEdgeInsets(top: topOffset,
                                          left: 0,
                                          bottom: 100,

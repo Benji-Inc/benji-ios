@@ -34,12 +34,13 @@ class EmojiCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(fraction))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
+                let sectionInset = Theme.ContentOffset.long.value
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: inset,
+                                                                leading: sectionInset,
                                                                 bottom: 0,
-                                                                trailing: inset)
+                                                                trailing: sectionInset)
                 return section
             }
 

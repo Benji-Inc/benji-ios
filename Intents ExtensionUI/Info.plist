@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>RELEASE_TYPE</key>
-    <string>${RELEASE_TYPE}</string>
+	<key>RELEASE_TYPE</key>
+	<string>${RELEASE_TYPE}</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>
@@ -19,9 +19,6 @@
 		<string>com.apple.intents-ui-service</string>
 	</dict>
 	<key>UIAppFonts</key>
-	<array>
-		<string>SF-Pro-Text-Regular.otf</string>
-		<string>SF-Pro-Text-Bold.otf</string>
-	</array>
+	<array/>
 </dict>
 </plist>
