@@ -23,7 +23,6 @@ enum FontType {
     case smallBold
     case xtraSmall
     case system
-    case systemSmall
     case systemBold
     case contextCues
 
@@ -32,14 +31,14 @@ enum FontType {
         return UIFont.systemFont(ofSize: self.size)
     #else
         switch self {
-        case .system, .systemSmall, .contextCues:
+        case .system, .contextCues:
             return UIFont.systemFont(ofSize: self.size)
         case .systemBold:
             return UIFont.systemFont(ofSize: self.size, weight: .bold)
         case .display, .medium, .regular, .small, .xtraSmall:
-            return UIFont(name: regularFontName, size: self.size)!
+            return UIFont.systemFont(ofSize: self.size)
         case .mediumBold, .regularBold, .smallBold:
-            return UIFont(name: boldFontName, size: self.size)!
+            return UIFont.systemFont(ofSize: self.size, weight: .bold)
         }
     #endif
     }
@@ -54,7 +53,7 @@ enum FontType {
             return 20
         case .regular, .regularBold:
             return 16
-        case .small, .smallBold, .systemSmall:
+        case .small, .smallBold:
             return 12
         case .xtraSmall:
             return 8

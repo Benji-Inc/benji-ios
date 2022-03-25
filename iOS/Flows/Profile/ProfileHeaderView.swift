@@ -106,7 +106,7 @@ class ProfileHeaderView: BaseView {
         
         self.memberLabel.setSize(withWidth: self.width)
         self.memberLabel.match(.left, to: .right, of: self.nameLabel, offset: .short)
-        self.memberLabel.bottom = self.nameLabel.bottom
+        self.memberLabel.bottom = self.nameLabel.bottom - 2
         
         self.timeLabel.setSize(withWidth: self.width)
         self.timeLabel.match(.left, to: .left, of: self.nameLabel)
