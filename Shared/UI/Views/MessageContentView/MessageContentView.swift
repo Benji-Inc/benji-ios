@@ -182,18 +182,6 @@ class MessageContentView: BaseView {
     }
 }
 
-extension MessageContentView: UITextViewDelegate {
-
-    func textView(_ textView: UITextView,
-                  shouldInteractWith URL: URL,
-                  in characterRange: NSRange,
-                  interaction: UITextItemInteraction) -> Bool {
-
-
-        return true
-    }
-}
-
 extension MessageTextView {
 
     func getSize(width: CGFloat, layout: MessageContentView.Layout = .expanded) -> CGSize {
