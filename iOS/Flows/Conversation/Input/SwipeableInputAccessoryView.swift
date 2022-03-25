@@ -25,7 +25,6 @@ class SwipeableInputAccessoryView: BaseView {
     
    // private let animationView = AnimationView.with(animation: .maxToMin)
     
-    @IBOutlet var collapseButton: UIButton!
     /// An invisible button to handle taps and pan gestures.
     @IBOutlet var gestureButton: UIButton!
     @IBOutlet var countView: CharacterCountView!
@@ -120,7 +119,6 @@ class SwipeableInputAccessoryView: BaseView {
             self.textView.textAlignment = .left
 
             self.gestureButton.isVisible = true
-            self.collapseButton.isVisible = false
             self.doneButton.isVisible = false
 
             var proposedHeight = SwipeableInputAccessoryView.inputContainerCollapsedHeight
@@ -150,7 +148,6 @@ class SwipeableInputAccessoryView: BaseView {
 
             // Disable swipe gestures when expanded
             self.gestureButton.isVisible = false
-            self.collapseButton.isVisible = true
             self.doneButton.isVisible = true
 
             newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight

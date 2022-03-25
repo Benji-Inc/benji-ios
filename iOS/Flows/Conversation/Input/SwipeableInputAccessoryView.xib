@@ -45,14 +45,6 @@
                                         <constraint firstAttribute="width" constant="72" id="IXg-j4-o0P"/>
                                     </constraints>
                                 </view>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-jA-Yqp">
-                                    <rect key="frame" x="0.0" y="18" width="305" height="44"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="44" id="Cq9-5y-qrp"/>
-                                    </constraints>
-                                    <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain"/>
-                                </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
                                     <rect key="frame" x="0.0" y="0.0" width="305" height="76"/>
                                     <state key="normal" title="Button"/>
@@ -72,10 +64,7 @@
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" constant="52" id="3E0-AT-Kum"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
                                 <constraint firstAttribute="height" constant="76" id="6vC-6Q-TU9"/>
-                                <constraint firstItem="wxD-jA-Yqp" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="7Qi-P2-Vbz"/>
-                                <constraint firstItem="wxD-jA-Yqp" firstAttribute="centerX" secondItem="VuQ-5S-h7F" secondAttribute="centerX" id="E5T-lW-ZLU"/>
                                 <constraint firstAttribute="bottom" secondItem="MFc-dt-fdD" secondAttribute="bottom" constant="24" id="HDZ-pY-p0J"/>
-                                <constraint firstAttribute="bottom" secondItem="wxD-jA-Yqp" secondAttribute="bottom" constant="14" id="IYW-9o-rq4"/>
                                 <constraint firstAttribute="bottom" secondItem="sz8-yd-98E" secondAttribute="bottom" constant="24" id="N2E-UN-TiW"/>
                                 <constraint firstItem="MFc-dt-fdD" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" constant="12" id="ZNb-0N-B5x"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" constant="4" id="fhu-x1-1GA"/>
@@ -86,7 +75,6 @@
                                 <constraint firstAttribute="bottom" secondItem="b2H-ok-H5y" secondAttribute="bottom" id="o6A-2N-qrt"/>
                                 <constraint firstAttribute="trailing" secondItem="sz8-yd-98E" secondAttribute="trailing" constant="12" id="o7Y-WN-Kqb"/>
                                 <constraint firstAttribute="trailing" secondItem="b2H-ok-H5y" secondAttribute="trailing" id="tFu-L7-c6N"/>
-                                <constraint firstAttribute="trailing" secondItem="wxD-jA-Yqp" secondAttribute="trailing" id="ybi-NR-WiI"/>
                             </constraints>
                             <variation key="default">
                                 <mask key="constraints">
@@ -149,7 +137,6 @@
                 <outlet property="addViewWidthContstrain" destination="fIY-Wg-9pF" id="Mnx-Ik-CeA"/>
                 <outlet property="avatarHeightConstraint" destination="cuN-Y3-dkq" id="Yoz-hx-5eh"/>
                 <outlet property="avatarView" destination="sdi-8g-wyi" id="1zf-uD-U28"/>
-                <outlet property="collapseButton" destination="wxD-jA-Yqp" id="IRt-FG-tCk"/>
                 <outlet property="countView" destination="TRK-Tt-Z8M" id="Eby-pz-IPO"/>
                 <outlet property="doneButton" destination="sz8-yd-98E" id="4rY-Np-Jb7"/>
                 <outlet property="gestureButton" destination="b2H-ok-H5y" id="B2D-c9-aad"/>

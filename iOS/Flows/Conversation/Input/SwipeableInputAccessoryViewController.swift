@@ -135,10 +135,10 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
         self.swipeInputView.gestureButton.addGestureRecognizer(self.inputFieldTapRecognizer)
 
-        self.swipeInputView.collapseButton.didSelect { [unowned self] in
+        self.swipeInputView.doneButton.didSelect { [unowned self] in
             self.inputState = .collapsed
         }
-
+        
         self.swipeInputView.addGestureRecognizer(self.backgroundTapRecognizer)
     }
 
