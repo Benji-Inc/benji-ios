@@ -18,7 +18,7 @@ class ContextCueView: BaseView {
     private let label = ThemeLabel(font: .small)
     var currentSize: Size = .small {
         didSet {
-            self.label.setFont(self.currentSize == .small ? .small : .system)
+            self.label.setFont(self.currentSize == .small ? .small : .regular)
             self.layoutNow()
         }
     }

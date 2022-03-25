@@ -22,7 +22,6 @@ enum FontType {
     case small
     case smallBold
     case xtraSmall
-    case system
     case systemBold
     case contextCues
 
@@ -31,7 +30,7 @@ enum FontType {
         return UIFont.systemFont(ofSize: self.size)
     #else
         switch self {
-        case .system, .contextCues:
+        case .contextCues:
             return UIFont.systemFont(ofSize: self.size)
         case .systemBold:
             return UIFont.systemFont(ofSize: self.size, weight: .bold)
@@ -57,14 +56,14 @@ enum FontType {
             return 12
         case .xtraSmall:
             return 8
-        case .system, .systemBold:
+        case .systemBold:
             return 16
         }
     }
 
     var kern: CGFloat {
         switch self {
-        case .small, .xtraSmall, .system, .systemBold:
+        case .small, .xtraSmall, .systemBold:
             return 0
         case .contextCues:
             return 2

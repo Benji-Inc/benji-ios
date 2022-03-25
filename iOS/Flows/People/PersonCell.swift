@@ -16,7 +16,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     
     typealias ItemType = Person
 
-    let titleLabel = ThemeLabel(font: .system)
+    let titleLabel = ThemeLabel(font: .regular)
     let buttonTitleLabel = ThemeLabel(font: .systemBold, textColor: .D1)
     let lineView = BaseView()
 

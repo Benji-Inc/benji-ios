@@ -10,7 +10,7 @@ import Foundation
 
 class PeopleFooterView: UICollectionReusableView {
     
-    let label = ThemeLabel(font: .system)
+    let label = ThemeLabel(font: .regular)
     let button = ThemeButton()
     
     var didSelectButton: CompletionOptional = nil
