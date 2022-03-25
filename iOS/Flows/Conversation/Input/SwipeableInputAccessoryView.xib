@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -27,7 +27,7 @@
                             <rect key="frame" x="16" y="8" width="305" height="76"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="52" y="7.5" width="253" height="49.5"/>
+                                    <rect key="frame" x="52" y="15.5" width="249" height="33"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="DYI-6o-w2X"/>
@@ -37,12 +37,12 @@
                                     <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="14"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz8-yd-98E">
-                                    <rect key="frame" x="273" y="32" width="24" height="24"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz8-yd-98E" customClass="ThemeButton" customModule="Jibber" customModuleProvider="target">
+                                    <rect key="frame" x="221" y="12" width="72" height="40"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="24" id="8f3-v1-aia"/>
-                                        <constraint firstAttribute="width" constant="24" id="IXg-j4-o0P"/>
+                                        <constraint firstAttribute="height" constant="40" id="8f3-v1-aia"/>
+                                        <constraint firstAttribute="width" constant="72" id="IXg-j4-o0P"/>
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wxD-jA-Yqp">
@@ -76,15 +76,15 @@
                                 <constraint firstItem="wxD-jA-Yqp" firstAttribute="centerX" secondItem="VuQ-5S-h7F" secondAttribute="centerX" id="E5T-lW-ZLU"/>
                                 <constraint firstAttribute="bottom" secondItem="MFc-dt-fdD" secondAttribute="bottom" constant="24" id="HDZ-pY-p0J"/>
                                 <constraint firstAttribute="bottom" secondItem="wxD-jA-Yqp" secondAttribute="bottom" constant="14" id="IYW-9o-rq4"/>
-                                <constraint firstAttribute="bottom" secondItem="sz8-yd-98E" secondAttribute="bottom" constant="20" id="N2E-UN-TiW"/>
+                                <constraint firstAttribute="bottom" secondItem="sz8-yd-98E" secondAttribute="bottom" constant="24" id="N2E-UN-TiW"/>
                                 <constraint firstItem="MFc-dt-fdD" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" constant="12" id="ZNb-0N-B5x"/>
-                                <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="fhu-x1-1GA"/>
+                                <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" constant="4" id="fhu-x1-1GA"/>
                                 <constraint firstAttribute="bottom" secondItem="Ads-9e-WJh" secondAttribute="bottom" constant="20" id="g4Y-rU-cRa"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="hq5-LO-hrU"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="jJa-qV-wJv"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="centerY" secondItem="VuQ-5S-h7F" secondAttribute="centerY" constant="-6" id="jrV-3k-sUT"/>
                                 <constraint firstAttribute="bottom" secondItem="b2H-ok-H5y" secondAttribute="bottom" id="o6A-2N-qrt"/>
-                                <constraint firstAttribute="trailing" secondItem="sz8-yd-98E" secondAttribute="trailing" constant="8" id="o7Y-WN-Kqb"/>
+                                <constraint firstAttribute="trailing" secondItem="sz8-yd-98E" secondAttribute="trailing" constant="12" id="o7Y-WN-Kqb"/>
                                 <constraint firstAttribute="trailing" secondItem="b2H-ok-H5y" secondAttribute="trailing" id="tFu-L7-c6N"/>
                                 <constraint firstAttribute="trailing" secondItem="wxD-jA-Yqp" secondAttribute="trailing" id="ybi-NR-WiI"/>
                             </constraints>
@@ -147,11 +147,11 @@
                 <outlet property="addView" destination="MFc-dt-fdD" id="Pm4-Sg-FFc"/>
                 <outlet property="addViewHeightContstrain" destination="Iff-SO-qMR" id="gLl-ra-BM4"/>
                 <outlet property="addViewWidthContstrain" destination="fIY-Wg-9pF" id="Mnx-Ik-CeA"/>
-                <outlet property="animationViewContainer" destination="sz8-yd-98E" id="PSU-J6-1el"/>
                 <outlet property="avatarHeightConstraint" destination="cuN-Y3-dkq" id="Yoz-hx-5eh"/>
                 <outlet property="avatarView" destination="sdi-8g-wyi" id="1zf-uD-U28"/>
                 <outlet property="collapseButton" destination="wxD-jA-Yqp" id="IRt-FG-tCk"/>
                 <outlet property="countView" destination="TRK-Tt-Z8M" id="Eby-pz-IPO"/>
+                <outlet property="doneButton" destination="sz8-yd-98E" id="4rY-Np-Jb7"/>
                 <outlet property="gestureButton" destination="b2H-ok-H5y" id="B2D-c9-aad"/>
                 <outlet property="inputContainerHeightConstraint" destination="6vC-6Q-TU9" id="GJI-zN-bhu"/>
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="waN-uG-qvj"/>

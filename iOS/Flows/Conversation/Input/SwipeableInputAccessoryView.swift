@@ -21,9 +21,9 @@ class SwipeableInputAccessoryView: BaseView {
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
     @IBOutlet var addView: AddMediaView!
-    @IBOutlet var animationViewContainer: UIView!
+    @IBOutlet var doneButton: ThemeButton!
     
-    private let animationView = AnimationView.with(animation: .maxToMin)
+   // private let animationView = AnimationView.with(animation: .maxToMin)
     
     @IBOutlet var collapseButton: UIButton!
     /// An invisible button to handle taps and pan gestures.
@@ -86,29 +86,22 @@ class SwipeableInputAccessoryView: BaseView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.animationViewContainer.addSubview(self.animationView)
-        self.animationView.loopMode = .playOnce
-        let keypath = AnimationKeypath(keys: ["**", "Color"])
-        let colorProvider = ColorValueProvider(ThemeColor.D6.color.lottieColorValue)
-        self.animationView.animationSpeed = 0.5
-
-        self.animationView.setValueProvider(colorProvider, keypath: keypath)
-        self.animationView.contentMode = .scaleAspectFit
+        self.doneButton.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
     }
+
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.emotionView.pin(.left)
         self.deliveryTypeView.pin(.right)
-        self.animationView.expandToSuperviewSize()
     }
 
     // MARK: - State Updates
 
     func updateLayout(for inputState: InputState) {
         let newInputHeight: CGFloat
-        var textViewLeadingValue: CGFloat = 0
+        var textViewLeadingValue: CGFloat = Theme.ContentOffset.short.value
         var newAddViewSize: CGFloat = 0
         
         switch inputState {
@@ -128,8 +121,7 @@ class SwipeableInputAccessoryView: BaseView {
 
             self.gestureButton.isVisible = true
             self.collapseButton.isVisible = false
-            self.animationView.isVisible = false
-            self.animationView.currentProgress = 0
+            self.doneButton.isVisible = false
 
             var proposedHeight = SwipeableInputAccessoryView.inputContainerCollapsedHeight
             if self.textView.numberOfLines > 2, let lineHeight = self.textView.font?.lineHeight {
@@ -159,11 +151,7 @@ class SwipeableInputAccessoryView: BaseView {
             // Disable swipe gestures when expanded
             self.gestureButton.isVisible = false
             self.collapseButton.isVisible = true
-            self.animationView.isVisible = true
-            Task.onMainActorAsync {
-                await Task.sleep(seconds: 0.5)
-                self.animationView.play(fromFrame: 20, toFrame: 30, loopMode: .playOnce, completion: nil)
-            }
+            self.doneButton.isVisible = true
 
             newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
