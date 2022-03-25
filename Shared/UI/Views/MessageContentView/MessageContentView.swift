@@ -126,16 +126,14 @@ class MessageContentView: BaseView {
             case .link(url: let url, _):
                 self.linkProvider?.cancel()
 
-                logDebug("loading \(url)")
-
                 let initialMetadata = LPLinkMetadata()
                 initialMetadata.originalURL = url
                 self.linkView.metadata = initialMetadata
 
                 self.linkProvider = LPMetadataProvider()
                 self.linkProvider?.startFetchingMetadata(for: url) { (metadata, error) in
-                    guard let metadata = metadata else { return }
                     Task.onMainActor {
+                        guard let metadata = metadata else { return }
                         self.linkView.metadata = metadata
                     }
                 }
