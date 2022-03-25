@@ -51,6 +51,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var scalingKeyPoints: [CGFloat] = [1, 0.84, 0.65, 0.4]
     /// The amount of vertical space between the tops of adjacent items.
     var spacingKeyPoints: [CGFloat] = [0, 8, 16, 20]
+    /// Top of the back most item on the stack
+    var topOfStackY: CGFloat = 0
 
     /// Key points used for the gradually alpha out items further back in the message stack.
     var alphaKeyPoints: [CGFloat] = [1, 1, 1, 0]
@@ -288,6 +290,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         centerPoint.y -= self.itemHeight.half
         centerPoint.y -= self.itemHeight.half - self.itemHeight.half * scale
         centerPoint.y -= yOffset
+        centerPoint.y += self.topOfStackY
         
         return centerPoint
     }

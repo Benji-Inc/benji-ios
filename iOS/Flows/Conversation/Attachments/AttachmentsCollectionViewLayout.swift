@@ -55,39 +55,44 @@ class AttachmentCollectionViewLayout: UICollectionViewCompositionalLayout {
                 return section
                 
             case .other:
-                
-                let inset = Theme.ContentOffset.short.value
+                let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(60))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: inset,
-                                                             leading: 0,
-                                                             bottom: inset,
-                                                             trailing: 0)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                             leading: sectionInset,
+                                                             bottom: 0,
+                                                             trailing: sectionInset)
                 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(60))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                              leading: 0,
+                                                              bottom: 0,
+                                                              trailing: 0)
                 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: screenPadding,
-                                                                bottom: 0,
-                                                                trailing: screenPadding)
+                section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset,
+                                                                leading: sectionInset,
+                                                                bottom: sectionInset,
+                                                                trailing: sectionInset)
                 
-                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(Theme.ContentOffset.xtraLong.value))
-                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-                headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                   leading: 0,
-                                                                   bottom: 0,
-                                                                   trailing: 0)
-                section.boundarySupplementaryItems = [headerItem]
+                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.kind)
+                let backgroundInset: CGFloat = Theme.ContentOffset.xtraLong.value
+                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: backgroundInset,
+                                                                       leading: backgroundInset,
+                                                                       bottom: backgroundInset,
+                                                                       trailing: backgroundInset)
+                section.decorationItems = [backgroundItem]
                 
                 return section
             }
             
         }, configuration: config)
+        
+        self.register(SectionBackgroundView.self, forDecorationViewOfKind: SectionBackgroundView.kind)
     }
     
     required init?(coder: NSCoder) {

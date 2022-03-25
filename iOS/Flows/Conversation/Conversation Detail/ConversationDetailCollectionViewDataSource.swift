@@ -20,22 +20,61 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         case options
     }
     
-    enum OptionType: Int {
+    enum OptionType: Int, OptionDisplayable {
+        
+        case add
         case hide
         case leave
         case delete
+        
+        var image: UIImage? {
+            switch self {
+            case .add:
+                return UIImage(systemName: "person.badge.plus")
+            case .hide:
+                return UIImage(systemName: "eye.slash")
+            case .leave:
+                return UIImage(systemName: "hand.wave")
+            case .delete:
+                return UIImage(systemName: "trash")
+            }
+        }
+        
+        var title: String {
+            switch self {
+            case .add:
+                return "Add People"
+            case .hide:
+                return "Hide Conversation"
+            case .leave:
+                return "Leave Conversation"
+            case .delete:
+                return "Delete Conversation"
+            }
+        }
+        
+        var color: ThemeColor {
+            switch self {
+            case .add:
+                return .T1
+            case .hide:
+                return .T1
+            case .leave:
+                return .T1
+            case .delete:
+                return .red
+            }
+        }
     }
 
     enum ItemType: Hashable {
         case member(Member)
-        case add(ChannelId)
         case info(ChannelId)
         case editTopic(ChannelId)
-        case detail(ChannelId, OptionType)
+        case detail(OptionType)
     }
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
-    private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
     private let infoConfig = ManageableCellRegistration<ConversationInfoCell>().provider
@@ -68,34 +107,12 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                                                                     item: member)
             cell.lineView.isHidden = shouldHideLine
             return cell
-        case .add(let cid):
-            return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
-                                                                for: indexPath,
-                                                                item: cid)
-        case .detail(let cid, let type):
+        case .detail(let type):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.detailConfig,
                                                                     for: indexPath,
-                                                                    item: cid)
-            switch type {
-            case .hide:
-                cell.imageView.image = UIImage(systemName: "eye.slash")
-                cell.label.setText("Hide Conversation")
-                cell.rightImageView.image = nil
-            case .leave:
-                cell.imageView.image = UIImage(systemName: "hand.wave")
-                cell.label.setText("Leave Conversation")
-                cell.rightImageView.image = nil
-                return cell
-            case .delete:
-                cell.imageView.image = UIImage(systemName: "trash")
-                cell.imageView.tintColor = ThemeColor.red.color
-                cell.label.setTextColor(.red)
-                cell.label.setText("Delete Conversation")
-                cell.rightImageView.image = nil
-            }
+                                                                    item: type)
             
             cell.lineView.isHidden = shouldHideLine
-
             return cell
         }
     }
