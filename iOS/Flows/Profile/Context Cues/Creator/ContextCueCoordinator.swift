@@ -11,6 +11,7 @@ import Foundation
 class ContextCueCoordinator: PresentableCoordinator<Void> {
     
     lazy var creatorVC = ContextCueCreatorViewController()
+    lazy var emojiNav = EmojiNavigationViewController(with: self.creatorVC)
     
     override init(router: Router, deepLink: DeepLinkable?) {
         super.init(router: router, deepLink: deepLink)
@@ -21,6 +22,6 @@ class ContextCueCoordinator: PresentableCoordinator<Void> {
     }
 
     override func toPresentable() -> DismissableVC {
-        return self.creatorVC
+        return self.emojiNav
     }
 }

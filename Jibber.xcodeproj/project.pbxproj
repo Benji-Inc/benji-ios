@@ -113,6 +113,8 @@
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
 		D60CA47427ED1C1800F0871A /* OptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47327ED1C1800F0871A /* OptionCell.swift */; };
 		D60CA47827EE299A00F0871A /* EmojiPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47727EE299A00F0871A /* EmojiPickerViewController.swift */; };
+		D60CA47A27EE2C6500F0871A /* EmojiNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47927EE2C6500F0871A /* EmojiNavigationViewController.swift */; };
+		D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
@@ -874,6 +876,8 @@
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
 		D60CA47327ED1C1800F0871A /* OptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCell.swift; sourceTree = "<group>"; };
 		D60CA47727EE299A00F0871A /* EmojiPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerViewController.swift; sourceTree = "<group>"; };
+		D60CA47927EE2C6500F0871A /* EmojiNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiNavigationViewController.swift; sourceTree = "<group>"; };
+		D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmojiPickerViewController+Search.swift"; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
 		D6129F9D27AB21720058811C /* UpsellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsellContentView.swift; sourceTree = "<group>"; };
 		D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestmentUpsellCell.swift; sourceTree = "<group>"; };
@@ -1408,6 +1412,8 @@
 				D61A33CC27D4F27000056242 /* EmojiCollectionViewDataSource.swift */,
 				D61A33D227D4F5C200056242 /* EmojiCollectionViewLayout.swift */,
 				D60CA47727EE299A00F0871A /* EmojiPickerViewController.swift */,
+				D60CA47927EE2C6500F0871A /* EmojiNavigationViewController.swift */,
+				D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */,
 			);
 			path = "Emoji Picker";
 			sourceTree = "<group>";
@@ -2970,6 +2976,7 @@
 				80F88BAE26F11F02006C7677 /* ConversationController+Extensions.swift in Sources */,
 				D6DEC40227A22F540072D9D0 /* CircleCell.swift in Sources */,
 				D646D36E27E53D750077D20B /* AttachmentOptionCell.swift in Sources */,
+				D60CA47A27EE2C6500F0871A /* EmojiNavigationViewController.swift in Sources */,
 				D6DEC3F327A1DEE60072D9D0 /* CircleAvatarView.swift in Sources */,
 				D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */,
 				D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */,
@@ -3097,6 +3104,7 @@
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
 				D6FE05222767B2BC00137EEA /* old_EmotionView.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
+				D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */,
 				D646D37627E579310077D20B /* AddMediaView.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
