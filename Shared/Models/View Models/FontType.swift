@@ -9,9 +9,6 @@
 import Foundation
 import UIKit
 
-private let boldFontName = "SFProText-Bold"
-private let regularFontName = "SFProText-Regular"
-
 enum FontType {
 
     case display
@@ -22,24 +19,15 @@ enum FontType {
     case small
     case smallBold
     case xtraSmall
-    case systemBold
     case contextCues
 
     var font: UIFont {
-    #if APPCLIP
-        return UIFont.systemFont(ofSize: self.size)
-    #else
         switch self {
-        case .contextCues:
-            return UIFont.systemFont(ofSize: self.size)
-        case .systemBold:
-            return UIFont.systemFont(ofSize: self.size, weight: .bold)
-        case .display, .medium, .regular, .small, .xtraSmall:
+        case .display, .medium, .regular, .small, .xtraSmall, .contextCues:
             return UIFont.systemFont(ofSize: self.size)
         case .mediumBold, .regularBold, .smallBold:
             return UIFont.systemFont(ofSize: self.size, weight: .bold)
         }
-    #endif
     }
 
     var size: CGFloat {
@@ -56,14 +44,12 @@ enum FontType {
             return 12
         case .xtraSmall:
             return 8
-        case .systemBold:
-            return 16
         }
     }
 
     var kern: CGFloat {
         switch self {
-        case .small, .xtraSmall, .systemBold:
+        case .small, .xtraSmall:
             return 0
         case .contextCues:
             return 2

@@ -17,7 +17,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Person
 
     let titleLabel = ThemeLabel(font: .regular)
-    let buttonTitleLabel = ThemeLabel(font: .systemBold, textColor: .D1)
+    let buttonTitleLabel = ThemeLabel(font: .regularBold, textColor: .D1)
     let lineView = BaseView()
 
     override func initializeSubviews() {
@@ -53,7 +53,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.setText(person.fullName)
         
         if let highlightText = highlightText {
-            let attributes: [NSAttributedString.Key : Any] = [.font: FontType.systemBold.font,
+            let attributes: [NSAttributedString.Key : Any] = [.font: FontType.regularBold.font,
                                                               .foregroundColor: ThemeColor.D6.color]
             self.titleLabel.add(attributes: attributes, to: highlightText)
         }
