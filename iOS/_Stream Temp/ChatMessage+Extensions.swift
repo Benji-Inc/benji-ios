@@ -88,29 +88,31 @@ extension Message: Messageable {
     }
 
     var kind: MessageKind {
-        if let key = self.attachmentCounts.keys.first {
-            switch key {
-            case AttachmentType.image:
-                if let streamAttachement = self.imageAttachments.first {
-                    let attachment = PhotoAttachment(url: streamAttachement.imageURL,
-                                                     previewUrl: streamAttachement.imagePreviewURL,
-                                                     _data: nil,
-                                                     info: nil)
-                    return .photo(photo: attachment, body: self.text)
-                }
-                return .text(self.text)
-            case AttachmentType.audio:
-                break
-            case AttachmentType.file:
-                break
-            case AttachmentType.giphy:
-                break
-            case AttachmentType.linkPreview:
-                break
-            default:
+        if let imageAttachment = self.imageAttachments.first {
+            let attachment = PhotoAttachment(url: imageAttachment.imageURL,
+                                             previewUrl: imageAttachment.imagePreviewURL,
+                                             _data: nil,
+                                             info: nil)
+            return .photo(photo: attachment, body: self.text)
+        } else if self.text.isSingleLink,
+                  self.linkAttachments.count == 1,
+                  let linkAttachment = self.linkAttachments.first {
+            
+            guard var urlComponents = URLComponents(url: linkAttachment.originalURL,
+                                                    resolvingAgainstBaseURL: false) else {
                 return .text(self.text)
             }
+
+            // Make sure the url has a scheme.
+            if urlComponents.scheme.isNil {
+                urlComponents.scheme = "https"
+            }
+
+            guard let url = urlComponents.url else { return .text(self.text) }
+
+            return .link(url: url, stringURL: self.text)
         }
+
         return .text(self.text)
     }
 

@@ -37,7 +37,8 @@ enum MessageKind {
     /// A contact message.
     case contact(ContactItem)
 
-    case link(URL)
+    /// A single url based link without any other content.
+    case link(url: URL, stringURL: String)
 
     var isSendable: Bool {
         switch self {
@@ -60,17 +61,10 @@ enum MessageKind {
             return body
         case .emoji(let emoji):
             return emoji
+        case .link(let url, let stringURL):
+            return stringURL
         default:
             return String()
-        }
-    }
-
-    var displayable: ImageDisplayable? {
-        switch self {
-        case .photo(photo: let photo, _):
-            return photo.image
-        default:
-            return nil
         }
     }
 }
@@ -94,13 +88,41 @@ extension MessageKind: Equatable {
             return lhsAudio == rhsAudio
         case (.contact(let lhsContact), .contact(let rhsContact)):
             return lhsContact == rhsContact
-        case (.link(let lhsLink), .link(let rhsLink)):
-            return lhsLink == rhsLink
+        case (.link(let lhsURL, let lhsStringURL), .link(let rhsURL, let rhsStringURL)):
+            return lhsURL == rhsURL && lhsStringURL == rhsStringURL
         default:
             return false
         }
     }
 }
+
+// MARK: - Convenience Variables
+
+extension MessageKind {
+
+    var hasText: Bool {
+        return !self.text.isEmpty
+    }
+
+    var isImage: Bool {
+        switch self {
+        case .photo:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var isLink: Bool {
+        switch self {
+        case .link:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 
 enum MediaType: String {
     case photo = "image/jpeg"

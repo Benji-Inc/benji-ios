@@ -123,7 +123,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     }
 
     func setupGestures() {
-                
         self.swipeInputView.addView.didSelectRemove = { [unowned self] in
             self.currentMessageKind = .text(self.swipeInputView.textView.text)
         }
@@ -231,8 +230,8 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             break
         case .contact(_):
             break
-        case .link(_):
-            break
+        case .link(_, _):
+            self.swipeInputView.addView.configure(with: nil)
         }
     }
 
@@ -253,8 +252,14 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     private func handleTextChange(_ text: String) {
         switch self.currentMessageKind {
-        case .text(_):
-            self.currentMessageKind = .text(text)
+        case .text, .link:
+            // If there's URL in the text, then this becomes a link message.
+            if text.isSingleLink, let url = text.getURLs().first {
+                self.currentMessageKind = .link(url: url, stringURL: text)
+            } else {
+                // No URL means we're just sending plain text.
+                self.currentMessageKind = .text(text)
+            }
         case .photo(photo: let photo, _):
             self.currentMessageKind = .photo(photo: photo, body: text)
         case .video(video: let video, _):

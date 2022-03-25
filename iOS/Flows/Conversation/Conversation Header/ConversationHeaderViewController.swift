@@ -48,7 +48,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                         
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
-            .mainSink { conversation in
+            .mainSink { [unowned self] conversation in
                 guard let convo = conversation else {
                     self.topicLabel.isVisible = false
                     self.membersLabel.isVisible = false
@@ -71,7 +71,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.jibImageView.squaredSize = 44
         self.jibImageView.pin(.right, offset: .custom(6))
-        self.jibImageView.pin(.top, offset: .custom(16))
+        self.jibImageView.centerOnY()
         
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()
