@@ -25,9 +25,6 @@ protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
     /// The accessory view finished its swipe interaction.
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  didFinishSwipeSendingSendable didSend: Bool)
-
-    /// The avatar view in the accessory was tapped.
-    func swipeableInputAccessoryDidTapAvatar(_ controller: SwipeableInputAccessoryViewController)
 }
 
 class SwipeableInputAccessoryViewController: UIInputViewController {
@@ -64,7 +61,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         }
     }
 
-    var currentEmotion: Emotion?
+    @Published var currentExpression: Emoji?
 
     var editableMessage: Messageable?
     @Published var currentMessageKind: MessageKind = .text(String())
@@ -83,27 +80,18 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.swipeInputView.emotionView.didSelectEmotion = { [unowned self] emotion in
-            AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
-            self.currentEmotion = emotion
-        }
-
         self.swipeInputView.deliveryTypeView.didSelectContext = { [unowned self] context in
             AnalyticsManager.shared.trackEvent(type: .deliveryTypeSelected, properties: ["value": context.rawValue])
             self.currentContext = context
-        }
-
-        self.swipeInputView.avatarView.didSelect { [unowned self] in
-            self.delegate?.swipeableInputAccessoryDidTapAvatar(self)
         }
 
         self.setupGestures()
         self.setupHandlers()
     }
     
-    func resetEmotion() {
-        self.currentEmotion = nil
-        self.swipeInputView.emotionView.configure(for: nil)
+    func resetExpression() {
+        self.currentExpression = nil
+        self.swipeInputView.expressionView.configure(for: nil)
     }
 
     func resetDeliveryType() {
@@ -135,10 +123,10 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
         self.swipeInputView.gestureButton.addGestureRecognizer(self.inputFieldTapRecognizer)
 
-        self.swipeInputView.collapseButton.didSelect { [unowned self] in
+        self.swipeInputView.doneButton.didSelect { [unowned self] in
             self.inputState = .collapsed
         }
-
+        
         self.swipeInputView.addGestureRecognizer(self.backgroundTapRecognizer)
     }
 
@@ -201,6 +189,10 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             .mainSink { [unowned self] inputState in
                 self.swipeInputView.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
+        
+        self.$currentExpression.mainSink { [unowned self] value in
+            self.swipeInputView.expressionView.configure(for: value)
+        }.store(in: &self.cancellables)
         
         self.$currentMessageKind
             .removeDuplicates()
@@ -283,6 +275,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.swipeInputView.inputContainerView.alpha = 1
         self.swipeInputView.countView.alpha = 0.0        
         self.currentMessageKind = .text("")
-        self.resetEmotion()
+        self.resetExpression()
     }
 }

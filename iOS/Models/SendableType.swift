@@ -12,7 +12,7 @@ import Intents
 protocol Sendable: AnyObject {
     var kind: MessageKind { get set }
     var context: MessageContext { get set }
-    var emotion: Emotion? { get set }
+    var expression: Emoji? { get set }
     var previousMessage: Messageable? { get set }
     var isSendable: Bool { get }
 }
@@ -22,7 +22,7 @@ class SendableObject: Sendable {
     var kind: MessageKind
     var context: MessageContext
     var previousMessage: Messageable?
-    var emotion: Emotion?
+    var expression: Emoji?
 
     var isSendable: Bool {
         return self.kind.isSendable
@@ -30,12 +30,12 @@ class SendableObject: Sendable {
 
     init(kind: MessageKind,
          context: MessageContext,
-         emotion: Emotion?,
+         expression: Emoji?,
          previousMessage: Messageable? = nil) {
 
         self.kind = kind
         self.context = context
-        self.emotion = emotion
+        self.expression = expression
         self.previousMessage = previousMessage
     }
 }

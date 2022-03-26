@@ -38,7 +38,6 @@ class DisplayableImageView: BaseView {
             // There's no need to load the displayable if we're already displaying it.
             let isAlreadyDisplayed = self.displayable?.isEqual(to: oldValue) ?? false
             if isAlreadyDisplayed && self.state == .success {
-                logDebug("displayable already displayed")
                 return
             }
 
@@ -114,9 +113,14 @@ class DisplayableImageView: BaseView {
         super.layoutSubviews()
 
         self.imageView.expandToSuperviewSize()
+        self.imageView.layer.cornerRadius = Theme.innerCornerRadius
+        self.imageView.layer.masksToBounds = true
+        self.imageView.clipsToBounds = true
 
         self.blurView.expandToSuperviewSize()
         self.blurView.layer.cornerRadius = Theme.innerCornerRadius
+        self.blurView.layer.masksToBounds = true
+        self.imageView.clipsToBounds = true 
 
         self.animationView.squaredSize = 20
         self.animationView.centerOnXAndY()

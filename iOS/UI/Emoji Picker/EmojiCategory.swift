@@ -9,6 +9,7 @@
 import Foundation
 
 struct Emoji: Decodable, Hashable {
+    
     var id: String
     var emoji: String
     var isSelected: Bool = false
@@ -21,6 +22,29 @@ struct Emoji: Decodable, Hashable {
         let lowercasedFilter = filterText.lowercased()
         return self.keywords.contains { element in
             return element.contains(lowercasedFilter)
+        }
+    }
+    
+    init(id: String,
+         emoji: String,
+         isSelected: Bool = false,
+         keywords: [String],
+         types: [String]?) {
+        
+        self.id = id
+        self.emoji = emoji
+        self.isSelected = isSelected
+        self.keywords = keywords
+        self.types = types
+    }
+    
+    init?(with string: String) {
+        if let value = EmojiCategory.allEmojis.first(where: { emoji in
+            return emoji.emoji == string
+        }) {
+            self = value
+        } else {
+            return nil
         }
     }
 }

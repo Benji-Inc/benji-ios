@@ -39,7 +39,8 @@ protocol Messageable {
     var recentReplies: [Messageable] { get }
     var lastUpdatedAt: Date? { get }
 
-    var emotion: Emotion? { get }
+    var emotions: [Emotion] { get }
+    var expression: String? { get }
 
     func setToConsumed() async throws
     func setToUnconsumed() async throws

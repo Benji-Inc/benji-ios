@@ -40,7 +40,7 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
         self.setupNavigationBar()
     }
     
-    private func setupNavigationBar() {
+    func setupNavigationBar() {
         self.navigationItem.title = "Emojis"
         
         let cancel = UIAction { _ in
@@ -78,6 +78,10 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
         self.bottomGradientView.pin(.bottom)
+    }
+    
+    func getAllAvailableEmojis() -> [Emoji] {
+        return EmojiCategory.allEmojis
     }
     
     override func getAllSections() -> [EmojiCollectionViewDataSource.SectionType] {

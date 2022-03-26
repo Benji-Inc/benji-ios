@@ -135,10 +135,9 @@ extension MessageController {
                         extraData: [String: RawJSON] = [:]) async throws -> MessageId {
 
         return try await withCheckedThrowingContinuation { continuation in
-            
             var data = extraData
-            if let emotion = sendable.emotion {
-                data["emotions"] = .array([.string(emotion.rawValue)])
+            if let expression = sendable.expression {
+                data["expression"] = .string(expression.emoji)
             }
             data["context"] = .string(sendable.context.rawValue)
             

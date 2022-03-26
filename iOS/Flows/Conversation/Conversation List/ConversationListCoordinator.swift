@@ -41,10 +41,6 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
             self.showWallet() 
         }
-
-        self.listVC.swipeInputDelegate.didTapAvatar = { [unowned self] in
-            self.presentProfile(for: User.current()!)
-        }
         
         self.listVC.headerVC.button.didSelect { [unowned self] in
             self.presentConversationDetail()
@@ -84,6 +80,15 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
             self.showWallet()
         default:
             break
+        }
+    }
+    
+    override func presentProfile(for person: PersonType) {
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+        self.present(coordinator) { [unowned self] result in
+            Task.onMainActorAsync {
+                await self.listVC.scrollToConversation(with: result, messageId: nil)
+            }
         }
     }
     

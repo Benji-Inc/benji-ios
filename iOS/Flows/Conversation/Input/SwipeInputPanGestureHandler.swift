@@ -56,7 +56,7 @@ class SwipeInputPanGestureHandler {
         // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     context: self.viewController.currentContext,
-                                    emotion: self.viewController.currentEmotion,
+                                    expression: self.viewController.currentExpression,
                                     previousMessage: self.viewController.editableMessage)
         return object.isSendable
     }
@@ -64,7 +64,7 @@ class SwipeInputPanGestureHandler {
     private func handlePanBegan() {
         let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     context: self.viewController.currentContext,
-                                    emotion: self.viewController.currentEmotion,
+                                    expression: self.viewController.currentExpression,
                                     previousMessage: self.viewController.editableMessage)
         self.viewController.sendable = object
 
@@ -86,7 +86,7 @@ class SwipeInputPanGestureHandler {
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputView.deliveryTypeView.alpha = 0.0
-            self.inputView.emotionView.alpha = 0.0
+            self.inputView.expressionView.alpha = 0.0
         }
         
         self.animatePreviewScale(shouldScale: true)
@@ -240,7 +240,7 @@ class SwipeInputPanGestureHandler {
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.inputView.deliveryTypeView.alpha = 1.0
-            self.inputView.emotionView.alpha = 1.0
+            self.inputView.expressionView.alpha = 1.0
         }
     }
 }

@@ -15,7 +15,7 @@ class old_MessageDetailView: BaseView {
     static let height: CGFloat = 25
 
     let statusView = old_MessageStatusView()
-    let emotionView = old_EmotionView()
+    let emotionView = ExpressionView()
     private var isAtTop: Bool = false
 
     private var hasLoadedMessage: Message?
@@ -24,7 +24,6 @@ class old_MessageDetailView: BaseView {
         super.initializeSubviews()
 
         self.addSubview(self.emotionView)
-        self.emotionView.button.isEnabled = false 
         self.addSubview(self.statusView)
     }
 

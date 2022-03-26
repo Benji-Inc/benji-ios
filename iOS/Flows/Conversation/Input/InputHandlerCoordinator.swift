@@ -51,10 +51,28 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     override func start() {
         super.start()
         
+        self.inputHandlerViewController.swipeableVC.swipeInputView.expressionView.didSelect { [unowned self] in
+            self.presentExpressions()
+        }
+        
         self.inputHandlerViewController.swipeableVC.swipeInputView.addView.didSelect { [unowned self] in
             self.presentAttachments()
         }
+        
+        self.inputHandlerViewController.swipeableVC.swipeInputView.avatarView.didSelect { [unowned self] in
+            self.presentProfile(for: User.current()!)
+        }
     }
+    
+    func presentExpressions() {
+        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator) { [unowned self] result in
+            AnalyticsManager.shared.trackEvent(type: .expressionSelected, properties: ["value": result.emoji])
+            self.inputHandlerViewController.swipeableVC.currentExpression = result
+        }
+    }
+    
+    func presentProfile(for person: PersonType) {}
     
     func presentAttachments() {
         let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)

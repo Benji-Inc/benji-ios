@@ -25,7 +25,7 @@ class SwipeInputHintAnimator {
         self.swipeHintTask?.cancel()
 
         self.view?.inputContainerView.transform = .identity
-        self.view?.emotionView.alpha = 1.0
+        self.view?.expressionView.alpha = 1.0
         self.view?.deliveryTypeView.alpha = 1.0
 
         guard shouldPlay, UserDefaultsManager.getInt(for: .numberOfSwipeHints) < 3 else { return }
@@ -37,7 +37,7 @@ class SwipeInputHintAnimator {
             guard !Task.isCancelled else { return }
 
             await UIView.awaitAnimation(with: .standard, animations: {
-                self?.view?.emotionView.alpha = 0
+                self?.view?.expressionView.alpha = 0
                 self?.view?.deliveryTypeView.alpha = 0
             })
 
@@ -72,7 +72,7 @@ class SwipeInputHintAnimator {
             guard !Task.isCancelled else { return }
 
             await UIView.awaitAnimation(with: .standard, animations: {
-                self?.view?.emotionView.alpha = 1.0
+                self?.view?.expressionView.alpha = 1.0
                 self?.view?.deliveryTypeView.alpha = 1.0
             })
         }

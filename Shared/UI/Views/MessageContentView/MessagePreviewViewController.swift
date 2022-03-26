@@ -14,7 +14,7 @@ class MessagePreviewViewController: ViewController {
 
     private let content = MessageContentView()
     private let readView = old_MessageReadView()
-    private let emotionView = old_EmotionView()
+    private let emotionView = ExpressionView()
     private let replyView = old_MessageReplyView()
 
     init(with message: Messageable) {
