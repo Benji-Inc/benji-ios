@@ -118,6 +118,7 @@
 		D60CA47F27EE74AD00F0871A /* ExpressionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */; };
 		D60CA48127EE74FC00F0871A /* ExpressionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA48027EE74FC00F0871A /* ExpressionViewController.swift */; };
 		D60CA48227EE7FD500F0871A /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
+		D60CA48527EF639300F0871A /* MessageContextSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA48427EF639300F0871A /* MessageContextSelectionView.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
@@ -872,6 +873,7 @@
 		D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmojiPickerViewController+Search.swift"; sourceTree = "<group>"; };
 		D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCoordinator.swift; sourceTree = "<group>"; };
 		D60CA48027EE74FC00F0871A /* ExpressionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionViewController.swift; sourceTree = "<group>"; };
+		D60CA48427EF639300F0871A /* MessageContextSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContextSelectionView.swift; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
 		D6129F9D27AB21720058811C /* UpsellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsellContentView.swift; sourceTree = "<group>"; };
 		D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestmentUpsellCell.swift; sourceTree = "<group>"; };
@@ -1417,6 +1419,14 @@
 			path = Expressions;
 			sourceTree = "<group>";
 		};
+		D60CA48327EF637E00F0871A /* Message Context */ = {
+			isa = PBXGroup;
+			children = (
+				D60CA48427EF639300F0871A /* MessageContextSelectionView.swift */,
+			);
+			path = "Message Context";
+			sourceTree = "<group>";
+		};
 		D6129F9F27AB23650058811C /* Upsell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1758,7 +1768,6 @@
 				8028C9EA273ECB1900520465 /* Conversation List */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6E9746C2757353800D95F08 /* Status View */,
-				80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -2225,12 +2234,14 @@
 		D6BEDE4A2625D738009BA131 /* Swipeable Input */ = {
 			isa = PBXGroup;
 			children = (
+				D60CA48327EF637E00F0871A /* Message Context */,
 				D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */,
 				D6CC1481276BE808005F617F /* EmotionView.swift */,
+				D6FE05212767B2BC00137EEA /* ExpressionView.swift */,
 				8060C85F27BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift */,
 				D6C20127276CFDAC0085B187 /* MessageDetailView.swift */,
 				D6CC148E276C1323005F617F /* MessageStatusView.swift */,
-				D6FE05212767B2BC00137EEA /* ExpressionView.swift */,
+				80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
@@ -2857,6 +2868,7 @@
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D666127427E2EA38006CDF3D /* AchievementsManager.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
+				D60CA48527EF639300F0871A /* MessageContextSelectionView.swift in Sources */,
 				D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */,
 				D646D36A27E5055D0077D20B /* AttachmentsCollectionViewLayout.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,

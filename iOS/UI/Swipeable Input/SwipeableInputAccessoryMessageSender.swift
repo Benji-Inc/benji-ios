@@ -80,6 +80,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
                                  didUpdatePreviewFrame frame: CGRect,
                                  for sendable: Sendable) {
 
+        let newContext = self.getMessageContext(forPreviewFrame: frame)
+        
         let newSendType = self.getSendMode(forPreviewFrame: frame)
 
         // Don't do redundant send preparations.
@@ -138,6 +140,10 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
         self.collectionView.isUserInteractionEnabled = true
 
         self.viewController.set(messageSequencePreparingToSend: nil)
+    }
+    
+    private func getMessageContext(forPreviewFrame frame: CGRect) -> MessageContext {
+        return .respectful
     }
 
     /// Gets the send position for the given preview view frame.
