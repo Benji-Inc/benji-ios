@@ -12,7 +12,6 @@ import Localization
 
 class ExpressionViewController: EmojiPickerViewController {
     
-    
     override func initializeViews() {
         super.initializeViews()
 
