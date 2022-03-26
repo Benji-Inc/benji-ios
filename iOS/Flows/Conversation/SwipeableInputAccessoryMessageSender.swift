@@ -34,6 +34,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     unowned let collectionView: MessageSendingCollectionViewType
     let isConversationList: Bool
     
+    var testView = BaseView()
+    
     private var contentContainer: UIView? {
         return self.collectionView.superview
     }
@@ -58,7 +60,12 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
         // Set the drop zone frame on the swipe view so it knows where to gravitate the message toward.
         let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: controller.view)
         controller.dropZoneFrame = overlayFrame
-
+        
+        controller.view.addSubview(self.testView)
+        self.testView.set(backgroundColor: .red)
+        self.testView.frame = overlayFrame
+        self.testView.isVisible = true
+        
         self.collectionView.isUserInteractionEnabled = false
 
         self.initialContentOffset = self.collectionView.contentOffset
@@ -97,6 +104,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  triggeredSendFor sendable: Sendable,
                                  withPreviewFrame frame: CGRect) -> Bool {
+        
+        self.testView.removeFromSuperview()
 
         // Ensure that the preview has been dragged far up enough to send.
         let dropZoneFrame = controller.dropZoneFrame
