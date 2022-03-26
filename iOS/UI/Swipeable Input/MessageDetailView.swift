@@ -16,7 +16,7 @@ class MessageDetailViewState: ObservableObject {
     @Published var statusText: String
 
     var emotion: Emotion? {
-        return self.message?.emotion
+        return self.message?.emotions.first
     }
     var isRead: Bool {
         return self.message?.isConsumed ?? false

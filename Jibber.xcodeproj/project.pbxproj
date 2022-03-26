@@ -117,6 +117,7 @@
 		D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47B27EE2D2700F0871A /* EmojiPickerViewController+Search.swift */; };
 		D60CA47F27EE74AD00F0871A /* ExpressionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */; };
 		D60CA48127EE74FC00F0871A /* ExpressionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA48027EE74FC00F0871A /* ExpressionViewController.swift */; };
+		D60CA48227EE7FD500F0871A /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
@@ -3299,6 +3300,7 @@
 				8074DDCA27B1D08200594BAC /* ReactionType.swift in Sources */,
 				D63DB21825E998E900F6B323 /* Theme.swift in Sources */,
 				D63DB21525E998D700F6B323 /* CloudFunction.swift in Sources */,
+				D60CA48227EE7FD500F0871A /* EmojiCategory.swift in Sources */,
 				D63DB26E25E9997F00F6B323 /* Objectable.swift in Sources */,
 				D63DB25725E9995700F6B323 /* DeeplinkTarget.swift in Sources */,
 				D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */,

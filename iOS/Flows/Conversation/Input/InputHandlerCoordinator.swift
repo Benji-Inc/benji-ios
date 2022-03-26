@@ -68,7 +68,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             AnalyticsManager.shared.trackEvent(type: .expressionSelected, properties: ["value": result.emoji])
-            self.inputHandlerViewController.swipeableVC.swipeInputView.expressionView.configure(for: result.emoji)
+            self.inputHandlerViewController.swipeableVC.currentExpression = result
         }
     }
     

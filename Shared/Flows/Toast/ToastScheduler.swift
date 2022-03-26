@@ -207,7 +207,7 @@ class ToastScheduler {
 
         let toast = Toast(id: objectId,
                           priority: 1,
-                          title: "What I'm up to..",
+                          title: "What I'm up to...",
                           description: contextCue.emojiString,
                           displayable: current,
                           deeplink: nil,

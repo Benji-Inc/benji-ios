@@ -100,7 +100,7 @@
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdi-8g-wyi" customClass="BorderedPersonView" customModule="Jibber" customModuleProvider="target">
                             <rect key="frame" x="146.5" y="100" width="44" height="44"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="44" id="Wyp-lK-Rej"/>
                                 <constraint firstAttribute="height" constant="44" id="cuN-Y3-dkq"/>

@@ -61,7 +61,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         }
     }
 
-    var currentEmotion: Emotion?
+    @Published var currentExpression: Emoji?
 
     var editableMessage: Messageable?
     @Published var currentMessageKind: MessageKind = .text(String())
@@ -89,8 +89,8 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.setupHandlers()
     }
     
-    func resetEmotion() {
-        self.currentEmotion = nil
+    func resetExpression() {
+        self.currentExpression = nil
         self.swipeInputView.expressionView.configure(for: nil)
     }
 
@@ -190,6 +190,10 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
                 self.swipeInputView.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
         
+        self.$currentExpression.mainSink { [unowned self] value in
+            self.swipeInputView.expressionView.configure(for: value)
+        }.store(in: &self.cancellables)
+        
         self.$currentMessageKind
             .removeDuplicates()
             .mainSink { [unowned self] kind in
@@ -271,6 +275,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.swipeInputView.inputContainerView.alpha = 1
         self.swipeInputView.countView.alpha = 0.0        
         self.currentMessageKind = .text("")
-        self.resetEmotion()
+        self.resetExpression()
     }
 }

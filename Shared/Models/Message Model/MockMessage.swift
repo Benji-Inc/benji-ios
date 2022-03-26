@@ -28,8 +28,9 @@ struct MockMessage: Messageable {
     var totalReplyCount: Int = 0
     var recentReplies: [Messageable] = []
     var lastUpdatedAt: Date? = Date()
-    var emotion: Emotion? = .suprised
-
+    var emotions: [Emotion] = [.suprised]
+    var expression: Emoji? = EmojiCategory.smileysAndPeople.emojis.first
+    
     func setToConsumed() async throws { }
     func setToUnconsumed() async throws { }
 }

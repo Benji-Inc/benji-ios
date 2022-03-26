@@ -24,15 +24,6 @@ class PersonView: DisplayableImageView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.imageView.contentMode = .scaleAspectFill
-        self.imageView.layer.masksToBounds = true
-        self.imageView.clipsToBounds = true
-        self.imageView.layer.cornerRadius = Theme.innerCornerRadius
-        self.imageView.set(backgroundColor: .B3)
-        
-        self.blurView.layer.masksToBounds = true
-        self.blurView.layer.cornerRadius = Theme.innerCornerRadius
-
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
 
