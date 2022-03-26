@@ -22,9 +22,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var textView: InputTextView!
     @IBOutlet var addView: AddMediaView!
     @IBOutlet var doneButton: ThemeButton!
-    
-   // private let animationView = AnimationView.with(animation: .maxToMin)
-    
+        
     /// An invisible button to handle taps and pan gestures.
     @IBOutlet var gestureButton: UIButton!
     @IBOutlet var countView: CharacterCountView!
