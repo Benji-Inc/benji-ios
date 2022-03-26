@@ -42,6 +42,7 @@ class MessageContentView: BaseView {
     private (set) var message: Messageable?
 
     let authorView = PersonView()
+    let emojiView = EmojiCircleView()
     
     var layoutState: Layout = .expanded
 
@@ -62,6 +63,7 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.linkView)
 
         self.bubbleView.addSubview(self.authorView)
+        self.bubbleView.addSubview(self.emojiView)
     }
 
     override func layoutSubviews() {
@@ -72,6 +74,9 @@ class MessageContentView: BaseView {
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         self.authorView.pin(.top, offset: MessageContentView.padding)
         self.authorView.pin(.left, offset: MessageContentView.padding)
+        
+        self.emojiView.center = CGPoint(x: self.authorView.width + 6,
+                                        y: self.authorView.height + 6)
 
         self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.textView.pin(.top, offset: MessageContentView.padding)
@@ -113,6 +118,11 @@ class MessageContentView: BaseView {
         self.textView.isVisible = message.kind.hasText
         self.displayableView.isVisible = message.kind.isImage
         self.linkView.isVisible = message.kind.isLink
+        self.emojiView.isVisible = message.expression.exists
+        
+        if let expression = message.expression {
+            self.emojiView.set(text: expression)
+        }
 
         if message.isDeleted {
             self.textView.text = "DELETED"

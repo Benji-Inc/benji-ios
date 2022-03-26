@@ -29,7 +29,7 @@ struct MockMessage: Messageable {
     var recentReplies: [Messageable] = []
     var lastUpdatedAt: Date? = Date()
     var emotions: [Emotion] = [.suprised]
-    var expression: Emoji? = EmojiCategory.smileysAndPeople.emojis.first
+    var expression: String? = EmojiCategory.smileysAndPeople.emojis.first?.emoji
     
     func setToConsumed() async throws { }
     func setToUnconsumed() async throws { }

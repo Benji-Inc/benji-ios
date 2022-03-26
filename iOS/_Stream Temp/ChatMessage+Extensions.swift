@@ -144,10 +144,10 @@ extension Message: Messageable {
         return emotions
     }
     
-    var expression: Emoji? {
+    var expression: String? {
         if let value = self.extraData["expression"],
            case RawJSON.string(let string) = value {
-            return Emoji.init(with: string)
+            return string
         }
         return nil
     }

@@ -8,14 +8,14 @@
 
 import Foundation
 
-class ContextCueView: BaseView {
+class EmojiCircleView: BaseView {
     
     enum Size {
         case large
         case small
     }
     
-    private let label = ThemeLabel(font: .small)
+    let label = ThemeLabel(font: .small)
     var currentSize: Size = .small {
         didSet {
             self.label.setFont(self.currentSize == .small ? .small : .regular)
@@ -29,6 +29,29 @@ class ContextCueView: BaseView {
         self.addSubview(self.label)
         self.label.textAlignment = .center
         self.set(backgroundColor: .white)
+    }
+    
+    func set(text: String) {
+        self.label.setText(text)
+        self.setNeedsLayout()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.label.setSize(withWidth: self.height * 0.8)
+        self.label.centerOnXAndY()
+        
+        self.squaredSize = self.currentSize == .small ? 22 : 30
+        self.makeRound()
+    }
+}
+
+class ContextCueView: EmojiCircleView {
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
         self.isHidden = true
     }
     
@@ -100,15 +123,5 @@ class ContextCueView: BaseView {
                await self?.animate(emojiIndex: 0, for: contextCue)
             }
         }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.label.setSize(withWidth: self.height * 0.8)
-        self.label.centerOnXAndY()
-        
-        self.squaredSize = self.currentSize == .small ? 22 : 30
-        self.makeRound()
     }
 }

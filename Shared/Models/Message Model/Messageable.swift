@@ -40,7 +40,7 @@ protocol Messageable {
     var lastUpdatedAt: Date? { get }
 
     var emotions: [Emotion] { get }
-    var expression: Emoji? { get }
+    var expression: String? { get }
 
     func setToConsumed() async throws
     func setToUnconsumed() async throws
