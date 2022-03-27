@@ -15,7 +15,8 @@ class UserOnboardingViewController: ViewController {
     private(set) var personView = PersonView()
 
     private(set) var nameLabel = ThemeLabel(font: .regular)
-    private(set) var messageContent = MessageContentView()
+    private(set) var messageBubble = SpeechBubbleView(orientation: .up, bubbleColor: .D1)
+    private(set) var textView = OnboardingMessageTextView()
 
     override func initializeViews() {
         super.initializeViews()
@@ -27,24 +28,23 @@ class UserOnboardingViewController: ViewController {
         self.personView.didSelect { [unowned self] in
             self.didSelectBackButton()
         }
-
-        self.view.addSubview(self.messageContent)
-        self.messageContent.configureBackground(color: ThemeColor.D1.color,
-                                                textColor: ThemeColor.T3.color,
-                                                brightness: 1,
-                                                showBubbleTail: true,
-                                                tailOrientation: .up)
+        
+        self.view.addSubview(self.messageBubble)
+        self.messageBubble.addSubview(self.textView)
+        self.textView.setTextColor(.T3)
 
         self.updateUI()
     }
 
     func updateUI(animateTyping: Bool = true) {
         if let text = self.getMessage() {
-            self.messageContent.isHidden = false
-            self.messageContent.textView.setText(text)
+            self.textView.isHidden = false
+            self.messageBubble.isHidden = false
+            self.textView.setText(text)
             self.view.layoutNow()
         } else {
-            self.messageContent.isHidden = true
+            self.textView.isHidden = false
+            self.messageBubble.isHidden = false
         }
     }
 
@@ -65,10 +65,17 @@ class UserOnboardingViewController: ViewController {
         self.personView.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)
 
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
-
-        self.messageContent.size = self.messageContent.getSize(with: maxWidth)
-        self.messageContent.match(.top, to: .bottom, of: self.personView, offset: .standard)
-        self.messageContent.centerOnX()
+        self.textView.setSize(withMaxWidth: maxWidth)
+        self.textView.centerOnX()
+        
+        self.messageBubble.size = self.textView.size
+        self.messageBubble.size.width += Theme.ContentOffset.long.value.doubled
+        self.messageBubble.size.height += Theme.ContentOffset.long.value + Theme.ContentOffset.long.value.doubled
+        
+        self.messageBubble.match(.top, to: .bottom, of: self.personView, offset: .standard)
+        self.messageBubble.centerOnX()
+        
+        self.textView.pin(.bottom, offset: .long)
     }
 
     // MARK: PUBLIC
