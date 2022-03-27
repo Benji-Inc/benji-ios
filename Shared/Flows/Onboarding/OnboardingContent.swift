@@ -36,7 +36,9 @@ enum OnboardingContent: Switchable {
     func getDescription(with user: User?) -> Localized? {
         switch self {
         case .welcome(_):
-            return nil
+            return LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Welcome to Jibber!")
         case .phone(_):
             return LocalizedString(id: "",
                                    arguments: [],
