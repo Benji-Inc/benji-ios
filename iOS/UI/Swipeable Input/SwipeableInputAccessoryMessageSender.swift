@@ -33,7 +33,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     unowned let viewController: MessageSendingViewControllerType
     unowned let collectionView: MessageSendingCollectionViewType
     let isConversationList: Bool
-    
+            
     private var contentContainer: UIView? {
         return self.collectionView.superview
     }
@@ -58,7 +58,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
         // Set the drop zone frame on the swipe view so it knows where to gravitate the message toward.
         let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: controller.view)
         controller.dropZoneFrame = overlayFrame
-
+        
         self.collectionView.isUserInteractionEnabled = false
 
         self.initialContentOffset = self.collectionView.contentOffset
@@ -72,7 +72,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  didUpdatePreviewFrame frame: CGRect,
                                  for sendable: Sendable) {
-
+        
         let newSendType = self.getSendMode(forPreviewFrame: frame)
 
         // Don't do redundant send preparations.
@@ -134,29 +134,5 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
         return .message
-//        guard self.isConversationList else { return .message }
-//
-//        guard let contentContainer = self.contentContainer else {
-//            return .message
-//        }
-//
-//        switch self.currentSendMode {
-//        case .message, .none:
-//            // If we're in the message mode, switch to newConversation when the user
-//            // has dragged far enough to the right.
-//            if frame.right > contentContainer.width - 10 {
-//                return .newConversation
-//            } else {
-//                return .message
-//            }
-//        case .newConversation:
-//            // If we're in newConversation mode, switch to newMessage mode when the user drags
-//            // far enough to the left.
-//            if frame.left < 10 {
-//                return .message
-//            } else {
-//                return .newConversation
-//            }
-//        }
     }
 }
