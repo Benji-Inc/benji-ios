@@ -10,10 +10,7 @@ import Foundation
 
 class MessageContextSelectionView: BaseView {
     
-    let lineView = BaseView()
-    let label = ThemeLabel(font: .regular)
-    let descriptionLabel = ThemeLabel(font: .small)
-    
+    let imageView = UIImageView()
     let context: MessageContext
     
     enum State {
@@ -22,7 +19,7 @@ class MessageContextSelectionView: BaseView {
         case highlighted
     }
     
-    private var state: State = .hidden
+    private(set) var state: State = .hidden
     
     init(with context: MessageContext) {
         self.context = context
@@ -36,37 +33,23 @@ class MessageContextSelectionView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.addSubview(self.label)
-        self.label.alpha = 0.0
-        self.label.setText(self.context.displayName)
+        self.set(backgroundColor: .white)
+        self.alpha = 0.5
         
-        self.addSubview(self.descriptionLabel)
-        self.descriptionLabel.alpha = 0.0
-        self.descriptionLabel.setText(self.context.description)
-        
-        self.addSubview(self.lineView)
-        self.lineView.alpha = 0.0
-        
-        self.lineView.set(backgroundColor: .T1)
+        self.addSubview(self.imageView)
+        self.imageView.image = self.context.image
+        self.imageView.contentMode = .scaleAspectFit
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.descriptionLabel.setSize(withWidth: self.width)
-        self.descriptionLabel.pin(.bottom, offset: .short)
-        self.descriptionLabel.pin(.left)
+        self.squaredSize = 50
+        self.makeRound()
         
-        self.label.setSize(withWidth: self.width)
-        self.label.match(.bottom, to: .top, of: self.descriptionLabel, offset: .short)
-        self.label.pin(.left)
-        
-        self.width = self.descriptionLabel.width
-        self.height = 50
-        
-        self.lineView.height = 1
-        self.lineView.pin(.bottom)
-        self.lineView.width = 0
+        self.imageView.squaredSize = self.height * 0.6
+        self.imageView.centerOnXAndY()
+        self.imageView.tintColor = ThemeColor.B6.color
     }
     
     private var animationTask: Task<Void, Never>?
@@ -86,35 +69,29 @@ class MessageContextSelectionView: BaseView {
             case .hidden:
                 
                 await UIView.awaitAnimation(with: .standard, animations: {
-                    self.label.alpha = 0.0
-                    self.descriptionLabel.alpha = 0.0
-                    self.lineView.alpha = 0
-                    self.lineView.width = 0
+                    self.alpha = 0.5
+                    self.setNeedsLayout()
                 })
                 
                 await UIView.awaitSpringAnimation(with: .standard, animations: {
                     self.right = 0
+                    self.setNeedsLayout()
                 })
 
             case .visible:
                 
                 await UIView.awaitSpringAnimation(with: .standard, animations: {
-                    self.left = Theme.ContentOffset.long.value
+                    self.pin(.left, offset: .long)
+                    self.setNeedsLayout()
                 })
                 
                 await UIView.awaitAnimation(with: .standard, animations: {
-                    self.label.alpha = 0.5
-                    self.descriptionLabel.alpha = 0.5
-                    self.lineView.alpha = 0
-                    self.lineView.width = 0
+                    self.alpha = 0.5
                 })
             case .highlighted:
                 
                 await UIView.awaitAnimation(with: .standard, animations: {
-                    self.label.alpha = 1.0
-                    self.descriptionLabel.alpha = 1.0
-                    self.lineView.alpha = 1.0
-                    self.lineView.width = self.width
+                    self.alpha = 1.0
                 })
             }
         }

@@ -33,9 +33,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     unowned let viewController: MessageSendingViewControllerType
     unowned let collectionView: MessageSendingCollectionViewType
     let isConversationList: Bool
-    
-    var testView = BaseView()
-    
+            
     private var contentContainer: UIView? {
         return self.collectionView.superview
     }
@@ -61,11 +59,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
         let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: controller.view)
         controller.dropZoneFrame = overlayFrame
         
-        controller.view.addSubview(self.testView)
-        self.testView.set(backgroundColor: .red)
-        self.testView.frame = overlayFrame
-        self.testView.isVisible = true
-        
         self.collectionView.isUserInteractionEnabled = false
 
         self.initialContentOffset = self.collectionView.contentOffset
@@ -79,8 +72,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  didUpdatePreviewFrame frame: CGRect,
                                  for sendable: Sendable) {
-
-        let newContext = self.getMessageContext(forPreviewFrame: frame)
         
         let newSendType = self.getSendMode(forPreviewFrame: frame)
 
@@ -106,8 +97,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  triggeredSendFor sendable: Sendable,
                                  withPreviewFrame frame: CGRect) -> Bool {
-        
-        self.testView.removeFromSuperview()
 
         // Ensure that the preview has been dragged far up enough to send.
         let dropZoneFrame = controller.dropZoneFrame
@@ -141,37 +130,9 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
 
         self.viewController.set(messageSequencePreparingToSend: nil)
     }
-    
-    private func getMessageContext(forPreviewFrame frame: CGRect) -> MessageContext {
-        return .respectful
-    }
 
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
         return .message
-//        guard self.isConversationList else { return .message }
-//
-//        guard let contentContainer = self.contentContainer else {
-//            return .message
-//        }
-//
-//        switch self.currentSendMode {
-//        case .message, .none:
-//            // If we're in the message mode, switch to newConversation when the user
-//            // has dragged far enough to the right.
-//            if frame.right > contentContainer.width - 10 {
-//                return .newConversation
-//            } else {
-//                return .message
-//            }
-//        case .newConversation:
-//            // If we're in newConversation mode, switch to newMessage mode when the user drags
-//            // far enough to the left.
-//            if frame.left < 10 {
-//                return .message
-//            } else {
-//                return .newConversation
-//            }
-//        }
     }
 }

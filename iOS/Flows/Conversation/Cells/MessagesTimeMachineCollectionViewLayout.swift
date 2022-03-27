@@ -78,12 +78,12 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         var frame = CGRect(x: padding.half,
                            y: 0,
                            width: self.collectionView!.width - padding,
-                           height: 40)
+                           height: 20)
         switch uiState {
         case .read:
-            frame.centerY = center.y + (self.collectionView!.height * 0.25)
+            frame.centerY = center.y + (self.collectionView!.height * 0.275)
         case .write:
-            frame.centerY = center.y + (self.collectionView!.height * 0.15)
+            frame.centerY = center.y + (self.collectionView!.height * 0.175)
         }
         
         return frame
