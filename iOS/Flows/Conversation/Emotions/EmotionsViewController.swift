@@ -29,6 +29,13 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
     override func initializeViews() {
         super.initializeViews()
         
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.medium()]
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
+        
         self.view.set(backgroundColor: .B0)
                         
         self.view.addSubview(self.bottomGradientView)
