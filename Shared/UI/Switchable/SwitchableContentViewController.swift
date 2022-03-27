@@ -61,7 +61,8 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
     }
 
     private func prepareForPresentation() {
-        self.messageContent.alpha = 0
+        self.messageBubble.alpha = 0
+        self.textView.alpha = 0
         self.currentCenterVC?.view.alpha = 0
     }
 
@@ -70,7 +71,8 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
                                                            curve: .easeOut,
                                                            animations: {
 
-            self.messageContent.alpha = 1
+            self.messageBubble.alpha = 1
+            self.textView.alpha = 1
             self.currentCenterVC?.view.alpha = 1
         })
         

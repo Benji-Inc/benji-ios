@@ -72,11 +72,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
         
-        self.welcomeVC.didLoadConversation = { [unowned self] conversation in
-            Task {
-                guard let adminId = PFConfig.current().adminUserId else { return }
-                try await self.updateInvitor(userId: adminId)
-            }
+        Task {
+            guard let adminId = PFConfig.current().adminUserId else { return }
+            try await self.updateInvitor(userId: adminId)
         }
 
         self.welcomeVC.onDidComplete = { [unowned self] result in

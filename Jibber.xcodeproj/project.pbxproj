@@ -202,7 +202,6 @@
 		D6265ED0279F13A40020BD26 /* InvitationUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */; };
 		D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4C7277A9129007B3286 /* InitialMessageCell.swift */; };
 		D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4CB277E0079007B3286 /* WelcomeViewController.swift */; };
-		D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D627E4CE277E06A1007B3286 /* WelcomeCollectionView.swift */; };
 		D628B00727B33EFB00949154 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FB327ADC72E0058811C /* Transaction.swift */; };
 		D628B00927B47EEF00949154 /* TransactionContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D628B00827B47EEF00949154 /* TransactionContentView.xib */; };
 		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
@@ -691,7 +690,6 @@
 		D6E974362752C47F00D95F08 /* ReactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* ReactionType.swift */; };
 		D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */; };
 		D6E9746E2757356C00D95F08 /* old_MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746D2757356C00D95F08 /* old_MessageStatusView.swift */; };
-		D6EA3FA72759AF7C002BDD0E /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -934,7 +932,6 @@
 		D6265ECF279F13A40020BD26 /* InvitationUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationUpsellCell.swift; sourceTree = "<group>"; };
 		D627E4C7277A9129007B3286 /* InitialMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialMessageCell.swift; sourceTree = "<group>"; };
 		D627E4CB277E0079007B3286 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		D627E4CE277E06A1007B3286 /* WelcomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeCollectionView.swift; sourceTree = "<group>"; };
 		D628B00827B47EEF00949154 /* TransactionContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionContentView.xib; sourceTree = "<group>"; };
 		D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotificationContent+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
@@ -1545,15 +1542,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		D627E4CD277E0687007B3286 /* Welcome */ = {
-			isa = PBXGroup;
-			children = (
-				D627E4CB277E0079007B3286 /* WelcomeViewController.swift */,
-				D627E4CE277E06A1007B3286 /* WelcomeCollectionView.swift */,
-			);
-			path = Welcome;
-			sourceTree = "<group>";
-		};
 		D6356D7E25A369F80015104F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -2061,7 +2049,7 @@
 				D67896A822FF51170059BA75 /* PhoneViewController.swift */,
 				D67896AC22FF60190059BA75 /* TextInputViewController.swift */,
 				D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */,
-				D627E4CD277E0687007B3286 /* Welcome */,
+				D627E4CB277E0079007B3286 /* WelcomeViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -3017,7 +3005,6 @@
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
 				D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */,
 				D637651E27E983FC00CCDA7F /* ConversationInfoCell.swift in Sources */,
-				D627E4CF277E06A1007B3286 /* WelcomeCollectionView.swift in Sources */,
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
@@ -3217,7 +3204,6 @@
 				D63DB25E25E9995E00F6B323 /* Connection.swift in Sources */,
 				D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */,
 				D6617CF726743DFE00439C06 /* Notice.swift in Sources */,
-				D6EA3FA72759AF7C002BDD0E /* MessageContentView.swift in Sources */,
 				D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				D68C08262729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D605AC8527861C9A0015D800 /* BackgroundGradientView.swift in Sources */,
