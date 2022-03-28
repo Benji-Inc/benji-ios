@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-class MessageDetailDataSource: CollectionViewDataSource<ConversationDetailCollectionViewDataSource.SectionType, ConversationDetailCollectionViewDataSource.ItemType> {
+class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.SectionType, MessageDetailDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
         case options

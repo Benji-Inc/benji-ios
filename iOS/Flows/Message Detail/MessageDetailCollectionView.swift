@@ -12,6 +12,7 @@ class MessageDetailCollectionView: CollectionView {
     
     init() {
         super.init(layout: MessageDetailCollectionViewLayout())
+        self.set(backgroundColor: .red)
     }
     
     required init?(coder aDecoder: NSCoder) {

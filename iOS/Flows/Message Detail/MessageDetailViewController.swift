@@ -14,7 +14,10 @@ protocol MessageDetailViewControllerDelegate: AnyObject {
                                      didSelectThreadFor message: Messageable)
 }
 
-class MessageDetailViewController: ViewController, MessageInteractableController {
+class MessageDetailViewController: DiffableCollectionViewController<MessageDetailDataSource.SectionType,
+                                   MessageDetailDataSource.ItemType,
+                                   MessageDetailDataSource>,
+                                   MessageInteractableController {
     var blurView = BlurView()
     
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
@@ -26,15 +29,17 @@ class MessageDetailViewController: ViewController, MessageInteractableController
         return self.messageContentView
     }
     
+    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
+    
     private let messageContentView = MessageContentView()
-    private let backgroundView = BaseView()
-    private let threadButton = ThemeButton()
     
     init(message: Messageable, delegate: MessageDetailViewControllerDelegate) {
         self.message = message
         self.delegate = delegate
         
-        super.init()
+        super.init(with: MessageDetailCollectionView())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,34 +58,40 @@ class MessageDetailViewController: ViewController, MessageInteractableController
         
         self.view.addSubview(self.messageContentView)
         self.messageContentView.configure(with: self.message)
+    
+        self.view.addSubview(self.bottomGradientView)
         
+        self.collectionView.allowsMultipleSelection = false
         
-        self.view.addSubview(self.backgroundView)
-        self.backgroundView.set(backgroundColor: .B0)
-        self.backgroundView.layer.cornerRadius = Theme.cornerRadius
-        self.backgroundView.clipsToBounds = true
-        
-        self.backgroundView.addSubview(self.threadButton)
-        self.threadButton.set(style: .normal(color: .gray, text: "Open Thread"))
-        self.threadButton.addAction(for: .touchUpInside) { [unowned self] in
-            self.delegate.messageDetailViewController(self, didSelectThreadFor: self.message)
-        }
+        self.view.bringSubviewToFront(self.collectionView)
     }
     
     override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         
         self.blurView.expandToSuperviewSize()
         
         self.messageContentView.centerOnX()
         self.messageContentView.bottom = self.view.height * 0.5
         
-        self.backgroundView.expandToSuperviewWidth()
-        self.backgroundView.expand(.bottom)
-        
-        self.threadButton.width = 150
-        self.threadButton.height = Theme.buttonHeight
-        self.threadButton.centerOnXAndY()
+        super.viewDidLayoutSubviews()
+    
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
+    }
+    
+    override func layoutCollectionView(_ collectionView: UICollectionView) {
+        self.collectionView.expandToSuperviewWidth()
+        self.collectionView.height = self.view.height - self.messageContent.bottom - Theme.ContentOffset.xtraLong.value
+       // self.collectionView.pin(.bottom)
+    }
+    
+    override func getAllSections() -> [MessageDetailDataSource.SectionType] {
+        return MessageDetailDataSource.SectionType.allCases
+    }
+
+    override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
+        return [:]
     }
 }
 
@@ -94,18 +105,18 @@ extension MessageDetailViewController: TransitionableViewController {
     }
     
     func prepareForPresentation() {
-        self.backgroundView.top = self.view.height
+        self.collectionView.top = self.view.height
     }
     
     func handlePresentationCompleted() {}
     
     func handleFinalPresentation() {
-        self.backgroundView.match(.top, to: .bottom, of: self.messageContentView, offset: .xtraLong)
+        self.collectionView.pin(.bottom)
         self.view.setNeedsLayout()
     }
     func handleInitialDismissal() {}
     
     func handleDismissal() {
-        self.backgroundView.top = self.view.height 
+        self.collectionView.top = self.view.height
     }
 }
