@@ -105,7 +105,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         })
         
         if msg.replyCount > 0 {
-            data[.recentReply] = [.reply(msg.id)]
+            data[.recentReply] = [.reply(msg)]
         }
         
         

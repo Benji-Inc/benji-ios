@@ -70,7 +70,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         case option(OptionType)
         case member(Member)
         case info(MessageId)
-        case reply(MessageId)
+        case reply(Message)
     }
     
     private let topOptionConfig = ManageableCellRegistration<MessageTopOptionCell>().provider
@@ -105,10 +105,10 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
             return cell
         case .info(_):
             return nil
-        case .reply(let messagId):
+        case .reply(let message):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.replyConfig,
                                                                     for: indexPath,
-                                                                    item: messagId)
+                                                                    item: message)
             return cell
         }
 //        let lastIndex = self.snapshot().numberOfItems(inSection: section) - 1
