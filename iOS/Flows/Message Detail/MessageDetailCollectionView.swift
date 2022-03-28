@@ -13,6 +13,10 @@ class MessageDetailCollectionView: CollectionView {
     init() {
         super.init(layout: MessageDetailCollectionViewLayout())
         self.set(backgroundColor: .red)
+        
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.layer.cornerRadius = Theme.cornerRadius
+        self.layer.masksToBounds = true 
     }
     
     required init?(coder aDecoder: NSCoder) {
