@@ -33,23 +33,25 @@ class MessageContentView: BaseView {
 
     static let bubbleTailLength: CGFloat = 12
 
+    private (set) var message: Messageable?
+
     /// A view that provides a safe area for  main message content (margins are already taken into account).
     /// Subviews includes author, attachments, text and date sent views.
     private let mainContentArea = UIView()
 
     /// A speech bubble background view for the message.
     let bubbleView = MessageBubbleView(orientation: .down)
+    let authorView = PersonView()
+    let emojiView = EmojiCircleView()
     /// Date view that shows when the message was last updated.
     let dateView = ThemeLabel(font: .small, textColor: .white)
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .T1)
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
-    private (set) var message: Messageable?
 
-    let authorView = PersonView()
-    let emojiView = EmojiCircleView()
-    
+    let replyCountView = ThemeLabel(font: .small, textColor: .T1)
+
     var layoutState: Layout = .expanded
 
     override func initializeSubviews() {
@@ -74,6 +76,12 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.authorView)
         self.mainContentArea.addSubview(self.dateView)
         self.mainContentArea.addSubview(self.emojiView)
+
+        self.replyCountView.set(backgroundColor: .B1withAlpha)
+        self.replyCountView.layer.borderWidth = 2
+        self.replyCountView.layer.borderColor = ThemeColor.BORDER.color.cgColor
+        self.replyCountView.textAlignment = .center
+        self.addSubview(self.replyCountView)
     }
 
     override func layoutSubviews() {
@@ -134,6 +142,13 @@ class MessageContentView: BaseView {
             self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
                                   maxHeight: self.mainContentArea.height - self.textView.top)
         }
+
+        self.replyCountView.width = 22
+        self.replyCountView.height = 22
+        self.replyCountView.layer.cornerRadius = 4
+        self.replyCountView.layer.masksToBounds = true
+        self.replyCountView.pin(.right, offset: MessageContentView.padding)
+        self.replyCountView.pin(.bottom, offset: .standard)
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -151,6 +166,8 @@ class MessageContentView: BaseView {
         }
 
         self.dateView.text = message.lastUpdatedAt?.getTimeAgoString()
+        self.replyCountView.text = message.totalReplyCount.description
+
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {

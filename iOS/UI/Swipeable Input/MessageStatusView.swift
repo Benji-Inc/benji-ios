@@ -15,14 +15,14 @@ struct MessageStatusView: View {
 
     var body: some View {
         HStack {
-            MessageDeliveryStatusView(config: self.config)
-                .opacity(self.config.deliveryStatus == .sending ? 0.5 : 1)
-
-            // Don't show the replies view if there aren't any replies.
-            if self.config.replyCount > 0 {
-                Spacer.length(.short)
-                MessageReplyView(config: self.config)
-            }
+//            MessageDeliveryStatusView(config: self.config)
+//                .opacity(self.config.deliveryStatus == .sending ? 0.5 : 1)
+//
+//            // Don't show the replies view if there aren't any replies.
+//            if self.config.replyCount > 0 {
+//                Spacer.length(.short)
+//                MessageReplyView(config: self.config)
+//            }
         }
     }
 }
@@ -50,20 +50,16 @@ private struct MessageReplyView: View {
     
     var body: some View {
         HStack {
-            Spacer.length(.standard)
-            Text(self.config.replyCount.description)
-                .fontType(.small)
-                .color(.T1)
-            Spacer.length(.standard)
-        }
-        .frame(minWidth: 25, minHeight: 25, idealHeight: 25, maxHeight: 25)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
-                .fill(color: .B1withAlpha,
-                      strokeColor: .BORDER,
-                      lineWidth: 0.5)
 
-        )
+        }
+//        .frame(minWidth: 25, minHeight: 25, idealHeight: 25, maxHeight: 25)
+//        .background(
+//            RoundedRectangle(cornerRadius: Theme.innerCornerRadius)
+//                .fill(color: .B1withAlpha,
+//                      strokeColor: .BORDER,
+//                      lineWidth: 0.5)
+//
+//        )
     }
 }
 
