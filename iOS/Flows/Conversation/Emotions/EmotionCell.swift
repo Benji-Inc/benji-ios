@@ -71,6 +71,7 @@ class EmotionContentView: BaseView, UIContentView {
         
         self.label.translatesAutoresizingMaskIntoConstraints = false
         let inset = Theme.ContentOffset.long.value.doubled
+        
         NSLayoutConstraint.activate([
             self.label.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             self.label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset),
@@ -95,9 +96,12 @@ class EmotionContentView: BaseView, UIContentView {
     }
     
     private func updateLayout(with item: Emotion) {
+        let color = item.color
+
         self.label.setText(item.rawValue)
+        self.label.textColor = color 
         
-        self.borderView.layer.borderColor = item.color.cgColor
+        self.borderView.layer.borderColor = color.cgColor
         self.borderView.layer.borderWidth = 2
         self.borderView.layer.cornerRadius = Theme.innerCornerRadius
         self.borderView.layer.masksToBounds = false        

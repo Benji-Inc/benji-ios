@@ -13,6 +13,10 @@ import Localization
 class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectionViewDataSource.SectionType,
                               EmotionsCollectionViewDataSource.ItemType,
                               EmotionsCollectionViewDataSource> {
+    
+    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .topCenter,
+                                                  endPoint: .bottomCenter)
                 
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
@@ -39,6 +43,7 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         
         self.view.set(backgroundColor: .B0)
                         
+        self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         
         self.collectionView.allowsMultipleSelection = true
@@ -52,6 +57,10 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = Theme.ContentOffset.xtraLong.value.doubled
+        self.topGradientView.pin(.top)
         
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94

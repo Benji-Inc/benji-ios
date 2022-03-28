@@ -12,6 +12,11 @@ class EmotionsCollectionView: CollectionView {
     
     init() {
         super.init(layout: EmotionsCollectionViewLayout())
+        let padding = Theme.ContentOffset.xtraLong.value
+        self.contentInset = UIEdgeInsets(top: padding,
+                                         left: 0,
+                                         bottom: 100,
+                                         right: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {

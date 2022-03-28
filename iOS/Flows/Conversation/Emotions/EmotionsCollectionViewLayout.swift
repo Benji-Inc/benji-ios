@@ -24,21 +24,21 @@ class EmotionsCollectionViewLayout: UICollectionViewCompositionalLayout {
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(50), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: inset,
-                                                             leading: inset,
-                                                             bottom: inset,
-                                                             trailing: inset)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(62))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: inset,
+                                                               leading: inset,
+                                                               bottom: inset,
+                                                               trailing: inset)
 
                 let sectionInset = Theme.ContentOffset.long.value
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset,
                                                                 leading: sectionInset,
-                                                                bottom: 0,
+                                                                bottom: sectionInset,
                                                                 trailing: sectionInset)
                 return section
             }
