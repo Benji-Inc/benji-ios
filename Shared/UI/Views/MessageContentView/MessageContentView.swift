@@ -167,6 +167,7 @@ class MessageContentView: BaseView {
 
         self.dateView.text = message.lastUpdatedAt?.getTimeAgoString()
         self.replyCountView.text = message.totalReplyCount.description
+        self.replyCountView.isVisible = message.totalReplyCount > 0
 
         if message.isDeleted {
             self.textView.text = "DELETED"

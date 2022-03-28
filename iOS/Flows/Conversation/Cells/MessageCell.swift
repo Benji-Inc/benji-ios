@@ -94,7 +94,7 @@ class MessageCell: UICollectionViewCell {
 
         self.content.expandToSuperviewSize()
 
-        self.detailVC.view.expandToSuperviewWidth()
+        self.detailVC.view.width = self.halfWidth
         self.detailVC.view.height = 25
         self.detailVC.view.pin(.bottom, offset: .standard)
     }
@@ -105,7 +105,6 @@ class MessageCell: UICollectionViewCell {
         self.content.configure(with: message)
         
         self.messageState.message = message
-        self.messageState.deliveryStatus = message.deliveryStatus
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
@@ -162,9 +161,7 @@ class MessageCell: UICollectionViewCell {
     private func startConsumptionTaskIfNeeded(for message: Message) {
         guard message.canBeConsumed else { return }
 
-        Task { [weak self] in
-            self?.messageState.deliveryStatus = .reading
-
+        Task { 
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
 

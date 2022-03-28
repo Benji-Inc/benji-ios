@@ -263,7 +263,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         // Setting this here fixes issue with recursion during presentation.
         if let msg = self.messageController.message {
             self.messageState.message = msg
-            self.messageState.deliveryStatus = msg.deliveryStatus
         }
         
         if let replyId = self.startingReplyId {
@@ -406,7 +405,6 @@ extension ThreadViewController {
             guard let msg = self.messageController.message else { return }
             self.parentMessageView.configure(with: msg)
             self.messageState.message = msg
-            self.messageState.deliveryStatus = msg.deliveryStatus
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
