@@ -166,6 +166,13 @@ class MessageContentView: BaseView {
         }
 
         self.dateView.text = message.lastUpdatedAt?.getTimeAgoString()
+        if message.kind.isImage && message.kind.text.isEmpty {
+            self.dateView.shadowColor = UIColor.black
+            self.dateView.shadowOffset = CGSize(width: 1, height: 1)
+        } else {
+            self.dateView.shadowColor = nil
+        }
+
         self.replyCountView.text = message.totalReplyCount.description
         self.replyCountView.isVisible = message.totalReplyCount > 0
 
