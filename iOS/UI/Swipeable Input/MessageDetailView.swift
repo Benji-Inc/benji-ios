@@ -13,7 +13,6 @@ class MessageDetailViewState: ObservableObject {
 
     @Published var message: Messageable?
     @Published var deliveryStatus: DeliveryStatus
-    @Published var statusText: String
 
     var emotion: Emotion? {
         return self.message?.emotions.first
@@ -34,7 +33,6 @@ class MessageDetailViewState: ObservableObject {
     init(message: Messageable?) {
         self.message = message
         self.deliveryStatus = .sent
-        self.statusText = ""
     }
 }
 

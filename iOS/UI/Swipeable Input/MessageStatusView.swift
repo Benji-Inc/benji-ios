@@ -35,15 +35,6 @@ private struct MessageDeliveryStatusView: View {
     var body: some View {
         
         HStack {
-            Spacer.length(.standard)
-            
-            Text(config.statusText)
-                .fontType(.small)
-                .color(.white)
-                .animation(.linear(duration: Theme.animationDurationFast), value: config.statusText)
-            
-            Spacer.length(.short)
-
             MessageDeliveryStatusUIViewRepresentable(message: self.$config.message,
                                                      deliveryStatus: self.$config.deliveryStatus)
                 .frame(width: 25)

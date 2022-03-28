@@ -321,22 +321,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             }
         }.add(to: self.autocancelTaskPool)
     }
-    
-    private var statusTextTask: Task<Void, Never>?
-
-    func updateStatusText(for message: Message) {
-        guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
-        
-        self.statusTextTask = Task {
-            
-            self.messageState.statusText = message.context.displayName
-
-            await Task.snooze(seconds: 2)
-            guard !Task.isCancelled else { return }
-            
-            self.messageState.statusText = message.lastUpdatedAt?.getTimeAgoString() ?? ""
-        }
-    }
 }
 // MARK: - Messaging
 
@@ -385,8 +369,7 @@ extension ThreadViewController: TransitionableViewController {
     }
     
     func handlePresentationCompleted() {
-        guard let message = self.messageController.message else { return }
-        self.updateStatusText(for: message)
+        guard self.messageController.message.exists else { return }
         self.loadInitialData()
     }
     
