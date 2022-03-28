@@ -20,10 +20,9 @@ class EmotionsCollectionViewLayout: UICollectionViewCompositionalLayout {
             switch sectionType {
             case .emotions:
                 
-                let inset = Theme.ContentOffset.short.value
-                let fraction: CGFloat = 0.2
+                let inset = Theme.ContentOffset.long.value
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1.0))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(50), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                              leading: inset,
@@ -31,7 +30,7 @@ class EmotionsCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                              trailing: inset)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(fraction))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
                 let sectionInset = Theme.ContentOffset.long.value

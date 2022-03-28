@@ -106,4 +106,8 @@ enum Emotion: String, CaseIterable, Identifiable {
     }
     
     var id: Emotion { self }
+    
+    var color: UIColor {
+        return Lorem.randomColor()
+    }
 }

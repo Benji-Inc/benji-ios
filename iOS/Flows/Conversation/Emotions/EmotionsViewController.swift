@@ -34,6 +34,7 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium()]
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.prefersGrabberVisible = true 
         }
         
         self.view.set(backgroundColor: .B0)
@@ -41,6 +42,12 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         self.view.addSubview(self.bottomGradientView)
         
         self.collectionView.allowsMultipleSelection = true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.loadInitialData()
     }
     
     override func viewDidLayoutSubviews() {
