@@ -19,5 +19,14 @@ class EmotionsCoordinator: PresentableCoordinator<[Emotion]> {
     override func start() {
         super.start()
         
+        self.emotionsVC.button.didSelect { [unowned self] in
+            let emotions: [Emotion] = self.emotionsVC.selectedItems.compactMap { type in
+                switch type {
+                case .emotion(let emotion):
+                    return emotion
+                }
+            }
+            self.finishFlow(with: emotions)
+        }
     }
 }

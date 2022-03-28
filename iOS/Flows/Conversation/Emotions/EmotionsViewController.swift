@@ -14,6 +14,9 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
                               EmotionsCollectionViewDataSource.ItemType,
                               EmotionsCollectionViewDataSource> {
     
+    let button = ThemeButton()
+    private var showButton: Bool = true
+    
     private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .topCenter,
                                                   endPoint: .bottomCenter)
@@ -47,6 +50,12 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         self.view.addSubview(self.bottomGradientView)
         
         self.collectionView.allowsMultipleSelection = true
+        
+        self.view.addSubview(self.button)
+        
+        self.$selectedItems.mainSink { [unowned self] items in
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLoad() {
@@ -65,6 +74,23 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
         self.bottomGradientView.pin(.bottom)
+        
+        self.button.setSize(with: self.view.width)
+        self.button.centerOnX()
+        
+        if self.showButton {
+            self.button.pinToSafeAreaBottom()
+        } else {
+            self.button.top = self.view.height
+        }
+    }
+    
+    private func updateButton() {
+        self.button.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.showButton = self.selectedItems.count > 0
+            self.view.layoutNow()
+        }
     }
     
     override func getAllSections() -> [EmotionsCollectionViewDataSource.SectionType] {

@@ -69,9 +69,10 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     func presentEmotions() {
         let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
-//            result.forEach { emotion in
-//                AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
-//            }
+            result.forEach { emotion in
+                logDebug(emotion.rawValue)
+                //AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
+            }
             //self.inputHandlerViewController.swipeableVC.currentExpression = result
         }
     }
