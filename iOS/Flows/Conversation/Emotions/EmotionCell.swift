@@ -70,14 +70,14 @@ class EmotionContentView: BaseView, UIContentView {
         self.label.textAlignment = .center
         
         self.label.translatesAutoresizingMaskIntoConstraints = false
-        let inset = Theme.ContentOffset.long.value.doubled
+        let inset = Theme.ContentOffset.long.value
         
         NSLayoutConstraint.activate([
             self.label.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             self.label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset),
             self.label.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset),
-            self.borderView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: inset.half),
-            self.borderView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -inset.half),
+            self.borderView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 4),
+            self.borderView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -4),
             self.borderView.heightAnchor.constraint(equalTo: self.heightAnchor)
         ])
     }
@@ -91,32 +91,39 @@ class EmotionContentView: BaseView, UIContentView {
         self.currentConfiguration = configuration
         
         guard let emotion = configuration.emotion else { return }
-        
-        self.updateLayout(with: emotion)
+                
+        self.updateLayout(with: emotion, isSelected: configuration.isSelected)
     }
     
-    private func updateLayout(with item: Emotion) {
+    private func updateLayout(with item: Emotion, isSelected: Bool) {
         let color = item.color
 
         self.label.setText(item.rawValue)
         self.label.textColor = color 
         
-        self.borderView.layer.borderColor = color.cgColor
+        self.borderView.layer.borderColor = isSelected ? color.cgColor : color.withAlphaComponent(0.2).cgColor 
         self.borderView.layer.borderWidth = 2
         self.borderView.layer.cornerRadius = Theme.innerCornerRadius
-        self.borderView.layer.masksToBounds = false        
+        self.borderView.layer.masksToBounds = false
+        
+        self.borderView.backgroundColor = isSelected ? color.withAlphaComponent(0.2) : .clear
     }
 }
 
 struct EmotionContentConfiguration: UIContentConfiguration, Hashable {
     
     var emotion: Emotion?
+    var isSelected: Bool = false
     
     func makeContentView() -> UIView & UIContentView {
         return EmotionContentView(configuration: self)
     }
     
     func updated(for state: UIConfigurationState) -> EmotionContentConfiguration {
-        return self
+        guard let state = state as? UICellConfigurationState else { return self }
+        var updatedConfig = self
+        updatedConfig.isSelected = state.isSelected || state.isHighlighted
+        return updatedConfig
+
     }
 }
