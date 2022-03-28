@@ -53,11 +53,11 @@ class OptionCell: CollectionViewManagerCell {
         
         self.imageView.squaredSize = 20
         self.imageView.centerOnY()
-        self.imageView.pin(.left)
+        self.imageView.pin(.right)
         
         self.label.setSize(withWidth: self.contentView.width)
         self.label.centerOnY()
-        self.label.match(.left, to: .right, of: self.imageView, offset: .long)
+        self.label.pin(.left)
         
         self.lineView.expandToSuperviewWidth()
         self.lineView.height = 1
