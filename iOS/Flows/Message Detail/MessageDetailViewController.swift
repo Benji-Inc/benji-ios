@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 @MainActor
 protocol MessageDetailViewControllerDelegate: AnyObject {
@@ -93,6 +94,23 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
         
         data[.options] = [.option(.viewReplies), .option(.pin), .option(.edit), .option(.more)].reversed()
+        
+        guard let msg = ChatClient.shared.messageController(for: self.message)?.message else { return data }
+        
+        data[.reads] = msg.hasBeenConsumedBy.filter({ person in
+            return !person.isCurrentUser
+        }).compactMap({ person in
+            let member = Member(personId: person.personId)
+            return .member(member)
+        })
+        
+        if msg.replyCount > 0 {
+            data[.recentReply] = [.reply(msg.id)]
+        }
+        
+        
+        
+        
         return data
     }
 }

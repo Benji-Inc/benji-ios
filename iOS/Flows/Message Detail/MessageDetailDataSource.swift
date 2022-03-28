@@ -68,13 +68,17 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
 
     enum ItemType: Hashable {
         case option(OptionType)
-        case members([Member])
+        case member(Member)
         case info(MessageId)
         case reply(MessageId)
     }
     
     private let topOptionConfig = ManageableCellRegistration<MessageTopOptionCell>().provider
-
+    private let readConfig = ManageableCellRegistration<MessageReadCell>().provider
+    private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
+    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
+    private let replyConfig = ManageableCellRegistration<RecentReplyView>().provider
+    
 //    private let memberConfig = ManageableCellRegistration<MemberCell>().provider
 //    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
 //    private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
@@ -94,12 +98,18 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                                                                     for: indexPath,
                                                                     item: option)
             return cell
-        case .members(_):
-            return nil
+        case .member(let member):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.readConfig,
+                                                                    for: indexPath,
+                                                                    item: member)
+            return cell
         case .info(_):
             return nil
-        case .reply(_):
-            return nil
+        case .reply(let messagId):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.replyConfig,
+                                                                    for: indexPath,
+                                                                    item: messagId)
+            return cell
         }
 //        let lastIndex = self.snapshot().numberOfItems(inSection: section) - 1
 //        let shouldHideLine = lastIndex == indexPath.row
@@ -128,15 +138,23 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
 //        }
     }
     
-//    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
-//                                           section: SectionType,
-//                                           indexPath: IndexPath) -> UICollectionReusableView? {
-//
-//        if kind == SectionBackgroundView.kind {
-//            return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
-//                                                                         for: indexPath)
-//        }
-//
-//        return nil
-//    }
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
+                                           section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+        
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            header.leftLabel.setText("Read by")
+            header.rightLabel.isHidden = true
+            header.button.isHidden = true 
+            return header
+        case SectionBackgroundView.kind:
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
+                                                                         for: indexPath)
+        default:
+            return nil
+        }
+    }
 }

@@ -112,6 +112,8 @@
 		D60B885227F2181900B3E1C2 /* MessageDetailCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885127F2181900B3E1C2 /* MessageDetailCollectionView.swift */; };
 		D60B885427F2186F00B3E1C2 /* MessageDetailCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885327F2186F00B3E1C2 /* MessageDetailCollectionViewLayout.swift */; };
 		D60B885627F231E000B3E1C2 /* MessageTopOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */; };
+		D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885727F2447600B3E1C2 /* MessageReadCell.swift */; };
+		D60B885A27F2579A00B3E1C2 /* RecentReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885927F2579A00B3E1C2 /* RecentReplyView.swift */; };
 		D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* ThemeButton.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -376,7 +378,7 @@
 		D646D36A27E5055D0077D20B /* AttachmentsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36927E5055D0077D20B /* AttachmentsCollectionViewLayout.swift */; };
 		D646D36C27E53B880077D20B /* CaptureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36B27E53B880077D20B /* CaptureCell.swift */; };
 		D646D36E27E53D750077D20B /* AttachmentOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36D27E53D750077D20B /* AttachmentOptionCell.swift */; };
-		D646D37027E544990077D20B /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36F27E544990077D20B /* AttachmentHeaderView.swift */; };
+		D646D37027E544990077D20B /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D36F27E544990077D20B /* SectionHeaderView.swift */; };
 		D646D37227E54DFC0077D20B /* AttachmentLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37127E54DFC0077D20B /* AttachmentLineView.swift */; };
 		D646D37627E579310077D20B /* AddMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646D37527E579310077D20B /* AddMediaView.swift */; };
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
@@ -876,6 +878,8 @@
 		D60B885127F2181900B3E1C2 /* MessageDetailCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailCollectionView.swift; sourceTree = "<group>"; };
 		D60B885327F2186F00B3E1C2 /* MessageDetailCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTopOptionCell.swift; sourceTree = "<group>"; };
+		D60B885727F2447600B3E1C2 /* MessageReadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReadCell.swift; sourceTree = "<group>"; };
+		D60B885927F2579A00B3E1C2 /* RecentReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentReplyView.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -1004,7 +1008,7 @@
 		D646D36927E5055D0077D20B /* AttachmentsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D646D36B27E53B880077D20B /* CaptureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCell.swift; sourceTree = "<group>"; };
 		D646D36D27E53D750077D20B /* AttachmentOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentOptionCell.swift; sourceTree = "<group>"; };
-		D646D36F27E544990077D20B /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
+		D646D36F27E544990077D20B /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		D646D37127E54DFC0077D20B /* AttachmentLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentLineView.swift; sourceTree = "<group>"; };
 		D646D37527E579310077D20B /* AddMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMediaView.swift; sourceTree = "<group>"; };
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
@@ -1373,7 +1377,9 @@
 				80E228DE27C8132500AF37AC /* MessageDetailCoordinator.swift */,
 				D60B884F27F217EB00B3E1C2 /* MessageDetailDataSource.swift */,
 				80E228DC27C80B1C00AF37AC /* MessageDetailViewController.swift */,
+				D60B885727F2447600B3E1C2 /* MessageReadCell.swift */,
 				D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */,
+				D60B885927F2579A00B3E1C2 /* RecentReplyView.swift */,
 			);
 			path = "Message Detail";
 			sourceTree = "<group>";
@@ -1802,7 +1808,6 @@
 			isa = PBXGroup;
 			children = (
 				D646D36527E505280077D20B /* AttachmentCell.swift */,
-				D646D36F27E544990077D20B /* AttachmentHeaderView.swift */,
 				D646D37127E54DFC0077D20B /* AttachmentLineView.swift */,
 				D646D36D27E53D750077D20B /* AttachmentOptionCell.swift */,
 				D646D36327E505190077D20B /* AttachmentsCollectionView.swift */,
@@ -1926,6 +1931,7 @@
 				D605AC9B27877F890015D800 /* MessageBubbleView.swift */,
 				D6E974302752B4B000D95F08 /* MessageContentView */,
 				D60CA47327ED1C1800F0871A /* OptionCell.swift */,
+				D646D36F27E544990077D20B /* SectionHeaderView.swift */,
 				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D66F0FE122C041AF00BA277D /* PersonView.swift */,
 				D6850D592798967E001327D3 /* PullView.swift */,
@@ -2882,7 +2888,7 @@
 				D6A6691D271A44FB0001D218 /* Pass.swift in Sources */,
 				D6DEC3ED27A1D9520072D9D0 /* CircleViewController.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
-				D646D37027E544990077D20B /* AttachmentHeaderView.swift in Sources */,
+				D646D37027E544990077D20B /* SectionHeaderView.swift in Sources */,
 				8043F53F276BC05D0036FAC8 /* PlaceholderConversationCell.swift in Sources */,
 				D6203A2A27EB8F28002FEAF5 /* InputHandlerCoordinator.swift in Sources */,
 				D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
@@ -2977,6 +2983,7 @@
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D65D460427A9B1960019301C /* old_MessageReplyView.swift in Sources */,
+				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationListCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
@@ -3115,6 +3122,7 @@
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
 				803DECCA27BDBCA40029A734 /* UIResponder+Extensions.swift in Sources */,
+				D60B885A27F2579A00B3E1C2 /* RecentReplyView.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D61A33CF27D4F28800056242 /* EmojiCollectionView.swift in Sources */,
