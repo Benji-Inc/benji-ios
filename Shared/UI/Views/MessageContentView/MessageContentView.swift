@@ -73,10 +73,9 @@ class MessageContentView: BaseView {
 
         // Make sure the author, date and emoji view are on top of the other content
         self.mainContentArea.addSubview(self.authorView)
-        self.mainContentArea.addSubview(self.dateView)
-
         #warning("Remove testing")
-        self.dateView.text = "1 Testing Ago"
+//        self.addSubview(self.dateView)
+//        self.dateView.text = "5 minutes ago"
         self.mainContentArea.addSubview(self.emojiView)
     }
 
@@ -102,22 +101,22 @@ class MessageContentView: BaseView {
 
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         if self.imageView.isVisible {
-            self.authorView.pin(.top, offset: MessageContentView.padding)
-            self.authorView.pin(.left, offset: MessageContentView.padding)
+            self.authorView.pin(.top, offset: .short)
+            self.authorView.pin(.left, offset: .short)
         } else {
             self.authorView.pin(.top)
             self.authorView.pin(.left)
         }
-        self.emojiView.center = CGPoint(x: self.authorView.width + 6,
-                                        y: self.authorView.height + 6)
+        self.emojiView.center = CGPoint(x: self.authorView.width + 4,
+                                        y: self.authorView.height + 4)
 
-        self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.dateView.match(.top, to: .top, of: self.authorView)
-        self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.right)
+//        self.dateView.setSize(withWidth: self.width)
+//        self.dateView.pin(.right, offset: Theme.ContentOffset.screenPadding)
+//        self.dateView.pin(.bottom, offset: .xtraLong)
 
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
-        self.linkView.width = self.mainContentArea.width.half
+        self.linkView.match(.top, to: .top, of: self.authorView)
+        self.linkView.expand(.right)
         self.linkView.expand(.bottom)
 
         if self.imageView.isVisible {
@@ -127,7 +126,7 @@ class MessageContentView: BaseView {
                                   maxHeight: self.mainContentArea.height)
         } else {
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-            self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+            self.textView.match(.top, to: .top, of: self.authorView)
             self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
                                   maxHeight: self.mainContentArea.height - self.textView.top)
         }
