@@ -111,6 +111,7 @@
 		D60B885027F217EB00B3E1C2 /* MessageDetailDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B884F27F217EB00B3E1C2 /* MessageDetailDataSource.swift */; };
 		D60B885227F2181900B3E1C2 /* MessageDetailCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885127F2181900B3E1C2 /* MessageDetailCollectionView.swift */; };
 		D60B885427F2186F00B3E1C2 /* MessageDetailCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885327F2186F00B3E1C2 /* MessageDetailCollectionViewLayout.swift */; };
+		D60B885627F231E000B3E1C2 /* MessageTopOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */; };
 		D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* ThemeButton.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -874,6 +875,7 @@
 		D60B884F27F217EB00B3E1C2 /* MessageDetailDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailDataSource.swift; sourceTree = "<group>"; };
 		D60B885127F2181900B3E1C2 /* MessageDetailCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailCollectionView.swift; sourceTree = "<group>"; };
 		D60B885327F2186F00B3E1C2 /* MessageDetailCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTopOptionCell.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -1371,6 +1373,7 @@
 				80E228DE27C8132500AF37AC /* MessageDetailCoordinator.swift */,
 				D60B884F27F217EB00B3E1C2 /* MessageDetailDataSource.swift */,
 				80E228DC27C80B1C00AF37AC /* MessageDetailViewController.swift */,
+				D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */,
 			);
 			path = "Message Detail";
 			sourceTree = "<group>";
@@ -2903,6 +2906,7 @@
 				D68759692728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */,
 				D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
+				D60B885627F231E000B3E1C2 /* MessageTopOptionCell.swift in Sources */,
 				D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D60CA47827EE299A00F0871A /* EmojiPickerViewController.swift in Sources */,

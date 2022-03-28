@@ -83,7 +83,6 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     override func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.height = self.view.height - self.messageContent.bottom - Theme.ContentOffset.xtraLong.value
-       // self.collectionView.pin(.bottom)
     }
     
     override func getAllSections() -> [MessageDetailDataSource.SectionType] {
@@ -91,7 +90,10 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     }
 
     override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
-        return [:]
+        var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
+        
+        data[.options] = [.option(.viewReplies), .option(.pin), .option(.edit), .option(.more)].reversed()
+        return data
     }
 }
 
@@ -106,6 +108,7 @@ extension MessageDetailViewController: TransitionableViewController {
     
     func prepareForPresentation() {
         self.collectionView.top = self.view.height
+        self.loadInitialData()
     }
     
     func handlePresentationCompleted() {}
