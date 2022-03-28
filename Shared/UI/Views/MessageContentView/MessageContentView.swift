@@ -73,8 +73,6 @@ class MessageContentView: BaseView {
         // Make sure the author, date and emoji view are on top of the other content
         self.mainContentArea.addSubview(self.authorView)
         self.mainContentArea.addSubview(self.dateView)
-        #warning("Remove testing code")
-        self.dateView.text = "5 minutes ago"
         self.mainContentArea.addSubview(self.emojiView)
     }
 
@@ -152,6 +150,7 @@ class MessageContentView: BaseView {
             self.emojiView.set(text: expression)
         }
 
+        self.dateView.text = message.lastUpdatedAt?.getTimeAgoString()
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {
