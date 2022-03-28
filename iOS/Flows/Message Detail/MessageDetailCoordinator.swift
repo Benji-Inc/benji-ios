@@ -45,7 +45,7 @@ class MessageDetailCoordinator: PresentableCoordinator<Messageable?> {
                 case .delete:
                     break
                 }
-            case .member(_):
+            case .read(_):
                 break
             case .info(_):
                 break

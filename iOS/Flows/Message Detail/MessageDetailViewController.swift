@@ -30,6 +30,10 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         return self.messageContentView
     }
     
+    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .topCenter,
+                                                  endPoint: .bottomCenter)
+    
     private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
@@ -65,6 +69,10 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         self.collectionView.allowsMultipleSelection = false
         
         self.view.bringSubviewToFront(self.collectionView)
+        
+        self.view.addSubview(self.bottomGradientView)
+        self.view.addSubview(self.topGradientView)
+        self.topGradientView.roundCorners()
     }
     
     override func viewDidLayoutSubviews() {
@@ -75,6 +83,9 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         self.messageContentView.bottom = self.view.height * 0.5
         
         super.viewDidLayoutSubviews()
+        
+        self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = Theme.ContentOffset.xtraLong.value
     
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
@@ -97,19 +108,17 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         guard let msg = ChatClient.shared.messageController(for: self.message)?.message else { return data }
         
-        data[.reads] = msg.hasBeenConsumedBy.filter({ person in
-            return !person.isCurrentUser
-        }).compactMap({ person in
-            let member = Member(personId: person.personId)
-            return .member(member)
+        data[.reads] = msg.readReactions.filter({ reaction in
+            return !reaction.author.isCurrentUser
+        }).compactMap({ read in
+            return .read(read)
         })
         
         if msg.replyCount > 0 {
             data[.recentReply] = [.reply(msg)]
         }
         
-        
-        
+        data[.metadata] = [.info(msg)]
         
         return data
     }
@@ -126,6 +135,7 @@ extension MessageDetailViewController: TransitionableViewController {
     
     func prepareForPresentation() {
         self.collectionView.top = self.view.height
+        self.topGradientView.match(.top, to: .top, of: self.collectionView)
         self.loadInitialData()
     }
     
@@ -133,11 +143,13 @@ extension MessageDetailViewController: TransitionableViewController {
     
     func handleFinalPresentation() {
         self.collectionView.pin(.bottom)
+        self.topGradientView.match(.top, to: .top, of: self.collectionView)
         self.view.setNeedsLayout()
     }
     func handleInitialDismissal() {}
     
     func handleDismissal() {
         self.collectionView.top = self.view.height
+        self.topGradientView.match(.top, to: .top, of: self.collectionView)
     }
 }

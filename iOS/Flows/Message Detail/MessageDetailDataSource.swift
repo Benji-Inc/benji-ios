@@ -68,8 +68,8 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
 
     enum ItemType: Hashable {
         case option(OptionType)
-        case member(Member)
-        case info(MessageId)
+        case read(ChatMessageReaction)
+        case info(Message)
         case reply(Message)
     }
     
@@ -78,6 +78,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
     private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     private let replyConfig = ManageableCellRegistration<RecentReplyView>().provider
+    private let metadatConfig = ManageableCellRegistration<MessageMetadataCell>().provider
     
 //    private let memberConfig = ManageableCellRegistration<MemberCell>().provider
 //    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
@@ -98,13 +99,16 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                                                                     for: indexPath,
                                                                     item: option)
             return cell
-        case .member(let member):
+        case .read(let read):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.readConfig,
                                                                     for: indexPath,
-                                                                    item: member)
+                                                                    item: read)
             return cell
-        case .info(_):
-            return nil
+        case .info(let message):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.metadatConfig,
+                                                                    for: indexPath,
+                                                                    item: message)
+            return cell
         case .reply(let message):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.replyConfig,
                                                                     for: indexPath,

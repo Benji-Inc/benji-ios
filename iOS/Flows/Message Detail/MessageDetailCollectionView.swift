@@ -14,6 +14,11 @@ class MessageDetailCollectionView: CollectionView {
         super.init(layout: MessageDetailCollectionViewLayout())
         self.set(backgroundColor: .B0)
         
+        self.contentInset = UIEdgeInsets(top: Theme.ContentOffset.short.value,
+                                         left: 0,
+                                         bottom: 100,
+                                         right: 0)
+        
         self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.layer.cornerRadius = Theme.cornerRadius
         self.layer.masksToBounds = true 
