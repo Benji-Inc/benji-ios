@@ -60,7 +60,6 @@ class MessageContentView: BaseView {
 
         self.bubbleView.addSubview(self.mainContentArea)
 
-
         self.mainContentArea.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
         self.imageView.roundCorners()
@@ -73,9 +72,9 @@ class MessageContentView: BaseView {
 
         // Make sure the author, date and emoji view are on top of the other content
         self.mainContentArea.addSubview(self.authorView)
-        #warning("Remove testing")
-//        self.addSubview(self.dateView)
-//        self.dateView.text = "5 minutes ago"
+        self.mainContentArea.addSubview(self.dateView)
+        #warning("Remove testing code")
+        self.dateView.text = "5 minutes ago"
         self.mainContentArea.addSubview(self.emojiView)
     }
 
@@ -94,10 +93,15 @@ class MessageContentView: BaseView {
         self.imageView.pin(.top)
         self.imageView.expand(.bottom)
         if self.textView.isVisible {
-            self.imageView.width = self.mainContentArea.width.half
+            self.imageView.width = self.mainContentArea.halfWidth
         } else {
             self.imageView.expand(.right)
         }
+
+        self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.linkView.match(.top, to: .top, of: self.authorView)
+        self.linkView.width = self.mainContentArea.halfWidth
+        self.linkView.expand(.bottom)
 
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         if self.imageView.isVisible {
@@ -110,23 +114,25 @@ class MessageContentView: BaseView {
         self.emojiView.center = CGPoint(x: self.authorView.width + 4,
                                         y: self.authorView.height + 4)
 
-//        self.dateView.setSize(withWidth: self.width)
-//        self.dateView.pin(.right, offset: Theme.ContentOffset.screenPadding)
-//        self.dateView.pin(.bottom, offset: .xtraLong)
+        self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.dateView.match(.top, to: .top, of: self.authorView)
+        self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
 
-        self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.linkView.match(.top, to: .top, of: self.authorView)
-        self.linkView.expand(.right)
-        self.linkView.expand(.bottom)
+        if self.imageView.isVisible && self.textView.isVisible {
+            self.dateView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
+            self.dateView.match(.top, to: .top, of: self.imageView)
+        } else if self.linkView.isVisible {
+            self.dateView.match(.left, to: .right, of: self.linkView, offset: MessageContentView.padding)
+            self.dateView.match(.top, to: .top, of: self.linkView)
+        }
 
+        self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
         if self.imageView.isVisible {
             self.textView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
-            self.textView.pin(.top)
             self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
                                   maxHeight: self.mainContentArea.height)
         } else {
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-            self.textView.match(.top, to: .top, of: self.authorView)
             self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
                                   maxHeight: self.mainContentArea.height - self.textView.top)
         }
@@ -137,7 +143,7 @@ class MessageContentView: BaseView {
     func configure(with message: Messageable) {
         self.message = message
 
-        self.textView.isVisible = message.kind.hasText
+        self.textView.isVisible = message.kind.hasText && !message.kind.isLink
         self.imageView.isVisible = message.kind.isImage
         self.linkView.isVisible = message.kind.isLink
         self.emojiView.isVisible = message.expression.exists
