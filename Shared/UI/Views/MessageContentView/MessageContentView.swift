@@ -95,6 +95,7 @@ class MessageContentView: BaseView {
         self.mainContentArea.expand(.right, padding: MessageContentView.padding.value)
         self.mainContentArea.expand(.bottom, padding: MessageContentView.padding.value)
 
+        // Author and Emoji
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         self.authorView.pin(.top)
         self.authorView.pin(.left)
@@ -102,15 +103,18 @@ class MessageContentView: BaseView {
         self.emojiView.center = CGPoint(x: self.authorView.width - Theme.ContentOffset.short.value,
                                         y: self.authorView.height)
 
+        // Date view
         self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.dateView.match(.top, to: .top, of: self.authorView)
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
 
+        // Link view
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
         self.linkView.expand(.right)
         self.linkView.expand(.bottom)
 
+        // Text view
         self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
         self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         if self.imageView.isVisible {
@@ -121,6 +125,7 @@ class MessageContentView: BaseView {
         self.textView.expand(.bottom)
         self.textView.updateFontSize()
 
+        // Image view
         if self.textView.isVisible {
             self.imageView.pin(.top)
             self.imageView.match(.left, to: .right, of: self.textView, offset: .short)
@@ -131,6 +136,7 @@ class MessageContentView: BaseView {
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
 
+        // Replies
         self.replyCountView.width = 22
         self.replyCountView.height = 22
         self.replyCountView.layer.cornerRadius = 4
