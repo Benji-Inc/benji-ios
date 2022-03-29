@@ -74,17 +74,11 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     func getDropZoneFrame() -> CGRect {
         let center = self.getItemCenterPoint(withYOffset: 0, scale: 1)
-        let padding = Theme.ContentOffset.long.value.doubled
-        var frame = CGRect(x: padding.half,
+        var frame = CGRect(x: 0,
                            y: 0,
-                           width: self.collectionView!.width - padding,
-                           height: 20)
-        switch uiState {
-        case .read:
-            frame.centerY = center.y + (self.collectionView!.height * 0.275)
-        case .write:
-            frame.centerY = center.y + (self.collectionView!.height * 0.175)
-        }
+                           width: self.collectionView!.width,
+                           height: self.itemHeight)
+        frame.center = center
         
         return frame
     }
