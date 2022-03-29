@@ -38,12 +38,12 @@ class EmojiCircleView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.label.setSize(withWidth: self.height * 0.8)
-        self.label.centerOnXAndY()
-        
+
         self.squaredSize = self.currentSize == .small ? 22 : 30
         self.makeRound()
+
+        self.label.setSize(withWidth: self.height * 0.8)
+        self.label.centerOnXAndY()
     }
 }
 
@@ -59,7 +59,6 @@ class ContextCueView: EmojiCircleView {
     private var animateContextCueTask: Task<Void, Never>?
     
     func configure(with person: PersonType) {
-        
         // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
         self.newContextCueTask?.cancel()
         self.animateContextCueTask?.cancel()
