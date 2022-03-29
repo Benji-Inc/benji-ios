@@ -147,6 +147,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             .mainSink { [unowned self] state in
                 self.updateUI(for: state, forceLayout: false)
             }.store(in: &self.cancellables)
+        
+        self.collectionView.allowsMultipleSelection = false 
     }
 
     override func viewDidLayoutSubviews() {
