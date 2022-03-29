@@ -12,29 +12,13 @@ import SwiftUI
 class MessageDetailViewState: ObservableObject {
 
     @Published var message: Messageable?
-    @Published var deliveryStatus: DeliveryStatus
-    @Published var statusText: String
 
     var emotion: Emotion? {
         return self.message?.emotions.first
     }
-    var isRead: Bool {
-        return self.message?.isConsumed ?? false
-    }
-    var updateDate: Date? {
-        return self.message?.lastUpdatedAt
-    }
-    var replyCount: Int {
-        return self.message?.totalReplyCount ?? 0
-    }
-    var context: MessageContext? {
-        return self.message?.context
-    }
 
     init(message: Messageable?) {
         self.message = message
-        self.deliveryStatus = .sent
-        self.statusText = ""
     }
 }
 
@@ -45,17 +29,11 @@ struct MessageDetailView: View {
     var body: some View {
         HStack {
             if let _ = self.config.emotion {
-                Spacer().frame(width: Theme.ContentOffset.standard.value)
+                Spacer().frame(width: Theme.ContentOffset.long.value)
                 EmotionView(config: self.config)
             }
             
             Spacer()
-
-            MessageStatusView(config: self.config)
-                .padding(.vertical, 0.0)
-
-            Spacer()
-                .frame(width: Theme.ContentOffset.standard.value)
         }
         .frame(height: 50)
     }

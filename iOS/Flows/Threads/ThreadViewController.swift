@@ -263,7 +263,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         // Setting this here fixes issue with recursion during presentation.
         if let msg = self.messageController.message {
             self.messageState.message = msg
-            self.messageState.deliveryStatus = msg.deliveryStatus
         }
         
         if let replyId = self.startingReplyId {
@@ -321,22 +320,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             }
         }.add(to: self.autocancelTaskPool)
     }
-    
-    private var statusTextTask: Task<Void, Never>?
-
-    func updateStatusText(for message: Message) {
-        guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
-        
-        self.statusTextTask = Task {
-            
-            self.messageState.statusText = message.context.displayName
-
-            await Task.snooze(seconds: 2)
-            guard !Task.isCancelled else { return }
-            
-            self.messageState.statusText = message.lastUpdatedAt?.getTimeAgoString() ?? ""
-        }
-    }
 }
 // MARK: - Messaging
 
@@ -385,8 +368,7 @@ extension ThreadViewController: TransitionableViewController {
     }
     
     func handlePresentationCompleted() {
-        guard let message = self.messageController.message else { return }
-        self.updateStatusText(for: message)
+        guard self.messageController.message.exists else { return }
         self.loadInitialData()
     }
     
@@ -423,7 +405,6 @@ extension ThreadViewController {
             guard let msg = self.messageController.message else { return }
             self.parentMessageView.configure(with: msg)
             self.messageState.message = msg
-            self.messageState.deliveryStatus = msg.deliveryStatus
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in

@@ -42,14 +42,14 @@ class ThemeLabel: UILabel {
         }
     }
 
-    /// The string attributes to apply to any text given this label's assigned font and font color.
+    /// The string attributes to apply to any text. This reflects the label's assigned font and font color.
     private var defaultAttributes: [NSAttributedString.Key : Any] {
         let font = self.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
         let textColor = self.textColor ?? ThemeColor.T1.color
 
-        return [.font: font,
-                .foregroundColor: textColor,
-                .kern: self.kerning]
+        return [.font : font,
+                .foregroundColor : textColor,
+                .kern : self.kerning]
     }
 
     // MARK: Lifecycle
