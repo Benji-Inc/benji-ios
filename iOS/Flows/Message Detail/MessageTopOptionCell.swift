@@ -16,7 +16,7 @@ class MessageTopOptionCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: MessageDetailDataSource.OptionType?
     
     let imageView = UIImageView()
-    let label = ThemeLabel(font: .regular)
+    let label = ThemeLabel(font: .small)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -42,9 +42,9 @@ class MessageTopOptionCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.imageView.squaredSize = self.height * 0.3
+        self.imageView.squaredSize = self.height * 0.32
         self.imageView.centerOnX()
-        self.imageView.bottom = self.contentView.centerY
+        self.imageView.bottom = self.contentView.centerY + 6
         
         self.label.setSize(withWidth: self.contentView.width)
         self.label.centerOnX()

@@ -21,7 +21,7 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: MoreOptionModel?
     
     let imageView = UIImageView()
-    let label = ThemeLabel(font: .regular)
+    let label = ThemeLabel(font: .small)
     let button = ThemeButton()
     
     var didTapEdit: CompletionOptional = nil
@@ -57,7 +57,7 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
         
         self.imageView.squaredSize = self.height * 0.3
         self.imageView.centerOnX()
-        self.imageView.bottom = self.contentView.centerY
+        self.imageView.bottom = self.contentView.centerY + 6
         
         self.label.setSize(withWidth: self.contentView.width)
         self.label.centerOnX()

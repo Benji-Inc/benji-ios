@@ -430,25 +430,9 @@ extension ConversationListViewController: MessageInteractableController {
         return self.getCentmostMessageCellContent()!
     }
     
-    func handleDismissal() {
-        
-    }
-    
-    func handleInitialDismissal() {
-        
-    }
-    
-    func handleFinalPresentation() {
-        
-    }
-    
-    func handlePresentationCompleted() {
-        
-    }
-    
-    func handleCompletedDismissal() {
-//        delay(0.1) {
-//            self.becomeFirstResponder()
-//        }
-    }
+    func handleDismissal() {}
+    func handleInitialDismissal() {}
+    func handleFinalPresentation() {}
+    func handlePresentationCompleted() {}
+    func handleCompletedDismissal() {}
 }
