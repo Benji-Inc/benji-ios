@@ -123,13 +123,11 @@ class MessageContentView: BaseView {
         self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
         if self.imageView.isVisible {
             self.textView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
-            self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
-                                  maxHeight: self.mainContentArea.height)
         } else {
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-            self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
-                                  maxHeight: self.mainContentArea.height - self.textView.top)
         }
+        self.textView.expand(.right)
+        self.textView.expand(.bottom)
         self.textView.updateFontSize()
 
         self.replyCountView.width = 22
