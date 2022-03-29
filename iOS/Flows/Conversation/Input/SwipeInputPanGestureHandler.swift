@@ -27,7 +27,7 @@ class SwipeInputPanGestureHandler {
     /// The center point of the preview view when the pan started.
     private var initialPreviewCenter: CGPoint?
     /// How far the preview view can be dragged left or right.
-    private let maxXOffset: CGFloat = 40
+    private let maxXOffset: CGFloat = 20
     /// If true, the preview view is currently in the drop zone.
     private var isPreviewInDropZone = false
 
@@ -150,31 +150,13 @@ class SwipeInputPanGestureHandler {
               let previewView = self.previewView else { return }
 
         let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
-
-        var previewCenter = initialCenter + CGPoint(x: offsetX, y: panOffset.y)
+        let offsetY = -self.getYOffset(withPanOffset: panOffset.y)
+        logDebug(offsetY)
+        let previewCenter = initialCenter + CGPoint(x: offsetX, y: offsetY)
+        previewView.center = previewCenter
 
         // As the user drags further up, gravitate the preview view toward the drop zone.
         let dropZoneCenter = self.viewController.dropZoneFrame.center
-        let xGravityRange: CGFloat = 30
-        // Range along y axis from the drop zone center within which we start gravitating the preview
-        let yGravityRange: CGFloat = self.viewController.dropZoneFrame.height
-
-        // Vector pointing from the current preview center to the drop zone center.
-        var gravityVector = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter)
-
-        // The closer to the drop zone, the stronger the gravity should be.
-        let gravityFactorX = lerpClamped(abs(previewCenter.x - dropZoneCenter.x)/xGravityRange,
-                                         keyPoints: [1, 0.95, 0.85, 0.5, 0])
-        let gravityFactorY = lerpClamped(abs(previewCenter.y - dropZoneCenter.y)/yGravityRange,
-                                         keyPoints: [1, 0.95, 0.85, 0.7, 0])
-        gravityVector = CGVector(dx: gravityVector.dx * gravityFactorX,
-                                 dy: gravityVector.dy * gravityFactorY)
-
-        // Adjust the preview's center with the gravity vector.
-        previewCenter = CGPoint(x: previewCenter.x + gravityVector.dx,
-                                y: previewCenter.y + gravityVector.dy)
-
-        previewView.center = previewCenter
 
         // Provide haptic and visual feedback when the message is ready to send.
         let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
@@ -200,6 +182,12 @@ class SwipeInputPanGestureHandler {
             }
             self.isPreviewInDropZone = false
         }
+    }
+
+    private func getYOffset(withPanOffset panOffset: CGFloat) -> CGFloat {
+        let normalized = -panOffset/250
+        let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.3, 0.33, 0.36, 0.63, 0.66, 0.69, 0.97, 1])
+        return adjustedNormalized * 250
     }
 
     private func resetPreviewAndInputViews(didSend: Bool) {

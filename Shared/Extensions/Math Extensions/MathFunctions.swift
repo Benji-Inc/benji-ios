@@ -63,10 +63,14 @@ func lerp(_ normalized: CGFloat, keyPoints: [CGFloat]) -> CGFloat {
 
     guard pointCount > 0 else { return 0 }
 
+    guard normalized > 0 else { return keyPoints.first ?? 0 }
+
     let segmentLength = 1/CGFloat(pointCount - 1)
     let currentIndex = Int(normalized/segmentLength)
 
-    guard let segmentLowerBound = keyPoints[safe: currentIndex] else { return 0 }
+    guard let segmentLowerBound = keyPoints[safe: currentIndex] else {
+        return keyPoints.last ?? 0
+    }
     guard let segmentUpperBound = keyPoints[safe: currentIndex + 1] else { return segmentLowerBound }
 
     let normalizedInSegment
