@@ -96,9 +96,11 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
         var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
         
-        data[.options] = [.option(.viewReplies), .option(.pin), .option(.edit), .option(.more)].reversed()
         
         guard let msg = ChatClient.shared.messageController(for: self.message)?.message else { return data }
+        
+        data[.options] = [.option(.viewReplies), .option(.pin), .option(.edit), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+
         
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
             return !reaction.author.isCurrentUser

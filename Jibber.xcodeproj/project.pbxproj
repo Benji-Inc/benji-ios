@@ -115,6 +115,7 @@
 		D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885727F2447600B3E1C2 /* MessageReadCell.swift */; };
 		D60B885A27F2579A00B3E1C2 /* RecentReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885927F2579A00B3E1C2 /* RecentReplyView.swift */; };
 		D60B885C27F2717000B3E1C2 /* MessageMetadataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885B27F2717000B3E1C2 /* MessageMetadataCell.swift */; };
+		D60B886027F37BC800B3E1C2 /* MessageMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885F27F37BC800B3E1C2 /* MessageMoreCell.swift */; };
 		D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* ThemeButton.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -882,6 +883,7 @@
 		D60B885727F2447600B3E1C2 /* MessageReadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReadCell.swift; sourceTree = "<group>"; };
 		D60B885927F2579A00B3E1C2 /* RecentReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentReplyView.swift; sourceTree = "<group>"; };
 		D60B885B27F2717000B3E1C2 /* MessageMetadataCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMetadataCell.swift; sourceTree = "<group>"; };
+		D60B885F27F37BC800B3E1C2 /* MessageMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMoreCell.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -1380,6 +1382,7 @@
 				D60B884F27F217EB00B3E1C2 /* MessageDetailDataSource.swift */,
 				80E228DC27C80B1C00AF37AC /* MessageDetailViewController.swift */,
 				D60B885B27F2717000B3E1C2 /* MessageMetadataCell.swift */,
+				D60B885F27F37BC800B3E1C2 /* MessageMoreCell.swift */,
 				D60B885727F2447600B3E1C2 /* MessageReadCell.swift */,
 				D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */,
 				D60B885927F2579A00B3E1C2 /* RecentReplyView.swift */,
@@ -3153,6 +3156,7 @@
 				D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */,
 				D646D37627E579310077D20B /* AddMediaView.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
+				D60B886027F37BC800B3E1C2 /* MessageMoreCell.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */,

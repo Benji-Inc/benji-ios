@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Combine
+import Lottie
 
 class RecentReplyView: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Message
@@ -23,10 +24,15 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
 
     private var controller: MessageController?
     
+    let animationView = AnimationView.with(animation: .loading)
+    
     var subscriptions = Set<AnyCancellable>()
     
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.contentView.addSubview(self.animationView)
+        self.animationView.loopMode = .loop
         
         self.contentView.addSubview(self.bottomBubble)
         self.contentView.addSubview(self.middleBubble)
@@ -65,7 +71,7 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
     
     func configure(with item: Message) {
         Task.onMainActorAsync {
-            
+            self.animationView.play()
             if self.controller?.message != item {
                 self.controller = ChatClient.shared.messageController(cid: item.cid!, messageId: item.id)
 
@@ -87,11 +93,15 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
         self.messageContent.isVisible = true
         self.middleBubble.isVisible = true
         self.bottomBubble.isVisible = true
+        self.animationView.stop()
         self.layoutNow()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.centerOnXAndY()
         
         let maxWidth = self.width - Theme.ContentOffset.xtraLong.value.doubled
         

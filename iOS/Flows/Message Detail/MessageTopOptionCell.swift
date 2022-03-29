@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 class MessageTopOptionCell: CollectionViewManagerCell, ManageableCell {
     
@@ -28,7 +29,7 @@ class MessageTopOptionCell: CollectionViewManagerCell, ManageableCell {
         self.label.textAlignment = .center
         
         self.contentView.layer.cornerRadius = Theme.cornerRadius
-        self.contentView.layer.masksToBounds = true 
+        self.contentView.layer.masksToBounds = true
     }
     
     func configure(with item: MessageDetailDataSource.OptionType) {
