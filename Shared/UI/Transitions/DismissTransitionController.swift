@@ -45,27 +45,41 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         guard self.animator.isNil else {
             return
         }
+        
+        var toVC: MessageInteractableController?
+        var toView: MessageContentView?
+        var fromView: MessageContentView?
+        var fromVC: MessageInteractableController?
+        
+        if let vc = transitionContext.viewController(forKey: .to) as? MessageInteractableController {
+            toVC = vc
+            toView = vc.messageContent
+        } else if let rootVC = transitionContext.viewController(forKey: .to) as? RootNavigationController,
+                  let listVC = rootVC.viewControllers.first(where: { controller in
+                      return controller is ConversationListViewController
+                  }) as? ConversationListViewController {
+            toVC = listVC
+            toView = listVC.messageContent
+        }
+        
+        if let vc = transitionContext.viewController(forKey: .from) as? MessageInteractableController {
+            fromVC = vc
+            fromView = vc.messageContent
+        }
+        
+        guard let toView = toView,
+              let fromView = fromView,
+              let fromVC = fromVC else { return }
 
-        guard let rootVC = transitionContext.viewController(forKey: .to) as? RootNavigationController,
-              let listVC = rootVC.viewControllers.first(where: { controller in
-                  return controller is ConversationListViewController
-              }) as? ConversationListViewController,
-              let interactableVC = transitionContext.viewController(forKey: .from) as? MessageInteractableController
-               else { return }
-
-        let fromView = interactableVC.messageContent
-        let toView = listVC.getCentmostMessageCellContent()!
 
         let containerView = transitionContext.containerView
 
-        containerView.addSubview(interactableVC.view)
+        containerView.addSubview(fromVC.view)
 
         let finalFrame = toView.convert(toView.bounds, to: containerView)
 
         let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
                                               curve: .linear)
-
-        let threadVC = interactableVC as? ThreadViewController
         
         animator.addAnimations {
 
@@ -73,15 +87,15 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
                     fromView.center = finalFrame.center
-                    interactableVC.handleDismissal()
+                    fromVC.handleDismissal()
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                    interactableVC.handleInitialDismissal()
+                    fromVC.handleInitialDismissal()
                 }
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
-                    interactableVC.blurView.showBlur(false)
+                    fromVC.blurView.showBlur(false)
                 }
               })
         }
@@ -89,13 +103,9 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         animator.addCompletion { (position) in
             if position == .end {
                 toView.isHidden = false
-                fromView.isHidden = true
-                delay(0.1) {
-                    listVC.becomeFirstResponder()
-                }
+                toVC?.handleCompletedDismissal()
             } else if position == .start {
                 toView.isHidden = true
-                fromView.isHidden = false
             }
 
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)

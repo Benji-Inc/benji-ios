@@ -27,7 +27,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     let parentMessageView = MessageContentView()
     
     var messageContent: MessageContentView {
-        return self.parentMessageView
+        if let first = self.collectionView.indexPathsForSelectedItems?.first,
+                let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
+            return cell.content
+        } else {
+            return self.parentMessageView
+        }
     }
 
     weak var messageCellDelegate: MesssageCellDelegate? {
@@ -147,6 +152,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             .mainSink { [unowned self] state in
                 self.updateUI(for: state, forceLayout: false)
             }.store(in: &self.cancellables)
+        
+        self.collectionView.allowsMultipleSelection = false 
     }
 
     override func viewDidLayoutSubviews() {
@@ -358,9 +365,24 @@ extension ThreadViewController: TransitionableViewController {
     var receivingPresentationType: TransitionType {
         return .message(self.parentMessageView)
     }
+    
+    var receivingDismissalType: TransitionType {
+        if let first = self.collectionView.indexPathsForSelectedItems?.first,
+                let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
+            return .message(cell.content)
+        } else {
+            return .message(self.parentMessageView)
+        }
+    }
 
     var sendingDismissalType: TransitionType {
         return .message(self.parentMessageView)
+    }
+    
+    var sendingPresentationType: TransitionType {
+        guard let first = self.collectionView.indexPathsForSelectedItems?.first,
+                let cell = self.collectionView.cellForItem(at: first) as? MessageCell else { return .fade }
+        return .message(cell.content)
     }
     
     func handleFinalPresentation() {
@@ -380,6 +402,12 @@ extension ThreadViewController: TransitionableViewController {
     
     func handleDismissal() {
         self.pullView.bottom = self.messageContent.top
+    }
+    
+    func handleCompletedDismissal() {
+        if let selectedIndexPath = self.collectionView.indexPathsForSelectedItems?.first {
+            self.collectionView.deselectItem(at: selectedIndexPath, animated: false)
+        }
     }
 }
 

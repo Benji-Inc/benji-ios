@@ -24,7 +24,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         case edit
         case pin
         case more
-        case delete
         
         var image: UIImage? {
             switch self {
@@ -36,8 +35,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                 return UIImage(systemName: "bookmark")
             case .more:
                 return UIImage(systemName: "ellipsis")
-            case .delete:
-                return UIImage(systemName: "trash")
             }
         }
         
@@ -51,15 +48,11 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                 return "Pin"
             case .more:
                 return "More"
-            case .delete:
-                return "Delete Message"
             }
         }
         
         var color: ThemeColor {
             switch self {
-            case .delete:
-                return .red
             default:
                 return .T1
             }
@@ -67,8 +60,9 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
     }
 
     enum ItemType: Hashable {
+        case more(MoreOptionModel)
         case option(OptionType)
-        case read(ChatMessageReaction)
+        case read(ReadViewModel)
         case info(Message)
         case reply(Message)
     }
@@ -79,6 +73,10 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     private let replyConfig = ManageableCellRegistration<RecentReplyView>().provider
     private let metadatConfig = ManageableCellRegistration<MessageMetadataCell>().provider
+    private let moreConfige = ManageableCellRegistration<MessageMoreCell>().provider
+    
+    var didTapEdit: CompletionOptional = nil
+    var didTapDelete: CompletionOptional = nil
 
     // MARK: - Cell Dequeueing
 
@@ -108,6 +106,19 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                                                                     for: indexPath,
                                                                     item: message)
             return cell
+        case .more(let model):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.moreConfige,
+                                                                    for: indexPath,
+                                                                    item: model)
+            cell.didTapEdit = { [unowned self] in
+                self.didTapEdit?()
+            }
+            
+            cell.didTapDelete = { [unowned self] in
+                self.didTapDelete?()
+            }
+            
+            return cell
         }
     }
     
@@ -119,6 +130,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+
             switch section {
             case .options:
                 break
@@ -134,9 +146,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
             header.button.isHidden = true
             header.lineView.isHidden = true 
             return header
-        case SectionBackgroundView.kind:
-            return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
-                                                                         for: indexPath)
         default:
             return nil
         }

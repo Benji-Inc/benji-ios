@@ -69,7 +69,7 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.textView.textAlignment = .left
-
+        self.textView.isVisible = false
         self.mainContentArea.addSubview(self.linkView)
 
         // Make sure the author, date and emoji view are on top of the other content

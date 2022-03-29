@@ -14,14 +14,10 @@ class MessageMetadataCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: Message?
 
-    let label = ThemeLabel(font: .regular)
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.label.setText("Coming soon...")
-        self.label.alpha = 0.5
-        self.contentView.addSubview(self.label)
     }
     
     func configure(with item: Message) {
@@ -31,7 +27,6 @@ class MessageMetadataCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.label.setSize(withWidth: self.contentView.width)
-        self.label.centerOnXAndY()
+
     }
 }

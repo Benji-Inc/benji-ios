@@ -48,10 +48,23 @@ extension ConversationListCoordinator {
                                                    router: self.router,
                                                    deepLink: self.deepLink)
         
-        self.present(coordinator) { [unowned self] message in
-            self.presentThread(for: channelId,
-                                  messageId: messageId,
-                                  startingReplyId: nil)
+        self.present(coordinator) { [unowned self] result in
+            switch result {
+            case .message(_):
+                self.presentThread(for: channelId,
+                                   messageId: messageId,
+                                   startingReplyId: nil)
+            case .reply(let replyId):
+                self.presentThread(for: channelId,
+                                   messageId: messageId,
+                                   startingReplyId: replyId)
+            case .conversation(let conversation):
+                Task.onMainActorAsync {
+                    await self.listVC.scrollToConversation(with: conversation, messageId: nil)
+                }
+            case .none:
+                break
+            }
         }
     }
     

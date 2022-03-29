@@ -9,11 +9,14 @@
 import Foundation
 import StreamChat
 
+struct ReadViewModel: Hashable {
+    var readReaction: ChatMessageReaction?
+}
+
 class MessageReadCell: CollectionViewManagerCell, ManageableCell {
+    typealias ItemType = ReadViewModel
     
-    typealias ItemType = ChatMessageReaction
-    
-    var currentItem: ChatMessageReaction?
+    var currentItem: ReadViewModel?
     
     let personView = BorderedPersonView()
     let label = ThemeLabel(font: .xtraSmall)
@@ -37,8 +40,15 @@ class MessageReadCell: CollectionViewManagerCell, ManageableCell {
     /// A reference to a task for configuring the cell.
     private var configurationTask: Task<Void, Never>?
 
-    func configure(with item: ChatMessageReaction) {
+    func configure(with item: ReadViewModel) {
         self.configurationTask?.cancel()
+        
+        guard let item = item.readReaction else {
+            self.personView.isVisible = false
+            return
+        }
+        
+        self.personView.isVisible = true 
 
         self.configurationTask = Task {
             guard let person = await PeopleStore.shared.getPerson(withPersonId: item.author.id) else { return }
@@ -70,7 +80,7 @@ class MessageReadCell: CollectionViewManagerCell, ManageableCell {
     private func subscribeToUpdates() {
         // Make sure that the person's focus status up to date.
         PeopleStore.shared.$personUpdated.filter { [unowned self] updatedPerson in
-            self.currentItem?.author.id == updatedPerson?.personId
+            self.currentItem?.readReaction?.author.id == updatedPerson?.personId
         }.mainSink { [unowned self] updatedPerson in
             self.personView.set(person: updatedPerson)
         }.store(in: &self.cancellables)

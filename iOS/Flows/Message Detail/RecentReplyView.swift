@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Combine
+import Lottie
 
 class RecentReplyView: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Message
@@ -23,10 +24,19 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
 
     private var controller: MessageController?
     
+    let animationView = AnimationView.with(animation: .loading)
+    let label  = ThemeLabel(font: .regular)
+    
     var subscriptions = Set<AnyCancellable>()
     
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.contentView.addSubview(self.animationView)
+        self.animationView.loopMode = .loop
+        self.contentView.addSubview(self.label)
+        self.label.alpha = 0.25
+        self.label.setText("No replies")
         
         self.contentView.addSubview(self.bottomBubble)
         self.contentView.addSubview(self.middleBubble)
@@ -57,6 +67,11 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
         self.bottomBubble.layer.masksToBounds = true
         self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
         self.bottomBubble.tailLength = 0
+        
+        self.messageContent.isVisible = false
+        self.middleBubble.isVisible = false
+        self.bottomBubble.isVisible = false
+        self.label.isVisible = false
     }
     
     func configure(with item: Message) {
@@ -64,15 +79,20 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
             
             if self.controller?.message != item {
                 self.controller = ChatClient.shared.messageController(cid: item.cid!, messageId: item.id)
-
+                self.animationView.play()
                 try? await self.controller?.loadPreviousReplies()
                 self.subscribeToUpdates()
+            } else {
+                self.label.isVisible = true
             }
             
-//            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled else { return }
             
             if let latest = self.controller?.replies.first {
                 self.update(for: latest)
+            } else {
+                self.label.isVisible = true
+                self.animationView.stop()
             }
         }
     }
@@ -80,11 +100,22 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
     @MainActor
     private func update(for message: Message) {
         self.messageContent.configure(with: message)
+        self.messageContent.isVisible = true
+        self.middleBubble.isVisible = true
+        self.bottomBubble.isVisible = true
+        self.label.isVisible = false
+        self.animationView.stop()
         self.layoutNow()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.label.setSize(withWidth: self.contentView.width)
+        self.label.centerOnXAndY()
+        
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.centerOnXAndY()
         
         let maxWidth = self.width - Theme.ContentOffset.xtraLong.value.doubled
         
