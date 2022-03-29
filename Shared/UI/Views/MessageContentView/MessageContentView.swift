@@ -18,12 +18,12 @@ class MessageContentView: BaseView {
     }
 
     // Sizing
-    static let bubbleHeight: CGFloat = 168
+    static let bubbleHeight: CGFloat = 188
     static let collapsedHeight: CGFloat = 78 - MessageContentView.bubbleTailLength
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
     }
-    static let authorViewHeight: CGFloat = 40
+    static let authorViewHeight: CGFloat = 38
 
     static var standardHeight: CGFloat {
         return MessageContentView.bubbleHeight - MessageContentView.textViewPadding
@@ -33,17 +33,25 @@ class MessageContentView: BaseView {
 
     static let bubbleTailLength: CGFloat = 12
 
-    /// A speech bubble background view for the message.
-    let bubbleView = MessageBubbleView(orientation: .down)
-    /// Text view for displaying the text of the message.
-    let textView = MessageTextView(font: .regular, textColor: .T1)
-    let displayableView = DisplayableImageView()
-    let linkView = LPLinkView()
     private (set) var message: Messageable?
 
+    /// A view that provides a safe area for  main message content (margins are already taken into account).
+    /// Subviews includes author, attachments, text and date sent views.
+    private let mainContentArea = UIView()
+
+    /// A speech bubble background view for the message.
+    let bubbleView = MessageBubbleView(orientation: .down)
     let authorView = PersonView()
     let emojiView = EmojiCircleView()
-    
+    /// Date view that shows when the message was last updated.
+    let dateView = ThemeLabel(font: .small, textColor: .white)
+    /// Text view for displaying the text of the message.
+    let textView = MessageTextView(font: .regular, textColor: .T1)
+    let imageView = DisplayableImageView()
+    let linkView = LPLinkView()
+
+    let replyCountView = ThemeLabel(font: .small, textColor: .T1)
+
     var layoutState: Layout = .expanded
 
     override func initializeSubviews() {
@@ -52,21 +60,29 @@ class MessageContentView: BaseView {
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
 
-        self.bubbleView.addSubview(self.displayableView)
-        self.displayableView.imageView.contentMode = .scaleAspectFill
-        self.displayableView.roundCorners()
+        self.bubbleView.addSubview(self.mainContentArea)
 
-        self.bubbleView.addSubview(self.textView)
+        self.mainContentArea.addSubview(self.imageView)
+        self.imageView.imageView.contentMode = .scaleAspectFill
+        self.imageView.roundCorners()
+
+        self.mainContentArea.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.textView.textAlignment = .left
         self.textView.isVisible = false
+        self.mainContentArea.addSubview(self.linkView)
 
-        self.bubbleView.addSubview(self.linkView)
-        self.linkView.isVisible = false
+        // Make sure the author, date and emoji view are on top of the other content
+        self.mainContentArea.addSubview(self.authorView)
+        self.mainContentArea.addSubview(self.dateView)
+        self.dateView.alpha = 0.6
+        self.mainContentArea.addSubview(self.emojiView)
 
-        self.bubbleView.addSubview(self.authorView)
-        self.bubbleView.addSubview(self.emojiView)
-        self.emojiView.isVisible = false 
+        self.replyCountView.set(backgroundColor: .B1withAlpha)
+        self.replyCountView.layer.borderWidth = 2
+        self.replyCountView.layer.borderColor = ThemeColor.BORDER.color.cgColor
+        self.replyCountView.textAlignment = .center
+        self.addSubview(self.replyCountView)
     }
 
     override func layoutSubviews() {
@@ -74,43 +90,59 @@ class MessageContentView: BaseView {
 
         self.bubbleView.expandToSuperviewSize()
 
+        self.mainContentArea.pin(.left, offset: MessageContentView.padding)
+        self.mainContentArea.pin(.top, offset: MessageContentView.padding)
+        self.mainContentArea.expand(.right, padding: MessageContentView.padding.value)
+        self.mainContentArea.expand(.bottom, padding: MessageContentView.padding.value)
+
+        // Author and Emoji
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
-        self.authorView.pin(.top, offset: MessageContentView.padding)
-        self.authorView.pin(.left, offset: MessageContentView.padding)
-        
-        self.emojiView.center = CGPoint(x: self.authorView.width + 6,
-                                        y: self.authorView.height + 6)
+        self.authorView.pin(.top)
+        self.authorView.pin(.left)
 
-        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.textView.pin(.top, offset: MessageContentView.padding)
-        if self.displayableView.displayable.exists {
-            // If there's also an image to display, then limit the text view height.
-            let maxHeight = MessageContentView.authorViewHeight
-            self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
-                                  maxHeight: maxHeight)
-        } else {
-            // If there's no image to display, the text view can take up all the available vertical space.
-            self.textView.setSize(withMaxWidth: self.width - self.textView.left - MessageContentView.padding.value,
-                                  maxHeight: self.height - self.textView.top - MessageContentView.padding.value - 25)
-        }
+        self.emojiView.center = CGPoint(x: self.authorView.width - Theme.ContentOffset.short.value,
+                                        y: self.authorView.height)
 
-        self.displayableView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        if self.textView.text.isEmpty {
-            // If there's no text, then the image will take up all available vertical space.
-            self.displayableView.match(.top, to: .top, of: self.authorView)
-        } else {
-            // If there is text, then fit the image in the remaining vertical space under the image.
-            self.displayableView.match(.top, to: .bottom, of: self.textView, offset: MessageContentView.padding)
-        }
+        // Date view
+        self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.dateView.match(.top, to: .top, of: self.authorView)
+        self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
 
+        // Link view
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.linkView.pin(.top, offset: MessageContentView.padding)
-        self.linkView.expand(.right, to: self.width - MessageContentView.padding.value)
-        self.linkView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
+        self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        self.linkView.expand(.right)
+        self.linkView.expand(.bottom)
 
-        // Expand the image to fill in the remaining height.
-        self.displayableView.expand(.bottom, to: self.height - MessageContentView.padding.value - 25)
-        self.displayableView.width = self.displayableView.height
+        // Text view
+        self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        if self.imageView.isVisible {
+            self.textView.width = (self.mainContentArea.width - self.textView.left).half
+        } else {
+            self.textView.expand(.right)
+        }
+        self.textView.expand(.bottom)
+        self.textView.updateFontSize()
+
+        // Image view
+        if self.textView.isVisible {
+            self.imageView.pin(.top)
+            self.imageView.match(.left, to: .right, of: self.textView, offset: .short)
+        } else {
+            self.imageView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.imageView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        }
+        self.imageView.expand(.right)
+        self.imageView.expand(.bottom)
+
+        // Replies
+        self.replyCountView.width = 22
+        self.replyCountView.height = 22
+        self.replyCountView.layer.cornerRadius = 4
+        self.replyCountView.layer.masksToBounds = true
+        self.replyCountView.pin(.right, offset: MessageContentView.padding)
+        self.replyCountView.pin(.bottom, offset: .standard)
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -118,14 +150,19 @@ class MessageContentView: BaseView {
     func configure(with message: Messageable) {
         self.message = message
 
-        self.textView.isVisible = message.kind.hasText
-        self.displayableView.isVisible = message.kind.isImage
+        self.textView.isVisible = message.kind.hasText && !message.kind.isLink
+        self.imageView.isVisible = message.kind.isImage
         self.linkView.isVisible = message.kind.isLink
         self.emojiView.isVisible = message.expression.exists
         
         if let expression = message.expression {
             self.emojiView.set(text: expression)
         }
+
+        self.dateView.text = message.createdAt.getTimeAgoString()
+
+        self.replyCountView.text = message.totalReplyCount.description
+        self.replyCountView.isVisible = message.totalReplyCount > 0
 
         if message.isDeleted {
             self.textView.text = "DELETED"
@@ -135,7 +172,7 @@ class MessageContentView: BaseView {
             switch message.kind {
             case .photo(photo: let photo, _):
                 guard let previewUrl = photo.previewUrl else { break }
-                self.displayableView.displayable = previewUrl
+                self.imageView.displayable = previewUrl
             case .link(url: let url, _):
                 self.linkProvider?.cancel()
 
@@ -148,10 +185,11 @@ class MessageContentView: BaseView {
                     Task.onMainActor {
                         guard let metadata = metadata else { return }
                         self.linkView.metadata = metadata
+                        self.setNeedsLayout()
                     }
                 }
             case .text, .attributedText, .video, .location, .emoji, .audio, .contact:
-                self.displayableView.isVisible = false
+                self.imageView.isVisible = false
                 self.linkView.isVisible = false
                 break
             }
@@ -210,5 +248,18 @@ extension MessageTextView {
         maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
 
         return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
+    }
+
+    /// Updates the font size to be appropriate for the amount of text displayed.
+    fileprivate func updateFontSize() {
+        self.font = FontType.contextCues.font
+
+        guard self.numberOfLines > 1 else { return }
+
+        self.font = FontType.medium.font
+
+        guard self.numberOfLines > 1 else { return }
+
+        self.font = FontType.regular.font
     }
 }

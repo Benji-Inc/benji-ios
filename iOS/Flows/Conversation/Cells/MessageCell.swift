@@ -58,7 +58,7 @@ class MessageCell: UICollectionViewCell {
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
         self.content.bubbleView.addInteraction(contextMenuInteraction)
 
-        self.content.displayableView.didSelect { [unowned self] in
+        self.content.imageView.didSelect { [unowned self] in
             guard let message = self.messageState.message else { return }
 
             self.delegate?.messageCell(self, didTapAttachmentForMessage: (message.streamCid, message.id))
@@ -94,7 +94,7 @@ class MessageCell: UICollectionViewCell {
 
         self.content.expandToSuperviewSize()
 
-        self.detailVC.view.expandToSuperviewWidth()
+        self.detailVC.view.width = self.halfWidth
         self.detailVC.view.height = 25
         self.detailVC.view.pin(.bottom, offset: .standard)
     }
@@ -105,8 +105,6 @@ class MessageCell: UICollectionViewCell {
         self.content.configure(with: message)
         
         self.messageState.message = message
-        self.messageState.deliveryStatus = message.deliveryStatus
-        self.messageState.statusText = message.context.displayName
         
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
@@ -153,36 +151,17 @@ class MessageCell: UICollectionViewCell {
         // If this item is showing its details, we may want to start the consumption process for it.
         guard areDetailsFullyVisible, ChatUser.currentUserRole != .anonymous else { return }
 
-        // Show the time sent text if needed.
-        if message.lastUpdatedAt?.getTimeAgoString() != self.messageState.statusText {
-            self.startTimeSentTextTask(for: message)
-        }
-
         // Don't consume messages unless they're a part of the active conversation.
         if ConversationsManager.shared.activeConversation?.cid == cid {
             self.startConsumptionTaskIfNeeded(for: message)
         }
     }
 
-    /// Starts a task that replaces the delivery type text with the last updated text.
-    private func startTimeSentTextTask(for message: Message) {
-        guard message.deliveryStatus == .sent || message.deliveryStatus == .read else { return }
-        
-        Task { [weak self] in
-            await Task.snooze(seconds: 2)
-            guard !Task.isCancelled else { return }
-            
-            self?.messageState.statusText = message.lastUpdatedAt?.getTimeAgoString() ?? ""
-        }.add(to: self.messageDetailTasks)
-    }
-
     /// If necessary for the message, starts a task that sets the delivery status to reading, then consumes the message after a delay.
     private func startConsumptionTaskIfNeeded(for message: Message) {
         guard message.canBeConsumed else { return }
 
-        Task { [weak self] in
-            self?.messageState.deliveryStatus = .reading
-
+        Task { 
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
 
