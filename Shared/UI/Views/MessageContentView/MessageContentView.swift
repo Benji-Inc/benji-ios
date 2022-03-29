@@ -95,6 +95,7 @@ class MessageContentView: BaseView {
         self.mainContentArea.expand(.bottom,
                                     to: self.bubbleView.height - MessageContentView.padding.value - 25)
 
+        // Image view
         self.imageView.pin(.left)
         self.imageView.pin(.top)
         self.imageView.expand(.bottom)
@@ -104,11 +105,13 @@ class MessageContentView: BaseView {
             self.imageView.expand(.right)
         }
 
+        // Link preview
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.linkView.match(.top, to: .top, of: self.authorView)
         self.linkView.width = self.mainContentArea.halfWidth
         self.linkView.expand(.bottom)
 
+        // Author view
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         if self.imageView.isVisible {
             self.authorView.pin(.top, offset: .short)
@@ -117,9 +120,11 @@ class MessageContentView: BaseView {
             self.authorView.pin(.top)
             self.authorView.pin(.left)
         }
+        //Emoji view
         self.emojiView.center = CGPoint(x: self.authorView.width + 4,
                                         y: self.authorView.height + 4)
 
+        // Message date
         self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.dateView.match(.top, to: .top, of: self.authorView)
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
@@ -132,17 +137,18 @@ class MessageContentView: BaseView {
             self.dateView.match(.top, to: .top, of: self.linkView)
         }
 
+        // Message text
         self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
         if self.imageView.isVisible {
             self.textView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
-            self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
-                                  maxHeight: self.mainContentArea.height)
         } else {
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-            self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
-                                  maxHeight: self.mainContentArea.height - self.textView.top)
         }
+        self.textView.expand(.right)
+        self.textView.expand(.bottom)
+        self.textView.updateFontSize()
 
+        // Reply count
         self.replyCountView.width = 22
         self.replyCountView.height = 22
         self.replyCountView.layer.cornerRadius = 4
@@ -260,5 +266,18 @@ extension MessageTextView {
         maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
 
         return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
+    }
+
+    /// Updates the font size to be appropriate for the amount of text displayed.
+    fileprivate func updateFontSize() {
+        self.font = FontType.contextCues.font
+
+        guard self.numberOfLines > 1 else { return }
+
+        self.font = FontType.medium.font
+
+        guard self.numberOfLines > 1 else { return }
+
+        self.font = FontType.regular.font
     }
 }
