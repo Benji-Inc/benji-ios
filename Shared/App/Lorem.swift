@@ -114,6 +114,14 @@ class Lorem {
         return self.dateList.random()
     }
     
+    class func randomColor() -> UIColor {
+        return UIColor(
+            red:   CGFloat(arc4random()) / CGFloat(UInt32.max),
+            green: CGFloat(arc4random()) / CGFloat(UInt32.max),
+            blue:  CGFloat(arc4random()) / CGFloat(UInt32.max),
+            alpha: 1.0)
+    }
+    
     /**
      Return a random word.
 

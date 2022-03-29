@@ -13,7 +13,7 @@ import Lottie
 struct Member: Hashable {
     
     var personId: String
-    var conversationController: ConversationController
+    var conversationController: ConversationController?
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
         return lhs.personId == rhs.personId
@@ -112,7 +112,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
             
             self.setNeedsLayout()
             
-            let typingUsers = item.conversationController.conversation.currentlyTypingUsers
+            guard let typingUsers = item.conversationController?.conversation.currentlyTypingUsers else { return }
+            
             if typingUsers.contains(where: { typingUser in
                 typingUser.personId == personId
             }) {

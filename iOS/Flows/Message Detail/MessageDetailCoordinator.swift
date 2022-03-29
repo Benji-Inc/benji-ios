@@ -11,7 +11,7 @@ import StreamChat
 
 class MessageDetailCoordinator: PresentableCoordinator<Messageable?> {
 
-    private lazy var messageVC = MessageDetailViewController(message: self.message, delegate: self)
+    private lazy var messageVC = MessageDetailViewController(message: self.message)
 
     private let message: Messageable
 
@@ -23,17 +23,39 @@ class MessageDetailCoordinator: PresentableCoordinator<Messageable?> {
 
         super.init(router: router, deepLink: deepLink)
     }
+    
+    override func start() {
+        super.start()
+        
+        self.messageVC.$selectedItems
+            .removeDuplicates()
+            .mainSink { items in
+            guard let first = items.first else { return }
+            switch first {
+            case .option(let type):
+                switch type {
+                case .viewReplies:
+                    self.finishFlow(with: self.message)
+                case .edit:
+                    break
+                case .pin:
+                    break
+                case .more:
+                    break
+                case .delete:
+                    break
+                }
+            case .read(_):
+                break
+            case .info(_):
+                break
+            case .reply(_):
+                break
+            }
+        }.store(in: &self.cancellables)
+    }
 
     override func toPresentable() -> PresentableCoordinator<Messageable?>.DismissableVC {
         return self.messageVC
-    }
-}
-
-extension MessageDetailCoordinator: MessageDetailViewControllerDelegate {
-
-    func messageDetailViewController(_ controller: MessageDetailViewController,
-                                     didSelectThreadFor message: Messageable) {
-
-        self.finishFlow(with: message)
     }
 }

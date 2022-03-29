@@ -76,13 +76,15 @@ extension Message: Messageable {
         return latestRead
     }
     
-    var hasBeenConsumedBy: [PersonType] {
-        let reads = self.latestReactions.filter { reaction in
+    var readReactions: [ChatMessageReaction] {
+        return self.latestReactions.filter { reaction in
             guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
             return type == .read
         }
-        
-        return reads.compactMap { reaction in
+    }
+    
+    var hasBeenConsumedBy: [PersonType] {
+        return self.readReactions.compactMap { reaction in
             return reaction.author
         }
     }

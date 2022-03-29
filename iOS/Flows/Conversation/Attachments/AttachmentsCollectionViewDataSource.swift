@@ -57,7 +57,7 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
     private let config = ManageableCellRegistration<AttachmentCell>().provider
     private let captureConfig = ManageableCellRegistration<CaptureCell>().provider
     private let optionConfig = ManageableCellRegistration<AttachmentOptionCell>().provider
-    private let headerConfig = ManageableHeaderRegistration<AttachmentHeaderView>().provider
+    private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     
     var didSelectLibrary: CompletionOptional = nil
@@ -100,7 +100,9 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
         switch section {
         case .photoVideo:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            
+            header.leftLabel.setText("Photo & Video")
+            header.rightLabel.setText("View Library")
+            header.lineView.isHidden = true 
             header.didSelectButton = { [unowned self] in
                 self.didSelectLibrary?()
             }

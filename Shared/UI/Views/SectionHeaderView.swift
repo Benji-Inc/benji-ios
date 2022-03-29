@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AttachmentHeaderView: UICollectionReusableView {
+class SectionHeaderView: UICollectionReusableView {
     
     let leftLabel = ThemeLabel(font: .regular)
     let rightLabel = ThemeLabel(font: .regular, textColor: .D1)
@@ -16,6 +16,8 @@ class AttachmentHeaderView: UICollectionReusableView {
     let button = ThemeButton()
     
     var didSelectButton: CompletionOptional = nil
+    
+    let lineView = BaseView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +32,6 @@ class AttachmentHeaderView: UICollectionReusableView {
     func initializeViews() {
         
         self.addSubview(self.leftLabel)
-        self.leftLabel.setText("Photo & Video")
         self.leftLabel.textAlignment = .left
 
         
@@ -40,8 +41,11 @@ class AttachmentHeaderView: UICollectionReusableView {
         }
         
         self.addSubview(self.rightLabel)
-        self.rightLabel.setText("View Library")
         self.rightLabel.textAlignment = .right
+        
+        self.addSubview(self.lineView)
+        self.lineView.set(backgroundColor: .white)
+        self.lineView.alpha = 0.1
     }
     
     override func layoutSubviews() {
@@ -56,6 +60,10 @@ class AttachmentHeaderView: UICollectionReusableView {
         self.rightLabel.pin(.right)
         
         self.button.size = self.rightLabel.size
-        self.button.center = self.rightLabel.center 
+        self.button.center = self.rightLabel.center
+        
+        self.lineView.expandToSuperviewWidth()
+        self.lineView.height = 1
+        self.lineView.pin(.bottom)
     }
 }

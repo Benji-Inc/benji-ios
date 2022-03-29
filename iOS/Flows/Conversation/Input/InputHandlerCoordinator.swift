@@ -60,7 +60,18 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
         
         self.inputHandlerViewController.swipeableVC.swipeInputView.avatarView.didSelect { [unowned self] in
-            self.presentProfile(for: User.current()!)
+            self.presentProfile(for: User.current()!)            
+        }
+    }
+    
+    func presentEmotions() {
+        let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator) { [unowned self] result in
+            result.forEach { emotion in
+                logDebug(emotion.rawValue)
+                //AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
+            }
+            //self.inputHandlerViewController.swipeableVC.currentExpression = result
         }
     }
     

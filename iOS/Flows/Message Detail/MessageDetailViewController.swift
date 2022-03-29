@@ -7,34 +7,36 @@
 //
 
 import Foundation
+import StreamChat
 
-@MainActor
-protocol MessageDetailViewControllerDelegate: AnyObject {
-    func messageDetailViewController(_ controller: MessageDetailViewController,
-                                     didSelectThreadFor message: Messageable)
-}
-
-class MessageDetailViewController: ViewController, MessageInteractableController {
+class MessageDetailViewController: DiffableCollectionViewController<MessageDetailDataSource.SectionType,
+                                   MessageDetailDataSource.ItemType,
+                                   MessageDetailDataSource>,
+                                   MessageInteractableController {
     var blurView = BlurView()
     
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     let message: Messageable
-    unowned let delegate: MessageDetailViewControllerDelegate
     
     var messageContent: MessageContentView {
         return self.messageContentView
     }
     
-    private let messageContentView = MessageContentView()
-    private let backgroundView = BaseView()
-    private let threadButton = ThemeButton()
+    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .topCenter,
+                                                  endPoint: .bottomCenter)
     
-    init(message: Messageable, delegate: MessageDetailViewControllerDelegate) {
+    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
+    
+    private let messageContentView = MessageContentView()
+    
+    init(message: Messageable) {
         self.message = message
-        self.delegate = delegate
         
-        super.init()
+        super.init(with: MessageDetailCollectionView())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -47,40 +49,70 @@ class MessageDetailViewController: ViewController, MessageInteractableController
         self.modalPresentationStyle = .overCurrentContext
         
         self.dismissInteractionController.handlePan(for: self.messageContentView)
-        self.dismissInteractionController.handlePan(for: self.view)
+        self.dismissInteractionController.handleCollectionViewPan(for: self.collectionView)
         
         self.view.addSubview(self.blurView)
         
         self.view.addSubview(self.messageContentView)
         self.messageContentView.configure(with: self.message)
+    
+        self.view.addSubview(self.bottomGradientView)
         
+        self.collectionView.allowsMultipleSelection = false
         
-        self.view.addSubview(self.backgroundView)
-        self.backgroundView.set(backgroundColor: .B0)
-        self.backgroundView.layer.cornerRadius = Theme.cornerRadius
-        self.backgroundView.clipsToBounds = true
+        self.view.bringSubviewToFront(self.collectionView)
         
-        self.backgroundView.addSubview(self.threadButton)
-        self.threadButton.set(style: .normal(color: .gray, text: "Open Thread"))
-        self.threadButton.addAction(for: .touchUpInside) { [unowned self] in
-            self.delegate.messageDetailViewController(self, didSelectThreadFor: self.message)
-        }
+        self.view.addSubview(self.bottomGradientView)
+        self.view.addSubview(self.topGradientView)
+        self.topGradientView.roundCorners()
     }
     
     override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         
         self.blurView.expandToSuperviewSize()
         
         self.messageContentView.centerOnX()
         self.messageContentView.bottom = self.view.height * 0.5
         
-        self.backgroundView.expandToSuperviewWidth()
-        self.backgroundView.expand(.bottom)
+        super.viewDidLayoutSubviews()
         
-        self.threadButton.width = 150
-        self.threadButton.height = Theme.buttonHeight
-        self.threadButton.centerOnXAndY()
+        self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = Theme.ContentOffset.xtraLong.value
+    
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
+    }
+    
+    override func layoutCollectionView(_ collectionView: UICollectionView) {
+        self.collectionView.expandToSuperviewWidth()
+        self.collectionView.height = self.view.height - self.messageContent.bottom - Theme.ContentOffset.xtraLong.value
+    }
+    
+    override func getAllSections() -> [MessageDetailDataSource.SectionType] {
+        return MessageDetailDataSource.SectionType.allCases
+    }
+
+    override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
+        var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
+        
+        data[.options] = [.option(.viewReplies), .option(.pin), .option(.edit), .option(.more)].reversed()
+        
+        guard let msg = ChatClient.shared.messageController(for: self.message)?.message else { return data }
+        
+        data[.reads] = msg.readReactions.filter({ reaction in
+            return !reaction.author.isCurrentUser
+        }).compactMap({ read in
+            return .read(read)
+        })
+        
+        if msg.replyCount > 0 {
+            data[.recentReply] = [.reply(msg)]
+        }
+        
+        data[.metadata] = [.info(msg)]
+        
+        return data
     }
 }
 
@@ -94,18 +126,22 @@ extension MessageDetailViewController: TransitionableViewController {
     }
     
     func prepareForPresentation() {
-        self.backgroundView.top = self.view.height
+        self.collectionView.top = self.view.height
+        self.topGradientView.match(.top, to: .top, of: self.collectionView)
+        self.loadInitialData()
     }
     
     func handlePresentationCompleted() {}
     
     func handleFinalPresentation() {
-        self.backgroundView.match(.top, to: .bottom, of: self.messageContentView, offset: .xtraLong)
+        self.collectionView.pin(.bottom)
+        self.topGradientView.match(.top, to: .top, of: self.collectionView)
         self.view.setNeedsLayout()
     }
     func handleInitialDismissal() {}
     
     func handleDismissal() {
-        self.backgroundView.top = self.view.height 
+        self.collectionView.top = self.view.height
+        self.topGradientView.match(.top, to: .top, of: self.collectionView)
     }
 }
