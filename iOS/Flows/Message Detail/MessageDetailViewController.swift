@@ -9,12 +9,6 @@
 import Foundation
 import StreamChat
 
-@MainActor
-protocol MessageDetailViewControllerDelegate: AnyObject {
-    func messageDetailViewController(_ controller: MessageDetailViewController,
-                                     didSelectThreadFor message: Messageable)
-}
-
 class MessageDetailViewController: DiffableCollectionViewController<MessageDetailDataSource.SectionType,
                                    MessageDetailDataSource.ItemType,
                                    MessageDetailDataSource>,
@@ -24,7 +18,6 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     let message: Messageable
-    unowned let delegate: MessageDetailViewControllerDelegate
     
     var messageContent: MessageContentView {
         return self.messageContentView
@@ -40,9 +33,8 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     
     private let messageContentView = MessageContentView()
     
-    init(message: Messageable, delegate: MessageDetailViewControllerDelegate) {
+    init(message: Messageable) {
         self.message = message
-        self.delegate = delegate
         
         super.init(with: MessageDetailCollectionView())
     }

@@ -79,12 +79,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     private let replyConfig = ManageableCellRegistration<RecentReplyView>().provider
     private let metadatConfig = ManageableCellRegistration<MessageMetadataCell>().provider
-    
-//    private let memberConfig = ManageableCellRegistration<MemberCell>().provider
-//    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
-//    private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
-//    private let infoConfig = ManageableCellRegistration<ConversationInfoCell>().provider
-//    private let editConfig = ManageableCellRegistration<ConversationEditCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -115,31 +109,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                                                                     item: message)
             return cell
         }
-//        let lastIndex = self.snapshot().numberOfItems(inSection: section) - 1
-//        let shouldHideLine = lastIndex == indexPath.row
-//
-//        switch item {
-//        case .info(let cid):
-
-//        case .editTopic(let cid):
-//            let cell = collectionView.dequeueConfiguredReusableCell(using: self.editConfig,
-//                                                                    for: indexPath,
-//                                                                    item: cid)
-//            return cell
-//        case .member(let member):
-//            let cell = collectionView.dequeueConfiguredReusableCell(using: self.memberConfig,
-//                                                                    for: indexPath,
-//                                                                    item: member)
-//            cell.lineView.isHidden = shouldHideLine
-//            return cell
-//        case .detail(let type):
-//            let cell = collectionView.dequeueConfiguredReusableCell(using: self.detailConfig,
-//                                                                    for: indexPath,
-//                                                                    item: type)
-//
-//            cell.lineView.isHidden = shouldHideLine
-//            return cell
-//        }
     }
     
     override func dequeueSupplementaryView(with collectionView: UICollectionView,
@@ -150,9 +119,20 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            header.leftLabel.setText("Read by")
+            switch section {
+            case .options:
+                break
+            case .reads:
+                header.leftLabel.setText("Read by")
+            case .recentReply:
+                header.leftLabel.setText("Latest reply")
+            case .metadata:
+                header.leftLabel.setText("Metadata")
+            }
+            
             header.rightLabel.isHidden = true
-            header.button.isHidden = true 
+            header.button.isHidden = true
+            header.lineView.isHidden = true 
             return header
         case SectionBackgroundView.kind:
             return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
