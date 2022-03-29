@@ -18,7 +18,7 @@ class MessageContentView: BaseView {
     }
 
     // Sizing
-    static let bubbleHeight: CGFloat = 168
+    static let bubbleHeight: CGFloat = 188
     static let collapsedHeight: CGFloat = 78 - MessageContentView.bubbleTailLength
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
@@ -106,29 +106,30 @@ class MessageContentView: BaseView {
         self.dateView.match(.top, to: .top, of: self.authorView)
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
 
-        self.imageView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.imageView.match(.top, to: .bottom, of: self.dateView, offset: .short)
-        if self.textView.isVisible {
-            self.imageView.width = (self.mainContentArea.width - self.imageView.left).half
-        } else {
-            self.imageView.expand(.right)
-        }
-        self.imageView.expand(.bottom)
-
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
         self.linkView.expand(.right)
         self.linkView.expand(.bottom)
 
         self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         if self.imageView.isVisible {
-            self.textView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
+            self.textView.width = (self.mainContentArea.width - self.textView.left).half
         } else {
-            self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.textView.expand(.right)
         }
-        self.textView.expand(.right)
         self.textView.expand(.bottom)
         self.textView.updateFontSize()
+
+        if self.textView.isVisible {
+            self.imageView.pin(.top)
+            self.imageView.match(.left, to: .right, of: self.textView, offset: .short)
+        } else {
+            self.imageView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.imageView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        }
+        self.imageView.expand(.right)
+        self.imageView.expand(.bottom)
 
         self.replyCountView.width = 22
         self.replyCountView.height = 22
