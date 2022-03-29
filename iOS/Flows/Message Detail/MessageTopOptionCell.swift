@@ -28,8 +28,9 @@ class MessageTopOptionCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.label)
         self.label.textAlignment = .center
         
+        self.contentView.layer.borderColor = ThemeColor.BORDER.color.cgColor
+        self.contentView.layer.borderWidth = 0.5
         self.contentView.layer.cornerRadius = Theme.cornerRadius
-        self.contentView.layer.masksToBounds = true
     }
     
     func configure(with item: MessageDetailDataSource.OptionType) {

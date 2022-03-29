@@ -9,7 +9,14 @@
 import Foundation
 import StreamChat
 
-class MessageDetailCoordinator: PresentableCoordinator<Messageable?> {
+enum MessageDetailResult {
+    case message(Messageable)
+    case reply(MessageId)
+    case conversation(ConversationId)
+    case none
+}
+
+class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
 
     private lazy var messageVC = MessageDetailViewController(message: self.message)
 
@@ -35,20 +42,22 @@ class MessageDetailCoordinator: PresentableCoordinator<Messageable?> {
             case .option(let type):
                 switch type {
                 case .viewReplies:
-                    self.finishFlow(with: self.message)
+                    self.finishFlow(with: .message(self.message))
                 case .edit:
-                    break
+                    self.presentAlert(for: type)
                 case .pin:
                     self.presentAlert(for: type)
                 case .more:
                     break
                 }
-            case .read(_):
-                break
+            case .read(let reaction):
+                guard let author = reaction.readReaction?.author else { return }
+                self.presentProfile(for: author)
             case .info(_):
                 break
             case .reply(_):
-                break
+                guard let first = self.message.mostRecentMessage else { return }
+                self.finishFlow(with: .reply(first.id))
             case .more(_):
                 break
             }
@@ -82,7 +91,7 @@ class MessageDetailCoordinator: PresentableCoordinator<Messageable?> {
                                                              description: "Your message has successfully been deleted",
                                                              deepLink: nil))
             
-            self.finishFlow(with: nil)
+            self.finishFlow(with: .none)
         }
     }
     
@@ -98,5 +107,19 @@ class MessageDetailCoordinator: PresentableCoordinator<Messageable?> {
 
         alertController.addAction(cancelAction)
         self.messageVC.present(alertController, animated: true, completion: nil)
+    }
+    
+    func presentProfile(for person: PersonType) {
+        self.removeChild()
+
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                self.finishFlow(with: .conversation(result))
+            }
+        }
+        
+        self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
     }
 }

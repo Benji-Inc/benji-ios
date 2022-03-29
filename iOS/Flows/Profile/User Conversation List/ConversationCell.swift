@@ -113,7 +113,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
             
             guard !Task.isCancelled else { return }
             
-            if let latest = self.conversationController?.channel?.latestMessages.first {
+            if let latest = self.conversationController?.channel?.latestMessages.first(where: { message in
+                return !message.isDeleted
+            }) {
                 self.update(for: latest)
             }
         }
