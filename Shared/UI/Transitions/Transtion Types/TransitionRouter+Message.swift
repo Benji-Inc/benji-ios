@@ -14,6 +14,7 @@ protocol MessageInteractableController where Self: DismissInteractableController
     var messageContent: MessageContentView { get }
     func handleDismissal()
     func handleInitialDismissal()
+    func handleCompletedDismissal()
     func prepareForPresentation()
     func handleFinalPresentation()
     func handlePresentationCompleted()
@@ -21,6 +22,7 @@ protocol MessageInteractableController where Self: DismissInteractableController
 
 extension MessageInteractableController {
     func prepareForPresentation() {}
+    func handleCompletedDismissal() {}
 }
 
 extension TransitionRouter {
