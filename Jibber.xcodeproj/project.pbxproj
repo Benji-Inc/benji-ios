@@ -1379,10 +1379,10 @@
 				80E228DE27C8132500AF37AC /* MessageDetailCoordinator.swift */,
 				D60B884F27F217EB00B3E1C2 /* MessageDetailDataSource.swift */,
 				80E228DC27C80B1C00AF37AC /* MessageDetailViewController.swift */,
+				D60B885B27F2717000B3E1C2 /* MessageMetadataCell.swift */,
 				D60B885727F2447600B3E1C2 /* MessageReadCell.swift */,
 				D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */,
 				D60B885927F2579A00B3E1C2 /* RecentReplyView.swift */,
-				D60B885B27F2717000B3E1C2 /* MessageMetadataCell.swift */,
 			);
 			path = "Message Detail";
 			sourceTree = "<group>";

@@ -57,6 +57,10 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
         self.bottomBubble.layer.masksToBounds = true
         self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
         self.bottomBubble.tailLength = 0
+        
+        self.messageContent.isVisible = false
+        self.middleBubble.isVisible = false
+        self.bottomBubble.isVisible = false
     }
     
     func configure(with item: Message) {
@@ -69,7 +73,7 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
                 self.subscribeToUpdates()
             }
             
-//            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled else { return }
             
             if let latest = self.controller?.replies.first {
                 self.update(for: latest)
@@ -80,6 +84,9 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
     @MainActor
     private func update(for message: Message) {
         self.messageContent.configure(with: message)
+        self.messageContent.isVisible = true
+        self.middleBubble.isVisible = true
+        self.bottomBubble.isVisible = true
         self.layoutNow()
     }
     

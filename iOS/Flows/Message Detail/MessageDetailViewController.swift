@@ -100,15 +100,19 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         guard let msg = ChatClient.shared.messageController(for: self.message)?.message else { return data }
         
-        data[.reads] = msg.readReactions.filter({ reaction in
+        let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
             return !reaction.author.isCurrentUser
         }).compactMap({ read in
-            return .read(read)
+            return .read(ReadViewModel(readReaction: read))
         })
         
-        if msg.replyCount > 0 {
-            data[.recentReply] = [.reply(msg)]
+        if reads.isEmpty {
+            data[.reads] = [.read(ReadViewModel(readReaction: nil))]
+        } else {
+            data[.reads] = reads
         }
+        
+        data[.recentReply] = [.reply(msg)]
         
         data[.metadata] = [.info(msg)]
         

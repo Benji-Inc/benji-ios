@@ -59,11 +59,14 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.textView.textAlignment = .left
+        self.textView.isVisible = false
 
         self.bubbleView.addSubview(self.linkView)
+        self.linkView.isVisible = false
 
         self.bubbleView.addSubview(self.authorView)
         self.bubbleView.addSubview(self.emojiView)
+        self.emojiView.isVisible = false 
     }
 
     override func layoutSubviews() {

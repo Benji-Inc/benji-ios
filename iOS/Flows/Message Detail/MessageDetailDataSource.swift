@@ -68,7 +68,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
 
     enum ItemType: Hashable {
         case option(OptionType)
-        case read(ChatMessageReaction)
+        case read(ReadViewModel)
         case info(Message)
         case reply(Message)
     }
@@ -119,6 +119,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+
             switch section {
             case .options:
                 break
@@ -135,8 +136,33 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
             header.lineView.isHidden = true 
             return header
         case SectionBackgroundView.kind:
-            return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
-                                                                         for: indexPath)
+            
+            let background = collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
+                                                                                   for: indexPath)
+            switch section {
+            case .options:
+                return nil
+            case .reads:
+                if let item = self.itemIdentifiers(in: .reads).first,
+                   case ItemType.read(let model) = item,
+                   model.readReaction.isNil {
+                    background.setText(with: "None")
+                } else {
+                    background.setText(with: "")
+                }
+            case .recentReply:
+                if let item = self.itemIdentifiers(in: .recentReply).first,
+                   case ItemType.reply(let message) = item,
+                   message.replyCount > 0 {
+                    background.setText(with: "Loading...")
+                } else {
+                    background.setText(with: "No replies")
+                }
+            case .metadata:
+                background.setText(with: "Coming soon...")
+            }
+            
+            return background
         default:
             return nil
         }
