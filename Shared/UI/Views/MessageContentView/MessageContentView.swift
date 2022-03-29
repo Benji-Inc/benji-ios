@@ -23,7 +23,7 @@ class MessageContentView: BaseView {
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
     }
-    static let authorViewHeight: CGFloat = 40
+    static let authorViewHeight: CGFloat = 38
 
     static var standardHeight: CGFloat {
         return MessageContentView.bubbleHeight - MessageContentView.textViewPadding
@@ -75,6 +75,7 @@ class MessageContentView: BaseView {
         // Make sure the author, date and emoji view are on top of the other content
         self.mainContentArea.addSubview(self.authorView)
         self.mainContentArea.addSubview(self.dateView)
+        self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
 
         self.replyCountView.set(backgroundColor: .B1withAlpha)
@@ -91,64 +92,46 @@ class MessageContentView: BaseView {
 
         self.mainContentArea.pin(.left, offset: MessageContentView.padding)
         self.mainContentArea.pin(.top, offset: MessageContentView.padding)
-        self.mainContentArea.expand(.right, to: self.bubbleView.width - MessageContentView.padding.value)
-        self.mainContentArea.expand(.bottom,
-                                    to: self.bubbleView.height - MessageContentView.padding.value - 25)
+        self.mainContentArea.expand(.right, padding: MessageContentView.padding.value)
+        self.mainContentArea.expand(.bottom, padding: MessageContentView.padding.value)
 
-        // Image view
-        self.imageView.pin(.left)
-        self.imageView.pin(.top)
-        self.imageView.expand(.bottom)
-        if self.textView.isVisible {
-            self.imageView.width = self.mainContentArea.halfWidth
-        } else {
-            self.imageView.expand(.right)
-        }
-
-        // Link preview
-        self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
-        self.linkView.match(.top, to: .top, of: self.authorView)
-        self.linkView.width = self.mainContentArea.halfWidth
-        self.linkView.expand(.bottom)
-
-        // Author view
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
-        if self.imageView.isVisible {
-            self.authorView.pin(.top, offset: .short)
-            self.authorView.pin(.left, offset: .short)
-        } else {
-            self.authorView.pin(.top)
-            self.authorView.pin(.left)
-        }
-        //Emoji view
-        self.emojiView.center = CGPoint(x: self.authorView.width + 4,
-                                        y: self.authorView.height + 4)
+        self.authorView.pin(.top)
+        self.authorView.pin(.left)
 
-        // Message date
+        self.emojiView.center = CGPoint(x: self.authorView.width - Theme.ContentOffset.short.value,
+                                        y: self.authorView.height)
+
         self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.dateView.match(.top, to: .top, of: self.authorView)
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
 
-        if self.imageView.isVisible && self.textView.isVisible {
-            self.dateView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
-            self.dateView.match(.top, to: .top, of: self.imageView)
-        } else if self.linkView.isVisible {
-            self.dateView.match(.left, to: .right, of: self.linkView, offset: MessageContentView.padding)
-            self.dateView.match(.top, to: .top, of: self.linkView)
+        self.imageView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.imageView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        if self.textView.isVisible {
+            self.imageView.width = (self.mainContentArea.width - self.imageView.left).half
+        } else {
+            self.imageView.expand(.right)
         }
+        self.imageView.expand(.bottom)
 
-        // Message text
+        self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        self.linkView.expand(.right)
+        self.linkView.expand(.bottom)
+
         self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
         if self.imageView.isVisible {
             self.textView.match(.left, to: .right, of: self.imageView, offset: MessageContentView.padding)
+            self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
+                                  maxHeight: self.mainContentArea.height)
         } else {
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.textView.setSize(withMaxWidth: self.mainContentArea.width - self.textView.left,
+                                  maxHeight: self.mainContentArea.height - self.textView.top)
         }
-        self.textView.expand(.right)
-        self.textView.expand(.bottom)
         self.textView.updateFontSize()
 
-        // Reply count
         self.replyCountView.width = 22
         self.replyCountView.height = 22
         self.replyCountView.layer.cornerRadius = 4
@@ -171,13 +154,7 @@ class MessageContentView: BaseView {
             self.emojiView.set(text: expression)
         }
 
-        self.dateView.text = message.lastUpdatedAt?.getTimeAgoString()
-        if message.kind.isImage && message.kind.text.isEmpty {
-            self.dateView.shadowColor = UIColor.black
-            self.dateView.shadowOffset = CGSize(width: 1, height: 1)
-        } else {
-            self.dateView.shadowColor = nil
-        }
+        self.dateView.text = message.createdAt.getTimeAgoString()
 
         self.replyCountView.text = message.totalReplyCount.description
         self.replyCountView.isVisible = message.totalReplyCount > 0
