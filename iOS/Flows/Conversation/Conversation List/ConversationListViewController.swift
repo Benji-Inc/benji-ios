@@ -447,8 +447,8 @@ extension ConversationListViewController: MessageInteractableController {
     }
     
     func handleCompletedDismissal() {
-        delay(0.1) {
-            self.becomeFirstResponder()
-        }
+//        delay(0.1) {
+//            self.becomeFirstResponder()
+//        }
     }
 }

@@ -44,8 +44,11 @@ class MessageReadCell: CollectionViewManagerCell, ManageableCell {
         self.configurationTask?.cancel()
         
         guard let item = item.readReaction else {
+            self.personView.isVisible = false
             return
         }
+        
+        self.personView.isVisible = true 
 
         self.configurationTask = Task {
             guard let person = await PeopleStore.shared.getPerson(withPersonId: item.author.id) else { return }

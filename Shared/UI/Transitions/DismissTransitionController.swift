@@ -72,16 +72,6 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
               let fromVC = fromVC else { return }
 
 
-//        guard let rootVC = transitionContext.viewController(forKey: .to) as? RootNavigationController,
-//              let listVC = rootVC.viewControllers.first(where: { controller in
-//                  return controller is ConversationListViewController
-//              }) as? ConversationListViewController,
-//              let interactableVC = transitionContext.viewController(forKey: .from) as? MessageInteractableController
-//               else { return }
-//
-//        let fromView = interactableVC.messageContent
-//        let toView = listVC.getCentmostMessageCellContent()!
-
         let containerView = transitionContext.containerView
 
         containerView.addSubview(fromVC.view)
@@ -113,11 +103,9 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         animator.addCompletion { (position) in
             if position == .end {
                 toView.isHidden = false
-                fromView.isHidden = true
                 toVC?.handleCompletedDismissal()
             } else if position == .start {
                 toView.isHidden = true
-                fromView.isHidden = false
             }
 
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
