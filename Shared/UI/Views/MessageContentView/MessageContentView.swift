@@ -45,12 +45,12 @@ class MessageContentView: BaseView {
     let emojiView = EmojiCircleView()
     /// Date view that shows when the message was last updated.
     let dateView = ThemeLabel(font: .small, textColor: .white)
+    /// Delivery view that shows how the message was sent
+    let deliveryView = UIImageView()
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .T1)
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
-
-    let replyCountView = ThemeLabel(font: .small, textColor: .T1)
 
     var layoutState: Layout = .expanded
 
@@ -74,15 +74,14 @@ class MessageContentView: BaseView {
 
         // Make sure the author, date and emoji view are on top of the other content
         self.mainContentArea.addSubview(self.authorView)
+        self.mainContentArea.addSubview(self.deliveryView)
+        self.deliveryView.contentMode = .scaleAspectFit
+        self.deliveryView.alpha = 0.6
+        self.deliveryView.tintColor = ThemeColor.white.color
+        
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
-
-        self.replyCountView.set(backgroundColor: .B1withAlpha)
-        self.replyCountView.layer.borderWidth = 2
-        self.replyCountView.layer.borderColor = ThemeColor.BORDER.color.cgColor
-        self.replyCountView.textAlignment = .center
-        self.addSubview(self.replyCountView)
     }
 
     override func layoutSubviews() {
@@ -102,11 +101,17 @@ class MessageContentView: BaseView {
 
         self.emojiView.center = CGPoint(x: self.authorView.width - Theme.ContentOffset.short.value,
                                         y: self.authorView.height)
+        
+        // Delivery View
+        self.deliveryView.squaredSize = 11
+        self.deliveryView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
 
         // Date view
-        self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.dateView.match(.left, to: .right, of: self.deliveryView, offset: .short)
         self.dateView.match(.top, to: .top, of: self.authorView)
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
+        
+        self.deliveryView.centerY = self.dateView.centerY
 
         // Link view
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
@@ -123,7 +128,7 @@ class MessageContentView: BaseView {
             self.textView.expand(.right)
         }
         self.textView.expand(.bottom)
-        self.textView.updateFontSize()
+        self.textView.updateFontSize(state: self.layoutState)
 
         // Image view
         if self.textView.isVisible {
@@ -135,14 +140,6 @@ class MessageContentView: BaseView {
         }
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
-
-        // Replies
-        self.replyCountView.width = 22
-        self.replyCountView.height = 22
-        self.replyCountView.layer.cornerRadius = 4
-        self.replyCountView.layer.masksToBounds = true
-        self.replyCountView.pin(.right, offset: MessageContentView.padding)
-        self.replyCountView.pin(.bottom, offset: .standard)
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -160,9 +157,7 @@ class MessageContentView: BaseView {
         }
 
         self.dateView.text = message.createdAt.getTimeAgoString()
-
-        self.replyCountView.text = message.totalReplyCount.description
-        self.replyCountView.isVisible = message.totalReplyCount > 0
+        self.deliveryView.image = message.context.image
 
         if message.isDeleted {
             self.textView.text = "DELETED"
@@ -251,7 +246,13 @@ extension MessageTextView {
     }
 
     /// Updates the font size to be appropriate for the amount of text displayed.
-    fileprivate func updateFontSize() {
+    fileprivate func updateFontSize(state: MessageContentView.Layout) {
+        
+        if state == .collapsed {
+            self.font = FontType.regular.font
+            return
+        }
+        
         self.font = FontType.contextCues.font
 
         guard self.numberOfLines > 1 else { return }

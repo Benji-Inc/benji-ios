@@ -28,12 +28,10 @@ class MessageCell: UICollectionViewCell {
     weak var delegate: MesssageCellDelegate?
 
     let content = MessageContentView()
-
-    // Detail View
-    @ObservedObject var messageState = MessageDetailViewState(message: nil)
-    private lazy var detailView = MessageDetailView(config: self.messageState)
-    private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
+    
     var shouldShowDetailBar: Bool = true
+
+    @ObservedObject var messageState = MessageDetailViewState(message: nil)
 
     /// If true, this cell's message details are fully visible.
     @Published private(set) var messageDetailState = MessageDetailState()
@@ -41,6 +39,8 @@ class MessageCell: UICollectionViewCell {
 
     // Context menu
     private lazy var contextMenuDelegate = MessageCellContextMenuDelegate(messageCell: self)
+    
+    private var footerView = MessageFooterView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,40 +63,29 @@ class MessageCell: UICollectionViewCell {
 
             self.delegate?.messageCell(self, didTapAttachmentForMessage: (message.streamCid, message.id))
         }
+        
+        self.contentView.addSubview(self.footerView)
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { [unowned self] activeConversation in
                 // If this cell's conversation becomes active,
                 // then start message consumption if needed.
-                self.handleDetailVisibility(areDetailsFullyVisible: self.detailVC.view.alpha == 1)
+                self.handleDetailVisibility(areDetailsFullyVisible: self.footerView.alpha == 1)
             }.store(in: &self.subscriptions)
-    }
-
-    override func willMove(toWindow newWindow: UIWindow?) {
-        super.willMove(toWindow: newWindow)
-
-        guard newWindow.isNil else { return }
-
-        self.detailVC.removeFromParentAndSuperviewIfNeeded()
-    }
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-
-        guard self.window.exists else { return }
-
-        self.parentViewController()?.addChild(viewController: self.detailVC, toView: self.contentView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.footerView.width = self.contentView.width - Theme.ContentOffset.long.value.doubled
+        self.footerView.height = MessageFooterView.height
+        self.footerView.centerOnX()
+        self.footerView.pin(.bottom)
 
-        self.content.expandToSuperviewSize()
-
-        self.detailVC.view.width = self.halfWidth
-        self.detailVC.view.height = 25
-        self.detailVC.view.pin(.bottom, offset: .standard)
+        self.content.expandToSuperviewWidth()
+        self.content.height = self.height - self.footerView.height - Theme.ContentOffset.short.value
+        self.content.pin(.top)
     }
 
     // MARK: Configuration
@@ -106,7 +95,8 @@ class MessageCell: UICollectionViewCell {
         
         self.messageState.message = message
         
-        self.detailVC.view.isVisible = self.shouldShowDetailBar
+        self.footerView.configure(for: message)
+        self.footerView.isVisible = self.shouldShowDetailBar
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -125,8 +115,7 @@ class MessageCell: UICollectionViewCell {
 
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
-        self.detailVC.view.height = old_MessageDetailView.height
-        self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
+        self.footerView.alpha = messageLayoutAttributes.detailAlpha
 
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
         self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)

@@ -70,6 +70,17 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     // MARK: - Layout/Animation Properties
 
     private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self.swipeInputView)
+    
+    let typingIndicatorView = TypingIndicatorView()
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.typingIndicatorView.width = self.view.width - 48
+        self.typingIndicatorView.height = 16
+        self.typingIndicatorView.bottom = 0
+        self.typingIndicatorView.centerOnX()
+    }
 
     // MARK: BaseView Setup and Layout
 
@@ -79,6 +90,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.addSubview(self.typingIndicatorView)
 
         self.swipeInputView.deliveryTypeView.didSelectContext = { [unowned self] context in
             AnalyticsManager.shared.trackEvent(type: .deliveryTypeSelected, properties: ["value": context.rawValue])

@@ -32,6 +32,7 @@ protocol Messageable {
     var isConsumedByMe: Bool { get }
     var isConsumed: Bool { get }
     var hasBeenConsumedBy: [PersonType] { get }
+    var nonMeConsumers: [PersonType] { get }
     var color: ThemeColor { get }
     var kind: MessageKind { get }
     var isDeleted: Bool { get }
@@ -100,5 +101,11 @@ extension Messageable {
         }
 
         return self.recentReplies.first
+    }
+    
+    var nonMeConsumers: [PersonType] {
+        return self.hasBeenConsumedBy.filter { person in
+            return !person.isCurrentUser
+        }
     }
 }

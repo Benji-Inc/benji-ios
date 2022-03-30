@@ -15,7 +15,7 @@ class AddView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .B6)
+        self.set(backgroundColor: .B7)
         self.addSubview(self.imageView)
         self.imageView.image = UIImage(systemName: "plus")
         self.imageView.tintColor = UIColor.white.withAlphaComponent(0.8)

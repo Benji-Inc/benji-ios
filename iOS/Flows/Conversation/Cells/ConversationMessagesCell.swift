@@ -156,9 +156,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
 
     private func configureCollectionLayout(for state: ConversationUIState) {
-        self.collectionLayout.itemHeight
-        = MessageContentView.bubbleHeight + old_MessageDetailView.height + Theme.ContentOffset.short.value
-
+        
         switch state {
         case .read:
             self.collectionLayout.spacingKeyPoints = [0, 96, 144, 192]

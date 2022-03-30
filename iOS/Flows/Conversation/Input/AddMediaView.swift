@@ -25,7 +25,7 @@ class AddMediaView: ThemeButton {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .B6)
+        self.set(backgroundColor: .B7)
         
         self.addSubview(self.plusImageView)
         self.plusImageView.image = UIImage(systemName: "plus")
