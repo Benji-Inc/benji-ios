@@ -151,7 +151,6 @@ class SwipeInputPanGestureHandler {
 
         let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
         let offsetY = -self.getYOffset(withPanOffset: panOffset.y)
-        logDebug(offsetY)
         let previewCenter = initialCenter + CGPoint(x: offsetX, y: offsetY)
         previewView.center = previewCenter
 
@@ -190,11 +189,14 @@ class SwipeInputPanGestureHandler {
         }
 
         // The distance the user needs to drag in order to send a message at the highest delivery priority
-        let totalDragDistance: CGFloat = 120
+        let totalDragDistance: CGFloat = 180
 
         // Get the normalized drag distance, then adjust it so that it "gravitates" to three distinct spots.
         let normalized = -panOffset/totalDragDistance
-        let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.3, 0.33, 0.36, 0.63, 0.66, 0.69, 0.97, 1])
+        let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.11, 0.22,
+                                                              0.34, 0.35, 0.37,
+                                                              0.66, 0.68, 0.69,
+                                                              0.97, 0.98, 1])
 
         let dropZoneFrame = self.viewController.dropZoneFrame
         let firstCheckpoint = initialPreviewCenter.y - dropZoneFrame.bottom
