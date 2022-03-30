@@ -185,9 +185,26 @@ class SwipeInputPanGestureHandler {
     }
 
     private func getYOffset(withPanOffset panOffset: CGFloat) -> CGFloat {
-        let normalized = -panOffset/250
+        guard let initialPreviewCenter = self.initialPreviewCenter else {
+            return panOffset
+        }
+
+        // The distance the user needs to drag in order to send a message at the highest delivery priority
+        let totalDragDistance: CGFloat = 120
+
+        // Get the normalized drag distance, then adjust it so that it "gravitates" to three distinct spots.
+        let normalized = -panOffset/totalDragDistance
         let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.3, 0.33, 0.36, 0.63, 0.66, 0.69, 0.97, 1])
-        return adjustedNormalized * 250
+
+        let dropZoneFrame = self.viewController.dropZoneFrame
+        let firstCheckpoint = initialPreviewCenter.y - dropZoneFrame.bottom
+        let secondCheckpoint = initialPreviewCenter.y - dropZoneFrame.centerY
+        let thirdCheckpoint = initialPreviewCenter.y - dropZoneFrame.top - 10
+
+        let finalOffset = lerp(adjustedNormalized,
+                               keyPoints: [0, firstCheckpoint, secondCheckpoint, thirdCheckpoint])
+
+        return finalOffset
     }
 
     private func resetPreviewAndInputViews(didSend: Bool) {
@@ -207,7 +224,6 @@ class SwipeInputPanGestureHandler {
                     self.viewController.resetInputViews()
                 }
             }
-            
         } else {
             // If the user didn't swipe far enough to send a message, animate the preview view back
             // to where it started, then reveal the text view to allow for input again.

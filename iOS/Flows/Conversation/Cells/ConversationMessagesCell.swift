@@ -16,7 +16,7 @@ protocol ConversationUIStateSettable {
 }
 
 /// A cell to display the messages of a conversation.
-/// The user's messages and other messages are put in two stacks (along the z-axis),
+/// The user's messages and other messages are put in a stack (along the z-axis),
 /// with the most recent messages at the front.
 class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable, UICollectionViewDelegate {
 
