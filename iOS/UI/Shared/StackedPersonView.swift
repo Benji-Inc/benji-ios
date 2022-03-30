@@ -11,6 +11,7 @@ import Foundation
 class StackedPersonView: BaseView {
     
     private let label = ThemeLabel(font: .small)
+    private var peopleIds: [String] = []
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -19,6 +20,13 @@ class StackedPersonView: BaseView {
     }
     
     func configure(with people: [PersonType]) {
+        let ids = people.compactMap { person in
+            return person.personId
+        }
+        
+        guard self.peopleIds != ids else { return }
+        
+        self.peopleIds = ids
         self.removeAllSubviews()
         
         for (index, person) in people.enumerated() {
