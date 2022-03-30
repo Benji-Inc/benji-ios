@@ -81,6 +81,7 @@ class MessageFooterView: BaseView {
             
             self?.stackedView.configure(with: msg.nonMeConsumers)
             self?.replyCount.set(count: msg.replyCount)
+            self?.replyCount.isVisible = msg.replyCount > 0
         }
         
         self.subscribeToUpdates()
@@ -101,6 +102,7 @@ class MessageFooterView: BaseView {
         
         self.controller?.repliesChangesPublisher.mainSink(receiveValue: { [unowned self] _ in
             self.replyCount.set(count: msg.replyCount)
+            self.replyCount.isVisible = msg.replyCount > 0
         }).store(in: &self.subscriptions)
     }
         

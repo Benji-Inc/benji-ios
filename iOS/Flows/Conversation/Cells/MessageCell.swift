@@ -28,12 +28,10 @@ class MessageCell: UICollectionViewCell {
     weak var delegate: MesssageCellDelegate?
 
     let content = MessageContentView()
-
-    // Detail View
-    @ObservedObject var messageState = MessageDetailViewState(message: nil)
-    private lazy var detailView = MessageDetailView(config: self.messageState)
-    private lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
+    
     var shouldShowDetailBar: Bool = true
+
+    @ObservedObject var messageState = MessageDetailViewState(message: nil)
 
     /// If true, this cell's message details are fully visible.
     @Published private(set) var messageDetailState = MessageDetailState()
@@ -73,24 +71,8 @@ class MessageCell: UICollectionViewCell {
             .mainSink { [unowned self] activeConversation in
                 // If this cell's conversation becomes active,
                 // then start message consumption if needed.
-                self.handleDetailVisibility(areDetailsFullyVisible: self.detailVC.view.alpha == 1)
+                self.handleDetailVisibility(areDetailsFullyVisible: self.footerView.alpha == 1)
             }.store(in: &self.subscriptions)
-    }
-
-    override func willMove(toWindow newWindow: UIWindow?) {
-        super.willMove(toWindow: newWindow)
-
-        guard newWindow.isNil else { return }
-
-        self.detailVC.removeFromParentAndSuperviewIfNeeded()
-    }
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-
-        guard self.window.exists else { return }
-
-        self.parentViewController()?.addChild(viewController: self.detailVC, toView: self.contentView)
     }
 
     override func layoutSubviews() {
@@ -115,7 +97,6 @@ class MessageCell: UICollectionViewCell {
         
         self.footerView.configure(for: message)
         self.footerView.isVisible = self.shouldShowDetailBar
-        self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -134,8 +115,6 @@ class MessageCell: UICollectionViewCell {
 
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
-        self.detailVC.view.height = old_MessageDetailView.height
-        self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
         self.footerView.alpha = messageLayoutAttributes.detailAlpha
 
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar

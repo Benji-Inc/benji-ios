@@ -50,8 +50,6 @@ class MessageContentView: BaseView {
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
-    let replyCountView = ThemeLabel(font: .small, textColor: .T1)
-
     var layoutState: Layout = .expanded
 
     override func initializeSubviews() {
@@ -77,12 +75,6 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
-
-        self.replyCountView.set(backgroundColor: .B1withAlpha)
-        self.replyCountView.layer.borderWidth = 2
-        self.replyCountView.layer.borderColor = ThemeColor.BORDER.color.cgColor
-        self.replyCountView.textAlignment = .center
-        self.addSubview(self.replyCountView)
     }
 
     override func layoutSubviews() {
@@ -135,14 +127,6 @@ class MessageContentView: BaseView {
         }
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
-
-        // Replies
-        self.replyCountView.width = 22
-        self.replyCountView.height = 22
-        self.replyCountView.layer.cornerRadius = 4
-        self.replyCountView.layer.masksToBounds = true
-        self.replyCountView.pin(.right, offset: MessageContentView.padding)
-        self.replyCountView.pin(.bottom, offset: .standard)
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -160,9 +144,6 @@ class MessageContentView: BaseView {
         }
 
         self.dateView.text = message.createdAt.getTimeAgoString()
-
-        self.replyCountView.text = message.totalReplyCount.description
-        self.replyCountView.isVisible = message.totalReplyCount > 0
 
         if message.isDeleted {
             self.textView.text = "DELETED"
