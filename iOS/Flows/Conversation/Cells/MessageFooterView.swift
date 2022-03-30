@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import ScrollCounter
+import Combine
 
 class MessageFooterView: BaseView {
     
@@ -29,17 +30,55 @@ class MessageFooterView: BaseView {
                                       gradientColor: ThemeColor.B0.color,
                                       gradientStop: 4)
     
+    private var controller: MessageController?
+    private var subscriptions = Set<AnyCancellable>()
+    
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.stackedView)
-        self.set(backgroundColor: .red)
+        self.addSubview(self.counter)
     }
+    
+    private var messageTask: Task<Void, Never>?
     
     func configure(for message: Messageable) {
+        self.controller = ChatClient.shared.messageController(for: message)
         
+        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
+        self.messageTask?.cancel()
+        
+        self.messageTask = Task { [weak self] in
+            
+            try? await self?.controller?.synchronize()
+            
+            guard !Task.isCancelled, let msg = self?.controller?.message else { return }
+            
+            self?.stackedView.configure(with: msg.nonMeConsumers)
+            self?.counter.setValue(Float(msg.totalReplyCount), animated: true)
+        }
+        
+        self.subscribeToUpdates()
     }
     
+    private func subscribeToUpdates() {
+        
+        self.subscriptions.forEach { cancellable in
+            cancellable.cancel()
+        }
+        
+        guard let msg = self.controller?.message else { return }
+        
+        self.controller?.reactionsPublisher.mainSink(receiveValue: { [unowned self] _ in
+            self.stackedView.configure(with: msg.nonMeConsumers)
+            self.setNeedsLayout()
+        }).store(in: &self.subscriptions)
+        
+        self.controller?.repliesChangesPublisher.mainSink(receiveValue: { [unowned self] _ in
+            self.counter.setValue(Float(msg.totalReplyCount), animated: true)
+        }).store(in: &self.subscriptions)
+    }
+        
     override func layoutSubviews() {
         super.layoutSubviews()
         

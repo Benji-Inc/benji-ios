@@ -117,6 +117,8 @@ class MessageCell: UICollectionViewCell {
         
         self.messageState.message = message
         
+        self.footerView.configure(for: message)
+        self.footerView.isVisible = self.shouldShowDetailBar
         self.detailVC.view.isVisible = self.shouldShowDetailBar
     }
 
