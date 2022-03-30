@@ -91,8 +91,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.typingIndicatorView)
-        self.typingIndicatorView.set(backgroundColor: .red)
-        self.typingIndicatorView.update(typers: [User.current()!])
 
         self.swipeInputView.deliveryTypeView.didSelectContext = { [unowned self] context in
             AnalyticsManager.shared.trackEvent(type: .deliveryTypeSelected, properties: ["value": context.rawValue])

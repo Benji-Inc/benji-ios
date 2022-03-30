@@ -69,7 +69,7 @@ extension ConversationListViewController {
                 }
             }.store(in: &self.cancellables)
     }
-
+    
     func subscribeToConversationUpdates() {
         self.conversationListController
             .channelsChangesPublisher
