@@ -30,6 +30,9 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         get { return self.dataSource.messageCellDelegate}
         set { self.dataSource.messageCellDelegate = newValue }
     }
+    
+    var blurView = BlurView()
+    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
@@ -419,4 +422,17 @@ extension ConversationListViewController: TransitionableViewController {
 
         return messagesCell.getFrontmostCell()?.content
     }
+}
+
+extension ConversationListViewController: MessageInteractableController {
+    
+    var messageContent: MessageContentView {
+        return self.getCentmostMessageCellContent()!
+    }
+    
+    func handleDismissal() {}
+    func handleInitialDismissal() {}
+    func handleFinalPresentation() {}
+    func handlePresentationCompleted() {}
+    func handleCompletedDismissal() {}
 }

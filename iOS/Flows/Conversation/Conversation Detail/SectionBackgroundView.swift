@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import Localization
 
 class SectionBackgroundView: UICollectionReusableView, ElementKind {
     
     static var kind: String = "background"
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeViews()
@@ -23,7 +24,7 @@ class SectionBackgroundView: UICollectionReusableView, ElementKind {
     
     func initializeViews() {
         self.set(backgroundColor: .B6)
-        
+                
         self.layer.cornerRadius = Theme.cornerRadius
         self.clipsToBounds = true
     }

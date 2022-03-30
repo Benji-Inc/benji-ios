@@ -37,6 +37,7 @@ class AddMediaView: ThemeButton {
         self.layer.cornerRadius = Theme.innerCornerRadius
                 
         self.addSubview(self.displayableImageView)
+        self.showsMenuAsPrimaryAction = true 
     }
     
     override func layoutSubviews() {
