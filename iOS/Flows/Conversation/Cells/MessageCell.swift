@@ -102,12 +102,8 @@ class MessageCell: UICollectionViewCell {
         self.footerView.pin(.bottom)
 
         self.content.expandToSuperviewWidth()
-        self.content.height = self.height - self.footerView.height - Theme.ContentOffset.standard.value
+        self.content.height = self.height - self.footerView.height - Theme.ContentOffset.short.value
         self.content.pin(.top)
-        
-        self.detailVC.view.width = self.halfWidth
-        self.detailVC.view.height = 25
-        self.detailVC.view.match(.bottom, to: .bottom, of: self.content, offset: .standard)
     }
 
     // MARK: Configuration
