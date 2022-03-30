@@ -36,7 +36,7 @@ class OptionCell: CollectionViewManagerCell {
         self.contentView.addSubview(self.label)
         
         self.contentView.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .white)
+        self.lineView.set(backgroundColor: .B5)
         self.lineView.alpha = 0.1
     }
     

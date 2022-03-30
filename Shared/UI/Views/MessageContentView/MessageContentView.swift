@@ -113,7 +113,6 @@ class MessageContentView: BaseView {
         
         self.deliveryView.centerY = self.dateView.centerY
 
-
         // Link view
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
@@ -129,7 +128,7 @@ class MessageContentView: BaseView {
             self.textView.expand(.right)
         }
         self.textView.expand(.bottom)
-        self.textView.updateFontSize()
+        self.textView.updateFontSize(state: self.layoutState)
 
         // Image view
         if self.textView.isVisible {
@@ -247,7 +246,13 @@ extension MessageTextView {
     }
 
     /// Updates the font size to be appropriate for the amount of text displayed.
-    fileprivate func updateFontSize() {
+    fileprivate func updateFontSize(state: MessageContentView.Layout) {
+        
+        if state == .collapsed {
+            self.font = FontType.regular.font
+            return
+        }
+        
         self.font = FontType.contextCues.font
 
         guard self.numberOfLines > 1 else { return }
