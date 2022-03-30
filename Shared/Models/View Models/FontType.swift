@@ -54,7 +54,7 @@ enum FontType {
         case .contextCues:
             return 2
         default:
-            return -0.5
+            return 0.2
         }
     }
 

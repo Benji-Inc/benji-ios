@@ -38,7 +38,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                                          gradientStop: nil)
     let lineView = BaseView()
     
-    private let stackedAvatarView = StackedAvatarView()
+    private let stackedAvatarView = StackedPersonView()
     
     private var conversationController: ConversationController?
     var subscriptions = Set<AnyCancellable>()
@@ -204,65 +204,4 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     }
 }
 
-private class StackedAvatarView: BaseView {
-    
-    private let label = ThemeLabel(font: .small)
-    
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.clipsToBounds = false
-    }
-    
-    func configure(with people: [PersonType]) {
-        self.removeAllSubviews()
-        
-        for (index, person) in people.enumerated() {
-            if index <= 2 {
-                let view = BorderedPersonView()
-                view.set(person: person)
-                self.addSubview(view)
-            }
-        }
-        
-        if people.count > 3 {
-            let remainder = people.count - 3
-            self.label.setText("+\(remainder)")
-            self.addSubview(self.label)
-        }
-        
-        self.layoutNow()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.height = 22
-        
-        var xOffset: CGFloat = 0
-        var count: Int = 0
-        self.subviews.forEach { view in
-            if let personView = view as? BorderedPersonView {
-                personView.pulseLayer.borderWidth = 1
-                personView.shadowLayer.opacity = 0.0
-                personView.frame = CGRect(x: xOffset,
-                                          y: 0,
-                                          width: self.height,
-                                          height: self.height)
-                xOffset += view.width + Theme.ContentOffset.short.value
-                count += 1
-            }
-        }
-        
-        xOffset -= Theme.ContentOffset.short.value
-         
-        if count == 3 {
-            self.label.setSize(withWidth: 30)
-            xOffset += self.label.width + Theme.ContentOffset.short.value
-            self.label.centerOnY()
-            self.label.right = xOffset
-        }
-        
-        self.width = xOffset
-    }
-}
+

@@ -41,6 +41,8 @@ class MessageCell: UICollectionViewCell {
 
     // Context menu
     private lazy var contextMenuDelegate = MessageCellContextMenuDelegate(messageCell: self)
+    
+    private var footerView = MessageFooterView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,6 +65,8 @@ class MessageCell: UICollectionViewCell {
 
             self.delegate?.messageCell(self, didTapAttachmentForMessage: (message.streamCid, message.id))
         }
+        
+        self.contentView.addSubview(self.footerView)
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
@@ -91,12 +95,19 @@ class MessageCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.footerView.width = self.contentView.width - Theme.ContentOffset.long.value.doubled
+        self.footerView.height = MessageFooterView.height
+        self.footerView.centerOnX()
+        self.footerView.pin(.bottom)
 
-        self.content.expandToSuperviewSize()
-
+        self.content.expandToSuperviewWidth()
+        self.content.height = self.height - self.footerView.height - Theme.ContentOffset.standard.value
+        self.content.pin(.top)
+        
         self.detailVC.view.width = self.halfWidth
         self.detailVC.view.height = 25
-        self.detailVC.view.pin(.bottom, offset: .standard)
+        self.detailVC.view.match(.bottom, to: .bottom, of: self.content, offset: .standard)
     }
 
     // MARK: Configuration
@@ -127,6 +138,7 @@ class MessageCell: UICollectionViewCell {
 
         self.detailVC.view.height = old_MessageDetailView.height
         self.detailVC.view.alpha = messageLayoutAttributes.detailAlpha
+        self.footerView.alpha = messageLayoutAttributes.detailAlpha
 
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
         self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
