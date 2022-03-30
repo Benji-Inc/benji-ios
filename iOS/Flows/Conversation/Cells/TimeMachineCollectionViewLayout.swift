@@ -55,7 +55,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var topOfStackY: CGFloat = 0
 
     /// Key points used for the gradually alpha out items further back in the message stack.
-    var alphaKeyPoints: [CGFloat] = [1, 1, 1, 0]
+    var alphaKeyPoints: [CGFloat] = [1, 1, 0.75, 0]
     /// The maximum number of messages to show in each section's stack.
     var stackDepth: Int = 3 {
         didSet { self.invalidateLayout() }

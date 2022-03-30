@@ -49,7 +49,6 @@ class MessagePreviewViewController: ViewController {
                                          tailOrientation: .up)
         self.content.configure(with: self.message)
         self.content.bubbleView.backgroundLayer.fillColor = ThemeColor.clear.color.cgColor
-        self.content.bubbleView.lightGradientLayer.opacity = 0.0
         
         if let msg = self.message as? Message {
             self.replyView.setReplies(for: msg)

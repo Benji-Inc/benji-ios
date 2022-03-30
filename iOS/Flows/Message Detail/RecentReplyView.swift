@@ -50,20 +50,12 @@ class RecentReplyView: CollectionViewManagerCell, ManageableCell {
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
         
-        self.middleBubble.setBubbleColor(bubbleColor, animated: false)
-        self.middleBubble.lightGradientLayer.opacity
-        = 0.8
-        self.middleBubble.darkGradientLayer.opacity
-        = 0.6
+        self.middleBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.8), animated: false)
         self.middleBubble.tailLength = 0
         self.middleBubble.layer.masksToBounds = true
         self.middleBubble.layer.cornerRadius = Theme.cornerRadius
         
-        self.bottomBubble.setBubbleColor(bubbleColor, animated: false)
-        self.bottomBubble.lightGradientLayer.opacity
-        = 0.4
-        self.bottomBubble.darkGradientLayer.opacity
-        = 0.2
+        self.bottomBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.6), animated: false)
         self.bottomBubble.layer.masksToBounds = true
         self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
         self.bottomBubble.tailLength = 0
