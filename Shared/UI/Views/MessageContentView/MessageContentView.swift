@@ -45,6 +45,8 @@ class MessageContentView: BaseView {
     let emojiView = EmojiCircleView()
     /// Date view that shows when the message was last updated.
     let dateView = ThemeLabel(font: .small, textColor: .white)
+    /// Delivery view that shows how the message was sent
+    let deliveryView = UIImageView()
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .T1)
     let imageView = DisplayableImageView()
@@ -72,6 +74,11 @@ class MessageContentView: BaseView {
 
         // Make sure the author, date and emoji view are on top of the other content
         self.mainContentArea.addSubview(self.authorView)
+        self.mainContentArea.addSubview(self.deliveryView)
+        self.deliveryView.contentMode = .scaleAspectFit
+        self.deliveryView.alpha = 0.6
+        self.deliveryView.tintColor = ThemeColor.white.color
+        
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
@@ -94,11 +101,18 @@ class MessageContentView: BaseView {
 
         self.emojiView.center = CGPoint(x: self.authorView.width - Theme.ContentOffset.short.value,
                                         y: self.authorView.height)
+        
+        // Delivery View
+        self.deliveryView.squaredSize = 11
+        self.deliveryView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
 
         // Date view
-        self.dateView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.dateView.match(.left, to: .right, of: self.deliveryView, offset: .short)
         self.dateView.match(.top, to: .top, of: self.authorView)
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
+        
+        self.deliveryView.centerY = self.dateView.centerY
+
 
         // Link view
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
@@ -144,6 +158,7 @@ class MessageContentView: BaseView {
         }
 
         self.dateView.text = message.createdAt.getTimeAgoString()
+        self.deliveryView.image = message.context.image
 
         if message.isDeleted {
             self.textView.text = "DELETED"
