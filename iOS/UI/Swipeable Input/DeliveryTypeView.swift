@@ -14,7 +14,7 @@ class DeliveryTypeView: BaseView {
     let label = ThemeLabel(font: .small)
     let button = ThemeButton()
 
-    var didSelectContext: ((MessageContext) -> Void)?
+    var didSelectContext: ((MessageDeliveryType) -> Void)?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -39,7 +39,7 @@ class DeliveryTypeView: BaseView {
         self.setNeedsLayout()
     }
 
-    func configure(for context: MessageContext) {
+    func configure(for context: MessageDeliveryType) {
         self.label.setText(context.displayName)
         self.button.menu = self.createMenu(for: context)
         self.layoutNow()
@@ -63,10 +63,10 @@ class DeliveryTypeView: BaseView {
         self.button.centerOnXAndY()
     }
 
-    private func createMenu(for context: MessageContext) -> UIMenu {
+    private func createMenu(for context: MessageDeliveryType) -> UIMenu {
         
         var actions: [UIAction] = []
-        MessageContext.allCases.forEach { value in
+        MessageDeliveryType.allCases.forEach { value in
             let state: UIMenuElement.State = context == value ? .on : .off
             let action = UIAction(title: value.displayName,
                                    subtitle: value.description,

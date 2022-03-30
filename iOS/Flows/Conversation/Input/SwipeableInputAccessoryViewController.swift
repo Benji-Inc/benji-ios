@@ -55,7 +55,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     // MARK: - Message State
 
-    var currentContext: MessageContext = .respectful {
+    var currentContext: MessageDeliveryType = .respectful {
         didSet {
             self.swipeInputView.deliveryTypeView.configure(for: self.currentContext)
         }

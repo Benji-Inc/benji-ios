@@ -193,14 +193,15 @@ class SwipeInputPanGestureHandler {
 
         // Get the normalized drag distance, then adjust it so that it "gravitates" to three distinct spots.
         let normalized = -panOffset/totalDragDistance
-        let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.11, 0.22,
-                                                              0.34, 0.35, 0.37,
-                                                              0.66, 0.68, 0.69,
-                                                              0.97, 0.98, 1])
+        let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.11, 0.22,    // No send
+                                                              0.34, 0.35, 0.37, // Send with delivery mode low
+                                                              0.66, 0.68, 0.69, // Send with delivery mode med
+                                                              0.97, 0.98, 1])   // Send with delivery mode high
 
         let dropZoneFrame = self.viewController.dropZoneFrame
         let firstCheckpoint = initialPreviewCenter.y - dropZoneFrame.bottom
         let secondCheckpoint = initialPreviewCenter.y - dropZoneFrame.centerY
+        // Subtract 10 so it stays within the dropzone
         let thirdCheckpoint = initialPreviewCenter.y - dropZoneFrame.top - 10
 
         let finalOffset = lerp(adjustedNormalized,

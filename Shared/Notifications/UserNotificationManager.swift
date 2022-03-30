@@ -136,7 +136,7 @@ class UserNotificationManager: NSObject {
                         identifiers.append(message.id)
                     }
 
-                    if message.context == .timeSensitive {
+                    if message.deliveryType == .timeSensitive {
                         badgeCount -= 1
                     }
                 }

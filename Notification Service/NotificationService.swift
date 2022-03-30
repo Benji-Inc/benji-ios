@@ -21,10 +21,10 @@ class NotificationService: UNNotificationServiceExtension {
     private var author: INPerson?
     private var conversation: ChatChannel?
     private var message: ChatMessage?
-    private var messageContext: MessageContext? {
+    private var messageDeliveryType: MessageDeliveryType? {
         guard let value = self.message?.extraData["context"],
               case RawJSON.string(let string) = value else { return nil }
-        return MessageContext(rawValue: string)
+        return MessageDeliveryType(rawValue: string)
     }
     private var recipients: [INPerson] = []
 
@@ -179,9 +179,9 @@ class NotificationService: UNNotificationServiceExtension {
 
     private func updateInterruptionLevel(of content: UNMutableNotificationContent) async {
         // Update the interruption level
-        guard let messageContext = self.messageContext else { return }
+        guard let messageDeliveryType = self.messageDeliveryType else { return }
 
-        switch messageContext {
+        switch messageDeliveryType {
         case .timeSensitive:
             // Time-sensitive messages are always delivered with a time-sensitive interruption level
             // regardless of the user's current focus state
@@ -202,7 +202,7 @@ class NotificationService: UNNotificationServiceExtension {
 
     private func updateBadgeCount(of content: UNMutableNotificationContent) async {
         // Only increment the badge count for time sensitive messages.
-        guard self.messageContext == .timeSensitive else { return }
+        guard self.messageDeliveryType == .timeSensitive else { return }
 
         let badgeNumber = self.getUserDefaultsBadgeNumber() + 1
         content.badge = badgeNumber as NSNumber

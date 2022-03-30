@@ -11,7 +11,7 @@ import Intents
 
 protocol Sendable: AnyObject {
     var kind: MessageKind { get set }
-    var context: MessageContext { get set }
+    var context: MessageDeliveryType { get set }
     var expression: Emoji? { get set }
     var previousMessage: Messageable? { get set }
     var isSendable: Bool { get }
@@ -20,7 +20,7 @@ protocol Sendable: AnyObject {
 class SendableObject: Sendable {
 
     var kind: MessageKind
-    var context: MessageContext
+    var context: MessageDeliveryType
     var previousMessage: Messageable?
     var expression: Emoji?
 
@@ -29,7 +29,7 @@ class SendableObject: Sendable {
     }
 
     init(kind: MessageKind,
-         context: MessageContext,
+         context: MessageDeliveryType,
          expression: Emoji?,
          previousMessage: Messageable? = nil) {
 

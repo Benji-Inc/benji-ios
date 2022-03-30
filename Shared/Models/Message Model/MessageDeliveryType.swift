@@ -1,5 +1,5 @@
 //
-//  MessageContext.swift
+//  MessageDeliveryType.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 6/29/19.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum MessageContext: String, CaseIterable {
+enum MessageDeliveryType: String, CaseIterable {
 
     case timeSensitive = "time-sensitive"
     case conversational = "conversational"

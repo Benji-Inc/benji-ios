@@ -106,8 +106,8 @@ class Lorem {
         return self.imageList.random()
     }
 
-    class func context() -> MessageContext {
-        return MessageContext.allCases.random()
+    class func deliveryType() -> MessageDeliveryType {
+        return MessageDeliveryType.allCases.random()
     }
 
     class func date() -> Date {

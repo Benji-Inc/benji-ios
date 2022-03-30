@@ -27,7 +27,7 @@ protocol Messageable {
     var attributes: [String: Any]? { get }
     var person: PersonType? { get }
     var deliveryStatus: DeliveryStatus { get }
-    var context: MessageContext { get }
+    var deliveryType: MessageDeliveryType { get }
     var canBeConsumed: Bool { get }
     var isConsumedByMe: Bool { get }
     var isConsumed: Bool { get }
@@ -82,10 +82,10 @@ extension Messageable {
 
     var color: ThemeColor {
         if self.isFromCurrentUser {
-            if self.context == .respectful {
+            if self.deliveryType == .respectful {
                 return .T1
             } else {
-                return self.context.color
+                return self.deliveryType.color
             }
         } else {
             return .clear
