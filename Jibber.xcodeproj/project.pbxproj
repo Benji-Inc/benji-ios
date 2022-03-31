@@ -120,6 +120,7 @@
 		D60B886527F4C37E00B3E1C2 /* StackedPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */; };
 		D60B886727F4F7C200B3E1C2 /* ReplyCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886627F4F7C200B3E1C2 /* ReplyCountView.swift */; };
 		D60B886927F5026700B3E1C2 /* TypingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886827F5026700B3E1C2 /* TypingIndicatorView.swift */; };
+		D60B886B27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */; };
 		D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* ThemeButton.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -885,6 +886,7 @@
 		D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedPersonView.swift; sourceTree = "<group>"; };
 		D60B886627F4F7C200B3E1C2 /* ReplyCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyCountView.swift; sourceTree = "<group>"; };
 		D60B886827F5026700B3E1C2 /* TypingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingIndicatorView.swift; sourceTree = "<group>"; };
+		D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSegmentControlHeaderView.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -2383,6 +2385,7 @@
 				D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */,
 				D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */,
 				D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */,
+				D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */,
 			);
 			path = Room;
 			sourceTree = "<group>";
@@ -2913,6 +2916,7 @@
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */,
 				D6D96EF427C5B11900BDCD01 /* ContextCuesViewController.swift in Sources */,
+				D60B886B27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift in Sources */,
 				D615534A2745737300B08459 /* ThreadCoordinator.swift in Sources */,
 				D68759692728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */,
 				D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */,

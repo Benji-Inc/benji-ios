@@ -26,6 +26,9 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
 
     private let config = ManageableCellRegistration<RoomMemberCell>().provider
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
+    private let headerConfig = ManageableHeaderRegistration<RoomSegmentControlHeaderView>().provider
+    
+    var didSelectSegmentIndex: ((ConversationsSegmentControl.SegmentType) -> Void)? = nil
 
     // MARK: - Cell Dequeueing
 
@@ -42,6 +45,23 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                                 for: indexPath,
                                                                 item: cid)
+        }
+    }
+    
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
+                                           section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+        
+        switch section {
+        case .conversations:
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            header.segmentControl.didSelectSegmentIndex = { [unowned self] index in
+                self.didSelectSegmentIndex?(index)
+            }
+            return header
+        default:
+            return nil
         }
     }
 }

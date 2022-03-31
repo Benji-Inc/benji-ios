@@ -59,6 +59,17 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.dataSource.didSelectSegmentIndex = { [unowned self] index in
+            switch index {
+            case .recents:
+                self.startLoadRecentTask()
+            case .all:
+                self.startLoadAllTask()
+            case .archive:
+                self.startLoadArchiveTask()
+            }
+        }
+        
         self.loadInitialData()
     }
     
