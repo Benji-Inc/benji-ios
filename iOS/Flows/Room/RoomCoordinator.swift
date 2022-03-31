@@ -18,10 +18,23 @@ class RoomCoordinator: PresentableCoordinator<Void> {
     
     override func start() {
         super.start()
-    
         
+        self.roomVC.headerView.button.didSelect { [unowned self] in
+            guard let user = User.current() else { return }
+            self.presentProfile(for: user)
+        }
+    
         self.roomVC.$selectedItems.mainSink { [unowned self] items in
             guard let itemType = items.first else { return }
+            switch itemType {
+            case .memberId(let personId):
+                Task {
+                    guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                    self.presentProfile(for: person)
+                }
+            case .conversation(_):
+                 break
+            }
 //            switch itemType {
 //            case .item(let circleItem):
 //                if circleItem.canAdd {
@@ -43,5 +56,19 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         }
         
         self.router.present(coordinator, source: self.roomVC)
+    }
+    
+    func presentProfile(for person: PersonType) {
+        self.removeChild()
+
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                //self.finishFlow(with: .conversation(result))
+            }
+        }
+        
+        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
     }
 }

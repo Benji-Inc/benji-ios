@@ -13,7 +13,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                           RoomItemType,
                           RoomCollectionViewDataSource> {
     
-    private let headerView = RoomHeaderView()
+    let headerView = RoomHeaderView()
     private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor,
                                                       ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                startPoint: .topCenter,
