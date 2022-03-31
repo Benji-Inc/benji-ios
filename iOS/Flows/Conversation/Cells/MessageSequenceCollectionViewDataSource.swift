@@ -167,10 +167,7 @@ extension MessageSequenceCollectionViewDataSource {
     }
 
     static func createPlaceholderMessageCellRegistration() -> PlaceholderMessageCellRegistration {
-        return PlaceholderMessageCellRegistration { cell, indexPath, itemIdentifier in
-            #warning("remove debugging")
-//            cell.contentView.backgroundColor = .red
-        }
+        return PlaceholderMessageCellRegistration { cell, indexPath, itemIdentifier in }
     }
     
     static func createInitialCellRegistration() -> InitialMessageCellRegistration {
