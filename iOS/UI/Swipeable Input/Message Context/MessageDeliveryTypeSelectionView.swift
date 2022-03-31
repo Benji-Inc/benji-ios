@@ -1,5 +1,5 @@
 //
-//  MessageContextView.swift
+//  MessageDeliveryTypeView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 3/26/22.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-class MessageContextSelectionView: BaseView {
+class MessageDeliveryTypeSelectionView: BaseView {
     
     let imageView = UIImageView()
-    let context: MessageContext
+    let context: MessageDeliveryType
     
     enum State {
         case hidden
@@ -21,7 +21,7 @@ class MessageContextSelectionView: BaseView {
     
     private(set) var state: State = .hidden
     
-    init(with context: MessageContext) {
+    init(with context: MessageDeliveryType) {
         self.context = context
         super.init()
     }

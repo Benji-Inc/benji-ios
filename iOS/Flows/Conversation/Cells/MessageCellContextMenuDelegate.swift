@@ -1,5 +1,5 @@
 //
-//  MessageContextMenuDelegate.swift
+//  MessageDeliveryTypeMenuDelegate.swift
 //  Jibber
 //
 //  Created by Martin Young on 3/23/22.

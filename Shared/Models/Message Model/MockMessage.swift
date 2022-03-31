@@ -18,7 +18,7 @@ struct MockMessage: Messageable {
     var attributes: [String : Any]? = nil
     var person: PersonType? = nil
     var deliveryStatus: DeliveryStatus = .sent
-    var context: MessageContext = .respectful
+    var deliveryType: MessageDeliveryType = .respectful
     var hasBeenConsumedBy: [PersonType] = [SystemAvatar(givenName: "system",
                                                         familyName: "person",
                                                         handle: "system",

@@ -27,9 +27,11 @@ class SwipeInputPanGestureHandler {
     /// The center point of the preview view when the pan started.
     private var initialPreviewCenter: CGPoint?
     /// How far the preview view can be dragged left or right.
-    private let maxXOffset: CGFloat = 40
+    private let maxXOffset: CGFloat = 20
     /// If true, the preview view is currently in the drop zone.
     private var isPreviewInDropZone = false
+    /// The distance the user needs to drag in order to send a message at the highest delivery priority
+    private let totalDragDistance: CGFloat = 160
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
@@ -55,7 +57,7 @@ class SwipeInputPanGestureHandler {
     private func shouldHandlePan() -> Bool {
         // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.viewController.currentMessageKind,
-                                    context: self.viewController.currentContext,
+                                    deliveryType: .respectful,
                                     expression: self.viewController.currentExpression,
                                     previousMessage: self.viewController.editableMessage)
         return object.isSendable
@@ -63,7 +65,7 @@ class SwipeInputPanGestureHandler {
 
     private func handlePanBegan() {
         let object = SendableObject(kind: self.viewController.currentMessageKind,
-                                    context: self.viewController.currentContext,
+                                    deliveryType: .respectful,
                                     expression: self.viewController.currentExpression,
                                     previousMessage: self.viewController.editableMessage)
         self.viewController.sendable = object
@@ -76,7 +78,7 @@ class SwipeInputPanGestureHandler {
 
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
-                                              bubbleColor: self.viewController.currentContext.color.color)
+                                              bubbleColor: object.deliveryType.color.color)
         self.previewView?.frame = self.inputView.inputContainerView.frame
         self.previewView?.messageKind = self.viewController.currentMessageKind
         self.previewView?.showShadow(withOffset: 8)
@@ -85,7 +87,6 @@ class SwipeInputPanGestureHandler {
         self.initialPreviewCenter = self.previewView?.center
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputView.deliveryTypeView.alpha = 0.0
             self.inputView.expressionView.alpha = 0.0
         }
         
@@ -149,32 +150,14 @@ class SwipeInputPanGestureHandler {
         guard let initialCenter = self.initialPreviewCenter,
               let previewView = self.previewView else { return }
 
+        let panResult = self.getYOffsetAndDeliveryType(withPanOffset: panOffset.y)
+
         let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
-
-        var previewCenter = initialCenter + CGPoint(x: offsetX, y: panOffset.y)
-
-        // As the user drags further up, gravitate the preview view toward the drop zone.
-        let dropZoneCenter = self.viewController.dropZoneFrame.center
-        let xGravityRange: CGFloat = 30
-        // Range along y axis from the drop zone center within which we start gravitating the preview
-        let yGravityRange: CGFloat = self.viewController.dropZoneFrame.height
-
-        // Vector pointing from the current preview center to the drop zone center.
-        var gravityVector = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter)
-
-        // The closer to the drop zone, the stronger the gravity should be.
-        let gravityFactorX = lerpClamped(abs(previewCenter.x - dropZoneCenter.x)/xGravityRange,
-                                         keyPoints: [1, 0.95, 0.85, 0.5, 0])
-        let gravityFactorY = lerpClamped(abs(previewCenter.y - dropZoneCenter.y)/yGravityRange,
-                                         keyPoints: [1, 0.95, 0.85, 0.7, 0])
-        gravityVector = CGVector(dx: gravityVector.dx * gravityFactorX,
-                                 dy: gravityVector.dy * gravityFactorY)
-
-        // Adjust the preview's center with the gravity vector.
-        previewCenter = CGPoint(x: previewCenter.x + gravityVector.dx,
-                                y: previewCenter.y + gravityVector.dy)
-
+        let offsetY = panResult.offset
+        let previewCenter = initialCenter + CGPoint(x: offsetX, y: offsetY)
         previewView.center = previewCenter
+
+        let dropZoneCenter = self.viewController.dropZoneFrame.center
 
         // Provide haptic and visual feedback when the message is ready to send.
         let distanceToDropZone = CGVector(startPoint: previewCenter, endPoint: dropZoneCenter).magnitude
@@ -186,6 +169,9 @@ class SwipeInputPanGestureHandler {
                 self.impactFeedback.impactOccurred()
             }
             self.isPreviewInDropZone = true
+
+            // Update the delivery type
+            self.viewController.sendable?.deliveryType = panResult.deliveryType
         } else {
             if self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: true)
@@ -199,7 +185,50 @@ class SwipeInputPanGestureHandler {
                 }
             }
             self.isPreviewInDropZone = false
+
+            // If the message is out of the drop zone, reset its delivery type back to respectful.
+            self.viewController.sendable?.deliveryType = .respectful
         }
+    }
+
+    /// Get the yOffset that the preview view should have based up on the pan offset.
+    /// Also returns the delivery type that corresponds to that offset.
+    private func getYOffsetAndDeliveryType(withPanOffset panOffset: CGFloat)
+    -> (offset: CGFloat, deliveryType: MessageDeliveryType) {
+
+        guard let initialPreviewCenter = self.initialPreviewCenter else {
+            return (panOffset, .respectful)
+        }
+
+        // Get the normalized drag distance, then adjust it so that it "gravitates" to three distinct spots.
+        let normalized = -panOffset/self.totalDragDistance
+        let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.11, 0.22,    // No send
+                                                              0.34, 0.35, 0.37, // Send with delivery mode low
+                                                              0.66, 0.68, 0.69, // Send with delivery mode med
+                                                              0.97, 0.98, 1])   // Send with delivery mode high
+
+        let deliveryType: MessageDeliveryType
+        switch adjustedNormalized {
+        case 0..<0.66:
+            deliveryType = .respectful
+        case 0.66..<0.97:
+            deliveryType = .conversational
+        default:
+            deliveryType = .timeSensitive
+        }
+
+        let dropZoneFrame = self.viewController.dropZoneFrame
+        let firstCheckpoint = initialPreviewCenter.y - dropZoneFrame.bottom
+        let secondCheckpoint = initialPreviewCenter.y - dropZoneFrame.centerY
+        // Subtract 10 so it stays within the dropzone
+        let thirdCheckpoint = initialPreviewCenter.y - dropZoneFrame.top - 10
+
+        let finalOffset = lerp(adjustedNormalized,
+                               keyPoints: [0, firstCheckpoint, secondCheckpoint, thirdCheckpoint])
+
+        // Flip the sign of the offset because the preview view is swiped up,
+        // which is in the negative direction.
+        return (-finalOffset, deliveryType)
     }
 
     private func resetPreviewAndInputViews(didSend: Bool) {
@@ -219,7 +248,6 @@ class SwipeInputPanGestureHandler {
                     self.viewController.resetInputViews()
                 }
             }
-            
         } else {
             // If the user didn't swipe far enough to send a message, animate the preview view back
             // to where it started, then reveal the text view to allow for input again.
@@ -239,7 +267,6 @@ class SwipeInputPanGestureHandler {
         }
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputView.deliveryTypeView.alpha = 1.0
             self.inputView.expressionView.alpha = 1.0
         }
     }

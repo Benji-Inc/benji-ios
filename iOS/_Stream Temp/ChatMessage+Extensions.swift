@@ -52,10 +52,10 @@ extension Message: Messageable {
         return .sent
     }
     
-    var context: MessageContext {
+    var deliveryType: MessageDeliveryType {
         if let value = self.extraData["context"],
            case RawJSON.string(let string) = value,
-           let context = MessageContext.init(rawValue: string) {
+           let context = MessageDeliveryType(rawValue: string) {
             return context
         }
         return .respectful
