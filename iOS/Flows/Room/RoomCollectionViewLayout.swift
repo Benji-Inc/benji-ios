@@ -63,9 +63,20 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
+                
+                let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.kind)
+                let backgroundInset: CGFloat = Theme.ContentOffset.xtraLong.value
+                backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: backgroundInset,
+                                                                       leading: backgroundInset,
+                                                                       bottom: backgroundInset,
+                                                                       trailing: backgroundInset)
+                section.decorationItems = [backgroundItem]
+                
                 return section
             }
         }, configuration: config)
+        
+        self.register(SectionBackgroundView.self, forDecorationViewOfKind: SectionBackgroundView.kind)
     }
     
     required init?(coder: NSCoder) {

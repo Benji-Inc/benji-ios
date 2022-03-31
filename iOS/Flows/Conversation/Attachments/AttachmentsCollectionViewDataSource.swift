@@ -58,7 +58,6 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
     private let captureConfig = ManageableCellRegistration<CaptureCell>().provider
     private let optionConfig = ManageableCellRegistration<AttachmentOptionCell>().provider
     private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
-    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     
     var didSelectLibrary: CompletionOptional = nil
     
@@ -109,10 +108,6 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
             
             return header
         case .other:
-            if kind == SectionBackgroundView.kind {
-                return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
-                                                                             for: indexPath)
-            }
             return nil
         }
     }
