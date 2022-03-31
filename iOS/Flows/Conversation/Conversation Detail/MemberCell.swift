@@ -48,7 +48,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.personView)
         
-        self.personView.contextCueView.currentSize = .large
+        self.personView.contextCueView.currentSize = .small
         self.personView.contextCueView.isVisible = false
         
         self.addSubview(self.nameLabel)
