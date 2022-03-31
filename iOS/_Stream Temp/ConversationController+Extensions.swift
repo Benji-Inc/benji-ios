@@ -196,7 +196,7 @@ extension ConversationController {
             if let expression = sendable.expression {
                 data["expression"] = .string(expression.emoji)
             }
-            data["context"] = .string(sendable.context.rawValue)
+            data["context"] = .string(sendable.deliveryType.rawValue)
             self.createNewMessage(text: text,
                                   pinning: pinning,
                                   isSilent: isSilent,
@@ -342,7 +342,7 @@ extension ConversationController {
             if let expression = sendable.expression {
                 data["expression"] = .string(expression.emoji)
             }
-            data["context"] = .string(sendable.context.rawValue)
+            data["context"] = .string(sendable.deliveryType.rawValue)
             messageController.createNewReply(text: text,
                                              pinning: pinning,
                                              attachments: attachments,

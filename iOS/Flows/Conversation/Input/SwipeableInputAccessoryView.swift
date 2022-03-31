@@ -31,7 +31,6 @@ class SwipeableInputAccessoryView: BaseView {
     /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
     let expressionView = ExpressionView()
-    let deliveryTypeView = DeliveryTypeView()
 
     // MARK: - Layout/Animation Properties
 
@@ -73,9 +72,6 @@ class SwipeableInputAccessoryView: BaseView {
         self.inputTypeContainer.addSubview(self.expressionView)
         self.expressionView.alpha = 0
         self.expressionView.configure(for: nil)
-        
-        self.inputTypeContainer.addSubview(self.deliveryTypeView)
-        self.deliveryTypeView.alpha = 0
                 
         self.avatarView.set(person: User.current()!)
     }
@@ -91,7 +87,6 @@ class SwipeableInputAccessoryView: BaseView {
         super.layoutSubviews()
 
         self.expressionView.pin(.left)
-        self.deliveryTypeView.pin(.right)
     }
 
     // MARK: - State Updates
@@ -169,7 +164,6 @@ class SwipeableInputAccessoryView: BaseView {
     func setShowMessageDetailOptions(shouldShowDetail: Bool, showAvatar: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.expressionView.alpha = shouldShowDetail ? 1.0 : 0.0
-            self.deliveryTypeView.alpha = shouldShowDetail ? 1.0 : 0.0
             self.avatarView.alpha = showAvatar ? 1.0 : 0.0
             self.avatarHeightConstraint.constant = showAvatar ? 44 : 0
                                     

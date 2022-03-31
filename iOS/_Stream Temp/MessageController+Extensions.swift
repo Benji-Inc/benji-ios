@@ -139,7 +139,7 @@ extension MessageController {
             if let expression = sendable.expression {
                 data["expression"] = .string(expression.emoji)
             }
-            data["context"] = .string(sendable.context.rawValue)
+            data["context"] = .string(sendable.deliveryType.rawValue)
             
             self.createNewReply(text: text,
                                 pinning: pinning,

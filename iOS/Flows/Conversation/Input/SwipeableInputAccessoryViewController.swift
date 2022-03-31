@@ -55,12 +55,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     // MARK: - Message State
 
-    var currentContext: MessageDeliveryType = .respectful {
-        didSet {
-            self.swipeInputView.deliveryTypeView.configure(for: self.currentContext)
-        }
-    }
-
     @Published var currentExpression: Emoji?
 
     var editableMessage: Messageable?
@@ -80,11 +74,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.swipeInputView.deliveryTypeView.didSelectContext = { [unowned self] context in
-            AnalyticsManager.shared.trackEvent(type: .deliveryTypeSelected, properties: ["value": context.rawValue])
-            self.currentContext = context
-        }
-
         self.setupGestures()
         self.setupHandlers()
     }
@@ -92,11 +81,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     func resetExpression() {
         self.currentExpression = nil
         self.swipeInputView.expressionView.configure(for: nil)
-    }
-
-    func resetDeliveryType() {
-        self.currentContext = .respectful
-        self.swipeInputView.deliveryTypeView.reset()
     }
 
     private lazy var panRecognizer

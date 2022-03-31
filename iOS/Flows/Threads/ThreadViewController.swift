@@ -113,7 +113,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.initializeViews()
         
         self.messageInputController.resetExpression()
-        self.messageInputController.resetDeliveryType()
         
         self.view.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.5)
 

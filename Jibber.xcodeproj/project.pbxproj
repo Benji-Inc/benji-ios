@@ -513,7 +513,6 @@
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D6850D5A2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
 		D6850D5B2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
-		D68670092762D9AB00AD83A3 /* DeliveryTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
@@ -1101,7 +1100,6 @@
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D6850D592798967E001327D3 /* PullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullView.swift; sourceTree = "<group>"; };
-		D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTypeView.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
 		D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Intents.swift"; sourceTree = "<group>"; };
 		D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PhoneNumbers.swift"; sourceTree = "<group>"; };
@@ -2271,7 +2269,6 @@
 			isa = PBXGroup;
 			children = (
 				D60CA48327EF637E00F0871A /* Message Context */,
-				D68670082762D9AB00AD83A3 /* DeliveryTypeView.swift */,
 				D6CC1481276BE808005F617F /* EmotionView.swift */,
 				D6FE05212767B2BC00137EEA /* ExpressionView.swift */,
 				8060C85F27BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift */,
@@ -3186,7 +3183,6 @@
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
-				D68670092762D9AB00AD83A3 /* DeliveryTypeView.swift in Sources */,
 				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				8024B95326F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift in Sources */,

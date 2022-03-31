@@ -29,10 +29,8 @@ class SpeechBubbleView: BaseView {
 
     /// The color of the speech bubble.
     var bubbleColor: UIColor? {
-        get {
-            guard let cgColor = self.bubbleLayer.fillColor else { return nil }
-            return UIColor(cgColor: cgColor)
-        }
+        guard let cgColor = self.bubbleLayer.fillColor else { return nil }
+        return UIColor(cgColor: cgColor)
     }
 
     /// The distance from the base of the tail to the point.

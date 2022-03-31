@@ -16,6 +16,14 @@ enum MessageDeliveryType: String, CaseIterable {
     case respectful = "respectful"
 
     var color: ThemeColor {
+        switch self {
+        case .timeSensitive:
+            return .red
+        case .conversational:
+            return .yellow
+        case .respectful:
+            return .B1
+        }
         return .B1
     }
 
