@@ -54,6 +54,7 @@ class BorderedPersonView: PersonView {
         self.contextCueView.pin(.bottom, offset: .negative(.short))
     }
 
+    @MainActor
     override func set(person: PersonType?) {
         super.set(person: person)
 

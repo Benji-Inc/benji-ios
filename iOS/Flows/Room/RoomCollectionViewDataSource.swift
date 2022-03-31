@@ -15,14 +15,14 @@ typealias RoomItemType = RoomCollectionViewDataSource.ItemType
 class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, RoomItemType> {
 
     enum SectionType: Int, CaseIterable {
-        case circle
+        case members
     }
 
     enum ItemType: Hashable {
-        case item(CircleItem)
+        case memberId(String)
     }
 
-    private let config = ManageableCellRegistration<CircleCell>().provider
+    private let config = ManageableCellRegistration<RoomMemberCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -31,10 +31,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
         switch item {
-        case .item(let foo):
+        case .memberId(let member):
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
-                                                                item: foo)
+                                                                item: member)
         }
     }
 }

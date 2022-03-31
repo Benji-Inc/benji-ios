@@ -13,16 +13,9 @@ import Photos
 
 extension ConversationListCoordinator {
     
-    func presentCircle() {
-        guard let query = Circle.query() else { return }
-        query.whereKey("owner", equalTo: User.current()!)
-        query.getFirstObjectInBackground { [unowned self] object, error in
-            guard let circle = object as? Circle else { return }
-            let coordinator = RoomCoordinator(with: circle,
-                                                router: self.router,
-                                                deepLink: self.deepLink)
-            self.present(coordinator)
-        }
+    func presentRoom() {
+        let coordinator = RoomCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator)
     }
     
     func presentThread(for cid: ConversationId,

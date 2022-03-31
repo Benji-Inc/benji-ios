@@ -38,6 +38,10 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
     override func start() {
         super.start()
         
+        self.listVC.headerVC.roomsButton.didSelect { [unowned self] in
+            self.presentRoom()
+        }
+        
         self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
             self.showWallet() 
         }
