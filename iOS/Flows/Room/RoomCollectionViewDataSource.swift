@@ -16,13 +16,16 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
 
     enum SectionType: Int, CaseIterable {
         case members
+        case conversations
     }
 
     enum ItemType: Hashable {
         case memberId(String)
+        case conversation(ConversationId)
     }
 
     private let config = ManageableCellRegistration<RoomMemberCell>().provider
+    private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -35,6 +38,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
                                                                 item: member)
+        case .conversation(let cid):
+            return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
+                                                                for: indexPath,
+                                                                item: cid)
         }
     }
 }

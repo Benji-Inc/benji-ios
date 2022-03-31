@@ -43,7 +43,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         }
         
         self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
-            self.showWallet() 
+            self.showWallet()
         }
         
         self.listVC.headerVC.button.didSelect { [unowned self] in

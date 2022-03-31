@@ -22,7 +22,7 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
             switch sectionType {
             case .members:
                 let inset = Theme.ContentOffset.short.value
-                let fraction: CGFloat = 0.25
+                let fraction: CGFloat = 0.333
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -41,6 +41,28 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                 leading: sectionInset,
                                                                 bottom: sectionInset,
                                                                 trailing: sectionInset)
+                return section
+            case .conversations:
+                let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
+
+                // Item
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                             leading: sectionInset,
+                                                             bottom: 0,
+                                                             trailing: sectionInset)
+
+                // Group
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(180))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                              leading: 0,
+                                                              bottom: 0,
+                                                              trailing: 0)
+
+                // Section
+                let section = NSCollectionLayoutSection(group: group)
                 return section
             }
         }, configuration: config)
