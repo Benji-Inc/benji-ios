@@ -13,6 +13,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                           RoomItemType,
                           RoomCollectionViewDataSource> {
     
+    private let headerView = RoomHeaderView()
     private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor,
                                                       ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                startPoint: .topCenter,
@@ -26,7 +27,8 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     init() {
         let cv = CollectionView(layout: RoomCollectionViewLayout())
-        cv.contentInset = UIEdgeInsets(top: Theme.ContentOffset.xtraLong.value,
+        let top = UIWindow.topWindow()?.safeAreaInsets.top ?? 0 + 46
+        cv.contentInset = UIEdgeInsets(top: top,
                                        left: 0,
                                        bottom: 100,
                                        right: 0)
@@ -52,6 +54,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         
         self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.topGradientView)
+        self.view.addSubview(self.headerView)
         
         self.collectionView.allowsMultipleSelection = false
     }
@@ -82,9 +85,13 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.headerView.height = 46
+        self.headerView.expandToSuperviewWidth()
+        self.headerView.pinToSafeArea(.top, offset: .xtraLong)
+        
         self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = self.headerView.bottom
         self.topGradientView.pin(.top)
-        self.topGradientView.height = Theme.ContentOffset.xtraLong.value.doubled
         
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
