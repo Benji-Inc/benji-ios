@@ -689,16 +689,16 @@
 		D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFC27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift */; };
 		D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
-		D6DEC3ED27A1D9520072D9D0 /* CircleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */; };
-		D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */; };
+		D6DEC3ED27A1D9520072D9D0 /* RoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */; };
+		D6DEC3EF27A1DA5D0072D9D0 /* RoomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */; };
 		D6DEC3F127A1DDB70072D9D0 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */; };
 		D6DEC3F327A1DEE60072D9D0 /* CircleAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */; };
 		D6DEC3F527A20E410072D9D0 /* EmptyCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */; };
 		D6DEC3F727A212940072D9D0 /* InitialsCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* CircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* CircleCell.swift */; };
-		D6DEC40427A22F660072D9D0 /* CircleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40327A22F660072D9D0 /* CircleCollectionViewDataSource.swift */; };
-		D6DEC40627A22F790072D9D0 /* CircleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40527A22F790072D9D0 /* CircleCollectionViewLayout.swift */; };
+		D6DEC40427A22F660072D9D0 /* RoomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */; };
+		D6DEC40627A22F790072D9D0 /* RoomCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */; };
 		D6DEC40A27A319DB0072D9D0 /* CircleItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40927A319DB0072D9D0 /* CircleItem.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
@@ -1206,16 +1206,16 @@
 		D6D96EFC27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversationsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsSegmentControl.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleViewController.swift; sourceTree = "<group>"; };
-		D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCoordinator.swift; sourceTree = "<group>"; };
+		D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewController.swift; sourceTree = "<group>"; };
+		D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCoordinator.swift; sourceTree = "<group>"; };
 		D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleAvatarView.swift; sourceTree = "<group>"; };
 		D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCircleView.swift; sourceTree = "<group>"; };
 		D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialsCircleView.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* CircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCell.swift; sourceTree = "<group>"; };
-		D6DEC40327A22F660072D9D0 /* CircleCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewDataSource.swift; sourceTree = "<group>"; };
-		D6DEC40527A22F790072D9D0 /* CircleCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6DEC40927A319DB0072D9D0 /* CircleItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleItem.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
@@ -2390,12 +2390,12 @@
 			children = (
 				D6DEC3F227A1DEE60072D9D0 /* CircleAvatarView.swift */,
 				D6DEC40127A22F540072D9D0 /* CircleCell.swift */,
-				D6DEC40327A22F660072D9D0 /* CircleCollectionViewDataSource.swift */,
-				D6DEC40527A22F790072D9D0 /* CircleCollectionViewLayout.swift */,
-				D6DEC3EE27A1DA5D0072D9D0 /* CircleCoordinator.swift */,
+				D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */,
+				D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */,
+				D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */,
 				D6DEC40927A319DB0072D9D0 /* CircleItem.swift */,
 				D6DEC3F027A1DDB70072D9D0 /* CircleView.swift */,
-				D6DEC3EC27A1D9520072D9D0 /* CircleViewController.swift */,
+				D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */,
 				D6DEC3F427A20E410072D9D0 /* EmptyCircleView.swift */,
 				D6DEC3F627A212940072D9D0 /* InitialsCircleView.swift */,
 			);
@@ -2906,7 +2906,7 @@
 				D666126D27E29AED006CDF3D /* AchievementType.swift in Sources */,
 				D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D6A6691D271A44FB0001D218 /* Pass.swift in Sources */,
-				D6DEC3ED27A1D9520072D9D0 /* CircleViewController.swift in Sources */,
+				D6DEC3ED27A1D9520072D9D0 /* RoomViewController.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				D646D37027E544990077D20B /* SectionHeaderView.swift in Sources */,
 				8043F53F276BC05D0036FAC8 /* PlaceholderConversationCell.swift in Sources */,
@@ -3062,7 +3062,7 @@
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */,
-				D6DEC40627A22F790072D9D0 /* CircleCollectionViewLayout.swift in Sources */,
+				D6DEC40627A22F790072D9D0 /* RoomCollectionViewLayout.swift in Sources */,
 				809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
@@ -3119,7 +3119,7 @@
 				801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
 				D60CA47F27EE74AD00F0871A /* ExpressionCoordinator.swift in Sources */,
-				D6DEC40427A22F660072D9D0 /* CircleCollectionViewDataSource.swift in Sources */,
+				D6DEC40427A22F660072D9D0 /* RoomCollectionViewDataSource.swift in Sources */,
 				802EDDAB27ECD496005ECA9C /* String+DataTypes.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
@@ -3220,7 +3220,7 @@
 				D60CA47427ED1C1800F0871A /* OptionCell.swift in Sources */,
 				D64C323E270391AE004BC1BD /* Person.swift in Sources */,
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
-				D6DEC3EF27A1DA5D0072D9D0 /* CircleCoordinator.swift in Sources */,
+				D6DEC3EF27A1DA5D0072D9D0 /* RoomCoordinator.swift in Sources */,
 				D646D37227E54DFC0077D20B /* AttachmentLineView.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				80E228D827C6C70000AF37AC /* SwipeInputHintAnimator.swift in Sources */,

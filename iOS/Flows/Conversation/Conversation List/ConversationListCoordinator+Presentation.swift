@@ -18,7 +18,7 @@ extension ConversationListCoordinator {
         query.whereKey("owner", equalTo: User.current()!)
         query.getFirstObjectInBackground { [unowned self] object, error in
             guard let circle = object as? Circle else { return }
-            let coordinator = CircleCoordinator(with: circle,
+            let coordinator = RoomCoordinator(with: circle,
                                                 router: self.router,
                                                 deepLink: self.deepLink)
             self.present(coordinator)

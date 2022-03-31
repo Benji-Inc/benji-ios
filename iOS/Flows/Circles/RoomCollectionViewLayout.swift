@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CircleCollectionViewLayout: UICollectionViewLayout {
+class RoomCollectionViewLayout: UICollectionViewLayout {
     
     // MARK: Getting the Collection View Information
     

@@ -8,9 +8,9 @@
 
 import Foundation
 
-class CircleViewController: DiffableCollectionViewController<CircleSectionType,
-                            CircleItemType,
-                            CircleCollectionViewDataSource> {
+class RoomViewController: DiffableCollectionViewController<RoomSectionType,
+                            RoomItemType,
+                            RoomCollectionViewDataSource> {
     
     let backgroundGradient = BackgroundGradientView()
     let label = ThemeLabel(font: .regular)
@@ -25,7 +25,7 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         
     init(with circle: Circle) {
         self.circle = circle 
-        let cv = CollectionView(layout: CircleCollectionViewLayout())
+        let cv = CollectionView(layout: RoomCollectionViewLayout())
         cv.isScrollEnabled = false
         cv.showsHorizontalScrollIndicator = false
         super.init(with: cv)
@@ -93,19 +93,19 @@ class CircleViewController: DiffableCollectionViewController<CircleSectionType,
         self.pullView.centerY = (self.view.height * 0.9) - 50
     }
     
-    override func getAllSections() -> [CircleSectionType] {
+    override func getAllSections() -> [RoomSectionType] {
         return [.circle]
     }
     
-    override func retrieveDataForSnapshot() async -> [CircleSectionType : [CircleItemType]] {
-        var data: [CircleSectionType: [CircleItemType]] = [:]
+    override func retrieveDataForSnapshot() async -> [RoomSectionType : [RoomItemType]] {
+        var data: [RoomSectionType: [RoomItemType]] = [:]
         data[.circle] = self.getAllItems()
         return data
     }
     
-    func getAllItems() -> [CircleItemType] {
+    func getAllItems() -> [RoomItemType] {
         
-        var allItems: [CircleItemType] = []
+        var allItems: [RoomItemType] = []
         var itemCount: Int = 0
         
         let limit = self.circle.limit

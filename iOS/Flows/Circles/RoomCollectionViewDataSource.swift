@@ -9,10 +9,10 @@
 import Foundation
 
 
-typealias CircleSectionType = CircleCollectionViewDataSource.SectionType
-typealias CircleItemType = CircleCollectionViewDataSource.ItemType
+typealias RoomSectionType = RoomCollectionViewDataSource.SectionType
+typealias RoomItemType = RoomCollectionViewDataSource.ItemType
 
-class CircleCollectionViewDataSource: CollectionViewDataSource<CircleSectionType, CircleItemType> {
+class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, RoomItemType> {
 
     enum SectionType: Int, CaseIterable {
         case circle

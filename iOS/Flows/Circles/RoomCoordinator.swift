@@ -8,15 +8,15 @@
 
 import Foundation
 
-class CircleCoordinator: PresentableCoordinator<Void> {
+class RoomCoordinator: PresentableCoordinator<Void> {
     
-    let circleVC: CircleViewController
+    let circleVC: RoomViewController
     
     init(with cirlce: Circle,
          router: Router,
          deepLink: DeepLinkable?) {
         
-        self.circleVC = CircleViewController(with: cirlce)
+        self.circleVC = RoomViewController(with: cirlce)
         super.init(router: router, deepLink: deepLink)
     }
     
