@@ -14,6 +14,7 @@
 		8004EE5427E8FE970086E010 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004EE5327E8FE970086E010 /* URLSession+Extension.swift */; };
 		8004EE5527E8FE970086E010 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004EE5327E8FE970086E010 /* URLSession+Extension.swift */; };
 		8004EE5627E8FE970086E010 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004EE5327E8FE970086E010 /* URLSession+Extension.swift */; };
+		80058BBD27F657C80083AF1F /* MessageDeliveryTypeBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80058BBC27F657C80083AF1F /* MessageDeliveryTypeBadgeView.swift */; };
 		800718DD27861507005DD884 /* EventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800718DC27861507005DD884 /* EventLog.swift */; };
 		800718DE27861507005DD884 /* EventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800718DC27861507005DD884 /* EventLog.swift */; };
 		800718DF278620F1005DD884 /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
@@ -797,6 +798,7 @@
 		6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Service.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8004E3D027D7C81600E9931F /* SwipeableInputAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryViewController.swift; sourceTree = "<group>"; };
 		8004EE5327E8FE970086E010 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
+		80058BBC27F657C80083AF1F /* MessageDeliveryTypeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDeliveryTypeBadgeView.swift; sourceTree = "<group>"; };
 		800718DC27861507005DD884 /* EventLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLog.swift; sourceTree = "<group>"; };
 		800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Extensions.swift"; sourceTree = "<group>"; };
 		8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessagesCell.swift; sourceTree = "<group>"; };
@@ -2262,6 +2264,7 @@
 				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
 				D6203A2927EB8F28002FEAF5 /* InputHandlerCoordinator.swift */,
 				D61592DF24FC195D00B63412 /* InputTextView.swift */,
+				80058BBC27F657C80083AF1F /* MessageDeliveryTypeBadgeView.swift */,
 				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
 				8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */,
@@ -2894,6 +2897,7 @@
 				D66F0FE222C041AF00BA277D /* PersonView.swift in Sources */,
 				D646955827370A7B00BF47CE /* ToastView.swift in Sources */,
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
+				80058BBD27F657C80083AF1F /* MessageDeliveryTypeBadgeView.swift in Sources */,
 				D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */,
 				D6D1460721D552B100CD8CE4 /* Character+Extensions.swift in Sources */,
 				D666126D27E29AED006CDF3D /* AchievementType.swift in Sources */,
