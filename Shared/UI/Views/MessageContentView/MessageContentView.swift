@@ -157,7 +157,7 @@ class MessageContentView: BaseView {
         }
 
         self.dateView.text = message.createdAt.getTimeAgoString()
-        self.deliveryView.image = message.context.image
+        self.deliveryView.image = message.deliveryType.image
 
         if message.isDeleted {
             self.textView.text = "DELETED"
