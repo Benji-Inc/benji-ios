@@ -70,6 +70,7 @@ class TypingIndicatorView: BaseView {
         }
         
         guard typers.count > 0 else {
+            // If no one is typying, hide
             self.hideTyping()
             return
         }
@@ -106,6 +107,8 @@ class TypingIndicatorView: BaseView {
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.label.alpha = 0.0
         } completion: { _ in
+            
+            // Important to reset the text, to clear out the attributes
             self.label.setText("")
             self.label.transform = CGAffineTransform.init(translationX: -5, y: 0)
         }

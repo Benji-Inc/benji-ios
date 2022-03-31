@@ -208,16 +208,6 @@ class MessageContentView: BaseView {
         self.bubbleView.setBubbleColor(color.withAlphaComponent(brightness), animated: false)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
-
-        // NOTE: Changes to the gradient layer need to be applied immediately without animation.
-        // https://stackoverflow.com/questions/5833488/how-to-disable-calayer-implicit-animations
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-
-        self.bubbleView.lightGradientLayer.opacity = 0
-        self.bubbleView.darkGradientLayer.opacity = 0.2 * Float(1 - brightness)
-
-        CATransaction.commit()
     }
 
     func getSize(with width: CGFloat) -> CGSize {
