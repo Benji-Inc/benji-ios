@@ -122,8 +122,8 @@
 		D60B886927F5026700B3E1C2 /* TypingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886827F5026700B3E1C2 /* TypingIndicatorView.swift */; };
 		D60B886B27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */; };
 		D60B886D27F6206C00B3E1C2 /* RoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886C27F6206C00B3E1C2 /* RoomHeaderView.swift */; };
-		D60B886F27F639E000B3E1C2 /* NoticeCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886E27F639E000B3E1C2 /* NoticeCounterView.swift */; };
 		D60B887127F75F6D00B3E1C2 /* RoomAddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */; };
+		D60B887327F7732100B3E1C2 /* NoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887227F7732100B3E1C2 /* NoticeCell.swift */; };
 		D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* ThemeButton.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -891,8 +891,8 @@
 		D60B886827F5026700B3E1C2 /* TypingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingIndicatorView.swift; sourceTree = "<group>"; };
 		D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSegmentControlHeaderView.swift; sourceTree = "<group>"; };
 		D60B886C27F6206C00B3E1C2 /* RoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomHeaderView.swift; sourceTree = "<group>"; };
-		D60B886E27F639E000B3E1C2 /* NoticeCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCounterView.swift; sourceTree = "<group>"; };
 		D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomAddCell.swift; sourceTree = "<group>"; };
+		D60B887227F7732100B3E1C2 /* NoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCell.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -2386,7 +2386,7 @@
 		D6DEC3EB27A1D9370072D9D0 /* Room */ = {
 			isa = PBXGroup;
 			children = (
-				D60B886E27F639E000B3E1C2 /* NoticeCounterView.swift */,
+				D60B887227F7732100B3E1C2 /* NoticeCell.swift */,
 				D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */,
 				D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */,
 				D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */,
@@ -3171,7 +3171,6 @@
 				D60B886027F37BC800B3E1C2 /* MessageMoreCell.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
-				D60B886F27F639E000B3E1C2 /* NoticeCounterView.swift in Sources */,
 				D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */,
 				D646D36827E5053A0077D20B /* AttachmentsCollectionViewDataSource.swift in Sources */,
 				D6CC1489276BFA89005F617F /* Shape+Extensions.swift in Sources */,
@@ -3189,6 +3188,7 @@
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
+				D60B887327F7732100B3E1C2 /* NoticeCell.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
 				D637651527E8FC8000CCDA7F /* RoomNavigationButton.swift in Sources */,
 				D65D460227A9B1400019301C /* old_MessageStatusContainer.swift in Sources */,

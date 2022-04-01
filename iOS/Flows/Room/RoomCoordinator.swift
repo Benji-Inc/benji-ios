@@ -20,6 +20,10 @@ class RoomCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
         
+        self.roomVC.headerView.jibImageView.didSelect { [unowned self] in
+            self.presentWallet()
+        }
+        
         self.roomVC.headerView.button.didSelect { [unowned self] in
             guard let user = User.current() else { return }
             self.presentProfile(for: user)
@@ -62,6 +66,18 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         }
         
         self.router.present(coordinator, source: self.roomVC)
+    }
+    
+    func presentWallet() {
+        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                //self.finishFlow(with: .conversation(result))
+            }
+        }
+        
+        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
     }
     
     func presentProfile(for person: PersonType) {
