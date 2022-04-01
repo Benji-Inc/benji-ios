@@ -53,11 +53,11 @@ class SectionHeaderView: UICollectionReusableView {
         
         self.leftLabel.setSize(withWidth: self.width)
         self.leftLabel.centerOnY()
-        self.leftLabel.pin(.left)
+        self.leftLabel.pin(.left, offset: .standard)
         
         self.rightLabel.setSize(withWidth: self.width)
         self.rightLabel.centerOnY()
-        self.rightLabel.pin(.right)
+        self.rightLabel.pin(.right, offset: .standard)
         
         self.button.size = self.rightLabel.size
         self.button.center = self.rightLabel.center

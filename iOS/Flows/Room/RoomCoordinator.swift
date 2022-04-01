@@ -28,6 +28,14 @@ class RoomCoordinator: PresentableCoordinator<Void> {
             guard let user = User.current() else { return }
             self.presentProfile(for: user)
         }
+        
+        self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
+            
+        }
+        
+        self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in 
+            
+        }
     
         self.roomVC.$selectedItems.mainSink { [unowned self] items in
             guard let itemType = items.first else { return }

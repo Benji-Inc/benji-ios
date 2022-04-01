@@ -32,9 +32,12 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     private let headerConfig = ManageableHeaderRegistration<RoomSegmentControlHeaderView>().provider
     private let addConfig = ManageableCellRegistration<RoomAddCell>().provider
     private let memberHeaderConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
+    private let memberFooterConfig = ManageableFooterRegistration<SectionHeaderView>().provider
     private let noticeCell = ManageableCellRegistration<NoticeCell>().provider
     
     var didSelectSegmentIndex: ((ConversationsSegmentControl.SegmentType) -> Void)? = nil
+    var didSelectAddPerson: CompletionOptional = nil
+    var didSelectAddConversation: CompletionOptional = nil 
 
     // MARK: - Cell Dequeueing
 
@@ -69,12 +72,27 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
         
         switch section {
         case .members:
-            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.memberHeaderConfig, for: indexPath)
-            header.leftLabel.setText("Favorites")
-            header.rightLabel.setText("")
-            header.lineView.isHidden = true
-            return header
+            if kind == UICollectionView.elementKindSectionHeader {
+                let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.memberHeaderConfig, for: indexPath)
+                header.leftLabel.setText("Favorites")
+                header.rightLabel.setText("Add")
+                header.button.didSelect { [unowned self] in
+                    self.didSelectAddPerson?()
+                }
+                header.lineView.isHidden = true
+                return header
+            } else if kind == UICollectionView.elementKindSectionFooter {
+                let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.memberFooterConfig, for: indexPath)
+                footer.leftLabel.setText("Conversations")
+                footer.rightLabel.setText("Add")
+                footer.button.didSelect { [unowned self] in
+                    self.didSelectAddConversation?()
+                }
+                footer.lineView.isHidden = true
+                return footer
+            } else {
+                return nil 
+            }
         case .conversations:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
             header.segmentControl.didSelectSegmentIndex = { [unowned self] index in

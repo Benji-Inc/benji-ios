@@ -42,7 +42,7 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset,
                                                                 leading: 0,
-                                                                bottom: 0,
+                                                                bottom: 20,
                                                                 trailing: 0)
                 
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
@@ -70,13 +70,20 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                 bottom: sectionInset,
                                                                 trailing: sectionInset)
                 
-                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30))
                 let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
                 headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                                    leading: 0,
                                                                    bottom: 0,
                                                                    trailing: 0)
-                section.boundarySupplementaryItems = [headerItem]
+                
+                let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+                let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+                footerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                   leading: 0,
+                                                                   bottom: 0,
+                                                                   trailing: 0)
+                section.boundarySupplementaryItems = [headerItem, footerItem]
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
                 
                 return section
