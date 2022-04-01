@@ -34,13 +34,11 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                 }
             case .conversation(_):
                  break
+            case .notice(_):
+                break
+            case .add(_):
+                break 
             }
-//            switch itemType {
-//            case .item(let circleItem):
-//                if circleItem.canAdd {
-//                    self.presentPeoplePicker()
-//                }
-//            }
         }.store(in: &self.cancellables)
     }
     

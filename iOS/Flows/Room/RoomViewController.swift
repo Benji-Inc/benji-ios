@@ -109,6 +109,13 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         }).compactMap({ type in
             return .memberId(type.personId)
         })
+        
+        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.compactMap { (key: String, value: Reservation) in
+            return .add(key)
+        }
+        
+        data[.members]?.append(contentsOf: addItems)
+        
         return data
     }
     

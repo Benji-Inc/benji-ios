@@ -40,7 +40,7 @@ class PeopleStore {
     }
     
     private var contactsDictionary: [String : CNContact] = [:]
-    private var unclaimedReservations: [String : Reservation] = [:]
+    private(set) var unclaimedReservations: [String : Reservation] = [:]
     var usersArray: [User] {
         return Array(self.usersDictionary.values)
     }

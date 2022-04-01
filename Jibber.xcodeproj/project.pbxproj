@@ -2386,15 +2386,15 @@
 		D6DEC3EB27A1D9370072D9D0 /* Room */ = {
 			isa = PBXGroup;
 			children = (
+				D60B886E27F639E000B3E1C2 /* NoticeCounterView.swift */,
+				D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */,
 				D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */,
 				D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */,
 				D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */,
-				D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */,
-				D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */,
-				D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */,
 				D60B886C27F6206C00B3E1C2 /* RoomHeaderView.swift */,
-				D60B886E27F639E000B3E1C2 /* NoticeCounterView.swift */,
-				D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */,
+				D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */,
+				D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */,
+				D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */,
 			);
 			path = Room;
 			sourceTree = "<group>";
