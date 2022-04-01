@@ -104,19 +104,47 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     override func retrieveDataForSnapshot() async -> [RoomSectionType : [RoomItemType]] {
         var data: [RoomSectionType: [RoomItemType]] = [:]
+        
         data[.members] = PeopleStore.shared.people.filter({ type in
             return !type.isCurrentUser
         }).compactMap({ type in
             return .memberId(type.personId)
         })
         
-        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.compactMap { (key: String, value: Reservation) in
-            return .add(key)
+        let reservationIds = PeopleStore.shared.unclaimedReservations.compactMap { (key: String, value: Reservation) in
+            return key
         }
         
-        data[.members]?.append(contentsOf: addItems)
+        if reservationIds.count > 0 {
+            data[.members]?.insert(.add(reservationIds), at: 0)
+        }
         
         return data
+    }
+    
+    @MainActor
+    func reloadPeople() async {
+        
+        guard !Task.isCancelled else { return }
+        
+        var items: [RoomItemType] = PeopleStore.shared.people.filter({ type in
+            return !type.isCurrentUser
+        }).compactMap({ type in
+            return .memberId(type.personId)
+        })
+        
+        let reservationIds = PeopleStore.shared.unclaimedReservations.compactMap { (key: String, value: Reservation) in
+            return key
+        }
+        
+        if reservationIds.count > 0 {
+            items.insert(.add(reservationIds), at: 0)
+        }
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(items, in: .members)
+        
+        await self.dataSource.apply(snapshot)
     }
     
     // MARK: - Conversation Loading
@@ -203,3 +231,9 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         await self.dataSource.apply(snapshot)
     }
 }
+
+//extension RoomViewController: TransitionableViewController {
+//    var receivingPresentationType: TransitionType {
+//        return .fade
+//    }
+//}

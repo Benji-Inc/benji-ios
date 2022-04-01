@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 class RoomCoordinator: PresentableCoordinator<Void> {
     
@@ -37,7 +38,12 @@ class RoomCoordinator: PresentableCoordinator<Void> {
             case .notice(_):
                 break
             case .add(_):
-                break 
+                Task {
+                    try await self.createNewConversation()
+                    Task.onMainActor {
+                        self.presentPeoplePicker()
+                    }
+                }
             }
         }.store(in: &self.cancellables)
     }
@@ -49,7 +55,9 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         
         self.addChildAndStart(coordinator) { [unowned self] people in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-               // self.updateCircle(with: people)
+                Task {
+                    await self.roomVC.reloadPeople()
+                }
             }
         }
         
@@ -68,5 +76,24 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         }
         
         self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
+    }
+    
+    func createNewConversation() async throws {
+        let username = User.current()?.initials ?? ""
+        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
+        let userIDs = Set([User.current()!.objectId!])
+        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                 name: nil,
+                                                                 imageURL: nil,
+                                                                 team: nil,
+                                                                 members: userIDs,
+                                                                 isCurrentUserMember: true,
+                                                                 messageOrdering: .bottomToTop,
+                                                                 invites: [],
+                                                                 extraData: [:])
+        
+        try await controller.synchronize()
+        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
+        //ConversationsManager.shared.activeConversation = controller.conversation
     }
 }

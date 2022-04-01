@@ -24,25 +24,35 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                 return nil 
             case .members:
                 let inset = Theme.ContentOffset.short.value
-                let fraction: CGFloat = 0.333
+                let fraction: CGFloat = 0.33
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1.0))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                              leading: inset,
                                                              bottom: inset,
                                                              trailing: inset)
-
+                
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(fraction))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalWidth(fraction))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
+                
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset,
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                                 leading: sectionInset,
                                                                 bottom: sectionInset,
                                                                 trailing: sectionInset)
+                
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                   leading: 0,
+                                                                   bottom: 0,
+                                                                   trailing: 0)
+                section.boundarySupplementaryItems = [headerItem]
+                section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+                
                 return section
             case .conversations:
 

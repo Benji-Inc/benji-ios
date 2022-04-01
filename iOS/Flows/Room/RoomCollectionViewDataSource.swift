@@ -24,13 +24,14 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
         case notice(Notice)
         case memberId(String)
         case conversation(ConversationId)
-        case add(String)
+        case add([String])
     }
 
     private let config = ManageableCellRegistration<RoomMemberCell>().provider
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
     private let headerConfig = ManageableHeaderRegistration<RoomSegmentControlHeaderView>().provider
     private let addConfig = ManageableCellRegistration<RoomAddCell>().provider
+    private let memberHeaderConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
     
     var didSelectSegmentIndex: ((ConversationsSegmentControl.SegmentType) -> Void)? = nil
 
@@ -51,10 +52,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                                 for: indexPath,
                                                                 item: cid)
-        case .add(let reservationId):
+        case .add(let reservationIds):
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
                                                                 for: indexPath,
-                                                                item: reservationId)
+                                                                item: reservationIds)
         }
     }
     
@@ -64,6 +65,13 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         
         switch section {
+        case .members:
+            guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.memberHeaderConfig, for: indexPath)
+            header.leftLabel.setText("Favorites")
+            header.rightLabel.setText("")
+            header.lineView.isHidden = true
+            return header
         case .conversations:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
             header.segmentControl.didSelectSegmentIndex = { [unowned self] index in
