@@ -29,12 +29,20 @@ class RoomCoordinator: PresentableCoordinator<Void> {
             self.presentProfile(for: user)
         }
         
+        self.roomVC.dataSource.didSelectRightOption = { [unowned self] notice in
+            self.handleRightOption(with: notice)
+        }
+        
+        self.roomVC.dataSource.didSelectLeftOption = { [unowned self] notice in
+            self.handleLeftOption(with: notice)
+        }
+        
         self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
-            
+            // Create conversation, then present it
         }
         
         self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in 
-            
+            self.presentPeoplePicker()
         }
     
         self.roomVC.$selectedItems.mainSink { [unowned self] items in
@@ -51,7 +59,7 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                 break
             case .add(_):
                 Task {
-                    try await self.createNewConversation()
+                    //try await self.createNewConversation()
                     Task.onMainActor {
                         self.presentPeoplePicker()
                     }
@@ -69,6 +77,8 @@ class RoomCoordinator: PresentableCoordinator<Void> {
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 Task {
                     await self.roomVC.reloadPeople()
+                    
+                    // Add to conversation????
                 }
             }
         }

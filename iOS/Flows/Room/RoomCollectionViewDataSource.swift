@@ -13,20 +13,20 @@ typealias RoomSectionType = RoomCollectionViewDataSource.SectionType
 typealias RoomItemType = RoomCollectionViewDataSource.ItemType
 
 class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, RoomItemType> {
-
+    
     enum SectionType: Int, CaseIterable {
         case notices
         case members
         case conversations
     }
-
+    
     enum ItemType: Hashable {
         case notice(Notice)
         case memberId(String)
         case conversation(ConversationId)
         case add([String])
     }
-
+    
     private let config = ManageableCellRegistration<RoomMemberCell>().provider
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
     private let headerConfig = ManageableHeaderRegistration<RoomSegmentControlHeaderView>().provider
@@ -37,19 +37,29 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     
     var didSelectSegmentIndex: ((ConversationsSegmentControl.SegmentType) -> Void)? = nil
     var didSelectAddPerson: CompletionOptional = nil
-    var didSelectAddConversation: CompletionOptional = nil 
-
+    var didSelectAddConversation: CompletionOptional = nil
+    
+    var didSelectRightOption: ((Notice) -> Void)? = nil
+    var didSelectLeftOption: ((Notice) -> Void)? = nil
+    
     // MARK: - Cell Dequeueing
-
+    
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
         switch item {
         case .notice(let notice):
-            return collectionView.dequeueConfiguredReusableCell(using: self.noticeCell,
-                                                                for: indexPath,
-                                                                item: notice)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.noticeCell,
+                                                                    for: indexPath,
+                                                                    item: notice)
+            cell.didTapLeftButton = { [unowned self] in
+                self.didSelectLeftOption?(notice)
+            }
+            cell.didTapRightButton = { [unowned self] in
+                self.didSelectRightOption?(notice)
+            }
+            return cell
         case .memberId(let member):
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
@@ -91,7 +101,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
                 footer.lineView.isHidden = true
                 return footer
             } else {
-                return nil 
+                return nil
             }
         case .conversations:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)

@@ -19,13 +19,29 @@ enum NoticeKey: String {
 final class Notice: PFObject, PFSubclassing {
 
     enum NoticeType: String {
-        case alert = "ALERT_MESSAGE"
+        case timeSensitiveMessage = "ALERT_MESSAGE"
         case connectionRequest = "CONNECTION_REQUEST"
         case connectionConfirmed = "CONNECTION_CONFIRMED"
         case messageRead = "MESSAGE_READ"
         case unreadMessages = "UNREAD_MESSAGES"
         case system
-        case rsvps
+        
+        var title: String {
+            switch self {
+            case .timeSensitiveMessage:
+                return "Time-Sensitive Message"
+            case .connectionRequest:
+                return "Connection Request"
+            case .connectionConfirmed:
+                return "Connection Confirmed"
+            case .messageRead:
+                return "Message Read"
+            case .unreadMessages:
+                return "Unread Messages"
+            case .system:
+                return ""
+            }
+        }
     }
 
     static func parseClassName() -> String {

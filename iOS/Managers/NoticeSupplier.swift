@@ -54,16 +54,16 @@ class NoticeSupplier {
             }
 
             let reservations = await Reservation.getAllUnclaimed()
-            if reservations.count > 0 {
-                let text = LocalizedString(id: "", arguments: [String(reservations.count)], default: "You have @(count) RSVPs left.\nTap to invite someone.")
-                let reservationNotice = SystemNotice(createdAt: Date(),
-                                                     notice: nil,
-                                                     type: .rsvps,
-                                                     priority: 2,
-                                                     body: localized(text),
-                                                     attributes: nil)
-                notices.append(reservationNotice)
-            }
+//            if reservations.count > 0 {
+//                let text = LocalizedString(id: "", arguments: [String(reservations.count)], default: "You have @(count) RSVPs left.\nTap to invite someone.")
+//                let reservationNotice = SystemNotice(createdAt: Date(),
+//                                                     notice: nil,
+//                                                     type: .rsvps,
+//                                                     priority: 2,
+//                                                     body: localized(text),
+//                                                     attributes: nil)
+//                notices.append(reservationNotice)
+//            }
 
             return notices
         } catch {
