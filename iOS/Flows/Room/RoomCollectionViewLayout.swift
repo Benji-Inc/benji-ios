@@ -20,6 +20,8 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
             let sectionInset = Theme.ContentOffset.xtraLong.value
 
             switch sectionType {
+            case .notices:
+                return nil 
             case .members:
                 let inset = Theme.ContentOffset.short.value
                 let fraction: CGFloat = 0.333

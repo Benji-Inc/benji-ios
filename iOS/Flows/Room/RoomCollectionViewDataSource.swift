@@ -15,11 +15,13 @@ typealias RoomItemType = RoomCollectionViewDataSource.ItemType
 class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, RoomItemType> {
 
     enum SectionType: Int, CaseIterable {
+        case notices
         case members
         case conversations
     }
 
     enum ItemType: Hashable {
+        case notice(Notice)
         case memberId(String)
         case conversation(ConversationId)
     }
@@ -37,6 +39,8 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
         switch item {
+        case .notice(let notice):
+            return nil 
         case .memberId(let member):
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
