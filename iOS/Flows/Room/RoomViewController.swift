@@ -105,6 +105,12 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func retrieveDataForSnapshot() async -> [RoomSectionType : [RoomItemType]] {
         var data: [RoomSectionType: [RoomItemType]] = [:]
         
+        let notices = try? await Notice.fetchAll() ?? []
+        
+        data[.notices] = notices?.compactMap({ notice in
+            return .notice(notice)
+        })
+        
         data[.members] = PeopleStore.shared.people.filter({ type in
             return !type.isCurrentUser
         }).compactMap({ type in

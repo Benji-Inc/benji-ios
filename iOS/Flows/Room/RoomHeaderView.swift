@@ -47,7 +47,7 @@ class RoomHeaderView: BaseView {
         super.layoutSubviews()
         
         self.jibImageView.squaredSize = 44
-        self.jibImageView.pin(.right, offset: .custom(6))
+        self.jibImageView.pin(.right, offset: .long)
         self.jibImageView.centerOnY()
         
         self.nameLabel.setSize(withWidth: self.width)
@@ -63,7 +63,7 @@ class RoomHeaderView: BaseView {
         self.button.width = self.focusCircle.width + Theme.ContentOffset.standard.value + self.nameLabel.width
         self.button.centerOnXAndY()
         
-        self.roomNavButton.pin(.left, offset: .custom(6))
+        self.roomNavButton.pin(.left, offset: .long)
         self.roomNavButton.centerY = self.jibImageView.centerY
     }
 }

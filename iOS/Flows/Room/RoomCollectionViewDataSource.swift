@@ -32,6 +32,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     private let headerConfig = ManageableHeaderRegistration<RoomSegmentControlHeaderView>().provider
     private let addConfig = ManageableCellRegistration<RoomAddCell>().provider
     private let memberHeaderConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
+    private let noticeCell = ManageableCellRegistration<NoticeCell>().provider
     
     var didSelectSegmentIndex: ((ConversationsSegmentControl.SegmentType) -> Void)? = nil
 
@@ -43,7 +44,9 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
                               item: ItemType) -> UICollectionViewCell? {
         switch item {
         case .notice(let notice):
-            return nil 
+            return collectionView.dequeueConfiguredReusableCell(using: self.noticeCell,
+                                                                for: indexPath,
+                                                                item: notice)
         case .memberId(let member):
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
