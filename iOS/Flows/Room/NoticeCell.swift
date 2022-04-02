@@ -35,17 +35,26 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.descriptionLabel)
         
         self.contentView.addSubview(self.rightButtonLabel)
+        self.rightButtonLabel.isUserInteractionEnabled = true
+        self.rightButtonLabel.didSelect { [unowned self] in
+            self.didTapRightButton?()
+        }
+        
         self.contentView.addSubview(self.leftButtonLabel)
+        self.leftButtonLabel.isUserInteractionEnabled = true 
+        self.leftButtonLabel.didSelect { [unowned self] in
+            self.didTapLeftButton?()
+        }
         self.leftButtonLabel.alpha = 0.25
     }
 
     func configure(with item: Notice) {
-        
         Task {
             await self.handle(notice: item)
         }
     }
     
+    @MainActor
     private func handle(notice: Notice) async {
         guard let type = notice.type else { return }
         
@@ -58,21 +67,30 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String,
                   let authorId = ChatClient.shared.message(cid: cid, id: messageId)?.author.id,
-                  let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else { return }
+                  let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else {
+                self.showError()
+                return }
             
             self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
             self.imageView.displayable = author
         case .connectionRequest:
             guard let connectionId = notice.attributes?["connectionId"] as? String,
-                  let connection = try? await Connection.getObject(with: connectionId) else { return }
+                  let connection = PeopleStore.shared.allConnections.first(where: { existing in
+                      return existing.objectId == connectionId
+                  }) else {
+                self.showError()
+                return }
             
             self.imageView.displayable = connection.nonMeUser
             self.rightButtonLabel.setText("Accept")
             self.leftButtonLabel.setText("Decline")
         case .connectionConfirmed:
             guard let connectionId = notice.attributes?["connectionId"] as? String,
-                  let connection = try? await Connection.getObject(with: connectionId) else { return }
+                  let connection = PeopleStore.shared.allConnections.first(where: { existing in
+                      return existing.objectId == connectionId
+                  }) else { self.showError()
+                return }
             
             self.imageView.displayable = connection.nonMeUser
             self.rightButtonLabel.setText("Ok")
@@ -82,7 +100,8 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String,
                   let authorId = ChatClient.shared.message(cid: cid, id: messageId)?.author.id,
-                  let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else { return }
+                  let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else { self.showError()
+                return }
             
             self.rightButtonLabel.setText("Ok")
             self.leftButtonLabel.setText("")
@@ -98,6 +117,15 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         
         self.imageView.isVisible = !self.imageView.displayable.isNil
         
+        self.setNeedsLayout()
+    }
+    
+    func showError() {
+        self.imageView.isVisible = false 
+        self.titleLabel.setText("Error")
+        self.descriptionLabel.setText("There was an error displaying this content.")
+        self.rightButtonLabel.setText("")
+        self.leftButtonLabel.setText("")
         self.setNeedsLayout()
     }
     

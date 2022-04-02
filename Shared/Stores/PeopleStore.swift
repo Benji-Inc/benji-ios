@@ -47,6 +47,8 @@ class PeopleStore {
     var contactsArray: [CNContact] {
         return Array(self.contactsDictionary.values)
     }
+    
+    private(set) var allConnections: [Connection] = []
 
     private var initializeTask: Task<Void, Error>?
 
@@ -82,13 +84,19 @@ class PeopleStore {
     }
     
     private func getAndStoreAllConnectedUsers() async throws {
-        let connections = try await GetAllConnections().makeRequest(andUpdate: [],
+        self.allConnections = try await GetAllConnections().makeRequest(andUpdate: [],
                                                                     viewsToIgnore: [])
             .filter { (connection) -> Bool in
                 return !connection.nonMeUser.isNil
             }
+        
+        let connectionIds = self.allConnections.compactMap { connection in
+            return connection.objectId
+        }
+        
+        logDebug(connectionIds)
 
-        var unfetchedUserIds = connections.compactMap { connection in
+        var unfetchedUserIds = self.allConnections.compactMap { connection in
             return connection.nonMeUser?.objectId
         }
 
@@ -159,6 +167,12 @@ class PeopleStore {
                 // When a new connection is made, add the connected user to the array.
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
+                
+                if !self.allConnections.contains(where: { existing in
+                    return existing.objectId == connection.objectId
+                }) {
+                    self.allConnections.append(connection)
+                }
 
                 self.usersDictionary[nonMeUser.personId] = nonMeUser
             case .updated(let object):
@@ -166,6 +180,14 @@ class PeopleStore {
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
                 self.personUpdated = nonMeUser
+                
+                if let first = self.allConnections.first(where: { existing in
+                    return existing.objectId == connection.objectId
+                }) {
+                    self.allConnections.remove(object: first)
+                }
+                
+                self.allConnections.append(connection)
 
                 self.usersDictionary[nonMeUser.personId] = nonMeUser
             case .left(let object), .deleted(let object):
@@ -173,6 +195,8 @@ class PeopleStore {
                 guard let connection = object as? Connection,
                       let nonMeUser = connection.nonMeUser else { break }
 
+                self.allConnections.remove(object: connection)
+                
                 self.usersDictionary[nonMeUser.personId] = nil
                 self.personDeleted = nonMeUser
             }

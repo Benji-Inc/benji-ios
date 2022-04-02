@@ -105,7 +105,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func retrieveDataForSnapshot() async -> [RoomSectionType : [RoomItemType]] {
         var data: [RoomSectionType: [RoomItemType]] = [:]
         
-        let notices = try? await Notice.fetchAll() ?? []
+        let notices = try? await Notice.fetchAll()
         
         data[.notices] = notices?.compactMap({ notice in
             return .notice(notice)
@@ -117,15 +117,21 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             return .memberId(type.personId)
         })
         
-        let reservationIds = PeopleStore.shared.unclaimedReservations.compactMap { (key: String, value: Reservation) in
-            return key
-        }
-        
-        if reservationIds.count > 0 {
-            data[.members]?.insert(.add(reservationIds), at: 0)
-        }
-        
         return data
+    }
+    
+    @MainActor
+    func reloadNotices() async {
+        guard let notices = try? await Notice.fetchAll() else { return }
+        
+        let items: [RoomItemType] = notices.compactMap({ notice in
+            return .notice(notice)
+        })
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(items, in: .notices)
+        
+        await self.dataSource.apply(snapshot)
     }
     
     @MainActor
@@ -133,19 +139,11 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         
         guard !Task.isCancelled else { return }
         
-        var items: [RoomItemType] = PeopleStore.shared.people.filter({ type in
+        let items: [RoomItemType] = PeopleStore.shared.people.filter({ type in
             return !type.isCurrentUser
         }).compactMap({ type in
             return .memberId(type.personId)
         })
-        
-        let reservationIds = PeopleStore.shared.unclaimedReservations.compactMap { (key: String, value: Reservation) in
-            return key
-        }
-        
-        if reservationIds.count > 0 {
-            items.insert(.add(reservationIds), at: 0)
-        }
         
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .members)
