@@ -94,8 +94,6 @@ class PeopleStore {
             return connection.objectId
         }
         
-        logDebug(connectionIds)
-
         var unfetchedUserIds = self.allConnections.compactMap { connection in
             return connection.nonMeUser?.objectId
         }
