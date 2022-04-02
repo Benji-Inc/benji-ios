@@ -203,13 +203,16 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         self.collectionView.scrollToItem(at: conversationIndexPath,
                                          at: .centeredHorizontally,
                                          animated: true)
-
-        guard let messageId = messageId else { return }
-
+        
         guard let cell = self.collectionView.cellForItem(at: conversationIndexPath),
               let messagesCell = cell as? ConversationMessagesCell else {
                   return
               }
+
+        guard let messageId = messageId else {
+            self.collectionView.scrollToItem(at: conversationIndexPath, at: .centeredHorizontally, animated: false)
+            return
+        }
 
         let messageController = ChatClient.shared.messageController(cid: cid, messageId: messageId)
 

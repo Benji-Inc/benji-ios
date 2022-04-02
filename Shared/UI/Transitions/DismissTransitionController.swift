@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// This class is used to handle custom dismiss transitions for CardTransitionableControllers that are presented modally
+/// This class is used to handle custom dismiss transitions for DismissTransitionController that are presented modally
 class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioning {
 
     let interactionController: PanDismissInteractionController?

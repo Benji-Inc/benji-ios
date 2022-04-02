@@ -19,15 +19,15 @@ extension RoomCoordinator {
                                                       conversationMembers: [],
                                                       startingConversationId: cid,
                                                       startingMessageId: messageId)
-        self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            self.roomVC.dismiss(animated: true)
+        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+            self.router.popModule() 
         })
         
-        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil, animated: true) {
-            Task {
-                guard let cid = cid else { return }
-                await coordinator.listVC.scrollToConversation(with: cid, messageId: messageId)
-            }
+        self.router.push(coordinator, cancelHandler: nil, animated: true)
+        Task.onMainActorAsync {
+            guard let cid = cid else { return }
+            await Task.sleep(seconds: 0.1)
+            await coordinator.listVC.scrollToConversation(with: cid, messageId: messageId)
         }
     }
     
