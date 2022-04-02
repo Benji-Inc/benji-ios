@@ -64,7 +64,7 @@ extension RoomCoordinator {
         
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                //self.finishFlow(with: .conversation(result))
+                self.presentConversation(with: result, messageId: nil)
             }
         }
         

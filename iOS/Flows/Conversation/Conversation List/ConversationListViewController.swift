@@ -102,7 +102,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         super.initializeViews()
         
         self.view.set(backgroundColor: .B0)
-        self.modalPresentationStyle = .overCurrentContext
+       // self.modalPresentationStyle = .overCurrentContext
         
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
