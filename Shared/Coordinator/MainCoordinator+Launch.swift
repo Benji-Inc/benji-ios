@@ -19,19 +19,12 @@ extension MainCoordinator {
             try? await ChatClient.initialize(for: User.current()!)
         }
         
-        let startingCID = deepLink?.conversationId
-        let startingMessageId = deepLink?.messageId
-        
-        if let coordinator = self.childCoordinator as? ConversationListCoordinator,
+        if let coordinator = self.childCoordinator as? RoomCoordinator,
            let link = deepLink {
             coordinator.handle(deeplink: link)
         } else {
-            let coordinator = ConversationListCoordinator(router: self.router,
-                                                          deepLink: deepLink,
-                                                          conversationMembers: [],
-                                                          startingConversationId: startingCID,
-                                                          startingMessageId: startingMessageId)
-            self.addChildAndStart(coordinator, finishedHandler: { (_) in })
+            let coordinator = RoomCoordinator(router: self.router, deepLink: self.deepLink)
+            self.addChildAndStart(coordinator, finishedHandler: { (_) in})
             self.router.setRootModule(coordinator)
         }
     }

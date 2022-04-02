@@ -101,6 +101,9 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     override func initializeViews() {
         super.initializeViews()
         
+        self.view.set(backgroundColor: .B0)
+        self.modalPresentationStyle = .overCurrentContext
+        
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.conversationLayout.delegate = self

@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Intents
 
 extension RoomCoordinator {
     
@@ -18,7 +19,81 @@ extension RoomCoordinator {
                                                       conversationMembers: [],
                                                       startingConversationId: cid,
                                                       startingMessageId: messageId)
-        self.addChildAndStart(coordinator, finishedHandler: { (_) in })
-        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil, animated: true, completion: nil)
+        self.addChildAndStart(coordinator, finishedHandler: { (_) in
+            self.roomVC.dismiss(animated: true)
+        })
+        
+        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil, animated: true) {
+            Task {
+                guard let cid = cid else { return }
+                await coordinator.listVC.scrollToConversation(with: cid, messageId: messageId)
+            }
+        }
+    }
+    
+    func presentPeoplePicker() {
+        
+        self.removeChild()
+        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { [unowned self] people in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                Task {
+                    await self.roomVC.reloadPeople()
+                    
+                    // Add to conversation????
+                }
+            }
+        }
+        
+        self.router.present(coordinator, source: self.roomVC)
+    }
+    
+    func presentWallet() {
+        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                //self.finishFlow(with: .conversation(result))
+            }
+        }
+        
+        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
+    }
+    
+    func presentProfile(for person: PersonType) {
+        self.removeChild()
+
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+                //self.finishFlow(with: .conversation(result))
+            }
+        }
+        
+        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
+    }
+}
+
+// MARK: - Permissions Flow
+
+extension RoomCoordinator {
+
+    @MainActor
+    func checkForPermissions() async {
+        if INFocusStatusCenter.default.authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+            self.presentPermissions()
+        }
+    }
+
+    @MainActor
+    private func presentPermissions() {
+        self.removeChild()
+        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { _ in }
+        self.router.present(coordinator, source: self.roomVC)
     }
 }

@@ -20,6 +20,35 @@ class RoomCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
         
+        if let deepLink = self.deepLink {
+            self.handle(deeplink: deepLink)
+        }
+        
+        self.setupHandlers()
+        
+        Task {
+            await self.checkForPermissions()
+        }.add(to: self.taskPool)
+    }
+    
+    func handle(deeplink: DeepLinkable) {
+        self.deepLink = deeplink
+
+        guard let target = deeplink.deepLinkTarget else { return }
+
+        switch target {
+        case .conversation:
+            let messageID = deeplink.messageId
+            guard let cid = deeplink.conversationId else { break }
+            self.presentConversation(with: cid, messageId: messageID)
+        case .wallet:
+            self.presentWallet()
+        default:
+            break
+        }
+    }
+    
+    private func setupHandlers() {
         self.roomVC.headerView.jibImageView.didSelect { [unowned self] in
             self.presentWallet()
         }
@@ -41,7 +70,7 @@ class RoomCoordinator: PresentableCoordinator<Void> {
             // Create conversation, then present it
         }
         
-        self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in 
+        self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in
             self.presentPeoplePicker()
         }
     
@@ -53,8 +82,8 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                     guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
                     self.presentProfile(for: person)
                 }
-            case .conversation(_):
-                 break
+            case .conversation(let conversation):
+                self.presentConversation(with: conversation, messageId: nil)
             case .notice(_):
                 break
             case .add(_):
@@ -66,50 +95,6 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                 }
             }
         }.store(in: &self.cancellables)
-    }
-    
-    func presentPeoplePicker() {
-        
-        self.removeChild()
-        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        
-        self.addChildAndStart(coordinator) { [unowned self] people in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                Task {
-                    await self.roomVC.reloadPeople()
-                    
-                    // Add to conversation????
-                }
-            }
-        }
-        
-        self.router.present(coordinator, source: self.roomVC)
-    }
-    
-    func presentWallet() {
-        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
-        
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                //self.finishFlow(with: .conversation(result))
-            }
-        }
-        
-        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
-    }
-    
-    func presentProfile(for person: PersonType) {
-        self.removeChild()
-
-        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
-        
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                //self.finishFlow(with: .conversation(result))
-            }
-        }
-        
-        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
     }
     
     func createNewConversation() async throws {

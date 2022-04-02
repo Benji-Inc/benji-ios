@@ -42,14 +42,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func initializeViews() {
         super.initializeViews()
         
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-        }
-        
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.bottomGradientView)
@@ -239,8 +231,8 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     }
 }
 
-//extension RoomViewController: TransitionableViewController {
-//    var receivingPresentationType: TransitionType {
-//        return .fade
-//    }
-//}
+extension RoomViewController: TransitionableViewController {
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+}
