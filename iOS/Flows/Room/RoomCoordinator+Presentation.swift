@@ -40,8 +40,6 @@ extension RoomCoordinator {
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 Task {
                     await self.roomVC.reloadPeople()
-                    
-                    // Add to conversation????
                 }
             }
         }
@@ -53,9 +51,7 @@ extension RoomCoordinator {
         let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                //self.finishFlow(with: .conversation(result))
-            }
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) 
         }
         
         self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)

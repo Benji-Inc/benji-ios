@@ -32,7 +32,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     
     @Published var selectedPeople: [Person] = []
     
-    init() {
+    let shouldShowConnections: Bool
+    
+    init(shouldShowConnections: Bool) {
+        self.shouldShowConnections = shouldShowConnections
         let cv = CollectionView(layout: PeopleCollectionViewLayout())
         cv.keyboardDismissMode = .interactive
         cv.isScrollEnabled = true
@@ -176,6 +179,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func retrieveDataForSnapshot() async -> [PeopleSection : [PersonItem]] {
         var data: [PeopleSection: [PersonItem]] = [:]
 
+        guard self.shouldShowConnections else { return data }
         let connections = (try? await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])) ?? []
 
         // Get all of the connected Jibber users.

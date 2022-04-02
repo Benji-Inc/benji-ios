@@ -90,12 +90,7 @@ class RoomCoordinator: PresentableCoordinator<Void> {
             case .notice(_):
                 break
             case .add(_):
-                Task {
-                    //try await self.createNewConversation()
-                    Task.onMainActor {
-                        self.presentPeoplePicker()
-                    }
-                }
+                self.presentPeoplePicker()
             }
         }.store(in: &self.cancellables)
     }
