@@ -106,9 +106,19 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         
         data[.members] = PeopleStore.shared.people.filter({ type in
             return !type.isCurrentUser
+        }).sorted(by: { lhs, rhs in
+            guard let lhsUpdated = lhs.updatedAt,
+                    let rhsUpdated = rhs.updatedAt else { return false }
+            return lhsUpdated > rhsUpdated
         }).compactMap({ type in
             return .memberId(type.personId)
         })
+        
+        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.keys.compactMap { reservationId in
+            return .add(reservationId)
+        }
+        
+        data[.members]?.append(contentsOf: addItems)
         
         return data
     }
@@ -119,9 +129,15 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         try? await NoticeStore.shared.initializeIfNeeded()
         let notices = await NoticeStore.shared.getAllNotices()
         
-        let items: [RoomItemType] = notices.compactMap({ notice in
+        var items: [RoomItemType] = notices.compactMap({ notice in
             return .notice(notice)
         })
+        
+        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.keys.compactMap { reservationId in
+            return .add(reservationId)
+        }
+        
+        items.append(contentsOf: addItems)
         
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .notices)
@@ -136,6 +152,10 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         
         let items: [RoomItemType] = PeopleStore.shared.people.filter({ type in
             return !type.isCurrentUser
+        }).sorted(by: { lhs, rhs in
+            guard let lhsUpdated = lhs.updatedAt,
+                    let rhsUpdated = rhs.updatedAt else { return false }
+            return lhsUpdated > rhsUpdated
         }).compactMap({ type in
             return .memberId(type.personId)
         })

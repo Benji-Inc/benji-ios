@@ -103,6 +103,10 @@ extension CNContact: PersonType {
     var image: UIImage? {
         return self.imageWith(text: self.initials)
     }
+    
+    var updatedAt: Date? {
+        return Date.distantPast
+    }
 
     /// Returns an image with the provided text baked into it.
     private func imageWith(text: String) -> UIImage? {

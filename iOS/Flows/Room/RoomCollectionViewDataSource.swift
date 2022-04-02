@@ -24,7 +24,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
         case notice(SystemNotice)
         case memberId(String)
         case conversation(ConversationId)
-        case add([String])
+        case add(String)
     }
     
     private let config = ManageableCellRegistration<RoomMemberCell>().provider
@@ -68,10 +68,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                                 for: indexPath,
                                                                 item: cid)
-        case .add(let reservationIds):
+        case .add(let reservationId):
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
                                                                 for: indexPath,
-                                                                item: reservationIds)
+                                                                item: reservationId)
         }
     }
     
