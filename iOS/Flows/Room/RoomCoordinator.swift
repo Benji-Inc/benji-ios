@@ -67,7 +67,10 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         }
         
         self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
-            // Create conversation, then present it
+            Task {
+                guard let conversation = try? await self.createNewConversation() else { return }
+                self.presentConversation(with: conversation.cid, messageId: nil)
+            }
         }
         
         self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in
@@ -97,7 +100,7 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         }.store(in: &self.cancellables)
     }
     
-    func createNewConversation() async throws {
+    func createNewConversation() async throws -> Conversation {
         let username = User.current()?.initials ?? ""
         let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
         let userIDs = Set([User.current()!.objectId!])
@@ -113,6 +116,6 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
-        //ConversationsManager.shared.activeConversation = controller.conversation
+        return controller.conversation
     }
 }
