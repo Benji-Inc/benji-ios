@@ -48,7 +48,12 @@ extension RoomCoordinator {
                 }
             }
         case .connectionConfirmed:
-            break // Delete notice
+            Task {
+                if let n = notice.notice {
+                    try n.delete()
+                    await self.roomVC.reloadNotices()
+                }
+            }
         case .unreadMessages:
             break // Scroll to unread tab
         case .system:
@@ -65,6 +70,11 @@ extension RoomCoordinator {
                 guard let connectionId = notice.attributes?["connectionId"] as? String else { return }
                 _ = try await UpdateConnection(connectionId: connectionId, status: .declined)
                     .makeRequest(andUpdate:[], viewsToIgnore: [])
+                
+                if let n = notice.notice {
+                    try n.delete()
+                    await self.roomVC.reloadNotices()
+                }
             }
         default:
             break
