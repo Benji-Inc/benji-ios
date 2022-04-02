@@ -21,7 +21,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     }
     
     enum ItemType: Hashable {
-        case notice(Notice)
+        case notice(SystemNotice)
         case memberId(String)
         case conversation(ConversationId)
         case add([String])
@@ -39,8 +39,8 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     var didSelectAddPerson: CompletionOptional = nil
     var didSelectAddConversation: CompletionOptional = nil
     
-    var didSelectRightOption: ((Notice) -> Void)? = nil
-    var didSelectLeftOption: ((Notice) -> Void)? = nil
+    var didSelectRightOption: ((SystemNotice) -> Void)? = nil
+    var didSelectLeftOption: ((SystemNotice) -> Void)? = nil
     
     // MARK: - Cell Dequeueing
     

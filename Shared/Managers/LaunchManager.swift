@@ -64,7 +64,8 @@ class LaunchManager {
                 = UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
                 // Initialize the people store
                 async let second: Void = PeopleStore.shared.initializeIfNeeded()
-                let _: [Void] = try await [first, second]
+                async let third: Void = NoticeStore.shared.initializeIfNeeded()
+                let _: [Void] = try await [first, second, third]
 
                 // Update the timeZone
                 user.timeZone = TimeZone.current.identifier

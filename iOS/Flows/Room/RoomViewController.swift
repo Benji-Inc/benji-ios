@@ -105,9 +105,10 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func retrieveDataForSnapshot() async -> [RoomSectionType : [RoomItemType]] {
         var data: [RoomSectionType: [RoomItemType]] = [:]
         
-        let notices = try? await Notice.fetchAll()
+        try? await NoticeStore.shared.initializeIfNeeded()
+        let notices = await NoticeStore.shared.getAllNotices()
         
-        data[.notices] = notices?.compactMap({ notice in
+        data[.notices] = notices.compactMap({ notice in
             return .notice(notice)
         })
         
@@ -122,7 +123,9 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     @MainActor
     func reloadNotices() async {
-        guard let notices = try? await Notice.fetchAll() else { return }
+        
+        try? await NoticeStore.shared.initializeIfNeeded()
+        let notices = await NoticeStore.shared.getAllNotices()
         
         let items: [RoomItemType] = notices.compactMap({ notice in
             return .notice(notice)

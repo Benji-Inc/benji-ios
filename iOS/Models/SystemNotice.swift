@@ -11,7 +11,7 @@ import Foundation
 protocol Noticeable: Hashable {
     var notice: Notice? { get set }
     var created: Date? { get set }
-    var priority: Int? { get set }
+    var priority: Int { get set }
     var attributes: [String: AnyHashable]? { get set }
 }
 
@@ -21,7 +21,7 @@ struct SystemNotice: Noticeable, Comparable {
     var type: Notice.NoticeType
     var body: String?
     var created: Date?
-    var priority: Int?
+    var priority: Int = 0
     var attributes: [String : AnyHashable]?
 
     init(createdAt: Date?,
@@ -43,8 +43,8 @@ struct SystemNotice: Noticeable, Comparable {
 
         self.init(createdAt: notice.createdAt,
                   notice: notice,
-                  type: notice.type!,
-                  priority: notice.priority!,
+                  type: notice.type,
+                  priority: notice.priority,
                   body: notice.body,
                   attributes: notice.attributes)
     }
@@ -67,6 +67,6 @@ struct SystemNotice: Noticeable, Comparable {
     }
 
     static func < (lhs: SystemNotice, rhs: SystemNotice) -> Bool {
-        return lhs.priority! < rhs.priority!
+        return lhs.priority < rhs.priority
     }
 }

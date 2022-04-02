@@ -126,6 +126,7 @@
 		D60B887327F7732100B3E1C2 /* NoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887227F7732100B3E1C2 /* NoticeCell.swift */; };
 		D60B887527F7AF9F00B3E1C2 /* RoomCoordinator+Notices.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887427F7AF9F00B3E1C2 /* RoomCoordinator+Notices.swift */; };
 		D60B887727F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887627F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift */; };
+		D60B887927F7E05500B3E1C2 /* NoticeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887827F7E05500B3E1C2 /* NoticeStore.swift */; };
 		D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* ThemeButton.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -679,7 +680,6 @@
 		D6D3927B265AAAA700E49F1E /* MicroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39278265AAAA700E49F1E /* MicroAnimation.swift */; };
 		D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
 		D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
-		D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928F266287A700E49F1E /* NoticeSupplier.swift */; };
 		D6D557FE27C9B8AE0024D1CD /* UserConversationsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D557FD27C9B8AE0024D1CD /* UserConversationsCollectionView.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
@@ -895,6 +895,7 @@
 		D60B887227F7732100B3E1C2 /* NoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCell.swift; sourceTree = "<group>"; };
 		D60B887427F7AF9F00B3E1C2 /* RoomCoordinator+Notices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoomCoordinator+Notices.swift"; sourceTree = "<group>"; };
 		D60B887627F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoomCoordinator+Presentation.swift"; sourceTree = "<group>"; };
+		D60B887827F7E05500B3E1C2 /* NoticeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeStore.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -1197,7 +1198,6 @@
 		D6D380C3257FC18300C562E8 /* Selectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
 		D6D39278265AAAA700E49F1E /* MicroAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroAnimation.swift; sourceTree = "<group>"; };
 		D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationView+Extensions.swift"; sourceTree = "<group>"; };
-		D6D3928F266287A700E49F1E /* NoticeSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSupplier.swift; sourceTree = "<group>"; };
 		D6D557FD27C9B8AE0024D1CD /* UserConversationsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversationsCollectionView.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 		D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationaryPressRecognizer.swift; sourceTree = "<group>"; };
@@ -1871,7 +1871,6 @@
 				D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */,
 				D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */,
 				D6B95AF627236E1000FBE66A /* ConversationsManager.swift */,
-				D6D3928F266287A700E49F1E /* NoticeSupplier.swift */,
 				D666127327E2EA38006CDF3D /* AchievementsManager.swift */,
 			);
 			path = Managers;
@@ -2279,6 +2278,7 @@
 			isa = PBXGroup;
 			children = (
 				D6B95AF2272324BD00FBE66A /* PeopleStore.swift */,
+				D60B887827F7E05500B3E1C2 /* NoticeStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -2847,7 +2847,6 @@
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
-				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				8015CA7726F3D907000F3C60 /* ConversationMessagesCell.swift in Sources */,
@@ -2877,6 +2876,7 @@
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,
 				D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
+				D60B887927F7E05500B3E1C2 /* NoticeStore.swift in Sources */,
 				80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */,
 				8004EE5427E8FE970086E010 /* URLSession+Extension.swift in Sources */,
 				D642735122C857760088256B /* MessageDeliveryType.swift in Sources */,

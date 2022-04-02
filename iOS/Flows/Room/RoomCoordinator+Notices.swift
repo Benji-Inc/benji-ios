@@ -12,9 +12,8 @@ import StreamChat
 extension RoomCoordinator {
     
     // The primary action
-    func handleRightOption(with notice: Notice) {
-        guard let type = notice.type else { return }
-        switch type {
+    func handleRightOption(with notice: SystemNotice) {
+        switch notice.type {
         case .timeSensitiveMessage:
             guard let cidValue = notice.attributes?["channelId"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
@@ -51,10 +50,9 @@ extension RoomCoordinator {
     }
     
     // The secondary action
-    func handleLeftOption(with notice: Notice) {
-        guard let type = notice.type else { return }
+    func handleLeftOption(with notice: SystemNotice) {
 
-        switch type {
+        switch notice.type {
         case .timeSensitiveMessage:
             break
         case .connectionRequest:

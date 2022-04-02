@@ -48,9 +48,9 @@ final class Notice: PFObject, PFSubclassing {
         return String(describing: self)
     }
 
-    var type: NoticeType? {
+    var type: NoticeType {
         get {
-            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return nil }
+            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return .system }
             return t
         }
     }
@@ -59,8 +59,8 @@ final class Notice: PFObject, PFSubclassing {
         get { self.getObject(for: .attributes) }
     }
 
-    var priority: Int? {
-        get { self.getObject(for: .priority) }
+    var priority: Int {
+        get { self.getObject(for: .priority) ?? 0 }
     }
 
     var body: String? {

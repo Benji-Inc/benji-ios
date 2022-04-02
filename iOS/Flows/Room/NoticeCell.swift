@@ -10,9 +10,9 @@ import Foundation
 import StreamChat
 
 class NoticeCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = Notice
+    typealias ItemType = SystemNotice
     
-    var currentItem: Notice?
+    var currentItem: SystemNotice?
     
     private let titleLabel = ThemeLabel(font: .mediumBold, textColor: .T1)
     private let descriptionLabel = ThemeLabel(font: .regular, textColor: .T1)
@@ -48,20 +48,19 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         self.leftButtonLabel.alpha = 0.25
     }
 
-    func configure(with item: Notice) {
+    func configure(with item: SystemNotice) {
         Task {
             await self.handle(notice: item)
         }
     }
     
     @MainActor
-    private func handle(notice: Notice) async {
-        guard let type = notice.type else { return }
+    private func handle(notice: SystemNotice) async {
         
-        self.titleLabel.setText(type.title)
+        self.titleLabel.setText(notice.type.title)
         self.descriptionLabel.setText(notice.body ?? "")
         
-        switch type {
+        switch notice.type {
         case .timeSensitiveMessage:
             guard let cidValue = notice.attributes?["channelId"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
@@ -107,7 +106,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             self.leftButtonLabel.setText("")
             self.imageView.displayable = author
         case .unreadMessages:
-            let text = "You have \(notice.unreadMessages.count) unread messages."
+            let text = "You have \(notice.notice?.unreadMessages.count ?? 0) unread messages."
             self.descriptionLabel.setText(text)
             self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
