@@ -41,6 +41,7 @@ struct UpdateConnection: CloudFunction {
     var connectionId: String
     var status: Connection.Status
     
+    @discardableResult
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]

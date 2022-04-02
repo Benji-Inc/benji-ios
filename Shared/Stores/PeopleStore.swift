@@ -22,6 +22,7 @@ class PeopleStore {
     // MARK: - Public Events
     @Published var personUpdated: PersonType?
     @Published var personDeleted: PersonType?
+    @Published var personAdded: PersonType?
 
     var people: [PersonType] {
         var allPeople: [PersonType] = self.usersArray
@@ -89,10 +90,6 @@ class PeopleStore {
             .filter { (connection) -> Bool in
                 return !connection.nonMeUser.isNil
             }
-        
-        let connectionIds = self.allConnections.compactMap { connection in
-            return connection.objectId
-        }
         
         var unfetchedUserIds = self.allConnections.compactMap { connection in
             return connection.nonMeUser?.objectId
@@ -172,6 +169,7 @@ class PeopleStore {
                     self.allConnections.append(connection)
                 }
 
+                self.personAdded = nonMeUser
                 self.usersDictionary[nonMeUser.personId] = nonMeUser
             case .updated(let object):
                 // When a connection is updated, we update the corresponding user.

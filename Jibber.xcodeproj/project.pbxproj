@@ -2397,9 +2397,9 @@
 				D60B887627F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift */,
 				D60B886C27F6206C00B3E1C2 /* RoomHeaderView.swift */,
 				D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */,
+				D60B887A27F8A13A00B3E1C2 /* RoomSectionDividerView.swift */,
 				D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */,
 				D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */,
-				D60B887A27F8A13A00B3E1C2 /* RoomSectionDividerView.swift */,
 			);
 			path = Room;
 			sourceTree = "<group>";

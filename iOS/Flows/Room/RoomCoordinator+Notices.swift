@@ -14,7 +14,7 @@ extension RoomCoordinator {
     // The primary action
     func handleRightOption(with notice: SystemNotice) {
         switch notice.type {
-        case .timeSensitiveMessage:
+        case .timeSensitiveMessage, .messageRead:
             guard let cidValue = notice.attributes?["channelId"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String else { return }
@@ -26,22 +26,29 @@ extension RoomCoordinator {
                           return existing.objectId == connectionId
                       }), let user = try? await connection.nonMeUser?.retrieveDataIfNeeded() else { return }
                 
-                _ = try await UpdateConnection(connectionId: connectionId, status: .accepted)
-                    .makeRequest(andUpdate:[], viewsToIgnore: [])
-                                
-                let text = "Your are now connected to \(user.fullName)."
-                
-                await ToastScheduler.shared.schedule(toastType: .basic(identifier: connectionId,
-                                                                 displayable: user,
-                                                                 title: "Connection Accepted",
-                                                                 description: text,
-                                                                 deepLink: nil))
+                do {
+                    try await UpdateConnection(connectionId: connectionId, status: .accepted)
+                        .makeRequest(andUpdate:[], viewsToIgnore: [])
+                                    
+                    let text = "Your are now connected to \(user.fullName)."
+                    
+                    await ToastScheduler.shared.schedule(toastType: .basic(identifier: connectionId,
+                                                                     displayable: user,
+                                                                     title: "Connection Accepted",
+                                                                     description: text,
+                                                                     deepLink: nil))
+                    
+                    if let n = notice.notice {
+                        try n.delete()
+                        await self.roomVC.reloadNotices()
+                    }
+
+                } catch {
+                    logError(error)
+                }
             }
-            break // Update connection request to accepted
         case .connectionConfirmed:
             break // Delete notice
-        case .messageRead:
-            break // Go to message
         case .unreadMessages:
             break // Scroll to unread tab
         case .system:
@@ -53,17 +60,13 @@ extension RoomCoordinator {
     func handleLeftOption(with notice: SystemNotice) {
 
         switch notice.type {
-        case .timeSensitiveMessage:
-            break
         case .connectionRequest:
-            break
-        case .connectionConfirmed:
-            break
-        case .messageRead:
-            break
-        case .unreadMessages:
-            break
-        case .system:
+            Task {
+                guard let connectionId = notice.attributes?["connectionId"] as? String else { return }
+                _ = try await UpdateConnection(connectionId: connectionId, status: .declined)
+                    .makeRequest(andUpdate:[], viewsToIgnore: [])
+            }
+        default:
             break
         }
     }

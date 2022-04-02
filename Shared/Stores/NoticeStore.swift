@@ -44,9 +44,21 @@ class NoticeStore {
     }
     
     func getAllNotices() async -> [SystemNotice] {
-        return self.allNotices.compactMap { notice in
+        let existing = self.allNotices.compactMap { notice in
             return SystemNotice(with: notice)
         }.sorted()
+        
+        if existing.count == 0 {
+            let empty = SystemNotice(createdAt: Date(),
+                                     notice: nil,
+                                     type: .system,
+                                     priority: 0,
+                                     body: "Nothing to see here... yet.",
+                                     attributes: [:])
+            return [empty]
+        }
+        
+        return existing
     }
     
     private func subscribeToUpdates() {

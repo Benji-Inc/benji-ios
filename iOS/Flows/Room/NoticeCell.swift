@@ -111,7 +111,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
         case .system:
-            break
+            self.descriptionLabel.alpha = 0.25
         }
         
         self.imageView.isVisible = !self.imageView.displayable.isNil
