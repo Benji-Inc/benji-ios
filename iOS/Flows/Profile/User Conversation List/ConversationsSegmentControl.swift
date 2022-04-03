@@ -13,7 +13,7 @@ class ConversationsSegmentControl: UISegmentedControl {
     enum SegmentType: Int {
         case recents
         case all
-        case archive
+        case unread
     }
     
     var didSelectSegmentIndex: ((SegmentType) -> Void)? = nil
@@ -30,8 +30,8 @@ class ConversationsSegmentControl: UISegmentedControl {
             self.didSelectSegmentIndex?(.all)
         }
         
-        let archiveAction = UIAction(title: "Archive") { _ in
-            self.didSelectSegmentIndex?(.archive)
+        let archiveAction = UIAction(title: "Unread") { _ in
+            self.didSelectSegmentIndex?(.unread)
         }
             
         self.insertSegment(action: recentsAction, at: 1, animated: false)

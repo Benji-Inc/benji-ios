@@ -67,6 +67,15 @@ final class Notice: PFObject, PFSubclassing {
         get { self.getObject(for: .body) }
     }
     
+    var unreadConversationIds: [String] {
+        guard let value = self.attributes?["unreadMessages"],
+              let array = value as? [[String: String]] else { return [] }
+        
+        return array.compactMap { dict in
+            return dict["cid"]
+        }
+    }
+    
     var unreadMessages: [[String: String]] {
         get {
             guard let value = self.attributes?["unreadMessages"],

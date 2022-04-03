@@ -60,8 +60,8 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                 self.startLoadRecentTask()
             case .all:
                 self.startLoadAllTask()
-            case .archive:
-                self.startLoadArchiveTask()
+            case .unread:
+                self.startLoadingUnreadConversations()
             }
         }
         
@@ -187,22 +187,28 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     /// The currently running task that is loading conversations.
     private var loadConversationsTask: Task<Void, Never>?
     
-    private func startLoadArchiveTask() {
+    private func startLoadingUnreadConversations() {
         self.loadConversationsTask?.cancel()
         
         self.loadConversationsTask = Task { [weak self] in
-            guard let user = User.current() else { return }
+            guard let `self` = self else { return }
             
-            var userIds: [String] = []
-            userIds.append(user.objectId!)
+            try? await NoticeStore.shared.initializeIfNeeded()
             
-            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
-            let query = ChannelListQuery(filter: .and([.equal("hidden", to: true), filter]),
-                                         sort: [Sorting(key: .createdAt, isAscending: true)],
-                                         pageSize: .channelsPageSize,
-                                         messagesLimit: 1)
-            
-            await self?.loadConversations(with: query)
+            if let unreadNotice = await NoticeStore.shared.getAllNotices().first(where: { system in
+                return system.notice?.type == .unreadMessages
+            }), let conversationIds: [ConversationId] = unreadNotice.notice?.unreadConversationIds.compactMap({ id in
+                return try? ConversationId(cid: id)
+            }) {
+                
+                let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(conversationIds: conversationIds)
+                let query = ChannelListQuery(filter: filter,
+                                             sort: [Sorting(key: .updatedAt, isAscending: true)])
+                
+                await self.loadUnreadConversations(with: query)
+            } else {
+                // show empty cell
+            }
         }.add(to: self.autocancelTaskPool)
     }
     
@@ -242,6 +248,28 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             
             await self?.loadConversations(with: query)
         }.add(to: self.autocancelTaskPool)
+    }
+    
+    @MainActor
+    private func loadUnreadConversations(with query: ChannelListQuery) async {
+        self.conversationListController
+        = ChatClient.shared.channelListController(query: query)
+        
+        try? await self.conversationListController?.synchronize()
+        
+        guard !Task.isCancelled else { return }
+        
+        let conversations: [Conversation] = self.conversationListController?.conversations ?? []
+        
+        let items = conversations.filter({ conversation in
+            return conversation.messages.count > 0
+        }).map { convo in
+            return RoomCollectionViewDataSource.ItemType.unreadMessages(convo.cid)
+        }
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(items, in: .conversations)
+        
+        await self.dataSource.apply(snapshot)
     }
     
     @MainActor

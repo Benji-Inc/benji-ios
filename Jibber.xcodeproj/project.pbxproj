@@ -128,6 +128,7 @@
 		D60B887727F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887627F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift */; };
 		D60B887927F7E05500B3E1C2 /* NoticeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887827F7E05500B3E1C2 /* NoticeStore.swift */; };
 		D60B887B27F8A13A00B3E1C2 /* RoomSectionDividerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887A27F8A13A00B3E1C2 /* RoomSectionDividerView.swift */; };
+		D60B887F27F933CC00B3E1C2 /* UnreadMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B887E27F933CC00B3E1C2 /* UnreadMessagesCell.swift */; };
 		D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* ThemeButton.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -898,6 +899,7 @@
 		D60B887627F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoomCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D60B887827F7E05500B3E1C2 /* NoticeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeStore.swift; sourceTree = "<group>"; };
 		D60B887A27F8A13A00B3E1C2 /* RoomSectionDividerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSectionDividerView.swift; sourceTree = "<group>"; };
+		D60B887E27F933CC00B3E1C2 /* UnreadMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadMessagesCell.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -2378,6 +2380,7 @@
 			children = (
 				D6C4BD3F27C95E8400579014 /* ConversationCell.swift */,
 				D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */,
+				D60B887E27F933CC00B3E1C2 /* UnreadMessagesCell.swift */,
 				D6D557FD27C9B8AE0024D1CD /* UserConversationsCollectionView.swift */,
 				D6D96EFC27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift */,
 				D6D96EFA27C5B4EC00BDCD01 /* UserConversationsDataSource.swift */,
@@ -2850,6 +2853,7 @@
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
+				D60B887F27F933CC00B3E1C2 /* UnreadMessagesCell.swift in Sources */,
 				806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				8015CA7726F3D907000F3C60 /* ConversationMessagesCell.swift in Sources */,

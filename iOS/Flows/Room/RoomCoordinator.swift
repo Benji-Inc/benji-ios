@@ -85,8 +85,10 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                     guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
                     self.presentProfile(for: person)
                 }
-            case .conversation(let conversation):
-                self.presentConversation(with: conversation, messageId: nil)
+            case .conversation(let cid):
+                self.presentConversation(with: cid, messageId: nil)
+            case .unreadMessages(let cid):
+                self.presentConversation(with: cid, messageId: nil)
             case .notice(_):
                 break
             case .add(_):

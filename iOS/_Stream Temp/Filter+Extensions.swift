@@ -50,4 +50,14 @@ extension Filter where Scope: AnyChannelListFilterScope {
 
         return .and(memberFilters)
     }
+    
+    /// Filter to match conversations that contain all the members with the passed in user ids. May contain other members.
+    static func containsAtLeastThese(conversationIds: [ConversationId]) -> Filter<Scope> {
+        var conversationFilters: [Filter<Scope>] = []
+        for cid in conversationIds {
+            conversationFilters.append(.equal(.cid, to: cid))
+        }
+
+        return .and(conversationFilters)
+    }
 }
