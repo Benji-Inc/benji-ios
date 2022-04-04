@@ -128,9 +128,10 @@ class MessageCell: UICollectionViewCell {
     private var messageTasks = TaskPool()
 
     private func subscribeToUpdates(for messageable: Messageable) {
-        if messageable.id != self.messageController?.messageId {
-            self.messageController = ChatClient.shared.messageController(for: messageable)
-        }
+        // If we're already subscribed to message updates, don't do it again.
+        guard messageable.id != self.messageController?.messageId else { return }
+
+        self.messageController = ChatClient.shared.messageController(for: messageable)
 
         self.messageController?.reactionsPublisher
             .mainSink(receiveValue: { [unowned self] _ in
