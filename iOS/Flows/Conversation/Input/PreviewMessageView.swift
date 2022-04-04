@@ -14,6 +14,16 @@ class PreviewMessageView: SpeechBubbleView {
     private let minHeight: CGFloat = 52
     let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
+    private let deliveryTypeView = MessageDeliveryTypeBadgeView()
+
+    var deliveryType: MessageDeliveryType? {
+        get {
+            return self.deliveryTypeView.deliveryType
+        }
+        set {
+            self.deliveryTypeView.deliveryType = newValue
+        }
+    }
     @Published var messageKind: MessageKind?
     private var cancellables = Set<AnyCancellable>()
 
@@ -30,7 +40,9 @@ class PreviewMessageView: SpeechBubbleView {
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius
 
-        self.$messageKind.mainSink { (kind) in
+        self.addSubview(self.deliveryTypeView)
+
+        self.$messageKind.mainSink { [unowned self] (kind) in
             guard let messageKind = kind else { return }
 
             switch messageKind {
@@ -62,20 +74,19 @@ class PreviewMessageView: SpeechBubbleView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.imageView.squaredSize = self.imageView.displayable.isNil ? 0 : 40
+        self.imageView.squaredSize = 40
         self.imageView.centerOnX()
         self.imageView.pin(.bottom, offset: .custom(24))
         self.imageView.pin(.left, offset: .long)
-        
-        if self.imageView.displayable.exists {
-            let maxWidth: CGFloat = self.width - self.imageView.right - Theme.ContentOffset.long.value
-            self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height)
-            self.textView.match(.left, to: .right, of: self.imageView)
-        } else {
-            self.textView.setSize(withMaxWidth: self.width, maxHeight: self.height)
-            self.textView.pin(.left)
-        }
-        
+
+        self.imageView.isVisible = self.imageView.displayable.exists
+
+        let maxWidth: CGFloat = self.width - self.imageView.right - Theme.ContentOffset.long.value
+        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height)
+        self.textView.match(.left, to: .right, of: self.imageView)
         self.textView.center.y = self.halfHeight - 6
+
+        self.deliveryTypeView.pin(.right, offset: .custom(10))
+        self.deliveryTypeView.pin(.top, offset: .custom(-10))
     }
 }

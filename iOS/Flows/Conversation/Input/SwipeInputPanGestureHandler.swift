@@ -166,12 +166,16 @@ class SwipeInputPanGestureHandler {
                 self.animatePreviewScale(shouldScale: false)
                 previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
                 previewView.textView.setTextColor(.T3)
-                self.impactFeedback.impactOccurred()
             }
             self.isPreviewInDropZone = true
 
             // Update the delivery type
             self.viewController.sendable?.deliveryType = panResult.deliveryType
+
+            if previewView.deliveryType != panResult.deliveryType {
+                previewView.deliveryType = panResult.deliveryType
+                self.impactFeedback.impactOccurred()
+            }
         } else {
             if self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: true)
@@ -188,6 +192,7 @@ class SwipeInputPanGestureHandler {
 
             // If the message is out of the drop zone, reset its delivery type back to respectful.
             self.viewController.sendable?.deliveryType = .respectful
+            previewView.deliveryType = nil
         }
     }
 
