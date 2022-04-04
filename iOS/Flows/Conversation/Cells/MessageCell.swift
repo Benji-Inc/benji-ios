@@ -200,25 +200,3 @@ class MessageCell: UICollectionViewCell {
         }.add(to: self.messageDetailTasks)
     }
 }
-
-// MARK: - Helper Functions
-
-extension UIView {
-    
-    // HACK: Accessing a parent view controller from a view is an anti-pattern, but it's extremely convenient
-    // in this case where we're assigning a view controller to a cell and need to add it as a childVC.
-
-    /// Used to get the parent view controller of a collection view cell
-    fileprivate func parentViewController() -> UIViewController? {
-        
-        guard let nextResponder = self.next else { return nil }
-        
-        if let parentViewController = nextResponder as? UIViewController {
-            return parentViewController
-        } else if let parentView = nextResponder as? UIView {
-            return parentView.parentViewController()
-        } else {
-            return nil;
-        }
-    }
-}
