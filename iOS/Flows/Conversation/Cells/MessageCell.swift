@@ -96,7 +96,7 @@ class MessageCell: UICollectionViewCell {
         self.footerView.configure(for: message)
         self.footerView.isVisible = self.shouldShowDetailBar
 
-        self.subscribeToUpdates(for: message)
+        self.subscribeToUpdatesIfNeeded(for: message)
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -127,7 +127,7 @@ class MessageCell: UICollectionViewCell {
     private var messageSubscriptions: Set<AnyCancellable> = []
     private var messageTasks = TaskPool()
 
-    private func subscribeToUpdates(for messageable: Messageable) {
+    private func subscribeToUpdatesIfNeeded(for messageable: Messageable) {
         // If we're already subscribed to message updates, don't do it again.
         guard messageable.id != self.messageController?.messageId else { return }
 
