@@ -12,12 +12,7 @@ import Localization
 import Photos
 
 extension ConversationListCoordinator {
-    
-    func presentRoom() {
-        let coordinator = RoomCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator)
-    }
-    
+        
     func presentThread(for cid: ConversationId,
                        messageId: MessageId,
                        startingReplyId: MessageId?) {

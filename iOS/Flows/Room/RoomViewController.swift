@@ -42,14 +42,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func initializeViews() {
         super.initializeViews()
         
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-        }
-        
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.bottomGradientView)
@@ -80,6 +72,22 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         super.collectionViewDataWasLoaded()
         
         self.startLoadRecentTask()
+        self.subscribeToUpdates()
+    }
+    
+    private func subscribeToUpdates() {
+        
+        PeopleStore.shared.$personDeleted.mainSink { [unowned self] _ in
+            Task {
+                await self.reloadPeople()
+            }
+        }.store(in: &self.cancellables)
+        
+        PeopleStore.shared.$personAdded.mainSink { [unowned self] _ in
+            Task {
+                await self.reloadPeople()
+            }
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -104,12 +112,74 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     override func retrieveDataForSnapshot() async -> [RoomSectionType : [RoomItemType]] {
         var data: [RoomSectionType: [RoomItemType]] = [:]
+        
+        try? await NoticeStore.shared.initializeIfNeeded()
+        let notices = await NoticeStore.shared.getAllNotices()
+        
+        data[.notices] = notices.compactMap({ notice in
+            return .notice(notice)
+        })
+        
         data[.members] = PeopleStore.shared.people.filter({ type in
             return !type.isCurrentUser
+        }).sorted(by: { lhs, rhs in
+            guard let lhsUpdated = lhs.updatedAt,
+                    let rhsUpdated = rhs.updatedAt else { return false }
+            return lhsUpdated > rhsUpdated
         }).compactMap({ type in
             return .memberId(type.personId)
         })
+        
+        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.keys.compactMap { reservationId in
+            return .add(reservationId)
+        }
+        
+        data[.members]?.append(contentsOf: addItems)
+        
         return data
+    }
+    
+    @MainActor
+    func reloadNotices() async {
+        
+        try? await NoticeStore.shared.initializeIfNeeded()
+        let notices = await NoticeStore.shared.getAllNotices()
+        
+        var items: [RoomItemType] = notices.compactMap({ notice in
+            return .notice(notice)
+        })
+        
+        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.keys.compactMap { reservationId in
+            return .add(reservationId)
+        }
+        
+        items.append(contentsOf: addItems)
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(items, in: .notices)
+        
+        await self.dataSource.apply(snapshot)
+    }
+    
+    @MainActor
+    func reloadPeople() async {
+        
+        guard !Task.isCancelled else { return }
+        
+        let items: [RoomItemType] = PeopleStore.shared.people.filter({ type in
+            return !type.isCurrentUser
+        }).sorted(by: { lhs, rhs in
+            guard let lhsUpdated = lhs.updatedAt,
+                    let rhsUpdated = rhs.updatedAt else { return false }
+            return lhsUpdated > rhsUpdated
+        }).compactMap({ type in
+            return .memberId(type.personId)
+        })
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems(items, in: .members)
+        
+        await self.dataSource.apply(snapshot)
     }
     
     // MARK: - Conversation Loading
@@ -194,5 +264,11 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         snapshot.setItems(items, in: .conversations)
         
         await self.dataSource.apply(snapshot)
+    }
+}
+
+extension RoomViewController: TransitionableViewController {
+    var receivingPresentationType: TransitionType {
+        return .fade
     }
 }

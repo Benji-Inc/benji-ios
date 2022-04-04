@@ -28,8 +28,13 @@ struct Person: PersonType, Hashable, Comparable {
     
     var familyName: String
     var givenName: String
+    
+    var updatedAt: Date? {
+        return self.user?.updatedAt
+    }
+    
     var handle: String {
-        return ""
+        return self.user?.handle ?? ""
     }
     var focusStatus: FocusStatus? {
         return nil

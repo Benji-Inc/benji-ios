@@ -12,7 +12,7 @@ class BorderedPersonView: PersonView {
     
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
-        layer.shadowColor = ThemeColor.yellow.color.cgColor
+        layer.shadowColor = ThemeColor.B6.color.cgColor
         layer.shadowOpacity = 0.35
         layer.shadowOffset = .zero
         layer.shadowRadius = 6
@@ -24,7 +24,7 @@ class BorderedPersonView: PersonView {
         layer.lineWidth = 2
         layer.lineCap = .round
         layer.fillColor = UIColor.clear.cgColor
-        layer.borderColor = ThemeColor.yellow.color.cgColor
+        layer.borderColor = ThemeColor.B6.color.cgColor
         layer.borderWidth = 2
         return layer
     }()

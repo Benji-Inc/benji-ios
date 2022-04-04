@@ -10,7 +10,17 @@ import Foundation
 
 class PeopleNavigationController: NavigationController {
     
-    lazy var peopleVC = PeopleViewController()
+    lazy var peopleVC = PeopleViewController(shouldShowConnections: self.showConnections)
+    let showConnections: Bool
+    
+    init(showConnections: Bool) {
+        self.showConnections = showConnections
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func initializeViews() {
         super.initializeViews()

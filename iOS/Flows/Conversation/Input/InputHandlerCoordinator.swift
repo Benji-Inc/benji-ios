@@ -220,7 +220,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
 // MARK: - Image View Flow
 
-extension ConversationListCoordinator {
+extension InputHandlerCoordinator {
 
     func presentImageFlow(for imageURLs: [URL], startingURL: URL?) {
         let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,

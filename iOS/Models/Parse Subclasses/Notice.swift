@@ -19,22 +19,38 @@ enum NoticeKey: String {
 final class Notice: PFObject, PFSubclassing {
 
     enum NoticeType: String {
-        case alert = "ALERT_MESSAGE"
+        case timeSensitiveMessage = "ALERT_MESSAGE"
         case connectionRequest = "CONNECTION_REQUEST"
         case connectionConfirmed = "CONNECTION_CONFIRMED"
         case messageRead = "MESSAGE_READ"
         case unreadMessages = "UNREAD_MESSAGES"
         case system
-        case rsvps
+        
+        var title: String {
+            switch self {
+            case .timeSensitiveMessage:
+                return "Time-Sensitive Message"
+            case .connectionRequest:
+                return "Connection Request"
+            case .connectionConfirmed:
+                return "Connection Confirmed"
+            case .messageRead:
+                return "Message Read"
+            case .unreadMessages:
+                return "Unread Messages"
+            case .system:
+                return ""
+            }
+        }
     }
 
     static func parseClassName() -> String {
         return String(describing: self)
     }
 
-    var type: NoticeType? {
+    var type: NoticeType {
         get {
-            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return nil }
+            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return .system }
             return t
         }
     }
@@ -43,8 +59,8 @@ final class Notice: PFObject, PFSubclassing {
         get { self.getObject(for: .attributes) }
     }
 
-    var priority: Int? {
-        get { self.getObject(for: .priority) }
+    var priority: Int {
+        get { self.getObject(for: .priority) ?? 0 }
     }
 
     var body: String? {

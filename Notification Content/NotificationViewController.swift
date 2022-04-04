@@ -16,14 +16,6 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
 
     private var cancellables = Set<AnyCancellable>()
 
-    lazy var connectionRequestView: ConnectionRequestView = {
-        let view = ConnectionRequestView()
-        view.didUpdateConnection = { [unowned self] updatedConnection in
-            self.extensionContext?.notificationActions = [UserNotificationAction.sayHi.action]
-        }
-        return view
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -44,16 +36,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
 
         switch category {
         case .connectionRequest:
-            guard let connectionId = notification.connectionId else { return }
-            self.view.addSubview(self.connectionRequestView)
-
-            Task {
-                guard let connection = try? await Connection.localThenNetworkQuery(for: connectionId) else {
-                    return
-                }
-
-                await self.connectionRequestView.configure(with: connection)
-            }
+            break
         case .connnectionConfirmed:
             break
         }
@@ -73,6 +56,5 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.connectionRequestView.expandToSuperviewSize()
     }
 }

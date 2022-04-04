@@ -23,4 +23,8 @@ struct SystemAvatar: PersonType, Hashable {
     var phoneNumber: String?
 
     var image: UIImage?
+    
+    var updatedAt: Date? {
+        return Date()
+    }
 }

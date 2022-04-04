@@ -39,7 +39,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         super.start()
         
         self.listVC.headerVC.roomsButton.didSelect { [unowned self] in
-            self.presentRoom()
+            self.finishFlow(with: ())
         }
         
         self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
@@ -62,10 +62,6 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         self.listVC.dataSource.handleInvestmentSelected = { [unowned self] in
             self.presentEmailAlert() 
         }
-
-        Task {
-            await self.checkForPermissions()
-        }.add(to: self.taskPool)
     }
 
     func handle(deeplink: DeepLinkable) {
@@ -113,26 +109,6 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         ConversationsManager.shared.activeConversation = controller.conversation
-    }
-}
-
-// MARK: - Permissions Flow
-
-extension ConversationListCoordinator {
-
-    @MainActor
-    func checkForPermissions() async {
-        if INFocusStatusCenter.default.authorizationStatus != .authorized {
-            self.presentPermissions()
-        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
-            self.presentPermissions()
-        }
-    }
-
-    @MainActor
-    private func presentPermissions() {
-        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator, finishedHandler: nil, cancelHandler: nil)
     }
 }
 

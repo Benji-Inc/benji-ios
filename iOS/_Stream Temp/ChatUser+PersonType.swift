@@ -53,4 +53,8 @@ extension ChatUser: PersonType {
     var fileObject: PFFileObject? {
         return self.parseUser?.smallImage
     }
+    
+    var updatedAt: Date? {
+        return self.lastActiveAt
+    }
 }

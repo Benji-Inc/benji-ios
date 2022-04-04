@@ -16,10 +16,7 @@ class RoomHeaderView: BaseView {
     let nameLabel = ThemeLabel(font: .regularBold)
     let focusCircle = BaseView()
     
-    let noticeCounter = NoticeCounterView()
-    //jib button right
-    //notice button left
-    // name and availibilty center
+    let roomNavButton = RoomNavigationButton()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -42,20 +39,15 @@ class RoomHeaderView: BaseView {
         
         self.addSubview(self.button)
         
-        self.addSubview(self.noticeCounter)
-        
-//        PeopleStore.shared.$personUpdated.filter { person in
-//            return person?.isCurrentUser ?? false
-//        }.mainSink { person in
-//
-//        }.store(in: &self.cancellables)
+        self.addSubview(self.roomNavButton)
+        self.roomNavButton.configure(for: .outer)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         self.jibImageView.squaredSize = 44
-        self.jibImageView.pin(.right, offset: .custom(6))
+        self.jibImageView.pin(.right, offset: .long)
         self.jibImageView.centerOnY()
         
         self.nameLabel.setSize(withWidth: self.width)
@@ -71,8 +63,7 @@ class RoomHeaderView: BaseView {
         self.button.width = self.focusCircle.width + Theme.ContentOffset.standard.value + self.nameLabel.width
         self.button.centerOnXAndY()
         
-        self.noticeCounter.squaredSize = 44
-        self.noticeCounter.pin(.left, offset: .custom(6))
-        self.noticeCounter.centerOnY()
+        self.roomNavButton.pin(.left, offset: .long)
+        self.roomNavButton.centerY = self.jibImageView.centerY
     }
 }

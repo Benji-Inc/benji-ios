@@ -15,7 +15,7 @@ import Localization
 
 class PeopleCoordinator: PresentableCoordinator<[Person]> {
 
-    private lazy var peopleNavController = PeopleNavigationController()
+    private lazy var peopleNavController = PeopleNavigationController(showConnections: self.selectedConversationCID.exists)
     private var messageController: MessageComposerViewController?
     var selectedReservation: Reservation?
 

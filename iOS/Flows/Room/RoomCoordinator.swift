@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 class RoomCoordinator: PresentableCoordinator<Void> {
     
@@ -19,9 +20,61 @@ class RoomCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
         
+        if let deepLink = self.deepLink {
+            self.handle(deeplink: deepLink)
+        }
+        
+        self.setupHandlers()
+        
+        Task {
+            await self.checkForPermissions()
+        }.add(to: self.taskPool)
+    }
+    
+    func handle(deeplink: DeepLinkable) {
+        self.deepLink = deeplink
+
+        guard let target = deeplink.deepLinkTarget else { return }
+
+        switch target {
+        case .conversation:
+            let messageID = deeplink.messageId
+            guard let cid = deeplink.conversationId else { break }
+            self.presentConversation(with: cid, messageId: messageID)
+        case .wallet:
+            self.presentWallet()
+        default:
+            break
+        }
+    }
+    
+    private func setupHandlers() {
+        self.roomVC.headerView.jibImageView.didSelect { [unowned self] in
+            self.presentWallet()
+        }
+        
         self.roomVC.headerView.button.didSelect { [unowned self] in
             guard let user = User.current() else { return }
             self.presentProfile(for: user)
+        }
+        
+        self.roomVC.dataSource.didSelectRightOption = { [unowned self] notice in
+            self.handleRightOption(with: notice)
+        }
+        
+        self.roomVC.dataSource.didSelectLeftOption = { [unowned self] notice in
+            self.handleLeftOption(with: notice)
+        }
+        
+        self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
+            Task {
+                guard let conversation = try? await self.createNewConversation() else { return }
+                self.presentConversation(with: conversation.cid, messageId: nil)
+            }
+        }
+        
+        self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in
+            self.presentPeoplePicker()
         }
     
         self.roomVC.$selectedItems.mainSink { [unowned self] items in
@@ -32,43 +85,32 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                     guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
                     self.presentProfile(for: person)
                 }
-            case .conversation(_):
-                 break
+            case .conversation(let conversation):
+                self.presentConversation(with: conversation, messageId: nil)
+            case .notice(_):
+                break
+            case .add(_):
+                self.presentPeoplePicker()
             }
-//            switch itemType {
-//            case .item(let circleItem):
-//                if circleItem.canAdd {
-//                    self.presentPeoplePicker()
-//                }
-//            }
         }.store(in: &self.cancellables)
     }
     
-    func presentPeoplePicker() {
+    func createNewConversation() async throws -> Conversation {
+        let username = User.current()?.initials ?? ""
+        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
+        let userIDs = Set([User.current()!.objectId!])
+        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                 name: nil,
+                                                                 imageURL: nil,
+                                                                 team: nil,
+                                                                 members: userIDs,
+                                                                 isCurrentUserMember: true,
+                                                                 messageOrdering: .bottomToTop,
+                                                                 invites: [],
+                                                                 extraData: [:])
         
-        self.removeChild()
-        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        
-        self.addChildAndStart(coordinator) { [unowned self] people in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-               // self.updateCircle(with: people)
-            }
-        }
-        
-        self.router.present(coordinator, source: self.roomVC)
-    }
-    
-    func presentProfile(for person: PersonType) {
-        self.removeChild()
-
-        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
-        
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                //self.finishFlow(with: .conversation(result))
-            }
-        }
-        
-        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
+        try await controller.synchronize()
+        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
+        return controller.conversation
     }
 }

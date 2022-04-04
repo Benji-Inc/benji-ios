@@ -20,7 +20,7 @@ struct CreateConnection: CloudFunction {
                      viewsToIgnore: [UIView]) async throws -> Connection {
         
         let params = ["to": self.to.objectId!,
-                      "status": Connection.Status.accepted.rawValue]
+                      "status": Connection.Status.invited.rawValue]
         
         let object = try await self.makeRequest(andUpdate: statusables,
                                           params: params,
@@ -41,6 +41,7 @@ struct UpdateConnection: CloudFunction {
     var connectionId: String
     var status: Connection.Status
     
+    @discardableResult
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]

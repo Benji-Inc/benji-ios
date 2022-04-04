@@ -1,24 +1,21 @@
 //
-//  AttachmentHeaderView.swift
+//  SectionDividerView.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 3/18/22.
+//  Created by Benji Dodgson on 4/2/22.
 //  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-class SectionHeaderView: UICollectionReusableView {
+class RoomSectionDividerView: UICollectionReusableView {
     
     let leftLabel = ThemeLabel(font: .regular)
-    let rightLabel = ThemeLabel(font: .regular, textColor: .D1)
-    
+    let imageView = UIImageView()
     let button = ThemeButton()
     
     var didSelectButton: CompletionOptional = nil
-    
-    let lineView = BaseView()
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeViews()
@@ -40,12 +37,10 @@ class SectionHeaderView: UICollectionReusableView {
             self.didSelectButton?()
         }
         
-        self.addSubview(self.rightLabel)
-        self.rightLabel.textAlignment = .right
-        
-        self.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .white)
-        self.lineView.alpha = 0.1
+        self.addSubview(self.imageView)
+        self.imageView.tintColor = ThemeColor.D1.color
+        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.image = UIImage(systemName: "plus")
     }
     
     override func layoutSubviews() {
@@ -55,15 +50,11 @@ class SectionHeaderView: UICollectionReusableView {
         self.leftLabel.centerOnY()
         self.leftLabel.pin(.left, offset: .standard)
         
-        self.rightLabel.setSize(withWidth: self.width)
-        self.rightLabel.centerOnY()
-        self.rightLabel.pin(.right, offset: .standard)
+        self.imageView.squaredSize = 20
+        self.imageView.centerOnY()
+        self.imageView.pin(.right, offset: .standard)
         
-        self.button.size = self.rightLabel.size
-        self.button.center = self.rightLabel.center
-        
-        self.lineView.expandToSuperviewWidth()
-        self.lineView.height = 1
-        self.lineView.pin(.bottom)
+        self.button.squaredSize = self.height
+        self.button.center = self.imageView.center
     }
 }
