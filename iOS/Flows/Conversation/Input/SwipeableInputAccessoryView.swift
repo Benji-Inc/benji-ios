@@ -56,6 +56,9 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var addViewHeightContstrain: NSLayoutConstraint!
     @IBOutlet var addViewWidthContstrain: NSLayoutConstraint!
     
+    let unreadView = UnreadMessagesCounter()
+    let typingIndicatorView = TypingIndicatorView()
+    
     // MARK: BaseView Setup and Layout
 
     override func initializeSubviews() {
@@ -74,6 +77,13 @@ class SwipeableInputAccessoryView: BaseView {
         self.expressionView.configure(for: nil)
                 
         self.avatarView.set(person: User.current()!)
+        
+        self.addSubview(self.typingIndicatorView)
+        self.addSubview(self.unreadView)
+        
+        self.unreadView.didSelect { [unowned self] in
+            logDebug("did select")
+        }
     }
     
     override func awakeFromNib() {
@@ -85,6 +95,14 @@ class SwipeableInputAccessoryView: BaseView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.unreadView.pin(.right, offset: .xtraLong)
+        self.unreadView.bottom = 0
+        
+        self.typingIndicatorView.width = self.width - 48
+        self.typingIndicatorView.height = 16
+        self.typingIndicatorView.bottom = 0
+        self.typingIndicatorView.centerOnX()
 
         self.expressionView.pin(.left)
     }
@@ -180,5 +198,12 @@ class SwipeableInputAccessoryView: BaseView {
     
     func updateInputType(with type: InputType) {
         self.textView.updateInputView(type: type)
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if self.unreadView.frame.contains(point) || self.typingIndicatorView.frame.contains(point) {
+            return true
+        }
+        return super.point(inside: point, with: event)
     }
 }

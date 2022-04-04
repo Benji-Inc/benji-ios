@@ -217,7 +217,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                 var snapshot = self.dataSource.snapshot()
                 snapshot.setItems([.empty], in: .conversations)
                 await self.dataSource.apply(snapshot)
-                // show empty cell
             }
         }.add(to: self.autocancelTaskPool)
     }

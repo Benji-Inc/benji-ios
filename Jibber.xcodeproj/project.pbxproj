@@ -425,6 +425,7 @@
 		D656EF4C2765A13600FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4B2765A13600FF6E2C /* Localization */; };
 		D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4D2765A13B00FF6E2C /* Localization */; };
 		D657A35827FB4F7900664DD3 /* EmptyUnreadMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */; };
+		D657A35A27FB67D800664DD3 /* UnreadMessagesCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */; };
 		D65D460027A9B09D0019301C /* old_MessageReadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D45FF27A9B09D0019301C /* old_MessageReadView.swift */; };
 		D65D460227A9B1400019301C /* old_MessageStatusContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460127A9B1400019301C /* old_MessageStatusContainer.swift */; };
 		D65D460427A9B1960019301C /* old_MessageReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460327A9B1960019301C /* old_MessageReplyView.swift */; };
@@ -1052,6 +1053,7 @@
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D656AF4927C8470E008175D7 /* doublecheckmark.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = doublecheckmark.json; sourceTree = "<group>"; };
 		D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyUnreadMessageCell.swift; sourceTree = "<group>"; };
+		D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadMessagesCounter.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D65D45FF27A9B09D0019301C /* old_MessageReadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_MessageReadView.swift; sourceTree = "<group>"; };
 		D65D460127A9B1400019301C /* old_MessageStatusContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_MessageStatusContainer.swift; sourceTree = "<group>"; };
@@ -1328,6 +1330,7 @@
 				8028C9E8273ECB1200520465 /* ConversationListViewController.swift */,
 				809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */,
 				D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */,
+				D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */,
 			);
 			path = "Conversation List";
 			sourceTree = "<group>";
@@ -2905,6 +2908,7 @@
 				D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
+				D657A35A27FB67D800664DD3 /* UnreadMessagesCounter.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* PersonView.swift in Sources */,
 				D646955827370A7B00BF47CE /* ToastView.swift in Sources */,

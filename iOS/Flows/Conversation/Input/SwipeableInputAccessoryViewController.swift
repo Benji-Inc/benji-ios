@@ -64,17 +64,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     // MARK: - Layout/Animation Properties
 
     private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self.swipeInputView)
-    
-    let typingIndicatorView = TypingIndicatorView()
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.typingIndicatorView.width = self.view.width - 48
-        self.typingIndicatorView.height = 16
-        self.typingIndicatorView.bottom = 0
-        self.typingIndicatorView.centerOnX()
-    }
 
     // MARK: BaseView Setup and Layout
 
@@ -84,7 +73,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(self.typingIndicatorView)
 
         self.setupGestures()
         self.setupHandlers()
