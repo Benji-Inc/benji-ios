@@ -55,7 +55,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     /// A reference to the current task that scrolls to a specific message
     private var scrollToMessageTask: Task<Void, Never>?
     /// If true we should scroll to the last item in the collection in layout subviews.
-    private var scrollToFirstUnreadIfNeccessary: Bool = false
+    private var scrollToFirstMessageIfNeccessary: Bool = false
 
     // MARK: - Lifecycle
 
@@ -87,34 +87,16 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.collectionView.expandToSuperviewSize()
 
         #warning("Do this when the conversation is loaded.")
-        if self.scrollToFirstUnreadIfNeccessary {
-            self.scrollToFirstUnreadIfNeccessary = false
-            self.scrollToFirstUnread()
+        if self.scrollToFirstMessageIfNeccessary {
+            self.scrollToFirstMessageIfNeccessary = false
+            self.scrollToFirstMessage()
         }
     }
     
-    private func scrollToFirstUnread() {
-        let firstUnread: Message? = self.dataSource.itemIdentifiers(in: .messages)
-            .compactMap({ type in
-            switch type {
-            case .message(cid: let cid, messageID: let messageID, _):
-                return ChatClient.shared.message(cid: cid, id: messageID)
-            default:
-                return nil
-            }
-        }).first { message in
-            return !message.isFromCurrentUser && !message.isConsumed
-        }
-        
-        if let messageId = firstUnread?.id {
-            Task {
-                await self.scrollToMessage(with: messageId, animateSelection: true)
-            }
-        } else {
-            self.collectionLayout.prepare()
-            let maxOffset = self.collectionLayout.maxZPosition
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
-        }
+    private func scrollToFirstMessage() {
+        self.collectionLayout.prepare()
+        let maxOffset = self.collectionLayout.maxZPosition
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
     }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
@@ -132,7 +114,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         // Scroll to the last item when a new conversation is loaded.
         if self.dataSource.snapshot().itemIdentifiers.isEmpty {
-            self.scrollToFirstUnreadIfNeccessary = true
+            self.scrollToFirstMessageIfNeccessary = true
             self.setNeedsLayout()
         }
 

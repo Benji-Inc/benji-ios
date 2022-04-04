@@ -13,15 +13,20 @@ import StreamChat
 
 class UnreadMessagesCounter: BaseView {
     
+    let imageView = UIImageView(image: UIImage(systemName: "chevron.up"))
+    let circle = BaseView()
+    
+    let countCircle = BaseView()
+    
     let counter = NumberScrollCounter(value: 0,
                                       scrollDuration: Theme.animationDurationSlow,
                                       decimalPlaces: 0,
-                                      prefix: "Unread: ",
+                                      prefix: "",
                                       suffix: nil,
                                       seperator: "",
                                       seperatorSpacing: 0,
                                       font: FontType.small.font,
-                                      textColor: ThemeColor.T1.color,
+                                      textColor: ThemeColor.T3.color,
                                       animateInitialValue: true,
                                       gradientColor: nil,
                                       gradientStop: nil)
@@ -37,10 +42,20 @@ class UnreadMessagesCounter: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .B1withAlpha)
-        self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.BORDER.color.cgColor
-        self.layer.borderWidth = 0.5
+        self.addSubview(self.circle)
+        
+        self.circle.set(backgroundColor: .B1withAlpha)
+        self.circle.layer.cornerRadius = Theme.innerCornerRadius
+        self.circle.layer.borderColor = ThemeColor.BORDER.color.cgColor
+        self.circle.layer.borderWidth = 0.5
+        
+        self.clipsToBounds = false
+        
+        self.addSubview(self.imageView)
+        self.imageView.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
+        
+        self.addSubview(self.countCircle)
+        self.countCircle.set(backgroundColor: .D6)
         
         self.addSubview(self.counter)
                 
@@ -64,11 +79,23 @@ class UnreadMessagesCounter: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.height = 30
+        self.squaredSize = 44
+        
+        self.circle.expandToSuperviewSize()
+        self.circle.makeRound()
+        
+        self.imageView.sizeToFit()
+        self.imageView.centerOnXAndY()
+        
         self.counter.sizeToFit()
         
-        self.width = self.counter.width + Theme.ContentOffset.long.value.doubled
-        self.counter.centerOnXAndY()
+        self.countCircle.squaredSize = 20
+        self.countCircle.makeRound()
+        
+        self.counter.x = self.width - 8
+        self.counter.y = 0
+        
+        self.countCircle.center = self.counter.center
     }
     
     func updateVisibility(for state: SwipeableInputAccessoryViewController.InputState) {
