@@ -79,8 +79,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 self.startLoadRecentTask()
             case .all:
                 self.startLoadAllTask()
-            case .archive:
-                self.startLoadArchiveTask()
+            case .unread:
+                self.startLoadingUnreadConversations()
             }
         }
         
@@ -181,26 +181,37 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     /// The currently running task that is loading conversations.
     private var loadConversationsTask: Task<Void, Never>?
 
-    private func startLoadArchiveTask() {
+    private func startLoadingUnreadConversations() {
         self.loadConversationsTask?.cancel()
 
         self.loadConversationsTask = Task { [weak self] in
-            guard let user = self?.person as? User else { return }
+            guard let `self` = self else { return }
+            
+            try? await NoticeStore.shared.initializeIfNeeded()
+            
+            if let unreadNotice = await NoticeStore.shared.getAllNotices().first(where: { system in
+                return system.notice?.type == .unreadMessages
+            }), let conversationIds: [ConversationId] = unreadNotice.notice?.unreadConversationIds.compactMap({ id in
+                return try? ConversationId(cid: id)
+            }) {
+                
+                var items: [UserConversationsDataSource.ItemType] = conversationIds.compactMap({ conversationId in
+                    return .unreadMessages(conversationId)
+                })
+                
+                if items.isEmpty {
+                    items = [.empty]
+                }
+                
+                var snapshot = self.dataSource.snapshot()
+                snapshot.setItems(items, in: .conversations)
 
-            var userIds: [String] = []
-            if user.isCurrentUser {
-                userIds.append(user.objectId!)
+                await self.dataSource.apply(snapshot)
             } else {
-                userIds = [User.current()!.objectId!, user.objectId!]
+                var snapshot = self.dataSource.snapshot()
+                snapshot.setItems([.empty], in: .conversations)
+                await self.dataSource.apply(snapshot)
             }
-
-            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
-            let query = ChannelListQuery(filter: .and([.equal("hidden", to: true), filter]),
-                                         sort: [Sorting(key: .createdAt, isAscending: true)],
-                                         pageSize: .channelsPageSize,
-                                         messagesLimit: 1)
-
-            await self?.loadConversations(with: query)
         }.add(to: self.autocancelTaskPool)
     }
 

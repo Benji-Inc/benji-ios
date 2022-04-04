@@ -186,6 +186,13 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         }
     }
     
+    @MainActor
+    func scrollToConversation(with cid: ConversationId, messageId: MessageId?) async {
+        guard let messageId = messageId else { return }
+        
+        self.animateToReply(with: messageId)
+    }
+    
     func updateUI(for state: ConversationUIState, forceLayout: Bool) {
         guard !self.isBeingOpen && !self.isBeingClosed else { return }
 

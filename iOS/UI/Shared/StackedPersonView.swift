@@ -33,6 +33,7 @@ class StackedPersonView: BaseView {
             if index <= 2 {
                 let view = BorderedPersonView()
                 view.set(person: person)
+                view.contextCueView.isVisible = false
                 self.addSubview(view)
             }
         }

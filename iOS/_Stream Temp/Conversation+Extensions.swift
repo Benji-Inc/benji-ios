@@ -113,7 +113,7 @@ extension Conversation: MessageSequence {
     var totalUnread: Int {
         var total: Int = 0
         self.messages.forEach { message in
-            if !message.isFromCurrentUser, !message.isConsumedByMe {
+            if !message.isFromCurrentUser, !message.isConsumedByMe, !message.isDeleted {
                 total += 1
             }
         }

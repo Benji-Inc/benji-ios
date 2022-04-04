@@ -56,6 +56,9 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var addViewHeightContstrain: NSLayoutConstraint!
     @IBOutlet var addViewWidthContstrain: NSLayoutConstraint!
     
+    let unreadView = UnreadMessagesCounter()
+    let typingIndicatorView = TypingIndicatorView()
+    
     // MARK: BaseView Setup and Layout
 
     override func initializeSubviews() {
@@ -74,6 +77,9 @@ class SwipeableInputAccessoryView: BaseView {
         self.expressionView.configure(for: nil)
                 
         self.avatarView.set(person: User.current()!)
+        
+        self.addSubview(self.typingIndicatorView)
+        self.addSubview(self.unreadView)
     }
     
     override func awakeFromNib() {
@@ -82,9 +88,16 @@ class SwipeableInputAccessoryView: BaseView {
         self.doneButton.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
     }
 
-
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.unreadView.pin(.right, offset: .xtraLong)
+        self.unreadView.bottom = 0
+        
+        self.typingIndicatorView.width = self.width - 48
+        self.typingIndicatorView.height = 16
+        self.typingIndicatorView.bottom = 0
+        self.typingIndicatorView.centerOnX()
 
         self.expressionView.pin(.left)
     }
@@ -146,14 +159,12 @@ class SwipeableInputAccessoryView: BaseView {
             newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }
-
-        // There's no need to animate the height if it hasn't changed.
-        //guard self.inputContainerHeightConstraint.constant != newInputHeight else { return }
+        
+        self.unreadView.updateVisibility(for: inputState)
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.addViewWidthContstrain.constant = newAddViewSize
             self.addViewHeightContstrain.constant = newAddViewSize
-            
             self.inputContainerHeightConstraint.constant = newInputHeight
             self.textViewLeadingConstraint.constant = textViewLeadingValue
             // Layout the window so that our container view also animates
@@ -180,5 +191,12 @@ class SwipeableInputAccessoryView: BaseView {
     
     func updateInputType(with type: InputType) {
         self.textView.updateInputView(type: type)
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if self.unreadView.frame.contains(point) || self.typingIndicatorView.frame.contains(point) {
+            return true
+        }
+        return super.point(inside: point, with: event)
     }
 }
