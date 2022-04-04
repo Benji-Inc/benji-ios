@@ -59,7 +59,7 @@ class UnreadMessagesCounter: BaseView {
         
         self.addSubview(self.counter)
                 
-        ConversationsManager.shared.$activeConversation.mainSink { conversation in
+        ConversationsManager.shared.$activeConversation.mainSink { [unowned self] conversation in
             guard let conversation = conversation else {
                 self.animate(shouldShow: false)
                 return
@@ -67,7 +67,7 @@ class UnreadMessagesCounter: BaseView {
             self.counter.setValue(Float(conversation.totalUnread))
         }.store(in: &self.cancellables)
         
-        ConversationsManager.shared.$messageEvent.mainSink { event in
+        ConversationsManager.shared.$messageEvent.mainSink { [unowned self] event in
             guard let messageEvent = event as? MessageNewEvent,
                   let conversation = ConversationsManager.shared.activeConversation,
                   messageEvent.cid == conversation.cid else { return }
@@ -75,7 +75,7 @@ class UnreadMessagesCounter: BaseView {
             self.counter.setValue(Float(conversation.totalUnread))
         }.store(in: &self.cancellables)
         
-        ConversationsManager.shared.$reactionEvent.mainSink { event in
+        ConversationsManager.shared.$reactionEvent.mainSink { [unowned self] event in
             guard let reactionEvent = event as? ReactionNewEvent,
                   let conversation = ConversationsManager.shared.activeConversation,
                   reactionEvent.cid == conversation.cid else { return }
