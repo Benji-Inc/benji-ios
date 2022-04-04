@@ -27,20 +27,18 @@ class MessageCell: UICollectionViewCell {
 
     weak var delegate: MesssageCellDelegate?
 
+    @ObservedObject var messageState = MessageDetailViewState(message: nil)
+
     let content = MessageContentView()
+    private var footerView = MessageFooterView()
     
     var shouldShowDetailBar: Bool = true
 
-    @ObservedObject var messageState = MessageDetailViewState(message: nil)
-
-    /// If true, this cell's message details are fully visible.
     @Published private(set) var messageDetailState = MessageDetailState()
-    private var subscriptions = Set<AnyCancellable>()
+    private var conversationsManagerSubscription: AnyCancellable?
 
     // Context menu
     private lazy var contextMenuDelegate = MessageCellContextMenuDelegate(messageCell: self)
-    
-    private var footerView = MessageFooterView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,13 +64,13 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
 
-        ConversationsManager.shared.$activeConversation
+        self.conversationsManagerSubscription = ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { [unowned self] activeConversation in
                 // If this cell's conversation becomes active,
                 // then start message consumption if needed.
                 self.handleDetailVisibility(areDetailsFullyVisible: self.footerView.alpha == 1)
-            }.store(in: &self.subscriptions)
+            }
     }
 
     override func layoutSubviews() {
@@ -97,6 +95,8 @@ class MessageCell: UICollectionViewCell {
         
         self.footerView.configure(for: message)
         self.footerView.isVisible = self.shouldShowDetailBar
+
+        self.subscribeToUpdates(for: message)
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -123,6 +123,48 @@ class MessageCell: UICollectionViewCell {
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
     }
 
+    private var messageController: MessageController?
+    private var messageSubscriptions: Set<AnyCancellable> = []
+    private var messageTasks = TaskPool()
+
+    private func subscribeToUpdates(for messageable: Messageable) {
+        if messageable.id != self.messageController?.messageId {
+            self.messageController = ChatClient.shared.messageController(for: messageable)
+        }
+
+        self.messageController?.reactionsPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                Task {
+                    await self.refreshFooter()
+                }.add(to: self.messageTasks)
+            }).store(in: &self.messageSubscriptions)
+
+        self.messageController?.repliesChangesPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                Task {
+                    await self.refreshFooter()
+                }.add(to: self.messageTasks)
+            }).store(in: &self.messageSubscriptions)
+    }
+
+    /// Gets the latest state of the message and updates the footer with that new state.
+    private func refreshFooter() async {
+        try? await self.messageController?.synchronize()
+
+        guard !Task.isCancelled else { return }
+
+        guard let message = self.messageController?.message else { return }
+        self.footerView.configure(for: message)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.messageController = nil
+        self.messageSubscriptions.removeAll()
+        self.messageTasks.cancelAndRemoveAll()
+    }
+
     // MARK: - Message Detail Tasks
 
     /// A pool of tasks related to updating the message details.
@@ -141,7 +183,6 @@ class MessageCell: UICollectionViewCell {
 
         // Don't consume messages unless they're a part of the active conversation.
         if ConversationsManager.shared.activeConversation?.cid == cid {
-
             self.startConsumptionTaskIfNeeded(for: messageable)
         }
     }
@@ -154,11 +195,7 @@ class MessageCell: UICollectionViewCell {
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
 
-            guard let message = ChatClient.shared.message(cid: messageable.streamCid, id: messageable.id) else {
-                return
-            }
-
-            try? await message.setToConsumed()
+            try? await messageable.setToConsumed()
         }.add(to: self.messageDetailTasks)
     }
 }
