@@ -17,10 +17,12 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
     enum ItemType: Hashable {
         case conversation(ConversationId)
         case unreadMessages(ConversationId)
+        case empty
     }
     
     let config = ManageableCellRegistration<ConversationCell>().provider
     let unreadConfig = ManageableCellRegistration<UnreadMessagesCell>().provider
+    let emptyConfig = ManageableCellRegistration<EmptyUnreadMessagesCell>().provider
     
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
         
@@ -33,6 +35,10 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
                                                                 item: cid)
+        case .empty:
+            return collectionView.dequeueConfiguredReusableCell(using: self.emptyConfig,
+                                                                for: indexPath,
+                                                                item: item)
         }
     }
 }

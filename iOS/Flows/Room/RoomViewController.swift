@@ -208,13 +208,15 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                     return model.cid
                 }
                 
-                
                 let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(conversationIds: conversationIds)
                 let query = ChannelListQuery(filter: filter,
                                              sort: [Sorting(key: .updatedAt, isAscending: true)])
                 
                 await self.loadUnreadConversations(with: query, models: models)
             } else {
+                var snapshot = self.dataSource.snapshot()
+                snapshot.setItems([.empty], in: .conversations)
+                await self.dataSource.apply(snapshot)
                 // show empty cell
             }
         }.add(to: self.autocancelTaskPool)

@@ -26,11 +26,13 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
         case conversation(ConversationId)
         case unreadMessages(UnreadMessagesModel)
         case add(String)
+        case empty
     }
     
     private let config = ManageableCellRegistration<RoomMemberCell>().provider
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
     private let unreadConfig = ManageableCellRegistration<UnreadMessagesCell>().provider
+    private let emptyConfig = ManageableCellRegistration<EmptyUnreadMessagesCell>().provider
     private let headerConfig = ManageableHeaderRegistration<RoomSegmentControlHeaderView>().provider
     private let addConfig = ManageableCellRegistration<RoomAddCell>().provider
     private let memberHeaderConfig = ManageableHeaderRegistration<RoomSectionDividerView>().provider
@@ -78,6 +80,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
                                                                 for: indexPath,
                                                                 item: reservationId)
+        case .empty:
+            return collectionView.dequeueConfiguredReusableCell(using: self.emptyConfig,
+                                                                for: indexPath,
+                                                                item: .empty)
         }
     }
     

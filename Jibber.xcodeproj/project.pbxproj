@@ -424,6 +424,7 @@
 		D656EF4A2765A13100FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF492765A13100FF6E2C /* Localization */; };
 		D656EF4C2765A13600FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4B2765A13600FF6E2C /* Localization */; };
 		D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4D2765A13B00FF6E2C /* Localization */; };
+		D657A35827FB4F7900664DD3 /* EmptyUnreadMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */; };
 		D65D460027A9B09D0019301C /* old_MessageReadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D45FF27A9B09D0019301C /* old_MessageReadView.swift */; };
 		D65D460227A9B1400019301C /* old_MessageStatusContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460127A9B1400019301C /* old_MessageStatusContainer.swift */; };
 		D65D460427A9B1960019301C /* old_MessageReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65D460327A9B1960019301C /* old_MessageReplyView.swift */; };
@@ -1050,6 +1051,7 @@
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D656AF4927C8470E008175D7 /* doublecheckmark.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = doublecheckmark.json; sourceTree = "<group>"; };
+		D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyUnreadMessageCell.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D65D45FF27A9B09D0019301C /* old_MessageReadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_MessageReadView.swift; sourceTree = "<group>"; };
 		D65D460127A9B1400019301C /* old_MessageStatusContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = old_MessageStatusContainer.swift; sourceTree = "<group>"; };
@@ -2380,6 +2382,7 @@
 			children = (
 				D6C4BD3F27C95E8400579014 /* ConversationCell.swift */,
 				D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */,
+				D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */,
 				D60B887E27F933CC00B3E1C2 /* UnreadMessagesCell.swift */,
 				D6D557FD27C9B8AE0024D1CD /* UserConversationsCollectionView.swift */,
 				D6D96EFC27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift */,
@@ -3154,6 +3157,7 @@
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D60B886927F5026700B3E1C2 /* TypingIndicatorView.swift in Sources */,
+				D657A35827FB4F7900664DD3 /* EmptyUnreadMessageCell.swift in Sources */,
 				D61A33CF27D4F28800056242 /* EmojiCollectionView.swift in Sources */,
 				8028C9E9273ECB1200520465 /* ConversationListViewController.swift in Sources */,
 				D6D557FE27C9B8AE0024D1CD /* UserConversationsCollectionView.swift in Sources */,

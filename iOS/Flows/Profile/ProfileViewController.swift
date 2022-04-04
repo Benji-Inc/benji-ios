@@ -195,9 +195,13 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 return try? ConversationId(cid: id)
             }) {
                 
-                let items: [UserConversationsDataSource.ItemType] = conversationIds.compactMap({ conversationId in
+                var items: [UserConversationsDataSource.ItemType] = conversationIds.compactMap({ conversationId in
                     return .unreadMessages(conversationId)
                 })
+                
+                if items.isEmpty {
+                    items = [.empty]
+                }
                 
                 var snapshot = self.dataSource.snapshot()
                 snapshot.setItems(items, in: .conversations)
