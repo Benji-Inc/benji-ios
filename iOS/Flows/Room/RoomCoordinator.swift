@@ -87,8 +87,8 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                 }
             case .conversation(let cid):
                 self.presentConversation(with: cid, messageId: nil)
-            case .unreadMessages(let cid):
-                self.presentConversation(with: cid, messageId: nil)
+            case .unreadMessages(let model):
+                self.presentConversation(with: model.cid, messageId: model.messageIds.first)
             case .notice(_):
                 break
             case .add(_):

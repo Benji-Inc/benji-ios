@@ -11,13 +11,16 @@ import ScrollCounter
 import StreamChat
 import Combine
 
-
+struct UnreadMessagesModel: Hashable {
+    var cid: ConversationId
+    var messageIds: [MessageId]
+}
 
 class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     
-    typealias ItemType = ConversationId
+    typealias ItemType = UnreadMessagesModel
     
-    var currentItem: ConversationId?
+    var currentItem: UnreadMessagesModel?
     
     let titleLabel = ThemeLabel(font: .regular)
     let messageContent = MessageContentView()
@@ -68,14 +71,14 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     
     private var loadConversationTask: Task<Void, Never>?
     
-    func configure(with item: ConversationId) {
+    func configure(with item: UnreadMessagesModel) {
         self.loadConversationTask?.cancel()
         
         self.loadConversationTask = Task { [weak self] in
-            guard let `self` = self else { return }
+            guard let `self` = self, let unreadMessageId = item.messageIds.first else { return }
             
-            if self.conversationController?.cid != item {
-                self.conversationController = ChatClient.shared.channelController(for: item)
+            if self.conversationController?.cid != item.cid {
+                self.conversationController = ChatClient.shared.channelController(for: item.cid)
                 if let latest = self.conversationController?.channel?.latestMessages, latest.isEmpty  {
                     try? await self.conversationController?.synchronize()
                 }
@@ -89,7 +92,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
             guard !Task.isCancelled else { return }
             
             if let latest = self.conversationController?.channel?.latestMessages.first(where: { message in
-                return !message.isDeleted
+                return !message.isDeleted && message.id == unreadMessageId
             }) {
                 self.update(for: latest)
             }

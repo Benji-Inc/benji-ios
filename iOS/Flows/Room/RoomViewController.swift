@@ -124,7 +124,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             return !type.isCurrentUser
         }).sorted(by: { lhs, rhs in
             guard let lhsUpdated = lhs.updatedAt,
-                    let rhsUpdated = rhs.updatedAt else { return false }
+                  let rhsUpdated = rhs.updatedAt else { return false }
             return lhsUpdated > rhsUpdated
         }).compactMap({ type in
             return .memberId(type.personId)
@@ -170,7 +170,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             return !type.isCurrentUser
         }).sorted(by: { lhs, rhs in
             guard let lhsUpdated = lhs.updatedAt,
-                    let rhsUpdated = rhs.updatedAt else { return false }
+                  let rhsUpdated = rhs.updatedAt else { return false }
             return lhsUpdated > rhsUpdated
         }).compactMap({ type in
             return .memberId(type.personId)
@@ -197,15 +197,23 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             
             if let unreadNotice = await NoticeStore.shared.getAllNotices().first(where: { system in
                 return system.notice?.type == .unreadMessages
-            }), let conversationIds: [ConversationId] = unreadNotice.notice?.unreadConversationIds.compactMap({ id in
-                return try? ConversationId(cid: id)
+            }), let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
+                if let cid = try? ConversationId(cid: dict.key) {
+                    return UnreadMessagesModel(cid: cid, messageIds: dict.value)
+                }
+                return nil
             }) {
+                
+                let conversationIds = models.compactMap { model in
+                    return model.cid
+                }
+                
                 
                 let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(conversationIds: conversationIds)
                 let query = ChannelListQuery(filter: filter,
                                              sort: [Sorting(key: .updatedAt, isAscending: true)])
                 
-                await self.loadUnreadConversations(with: query)
+                await self.loadUnreadConversations(with: query, models: models)
             } else {
                 // show empty cell
             }
@@ -251,20 +259,16 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     }
     
     @MainActor
-    private func loadUnreadConversations(with query: ChannelListQuery) async {
+    private func loadUnreadConversations(with query: ChannelListQuery, models: [UnreadMessagesModel]) async {
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
         
         try? await self.conversationListController?.synchronize()
         
         guard !Task.isCancelled else { return }
-        
-        let conversations: [Conversation] = self.conversationListController?.conversations ?? []
-        
-        let items = conversations.filter({ conversation in
-            return conversation.messages.count > 0
-        }).map { convo in
-            return RoomCollectionViewDataSource.ItemType.unreadMessages(convo.cid)
+                
+        let items = models.map { model in
+            return RoomCollectionViewDataSource.ItemType.unreadMessages(model)
         }
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .conversations)

@@ -24,7 +24,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
         case notice(SystemNotice)
         case memberId(String)
         case conversation(ConversationId)
-        case unreadMessages(ConversationId)
+        case unreadMessages(UnreadMessagesModel)
         case add(String)
     }
     
