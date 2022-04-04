@@ -27,20 +27,18 @@ class MessageCell: UICollectionViewCell {
 
     weak var delegate: MesssageCellDelegate?
 
+    @ObservedObject var messageState = MessageDetailViewState(message: nil)
+
     let content = MessageContentView()
+    private var footerView = MessageFooterView()
     
     var shouldShowDetailBar: Bool = true
 
-    @ObservedObject var messageState = MessageDetailViewState(message: nil)
-
-    /// If true, this cell's message details are fully visible.
     @Published private(set) var messageDetailState = MessageDetailState()
-    private var subscriptions = Set<AnyCancellable>()
+    private var conversationsManagerSubscription: AnyCancellable?
 
     // Context menu
     private lazy var contextMenuDelegate = MessageCellContextMenuDelegate(messageCell: self)
-    
-    private var footerView = MessageFooterView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,13 +64,13 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
 
-        ConversationsManager.shared.$activeConversation
+        self.conversationsManagerSubscription = ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { [unowned self] activeConversation in
                 // If this cell's conversation becomes active,
                 // then start message consumption if needed.
                 self.handleDetailVisibility(areDetailsFullyVisible: self.footerView.alpha == 1)
-            }.store(in: &self.subscriptions)
+            }
     }
 
     override func layoutSubviews() {
@@ -97,6 +95,8 @@ class MessageCell: UICollectionViewCell {
         
         self.footerView.configure(for: message)
         self.footerView.isVisible = self.shouldShowDetailBar
+
+        self.subscribeToUpdatesIfNeeded(for: message)
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -123,6 +123,49 @@ class MessageCell: UICollectionViewCell {
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
     }
 
+    private var messageController: MessageController?
+    private var messageSubscriptions: Set<AnyCancellable> = []
+    private var messageTasks = TaskPool()
+
+    private func subscribeToUpdatesIfNeeded(for messageable: Messageable) {
+        // If we're already subscribed to message updates, don't do it again.
+        guard messageable.id != self.messageController?.messageId else { return }
+
+        self.messageController = ChatClient.shared.messageController(for: messageable)
+
+        self.messageController?.reactionsPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                Task {
+                    await self.refreshFooter()
+                }.add(to: self.messageTasks)
+            }).store(in: &self.messageSubscriptions)
+
+        self.messageController?.repliesChangesPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                Task {
+                    await self.refreshFooter()
+                }.add(to: self.messageTasks)
+            }).store(in: &self.messageSubscriptions)
+    }
+
+    /// Gets the latest state of the message and updates the footer with that new state.
+    private func refreshFooter() async {
+        try? await self.messageController?.synchronize()
+
+        guard !Task.isCancelled else { return }
+
+        guard let message = self.messageController?.message else { return }
+        self.footerView.configure(for: message)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.messageController = nil
+        self.messageSubscriptions.removeAll()
+        self.messageTasks.cancelAndRemoveAll()
+    }
+
     // MARK: - Message Detail Tasks
 
     /// A pool of tasks related to updating the message details.
@@ -134,49 +177,26 @@ class MessageCell: UICollectionViewCell {
         self.messageDetailTasks.cancelAndRemoveAll()
 
         guard let messageable = self.messageState.message,
-              let cid = try? ConversationId(cid: messageable.conversationId),
-        let message = ChatClient.shared.message(cid: cid, id: messageable.id) else { return }
+              let cid = try? ConversationId(cid: messageable.conversationId) else { return }
 
         // If this item is showing its details, we may want to start the consumption process for it.
         guard areDetailsFullyVisible, ChatUser.currentUserRole != .anonymous else { return }
 
         // Don't consume messages unless they're a part of the active conversation.
         if ConversationsManager.shared.activeConversation?.cid == cid {
-            self.startConsumptionTaskIfNeeded(for: message)
+            self.startConsumptionTaskIfNeeded(for: messageable)
         }
     }
 
     /// If necessary for the message, starts a task that sets the delivery status to reading, then consumes the message after a delay.
-    private func startConsumptionTaskIfNeeded(for message: Message) {
-        guard message.canBeConsumed else { return }
+    private func startConsumptionTaskIfNeeded(for messageable: Messageable) {
+        guard messageable.canBeConsumed else { return }
 
-        Task { 
+        Task {
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
 
-            try? await message.setToConsumed()
+            try? await messageable.setToConsumed()
         }.add(to: self.messageDetailTasks)
-    }
-}
-
-// MARK: - Helper Functions
-
-extension UIView {
-    
-    // HACK: Accessing a parent view controller from a view is an anti-pattern, but it's extremely convenient
-    // in this case where we're assigning a view controller to a cell and need to add it as a childVC.
-
-    /// Used to get the parent view controller of a collection view cell
-    fileprivate func parentViewController() -> UIViewController? {
-        
-        guard let nextResponder = self.next else { return nil }
-        
-        if let parentViewController = nextResponder as? UIViewController {
-            return parentViewController
-        } else if let parentView = nextResponder as? UIView {
-            return parentView.parentViewController()
-        } else {
-            return nil;
-        }
     }
 }

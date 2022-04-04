@@ -86,13 +86,12 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         self.collectionView.expandToSuperviewSize()
 
-        #warning("Do this when the conversation is loaded.")
         if self.scrollToLastMessageIfNeccessary {
             self.scrollToLastMessageIfNeccessary = false
             self.scrollToLastMessage()
         }
     }
-    
+
     private func scrollToLastMessage() {
         self.collectionLayout.prepare()
         let maxOffset = self.collectionLayout.maxZPosition
@@ -138,7 +137,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
 
     private func configureCollectionLayout(for state: ConversationUIState) {
-        
         switch state {
         case .read:
             self.collectionLayout.spacingKeyPoints = [0, 96, 144, 192]
