@@ -11,11 +11,13 @@ import PhotosUI
 import Photos
 import Localization
 import Lightbox
+import StreamChat
 
 protocol SwipeableInputControllerHandler where Self: ViewController {
     var messageCellDelegate: MesssageCellDelegate? { get set }
     var swipeableVC: SwipeableInputAccessoryViewController { get }
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
+    func scrollToConversation(with cid: ConversationId, messageId: MessageId?) async
 }
 
 typealias InputHandlerViewContoller = SwipeableInputControllerHandler & ViewController
@@ -61,6 +63,23 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         
         self.inputHandlerViewController.swipeableVC.swipeInputView.avatarView.didSelect { [unowned self] in
             self.presentProfile(for: User.current()!)            
+        }
+        
+        self.inputHandlerViewController.swipeableVC.swipeInputView.unreadView.didSelect { [unowned self] in
+            self.scrollToUnreadMessage()
+        }
+    }
+    
+    func scrollToUnreadMessage() {
+        guard let conversation = ConversationsManager.shared.activeConversation,
+                let unreadMessage = conversation.messages.first(where: { message in
+            return !message.isFromCurrentUser && !message.isConsumedByMe
+        }) else { return }
+        
+        Task.onMainActorAsync {
+            await Task.sleep(seconds: 0.1)
+            await self.inputHandlerViewController.scrollToConversation(with: conversation.cid,
+                                                                       messageId: unreadMessage.id)
         }
     }
     

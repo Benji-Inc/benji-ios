@@ -106,10 +106,20 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             self.leftButtonLabel.setText("")
             self.imageView.displayable = author
         case .unreadMessages:
-            let text = "You have \(notice.notice?.unreadMessages.count ?? 0) unread messages."
-            self.descriptionLabel.setText(text)
-            self.rightButtonLabel.setText("View")
-            self.leftButtonLabel.setText("")
+            let count = notice.notice?.unreadMessages.count ?? 0
+            
+            if count == 0 {
+                let text = "You are all caught up! 🥳"
+                self.descriptionLabel.setText(text)
+                self.rightButtonLabel.setText("")
+                self.leftButtonLabel.setText("")
+            } else {
+                let text = "You have \(notice.notice?.unreadMessages.count ?? 0) unread messages."
+                self.descriptionLabel.setText(text)
+                self.rightButtonLabel.setText("View")
+                self.leftButtonLabel.setText("")
+            }
+            
         case .system:
             self.descriptionLabel.alpha = 0.25
         }

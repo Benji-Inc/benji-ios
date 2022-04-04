@@ -44,6 +44,10 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
             switch first {
             case .conversation(let cid):
                 self.finishFlow(with: cid)
+            case .unreadMessages(let cid):
+                self.finishFlow(with: cid)
+            default:
+                break 
             }
             
         }.store(in: &self.cancellables)

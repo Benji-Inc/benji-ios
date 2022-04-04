@@ -85,12 +85,14 @@ class RoomCoordinator: PresentableCoordinator<Void> {
                     guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
                     self.presentProfile(for: person)
                 }
-            case .conversation(let conversation):
-                self.presentConversation(with: conversation, messageId: nil)
-            case .notice(_):
-                break
+            case .conversation(let cid):
+                self.presentConversation(with: cid, messageId: nil)
+            case .unreadMessages(let model):
+                self.presentConversation(with: model.cid, messageId: model.messageIds.first)
             case .add(_):
                 self.presentPeoplePicker()
+            default:
+                break
             }
         }.store(in: &self.cancellables)
     }
