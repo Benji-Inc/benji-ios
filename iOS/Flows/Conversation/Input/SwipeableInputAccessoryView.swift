@@ -80,10 +80,6 @@ class SwipeableInputAccessoryView: BaseView {
         
         self.addSubview(self.typingIndicatorView)
         self.addSubview(self.unreadView)
-        
-        self.unreadView.didSelect { [unowned self] in
-            logDebug("did select")
-        }
     }
     
     override func awakeFromNib() {
@@ -91,7 +87,6 @@ class SwipeableInputAccessoryView: BaseView {
         
         self.doneButton.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
     }
-
 
     override func layoutSubviews() {
         super.layoutSubviews()

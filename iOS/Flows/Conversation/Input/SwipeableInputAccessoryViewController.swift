@@ -9,7 +9,6 @@
 import Foundation
 import Lottie
 import Combine
-import StreamChat
 
 protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
     /// The accessory has begun a swipe interaction.

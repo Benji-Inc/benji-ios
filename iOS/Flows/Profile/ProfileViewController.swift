@@ -208,7 +208,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
 
                 await self.dataSource.apply(snapshot)
             } else {
-                // show empty cell
+                var snapshot = self.dataSource.snapshot()
+                snapshot.setItems([.empty], in: .conversations)
+                await self.dataSource.apply(snapshot)
             }
         }.add(to: self.autocancelTaskPool)
     }
