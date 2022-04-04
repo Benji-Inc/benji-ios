@@ -36,7 +36,7 @@ class ConversationsManager: EventsControllerDelegate {
     @Published var activeConversation: Conversation?
 
     @Published var reactionEvent: Event?
-    @Published var localMessageStateEvent: Event?
+    @Published var messageEvent: Event?
 
     init() {
         self.initialize()
@@ -59,7 +59,7 @@ class ConversationsManager: EventsControllerDelegate {
                     await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
                 }
             }
-            self.localMessageStateEvent = event
+            self.messageEvent = event
 
         case let event as ReactionNewEvent:
             self.reactionEvent = event

@@ -67,6 +67,14 @@ class UnreadMessagesCounter: BaseView {
             self.counter.setValue(Float(conversation.totalUnread))
         }.store(in: &self.cancellables)
         
+        ConversationsManager.shared.$messageEvent.mainSink { event in
+            guard let messageEvent = event as? MessageNewEvent,
+                  let conversation = ConversationsManager.shared.activeConversation,
+                  messageEvent.cid == conversation.cid else { return }
+            
+            self.counter.setValue(Float(conversation.totalUnread))
+        }.store(in: &self.cancellables)
+        
         ConversationsManager.shared.$reactionEvent.mainSink { event in
             guard let reactionEvent = event as? ReactionNewEvent,
                   let conversation = ConversationsManager.shared.activeConversation,
