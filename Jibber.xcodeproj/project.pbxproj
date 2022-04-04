@@ -1330,7 +1330,6 @@
 				8028C9E8273ECB1200520465 /* ConversationListViewController.swift */,
 				809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */,
 				D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */,
-				D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */,
 			);
 			path = "Conversation List";
 			sourceTree = "<group>";
@@ -2279,6 +2278,7 @@
 				80E228D727C6C70000AF37AC /* SwipeInputHintAnimator.swift */,
 				80536B5D27A249D00094B81C /* SwipeInputPanGestureHandler.swift */,
 				D60B886827F5026700B3E1C2 /* TypingIndicatorView.swift */,
+				D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";

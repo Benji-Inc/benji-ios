@@ -59,14 +59,14 @@ class ConversationsManager: EventsControllerDelegate {
                     await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
                 }
             }
+            self.localMessageStateEvent = event
+
         case let event as ReactionNewEvent:
             self.reactionEvent = event
         case let event as ReactionDeletedEvent:
             self.reactionEvent = event
         case let event as ReactionUpdatedEvent:
             self.reactionEvent = event
-        case let event as MessageNewEvent:
-            self.localMessageStateEvent = event
         default:
             break
         }

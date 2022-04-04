@@ -164,14 +164,12 @@ class SwipeableInputAccessoryView: BaseView {
             newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         }
-
-        // There's no need to animate the height if it hasn't changed.
-        //guard self.inputContainerHeightConstraint.constant != newInputHeight else { return }
+        
+        self.unreadView.updateVisibility(for: inputState)
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.addViewWidthContstrain.constant = newAddViewSize
             self.addViewHeightContstrain.constant = newAddViewSize
-            
             self.inputContainerHeightConstraint.constant = newInputHeight
             self.textViewLeadingConstraint.constant = textViewLeadingValue
             // Layout the window so that our container view also animates
