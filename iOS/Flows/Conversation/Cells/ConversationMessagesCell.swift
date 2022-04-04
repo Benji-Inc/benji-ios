@@ -55,7 +55,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     /// A reference to the current task that scrolls to a specific message
     private var scrollToMessageTask: Task<Void, Never>?
     /// If true we should scroll to the last item in the collection in layout subviews.
-    private var scrollToFirstMessageIfNeccessary: Bool = false
+    private var scrollToLastMessageIfNeccessary: Bool = false
 
     // MARK: - Lifecycle
 
@@ -87,13 +87,13 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.collectionView.expandToSuperviewSize()
 
         #warning("Do this when the conversation is loaded.")
-        if self.scrollToFirstMessageIfNeccessary {
-            self.scrollToFirstMessageIfNeccessary = false
-            self.scrollToFirstMessage()
+        if self.scrollToLastMessageIfNeccessary {
+            self.scrollToLastMessageIfNeccessary = false
+            self.scrollToLastMessage()
         }
     }
     
-    private func scrollToFirstMessage() {
+    private func scrollToLastMessage() {
         self.collectionLayout.prepare()
         let maxOffset = self.collectionLayout.maxZPosition
         self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
@@ -114,7 +114,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         // Scroll to the last item when a new conversation is loaded.
         if self.dataSource.snapshot().itemIdentifiers.isEmpty {
-            self.scrollToFirstMessageIfNeccessary = true
+            self.scrollToLastMessageIfNeccessary = true
             self.setNeedsLayout()
         }
 
