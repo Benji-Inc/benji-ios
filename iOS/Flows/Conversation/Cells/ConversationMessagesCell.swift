@@ -97,8 +97,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         let firstUnread: Message? = self.dataSource.itemIdentifiers(in: .messages)
             .compactMap({ type in
             switch type {
-            case .message(cid: let cid, messageID: let messageID, _):
-                return ChatClient.shared.message(cid: cid, id: messageID)
+            case .message(_, messageID: let messageID, _):
+                return self.conversation?.latestMessages.first(where: { chatMessage in
+                    chatMessage.id == messageID
+                })
             default:
                 return nil
             }
@@ -156,7 +158,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
 
     private func configureCollectionLayout(for state: ConversationUIState) {
-        
         switch state {
         case .read:
             self.collectionLayout.spacingKeyPoints = [0, 96, 144, 192]

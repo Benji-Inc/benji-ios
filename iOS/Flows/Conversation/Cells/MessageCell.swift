@@ -134,25 +134,29 @@ class MessageCell: UICollectionViewCell {
         self.messageDetailTasks.cancelAndRemoveAll()
 
         guard let messageable = self.messageState.message,
-              let cid = try? ConversationId(cid: messageable.conversationId),
-        let message = ChatClient.shared.message(cid: cid, id: messageable.id) else { return }
+              let cid = try? ConversationId(cid: messageable.conversationId) else { return }
 
         // If this item is showing its details, we may want to start the consumption process for it.
         guard areDetailsFullyVisible, ChatUser.currentUserRole != .anonymous else { return }
 
         // Don't consume messages unless they're a part of the active conversation.
         if ConversationsManager.shared.activeConversation?.cid == cid {
-            self.startConsumptionTaskIfNeeded(for: message)
+
+            self.startConsumptionTaskIfNeeded(for: messageable)
         }
     }
 
     /// If necessary for the message, starts a task that sets the delivery status to reading, then consumes the message after a delay.
-    private func startConsumptionTaskIfNeeded(for message: Message) {
-        guard message.canBeConsumed else { return }
+    private func startConsumptionTaskIfNeeded(for messageable: Messageable) {
+        guard messageable.canBeConsumed else { return }
 
-        Task { 
+        Task {
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
+
+            guard let message = ChatClient.shared.message(cid: messageable.streamCid, id: messageable.id) else {
+                return
+            }
 
             try? await message.setToConsumed()
         }.add(to: self.messageDetailTasks)
