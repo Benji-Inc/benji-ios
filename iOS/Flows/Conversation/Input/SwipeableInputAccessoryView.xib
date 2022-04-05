@@ -37,14 +37,6 @@
                                     <fontDescription key="fontDescription" name="SFProText-Bold" family="SF Pro Text" pointSize="14"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz8-yd-98E" customClass="ThemeButton" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="221" y="12" width="72" height="40"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="40" id="8f3-v1-aia"/>
-                                        <constraint firstAttribute="width" constant="72" id="IXg-j4-o0P"/>
-                                    </constraints>
-                                </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
                                     <rect key="frame" x="0.0" y="0.0" width="305" height="76"/>
                                     <state key="normal" title="Button"/>
@@ -65,7 +57,6 @@
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
                                 <constraint firstAttribute="height" constant="76" id="6vC-6Q-TU9"/>
                                 <constraint firstAttribute="bottom" secondItem="MFc-dt-fdD" secondAttribute="bottom" constant="24" id="HDZ-pY-p0J"/>
-                                <constraint firstAttribute="bottom" secondItem="sz8-yd-98E" secondAttribute="bottom" constant="24" id="N2E-UN-TiW"/>
                                 <constraint firstItem="MFc-dt-fdD" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" constant="12" id="ZNb-0N-B5x"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" constant="4" id="fhu-x1-1GA"/>
                                 <constraint firstAttribute="bottom" secondItem="Ads-9e-WJh" secondAttribute="bottom" constant="20" id="g4Y-rU-cRa"/>
@@ -73,7 +64,6 @@
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="jJa-qV-wJv"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="centerY" secondItem="VuQ-5S-h7F" secondAttribute="centerY" constant="-6" id="jrV-3k-sUT"/>
                                 <constraint firstAttribute="bottom" secondItem="b2H-ok-H5y" secondAttribute="bottom" id="o6A-2N-qrt"/>
-                                <constraint firstAttribute="trailing" secondItem="sz8-yd-98E" secondAttribute="trailing" constant="12" id="o7Y-WN-Kqb"/>
                                 <constraint firstAttribute="trailing" secondItem="b2H-ok-H5y" secondAttribute="trailing" id="tFu-L7-c6N"/>
                             </constraints>
                             <variation key="default">
@@ -98,6 +88,14 @@
                                 <constraint firstAttribute="height" constant="25" id="W3f-8z-1Rm"/>
                             </constraints>
                         </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz8-yd-98E" customClass="ThemeButton" customModule="Jibber" customModuleProvider="target">
+                            <rect key="frame" x="241" y="80" width="72" height="30"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="72" id="LGy-N8-zXI"/>
+                                <constraint firstAttribute="height" constant="30" id="Rcl-2R-6mP"/>
+                            </constraints>
+                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sdi-8g-wyi" customClass="BorderedPersonView" customModule="Jibber" customModuleProvider="target">
                             <rect key="frame" x="146.5" y="100" width="44" height="44"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -110,6 +108,8 @@
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="sdi-8g-wyi" secondAttribute="bottom" constant="16" id="3oC-aC-u1w"/>
                         <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="24" id="7ML-EV-mbN"/>
+                        <constraint firstItem="sz8-yd-98E" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="-4" id="Hbd-x6-5ya"/>
+                        <constraint firstAttribute="trailing" secondItem="sz8-yd-98E" secondAttribute="trailing" constant="24" id="IkF-sc-dO6"/>
                         <constraint firstItem="sdi-8g-wyi" firstAttribute="centerX" secondItem="CP8-gi-eym" secondAttribute="centerX" id="Kf4-la-9nS"/>
                         <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="-4" id="LBl-C0-7ZV"/>
                         <constraint firstItem="TRK-Tt-Z8M" firstAttribute="centerX" secondItem="CP8-gi-eym" secondAttribute="centerX" id="NE3-Ya-SRn"/>
