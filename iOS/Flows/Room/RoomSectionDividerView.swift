@@ -38,7 +38,7 @@ class RoomSectionDividerView: UICollectionReusableView {
         }
         
         self.addSubview(self.imageView)
-        self.imageView.tintColor = ThemeColor.D1.color
+        self.imageView.tintColor = ThemeColor.T1.color
         self.imageView.contentMode = .scaleAspectFit
         self.imageView.image = UIImage(systemName: "plus")
     }
