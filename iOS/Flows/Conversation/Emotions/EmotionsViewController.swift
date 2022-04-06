@@ -10,20 +10,14 @@ import Foundation
 import Combine
 import Localization
 
-class EmotionsViewController: DiffableCollectionViewController<EmotionCategory,
+class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectionViewDataSource.SectionType,
                               EmotionsCollectionViewDataSource.ItemType,
                               EmotionsCollectionViewDataSource> {
     
     let button = ThemeButton()
     private var showButton: Bool = true
     
-    private let topGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .topCenter,
-                                                  endPoint: .bottomCenter)
-                
-    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .bottomCenter,
-                                                  endPoint: .topCenter)
+    @Published var selectedEmotions: [Emotion] = []
 
     init() {
         super.init(with: EmotionsCollectionView())
@@ -45,17 +39,22 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionCategory,
         }
         
         self.view.set(backgroundColor: .B0)
-                        
-        self.view.addSubview(self.topGradientView)
-        self.view.addSubview(self.bottomGradientView)
         
         self.collectionView.allowsMultipleSelection = true
         
         self.view.addSubview(self.button)
         
-        self.$selectedItems.mainSink { [unowned self] items in
+        self.$selectedEmotions.mainSink { [unowned self] items in
             self.updateButton()
         }.store(in: &self.cancellables)
+        
+        self.dataSource.didSelectEmotion = { [unowned self] emotion in
+            self.handleSelected(emotion: emotion)
+        }
+        
+        self.dataSource.didSelectRemove = { [unowned self] in
+            self.removeLastEmotion()
+        }
     }
     
     override func viewDidLoad() {
@@ -67,14 +66,6 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionCategory,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.topGradientView.expandToSuperviewWidth()
-        self.topGradientView.height = Theme.ContentOffset.xtraLong.value.doubled
-        self.topGradientView.pin(.top)
-        
-        self.bottomGradientView.expandToSuperviewWidth()
-        self.bottomGradientView.height = 94
-        self.bottomGradientView.pin(.bottom)
-        
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
         
@@ -85,35 +76,94 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionCategory,
         }
     }
     
-    override func layoutCollectionView(_ collectionView: UICollectionView) {
-        collectionView.expandToSuperviewWidth()
-        collectionView.height = self.view.height * 0.6
-        collectionView.pin(.bottom)
+    /// The currently running task that is loading conversations.
+    private var loadTask: Task<Void, Never>?
+    
+    private func removeLastEmotion() {
+        self.loadTask?.cancel()
+        
+        self.selectedEmotions.removeFirst()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            var snapshot = self.dataSource.snapshot()
+            
+            var contentItems: [EmotionsCollectionViewDataSource.ItemType] = self.selectedEmotions.compactMap({ emotion in
+                return .emotion(EmotionContentModel(emotion: emotion))
+            })
+            
+            if contentItems.isEmpty {
+                contentItems = [.emotion(EmotionContentModel(emotion: nil))]
+            }
+            
+            snapshot.setItems(contentItems, in: .content)
+            
+            let categoryItems: [EmotionsCollectionViewDataSource.ItemType] = EmotionCategory.allCases.compactMap { category in
+                let model = EmotionCategoryModel(category: category, selectedEmotions: self.selectedEmotions)
+                return .category(model)
+            }
+            
+            snapshot.setItems(categoryItems, in: .categories)
+            await self.dataSource.apply(snapshot)
+        }
+    }
+    
+    private func handleSelected(emotion: Emotion) {
+        if self.selectedEmotions.contains(emotion) {
+            self.selectedEmotions.remove(object: emotion)
+        } else {
+            self.selectedEmotions.insert(emotion, at: 0)
+        }
+        
+        self.loadTask?.cancel()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            var snapshot = self.dataSource.snapshot()
+            
+            var contentItems: [EmotionsCollectionViewDataSource.ItemType] = self.selectedEmotions.compactMap({ emotion in
+                return .emotion(EmotionContentModel(emotion: emotion))
+            })
+            
+            if contentItems.isEmpty {
+                contentItems = [.emotion(EmotionContentModel(emotion: nil))]
+            }
+            
+            snapshot.setItems(contentItems, in: .content)
+            
+            let categoryItems: [EmotionsCollectionViewDataSource.ItemType] = EmotionCategory.allCases.compactMap { category in
+                let model = EmotionCategoryModel(category: category, selectedEmotions: self.selectedEmotions)
+                return .category(model)
+            }
+            
+            snapshot.setItems(categoryItems, in: .categories)
+            
+            await self.dataSource.apply(snapshot)
+        }
     }
     
     private func updateButton() {
         self.button.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.showButton = self.selectedItems.count > 0
+            self.showButton = self.selectedEmotions.count > 0
             self.view.layoutNow()
         }
     }
     
-    override func getAllSections() -> [EmotionCategory] {
-        return EmotionCategory.allCases
+    override func getAllSections() -> [EmotionsCollectionViewDataSource.SectionType] {
+        return EmotionsCollectionViewDataSource.SectionType.allCases
     }
 
-    override func retrieveDataForSnapshot() async -> [EmotionCategory : [EmotionsCollectionViewDataSource.ItemType]] {
-        var data: [EmotionCategory : [EmotionsCollectionViewDataSource.ItemType]] = [:]
+    override func retrieveDataForSnapshot() async -> [EmotionsCollectionViewDataSource.SectionType : [EmotionsCollectionViewDataSource.ItemType]] {
+        var data: [EmotionsCollectionViewDataSource.SectionType : [EmotionsCollectionViewDataSource.ItemType]] = [:]
         
-        EmotionCategory.allCases.forEach { category in
-            data[category] = category.emotions.compactMap({ emotion in
-                return .emotion(emotion)
-            })
-        }
-//        data[.emotions] = Emotion.allCases.compactMap({ emotion in
-//            return .emotion(emotion)
-//        })
+        data[.content] = [.emotion(EmotionContentModel(emotion: nil))]
+        
+        data[.categories] = EmotionCategory.allCases.compactMap({ category in
+            return .category(EmotionCategoryModel(category: category, selectedEmotions: []))
+        })
         return data
     }
 }
