@@ -76,37 +76,9 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         }
     }
     
-    /// The currently running task that is loading conversations.
-    private var loadTask: Task<Void, Never>?
-    
     private func removeLastEmotion() {
-        self.loadTask?.cancel()
-        
         self.selectedEmotions.removeFirst()
-        
-        self.loadTask = Task { [weak self] in
-            guard let `self` = self else { return }
-            
-            var snapshot = self.dataSource.snapshot()
-            
-            var contentItems: [EmotionsCollectionViewDataSource.ItemType] = self.selectedEmotions.compactMap({ emotion in
-                return .emotion(EmotionContentModel(emotion: emotion))
-            })
-            
-            if contentItems.isEmpty {
-                contentItems = [.emotion(EmotionContentModel(emotion: nil))]
-            }
-            
-            snapshot.setItems(contentItems, in: .content)
-            
-            let categoryItems: [EmotionsCollectionViewDataSource.ItemType] = EmotionCategory.allCases.compactMap { category in
-                let model = EmotionCategoryModel(category: category, selectedEmotions: self.selectedEmotions)
-                return .category(model)
-            }
-            
-            snapshot.setItems(categoryItems, in: .categories)
-            await self.dataSource.apply(snapshot)
-        }
+        self.updateItems()
     }
     
     private func handleSelected(emotion: Emotion) {
@@ -116,6 +88,13 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
             self.selectedEmotions.insert(emotion, at: 0)
         }
         
+        self.updateItems()
+    }
+    
+    /// The currently running task that is loading conversations.
+    private var loadTask: Task<Void, Never>?
+    
+    private func updateItems() {
         self.loadTask?.cancel()
         
         self.loadTask = Task { [weak self] in
