@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import Localization
 
-class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectionViewDataSource.SectionType,
+class EmotionsViewController: DiffableCollectionViewController<EmotionCategory,
                               EmotionsCollectionViewDataSource.ItemType,
                               EmotionsCollectionViewDataSource> {
     
@@ -39,7 +39,7 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium()]
+            sheet.detents = [.large()]
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             sheet.prefersGrabberVisible = true 
         }
@@ -85,6 +85,12 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         }
     }
     
+    override func layoutCollectionView(_ collectionView: UICollectionView) {
+        collectionView.expandToSuperviewWidth()
+        collectionView.height = self.view.height * 0.6
+        collectionView.pin(.bottom)
+    }
+    
     private func updateButton() {
         self.button.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
         UIView.animate(withDuration: Theme.animationDurationFast) {
@@ -93,15 +99,21 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         }
     }
     
-    override func getAllSections() -> [EmotionsCollectionViewDataSource.SectionType] {
-        return EmotionsCollectionViewDataSource.SectionType.allCases
+    override func getAllSections() -> [EmotionCategory] {
+        return EmotionCategory.allCases
     }
 
-    override func retrieveDataForSnapshot() async -> [EmotionsCollectionViewDataSource.SectionType : [EmotionsCollectionViewDataSource.ItemType]] {
-        var data: [EmotionsCollectionViewDataSource.SectionType : [EmotionsCollectionViewDataSource.ItemType]] = [:]
-        data[.emotions] = Emotion.allCases.compactMap({ emotion in
-            return .emotion(emotion)
-        })
+    override func retrieveDataForSnapshot() async -> [EmotionCategory : [EmotionsCollectionViewDataSource.ItemType]] {
+        var data: [EmotionCategory : [EmotionsCollectionViewDataSource.ItemType]] = [:]
+        
+        EmotionCategory.allCases.forEach { category in
+            data[category] = category.emotions.compactMap({ emotion in
+                return .emotion(emotion)
+            })
+        }
+//        data[.emotions] = Emotion.allCases.compactMap({ emotion in
+//            return .emotion(emotion)
+//        })
         return data
     }
 }

@@ -19,7 +19,7 @@ extension MainCoordinator {
             try? await ChatClient.initialize(for: User.current()!)
         }
         
-        if let coordinator = self.childCoordinator as? RoomCoordinator,
+        if let coordinator = self.childCoordinator as? ConversationListCoordinator,
            let link = deepLink {
             coordinator.handle(deeplink: link)
         } else {
