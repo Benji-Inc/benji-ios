@@ -579,6 +579,7 @@
 		D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6977D6527D1780900A65330 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6977D6427D1780900A65330 /* StreamChat */; };
 		D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
+		D69D268227FCFD70004B893B /* EmotionContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D268127FCFD70004B893B /* EmotionContentCell.swift */; };
 		D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */; };
 		D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9927C0070C001D8855 /* Achievement.swift */; };
 		D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */; };
@@ -1147,6 +1148,7 @@
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972FD25EAFC18000AEE6A /* NotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContent.entitlements; sourceTree = "<group>"; };
+		D69D268127FCFD70004B893B /* EmotionContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionContentCell.swift; sourceTree = "<group>"; };
 		D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSegmentControl.swift; sourceTree = "<group>"; };
 		D69D2F9927C0070C001D8855 /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
 		D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementCell.swift; sourceTree = "<group>"; };
@@ -1529,11 +1531,12 @@
 			isa = PBXGroup;
 			children = (
 				D619C58D27F129EB0082AD19 /* EmotionCell.swift */,
+				D69D268127FCFD70004B893B /* EmotionContentCell.swift */,
 				D619C58B27F129DC0082AD19 /* EmotionsCollectionView.swift */,
 				D619C58F27F129FB0082AD19 /* EmotionsCollectionViewDataSource.swift */,
 				D619C59127F12A1E0082AD19 /* EmotionsCollectionViewLayout.swift */,
-				D619C58827F129B70082AD19 /* EmotionsViewController.swift */,
 				D619C59327F12BFD0082AD19 /* EmotionsCoordinator.swift */,
+				D619C58827F129B70082AD19 /* EmotionsViewController.swift */,
 			);
 			path = Emotions;
 			sourceTree = "<group>";
@@ -2878,6 +2881,7 @@
 				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
 				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				8060C86027BED71100E5FAB1 /* MessageDeliveryStatusUIViewRepresentable.swift in Sources */,
+				D69D268227FCFD70004B893B /* EmotionContentCell.swift in Sources */,
 				D61A33CB27D4F25F00056242 /* EmojiCell.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				8057B59C27E2A10600B23D0D /* MemberCell.swift in Sources */,

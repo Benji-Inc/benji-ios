@@ -8,31 +8,45 @@
 
 import Foundation
 
-class EmotionsCollectionViewDataSource: CollectionViewDataSource<EmotionsCollectionViewDataSource.SectionType,
+class EmotionsCollectionViewDataSource: CollectionViewDataSource<EmotionCategory,
                                         EmotionsCollectionViewDataSource.ItemType> {
-
-    enum SectionType: Int, CaseIterable {
-        case emotions
-    }
 
     enum ItemType: Hashable {
         case emotion(Emotion)
     }
 
     private let config = ManageableCellRegistration<EmotionCell>().provider
-    
+    private let contentConfig = ManageableCellRegistration<EmotionContentCell>().provider
+    private let headerConfig = ManageableHeaderRegistration<RoomSectionDividerView>().provider
+
     // MARK: - Cell Dequeueing
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
-                              section: SectionType,
+                              section: EmotionCategory,
                               item: ItemType) -> UICollectionViewCell? {
 
-        switch item {
-        case .emotion(let emotion):
-            return collectionView.dequeueConfiguredReusableCell(using: self.config,
-                                                                for: indexPath,
-                                                                item: emotion)
+        guard case ItemType.emotion(let emotion) = item else { return nil }
+        
+        return collectionView.dequeueConfiguredReusableCell(using: self.config,
+                                                            for: indexPath,
+                                                            item: emotion)
+    }
+    
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
+                                           section: EmotionCategory,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            header.leftLabel.setText(section.title)
+//                header.button.didSelect { [unowned self] in
+//                    self.didSelectAddPerson?()
+//                }
+            return header
+        } else {
+            return nil
         }
     }
 }
