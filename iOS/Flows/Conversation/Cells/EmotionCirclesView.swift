@@ -42,11 +42,10 @@ class EmotionCirclesView: BaseView {
         self.itemBehavior.angularResistance = 0
         self.animator.addBehavior(self.itemBehavior)
 
-        self.noiseField.strength = 1
+        self.noiseField.strength = 10
         self.animator.addBehavior(self.noiseField)
 
         self.animator.delegate = self
-        self.animator.setValue(true, forKey: "debugEnabled")
     }
 
     override func layoutSubviews() {
@@ -88,7 +87,7 @@ class EmotionCirclesView: BaseView {
 
             // Give the view a little push to get it moving.
             let pushBehavior = UIPushBehavior(items: [emotionView], mode: .instantaneous)
-            pushBehavior.setAngle(CGFloat.random(in: 0...CGFloat.pi*2), magnitude: 0.1)
+            pushBehavior.setAngle(CGFloat.random(in: 0...CGFloat.pi*2), magnitude: 0.2)
             pushBehavior.action = { [unowned self, unowned pushBehavior] in
                 // Clean up the push after it's done
                 guard !pushBehavior.active else { return }
@@ -117,7 +116,6 @@ class EmotionCirclesView: BaseView {
 
 extension EmotionCirclesView: UIDynamicAnimatorDelegate {
 
-
     func dynamicAnimatorWillResume(_ animator: UIDynamicAnimator) {
         logDebug("did resume "+animator.description)
     }
@@ -131,6 +129,8 @@ extension EmotionCirclesView: UIDynamicAnimatorDelegate {
 private class EmotionCircleView: BaseView {
 
     let emotion: Emotion
+
+    private let label = ThemeLabel(font: .regular, textColor: .white)
 
     init(emotion: Emotion) {
         self.emotion = emotion
@@ -147,12 +147,18 @@ private class EmotionCircleView: BaseView {
 
         self.backgroundColor = self.emotion.color.withAlphaComponent(0.6)
         self.clipsToBounds = true
+
+        self.addSubview(self.label)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.layer.cornerRadius = self.halfWidth
+
+        self.label.text = emotion.rawValue
+        self.label.setSize(withWidth: self.width)
+        self.label.centerOnXAndY()
     }
 
     // MARK: - UIDynamicItem
