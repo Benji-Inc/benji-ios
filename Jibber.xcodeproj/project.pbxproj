@@ -60,9 +60,7 @@
 		80632D9427853D2600D3A65B /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
 		80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80665BA527B2F2F3002A8F69 /* MockMessage.swift */; };
 		806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */; };
-		806CA1C327FDFAB8003E12F4 /* MessageCellEmotionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806CA1C227FDFAB8003E12F4 /* MessageCellEmotionsView.swift */; };
-		806CA1C427FDFAB8003E12F4 /* MessageCellEmotionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806CA1C227FDFAB8003E12F4 /* MessageCellEmotionsView.swift */; };
-		806CA1C527FDFAB8003E12F4 /* MessageCellEmotionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806CA1C227FDFAB8003E12F4 /* MessageCellEmotionsView.swift */; };
+		806CA1C327FDFAB8003E12F4 /* EmotionCirclesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806CA1C227FDFAB8003E12F4 /* EmotionCirclesView.swift */; };
 		806DA16A27307FA400843C4E /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806DA16927307FA400843C4E /* MessageCell.swift */; };
 		806EDAA627BEF1A400ADD677 /* alertCircle.json in Resources */ = {isa = PBXBuildFile; fileRef = 806EDAA527BEF1A400ADD677 /* alertCircle.json */; };
 		806EDAA727BEF1A400ADD677 /* alertCircle.json in Resources */ = {isa = PBXBuildFile; fileRef = 806EDAA527BEF1A400ADD677 /* alertCircle.json */; };
@@ -842,7 +840,7 @@
 		80632D92278534E600D3A65B /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		80665BA527B2F2F3002A8F69 /* MockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMessage.swift; sourceTree = "<group>"; };
 		806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeMachineCollectionViewLayout.swift; sourceTree = "<group>"; };
-		806CA1C227FDFAB8003E12F4 /* MessageCellEmotionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellEmotionsView.swift; sourceTree = "<group>"; };
+		806CA1C227FDFAB8003E12F4 /* EmotionCirclesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCirclesView.swift; sourceTree = "<group>"; };
 		806DA16927307FA400843C4E /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		806EDAA527BEF1A400ADD677 /* alertCircle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = alertCircle.json; sourceTree = "<group>"; };
 		8072253427AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarIgnoringHostingController.swift; sourceTree = "<group>"; };
@@ -1737,11 +1735,11 @@
 			children = (
 				8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */,
 				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
+				806CA1C227FDFAB8003E12F4 /* EmotionCirclesView.swift */,
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
 				8023C69E27EB98B300FD9DB6 /* MessageCellContextMenuDelegate.swift */,
-				806CA1C227FDFAB8003E12F4 /* MessageCellEmotionsView.swift */,
 				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
 				80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */,
@@ -3243,7 +3241,7 @@
 				D6CC148B276BFDC1005F617F /* Color+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ThreadViewController.swift in Sources */,
-				806CA1C327FDFAB8003E12F4 /* MessageCellEmotionsView.swift in Sources */,
+				806CA1C327FDFAB8003E12F4 /* EmotionCirclesView.swift in Sources */,
 				D65D460027A9B09D0019301C /* old_MessageReadView.swift in Sources */,
 				D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */,
 				D60CA47427ED1C1800F0871A /* OptionCell.swift in Sources */,
@@ -3354,7 +3352,6 @@
 				D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */,
 				80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D63DB25425E9995700F6B323 /* AnimationDuration.swift in Sources */,
-				806CA1C427FDFAB8003E12F4 /* MessageCellEmotionsView.swift in Sources */,
 				D63DB25025E9995100F6B323 /* LaunchManager.swift in Sources */,
 				D63DB23525E9992600F6B323 /* UIView+Layout.swift in Sources */,
 				D63DB28B25E999A600F6B323 /* SwitchableContentViewController.swift in Sources */,
@@ -3454,7 +3451,6 @@
 			files = (
 				D687595D2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				D68759642728A55A00AF7C07 /* FontType.swift in Sources */,
-				806CA1C527FDFAB8003E12F4 /* MessageCellEmotionsView.swift in Sources */,
 				D68759672728A59600AF7C07 /* User+Extensions.swift in Sources */,
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
 				D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */,
