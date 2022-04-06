@@ -172,7 +172,7 @@
 		D6166C902732FFD00013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D619C58927F129B70082AD19 /* EmotionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58827F129B70082AD19 /* EmotionsViewController.swift */; };
 		D619C58C27F129DC0082AD19 /* EmotionsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58B27F129DC0082AD19 /* EmotionsCollectionView.swift */; };
-		D619C58E27F129EB0082AD19 /* EmotionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58D27F129EB0082AD19 /* EmotionCell.swift */; };
+		D619C58E27F129EB0082AD19 /* EmotionCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58D27F129EB0082AD19 /* EmotionCategoryCell.swift */; };
 		D619C59027F129FB0082AD19 /* EmotionsCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58F27F129FB0082AD19 /* EmotionsCollectionViewDataSource.swift */; };
 		D619C59227F12A1E0082AD19 /* EmotionsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C59127F12A1E0082AD19 /* EmotionsCollectionViewLayout.swift */; };
 		D619C59427F12BFD0082AD19 /* EmotionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C59327F12BFD0082AD19 /* EmotionsCoordinator.swift */; };
@@ -937,7 +937,7 @@
 		D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+MediaItem.swift"; sourceTree = "<group>"; };
 		D619C58827F129B70082AD19 /* EmotionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionsViewController.swift; sourceTree = "<group>"; };
 		D619C58B27F129DC0082AD19 /* EmotionsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionsCollectionView.swift; sourceTree = "<group>"; };
-		D619C58D27F129EB0082AD19 /* EmotionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCell.swift; sourceTree = "<group>"; };
+		D619C58D27F129EB0082AD19 /* EmotionCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCategoryCell.swift; sourceTree = "<group>"; };
 		D619C58F27F129FB0082AD19 /* EmotionsCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionsCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D619C59127F12A1E0082AD19 /* EmotionsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D619C59327F12BFD0082AD19 /* EmotionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionsCoordinator.swift; sourceTree = "<group>"; };
@@ -1526,7 +1526,7 @@
 		D619C58A27F129C00082AD19 /* Emotions */ = {
 			isa = PBXGroup;
 			children = (
-				D619C58D27F129EB0082AD19 /* EmotionCell.swift */,
+				D619C58D27F129EB0082AD19 /* EmotionCategoryCell.swift */,
 				D69D268127FCFD70004B893B /* EmotionContentCell.swift */,
 				D619C58B27F129DC0082AD19 /* EmotionsCollectionView.swift */,
 				D619C58F27F129FB0082AD19 /* EmotionsCollectionViewDataSource.swift */,
@@ -3005,7 +3005,7 @@
 				D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */,
 				80632D93278534E600D3A65B /* EventLogger.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
-				D619C58E27F129EB0082AD19 /* EmotionCell.swift in Sources */,
+				D619C58E27F129EB0082AD19 /* EmotionCategoryCell.swift in Sources */,
 				D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */,
