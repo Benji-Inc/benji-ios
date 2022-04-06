@@ -138,9 +138,9 @@ enum EmotionCategory: Int, CaseIterable {
     var emotions: [Emotion] {
         switch self {
         case .uncertain:
-            return [.stressed, .overwhelmed, .anxious, .worried, .avoidance, .excited, .dread, .fear, .vulnerable]
+            return [.stressed, .overwhelmed, .anxious, .worried, .avoidance, .excited, .dread, .afraid, .vulnerable]
         case .compare:
-            return [.comparison, .admired, .revered, .envious, .jealous, .resentment, .schadenfreude, .freudenfreude]
+            return [.comparison, .admiration, .revered, .envious, .jealous, .resentment, .schadenfreude, .freudenfreude]
         case .unplanned:
             return [.bored, .dissapointed, .expecting, .regret, .discouraged, .resigned, .frustrated]
         case .beyondUs:
@@ -178,11 +178,11 @@ enum Emotion: String, CaseIterable, Identifiable {
     case avoidance
     case excited
     case dread
-    case fear
+    case afraid
     case vulnerable
     
     case comparison
-    case admired
+    case admiration
     case revered
     case envious
     case jealous
@@ -284,29 +284,29 @@ enum Emotion: String, CaseIterable, Identifiable {
     var definition: Localized {
         switch self {
         case .stressed:
-            return LocalizedString(id: "", default: "a state of mental or emotional strain or tension resulting from adverse or very demanding circumstances")
+            return LocalizedString(id: "", default: "We feel stressed when we evaluate environmental demand as beyond our ability to cope successfully. This includes elements of unpredictability, uncontrollability, and feeling overloaded")
         case .overwhelmed:
-            return LocalizedString(id: "", default: "have a strong emotional effect on")
+            return LocalizedString(id: "", default: "An extreme level of stress, an emotional and/or cognitive intensity to the point of feeling unable to function")
         case .anxious:
-            return LocalizedString(id: "", default: "a feeling of worry, nervousness, or unease, typically about an imminent event or something with an uncertain outcome")
+            return LocalizedString(id: "", default: "An emotion characterized by feelings of tension, worried thoughts and physical changes like increased blood pressure")
         case .worried:
-            return LocalizedString(id: "", default: "allow one's mind to dwell on difficulty or troubles.")
+            return LocalizedString(id: "", default: "A chain of negative thoughts about bad things that might happen in the future")
         case .avoidance:
-            return LocalizedString(id: "", default: "keep away from or stop oneself from doing (something)")
+            return LocalizedString(id: "", default: "Is not showing up and often spending a lot of energy zigzagging around and away from that thing that already feels like it’s consuming us")
         case .excited:
-            return LocalizedString(id: "", default: "very enthusiastic and eager")
+            return LocalizedString(id: "", default: "An energized state of enthusiasm leading up to or during an enjoyable activity")
         case .dread:
-            return LocalizedString(id: "", default: "anticipate with great apprehension or fear")
-        case .fear:
-            return LocalizedString(id: "", default: "an unpleasant emotion caused by the belief that someone or something is dangerous, likely to cause pain, or a threat")
+            return LocalizedString(id: "", default: "Occurs frequently in response to high-probability negative events; its magnitude increases as the dreaded event draws nearer")
+        case .afraid:
+            return LocalizedString(id: "", default: "a negative, short-lasting, high-alert emotion in response to a perceived threat, and, like anxiety, it can be measured as a state or trait")
         case .vulnerable:
-            return LocalizedString(id: "", default: "susceptible to physical or emotional attack or harm")
+            return LocalizedString(id: "", default: "is the emotion that we experience during times of uncertainty, risk, and emotional exposure")
         case .comparison:
-            return LocalizedString(id: "", default: "a consideration or estimate of the similarities or dissimilarities between two things or people")
-        case .admired:
-            return LocalizedString(id: "", default: "regard (an object, quality, or person) with respect or warm approval")
+            return LocalizedString(id: "", default: "Comparison is the crush of conformity from one side and competition from the other—it’s trying to simultaneously fit in and stand out")
+        case .admiration:
+            return LocalizedString(id: "", default: "We feel this when someone’s abilities, accomplishments, or character inspires us, or when we see something else that inspires us, like art or nature")
         case .revered:
-            return LocalizedString(id: "", default: "feel deep respect or admiration for (something)")
+            return LocalizedString(id: "", default: "Sometimes called adoration, worship, or veneration, is a deeper form of admiration or respect and is often combined with a sense of meaningful connection with something greater than ourselves")
         case .envious:
             return LocalizedString(id: "", default: "a feeling of discontented or resentful longing aroused by someone else's possessions, qualities, or luck")
         case .jealous:
@@ -477,14 +477,14 @@ enum Emotion: String, CaseIterable, Identifiable {
             return #colorLiteral(red: 0.8980392157, green: 0.2235294118, blue: 0.2078431373, alpha: 1)
         case .dread:
             return #colorLiteral(red: 0.8274509804, green: 0.1843137255, blue: 0.1843137255, alpha: 1)
-        case .fear:
+        case .afraid:
             return #colorLiteral(red: 0.7764705882, green: 0.1568627451, blue: 0.1568627451, alpha: 1)
         case .vulnerable:
             return #colorLiteral(red: 0.7176470588, green: 0.1098039216, blue: 0.1098039216, alpha: 1)
             
         case .comparison:
             return #colorLiteral(red: 0.9725490196, green: 0.7333333333, blue: 0.8156862745, alpha: 1)
-        case .admired:
+        case .admiration:
             return #colorLiteral(red: 0.9568627451, green: 0.5607843137, blue: 0.6941176471, alpha: 1)
         case .revered:
             return #colorLiteral(red: 0.9411764706, green: 0.3843137255, blue: 0.5725490196, alpha: 1)
