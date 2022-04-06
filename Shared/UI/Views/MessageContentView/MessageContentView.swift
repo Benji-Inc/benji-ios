@@ -52,6 +52,8 @@ class MessageContentView: BaseView {
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
+    let emotionCirclesView = EmotionCirclesView()
+
     var layoutState: Layout = .expanded
 
     override func initializeSubviews() {
@@ -82,6 +84,8 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
+
+        self.addSubview(self.emotionCirclesView)
     }
 
     override func layoutSubviews() {
@@ -140,6 +144,8 @@ class MessageContentView: BaseView {
         }
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
+
+        self.emotionCirclesView.expandToSuperviewSize()
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -192,6 +198,8 @@ class MessageContentView: BaseView {
 
         self.authorView.set(person: message.person)
 
+        self.emotionCirclesView.configure(with: [.boundaries, .admired, .admired,
+                                                 .avoidance, .belonging, .belonging])
         self.setNeedsLayout()
     }
 

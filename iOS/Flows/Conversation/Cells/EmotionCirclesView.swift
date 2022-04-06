@@ -20,7 +20,14 @@ class EmotionCirclesView: BaseView {
     private(set) var emotionCounts: [Emotion : Int] = [:]
 
     /// All of the circle views corresponding to the current set of emotions.
-    private var circleViews: [EmotionCircleView] = []
+    private var emotionViews: [EmotionCircleView] {
+        return self.subviews.compactMap { view in
+            return view as? EmotionCircleView
+        }
+    }
+
+    /// The diameter an emotion view with an emotion count of 1.
+    private let emotionViewDiameter: CGFloat = 100
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -35,8 +42,11 @@ class EmotionCirclesView: BaseView {
         self.itemBehavior.angularResistance = 0
         self.animator.addBehavior(self.itemBehavior)
 
-        self.noiseField.strength = 0.01
+        self.noiseField.strength = 1
         self.animator.addBehavior(self.noiseField)
+
+        self.animator.delegate = self
+        self.animator.setValue(true, forKey: "debugEnabled")
     }
 
     override func layoutSubviews() {
@@ -56,27 +66,21 @@ class EmotionCirclesView: BaseView {
         self.setNeedsLayout()
     }
 
-    func prepareNoiseField() {
-        // Remove the existing circle views
-        self.circleViews.removeAllFromSuperview(andRemoveAll: true)
+    private func prepareNoiseField() {
+        self.resetAnimatorAndViews()
 
-        // Reset the physics behaviors
-        self.collisionBehavior.removeAllItems()
-        self.itemBehavior.removeAllItems()
-        self.noiseField.removeAllItems()
-
-        self.animator.behaviors.forEach { behavior in
-            guard behavior is UIPushBehavior else { return }
-            self.animator.removeBehavior(behavior)
-        }
-
+        // Don't attempt to add emotion views if there's no space for them.
+        guard self.size.width > 0, self.size.height > 0 else { return }
 
         // Create a circle view for each emotion and randomly distribute them within the boundaries.
         for (emotion, count) in self.emotionCounts {
             let emotionView = EmotionCircleView(emotion: emotion)
 
             let sizeMultiplier = sqrt(CGFloat(count))
-            emotionView.squaredSize = 100 * sizeMultiplier
+            emotionView.squaredSize = clamp(self.emotionViewDiameter * sizeMultiplier,
+                                            0,
+                                            min(self.width, self.height))
+
             emotionView.origin = CGPoint(x: CGFloat.random(in: 0...self.width - emotionView.width),
                                          y: CGFloat.random(in: 0...self.height - emotionView.height))
 
@@ -85,12 +89,42 @@ class EmotionCirclesView: BaseView {
             // Give the view a little push to get it moving.
             let pushBehavior = UIPushBehavior(items: [emotionView], mode: .instantaneous)
             pushBehavior.setAngle(CGFloat.random(in: 0...CGFloat.pi*2), magnitude: 0.1)
+            pushBehavior.action = { [unowned self, unowned pushBehavior] in
+                // Clean up the push after it's done
+                guard !pushBehavior.active else { return }
+                self.animator.removeBehavior(pushBehavior)
+            }
             self.animator.addBehavior(pushBehavior)
 
             self.collisionBehavior.addItem(emotionView)
             self.itemBehavior.addItem(emotionView)
             self.noiseField.addItem(emotionView)
         }
+    }
+
+    private func resetAnimatorAndViews() {
+        // Remove the existing emotion views
+        self.emotionViews.forEach { emotionView in
+            emotionView.removeFromSuperview()
+        }
+
+        // Reset the physics behaviors
+        self.collisionBehavior.removeAllItems()
+        self.itemBehavior.removeAllItems()
+        self.noiseField.removeAllItems()
+    }
+}
+
+extension EmotionCirclesView: UIDynamicAnimatorDelegate {
+
+
+    func dynamicAnimatorWillResume(_ animator: UIDynamicAnimator) {
+        logDebug("did resume "+animator.description)
+    }
+
+
+    func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
+        logDebug("did pause "+animator.description)
     }
 }
 
@@ -111,7 +145,7 @@ private class EmotionCircleView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.backgroundColor = self.emotion.color
+        self.backgroundColor = self.emotion.color.withAlphaComponent(0.6)
         self.clipsToBounds = true
     }
 
