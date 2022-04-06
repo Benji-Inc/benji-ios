@@ -34,6 +34,14 @@ final class Transaction: PFObject, PFSubclassing {
         set { self.setObject(for: .from, with: newValue)}
     }
     
+    var nonMeUser: User? {
+        if let to = to, !to.isCurrentUser {
+            return to
+        }
+        
+        return from
+    }
+    
     var achievement: Achievement? {
         get { self.getObject(for: .achievement) }
         set { self.setObject(for: .achievement, with: newValue)}
