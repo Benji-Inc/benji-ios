@@ -58,7 +58,7 @@ enum ReactionType: String, CaseIterable {
     }
 }
 
-enum EmotionCategory: Int {
+enum EmotionCategory: Int, CaseIterable {
     case uncertain
     case compare
     case unplanned

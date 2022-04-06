@@ -62,7 +62,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
         
         self.inputHandlerViewController.swipeableVC.swipeInputView.avatarView.didSelect { [unowned self] in
-            self.presentProfile(for: User.current()!)            
+            self.presentEmotions()
+            //self.presentProfile(for: User.current()!)
         }
         
         self.inputHandlerViewController.swipeableVC.swipeInputView.unreadView.didSelect { [unowned self] in
