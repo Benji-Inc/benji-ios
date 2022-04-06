@@ -12,16 +12,17 @@ import StreamChat
 
 class ExpressionView: BaseView {
         
-    let label = ThemeLabel(font: .small)
+    let imageView = UIImageView(image: UIImage(systemName: "face.smiling"))
+    let label = ThemeLabel(font: .contextCues)
         
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .B1withAlpha)
-        self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.BORDER.color.cgColor
-        self.layer.borderWidth = 0.5
-                
+        self.set(backgroundColor: .clear)
+        
+        self.addSubview(self.imageView)
+        self.imageView.tintColor = ThemeColor.white.color.withAlphaComponent(0.3)
+        self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.label)
         
         self.clipsToBounds = false
@@ -54,8 +55,11 @@ class ExpressionView: BaseView {
     func configure(for emoji: Emoji?) {
         if let e = emoji?.emoji {
             self.label.setText(e)
+            self.label.isVisible = true
+            self.imageView.isVisible = false
         } else {
-            self.label.setText("Express it...")
+            self.label.isVisible = false
+            self.imageView.isVisible = true
         }
         
         self.setNeedsLayout()
@@ -64,15 +68,10 @@ class ExpressionView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.label.setSize(withWidth: 200)
+        self.label.setSize(withWidth: self.width)
+        self.label.centerOnXAndY()
         
-        self.height = old_MessageDetailView.height
-        
-        self.width = self.label.width + Theme.ContentOffset.standard.value.doubled
-        self.label.pin(.left, offset: .standard)
-                
-        self.pin(.left)
-        
-        self.label.centerOnY()
+        self.imageView.squaredSize = self.width * 0.8
+        self.imageView.centerOnXAndY()
     }
 }

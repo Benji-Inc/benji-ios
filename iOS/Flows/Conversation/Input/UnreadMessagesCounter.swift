@@ -64,23 +64,21 @@ class UnreadMessagesCounter: BaseView {
                 self.animate(shouldShow: false)
                 return
             }
-            self.counter.setValue(Float(conversation.totalUnread))
+            self.update(count: conversation.totalUnread)
         }.store(in: &self.cancellables)
         
         ConversationsManager.shared.$messageEvent.mainSink { [unowned self] event in
             guard let messageEvent = event as? MessageNewEvent,
                   let conversation = ConversationsManager.shared.activeConversation,
                   messageEvent.cid == conversation.cid else { return }
-            
-            self.counter.setValue(Float(conversation.totalUnread))
+            self.update(count: conversation.totalUnread)
         }.store(in: &self.cancellables)
         
         ConversationsManager.shared.$reactionEvent.mainSink { [unowned self] event in
             guard let reactionEvent = event as? ReactionNewEvent,
                   let conversation = ConversationsManager.shared.activeConversation,
                   reactionEvent.cid == conversation.cid else { return }
-            
-            self.counter.setValue(Float(conversation.totalUnread))
+            self.update(count: conversation.totalUnread)
         }.store(in: &self.cancellables)
     }
     
@@ -106,17 +104,24 @@ class UnreadMessagesCounter: BaseView {
         self.countCircle.center = self.counter.center
     }
     
+    func update(count: Int) {
+        self.counter.setValue(Float(count))
+        if count == 0 {
+            self.animate(shouldShow: false, delay: Theme.animationDurationSlow)
+        }
+    }
+    
     func updateVisibility(for state: SwipeableInputAccessoryViewController.InputState) {
         switch state {
         case .collapsed:
-            self.animate(shouldShow: true)
+            self.animate(shouldShow: self.counter.currentValue != 0)
         case .expanded:
             self.animate(shouldShow: false)
         }
     }
     
-    private func animate(shouldShow: Bool) {
-        UIView.animate(withDuration: Theme.animationDurationFast, delay: 0.0) {
+    private func animate(shouldShow: Bool, delay: TimeInterval = 0.0) {
+        UIView.animate(withDuration: Theme.animationDurationFast, delay: delay) {
             self.alpha = shouldShow ? 1.0 : 0.0
         }
     }

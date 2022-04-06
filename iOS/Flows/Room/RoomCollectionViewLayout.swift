@@ -50,7 +50,7 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                 return section
             case .members:
                 let inset = Theme.ContentOffset.short.value
-                let fraction: CGFloat = 0.33
+                let fraction: CGFloat = 0.225
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)

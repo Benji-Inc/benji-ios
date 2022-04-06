@@ -30,8 +30,8 @@ class SwipeableInputAccessoryView: BaseView {
 
     /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
-    let expressionView = ExpressionView()
-
+    @IBOutlet var expressionView: ExpressionView!
+    
     // MARK: - Layout/Animation Properties
 
     static let inputContainerCollapsedHeight: CGFloat = 76
@@ -52,6 +52,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
     @IBOutlet var textViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet var textViewTrailingConstraint: NSLayoutConstraint!
     
     @IBOutlet var addViewHeightContstrain: NSLayoutConstraint!
     @IBOutlet var addViewWidthContstrain: NSLayoutConstraint!
@@ -71,10 +72,6 @@ class SwipeableInputAccessoryView: BaseView {
 
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
-
-        self.inputTypeContainer.addSubview(self.expressionView)
-        self.expressionView.alpha = 0
-        self.expressionView.configure(for: nil)
                 
         self.avatarView.set(person: User.current()!)
         
@@ -85,28 +82,27 @@ class SwipeableInputAccessoryView: BaseView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        self.expressionView.configure(for: nil)
         self.doneButton.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.unreadView.pin(.right, offset: .xtraLong)
+        self.unreadView.pin(.right, offset: .custom(26))
         self.unreadView.bottom = 0
         
         self.typingIndicatorView.width = self.width - 48
         self.typingIndicatorView.height = 16
         self.typingIndicatorView.bottom = 0
         self.typingIndicatorView.centerOnX()
-
-        self.expressionView.pin(.left)
     }
 
     // MARK: - State Updates
 
     func updateLayout(for inputState: InputState) {
         let newInputHeight: CGFloat
-        var textViewLeadingValue: CGFloat = Theme.ContentOffset.short.value
+        var textViewPadding: CGFloat = Theme.ContentOffset.short.value
         var newAddViewSize: CGFloat = 0
         
         switch inputState {
@@ -117,7 +113,7 @@ class SwipeableInputAccessoryView: BaseView {
                                          self.textViewCollapsedVerticalHeightContstraint])
             
             if !self.textView.text.isEmpty || self.textView.isFirstResponder {
-                textViewLeadingValue = self.addView.left + AddMediaView.collapsedHeight
+                textViewPadding = self.addView.left + AddMediaView.collapsedHeight
             }
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
@@ -166,7 +162,8 @@ class SwipeableInputAccessoryView: BaseView {
             self.addViewWidthContstrain.constant = newAddViewSize
             self.addViewHeightContstrain.constant = newAddViewSize
             self.inputContainerHeightConstraint.constant = newInputHeight
-            self.textViewLeadingConstraint.constant = textViewLeadingValue
+            self.textViewLeadingConstraint.constant = textViewPadding
+            self.textViewTrailingConstraint.constant = textViewPadding
             // Layout the window so that our container view also animates
             self.window?.layoutNow()
         }
