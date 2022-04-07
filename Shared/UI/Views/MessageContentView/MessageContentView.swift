@@ -52,9 +52,8 @@ class MessageContentView: BaseView {
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
-    //let emotionCirclesView = EmotionCirclesView()
-    let emotionCollectionView = UICollectionView(frame: .zero,
-                                                 collectionViewLayout: EmotionsCollectionViewLayout())
+    private let emotionLayout = EmotionCircleCollectionViewLayout()
+    private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
 
@@ -65,6 +64,9 @@ class MessageContentView: BaseView {
 
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
+
+        self.emotionLayout.dataSource = self.emotionDataSource
+        self.bubbleView.addSubview(self.emotionCollectionView)
 
         self.bubbleView.addSubview(self.mainContentArea)
 
@@ -88,8 +90,6 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
-
-        self.addSubview(self.emotionCollectionView)
     }
 
     override func layoutSubviews() {
@@ -206,7 +206,7 @@ class MessageContentView: BaseView {
         snapshot.setItems([EmotionCircleItem(emotion: .boundaries),
                            EmotionCircleItem(emotion: .sympathy),
                            EmotionCircleItem(emotion: .selfRighteous),
-                           EmotionCircleItem(emotion: .proud)],
+                           EmotionCircleItem(emotion: .pride)],
                           in: .emotions)
         self.emotionDataSource.apply(snapshot)
         

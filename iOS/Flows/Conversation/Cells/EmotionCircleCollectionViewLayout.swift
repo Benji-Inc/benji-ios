@@ -30,6 +30,12 @@ class EmotionCircleAttributes: UICollectionViewLayoutAttributes {
 
         return false
     }
+
+    // MARK: - UIDynamic Item
+
+    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
+        return .ellipse
+    }
 }
 
 class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
@@ -129,7 +135,8 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
 
     
     private func addEmotionAttributesToAnimator(for indexPath: IndexPath, withId id: String) {
-        guard let collectionView = self.collectionView else { return }
+        guard let collectionView = self.collectionView,
+              collectionView.width > 0, collectionView.height > 0 else { return }
 
         let attributes = EmotionCircleAttributes(forCellWith: indexPath)
         attributes.id = id

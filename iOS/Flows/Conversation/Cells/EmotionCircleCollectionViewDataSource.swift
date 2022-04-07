@@ -53,6 +53,15 @@ extension EmotionCircleCollectionViewDataSource {
     }
 }
 
+// MARK: - EmotionCircleCollectionViewDataSource
+
+extension EmotionCircleCollectionViewDataSource: EmotionCircleCollectionViewLayoutDataSource {
+
+    func getId(forItemAt indexPath: IndexPath) -> String {
+        return self.itemIdentifier(for: indexPath)?.emotion.rawValue ?? String()
+    }
+}
+
 class EmotionCircleCell: UICollectionViewCell {
 
     private let label = ThemeLabel(font: .regular, textColor: .white)
@@ -84,14 +93,8 @@ class EmotionCircleCell: UICollectionViewCell {
 
     func configure(with emotion: Emotion) {
         self.label.text = emotion.rawValue
-        self.backgroundColor = emotion.color.withAlphaComponent(0.6)
+        self.backgroundColor = emotion.color.withAlphaComponent(0.7)
 
         self.setNeedsLayout()
-    }
-
-    // MARK: - UIDynamicItem
-
-    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
-        return .ellipse
     }
 }
