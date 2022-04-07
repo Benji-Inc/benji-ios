@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class RoomHeaderView: BaseView {
     
@@ -17,6 +18,13 @@ class RoomHeaderView: BaseView {
     let focusCircle = BaseView()
     
     let roomNavButton = RoomNavigationButton()
+    var cancellables = Set<AnyCancellable>()
+    
+    deinit {
+        self.cancellables.forEach { (cancellable) in
+            cancellable.cancel()
+        }
+    }
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -31,16 +39,26 @@ class RoomHeaderView: BaseView {
         }
         
         self.addSubview(self.focusCircle)
-        if let status = User.current()?.focusStatus {
-            self.focusCircle.set(backgroundColor: status.color)
-        } else {
-            self.focusCircle.set(backgroundColor: FocusStatus.focused.color)
-        }
+        self.update(status: User.current()?.focusStatus)
         
         self.addSubview(self.button)
         
         self.addSubview(self.roomNavButton)
         self.roomNavButton.configure(for: .outer)
+        
+        PeopleStore.shared.$personUpdated.mainSink { person in
+            if let person = person, person.isCurrentUser {
+                self.update(status: person.focusStatus)
+            }
+        }.store(in: &self.cancellables)
+    }
+    
+    private func update(status: FocusStatus?) {
+        if let status = status {
+            self.focusCircle.set(backgroundColor: status.color)
+        } else {
+            self.focusCircle.set(backgroundColor: FocusStatus.focused.color)
+        }
     }
     
     override func layoutSubviews() {

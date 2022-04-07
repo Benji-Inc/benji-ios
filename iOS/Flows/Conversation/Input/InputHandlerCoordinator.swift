@@ -62,8 +62,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
         
         self.inputHandlerViewController.swipeableVC.swipeInputView.avatarView.didSelect { [unowned self] in
-            self.presentEmotions()
-            //self.presentProfile(for: User.current()!)
+            self.presentProfile(for: User.current()!)
         }
         
         self.inputHandlerViewController.swipeableVC.swipeInputView.unreadView.didSelect { [unowned self] in
@@ -89,9 +88,10 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         self.present(coordinator) { [unowned self] result in
             result.forEach { emotion in
                 logDebug(emotion.rawValue)
-                //AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
+                AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
             }
-            //self.inputHandlerViewController.swipeableVC.currentExpression = result
+            
+            #warning("Do something with the selected emotions.")
         }
     }
     
