@@ -43,8 +43,9 @@ class EmotionCircleCollectionViewDataSource: CollectionViewDataSource<EmotionCir
 
 extension EmotionCircleCollectionViewDataSource {
 
-    typealias EmotionCellRegistration = UICollectionView.CellRegistration<EmotionCircleCell,
-                                                                            EmotionCircleItem>
+    typealias EmotionCellRegistration
+    = UICollectionView.CellRegistration<EmotionCircleCell, EmotionCircleItem>
+    
     static func createEmotionCellRegistration() -> EmotionCellRegistration {
         return EmotionCellRegistration { cell, indexPath, item in
             cell.configure(with: item.emotion)

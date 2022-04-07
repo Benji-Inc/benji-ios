@@ -52,7 +52,11 @@ class MessageContentView: BaseView {
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
-    let emotionCirclesView = EmotionCirclesView()
+    //let emotionCirclesView = EmotionCirclesView()
+    let emotionCollectionView = UICollectionView(frame: .zero,
+                                                 collectionViewLayout: EmotionsCollectionViewLayout())
+    private lazy var emotionDataSource
+    = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
 
     var layoutState: Layout = .expanded
 
@@ -85,7 +89,7 @@ class MessageContentView: BaseView {
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
 
-        self.addSubview(self.emotionCirclesView)
+        self.addSubview(self.emotionCollectionView)
     }
 
     override func layoutSubviews() {
@@ -145,7 +149,7 @@ class MessageContentView: BaseView {
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
 
-        self.emotionCirclesView.expandToSuperviewSize()
+        self.emotionCollectionView.expandToSuperviewSize()
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -198,8 +202,14 @@ class MessageContentView: BaseView {
 
         self.authorView.set(person: message.person)
 
-        self.emotionCirclesView.configure(with: [.boundaries, .admired, .admired,
-                                                 .avoidance, .belonging, .belonging])
+        var snapshot = self.emotionDataSource.snapshot()
+        snapshot.setItems([EmotionCircleItem(emotion: .boundaries),
+                           EmotionCircleItem(emotion: .sympathy),
+                           EmotionCircleItem(emotion: .selfRighteous),
+                           EmotionCircleItem(emotion: .proud)],
+                          in: .emotions)
+        self.emotionDataSource.apply(snapshot)
+        
         self.setNeedsLayout()
     }
 
