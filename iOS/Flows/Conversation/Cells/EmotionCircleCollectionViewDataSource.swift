@@ -53,48 +53,11 @@ extension EmotionCircleCollectionViewDataSource {
     }
 }
 
-// MARK: - EmotionCircleCollectionViewDataSource
+// MARK: - EmotionCircleCollectionViewLayoutDataSource
 
 extension EmotionCircleCollectionViewDataSource: EmotionCircleCollectionViewLayoutDataSource {
 
     func getId(forItemAt indexPath: IndexPath) -> String {
         return self.itemIdentifier(for: indexPath)?.emotion.rawValue ?? String()
-    }
-}
-
-class EmotionCircleCell: UICollectionViewCell {
-
-    private let label = ThemeLabel(font: .regular, textColor: .white)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initializeViews()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.initializeViews()
-    }
-
-    private func initializeViews() {
-        self.clipsToBounds = true
-
-        self.addSubview(self.label)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.layer.cornerRadius = self.halfWidth
-
-        self.label.setSize(withWidth: self.width)
-        self.label.centerOnXAndY()
-    }
-
-    func configure(with emotion: Emotion) {
-        self.label.text = emotion.rawValue
-        self.backgroundColor = emotion.color.withAlphaComponent(0.7)
-
-        self.setNeedsLayout()
     }
 }
