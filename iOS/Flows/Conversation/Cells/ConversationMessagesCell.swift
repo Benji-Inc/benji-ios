@@ -197,7 +197,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             }.store(in: &self.subscriptions)
     }
 
-    func scrollToMessage(with messageId: MessageId, animateSelection: Bool) async {
+    func scrollToMessage(with messageId: MessageId, animateScroll: Bool, animateSelection: Bool) async {
         let task = Task {
             guard let conversationController = self.conversationController,
                   let cid = conversationController.cid else { return }
@@ -212,7 +212,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
             guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
 
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: animateScroll)
 
             await Task.sleep(seconds: Theme.animationDurationStandard)
             

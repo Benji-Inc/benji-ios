@@ -39,6 +39,7 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
     var cancellables = Set<AnyCancellable>()
     var taskPool = TaskPool()
+    var selectionImpact = UIImpactFeedbackGenerator()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,9 +69,24 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
         // Customize the background color to be clear, no matter the state.
         backgroundConfig.backgroundColor = ThemeColor.clear.color
-
+        
         // Apply the background configuration to the cell.
         self.backgroundConfiguration = backgroundConfig
+        
+        if state.isHighlighted {
+            self.getHighlighetedViews().forEach { view in
+                view.alpha = 0.6
+            }
+            self.selectionImpact.impactOccurred(intensity: 1.0)
+        } else {
+            self.getHighlighetedViews().forEach { view in
+                view.alpha = 1.0
+            }
+        }
+    }
+    
+    func getHighlighetedViews() -> [UIView] {
+        return [self.contentView]
     }
     
     override func prepareForReuse() {

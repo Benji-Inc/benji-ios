@@ -74,7 +74,10 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
             let messageID = deeplink.messageId
             guard let cid = deeplink.conversationId else { break }
             Task {
-                await self.listVC.scrollToConversation(with: cid, messageId: messageID)
+                await self.listVC.scrollToConversation(with: cid,
+                                                       messageId: messageID,
+                                                       animateScroll: false,
+                                                       animateSelection: true)
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()
@@ -87,7 +90,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageId: nil)
+                await self.listVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
             }
         }
     }
