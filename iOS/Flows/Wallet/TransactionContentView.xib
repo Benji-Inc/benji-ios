@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,6 +12,7 @@
             <connections>
                 <outlet property="amountLabel" destination="yhg-ce-86G" id="9J5-UA-QAy"/>
                 <outlet property="avatarView" destination="Xh2-x1-yrf" id="d5c-de-Ahn"/>
+                <outlet property="badgeView" destination="FQr-Rm-o46" id="5PW-A1-Eer"/>
                 <outlet property="content" destination="iN0-l3-epB" id="lze-JS-lNw"/>
                 <outlet property="lineView" destination="mzj-Ny-lxD" id="cWK-2c-B9D"/>
                 <outlet property="noteLabel" destination="DKC-5W-2sT" id="EKL-da-XRA"/>
@@ -23,14 +25,22 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xh2-x1-yrf" customClass="BorderedPersonView" customModule="Jibber" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="16" width="32" height="32"/>
+                    <rect key="frame" x="0.0" y="16" width="36" height="36"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="32" id="EA2-65-iO8"/>
-                        <constraint firstAttribute="width" constant="32" id="QPs-2I-GEv"/>
+                        <constraint firstAttribute="height" constant="36" id="EA2-65-iO8"/>
+                        <constraint firstAttribute="width" constant="36" id="QPs-2I-GEv"/>
                     </constraints>
                 </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FQr-Rm-o46" customClass="MiniBadgeView" customModule="Jibber" customModuleProvider="target">
+                    <rect key="frame" x="829" y="16" width="32" height="40"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="b5b-zy-92R"/>
+                        <constraint firstAttribute="width" constant="32" id="bgB-gK-O4T"/>
+                    </constraints>
+                </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mRx-w7-sSG" customClass="ThemeLabel" customModule="Jibber" customModuleProvider="target">
-                    <rect key="frame" x="44" y="16" width="42" height="20"/>
+                    <rect key="frame" x="48" y="16" width="42" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="lessThanOrEqual" constant="20" id="8X5-gr-vou"/>
                     </constraints>
@@ -56,7 +66,7 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DKC-5W-2sT" customClass="ThemeLabel" customModule="Jibber" customModuleProvider="target">
-                    <rect key="frame" x="44" y="40" width="767" height="20.5"/>
+                    <rect key="frame" x="48" y="40" width="763" height="20.5"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20.5" id="Zum-jN-dwX"/>
                     </constraints>
@@ -73,8 +83,10 @@
                 <constraint firstAttribute="trailing" secondItem="mzj-Ny-lxD" secondAttribute="trailing" id="49Q-rD-wqK"/>
                 <constraint firstItem="mzj-Ny-lxD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="5Wy-cr-H8U"/>
                 <constraint firstItem="Xh2-x1-yrf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="6PE-Vk-iVx"/>
+                <constraint firstAttribute="trailing" secondItem="FQr-Rm-o46" secondAttribute="trailing" id="HeG-Bn-Hjp"/>
                 <constraint firstAttribute="bottom" secondItem="mzj-Ny-lxD" secondAttribute="bottom" id="KTz-2L-XNY"/>
                 <constraint firstItem="Xh2-x1-yrf" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="Psd-VW-d3j"/>
+                <constraint firstItem="FQr-Rm-o46" firstAttribute="top" secondItem="yhg-ce-86G" secondAttribute="top" id="TeJ-6B-S3i"/>
                 <constraint firstItem="yhg-ce-86G" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="fqE-B3-NkP"/>
                 <constraint firstItem="mRx-w7-sSG" firstAttribute="leading" secondItem="Xh2-x1-yrf" secondAttribute="trailing" constant="12" id="gKE-PO-Ib7"/>
                 <constraint firstItem="DKC-5W-2sT" firstAttribute="top" secondItem="mRx-w7-sSG" secondAttribute="bottom" constant="4" id="jlh-Sh-jaF"/>

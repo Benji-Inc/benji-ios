@@ -718,6 +718,7 @@
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D5F25B5D8610034C9C5 /* AvatarProfileViewController.swift */; };
 		D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
+		D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
 		D6F7DEF826FBDD8600F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
@@ -1240,6 +1241,7 @@
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
 		D6F37D5F25B5D8610034C9C5 /* AvatarProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarProfileViewController.swift; sourceTree = "<group>"; };
 		D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrancyView.swift; sourceTree = "<group>"; };
+		D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniBadgeView.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOnboardingViewController.swift; sourceTree = "<group>"; };
 		D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
@@ -1500,6 +1502,7 @@
 				D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */,
 				D666126A27E2871E006CDF3D /* BadgeView.swift */,
 				D6739A6127BC45500047BBCA /* Header Views */,
+				D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */,
 				D6129FAD27ADC6410058811C /* TransactionCell.swift */,
 				D628B00827B47EEF00949154 /* TransactionContentView.xib */,
 				D6129FAF27ADC6530058811C /* WalletCollectionView.swift */,
@@ -3027,6 +3030,7 @@
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationListCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
+				D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D61A33CD27D4F27000056242 /* EmojiCollectionViewDataSource.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,

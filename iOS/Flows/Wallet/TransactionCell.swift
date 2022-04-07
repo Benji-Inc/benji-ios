@@ -56,6 +56,7 @@ class TransactionContentView: BaseView, UIContentView {
     @IBOutlet weak var noteLabel: ThemeLabel?
     @IBOutlet weak var amountLabel: ThemeLabel?
     @IBOutlet weak var lineView: BaseView?
+    @IBOutlet weak var badgeView: MiniBadgeView?
     
     init(configuration: TransactionContentConfiguration) {
         super.init()
@@ -109,10 +110,20 @@ class TransactionContentView: BaseView, UIContentView {
     private func updateLayout(with item: Transaction) {
         Task {
             guard let transaction = try? await item.retrieveDataIfNeeded() else { return }
-            if let from = try? await transaction.from?.retrieveDataIfNeeded() {
+            if let from = try? await transaction.nonMeUser?.retrieveDataIfNeeded() {
                 self.avatarView?.set(person: from)
                 self.titleLabel?.setText(from.fullName)
                 self.setNeedsUpdateConstraints()
+            }
+            
+            if let achievement = try? await transaction.achievement?.retrieveDataIfNeeded(),
+                let type = achievement.type {
+                self.badgeView?.configure(with: type)
+                self.badgeView?.isVisible = true
+                self.amountLabel?.isVisible = false
+            } else {
+                self.badgeView?.isVisible = false
+                self.amountLabel?.isVisible = true 
             }
             
             self.setAmount(with: transaction.amount)

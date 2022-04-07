@@ -26,6 +26,9 @@ extension MainCoordinator {
             let coordinator = RoomCoordinator(router: self.router, deepLink: self.deepLink)
             self.addChildAndStart(coordinator, finishedHandler: { (_) in})
             self.router.setRootModule(coordinator)
+            if let deepLink = deepLink {
+                coordinator.handle(deeplink: deepLink)
+            }
         }
     }
 
