@@ -55,9 +55,9 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                 self.presentProfile(for: author)
             case .info(_):
                 break
-            case .reply(_):
-                guard let first = self.message.mostRecentMessage else { return }
-                self.finishFlow(with: .reply(first.id))
+            case .reply(let model):
+                guard let reply = model.reply else { return }
+                self.finishFlow(with: .reply(reply.id))
             case .more(_):
                 break
             }

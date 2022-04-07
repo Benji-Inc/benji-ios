@@ -46,7 +46,7 @@ class RoomHeaderView: BaseView {
         self.addSubview(self.roomNavButton)
         self.roomNavButton.configure(for: .outer)
         
-        PeopleStore.shared.$personUpdated.mainSink { person in
+        PeopleStore.shared.$personUpdated.mainSink { [unowned self] person in
             if let person = person, person.isCurrentUser {
                 self.update(status: person.focusStatus)
             }

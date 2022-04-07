@@ -18,6 +18,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     let message: Messageable
+    var messageController: MessageController?
     
     var messageContent: MessageContentView {
         return self.messageContentView
@@ -89,19 +90,26 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         self.collectionView.height = self.view.height - self.messageContent.bottom - Theme.ContentOffset.xtraLong.value
     }
     
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        self.subscribeToUpdates()
+    }
+    
     override func getAllSections() -> [MessageDetailDataSource.SectionType] {
         return MessageDetailDataSource.SectionType.allCases
     }
 
     override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
         var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
+    
+        guard let controller = ChatClient.shared.messageController(for: self.message),
+                let msg = controller.message else { return data }
         
-        
-        guard let msg = ChatClient.shared.messageController(for: self.message)?.message else { return data }
-        
+        self.messageController = controller
+                
         data[.options] = [.option(.viewReplies), .option(.pin), .option(.edit), .more(MoreOptionModel(message: msg, option: .more))].reversed()
 
-        
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
             return !reaction.author.isCurrentUser
         }).compactMap({ read in
@@ -114,11 +122,65 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             data[.reads] = reads
         }
         
-        data[.recentReply] = [.reply(msg)]
+        try? await controller.loadPreviousReplies()        
+        data[.recentReply] = [.reply(RecentReplyModel(reply: controller.replies.first))]
         
         data[.metadata] = [.info(msg)]
         
         return data
+    }
+    
+    private func subscribeToUpdates() {
+        
+        self.messageController?
+            .messageChangePublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                self.reloadData()
+            }).store(in: &self.cancellables)
+        
+        self.messageController?
+            .repliesChangesPublisher
+            .mainSink { [unowned self] _ in
+                self.reloadData()
+            }.store(in: &self.cancellables)
+    }
+    
+    /// The currently running task that is loading.
+    private var loadTask: Task<Void, Never>?
+    private func reloadData() {
+        self.loadTask?.cancel()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            guard let controller = self.messageController, let msg = controller.message else { return }
+                        
+            var snapshot = self.dataSource.snapshot()
+                    
+            let optionItems: [MessageDetailDataSource.ItemType] = [.option(.viewReplies), .option(.pin), .option(.edit), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            
+            snapshot.setItems(optionItems, in: .options)
+
+            let reads: [MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
+                return !reaction.author.isCurrentUser
+            }).compactMap({ read in
+                return .read(ReadViewModel(readReaction: read))
+            })
+            
+            if reads.isEmpty {
+                snapshot.setItems([.read(ReadViewModel(readReaction: nil))], in: .reads)
+            } else {
+                snapshot.setItems(reads, in: .reads)
+            }
+            
+            try? await controller.loadPreviousReplies()
+            
+            snapshot.setItems([.reply(RecentReplyModel(reply: controller.replies.first))], in: .recentReply)
+            snapshot.setItems([.info(msg)], in: .metadata)
+            
+            await self.dataSource.apply(snapshot)
+            
+        }
     }
 }
 
