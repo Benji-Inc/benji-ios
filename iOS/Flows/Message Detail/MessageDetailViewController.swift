@@ -34,6 +34,8 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     
     private let messageContentView = MessageContentView()
     
+    let pullView = PullView()
+    
     init(message: Messageable) {
         self.message = message
         
@@ -51,11 +53,14 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.dismissInteractionController.handlePan(for: self.messageContentView)
         self.dismissInteractionController.handleCollectionViewPan(for: self.collectionView)
+        self.dismissInteractionController.handlePan(for: self.pullView)
         
         self.view.addSubview(self.blurView)
         
         self.view.addSubview(self.messageContentView)
         self.messageContentView.configure(with: self.message)
+        
+        self.view.addSubview(self.pullView)
     
         self.view.addSubview(self.bottomGradientView)
         
@@ -74,6 +79,9 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.messageContentView.centerOnX()
         self.messageContentView.bottom = self.view.height * 0.5
+        
+        self.pullView.match(.bottom, to: .top, of: self.messageContent)
+        self.pullView.centerOnX()
         
         super.viewDidLayoutSubviews()
         
@@ -209,6 +217,7 @@ extension MessageDetailViewController: TransitionableViewController {
     func handleInitialDismissal() {}
     
     func handleDismissal() {
+        self.pullView.match(.bottom, to: .top, of: self.messageContent)
         self.collectionView.top = self.view.height
         self.topGradientView.match(.top, to: .top, of: self.collectionView)
     }

@@ -63,6 +63,10 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
             }
         }.store(in: &self.cancellables)
         
+        self.messageVC.blurView.didSelect { [unowned self] in
+            self.finishFlow(with: .none)
+        }
+        
         self.messageVC.dataSource.didTapDelete = { [unowned self] in
             self.handleDelete()
         }
