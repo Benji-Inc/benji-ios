@@ -187,7 +187,6 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             snapshot.setItems([.info(msg)], in: .metadata)
             
             await self.dataSource.apply(snapshot)
-            
         }
     }
 }
