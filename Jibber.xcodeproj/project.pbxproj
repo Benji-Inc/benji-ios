@@ -60,7 +60,6 @@
 		80632D9427853D2600D3A65B /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
 		80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80665BA527B2F2F3002A8F69 /* MockMessage.swift */; };
 		806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */; };
-		806CA1C327FDFAB8003E12F4 /* EmotionCirclesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806CA1C227FDFAB8003E12F4 /* EmotionCirclesView.swift */; };
 		806DA16A27307FA400843C4E /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806DA16927307FA400843C4E /* MessageCell.swift */; };
 		806EDAA627BEF1A400ADD677 /* alertCircle.json in Resources */ = {isa = PBXBuildFile; fileRef = 806EDAA527BEF1A400ADD677 /* alertCircle.json */; };
 		806EDAA727BEF1A400ADD677 /* alertCircle.json in Resources */ = {isa = PBXBuildFile; fileRef = 806EDAA527BEF1A400ADD677 /* alertCircle.json */; };
@@ -843,7 +842,6 @@
 		80632D92278534E600D3A65B /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		80665BA527B2F2F3002A8F69 /* MockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMessage.swift; sourceTree = "<group>"; };
 		806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeMachineCollectionViewLayout.swift; sourceTree = "<group>"; };
-		806CA1C227FDFAB8003E12F4 /* EmotionCirclesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCirclesView.swift; sourceTree = "<group>"; };
 		806DA16927307FA400843C4E /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		806EDAA527BEF1A400ADD677 /* alertCircle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = alertCircle.json; sourceTree = "<group>"; };
 		8072253427AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarIgnoringHostingController.swift; sourceTree = "<group>"; };
@@ -1744,7 +1742,6 @@
 				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
 				80BF244727FE314100E2471E /* EmotionCircleCollectionViewDataSource.swift */,
 				80BF244527FE271500E2471E /* EmotionCircleCollectionViewLayout.swift */,
-				806CA1C227FDFAB8003E12F4 /* EmotionCirclesView.swift */,
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
@@ -3253,7 +3250,6 @@
 				D6CC148B276BFDC1005F617F /* Color+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ThreadViewController.swift in Sources */,
-				806CA1C327FDFAB8003E12F4 /* EmotionCirclesView.swift in Sources */,
 				D65D460027A9B09D0019301C /* old_MessageReadView.swift in Sources */,
 				D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */,
 				D60CA47427ED1C1800F0871A /* OptionCell.swift in Sources */,
