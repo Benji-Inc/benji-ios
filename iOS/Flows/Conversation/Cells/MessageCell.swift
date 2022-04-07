@@ -107,11 +107,11 @@ class MessageCell: UICollectionViewCell {
             return
         }
         
-        self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
-                                         textColor: messageLayoutAttributes.textColor,
+        self.content.configureBackground(color: ThemeColor.B6.color,
+                                         textColor: ThemeColor.T3.color,
                                          brightness: messageLayoutAttributes.brightness,
-                                         showBubbleTail: messageLayoutAttributes.shouldShowTail,
-                                         tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
+                                         showBubbleTail: false,
+                                         tailOrientation: .down)
 
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
