@@ -64,14 +64,14 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         case option(OptionType)
         case read(ReadViewModel)
         case info(Message)
-        case reply(Message)
+        case reply(RecentReplyModel)
     }
     
     private let topOptionConfig = ManageableCellRegistration<MessageTopOptionCell>().provider
     private let readConfig = ManageableCellRegistration<MessageReadCell>().provider
     private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
-    private let replyConfig = ManageableCellRegistration<RecentReplyView>().provider
+    private let replyConfig = ManageableCellRegistration<RecentReplyCell>().provider
     private let metadatConfig = ManageableCellRegistration<MessageMetadataCell>().provider
     private let moreConfige = ManageableCellRegistration<MessageMoreCell>().provider
     
@@ -101,10 +101,10 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                                                                     for: indexPath,
                                                                     item: message)
             return cell
-        case .reply(let message):
+        case .reply(let model):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.replyConfig,
                                                                     for: indexPath,
-                                                                    item: message)
+                                                                    item: model)
             return cell
         case .more(let model):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.moreConfige,
