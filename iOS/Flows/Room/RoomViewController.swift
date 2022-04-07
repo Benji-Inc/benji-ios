@@ -210,7 +210,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                 
                 let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(conversationIds: conversationIds)
                 let query = ChannelListQuery(filter: filter,
-                                             sort: [Sorting(key: .updatedAt, isAscending: true)])
+                                             sort: [Sorting(key: .lastMessageAt, isAscending: false)])
                 
                 await self.loadUnreadConversations(with: query, models: models)
             } else {
@@ -232,7 +232,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             
             let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
-                                         sort: [Sorting(key: .updatedAt, isAscending: true)],
+                                         sort: [Sorting(key: .lastMessageAt, isAscending: false)],
                                          pageSize: 5,
                                          messagesLimit: 1)
             
@@ -251,7 +251,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             
             let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
-                                         sort: [Sorting(key: .createdAt, isAscending: true)],
+                                         sort: [Sorting(key: .createdAt, isAscending: false)],
                                          pageSize: .channelsPageSize,
                                          messagesLimit: 1)
             
