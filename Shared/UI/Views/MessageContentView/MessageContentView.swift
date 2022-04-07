@@ -52,6 +52,12 @@ class MessageContentView: BaseView {
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
+    private let emotionLayout = EmotionCircleCollectionViewLayout()
+    private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
+    private lazy var emotionDataSource
+    = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
+
     var layoutState: Layout = .expanded
 
     override func initializeSubviews() {
@@ -59,6 +65,11 @@ class MessageContentView: BaseView {
 
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
+
+        self.emotionLayout.dataSource = self.emotionDataSource
+        self.bubbleView.addSubview(self.emotionCollectionView)
+
+        self.bubbleView.addSubview(self.blurView)
 
         self.bubbleView.addSubview(self.mainContentArea)
 
@@ -88,6 +99,11 @@ class MessageContentView: BaseView {
         super.layoutSubviews()
 
         self.bubbleView.expandToSuperviewSize()
+
+        #warning("Restore once we get the emotion configuration working.")
+//        self.emotionCollectionView.expandToSuperviewSize()
+//
+//        self.blurView.expandToSuperviewSize()
 
         self.mainContentArea.pin(.left, offset: MessageContentView.padding)
         self.mainContentArea.pin(.top, offset: MessageContentView.padding)
@@ -191,7 +207,7 @@ class MessageContentView: BaseView {
         }
 
         self.authorView.set(person: message.person)
-
+        
         self.setNeedsLayout()
     }
 
