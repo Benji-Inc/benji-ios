@@ -33,7 +33,7 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
             let launchStatus = await LaunchManager.shared.launchApp(with: self?.deepLink)
 
             guard !Task.isCancelled else { return }
-
+            
             self?.handle(launchStatus: launchStatus)
         }
     }

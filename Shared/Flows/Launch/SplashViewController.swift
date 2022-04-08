@@ -16,55 +16,53 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     var receivingPresentationType: TransitionType {
         return .fade
     }
+    
+    /// A view to blur out the emotions collection view.
+    let blurView = BlurView()
+    private lazy var emotionLayout = EmotionCircleCollectionViewLayout(cellDiameter: 80)
+    private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
+    private lazy var emotionDataSource
+    = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
 
     let loadingView = AnimationView.with(animation: .loading)
-    let label = ThemeLabel(font: .small)
-    let versionLabel = ThemeLabel(font: .small)
-
-    private let allMessages = ["Booting up", "Getting coffee", "Squishing bugs", "Saving trees",
-                               "Finding purpose", "Doing math", "Painting pixels", "Kerning type",
-                               "Doing dark mode", "Earning Jibs", "Raising money"]
     
-    private var messages: [String] = []
-
-    var text: Localized? {
-        didSet {
-            guard let text = self.text else { return }
-            self.label.setText(text)
-            self.view.layoutNow()
-        }
-    }
+    private let emotionNameLabel = ThemeLabel(font: .smallBold)
+    private let label = ThemeLabel(font: .small)
+    private var emotions: Set<Emotion> = []
     
     override func initializeViews() {
         super.initializeViews()
         
-        self.messages = self.allMessages
+        self.emotionLayout.dataSource = self.emotionDataSource
+        
+        self.view.addSubview(self.emotionCollectionView)
+        self.view.addSubview(self.blurView)
+        
+        self.view.addSubview(self.emotionNameLabel)
+        self.view.addSubview(self.label)
 
-        self.contentContainer.addSubview(self.label)
-        self.contentContainer.addSubview(self.loadingView)
+        self.view.addSubview(self.loadingView)
         self.loadingView.contentMode = .scaleAspectFit
         self.loadingView.loopMode = .loop
-
-        self.contentContainer.addSubview(self.versionLabel)
-        let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
-        self.versionLabel.setText(version)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.emotionCollectionView.expandToSuperviewSize()
+        self.blurView.expandToSuperviewSize()
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.label.pinToSafeAreaLeft()
+        self.label.pinToSafeArea(.bottom, offset: .noOffset)
+        
+        self.emotionNameLabel.setSize(withWidth: self.view.width)
+        self.emotionNameLabel.pinToSafeAreaLeft()
+        self.emotionNameLabel.match(.bottom, to: .top, of: self.label, offset: .negative(.short))
 
         self.loadingView.size = CGSize(width: 18, height: 18)
         self.loadingView.pinToSafeAreaRight()
-        self.loadingView.pinToSafeAreaBottom()
-
-        let max = self.view.width - (Theme.contentOffset * 3) - self.loadingView.width
-        self.label.setSize(withWidth: max)
-        self.label.match(.right, to: .left, of: self.loadingView, offset: .negative(.standard))
-        self.label.centerY  = self.loadingView.centerY
-
-        self.versionLabel.setSize(withWidth: self.view.width)
-        self.versionLabel.pinToSafeAreaLeft()
-        self.versionLabel.match(.bottom, to: .bottom, of: self.label)
+        self.loadingView.pinToSafeArea(.bottom, offset: .noOffset)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -76,33 +74,52 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     func startLoadAnimation() {
         self.loadingView.play()
 
-        Task {
-            await self.animateText()
+        Task { [weak self] in
+            guard let `self` = self else { return }
+            await Task.sleep(seconds: 0.25)
+            
+            guard !Task.isCancelled else { return }
+            
+            await self.animateEmotions()
         }.add(to: self.autocancelTaskPool)
     }
 
-    private func animateText() async {
+    private func animateEmotions() async {
         guard !Task.isCancelled else { return }
+        
+        guard let emotion = Emotion.allCases.randomElement() else { return }
 
         await UIView.awaitAnimation(with: .fast, animations: {
             self.label.alpha = 0
+            self.emotionNameLabel.alpha = 0
         })
-
-        if let message = self.messages.randomElement() {
-            self.text = message
-            self.messages.remove(object: message)
-        } else {
-            self.messages = self.allMessages
-            let message = self.messages.randomElement()
-            self.text = message
-            self.messages.remove(object: message!)
+        
+        self.label.setText(emotion.definition)
+        self.label.textColor = emotion.color
+        
+        self.emotionNameLabel.setText(emotion.rawValue.capitalized)
+        self.emotionNameLabel.textColor = emotion.color
+    
+        self.view.setNeedsLayout()
+        
+        await UIView.awaitAnimation(with: .fast, delay: 0.1, animations: {
+            self.emotionNameLabel.alpha = 0.8
+            self.label.alpha = 0.6
+        })
+        
+        self.emotions.insert(emotion)
+        
+        let items = self.emotions.compactMap { emotion in
+            return EmotionCircleItem(emotion: emotion)
         }
+        
+        var snapshot = self.emotionDataSource.snapshot()
+        snapshot.setItems(items, in: .emotions)
+        await self.emotionDataSource.apply(snapshot)
+        
+        await Task.sleep(seconds: 5)
 
-        await UIView.awaitAnimation(with: .fast, animations: {
-            self.label.alpha = 1
-        })
-
-        await self.animateText()
+        await self.animateEmotions()
     }
 
     func stopLoadAnimation() {
