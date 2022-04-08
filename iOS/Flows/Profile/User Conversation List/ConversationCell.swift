@@ -127,7 +127,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     
     @MainActor
     private func update(for message: Message) {
-        self.messageContent.configure(with: message, shouldLoadEmotions: true)
+        self.messageContent.configure(with: message)
         self.leftLabel.setText(message.createdAt.getDaysAgoString())
         
         let title = self.conversationController?.conversation.title ?? "Untitled"

@@ -59,7 +59,10 @@ class MessageContentView: BaseView {
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
     
+    
+    let emotionLabel = ThemeLabel(font: .regular)
     let addEmotionButton = ThemeButton()
+    let addEmotionImageView = UIImageView(image: UIImage(systemName: "plus"))
 
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
@@ -89,8 +92,16 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.emotionCollectionView)
 
         self.bubbleView.addSubview(self.blurView)
+        self.bubbleView.addSubview(self.emotionLabel)
+        self.emotionLabel.setText("Empty")
+        self.emotionLabel.alpha = 0 
+        
+        self.addEmotionImageView.contentMode = .scaleAspectFit
+        self.addEmotionImageView.tintColor = ThemeColor.T3.color
+        self.bubbleView.addSubview(self.addEmotionImageView)
+        self.addEmotionImageView.alpha = 0
         self.bubbleView.addSubview(self.addEmotionButton)
-        self.addEmotionButton.set(style: .normal(color: .clear, text: "Add"))
+        self.addEmotionButton.set(style: .normal(color: .clear, text: ""))
         self.addEmotionButton.alpha = 0 
 
         self.bubbleView.addSubview(self.mainContentArea)
@@ -127,8 +138,15 @@ class MessageContentView: BaseView {
 
         self.emotionCollectionView.expandToSuperviewSize()
         
+        self.emotionLabel.setSize(withWidth: self.width)
+        self.emotionLabel.centerOnXAndY()
+        
+        self.addEmotionImageView.squaredSize = 20
+        self.addEmotionImageView.pin(.right, offset: .long)
+        self.addEmotionImageView.pin(.bottom, offset: .long)
+        
         self.addEmotionButton.squaredSize = 50
-        self.addEmotionButton.centerOnXAndY()
+        self.addEmotionButton.center = self.addEmotionImageView.center
 
         self.blurView.expandToSuperviewSize()
 
@@ -192,7 +210,7 @@ class MessageContentView: BaseView {
 
     private var linkProvider: LPMetadataProvider?
 
-    func configure(with message: Messageable, shouldLoadEmotions: Bool = true ) {
+    func configure(with message: Messageable) {
         self.message = message
 
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
@@ -240,14 +258,12 @@ class MessageContentView: BaseView {
 
         self.authorView.set(person: message.person)
 
-        if shouldLoadEmotions {
-            let emotionsItems = message.emotions.map { emotion in
-                EmotionCircleItem(emotion: emotion)
-            }
-            var snapshot = self.emotionDataSource.snapshot()
-            snapshot.setItems(emotionsItems, in: .emotions)
-            self.emotionDataSource.apply(snapshot)
+        let emotionsItems = message.emotions.map { emotion in
+            EmotionCircleItem(emotion: emotion)
         }
+        var snapshot = self.emotionDataSource.snapshot()
+        snapshot.setItems(emotionsItems, in: .emotions)
+        self.emotionDataSource.apply(snapshot)
 
         self.setNeedsLayout()
     }
@@ -273,10 +289,17 @@ class MessageContentView: BaseView {
             self.mainContentArea.alpha = areShown ? 0 : 1
             self.blurView.effect = areShown ? nil : Theme.blurEffect
             
-            if areShown, self.emotionDataSource.snapshot().numberOfItems == 0 {
+            if areShown {
+                if self.emotionDataSource.snapshot().numberOfItems == 0 {
+                    self.emotionLabel.alpha = 0.2
+                }
+                
+                self.addEmotionImageView.alpha = 1.0
                 self.addEmotionButton.alpha = 1.0
             } else {
                 self.addEmotionButton.alpha = 0.0
+                self.addEmotionImageView.alpha = 0.0
+                self.emotionLabel.alpha = 0.0
             }
         }
     }

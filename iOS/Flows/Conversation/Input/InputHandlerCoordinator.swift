@@ -96,7 +96,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     func presentEmotions(for message: Messageable) {
         let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator) { [unowned self] emotions in
+        self.present(coordinator) { emotions in
             emotions.forEach { emotion in
                 logDebug(emotion.rawValue)
                 AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
