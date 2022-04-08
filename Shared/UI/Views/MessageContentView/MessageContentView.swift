@@ -53,11 +53,13 @@ class MessageContentView: BaseView {
     let linkView = LPLinkView()
 
     /// A view to blur out the emotions collection view.
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
+    let blurView = BlurView()
     private let emotionLayout = EmotionCircleCollectionViewLayout()
     private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
+    
+    let addEmotionButton = ThemeButton()
 
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
@@ -76,6 +78,9 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.emotionCollectionView)
 
         self.bubbleView.addSubview(self.blurView)
+        self.bubbleView.addSubview(self.addEmotionButton)
+        self.addEmotionButton.set(style: .normal(color: .clear, text: "Add"))
+        self.addEmotionButton.alpha = 0 
 
         self.bubbleView.addSubview(self.mainContentArea)
 
@@ -110,6 +115,9 @@ class MessageContentView: BaseView {
         self.bubbleView.expandToSuperviewSize()
 
         self.emotionCollectionView.expandToSuperviewSize()
+        
+        self.addEmotionButton.squaredSize = 50
+        self.addEmotionButton.centerOnXAndY()
 
         self.blurView.expandToSuperviewSize()
 
@@ -250,7 +258,13 @@ class MessageContentView: BaseView {
         let animationDuration = animated ? Theme.animationDurationStandard : 0
         UIView.animate(withDuration: animationDuration) {
             self.mainContentArea.alpha = areShown ? 0 : 1
-            self.blurView.effect = areShown ? nil : UIBlurEffect(style: .systemThinMaterialDark)
+            self.blurView.effect = areShown ? nil : Theme.blurEffect
+            
+            if areShown, self.emotionDataSource.snapshot().numberOfItems == 0 {
+                self.addEmotionButton.alpha = 1.0
+            } else {
+                self.addEmotionButton.alpha = 0.0
+            }
         }
     }
 

@@ -113,38 +113,14 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         ConversationsManager.shared.activeConversation = controller.conversation
     }
-}
-
-// MARK: - MessageCellDelegate
-
-extension ConversationListCoordinator: MesssageCellDelegate {
-
-    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
+    
+    override func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
         if let parentId = message.parentMessageId {
             self.presentThread(for: messageInfo.0, messageId: parentId, startingReplyId: messageInfo.1)
         } else {
             self.presentMessageDetail(for: messageInfo.0, messageId: messageInfo.1)
-        }
-    }
-
-    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
-
-    }
-
-    func messageCell(_ cell: MessageCell,
-                     didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
-
-        switch message.kind {
-        case .photo(photo: let photo, let body):
-            guard let url = photo.url else { return }
-            let text = "\(message.author.givenName): \(body)"
-            self.presentImageFlow(for: [url], startingURL: url, body: text)
-        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
-            break
         }
     }
 }
