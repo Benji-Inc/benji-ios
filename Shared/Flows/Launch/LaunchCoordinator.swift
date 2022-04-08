@@ -34,8 +34,6 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
 
             guard !Task.isCancelled else { return }
             
-            await Task.sleep(seconds: 5)
-
             self?.handle(launchStatus: launchStatus)
         }
     }

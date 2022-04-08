@@ -10,14 +10,11 @@ import Foundation
 import UIKit
 
 class RootNavigationController: NavigationController, UINavigationControllerDelegate {
-    
-    private let gradientView = BackgroundGradientView()
-    
+        
     override func initializeViews() {
         super.initializeViews()
         
-        self.view.set(backgroundColor: .white)
-        self.view.insertSubview(self.gradientView, at: 0)
+        self.view.set(backgroundColor: .B0)
     }
 
     override func viewDidLoad() {
@@ -40,11 +37,5 @@ class RootNavigationController: NavigationController, UINavigationControllerDele
                               from fromVC: UIViewController,
                               to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return nil 
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.gradientView.expandToSuperviewSize()
     }
 }
