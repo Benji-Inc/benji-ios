@@ -71,6 +71,10 @@ class MessageCell: UICollectionViewCell {
                 // then start message consumption if needed.
                 self.handleDetailVisibility(areDetailsFullyVisible: self.footerView.alpha == 1)
             }
+
+        self.content.emotionsButton.addAction(for: .touchUpInside) { [unowned self] in
+            self.content.setEmotions(areShown: !self.content.areEmotionsShown, animated: true)
+        }
     }
 
     override func layoutSubviews() {
@@ -107,11 +111,11 @@ class MessageCell: UICollectionViewCell {
             return
         }
         
-        self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
-                                         textColor: messageLayoutAttributes.textColor,
+        self.content.configureBackground(color: ThemeColor.B6.color,
+                                         textColor: ThemeColor.T3.color,
                                          brightness: messageLayoutAttributes.brightness,
-                                         showBubbleTail: messageLayoutAttributes.shouldShowTail,
-                                         tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
+                                         showBubbleTail: false,
+                                         tailOrientation: .down)
 
         self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
 
@@ -161,6 +165,7 @@ class MessageCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.content.setEmotions(areShown: false, animated: false)
         self.messageController = nil
         self.messageSubscriptions.removeAll()
         self.messageTasks.cancelAndRemoveAll()

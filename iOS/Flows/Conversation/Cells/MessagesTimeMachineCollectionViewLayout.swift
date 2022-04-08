@@ -50,13 +50,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         }
 
         let detailAlpha = 1 - abs(normalizedZOffset) / 0.2
-
-        attributes.backgroundColor = ThemeColor.D1.color
-        attributes.textColor = ThemeColor.T3.color
-
         attributes.brightness = backgroundBrightness
-        attributes.shouldShowTail = false
-        attributes.bubbleTailOrientation = .down
         attributes.detailAlpha = detailAlpha
 
         return attributes
