@@ -252,9 +252,10 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
 extension InputHandlerCoordinator {
 
-    func presentImageFlow(for imageURLs: [URL], startingURL: URL?) {
+    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
         let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
                                                     startURL: startingURL,
+                                                    body: body,
                                                     router: self.router,
                                                     deepLink: self.deepLink)
 

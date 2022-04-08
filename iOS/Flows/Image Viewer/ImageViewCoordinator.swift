@@ -8,16 +8,20 @@
 
 import Foundation
 import Lightbox
+import Lottie
 
 class ImageViewCoordinator: PresentableCoordinator<Void> {
 
     let imageURLs: [URL]
     let startURL: URL?
+    let body: String
+    
+    let animationView = AnimationView.with(animation: .loading)
 
     lazy var imageViewController: ImageViewController = {
         let images: [LightboxImage]
         images = self.imageURLs.map { imageURL in
-            return LightboxImage(imageURL: imageURL)
+            return LightboxImage(imageURL: imageURL, text: self.body)
         }
 
         var startIndex: Int = 0
@@ -25,12 +29,34 @@ class ImageViewCoordinator: PresentableCoordinator<Void> {
             let startURLIndex = self.imageURLs.firstIndex(of: startURL) {
             startIndex = startURLIndex
         }
+        
+        
+        LightboxConfig.PageIndicator.textAttributes = [.font: FontType.xtraSmall.font,
+                                                       .foregroundColor: ThemeColor.T3.color.withAlphaComponent(0.2)]
+        
+        LightboxConfig.InfoLabel.textAttributes = [.font: FontType.small.font,
+                                                   .foregroundColor: ThemeColor.T3.color]
+        
+        LightboxConfig.CloseButton.text = ""
+        LightboxConfig.CloseButton.image = UIImage(systemName: "xmark")
+        LightboxConfig.CloseButton.size = CGSize(width: 20, height: 18)
+        
+        LightboxConfig.makeLoadingIndicator = { [unowned self] in
+            self.animationView
+        }
+        
+        self.animationView.loopMode = .loop
+        self.animationView.play()
+        self.animationView.squaredSize = 18
 
         // Create an instance of LightboxController.
         let controller = ImageViewController(images: images, startIndex: startIndex)
+        controller.headerView.closeButton.tintColor = ThemeColor.white.color
+        controller.headerView.closeButton.imageView?.contentMode = .scaleAspectFit
 
         // Use dynamic background.
         controller.dynamicBackground = true
+        
 
         return controller
     }()
@@ -41,11 +67,13 @@ class ImageViewCoordinator: PresentableCoordinator<Void> {
 
     init(imageURLs: [URL],
          startURL: URL?,
+         body: String,
          router: Router,
          deepLink: DeepLinkable?) {
 
         self.imageURLs = imageURLs
         self.startURL = startURL
+        self.body = body
 
         super.init(router: router, deepLink: deepLink)
     }
@@ -56,7 +84,7 @@ class ImageViewCoordinator: PresentableCoordinator<Void> {
 class ImageViewController: LightboxController, Dismissable {
 
     var dismissHandlers: [DismissHandler] = []
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
