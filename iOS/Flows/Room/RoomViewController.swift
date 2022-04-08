@@ -289,7 +289,10 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         let conversations: [Conversation] = self.conversationListController?.conversations ?? []
         
         let items = conversations.filter({ conversation in
-            return conversation.messages.count > 0
+            let messages = conversation.messages.filter { message in
+                return !message.isDeleted
+            }
+            return messages.count > 0
         }).map { convo in
             return RoomCollectionViewDataSource.ItemType.conversation(convo.cid)
         }

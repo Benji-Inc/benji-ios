@@ -16,7 +16,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = ConversationId
     
     var currentItem: ConversationId?
-    
+            
     let titleLabel = ThemeLabel(font: .regular)
     let messageContent = MessageContentView()
     
@@ -109,6 +109,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                 return !message.isDeleted
             }) {
                 self.update(for: latest)
+            } else {
+                logDebug("No messages in coversation")
             }
         }
     }

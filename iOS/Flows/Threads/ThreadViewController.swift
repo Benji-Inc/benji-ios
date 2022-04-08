@@ -187,10 +187,36 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
     
     @MainActor
-    func scrollToConversation(with cid: ConversationId, messageId: MessageId?) async {
+    func scrollToConversation(with cid: ConversationId,
+                              messageId: MessageId?,
+                              animateScroll: Bool,
+                              animateSelection: Bool) async {
         guard let messageId = messageId else { return }
         
-        self.animateToReply(with: messageId)
+        Task {
+            let cid = self.messageController.cid
+
+            try? await self.messageController.loadNextReplies(including: messageId)
+
+            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
+
+            guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
+
+            let threadLayout = self.threadCollectionView.threadLayout
+            guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
+
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: animateScroll)
+
+            if animateSelection, let cell = self.collectionView.cellForItem(at: messageIndexPath) {
+                await UIView.awaitAnimation(with: .fast, animations: {
+                    cell.transform = CGAffineTransform.init(scaleX: 1.05, y: 1.05)
+                })
+
+                await UIView.awaitAnimation(with: .fast, animations: {
+                    cell.transform = .identity
+                })
+            }
+        }.add(to: self.autocancelTaskPool)
     }
     
     func updateUI(for state: ConversationUIState, forceLayout: Bool) {
@@ -279,7 +305,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         }
         
         if let replyId = self.startingReplyId {
-            self.animateToReply(with: replyId)
+            Task {
+                await self.scrollToConversation(with: self.messageController.cid,
+                                                messageId: replyId,
+                                                animateScroll: false,
+                                                animateSelection: false)
+            }
         }
         
         self.scrollToLastItemOnLayout = true
@@ -305,33 +336,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                               outToPosition: nil,
                               shouldConcatenate: false,
                               scrollToOffset: scrollToOffset)
-    }
-
-    func animateToReply(with messageId: MessageId) {
-        Task {
-            let cid = self.messageController.cid
-
-            try? await self.messageController.loadNextReplies(including: messageId)
-
-            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
-
-            guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
-
-            let threadLayout = self.threadCollectionView.threadLayout
-            guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
-
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
-
-            if let cell = self.collectionView.cellForItem(at: messageIndexPath) {
-                await UIView.awaitAnimation(with: .fast, animations: {
-                    cell.transform = CGAffineTransform.init(scaleX: 1.05, y: 1.05)
-                })
-
-                await UIView.awaitAnimation(with: .fast, animations: {
-                    cell.transform = .identity
-                })
-            }
-        }.add(to: self.autocancelTaskPool)
     }
 }
 // MARK: - Messaging

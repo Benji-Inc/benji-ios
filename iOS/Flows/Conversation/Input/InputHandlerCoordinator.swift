@@ -17,7 +17,10 @@ protocol SwipeableInputControllerHandler where Self: ViewController {
     var messageCellDelegate: MesssageCellDelegate? { get set }
     var swipeableVC: SwipeableInputAccessoryViewController { get }
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
-    func scrollToConversation(with cid: ConversationId, messageId: MessageId?) async
+    func scrollToConversation(with cid: ConversationId,
+                              messageId: MessageId?,
+                              animateScroll: Bool,
+                              animateSelection: Bool) async
 }
 
 typealias InputHandlerViewContoller = SwipeableInputControllerHandler & ViewController
@@ -70,16 +73,23 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
+    /// The currently running task that is loading.
+    private var loadTask: Task<Void, Never>?
+    
     func scrollToUnreadMessage() {
         guard let conversation = ConversationsManager.shared.activeConversation,
                 let unreadMessage = conversation.messages.first(where: { message in
             return !message.isFromCurrentUser && !message.isConsumedByMe
         }) else { return }
         
-        Task.onMainActorAsync {
-            await Task.sleep(seconds: 0.1)
+        self.loadTask?.cancel()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
             await self.inputHandlerViewController.scrollToConversation(with: conversation.cid,
-                                                                       messageId: unreadMessage.id)
+                                                                       messageId: unreadMessage.id,
+                                                                       animateScroll: true,
+                                                                       animateSelection: true)
         }
     }
     

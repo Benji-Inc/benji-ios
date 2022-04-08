@@ -198,7 +198,11 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     }
 
     @MainActor
-    func scrollToConversation(with cid: ConversationId, messageId: MessageId?) async {
+    func scrollToConversation(with cid: ConversationId,
+                              messageId: MessageId?,
+                              animateScroll: Bool = true,
+                              animateSelection: Bool = true) async {
+        
         guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(cid)) else { return }
         self.collectionView.scrollToItem(at: conversationIndexPath,
                                          at: .centeredHorizontally,
@@ -223,13 +227,13 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         // Determine if this is a reply message or regular message. If it's a reply, select the parent
         // message so we can open the thread experience.
         if let parentMessageId = message.parentMessageId {
-            await messagesCell.scrollToMessage(with: parentMessageId, animateSelection: true)
+            await messagesCell.scrollToMessage(with: parentMessageId, animateScroll: true, animateSelection: true)
 
             if let messageCell = messagesCell.getFrontmostCell() {
                 self.messageCellDelegate?.messageCell(messageCell, didTapMessage: (cid, messageId))
             }
         } else {
-            await messagesCell.scrollToMessage(with: messageId, animateSelection: true)
+            await messagesCell.scrollToMessage(with: messageId, animateScroll: true, animateSelection: true)
         }
     }
 
