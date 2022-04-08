@@ -40,14 +40,14 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         
         self.messages = self.allMessages
 
-        self.contentContainer.addSubview(self.label)
+        //self.contentContainer.addSubview(self.label)
         self.contentContainer.addSubview(self.loadingView)
         self.loadingView.contentMode = .scaleAspectFit
         self.loadingView.loopMode = .loop
 
-        self.contentContainer.addSubview(self.versionLabel)
-        let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
-        self.versionLabel.setText(version)
+//        self.contentContainer.addSubview(self.versionLabel)
+//        let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
+//        self.versionLabel.setText(version)
     }
 
     override func viewDidLayoutSubviews() {
