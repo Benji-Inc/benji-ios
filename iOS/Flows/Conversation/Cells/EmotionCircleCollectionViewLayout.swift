@@ -48,9 +48,12 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
     private let itemBehavior = UIDynamicItemBehavior()
     private let noiseField = UIFieldBehavior.noiseField(smoothness: 0.2, animationSpeed: 1)
 
-    private let cellDiameter: CGFloat = 80
+    private let cellDiameter: CGFloat
 
-    override init() {
+    init(cellDiameter: CGFloat) {
+        
+        self.cellDiameter = cellDiameter
+        
         super.init()
 
         self.collisionBehavior.translatesReferenceBoundsIntoBoundary = true

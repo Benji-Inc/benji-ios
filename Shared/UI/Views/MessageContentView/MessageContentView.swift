@@ -54,7 +54,7 @@ class MessageContentView: BaseView {
 
     /// A view to blur out the emotions collection view.
     let blurView = BlurView()
-    private let emotionLayout = EmotionCircleCollectionViewLayout()
+    private lazy var emotionLayout = EmotionCircleCollectionViewLayout(cellDiameter: self.cellDiameter)
     private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
@@ -67,7 +67,18 @@ class MessageContentView: BaseView {
     let emotionsButton = ThemeButton()
 
     var layoutState: Layout = .expanded
-
+    private let cellDiameter: CGFloat
+    
+    init(with cellDiameter: CGFloat = 80) {
+        self.cellDiameter = cellDiameter
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        self.cellDiameter = 80
+        super.init(coder: aDecoder)
+    }
+    
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -181,7 +192,7 @@ class MessageContentView: BaseView {
 
     private var linkProvider: LPMetadataProvider?
 
-    func configure(with message: Messageable) {
+    func configure(with message: Messageable, shouldLoadEmotions: Bool = true ) {
         self.message = message
 
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
@@ -229,12 +240,14 @@ class MessageContentView: BaseView {
 
         self.authorView.set(person: message.person)
 
-        let emotionsItems = message.emotions.map { emotion in
-            EmotionCircleItem(emotion: emotion)
+        if shouldLoadEmotions {
+            let emotionsItems = message.emotions.map { emotion in
+                EmotionCircleItem(emotion: emotion)
+            }
+            var snapshot = self.emotionDataSource.snapshot()
+            snapshot.setItems(emotionsItems, in: .emotions)
+            self.emotionDataSource.apply(snapshot)
         }
-        var snapshot = self.emotionDataSource.snapshot()
-        snapshot.setItems(emotionsItems, in: .emotions)
-        self.emotionDataSource.apply(snapshot)
 
         self.setNeedsLayout()
     }

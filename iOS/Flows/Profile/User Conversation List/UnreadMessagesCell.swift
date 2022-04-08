@@ -108,7 +108,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     
     @MainActor
     private func update(for message: Message) {
-        self.messageContent.configure(with: message)
+        self.messageContent.configure(with: message, shouldLoadEmotions: false)
         self.leftLabel.setText(message.createdAt.getDaysAgoString())
         
         let title = self.conversationController?.conversation.title ?? "Untitled"

@@ -94,17 +94,23 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentEmotions(for controller: MessageController) {
+    func presentEmotions(for message: Messageable) {
         let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator) { [unowned self] result in
-            result.forEach { emotion in
+        self.present(coordinator) { [unowned self] emotions in
+            emotions.forEach { emotion in
                 logDebug(emotion.rawValue)
                 AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
             }
             
-            //controller.addReaction(with: .)
+            guard !emotions.isEmpty else { return }
             
-            #warning("Do something with the selected emotions.")
+            guard let controller = ChatClient.shared.messageController(for: message) else { return }
+            
+            Task {
+                await emotions.asyncForEach { emotion in
+                    await controller.addReaction(with: .emotion(emotion))
+                }
+            }
         }
     }
     
@@ -253,8 +259,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     // MARK: - MessageCellDelegate
     
     func messageCell(_ cell: MessageCell, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
-        let controller = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1)
-        self.presentEmotions(for: controller)
+        guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
+        self.presentEmotions(for: message)
     }
     
     func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
