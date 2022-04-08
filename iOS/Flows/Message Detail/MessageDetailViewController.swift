@@ -13,7 +13,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                                    MessageDetailDataSource.ItemType,
                                    MessageDetailDataSource>,
                                    MessageInteractableController {
-    var blurView = BlurView()
+    var blurView = DarkBlurView()
     
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
@@ -101,6 +101,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
+        self.loadRecentReplies()
         self.subscribeToUpdates()
     }
     
@@ -108,6 +109,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         return MessageDetailDataSource.SectionType.allCases
     }
 
+    @MainActor
     override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
         var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
     
@@ -129,9 +131,8 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         } else {
             data[.reads] = reads
         }
-        
-        try? await controller.loadPreviousReplies()        
-        data[.recentReply] = [.reply(RecentReplyModel(reply: controller.replies.first))]
+
+        data[.recentReply] = [.reply(RecentReplyModel(reply: nil, isLoading: msg.replyCount > 0))]
         
         data[.metadata] = [.info(msg)]
         
@@ -143,25 +144,51 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         self.messageController?
             .messageChangePublisher
             .mainSink(receiveValue: { [unowned self] _ in
-                self.reloadData()
+                self.reloadDetailData()
             }).store(in: &self.cancellables)
         
         self.messageController?
             .repliesChangesPublisher
             .mainSink { [unowned self] _ in
-                self.reloadData()
+                self.loadRecentReplies()
             }.store(in: &self.cancellables)
     }
     
     /// The currently running task that is loading.
+    private var loadRepliesTask: Task<Void, Never>?
+    
+    private func loadRecentReplies() {
+        self.loadRepliesTask?.cancel()
+        
+        self.loadRepliesTask = Task { [weak self] in
+            guard let `self` = self,
+                let messageController = messageController else {
+                return
+            }
+
+            try? await messageController.loadPreviousReplies()
+            
+            let items: [MessageDetailDataSource.ItemType] = [.reply(RecentReplyModel(reply: messageController.replies.last, isLoading: false))]
+            
+            var snapshot = self.dataSource.snapshot()
+            snapshot.setItems(items, in: .recentReply)
+            
+            await self.dataSource.apply(snapshot)
+        }
+    }
+    
+    /// The currently running task that is loading.
     private var loadTask: Task<Void, Never>?
-    private func reloadData() {
+    
+    private func reloadDetailData() {
         self.loadTask?.cancel()
         
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
             guard let controller = self.messageController, let msg = controller.message else { return }
+            
+            try? await controller.synchronize()
                         
             var snapshot = self.dataSource.snapshot()
                     
@@ -181,9 +208,6 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                 snapshot.setItems(reads, in: .reads)
             }
             
-            try? await controller.loadPreviousReplies()
-            
-            snapshot.setItems([.reply(RecentReplyModel(reply: controller.replies.first))], in: .recentReply)
             snapshot.setItems([.info(msg)], in: .metadata)
             
             await self.dataSource.apply(snapshot)

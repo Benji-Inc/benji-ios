@@ -61,12 +61,13 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.rightLabel)
         
-        let bubbleColor = ThemeColor.D1.color
-        self.messageContent.configureBackground(color: bubbleColor,
+        let bubbleColor = ThemeColor.B1.color
+        self.messageContent.configureBackground(color: bubbleColor.withAlphaComponent(0.8),
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
+        self.messageContent.blurView.effect = nil
     }
     
     private var loadConversationTask: Task<Void, Never>?

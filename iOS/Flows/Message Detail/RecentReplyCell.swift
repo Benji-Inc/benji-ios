@@ -13,6 +13,7 @@ import Lottie
 
 struct RecentReplyModel: Hashable {
     var reply: Message?
+    var isLoading: Bool
 }
 
 class RecentReplyCell: CollectionViewManagerCell, ManageableCell {
@@ -40,13 +41,13 @@ class RecentReplyCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.messageContent)
         self.messageContent.layoutState = .collapsed
         
-        let bubbleColor = ThemeColor.D1.color
-        self.messageContent.configureBackground(color: bubbleColor,
+        let bubbleColor = ThemeColor.B1.color
+        self.messageContent.configureBackground(color: bubbleColor.withAlphaComponent(0.8),
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
-        
+        self.messageContent.blurView.effect = nil 
         self.messageContent.isVisible = false
         self.label.isVisible = false
     }
@@ -55,9 +56,9 @@ class RecentReplyCell: CollectionViewManagerCell, ManageableCell {
         
         if let reply = item.reply {
             self.update(for: reply)
-        } else {
-            self.label.isVisible = true
             self.animationView.stop()
+        } else if !item.isLoading {
+            self.label.isVisible = true
         }
     }
     
