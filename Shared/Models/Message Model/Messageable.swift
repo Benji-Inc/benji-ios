@@ -43,7 +43,7 @@ protocol Messageable {
     var emotions: [Emotion] { get }
     var expression: String? { get }
 
-    func setToConsumed() async throws
+    func setToConsumed() async 
     func setToUnconsumed() async throws
     func appendAttributes(with attributes: [String: Any]) async throws -> Messageable
 }

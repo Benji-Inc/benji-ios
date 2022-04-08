@@ -51,7 +51,7 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
             
         } else {
             self.emotionLabel.setText("")
-            self.label.setText("Select an emotion below to show what it means")
+            self.label.setText("Select any emotion below to see what it means and add it to your message")
             self.label.setTextColor(.T1)
             self.label.alpha = 0.2
             self.contentView.set(backgroundColor: .clear)

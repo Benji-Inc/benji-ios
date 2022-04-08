@@ -31,6 +31,6 @@ struct MockMessage: Messageable {
     var emotions: [Emotion] = [.suprised]
     var expression: String? = EmojiCategory.smileysAndPeople.emojis.first?.emoji
     
-    func setToConsumed() async throws { }
+    func setToConsumed() async { }
     func setToUnconsumed() async throws { }
 }

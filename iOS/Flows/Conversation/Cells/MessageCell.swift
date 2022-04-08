@@ -16,6 +16,7 @@ protocol MesssageCellDelegate: AnyObject {
     func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
     func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
     func messageCell(_ cell: MessageCell, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
 }
 
 struct MessageDetailState: Equatable {
@@ -58,8 +59,12 @@ class MessageCell: UICollectionViewCell {
 
         self.content.imageView.didSelect { [unowned self] in
             guard let message = self.messageState.message else { return }
-
             self.delegate?.messageCell(self, didTapAttachmentForMessage: (message.streamCid, message.id))
+        }
+        
+        self.content.addEmotionButton.didSelect { [unowned self] in
+            guard let message = self.messageState.message else { return }
+            self.delegate?.messageCell(self, didTapAddEmotionsForMessage: (message.streamCid, message.id))
         }
         
         self.contentView.addSubview(self.footerView)
@@ -72,7 +77,7 @@ class MessageCell: UICollectionViewCell {
                 self.handleDetailVisibility(areDetailsFullyVisible: self.footerView.alpha == 1)
             }
 
-        self.content.emotionsButton.addAction(for: .touchUpInside) { [unowned self] in
+        self.content.emotionsButton.didSelect { [unowned self] in
             self.content.setEmotions(areShown: !self.content.areEmotionsShown, animated: true)
         }
     }

@@ -53,11 +53,16 @@ class MessageContentView: BaseView {
     let linkView = LPLinkView()
 
     /// A view to blur out the emotions collection view.
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
-    private let emotionLayout = EmotionCircleCollectionViewLayout()
+    let blurView = BlurView()
+    private lazy var emotionLayout = EmotionCircleCollectionViewLayout(cellDiameter: self.cellDiameter)
     private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
+    
+    
+    let emotionLabel = ThemeLabel(font: .regular)
+    let addEmotionButton = ThemeButton()
+    let addEmotionImageView = UIImageView(image: UIImage(systemName: "plus"))
 
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
@@ -65,7 +70,18 @@ class MessageContentView: BaseView {
     let emotionsButton = ThemeButton()
 
     var layoutState: Layout = .expanded
-
+    private let cellDiameter: CGFloat
+    
+    init(with cellDiameter: CGFloat = 80) {
+        self.cellDiameter = cellDiameter
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        self.cellDiameter = 80
+        super.init(coder: aDecoder)
+    }
+    
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -76,6 +92,17 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.emotionCollectionView)
 
         self.bubbleView.addSubview(self.blurView)
+        self.bubbleView.addSubview(self.emotionLabel)
+        self.emotionLabel.setText("Empty")
+        self.emotionLabel.alpha = 0 
+        
+        self.addEmotionImageView.contentMode = .scaleAspectFit
+        self.addEmotionImageView.tintColor = ThemeColor.T3.color
+        self.bubbleView.addSubview(self.addEmotionImageView)
+        self.addEmotionImageView.alpha = 0
+        self.bubbleView.addSubview(self.addEmotionButton)
+        self.addEmotionButton.set(style: .normal(color: .clear, text: ""))
+        self.addEmotionButton.alpha = 0 
 
         self.bubbleView.addSubview(self.mainContentArea)
 
@@ -110,6 +137,16 @@ class MessageContentView: BaseView {
         self.bubbleView.expandToSuperviewSize()
 
         self.emotionCollectionView.expandToSuperviewSize()
+        
+        self.emotionLabel.setSize(withWidth: self.width)
+        self.emotionLabel.centerOnXAndY()
+        
+        self.addEmotionImageView.squaredSize = 20
+        self.addEmotionImageView.pin(.right, offset: .long)
+        self.addEmotionImageView.pin(.bottom, offset: .long)
+        
+        self.addEmotionButton.squaredSize = 50
+        self.addEmotionButton.center = self.addEmotionImageView.center
 
         self.blurView.expandToSuperviewSize()
 
@@ -250,7 +287,20 @@ class MessageContentView: BaseView {
         let animationDuration = animated ? Theme.animationDurationStandard : 0
         UIView.animate(withDuration: animationDuration) {
             self.mainContentArea.alpha = areShown ? 0 : 1
-            self.blurView.effect = areShown ? nil : UIBlurEffect(style: .systemThinMaterialDark)
+            self.blurView.effect = areShown ? nil : Theme.blurEffect
+            
+            if areShown {
+                if self.emotionDataSource.snapshot().numberOfItems == 0 {
+                    self.emotionLabel.alpha = 0.2
+                }
+                
+                self.addEmotionImageView.alpha = 1.0
+                self.addEmotionButton.alpha = 1.0
+            } else {
+                self.addEmotionButton.alpha = 0.0
+                self.addEmotionImageView.alpha = 0.0
+                self.emotionLabel.alpha = 0.0
+            }
         }
     }
 

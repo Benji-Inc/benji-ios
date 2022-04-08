@@ -10,52 +10,37 @@ import Foundation
 import StreamChat
 import Localization
 
-struct ReactionSummary: Hashable, Comparable {
+enum ReactionType {
 
-    let type: ReactionType
-    let count: Int
-
-    static func < (lhs: ReactionSummary, rhs: ReactionSummary) -> Bool {
-        return lhs.type.priority > rhs.type.priority
-    }
-}
-
-enum ReactionType: String, CaseIterable {
-
-    case like
-    case love
-    case dislike
+    case emotion(Emotion)
     case read
-
-    var priority: Int {
+    
+    var rawValue: String {
         switch self {
-        case .like:
-            return 0
-        case .love:
-            return 1
-        case .dislike:
-            return 2
+        case .emotion(let emotion):
+            return emotion.rawValue
         case .read:
-            return 3
+            return "read"
         }
     }
 
     var reaction: MessageReactionType {
         return MessageReactionType.init(stringLiteral: self.rawValue)
     }
-
-    var emoji: String {
-        switch self {
-        case .like:
-            return "👍"
-        case .love:
-            return "😍"
-        case .dislike:
-            return "👎"
-        case .read:
-            return ""
+    
+    init?(rawValue: String) {
+        if rawValue == "read" {
+            self = .read
+        } else if let e = Emotion.init(rawValue: rawValue) {
+            self = .emotion(e)
+        } else {
+            return nil 
         }
     }
+}
+
+func == (lhs: ReactionType, rhs: ReactionType) -> Bool {
+    return lhs.rawValue == rhs.rawValue
 }
 
 enum EmotionCategory: Int, CaseIterable {

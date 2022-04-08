@@ -131,19 +131,9 @@ extension Message: Messageable {
     }
     
     var emotions: [Emotion] {
-        let controller = ChatClient.shared.messageController(for: self)
-        
-        guard let data = controller?.message?.extraData["emotions"],
-              case .array(let JSONObjects) = data else {
-                  return []
-              }
-        
-        let emotions: [Emotion] = JSONObjects.compactMap({ json in
-            guard case .string(let value) = json else { return nil }
-            return Emotion.init(rawValue: value)
-        })
-        
-        return emotions
+        return self.reactionScores.compactMap { dict in
+            return Emotion(rawValue: dict.key.rawValue)
+        }
     }
     
     var expression: String? {
@@ -158,9 +148,9 @@ extension Message: Messageable {
         return MessageController.controller(cid, messageId: messageId).message!
     }
     
-    func setToConsumed() async throws {
+    func setToConsumed() async {
         let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
-        try await controller.addReaction(with: .read)
+        await controller.addReaction(with: .read)
         UserNotificationManager.shared.handleRead(message: self)
     }
     

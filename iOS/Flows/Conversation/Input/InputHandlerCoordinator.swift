@@ -29,7 +29,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                        ActiveConversationable,
                                        PHPickerViewControllerDelegate,
                                        UIImagePickerControllerDelegate,
-                                       UINavigationControllerDelegate {
+                                       UINavigationControllerDelegate,
+                                       MesssageCellDelegate {
     
     lazy var captureVC: UIImagePickerController = {
         let vc = UIImagePickerController()
@@ -93,15 +94,23 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentEmotions() {
+    func presentEmotions(for message: Messageable) {
         let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator) { [unowned self] result in
-            result.forEach { emotion in
+        self.present(coordinator) { emotions in
+            emotions.forEach { emotion in
                 logDebug(emotion.rawValue)
                 AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
             }
             
-            #warning("Do something with the selected emotions.")
+            guard !emotions.isEmpty else { return }
+            
+            guard let controller = ChatClient.shared.messageController(for: message) else { return }
+            
+            Task {
+                await emotions.asyncForEach { emotion in
+                    await controller.addReaction(with: .emotion(emotion))
+                }
+            }
         }
     }
     
@@ -244,6 +253,36 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }
+        }
+    }
+    
+    // MARK: - MessageCellDelegate
+    
+    func messageCell(_ cell: MessageCell, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+        guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
+        self.presentEmotions(for: message)
+    }
+    
+    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+
+    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+
+    }
+
+    func messageCell(_ cell: MessageCell,
+                     didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, let body):
+            guard let url = photo.url else { return }
+            let text = "\(message.author.givenName): \(body)"
+            self.presentImageFlow(for: [url], startingURL: url, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
         }
     }
 }

@@ -21,7 +21,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     let messageContent = MessageContentView()
     
     let middleBubble = MessageBubbleView(orientation: .up, bubbleColor: .B6)
+    let middleBlur = BlurView()
     let bottomBubble = MessageBubbleView(orientation: .up, bubbleColor: .B6)
+    let bottomBlur = BlurView()
     
     let leftLabel = ThemeLabel(font: .small, textColor: .D1)
     let rightLabel = NumberScrollCounter(value: 0,
@@ -54,7 +56,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.textAlignment = .left
         
         self.contentView.addSubview(self.bottomBubble)
+        self.bottomBubble.addSubview(self.bottomBlur)
         self.contentView.addSubview(self.middleBubble)
+        self.middleBubble.addSubview(self.middleBlur)
         self.contentView.addSubview(self.messageContent)
         self.messageContent.layoutState = .collapsed
         
@@ -64,19 +68,18 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.rightLabel)
         
         let bubbleColor = ThemeColor.B1.color
-        self.messageContent.configureBackground(color: bubbleColor.withAlphaComponent(0.8),
+        self.messageContent.configureBackground(color: bubbleColor,
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
-        self.messageContent.blurView.effect = nil
         
-        self.middleBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.8), animated: false)
+        self.middleBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.6), animated: false)
         self.middleBubble.tailLength = 0
         self.middleBubble.layer.masksToBounds = true
         self.middleBubble.layer.cornerRadius = Theme.cornerRadius
         
-        self.bottomBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.6), animated: false)
+        self.bottomBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.2), animated: false)
         self.bottomBubble.layer.masksToBounds = true
         self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
         self.bottomBubble.tailLength = 0
@@ -163,10 +166,14 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.middleBubble.centerOnX()
         self.middleBubble.match(.bottom, to: .bottom, of: self.messageContent, offset: .standard)
         
+        self.middleBlur.expandToSuperviewSize()
+        
         self.bottomBubble.width = maxWidth * 0.6
         self.bottomBubble.height = self.messageContent.height
         self.bottomBubble.centerOnX()
         self.bottomBubble.match(.bottom, to: .bottom, of: self.middleBubble, offset: .standard)
+        
+        self.bottomBlur.expandToSuperviewSize()
         
         self.titleLabel.setSize(withWidth: self.width)
         self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.long))
