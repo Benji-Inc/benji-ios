@@ -25,7 +25,7 @@ extension ConversationListCoordinator {
         
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageId: nil)
+                await self.listVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
             }
         }
     }
@@ -48,7 +48,7 @@ extension ConversationListCoordinator {
                                    startingReplyId: replyId)
             case .conversation(let conversation):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: conversation, messageId: nil)
+                    await self.listVC.scrollToConversation(with: conversation, messageId: nil, animateScroll: false)
                 }
             case .none:
                 break
@@ -211,7 +211,7 @@ extension ConversationListCoordinator {
             switch option {
             case .conversation(let cid):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: cid, messageId: nil)
+                    await self.listVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
                 }
             }
         }

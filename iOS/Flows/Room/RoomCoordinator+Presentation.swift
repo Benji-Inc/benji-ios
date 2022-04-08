@@ -27,7 +27,7 @@ extension RoomCoordinator {
         Task.onMainActorAsync {
             guard let cid = cid else { return }
             await Task.sleep(seconds: 0.1)
-            await coordinator.listVC.scrollToConversation(with: cid, messageId: messageId)
+            await coordinator.listVC.scrollToConversation(with: cid, messageId: messageId, animateScroll: false)
         }
     }
     
