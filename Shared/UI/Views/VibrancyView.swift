@@ -32,6 +32,24 @@ class VibrancyView: BaseView {
     }
 }
 
+class DarkBlurView: UIVisualEffectView {
+
+    let blurEffect: UIBlurEffect
+
+    init() {
+        self.blurEffect = UIBlurEffect.init(style: .systemThickMaterial)
+        super.init(effect: UIBlurEffect.init(style: .systemThickMaterial))
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func showBlur(_ show: Bool) {
+        self.effect = show ? self.blurEffect : nil
+    }
+}
+
 class BlurView: UIVisualEffectView {
 
     let blurEffect: UIBlurEffect

@@ -20,8 +20,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     let titleLabel = ThemeLabel(font: .regular)
     let messageContent = MessageContentView()
     
-    let middleBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
-    let bottomBubble = MessageBubbleView(orientation: .up, bubbleColor: .D1)
+    let middleBubble = MessageBubbleView(orientation: .up, bubbleColor: .B6)
+    let bottomBubble = MessageBubbleView(orientation: .up, bubbleColor: .B6)
     
     let leftLabel = ThemeLabel(font: .small, textColor: .D1)
     let rightLabel = NumberScrollCounter(value: 0,
@@ -63,12 +63,13 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.rightLabel)
         
-        let bubbleColor = ThemeColor.D1.color
-        self.messageContent.configureBackground(color: bubbleColor,
+        let bubbleColor = ThemeColor.B1.color
+        self.messageContent.configureBackground(color: bubbleColor.withAlphaComponent(0.8),
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
+        self.messageContent.blurView.effect = nil
         
         self.middleBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.8), animated: false)
         self.middleBubble.tailLength = 0

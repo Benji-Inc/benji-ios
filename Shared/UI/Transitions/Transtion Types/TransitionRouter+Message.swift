@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol MessageInteractableController where Self: DismissInteractableController {
-    var blurView: BlurView { get set }
+    var blurView: DarkBlurView { get set }
     var messageContent: MessageContentView { get }
     func handleDismissal()
     func handleInitialDismissal()
@@ -52,7 +52,7 @@ extension TransitionRouter {
         snapshot.size = fromView.bubbleView.bubbleFrame.size
         
         toView.configure(with: message)
-        toView.bubbleView.setBubbleColor(ThemeColor.D1.color, animated: false)
+        toView.bubbleView.setBubbleColor(ThemeColor.B6.color, animated: false)
         toView.textView.setTextColor(.T3)
         toView.bubbleView.tailLength = 0
         toView.bubbleView.orientation = fromView.bubbleView.orientation

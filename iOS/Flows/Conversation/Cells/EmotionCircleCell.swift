@@ -10,7 +10,7 @@ import Foundation
 
 class EmotionCircleCell: UICollectionViewCell {
 
-    private let label = ThemeLabel(font: .regular, textColor: .white)
+    private let label = ThemeLabel(font: .small, textColor: .white)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,12 +26,14 @@ class EmotionCircleCell: UICollectionViewCell {
         self.clipsToBounds = true
 
         self.addSubview(self.label)
+        self.contentView.layer.borderWidth = 2
+        self.contentView.layer.masksToBounds = false
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.layer.cornerRadius = self.halfWidth
+        self.contentView.layer.cornerRadius = self.halfWidth
 
         self.label.setSize(withWidth: self.width)
         self.label.centerOnXAndY()
@@ -39,7 +41,10 @@ class EmotionCircleCell: UICollectionViewCell {
 
     func configure(with emotion: Emotion) {
         self.label.text = emotion.rawValue
-        self.backgroundColor = emotion.color.withAlphaComponent(0.7)
+        
+        self.label.textColor = emotion.color
+        self.contentView.layer.borderColor = emotion.color.cgColor
+        self.contentView.backgroundColor = emotion.color.withAlphaComponent(0.4)
 
         self.setNeedsLayout()
     }

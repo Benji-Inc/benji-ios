@@ -23,7 +23,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return self.messageInputController
     }
     
-    var blurView = BlurView()
+    var blurView = DarkBlurView()
     let parentMessageView = MessageContentView()
     
     var messageContent: MessageContentView {

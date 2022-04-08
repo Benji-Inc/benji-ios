@@ -164,7 +164,7 @@ class SwipeInputPanGestureHandler {
         if distanceToDropZone < self.viewController.dropZoneFrame.height * 0.5 {
             if !self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: false)
-                previewView.setBubbleColor(ThemeColor.D1.color, animated: true)
+                previewView.setBubbleColor(ThemeColor.B6.color, animated: true)
                 previewView.textView.setTextColor(.T3)
             }
             self.isPreviewInDropZone = true

@@ -31,7 +31,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         set { self.dataSource.messageCellDelegate = newValue }
     }
     
-    var blurView = BlurView()
+    var blurView = DarkBlurView()
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     // Collection View
