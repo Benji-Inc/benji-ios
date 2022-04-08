@@ -52,11 +52,17 @@ class MessageContentView: BaseView {
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
+    /// A view to blur out the emotions collection view.
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
     private let emotionLayout = EmotionCircleCollectionViewLayout()
     private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
+
+    var areEmotionsShown: Bool {
+        return self.blurView.effect == nil
+    }
+    let emotionsButton = ThemeButton()
 
     var layoutState: Layout = .expanded
 
@@ -72,6 +78,9 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.blurView)
 
         self.bubbleView.addSubview(self.mainContentArea)
+
+        self.bubbleView.addSubview(self.emotionsButton)
+        self.emotionsButton.set(style: .normal(color: .red, text: ""))
 
         self.mainContentArea.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
@@ -100,10 +109,14 @@ class MessageContentView: BaseView {
 
         self.bubbleView.expandToSuperviewSize()
 
-        #warning("Restore once we get the emotion configuration working.")
-//        self.emotionCollectionView.expandToSuperviewSize()
-//
-//        self.blurView.expandToSuperviewSize()
+        self.emotionCollectionView.expandToSuperviewSize()
+
+        self.blurView.expandToSuperviewSize()
+
+        // Don't show the emotions button in the collapsed state.
+        self.emotionsButton.squaredSize = self.layoutState == .expanded ? 38 : 0
+        self.emotionsButton.pin(.left, offset: .standard)
+        self.emotionsButton.pin(.bottom, offset: .standard)
 
         self.mainContentArea.pin(.left, offset: MessageContentView.padding)
         self.mainContentArea.pin(.top, offset: MessageContentView.padding)
@@ -224,6 +237,14 @@ class MessageContentView: BaseView {
         self.bubbleView.setBubbleColor(color.withAlphaComponent(brightness), animated: false)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
+    }
+
+    func setEmotions(areShown: Bool, animated: Bool) {
+        let animationDuration = animated ? Theme.animationDurationStandard : 0
+        UIView.animate(withDuration: animationDuration) {
+            self.mainContentArea.alpha = areShown ? 0 : 1
+            self.blurView.effect = areShown ? nil : UIBlurEffect(style: .systemThinMaterialDark)
+        }
     }
 
     func getSize(with width: CGFloat) -> CGSize {
