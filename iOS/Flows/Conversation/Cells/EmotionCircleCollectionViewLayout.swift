@@ -46,7 +46,7 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
     private lazy var animator = UIDynamicAnimator(collectionViewLayout: self)
     private let collisionBehavior = UICollisionBehavior()
     private let itemBehavior = UIDynamicItemBehavior()
-    private let noiseField = UIFieldBehavior.noiseField(smoothness: 1, animationSpeed: 0.01)
+    private let noiseField = UIFieldBehavior.noiseField(smoothness: 0.2, animationSpeed: 1)
 
     private let cellDiameter: CGFloat = 100
 
@@ -55,6 +55,7 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
 
         self.collisionBehavior.translatesReferenceBoundsIntoBoundary = true
         self.collisionBehavior.collisionMode = .boundaries
+        self.collisionBehavior.collisionDelegate = self
         self.animator.addBehavior(self.collisionBehavior)
 
         self.itemBehavior.elasticity = 1
@@ -63,7 +64,7 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
         self.itemBehavior.angularResistance = 0
         self.animator.addBehavior(self.itemBehavior)
 
-        self.noiseField.strength = 10
+        self.noiseField.strength = 0.2
         self.animator.addBehavior(self.noiseField)
     }
 
@@ -132,7 +133,6 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
     }
 
     // MARK: - Animator Functions
-
     
     private func addEmotionAttributesToAnimator(for indexPath: IndexPath, withId id: String) {
         guard let collectionView = self.collectionView,
@@ -151,7 +151,7 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
 
         // Give the cell a little push to get them moving.
         let pushBehavior = UIPushBehavior(items: [attributes], mode: .instantaneous)
-        pushBehavior.setAngle(CGFloat.random(in: 0...CGFloat.pi*2), magnitude: 0.2)
+        pushBehavior.setAngle(CGFloat.random(in: 0...CGFloat.pi*2), magnitude: 0.3)
         pushBehavior.action = { [unowned self, unowned pushBehavior] in
             // Clean up the push after it's done
             guard !pushBehavior.active else { return }
@@ -168,6 +168,26 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
         self.collisionBehavior.removeItem(item)
         self.itemBehavior.removeItem(item)
         self.noiseField.removeItem(item)
+    }
+}
+
+extension EmotionCircleCollectionViewLayout: UICollisionBehaviorDelegate {
+
+    func collisionBehavior(_ behavior: UICollisionBehavior,
+                           beganContactFor item: UIDynamicItem,
+                           withBoundaryIdentifier identifier: NSCopying?,
+                           at p: CGPoint) {
+
+        let vector = CGVector(dx: item.center.x - p.x, dy: item.center.y - p.y)
+        let pushBehavior = UIPushBehavior(items: [item], mode: .instantaneous)
+        pushBehavior.pushDirection = vector
+        pushBehavior.magnitude = 0.05
+        pushBehavior.action = { [unowned self, unowned pushBehavior] in
+            // Clean up the push after it's done
+            guard !pushBehavior.active else { return }
+            self.animator.removeBehavior(pushBehavior)
+        }
+        self.animator.addBehavior(pushBehavior)
     }
 }
 

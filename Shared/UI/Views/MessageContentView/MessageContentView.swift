@@ -220,7 +220,14 @@ class MessageContentView: BaseView {
         }
 
         self.authorView.set(person: message.person)
-        
+
+        let emotionsItems = message.emotions.map { emotion in
+            EmotionCircleItem(emotion: emotion)
+        }
+        var snapshot = self.emotionDataSource.snapshot()
+        snapshot.setItems(emotionsItems, in: .emotions)
+        self.emotionDataSource.apply(snapshot)
+
         self.setNeedsLayout()
     }
 
