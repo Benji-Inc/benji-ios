@@ -148,14 +148,6 @@ extension Message: Messageable {
         return MessageController.controller(cid, messageId: messageId).message!
     }
     
-    func addEmotions(emtions: [Emotion]) async {
-        guard let controller = ChatClient.shared.messageController(for: self) else { return }
-        
-        await emotions.asyncForEach { emotion in
-            await controller.addReaction(with: .emotion(emotion))
-        }
-    }
-    
     func setToConsumed() async {
         let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
         await controller.addReaction(with: .read)

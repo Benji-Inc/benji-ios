@@ -10,16 +10,6 @@ import Foundation
 import StreamChat
 import Localization
 
-////struct ReactionSummary: Hashable, Comparable {
-////
-////    let type: ReactionType
-////    let count: Int
-////
-//    static func < (lhs: ReactionSummary, rhs: ReactionSummary) -> Bool {
-//        return lhs.type.priority > rhs.type.priority
-//    }
-////}
-
 enum ReactionType {
 
     case emotion(Emotion)
