@@ -29,7 +29,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 
     // Input handling
-    weak var messageCellDelegate: MesssageCellDelegate?
+    weak var messageCellDelegate: MesssageContentDelegate?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
 
     /// If true, show the detail bar for each message

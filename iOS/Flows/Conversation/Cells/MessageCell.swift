@@ -11,14 +11,6 @@ import SwiftUI
 import StreamChat
 import Combine
 
-@MainActor
-protocol MesssageCellDelegate: AnyObject {
-    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
-    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
-    func messageCell(_ cell: MessageCell, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
-    func messageCell(_ cell: MessageCell, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
-}
-
 struct MessageDetailState: Equatable {
     var areDetailsFullyVisible: Bool = false
 }
@@ -26,7 +18,7 @@ struct MessageDetailState: Equatable {
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
-    weak var delegate: MesssageCellDelegate?
+    weak var delegate: MesssageContentDelegate?
 
     @ObservedObject var messageState = MessageDetailViewState(message: nil)
 
@@ -39,7 +31,7 @@ class MessageCell: UICollectionViewCell {
     private var conversationsManagerSubscription: AnyCancellable?
 
     // Context menu
-    private lazy var contextMenuDelegate = MessageCellContextMenuDelegate(messageCell: self)
+    private lazy var contextMenuDelegate = MessageContentContextMenuDelegate(content: self.content)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

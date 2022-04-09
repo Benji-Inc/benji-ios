@@ -25,7 +25,7 @@
 		801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
 		801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
 		8020DD93272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */; };
-		8023C69F27EB98B300FD9DB6 /* MessageCellContextMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C69E27EB98B300FD9DB6 /* MessageCellContextMenuDelegate.swift */; };
+		8023C69F27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */; };
 		8023C6A227EBCDEF00FD9DB6 /* ImageViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C6A127EBCDEF00FD9DB6 /* ImageViewCoordinator.swift */; };
 		8024B95326F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */; };
 		80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80251FF726F3D362006D7873 /* MessageController+Extensions.swift */; };
@@ -813,7 +813,7 @@
 		801D382127FF755500FC2263 /* EmotionCircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCircleCell.swift; sourceTree = "<group>"; };
 		801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
 		8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwipeableInputAccessoryView.xib; sourceTree = "<group>"; };
-		8023C69E27EB98B300FD9DB6 /* MessageCellContextMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellContextMenuDelegate.swift; sourceTree = "<group>"; };
+		8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentContextMenuDelegate.swift; sourceTree = "<group>"; };
 		8023C6A127EBCDEF00FD9DB6 /* ImageViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewCoordinator.swift; sourceTree = "<group>"; };
 		8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		80251FF726F3D362006D7873 /* MessageController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageController+Extensions.swift"; sourceTree = "<group>"; };
@@ -1746,7 +1746,7 @@
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
-				8023C69E27EB98B300FD9DB6 /* MessageCellContextMenuDelegate.swift */,
+				8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */,
 				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
 				80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */,
@@ -3019,7 +3019,7 @@
 				D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */,
-				8023C69F27EB98B300FD9DB6 /* MessageCellContextMenuDelegate.swift in Sources */,
+				8023C69F27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift in Sources */,
 				D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */,
 				D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,

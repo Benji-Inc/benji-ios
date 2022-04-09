@@ -9,6 +9,15 @@
 import Foundation
 import Combine
 import LinkPresentation
+import StreamChat
+
+@MainActor
+protocol MesssageContentDelegate: AnyObject {
+    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
+    func messageCell(_ cell: MessageCell, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
+}
 
 class MessageContentView: BaseView {
     

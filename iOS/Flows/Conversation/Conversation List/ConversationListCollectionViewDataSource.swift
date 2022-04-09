@@ -29,7 +29,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     }
 
     // Input handling
-    var messageCellDelegate: MesssageCellDelegate?
+    var messageCellDelegate: MesssageContentDelegate?
     var handleCollectionViewTapped: CompletionOptional = nil 
     
     var handleLoadMoreMessages: CompletionOptional = nil
