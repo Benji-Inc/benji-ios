@@ -186,7 +186,7 @@ class MessageCell: UICollectionViewCell {
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
 
-            try? await messageable.setToConsumed()
+            await messageable.setToConsumed()
         }.add(to: self.messageDetailTasks)
     }
 }

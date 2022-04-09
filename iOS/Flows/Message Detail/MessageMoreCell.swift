@@ -124,7 +124,7 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
     func setToRead(with message: Message) {
         guard message.canBeConsumed else { return }
         Task {
-            try await message.setToConsumed()
+            await message.setToConsumed()
         }
     }
 

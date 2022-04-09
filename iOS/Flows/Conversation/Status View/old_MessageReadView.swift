@@ -246,13 +246,10 @@ class old_MessageReadView: old_MessageStatusContainer {
             await UIView.awaitAnimation(with: .fast, animations: {
                 self.progressView.alpha = 0
             })
-            do {
-                guard !Task.isCancelled else { return }
-                try await message.setToConsumed()
-            }
-            catch {
-                logError(error)
-            }
+            
+            guard !Task.isCancelled else { return }
+            await message.setToConsumed()
+            
         }.add(to: self.taskPool)
     }
     

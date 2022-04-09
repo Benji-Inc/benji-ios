@@ -54,12 +54,12 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
                                 children: [confirmDelete, neverMind])
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            //self.messageCell.delegate?.messageCell(self.messageCell, didTapMessage: (cid, message.id))
+            self.content.delegate?.messageContent(self.content, didTapMessage: (cid, message.id))
         }
 
         let edit = UIAction(title: "Edit",
                             image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
-            //self.messageCell.delegate?.messageCell(self.messageCell, didTapEditMessage: (cid, message.id))
+            self.content.delegate?.messageContent(self.content, didTapEditMessage: (cid, message.id))
         }
 
         let read = UIAction(title: "Set to read",
