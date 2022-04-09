@@ -26,7 +26,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         return "SCREEN_CONVERSATION_LIST"
     }
 
-    var messageCellDelegate: MesssageContentDelegate? {
+    var messageContentDelegate: MesssageContentDelegate? {
         get { return self.dataSource.messageCellDelegate}
         set { self.dataSource.messageCellDelegate = newValue }
     }
@@ -230,7 +230,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
             await messagesCell.scrollToMessage(with: parentMessageId, animateScroll: true, animateSelection: true)
 
             if let messageCell = messagesCell.getFrontmostCell() {
-                self.messageCellDelegate?.messageCell(messageCell, didTapMessage: (cid, messageId))
+                self.messageContentDelegate?.messageCell(messageCell, didTapMessage: (cid, messageId))
             }
         } else {
             await messagesCell.scrollToMessage(with: messageId, animateScroll: true, animateSelection: true)
