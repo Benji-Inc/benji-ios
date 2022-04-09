@@ -114,7 +114,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         ConversationsManager.shared.activeConversation = controller.conversation
     }
     
-    override func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
+    override func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
         if let parentId = message.parentMessageId {

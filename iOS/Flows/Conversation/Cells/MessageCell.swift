@@ -18,8 +18,6 @@ struct MessageDetailState: Equatable {
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
-    weak var delegate: MesssageContentDelegate?
-
     @ObservedObject var messageState = MessageDetailViewState(message: nil)
 
     let content = MessageContentView()
@@ -48,16 +46,6 @@ class MessageCell: UICollectionViewCell {
 
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
         self.content.bubbleView.addInteraction(contextMenuInteraction)
-
-        self.content.imageView.didSelect { [unowned self] in
-            guard let message = self.messageState.message else { return }
-            self.delegate?.messageCell(self, didTapAttachmentForMessage: (message.streamCid, message.id))
-        }
-        
-        self.content.addEmotionButton.didSelect { [unowned self] in
-            guard let message = self.messageState.message else { return }
-            self.delegate?.messageCell(self, didTapAddEmotionsForMessage: (message.streamCid, message.id))
-        }
         
         self.contentView.addSubview(self.footerView)
 

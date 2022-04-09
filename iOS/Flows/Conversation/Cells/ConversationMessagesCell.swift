@@ -21,9 +21,9 @@ protocol ConversationUIStateSettable {
 class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable, UICollectionViewDelegate {
 
     // Interaction handling
-    var messageCellDelegate: MesssageContentDelegate? {
-        get { return self.dataSource.messageCellDelegate }
-        set { self.dataSource.messageCellDelegate = newValue }
+    var messageContentDelegate: MesssageContentDelegate? {
+        get { return self.dataSource.messageContentDelegate }
+        set { self.dataSource.messageContentDelegate = newValue }
     }
     var handleCollectionViewTapped: CompletionOptional = nil
     
@@ -254,7 +254,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         switch item {
         case .message(cid: let cid, messageID: let messageID, _):
-            self.messageCellDelegate?.messageCell(cell, didTapMessage: (cid, messageID))
+            self.messageContentDelegate?.messageContent(cell.content, didTapMessage: (cid, messageID))
         case .loadMore, .placeholder, .initial:
             break
         }
