@@ -49,6 +49,9 @@ class RoomCoordinator: PresentableCoordinator<Void> {
     }
     
     private func setupHandlers() {
+        
+        self.roomVC.dataSource.messageContentDelegate = self 
+        
         self.roomVC.headerView.jibImageView.didSelect { [unowned self] in
             self.presentWallet()
         }
@@ -114,5 +117,33 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         return controller.conversation
+    }
+}
+
+extension RoomCoordinator: MessageContentDelegate {
+    
+    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, let body):
+            guard let url = photo.url else { return }
+            let text = "\(message.author.givenName): \(body)"
+            self.presentImageFlow(for: [url], startingURL: url, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
+        }
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+        
     }
 }

@@ -48,6 +48,8 @@ extension RoomCoordinator {
     }
     
     func presentWallet() {
+        self.removeChild()
+        
         let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] result in
@@ -68,6 +70,19 @@ extension RoomCoordinator {
             }
         }
         
+        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
+    }
+    
+    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
+        self.removeChild()
+        
+        let coordinator = ImageViewCoordinator(imageURLs: imageURLs,
+                                               startURL: startingURL,
+                                               body: body,
+                                               router: self.router,
+                                               deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { _ in }
         self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
     }
 }

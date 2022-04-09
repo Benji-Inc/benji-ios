@@ -14,7 +14,7 @@ import Lightbox
 import StreamChat
 
 protocol SwipeableInputControllerHandler where Self: ViewController {
-    var messageContentDelegate: MesssageContentDelegate? { get set }
+    var messageContentDelegate: MessageContentDelegate? { get set }
     var swipeableVC: SwipeableInputAccessoryViewController { get }
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
     func scrollToConversation(with cid: ConversationId,
@@ -30,7 +30,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                        PHPickerViewControllerDelegate,
                                        UIImagePickerControllerDelegate,
                                        UINavigationControllerDelegate,
-                                       MesssageContentDelegate {
+                                       MessageContentDelegate {
     
     lazy var captureVC: UIImagePickerController = {
         let vc = UIImagePickerController()

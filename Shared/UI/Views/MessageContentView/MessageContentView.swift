@@ -12,7 +12,7 @@ import LinkPresentation
 import StreamChat
 
 @MainActor
-protocol MesssageContentDelegate: AnyObject {
+protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
@@ -82,7 +82,7 @@ class MessageContentView: BaseView {
     private let cellDiameter: CGFloat
     
     /// Delegate
-    weak var delegate: MesssageContentDelegate?
+    weak var delegate: MessageContentDelegate?
     
     init(with cellDiameter: CGFloat = 80) {
         self.cellDiameter = cellDiameter

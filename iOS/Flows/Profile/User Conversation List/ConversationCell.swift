@@ -42,11 +42,17 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     
     private let stackedAvatarView = StackedPersonView()
     
+    // Context menu
+    private lazy var contextMenuDelegate = MessageContentContextMenuDelegate(content: self.messageContent)
+    
     private var conversationController: ConversationController?
     var subscriptions = Set<AnyCancellable>()
     
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
+        self.messageContent.bubbleView.addInteraction(contextMenuInteraction)
         
         self.contentView.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .white)

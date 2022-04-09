@@ -35,7 +35,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         }
     }
 
-    weak var messageContentDelegate: MesssageContentDelegate? {
+    weak var messageContentDelegate: MessageContentDelegate? {
         get { return self.dataSource.messageContentDelegate }
         set { self.dataSource.messageContentDelegate = newValue }
     }

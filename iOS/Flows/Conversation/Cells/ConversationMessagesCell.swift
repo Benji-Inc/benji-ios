@@ -21,7 +21,7 @@ protocol ConversationUIStateSettable {
 class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable, UICollectionViewDelegate {
 
     // Interaction handling
-    var messageContentDelegate: MesssageContentDelegate? {
+    var messageContentDelegate: MessageContentDelegate? {
         get { return self.dataSource.messageContentDelegate }
         set { self.dataSource.messageContentDelegate = newValue }
     }

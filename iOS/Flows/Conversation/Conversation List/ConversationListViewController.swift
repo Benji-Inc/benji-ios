@@ -26,7 +26,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         return "SCREEN_CONVERSATION_LIST"
     }
 
-    var messageContentDelegate: MesssageContentDelegate? {
+    var messageContentDelegate: MessageContentDelegate? {
         get { return self.dataSource.messageContentDelegate}
         set { self.dataSource.messageContentDelegate = newValue }
     }
