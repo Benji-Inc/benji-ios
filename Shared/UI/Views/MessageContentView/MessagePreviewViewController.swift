@@ -13,9 +13,6 @@ class MessagePreviewViewController: ViewController {
     let message: Messageable
 
     private let content = MessageContentView()
-    private let readView = old_MessageReadView()
-    private let emotionView = ExpressionView()
-    private let replyView = old_MessageReplyView()
 
     init(with message: Messageable) {
         self.message = message
@@ -31,51 +28,25 @@ class MessagePreviewViewController: ViewController {
 
         guard let window = UIWindow.topWindow() else { return }
         
+        self.content.layoutState = .expanded
         self.view.addSubview(self.content)
-        self.view.addSubview(self.replyView)
-        self.replyView.set(backgroundColor: .clear)
-        
-        self.view.addSubview(self.readView)
-        self.readView.set(backgroundColor: .clear)
-        
-        self.view.addSubview(self.emotionView)
-        
-        self.view.set(backgroundColor: .L1)
-
-        self.content.configureBackground(color: ThemeColor.clear.color,
-                                         textColor: ThemeColor.T2.color,
-                                         brightness: 0.0,
+        self.content.configureBackground(color: ThemeColor.B6.color,
+                                         textColor: ThemeColor.T3.color,
+                                         brightness: 1.0,
                                          showBubbleTail: false,
                                          tailOrientation: .up)
         self.content.configure(with: self.message)
-        self.content.bubbleView.backgroundLayer.fillColor = ThemeColor.clear.color.cgColor
-        
-        if let msg = self.message as? Message {
-            self.replyView.setReplies(for: msg)
-            self.replyView.countLabel.setTextColor(.T2)
-            self.replyView.height = 25
-            self.readView.showRead(with: msg)
-            self.readView.label.setTextColor(.T2)
-            self.emotionView.configure(for: msg)
-            self.emotionView.label.setTextColor(.T2)
-        }
+        self.content.emotionsButton.isVisible = false 
 
-        let maxWidth = Theme.getPaddedWidth(with: window.width)
+        let maxWidth = window.width - Theme.ContentOffset.xtraLong.value.doubled
         var size = self.content.getSize(with: maxWidth)
-
-        if size.width < maxWidth {
-            size.width = maxWidth
-        }
-
+        size.width = maxWidth
+        
         if size.height < MessageContentView.bubbleHeight {
             size.height = MessageContentView.bubbleHeight
         }
-        
-        size.height += 25 + Theme.ContentOffset.standard.value.doubled
 
-        self.content.size.width = size.width
-
-        self.preferredContentSize = size 
+        self.preferredContentSize = size
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -87,24 +58,6 @@ class MessagePreviewViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.content.size = self.content.getSize(with: self.view.width)
-        self.content.width = self.view.width
-        self.content.centerOnX()
-        self.content.pin(.top)
-        
-        self.replyView.right = self.view.width - Theme.ContentOffset.standard.value
-        self.replyView.pin(.bottom, offset: .standard)
-        
-        self.readView.height = 25
-        if self.replyView.width > 0 {
-            self.readView.match(.right, to: .left, of: self.replyView, offset: .negative(.short))
-        } else {
-            self.readView.match(.right, to: .left, of: self.replyView, offset: .noOffset)
-        }
-        self.readView.match(.bottom, to: .bottom, of: self.replyView)
-        
-        self.emotionView.height = 25
-        self.emotionView.pin(.left, offset: .long)
-        self.emotionView.match(.bottom, to: .bottom, of: self.replyView)
+        self.content.expandToSuperviewSize()
     }
 }
