@@ -29,7 +29,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     }
 
     // Input handling
-    var messageCellDelegate: MesssageCellDelegate?
+    var messageContentDelegate: MessageContentDelegate?
     var handleCollectionViewTapped: CompletionOptional = nil 
     
     var handleLoadMoreMessages: CompletionOptional = nil
@@ -66,7 +66,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
                                                            for: indexPath,
                                                            item: (cid, self.uiState, self))
-            conversationCell.messageCellDelegate = self.messageCellDelegate
+            conversationCell.messageContentDelegate = self.messageContentDelegate
             conversationCell.handleCollectionViewTapped = { [unowned self] in
                 self.handleCollectionViewTapped?()
             }

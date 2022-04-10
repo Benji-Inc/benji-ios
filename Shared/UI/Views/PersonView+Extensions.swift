@@ -8,14 +8,14 @@
 
 import Foundation
 
-extension PersonView: AvatarContextDelegate {
+extension PersonView: PersonContextDelegate {
     
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         guard let person = self.person else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil) { () -> UIViewController? in
-            return AvatarProfileViewController(with: person)
+            return PersonPreviewViewController(with: person)
         } actionProvider: { (suggestions) -> UIMenu? in
             return self.getMenu(for: person)
         }

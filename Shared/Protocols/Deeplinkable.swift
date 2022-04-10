@@ -11,6 +11,10 @@ import Foundation
 import StreamChat
 #endif
 
+protocol DeepLinkHandler {
+    func handle(deepLink: DeepLinkable)
+}
+
 protocol DeepLinkable {
     var customMetadata: NSMutableDictionary { get set }
     var deepLinkTarget: DeepLinkTarget? { get set }
@@ -44,6 +48,15 @@ extension DeepLinkable {
         set {
             let stringCID = newValue?.description
             self.customMetadata.setValue(stringCID, forKey: "conversationId")
+        }
+    }
+    
+    var personId: String? {
+        get {
+            return self.customMetadata.value(forKey: "personId") as? String
+        }
+        set {
+            self.customMetadata.setValue(newValue, forKey: "personId")
         }
     }
 

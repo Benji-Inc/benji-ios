@@ -9,6 +9,15 @@
 import Foundation
 import Combine
 import LinkPresentation
+import StreamChat
+
+@MainActor
+protocol MessageContentDelegate: AnyObject {
+    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId))
+    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId))
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
+    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
+}
 
 class MessageContentView: BaseView {
     
@@ -72,6 +81,9 @@ class MessageContentView: BaseView {
     var layoutState: Layout = .expanded
     private let cellDiameter: CGFloat
     
+    /// Delegate
+    weak var delegate: MessageContentDelegate?
+    
     init(with cellDiameter: CGFloat = 80) {
         self.cellDiameter = cellDiameter
         super.init()
@@ -129,6 +141,20 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
+        
+        self.setupHandlers()
+    }
+    
+    private func setupHandlers() {
+        self.imageView.didSelect { [unowned self] in
+            guard let message = self.message else { return }
+            self.delegate?.messageContent(self, didTapAttachmentForMessage: (message.streamCid, message.id))
+        }
+        
+        self.addEmotionButton.didSelect { [unowned self] in
+            guard let message = self.message else { return }
+            self.delegate?.messageContent(self, didTapAddEmotionsForMessage: (message.streamCid, message.id))
+        }
     }
 
     override func layoutSubviews() {

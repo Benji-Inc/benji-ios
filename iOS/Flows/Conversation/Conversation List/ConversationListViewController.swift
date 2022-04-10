@@ -26,9 +26,9 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         return "SCREEN_CONVERSATION_LIST"
     }
 
-    var messageCellDelegate: MesssageCellDelegate? {
-        get { return self.dataSource.messageCellDelegate}
-        set { self.dataSource.messageCellDelegate = newValue }
+    var messageContentDelegate: MessageContentDelegate? {
+        get { return self.dataSource.messageContentDelegate}
+        set { self.dataSource.messageContentDelegate = newValue }
     }
     
     var blurView = DarkBlurView()
@@ -230,7 +230,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
             await messagesCell.scrollToMessage(with: parentMessageId, animateScroll: true, animateSelection: true)
 
             if let messageCell = messagesCell.getFrontmostCell() {
-                self.messageCellDelegate?.messageCell(messageCell, didTapMessage: (cid, messageId))
+                self.messageContentDelegate?.messageContent(messageCell.content, didTapMessage: (cid, messageId))
             }
         } else {
             await messagesCell.scrollToMessage(with: messageId, animateScroll: true, animateSelection: true)

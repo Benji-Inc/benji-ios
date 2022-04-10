@@ -29,7 +29,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 
     // Input handling
-    weak var messageCellDelegate: MesssageCellDelegate?
+    weak var messageContentDelegate: MessageContentDelegate?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
 
     /// If true, show the detail bar for each message
@@ -61,7 +61,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                                                            for: indexPath,
                                                            item: (cid, messageID, showDetail, collectionView))
             messageCell.shouldShowDetailBar = self.shouldShowDetailBar
-            messageCell.delegate = self.messageCellDelegate
+            messageCell.content.delegate = self.messageContentDelegate
 
             return messageCell
         case .loadMore(cid: let conversationID):

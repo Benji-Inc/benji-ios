@@ -13,8 +13,13 @@ extension MainCoordinator: LaunchManagerDelegate {
 
     nonisolated func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity) {
         Task.onMainActor {
-            guard let furthestChild = self.furthestChild as? LaunchActivityHandler else { return }
-            furthestChild.handle(launchActivity: activity)
+            switch activity {
+            case .deepLink(let deepLinkable):
+                self.handle(deeplink: deepLinkable)
+            default:
+                guard let furthestChild = self.furthestChild as? LaunchActivityHandler else { return }
+                furthestChild.handle(launchActivity: activity)
+            }
         }
     }
 

@@ -11,22 +11,12 @@ import SwiftUI
 import StreamChat
 import Combine
 
-@MainActor
-protocol MesssageCellDelegate: AnyObject {
-    func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId))
-    func messageCell(_ cell: MessageCell, didTapEditMessage messageInfo: (ConversationId, MessageId))
-    func messageCell(_ cell: MessageCell, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
-    func messageCell(_ cell: MessageCell, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
-}
-
 struct MessageDetailState: Equatable {
     var areDetailsFullyVisible: Bool = false
 }
 
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
-
-    weak var delegate: MesssageCellDelegate?
 
     @ObservedObject var messageState = MessageDetailViewState(message: nil)
 
@@ -39,7 +29,7 @@ class MessageCell: UICollectionViewCell {
     private var conversationsManagerSubscription: AnyCancellable?
 
     // Context menu
-    private lazy var contextMenuDelegate = MessageCellContextMenuDelegate(messageCell: self)
+    private lazy var contextMenuDelegate = MessageContentContextMenuDelegate(content: self.content)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,16 +46,6 @@ class MessageCell: UICollectionViewCell {
 
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
         self.content.bubbleView.addInteraction(contextMenuInteraction)
-
-        self.content.imageView.didSelect { [unowned self] in
-            guard let message = self.messageState.message else { return }
-            self.delegate?.messageCell(self, didTapAttachmentForMessage: (message.streamCid, message.id))
-        }
-        
-        self.content.addEmotionButton.didSelect { [unowned self] in
-            guard let message = self.messageState.message else { return }
-            self.delegate?.messageCell(self, didTapAddEmotionsForMessage: (message.streamCid, message.id))
-        }
         
         self.contentView.addSubview(self.footerView)
 
@@ -206,7 +186,7 @@ class MessageCell: UICollectionViewCell {
             await Task.snooze(seconds: 2)
             guard !Task.isCancelled else { return }
 
-            try? await messageable.setToConsumed()
+            await messageable.setToConsumed()
         }.add(to: self.messageDetailTasks)
     }
 }

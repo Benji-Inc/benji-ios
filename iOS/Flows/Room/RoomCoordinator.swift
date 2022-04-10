@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-class RoomCoordinator: PresentableCoordinator<Void> {
+class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     
     lazy var roomVC = RoomViewController()
     
@@ -21,7 +21,7 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         super.start()
         
         if let deepLink = self.deepLink {
-            self.handle(deeplink: deepLink)
+            self.handle(deepLink: deepLink)
         }
         
         self.setupHandlers()
@@ -31,24 +31,33 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         }.add(to: self.taskPool)
     }
     
-    func handle(deeplink: DeepLinkable) {
-        self.deepLink = deeplink
+    func handle(deepLink: DeepLinkable) {
+        self.deepLink = deepLink
 
-        guard let target = deeplink.deepLinkTarget else { return }
+        guard let target = deepLink.deepLinkTarget else { return }
 
         switch target {
         case .conversation:
-            let messageID = deeplink.messageId
-            guard let cid = deeplink.conversationId else { break }
+            let messageID = deepLink.messageId
+            guard let cid = deepLink.conversationId else { break }
             self.presentConversation(with: cid, messageId: messageID)
         case .wallet:
             self.presentWallet()
+        case .profile:
+            Task {
+                guard let personId = self.deepLink?.personId,
+                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                self.presentProfile(for: person)
+            }
         default:
             break
         }
     }
     
     private func setupHandlers() {
+        
+        self.roomVC.dataSource.messageContentDelegate = self 
+        
         self.roomVC.headerView.jibImageView.didSelect { [unowned self] in
             self.presentWallet()
         }
@@ -114,5 +123,33 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         return controller.conversation
+    }
+}
+
+extension RoomCoordinator: MessageContentDelegate {
+    
+    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, let body):
+            guard let url = photo.url else { return }
+            let text = "\(message.author.givenName): \(body)"
+            self.presentImageFlow(for: [url], startingURL: url, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
+        }
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+        
     }
 }

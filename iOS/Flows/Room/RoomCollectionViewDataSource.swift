@@ -46,6 +46,8 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     var didSelectRightOption: ((SystemNotice) -> Void)? = nil
     var didSelectLeftOption: ((SystemNotice) -> Void)? = nil
     
+    weak var messageContentDelegate: MessageContentDelegate?
+    
     // MARK: - Cell Dequeueing
     
     override func dequeueCell(with collectionView: UICollectionView,
@@ -69,13 +71,19 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
                                                                 for: indexPath,
                                                                 item: member)
         case .conversation(let cid):
-            return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
-                                                                for: indexPath,
-                                                                item: cid)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
+                                                                    for: indexPath,
+                                                                    item: cid)
+            cell.messageContent.delegate = self.messageContentDelegate
+            cell.lineView.isHidden = self.snapshot().numberOfItems(inSection: section) - 1 == indexPath.row
+            return cell
         case .unreadMessages(let cid):
-            return collectionView.dequeueConfiguredReusableCell(using: self.unreadConfig,
-                                                                for: indexPath,
-                                                                item: cid)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.unreadConfig,
+                                                                    for: indexPath,
+                                                                    item: cid)
+            cell.messageContent.delegate = self.messageContentDelegate
+            cell.lineView.isHidden = self.snapshot().numberOfItems(inSection: section) - 1 == indexPath.row
+            return cell
         case .add(let reservationId):
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,
                                                                 for: indexPath,

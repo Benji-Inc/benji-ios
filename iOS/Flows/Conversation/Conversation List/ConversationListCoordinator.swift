@@ -14,7 +14,7 @@ import StreamChat
 import Localization
 import Intents
 
-class ConversationListCoordinator: InputHandlerCoordinator<Void> {
+class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
     var listVC: ConversationListViewController {
         return self.inputHandlerViewController as! ConversationListViewController
@@ -32,7 +32,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
 
         super.init(with: vc, router: router, deepLink: deepLink)
 
-        vc.messageCellDelegate = self
+        vc.messageContentDelegate = self
     }
 
     override func start() {
@@ -64,15 +64,15 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         }
     }
 
-    func handle(deeplink: DeepLinkable) {
-        self.deepLink = deeplink
+    func handle(deepLink: DeepLinkable) {
+        self.deepLink = deepLink
 
-        guard let target = deeplink.deepLinkTarget else { return }
+        guard let target = deepLink.deepLinkTarget else { return }
 
         switch target {
         case .conversation:
-            let messageID = deeplink.messageId
-            guard let cid = deeplink.conversationId else { break }
+            let messageID = deepLink.messageId
+            guard let cid = deepLink.conversationId else { break }
             Task {
                 await self.listVC.scrollToConversation(with: cid,
                                                        messageId: messageID,
@@ -81,6 +81,12 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()
+        case .profile:
+            Task {
+                guard let personId = self.deepLink?.personId,
+                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                self.presentProfile(for: person)
+            }
         default:
             break
         }
@@ -114,7 +120,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         ConversationsManager.shared.activeConversation = controller.conversation
     }
     
-    override func messageCell(_ cell: MessageCell, didTapMessage messageInfo: (ConversationId, MessageId)) {
+    override func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
         if let parentId = message.parentMessageId {

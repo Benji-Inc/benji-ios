@@ -9,19 +9,19 @@
 import Foundation
 import StreamChat
 
-class MessageCellContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
+class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
 
-    unowned let messageCell: MessageCell
+    unowned let content: MessageContentView
 
-    init(messageCell: MessageCell) {
-        self.messageCell = messageCell
+    init(content: MessageContentView) {
+        self.content = content
     }
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 
         return UIContextMenuConfiguration(identifier: nil) { [unowned self] () -> UIViewController? in
-            guard let message = self.messageCell.messageState.message else { return nil }
+            guard let message = self.content.message else { return nil }
             return MessagePreviewViewController(with: message)
         } actionProvider: { [unowned self] (suggestions) -> UIMenu? in
             return self.makeContextMenu()
@@ -29,7 +29,7 @@ class MessageCellContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate
     }
 
     private func makeContextMenu() -> UIMenu {
-        guard let message = self.messageCell.messageState.message as? Message, let cid = message.cid else {
+        guard let message = self.content.message as? Message, let cid = message.cid else {
             return UIMenu()
         }
 
@@ -54,12 +54,12 @@ class MessageCellContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate
                                 children: [confirmDelete, neverMind])
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            self.messageCell.delegate?.messageCell(self.messageCell, didTapMessage: (cid, message.id))
+            self.content.delegate?.messageContent(self.content, didTapMessage: (cid, message.id))
         }
 
         let edit = UIAction(title: "Edit",
                             image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
-            self.messageCell.delegate?.messageCell(self.messageCell, didTapEditMessage: (cid, message.id))
+            self.content.delegate?.messageContent(self.content, didTapEditMessage: (cid, message.id))
         }
 
         let read = UIAction(title: "Set to read",
@@ -115,14 +115,14 @@ class MessageCellContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate
     // MARK: - Message Consumption
 
     func setToRead() {
-        guard let msg = self.messageCell.messageState.message, msg.canBeConsumed else { return }
+        guard let msg = self.content.message, msg.canBeConsumed else { return }
         Task {
-            try await msg.setToConsumed()
+            await msg.setToConsumed()
         }
     }
 
     func setToUnread() {
-        guard let msg = self.messageCell.messageState.message, msg.isConsumedByMe else { return }
+        guard let msg = self.content.message, msg.isConsumedByMe else { return }
         Task {
             try await msg.setToUnconsumed()
         }

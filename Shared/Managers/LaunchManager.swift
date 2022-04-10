@@ -17,6 +17,7 @@ enum LaunchActivity {
     case onboarding(phoneNumber: String)
     case reservation(reservationId: String)
     case pass(passId: String)
+    case deepLink(DeepLinkable)
 }
 
 protocol LaunchActivityHandler {

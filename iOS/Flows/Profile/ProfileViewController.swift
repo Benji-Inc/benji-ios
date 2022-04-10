@@ -17,11 +17,12 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     lazy var header = ProfileHeaderView()
     lazy var contextCuesVC = ContextCuesViewController(person: self.person)
+    private let contextCueHeaderLabel = ThemeLabel(font: .regular)
     
-    private let segmentGradientView = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
-                                                         ThemeColor.walletBackground.color.cgColor,
-                                                         ThemeColor.walletBackground.color.cgColor,
-                                                         ThemeColor.walletBackground.color.withAlphaComponent(0.0).cgColor],
+    private let segmentGradientView = GradientView(with: [ThemeColor.B6.color.cgColor,
+                                                         ThemeColor.B6.color.cgColor,
+                                                         ThemeColor.B6.color.cgColor,
+                                                         ThemeColor.B6.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .topCenter,
                                                   endPoint: .bottomCenter)
     private let backgroundView = BaseView()
@@ -58,9 +59,12 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.view.addSubview(self.header)
         self.addChild(viewController: self.contextCuesVC, toView: self.view)
         
+        self.view.addSubview(self.contextCueHeaderLabel)
+        self.contextCueHeaderLabel.setText("What I'm up too...")
+        
         self.view.addSubview(self.bottomGradientView)
         
-        self.backgroundView.set(backgroundColor: .walletBackground)
+        self.backgroundView.set(backgroundColor: .B6)
         self.backgroundView.layer.cornerRadius = Theme.cornerRadius
         self.backgroundView.layer.masksToBounds = true
         self.backgroundView.clipsToBounds = true
@@ -125,14 +129,18 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     override func viewDidLayoutSubviews() {
         self.header.expandToSuperviewWidth()
-        self.header.height = 160
-        self.header.pinToSafeAreaTop()
+        self.header.height = ProfileHeaderView.height
+        self.header.pinToSafeArea(.top, offset: .xtraLong)
+        
+        self.contextCueHeaderLabel.setSize(withWidth: self.view.width)
+        self.contextCueHeaderLabel.match(.top, to: .bottom, of: self.header, offset: .xtraLong)
+        self.contextCueHeaderLabel.pin(.left, offset: .xtraLong)
         
         super.viewDidLayoutSubviews()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
         self.contextCuesVC.view.height = 44
-        self.contextCuesVC.view.match(.top, to: .bottom, of: self.header)
+        self.contextCuesVC.view.match(.top, to: .bottom, of: self.contextCueHeaderLabel, offset: .xtraLong)
         
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
