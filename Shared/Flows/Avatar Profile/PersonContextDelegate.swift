@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol AvatarContextDelegate: UIContextMenuInteractionDelegate {
+protocol PersonContextDelegate: UIContextMenuInteractionDelegate {
     func getMenu(for person: PersonType) -> UIMenu
 }
 
 private var personKey: UInt8 = 0
-extension AvatarContextDelegate where Self: NSObject {
+extension PersonContextDelegate where Self: NSObject {
 
     var person: PersonType? {
         get {

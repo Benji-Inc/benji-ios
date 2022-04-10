@@ -24,8 +24,10 @@ class PersonView: DisplayableImageView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        #if IOS
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
+        #endif
 
         self.subscribeToUpdates()
     }
@@ -33,8 +35,9 @@ class PersonView: DisplayableImageView {
     // MARK: - Open setters
 
     func set(person: PersonType?) {
+        #if IOS
         self.person = person
-
+        #endif
         self.displayable = person
     }
 
@@ -49,7 +52,11 @@ class PersonView: DisplayableImageView {
         PeopleStore.shared.$personUpdated
             .filter { [unowned self] updatedPerson in
                 // Only handle person updates related to the currently assigned person.
-                self.person?.personId ==  updatedPerson?.personId
+                if let person = displayable as? PersonType {
+                    return person.personId == updatedPerson?.personId
+                } else {
+                    return false
+                }
             }.mainSink { [unowned self] updatedPerson in
                 guard let updatedPerson = updatedPerson else { return }
                 self.didRecieveUpdateFor(person: updatedPerson)

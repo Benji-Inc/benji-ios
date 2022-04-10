@@ -23,10 +23,10 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                    endPoint: .topCenter)
     
     private let walletGradientView
-    = GradientView(with: [ThemeColor.walletBackground.color.cgColor,
-                          ThemeColor.walletBackground.color.cgColor,
-                          ThemeColor.walletBackground.color.cgColor,
-                          ThemeColor.walletBackground.color.withAlphaComponent(0.0).cgColor],
+    = GradientView(with: [ThemeColor.B6.color.cgColor,
+                          ThemeColor.B6.color.cgColor,
+                          ThemeColor.B6.color.cgColor,
+                          ThemeColor.B6.color.withAlphaComponent(0.0).cgColor],
                    startPoint: .topCenter,
                    endPoint: .bottomCenter)
     private let backgroundView = BaseView()
@@ -60,7 +60,7 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         }
         
         self.view.addSubview(self.header)
-        self.backgroundView.set(backgroundColor: .walletBackground)
+        self.backgroundView.set(backgroundColor: .B6)
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         

@@ -11,6 +11,8 @@ import Parse
 
 class ProfileHeaderView: BaseView {
     
+    static let height: CGFloat = 100 
+    
     let nameLabel = ThemeLabel(font: .medium)
     let memberLabel = ThemeLabel(font: .small)
     
@@ -20,9 +22,7 @@ class ProfileHeaderView: BaseView {
     let statusLabel = ThemeLabel(font: .small)
     let focusLabel = ThemeLabel(font: .small)
     let focusCircle = BaseView()
-    
-    let bottomLabel = ThemeLabel(font: .regular)
-    
+        
     let personView = BorderedPersonView()
     
     override func initializeSubviews() {
@@ -50,11 +50,6 @@ class ProfileHeaderView: BaseView {
         self.focusLabel.setTextColor(.D1)
         
         self.addSubview(self.focusCircle)
-        
-        self.addSubview(self.bottomLabel)
-        self.bottomLabel.textAlignment = .center
-        self.bottomLabel.setText("What I'm up to...")
-        
         self.addSubview(self.personView)
     }
     
@@ -65,7 +60,7 @@ class ProfileHeaderView: BaseView {
 
         if let user = person as? User {
             if let position = user.quePosition {
-                self.memberLabel.setText("Member #\(position)")
+                self.memberLabel.setText("#\(position)")
             }
 
             if user.isCurrentUser {
@@ -74,6 +69,8 @@ class ProfileHeaderView: BaseView {
             } else {
                 self.timeLabel.setText(user.getLocalTime())
             }
+        } else {
+            
         }
 
         if let status = person.focusStatus {
@@ -92,34 +89,14 @@ class ProfileHeaderView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.bottomLabel.setSize(withWidth: self.width)
-        self.bottomLabel.pin(.bottom, offset: .standard)
-        self.bottomLabel.pin(.left, offset: .xtraLong)
-        
         self.personView.squaredSize = 100
-        self.personView.match(.left, to: .left, of: self.bottomLabel)
-        self.personView.match(.bottom, to: .top, of: self.bottomLabel, offset: .negative(.xtraLong))
-        
-        self.nameLabel.setSize(withWidth: self.width)
-        self.nameLabel.centerY = self.personView.centerY - Theme.ContentOffset.xtraLong.value
-        self.nameLabel.match(.left, to: .right, of: self.personView, offset: .xtraLong)
-        
-        self.memberLabel.setSize(withWidth: self.width)
-        self.memberLabel.match(.left, to: .right, of: self.nameLabel, offset: .short)
-        self.memberLabel.bottom = self.nameLabel.bottom - 2
-        
-        self.timeLabel.setSize(withWidth: self.width)
-        self.timeLabel.match(.left, to: .left, of: self.nameLabel)
-        self.timeLabel.centerY = self.personView.centerY + Theme.ContentOffset.xtraLong.value
-        
-        self.localLabel.setSize(withWidth: self.width)
-        self.localLabel.match(.left, to: .right, of: self.timeLabel, offset: .short)
-        self.localLabel.centerY = self.timeLabel.centerY
+        self.personView.pin(.left, offset: .xtraLong)
+        self.personView.pin(.bottom)
         
         self.focusCircle.squaredSize = 10
         self.focusCircle.makeRound()
-        self.focusCircle.match(.left, to: .left, of: self.timeLabel)
-        self.focusCircle.match(.top, to: .bottom, of: self.timeLabel, offset: .standard)
+        self.focusCircle.match(.left, to: .right, of: self.personView, offset: .xtraLong)
+        self.focusCircle.match(.bottom, to: .bottom, of: self.personView)
         
         self.focusLabel.setSize(withWidth: self.width)
         self.focusLabel.match(.left, to: .right, of: self.focusCircle, offset: .short)
@@ -128,5 +105,21 @@ class ProfileHeaderView: BaseView {
         self.statusLabel.setSize(withWidth: self.width)
         self.statusLabel.match(.left, to: .right, of: self.focusLabel, offset: .short)
         self.statusLabel.centerY = self.focusCircle.centerY
+        
+        self.timeLabel.setSize(withWidth: self.width)
+        self.timeLabel.match(.left, to: .left, of: self.nameLabel)
+        self.timeLabel.match(.bottom, to: .top, of: self.focusCircle, offset: .negative(.standard))
+        
+        self.localLabel.setSize(withWidth: self.width)
+        self.localLabel.match(.left, to: .right, of: self.timeLabel, offset: .short)
+        self.localLabel.centerY = self.timeLabel.centerY
+        
+        self.nameLabel.setSize(withWidth: self.width)
+        self.nameLabel.match(.bottom, to: .top, of: self.timeLabel, offset: .negative(.standard))
+        self.nameLabel.match(.left, to: .right, of: self.personView, offset: .xtraLong)
+        
+        self.memberLabel.setSize(withWidth: self.width)
+        self.memberLabel.match(.left, to: .right, of: self.nameLabel, offset: .short)
+        self.memberLabel.bottom = self.nameLabel.bottom - 2
     }
 }
