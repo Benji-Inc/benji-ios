@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-class ThreadCoordinator: InputHandlerCoordinator<ConversationId> {
+class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandler {
     
     var threadVC: ThreadViewController {
         return self.inputHandlerViewController as! ThreadViewController
@@ -67,6 +67,22 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId> {
             case .none:
                 break
             }
+        }
+    }
+    
+    func handle(deepLink: DeepLinkable) {
+        self.deepLink = deepLink
+        guard let target = deepLink.deepLinkTarget else { return }
+        
+        switch target {
+        case .profile:
+            Task {
+                guard let personId = self.deepLink?.personId,
+                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                self.presentProfile(for: person)
+            }
+        default:
+            break
         }
     }
 }

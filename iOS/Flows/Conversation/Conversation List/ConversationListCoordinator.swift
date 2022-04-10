@@ -14,7 +14,7 @@ import StreamChat
 import Localization
 import Intents
 
-class ConversationListCoordinator: InputHandlerCoordinator<Void> {
+class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
     var listVC: ConversationListViewController {
         return self.inputHandlerViewController as! ConversationListViewController
@@ -64,15 +64,15 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
         }
     }
 
-    func handle(deeplink: DeepLinkable) {
-        self.deepLink = deeplink
+    func handle(deepLink: DeepLinkable) {
+        self.deepLink = deepLink
 
-        guard let target = deeplink.deepLinkTarget else { return }
+        guard let target = deepLink.deepLinkTarget else { return }
 
         switch target {
         case .conversation:
-            let messageID = deeplink.messageId
-            guard let cid = deeplink.conversationId else { break }
+            let messageID = deepLink.messageId
+            guard let cid = deepLink.conversationId else { break }
             Task {
                 await self.listVC.scrollToConversation(with: cid,
                                                        messageId: messageID,
@@ -81,6 +81,12 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void> {
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()
+        case .profile:
+            Task {
+                guard let personId = self.deepLink?.personId,
+                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                self.presentProfile(for: person)
+            }
         default:
             break
         }

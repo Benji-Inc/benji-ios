@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-class RoomCoordinator: PresentableCoordinator<Void> {
+class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     
     lazy var roomVC = RoomViewController()
     
@@ -21,7 +21,7 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         super.start()
         
         if let deepLink = self.deepLink {
-            self.handle(deeplink: deepLink)
+            self.handle(deepLink: deepLink)
         }
         
         self.setupHandlers()
@@ -31,18 +31,24 @@ class RoomCoordinator: PresentableCoordinator<Void> {
         }.add(to: self.taskPool)
     }
     
-    func handle(deeplink: DeepLinkable) {
-        self.deepLink = deeplink
+    func handle(deepLink: DeepLinkable) {
+        self.deepLink = deepLink
 
-        guard let target = deeplink.deepLinkTarget else { return }
+        guard let target = deepLink.deepLinkTarget else { return }
 
         switch target {
         case .conversation:
-            let messageID = deeplink.messageId
-            guard let cid = deeplink.conversationId else { break }
+            let messageID = deepLink.messageId
+            guard let cid = deepLink.conversationId else { break }
             self.presentConversation(with: cid, messageId: messageID)
         case .wallet:
             self.presentWallet()
+        case .profile:
+            Task {
+                guard let personId = self.deepLink?.personId,
+                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                self.presentProfile(for: person)
+            }
         default:
             break
         }

@@ -10,6 +10,7 @@ import Foundation
 
 protocol PersonContextDelegate: UIContextMenuInteractionDelegate {
     func getMenu(for person: PersonType) -> UIMenu
+    var didTapViewProfile: CompletionOptional { get set }
 }
 
 private var personKey: UInt8 = 0
@@ -25,6 +26,11 @@ extension PersonContextDelegate where Self: NSObject {
     }
 
     func getMenu(for person: PersonType) -> UIMenu {
-        return UIMenu(title: "Menu", children: [])
+        
+        let action = UIAction(title: "View Profile",
+                              image: UIImage(systemName: "person.circle")) { [unowned self] _ in
+            self.didTapViewProfile?()
+        }
+        return UIMenu(title: "", children: [action])
     }
 }

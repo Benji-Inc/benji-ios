@@ -222,6 +222,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     self.switchTo(.phone(self.phoneVC))
                 }
             }
+        case .deepLink(_):
+            break 
         }
     }
 

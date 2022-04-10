@@ -12,6 +12,8 @@ import UIKit
 class PersonView: DisplayableImageView {
     
     // MARK: - Properties
+    
+    var didTapViewProfile: CompletionOptional = nil 
 
     func getSize(forHeight height: CGFloat) -> CGSize {
         return CGSize(width: height, height: height)
@@ -27,6 +29,13 @@ class PersonView: DisplayableImageView {
         #if IOS
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
+        
+        self.didTapViewProfile = { [unowned self] in
+            var dl = DeepLinkObject(target: .profile)
+            dl.personId = self.person?.personId ?? ""
+            LaunchManager.shared.delegate?.launchManager(LaunchManager.shared, didReceive: .deepLink(dl))
+        }
+        
         #endif
 
         self.subscribeToUpdates()

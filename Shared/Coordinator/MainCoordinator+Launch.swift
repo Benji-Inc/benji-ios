@@ -13,21 +13,21 @@ import StreamChat
 extension MainCoordinator {
 
     @MainActor
-    func runConversationListFlow(with deepLink: DeepLinkable?) async {
+    func runRoomFlow(with deepLink: DeepLinkable?) async {
         // Ensure that the chat client is initialized for the logged in user.
         if !ChatClient.isConnected || ChatClient.shared.currentUserId != User.current()?.objectId {
             try? await ChatClient.initialize(for: User.current()!)
         }
         
-        if let coordinator = self.childCoordinator as? ConversationListCoordinator,
+        if let coordinator = self.furthestChild as? DeepLinkHandler,
            let link = deepLink {
-            coordinator.handle(deeplink: link)
+            coordinator.handle(deepLink: link)
         } else {
             let coordinator = RoomCoordinator(router: self.router, deepLink: self.deepLink)
             self.addChildAndStart(coordinator, finishedHandler: { (_) in})
             self.router.setRootModule(coordinator)
             if let deepLink = deepLink {
-                coordinator.handle(deeplink: deepLink)
+                coordinator.handle(deepLink: deepLink)
             }
         }
     }

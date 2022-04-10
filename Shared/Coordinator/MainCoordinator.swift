@@ -95,10 +95,10 @@ class MainCoordinator: Coordinator<Void> {
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .home, .conversation, .wallet:
+        case .home, .conversation, .wallet, .profile:
 #if IOS
             Task {
-                await self.runConversationListFlow(with: deeplink)
+                await self.runRoomFlow(with: deeplink)
             }
 #endif
         case .login:
@@ -106,7 +106,7 @@ class MainCoordinator: Coordinator<Void> {
         case .reservation:
 #if IOS
             Task {
-                await self.runConversationListFlow(with: deeplink)
+                await self.runRoomFlow(with: deeplink)
             }
 #endif
             self.runOnboardingFlow(with: deeplink)
