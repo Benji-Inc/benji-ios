@@ -48,7 +48,7 @@ class UpsellContentView: BaseView {
                    buttonTitle: Localized) {
         
         self.imageView.image = image
-        self.button.set(style: .custom(color: .white, textColor: .T2, text: buttonTitle))
+        self.button.set(style: .custom(color: .white, textColor: .D1, text: buttonTitle))
         self.label.setText(title)
         self.subTitle.setText(subtitle)
         self.layoutNow()

@@ -28,7 +28,6 @@ class MessageReadCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.personView)
         
         self.personView.contextCueView.currentSize = .small
-        self.personView.contextCueView.isVisible = false
         
         self.addSubview(self.label)
         self.label.textAlignment = .center

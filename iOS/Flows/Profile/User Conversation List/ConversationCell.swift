@@ -73,7 +73,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.rightLabel)
         
-        let bubbleColor = ThemeColor.B1.color
+        let bubbleColor = ThemeColor.B4.color
         self.messageContent.configureBackground(color: bubbleColor,
                                                 textColor: ThemeColor.T3.color,
                                                 brightness: 1.0,
