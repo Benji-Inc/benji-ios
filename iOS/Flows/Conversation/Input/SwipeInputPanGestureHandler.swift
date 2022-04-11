@@ -165,7 +165,7 @@ class SwipeInputPanGestureHandler {
             if !self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: false)
                 previewView.setBubbleColor(ThemeColor.B6.color, animated: true)
-                previewView.textView.setTextColor(.T3)
+                previewView.textView.setTextColor(.T1)
             }
             self.isPreviewInDropZone = true
 

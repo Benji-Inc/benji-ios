@@ -109,7 +109,7 @@ class MessageContentView: BaseView {
         self.emotionLabel.alpha = 0 
         
         self.addEmotionImageView.contentMode = .scaleAspectFit
-        self.addEmotionImageView.tintColor = ThemeColor.T3.color
+        self.addEmotionImageView.tintColor = ThemeColor.T1.color
         self.bubbleView.addSubview(self.addEmotionImageView)
         self.addEmotionImageView.alpha = 0
         self.bubbleView.addSubview(self.addEmotionButton)

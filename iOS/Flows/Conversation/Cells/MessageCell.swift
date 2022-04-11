@@ -97,7 +97,7 @@ class MessageCell: UICollectionViewCell {
         }
         
         self.content.configureBackground(color: ThemeColor.B7.color,
-                                         textColor: ThemeColor.T3.color,
+                                         textColor: ThemeColor.T1.color,
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: false,
                                          tailOrientation: .down)

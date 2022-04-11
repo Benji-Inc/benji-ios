@@ -43,7 +43,7 @@ class RecentReplyCell: CollectionViewManagerCell, ManageableCell {
         
         let bubbleColor = ThemeColor.B4.color
         self.messageContent.configureBackground(color: bubbleColor.withAlphaComponent(0.8),
-                                                textColor: ThemeColor.T3.color,
+                                                textColor: ThemeColor.T1.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
