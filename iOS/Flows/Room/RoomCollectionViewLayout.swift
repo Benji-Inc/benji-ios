@@ -111,7 +111,7 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let backgroundItem = NSCollectionLayoutDecorationItem.background(elementKind: SectionBackgroundView.kind)
                 backgroundItem.contentInsets = NSDirectionalEdgeInsets(top: -sectionInset.half,
                                                                        leading: sectionInset,
-                                                                       bottom: 0,
+                                                                       bottom: -sectionInset.half,
                                                                        trailing: sectionInset)
                 section.decorationItems = [backgroundItem]
                 
