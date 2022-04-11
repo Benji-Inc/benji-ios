@@ -97,8 +97,18 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
     override func presentProfile(for person: PersonType) {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
-            Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
+            switch result {
+            case .conversation(let cid):
+                Task.onMainActorAsync {
+                    await self.listVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
+                }
+            case .openReplies(let cid, let messageId):
+                Task.onMainActorAsync {
+                    await self.listVC.scrollToConversation(with: cid,
+                                                           messageId: messageId,
+                                                           viewReplies: true,
+                                                           animateScroll: false)
+                }
             }
         }
     }

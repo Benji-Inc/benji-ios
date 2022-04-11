@@ -8,8 +8,14 @@
 
 import Foundation
 import Combine
+import StreamChat
 
-class ProfileCoordinator: PresentableCoordinator<ConversationId> {
+enum ProfileResult {
+    case conversation(ConversationId)
+    case openReplies(ConversationId, MessageId)
+}
+
+class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
     
     lazy var profileVC = ProfileViewController(with: self.person)
     private let person: PersonType
@@ -28,6 +34,8 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
     
     override func start() {
         super.start()
+        
+        self.profileVC.dataSource.messageContentDelegate = self 
                 
         if let user = self.person as? User, user.isCurrentUser {
             self.profileVC.header.personView.didSelect { [unowned self] in
@@ -43,13 +51,12 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
             guard let first = items.first else { return }
             switch first {
             case .conversation(let cid):
-                self.finishFlow(with: cid)
-            case .unreadMessages(let cid):
-                self.finishFlow(with: cid)
+                self.finishFlow(with: .conversation(cid))
+            case .unreadMessages(let model):
+                self.finishFlow(with: .conversation(model.cid))
             default:
                 break 
             }
-            
         }.store(in: &self.cancellables)
     }
     
@@ -80,5 +87,50 @@ class ProfileCoordinator: PresentableCoordinator<ConversationId> {
         }
 
         self.router.present(coordinator, source: self.profileVC)
+    }
+}
+
+extension ProfileCoordinator: MessageContentDelegate {
+    
+    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        self.finishFlow(with: .openReplies(messageInfo.0, messageInfo.1))
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, let body):
+            guard let url = photo.url else { return }
+            let text = "\(message.author.givenName): \(body)"
+            self.presentImageFlow(for: [url], startingURL: url, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
+        }
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
+        self.removeChild()
+        
+        let coordinator = ImageViewCoordinator(imageURLs: imageURLs,
+                                               startURL: startingURL,
+                                               body: body,
+                                               router: self.router,
+                                               deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { _ in }
+        self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
     }
 }

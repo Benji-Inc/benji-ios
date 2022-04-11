@@ -200,20 +200,40 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
             if let unreadNotice = await NoticeStore.shared.getAllNotices().first(where: { system in
                 return system.notice?.type == .unreadMessages
-            }), let conversationIds: [ConversationId] = unreadNotice.notice?.unreadConversationIds.compactMap({ id in
-                return try? ConversationId(cid: id)
             }) {
                 
-                var items: [UserConversationsDataSource.ItemType] = conversationIds.compactMap({ conversationId in
-                    return .unreadMessages(conversationId)
-                })
+                let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
+                    if let cid = try? ConversationId(cid: dict.key) {
+                        return UnreadMessagesModel(cid: cid, messageIds: dict.value)
+                    }
+                    return nil
+                }) ?? []
+                
+                // Only show unread message models for messages that the person is the author of UNLESS currentUser.
+                var items: Set<UserConversationsDataSource.ItemType> = []
+                
+                if person.isCurrentUser {
+                    await models.asyncForEach({ model in
+                        await model.messageIds.asyncForEach { messageId in
+                            let controller = ChatClient.shared.messageController(cid: model.cid, messageId: messageId)
+                            try? await controller.synchronize()
+                            if let msg = controller.message, msg.author.personId == self.person.personId {
+                                items.insert(.unreadMessages(model))
+                            }
+                        }
+                    })
+                } else {
+                    models.forEach { model in
+                        items.insert(.unreadMessages(model))
+                    }
+                }
                 
                 if items.isEmpty {
                     items = [.empty]
                 }
                 
                 var snapshot = self.dataSource.snapshot()
-                snapshot.setItems(items, in: .conversations)
+                snapshot.setItems(Array(items), in: .conversations)
 
                 await self.dataSource.apply(snapshot)
             } else {

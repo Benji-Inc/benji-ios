@@ -122,7 +122,12 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
         
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.finishFlow(with: .conversation(result))
+                switch result {
+                case .conversation(let cid):
+                    self.finishFlow(with: .conversation(cid))
+                case .openReplies(_, _):
+                    break 
+                }
             }
         }
         

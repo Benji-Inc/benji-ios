@@ -46,7 +46,12 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
     override func presentProfile(for person: PersonType) {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
-            self.finishFlow(with: result)
+            switch result {
+            case .conversation(let cid):
+                self.finishFlow(with: cid)
+            case .openReplies(_, _):
+                break
+            }
         }
     }
     

@@ -72,7 +72,14 @@ extension RoomCoordinator {
         
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.presentConversation(with: result, messageId: nil)
+                switch result {
+                case .conversation(let cid):
+                    self.presentConversation(with: cid, messageId: nil)
+                case .openReplies(let cid, let messageId):
+                    self.presentConversation(with: cid,
+                                             messageId: messageId,
+                                             openReplies: true)
+                }
             }
         }
         

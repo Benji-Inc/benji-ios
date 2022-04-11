@@ -16,7 +16,7 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
     
     enum ItemType: Hashable {
         case conversation(ConversationId)
-        case unreadMessages(ConversationId)
+        case unreadMessages(UnreadMessagesModel)
         case empty
     }
     
@@ -24,17 +24,23 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
     let unreadConfig = ManageableCellRegistration<UnreadMessagesCell>().provider
     let emptyConfig = ManageableCellRegistration<EmptyUnreadMessagesCell>().provider
     
+    weak var messageContentDelegate: MessageContentDelegate?
+    
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
         
         switch item {
         case .conversation(let cid):
-            return collectionView.dequeueConfiguredReusableCell(using: self.config,
-                                                                for: indexPath,
-                                                                item: cid)
-        case .unreadMessages(let cid):
-            return collectionView.dequeueConfiguredReusableCell(using: self.config,
-                                                                for: indexPath,
-                                                                item: cid)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.config,
+                                                                    for: indexPath,
+                                                                    item: cid)
+            cell.messageContent.delegate = self.messageContentDelegate
+            return cell
+        case .unreadMessages(let model):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.unreadConfig,
+                                                                    for: indexPath,
+                                                                    item: model)
+            cell.messageContent.delegate = self.messageContentDelegate
+            return cell
         case .empty:
             return collectionView.dequeueConfiguredReusableCell(using: self.emptyConfig,
                                                                 for: indexPath,
