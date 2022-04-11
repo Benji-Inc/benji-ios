@@ -34,6 +34,8 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     override func start() {
         super.start()
         
+        self.messageVC.messageContent.delegate = self
+        
         self.messageVC.$selectedItems
             .removeDuplicates()
             .mainSink { items in
@@ -46,6 +48,8 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                 case .edit:
                     self.presentAlert(for: type)
                 case .pin:
+                    self.presentAlert(for: type)
+                case .quote:
                     self.presentAlert(for: type)
                 case .more:
                     break
@@ -120,10 +124,84 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
         
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.finishFlow(with: .conversation(result))
+                switch result {
+                case .conversation(let cid):
+                    self.finishFlow(with: .conversation(cid))
+                case .openReplies(_, _):
+                    break 
+                }
             }
         }
         
+        self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
+    }
+}
+
+extension MessageDetailCoordinator: MessageContentDelegate {
+    
+    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        self.finishFlow(with: .reply(messageInfo.1))
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        self.finishFlow(with: .message(self.message))
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, let body):
+            guard let url = photo.url else { return }
+            let text = "\(message.author.givenName): \(body)"
+            self.presentImageFlow(for: [url], startingURL: url, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
+        }
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+        guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
+        self.presentEmotions(for: message)
+    }
+    
+    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
+        self.removeChild()
+        
+        let coordinator = ImageViewCoordinator(imageURLs: imageURLs,
+                                               startURL: startingURL,
+                                               body: body,
+                                               router: self.router,
+                                               deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { _ in }
+        self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
+    }
+    
+    func presentEmotions(for message: Messageable) {
+        let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] emotions in
+            emotions.forEach { emotion in
+                logDebug(emotion.rawValue)
+                AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
+            }
+            
+            guard !emotions.isEmpty else { return }
+            
+            guard let controller = ChatClient.shared.messageController(for: message) else { return }
+            
+            Task {
+                await emotions.asyncForEach { emotion in
+                    await controller.addReaction(with: .emotion(emotion))
+                }
+            }
+            
+            self.messageVC.dismiss(animated: true)
+        }
         self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
     }
 }

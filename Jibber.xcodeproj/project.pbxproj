@@ -1743,7 +1743,6 @@
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
-				8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */,
 				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
 				80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */,
@@ -2443,6 +2442,7 @@
 		D6E974302752B4B000D95F08 /* MessageContentView */ = {
 			isa = PBXGroup;
 			children = (
+				8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */,
 				D615534D2745C1C900B08459 /* MessageContentView.swift */,
 				D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */,
 			);

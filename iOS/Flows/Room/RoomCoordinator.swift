@@ -128,6 +128,10 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
 
 extension RoomCoordinator: MessageContentDelegate {
     
+    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        self.presentConversation(with: messageInfo.0, messageId: messageInfo.1, openReplies: true)
+    }
+    
     func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
         
     }

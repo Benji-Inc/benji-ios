@@ -13,6 +13,7 @@ import StreamChat
 
 @MainActor
 protocol MessageContentDelegate: AnyObject {
+    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
@@ -67,7 +68,6 @@ class MessageContentView: BaseView {
     private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
-    
     
     let emotionLabel = ThemeLabel(font: .regular)
     let addEmotionButton = ThemeButton()
@@ -146,6 +146,11 @@ class MessageContentView: BaseView {
     }
     
     private func setupHandlers() {
+        
+        self.emotionsButton.didSelect { [unowned self] in
+            self.setEmotions(areShown: !self.areEmotionsShown, animated: true)
+        }
+        
         self.imageView.didSelect { [unowned self] in
             guard let message = self.message else { return }
             self.delegate?.messageContent(self, didTapAttachmentForMessage: (message.streamCid, message.id))

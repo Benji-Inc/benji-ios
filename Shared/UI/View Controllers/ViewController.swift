@@ -20,6 +20,10 @@ class ViewController: UIViewController, Dismissable {
     var analyticsIdentifier: String? {
         return nil
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     init() {
         super.init(nibName: nil, bundle: nil)

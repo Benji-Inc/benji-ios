@@ -12,23 +12,21 @@ import Intents
 
 extension RoomCoordinator {
     
-    func presentConversation(with cid: ConversationId?, messageId: MessageId?) {
+    func presentConversation(with cid: ConversationId?,
+                             messageId: MessageId?,
+                             openReplies: Bool = false) {
         
         let coordinator = ConversationListCoordinator(router: self.router,
                                                       deepLink: self.deepLink,
                                                       conversationMembers: [],
                                                       startingConversationId: cid,
-                                                      startingMessageId: messageId)
+                                                      startingMessageId: messageId,
+                                                      openReplies: true)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             self.router.popModule() 
         })
         
         self.router.push(coordinator, cancelHandler: nil, animated: true)
-        Task.onMainActorAsync {
-            guard let cid = cid else { return }
-            await Task.sleep(seconds: 0.1)
-            await coordinator.listVC.scrollToConversation(with: cid, messageId: messageId, animateScroll: false)
-        }
     }
     
     func presentPeoplePicker() {
@@ -66,7 +64,14 @@ extension RoomCoordinator {
         
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.presentConversation(with: result, messageId: nil)
+                switch result {
+                case .conversation(let cid):
+                    self.presentConversation(with: cid, messageId: nil)
+                case .openReplies(let cid, let messageId):
+                    self.presentConversation(with: cid,
+                                             messageId: messageId,
+                                             openReplies: true)
+                }
             }
         }
         
