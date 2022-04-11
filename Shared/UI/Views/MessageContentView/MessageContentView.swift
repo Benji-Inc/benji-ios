@@ -69,7 +69,6 @@ class MessageContentView: BaseView {
     private lazy var emotionDataSource
     = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
     
-    
     let emotionLabel = ThemeLabel(font: .regular)
     let addEmotionButton = ThemeButton()
     let addEmotionImageView = UIImageView(image: UIImage(systemName: "plus"))
@@ -147,6 +146,11 @@ class MessageContentView: BaseView {
     }
     
     private func setupHandlers() {
+        
+        self.emotionsButton.didSelect { [unowned self] in
+            self.setEmotions(areShown: !self.areEmotionsShown, animated: true)
+        }
+        
         self.imageView.didSelect { [unowned self] in
             guard let message = self.message else { return }
             self.delegate?.messageContent(self, didTapAttachmentForMessage: (message.streamCid, message.id))

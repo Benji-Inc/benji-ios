@@ -17,7 +17,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
-    let message: Messageable
+    private(set) var message: Messageable
     var messageController: MessageController?
     
     var messageContent: MessageContentView {
@@ -143,7 +143,16 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.messageController?
             .messageChangePublisher
-            .mainSink(receiveValue: { [unowned self] _ in
+            .mainSink(receiveValue: { [unowned self] change in
+                switch change {
+                case .create(let msg):
+                    self.message = msg
+                case .update(let msg):
+                    self.message = msg
+                case .remove(let msg):
+                    self.message = msg
+                }
+                self.messageContent.configure(with: self.message)
                 self.reloadDetailData()
             }).store(in: &self.cancellables)
         

@@ -56,10 +56,6 @@ class MessageCell: UICollectionViewCell {
                 // then start message consumption if needed.
                 self.handleDetailVisibility(areDetailsFullyVisible: self.footerView.alpha == 1)
             }
-
-        self.content.emotionsButton.didSelect { [unowned self] in
-            self.content.setEmotions(areShown: !self.content.areEmotionsShown, animated: true)
-        }
     }
 
     override func layoutSubviews() {
