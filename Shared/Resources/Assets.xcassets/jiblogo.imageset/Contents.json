@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Jib-1.pdf",
+      "filename" : "jiblogo.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,7 +12,6 @@
           "value" : "light"
         }
       ],
-      "filename" : "Jib.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -23,7 +22,6 @@
           "value" : "dark"
         }
       ],
-      "filename" : "jiblogo.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },

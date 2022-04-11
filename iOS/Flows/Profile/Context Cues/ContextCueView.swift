@@ -49,6 +49,8 @@ class EmojiCircleView: BaseView {
 
 class ContextCueView: EmojiCircleView {
     
+    var shouldStayHidden: Bool = false
+    
     override func initializeSubviews() {
         super.initializeSubviews()
         
@@ -64,17 +66,20 @@ class ContextCueView: EmojiCircleView {
         self.animateContextCueTask?.cancel()
         
         self.newContextCueTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
             guard let user = person as? User,
                   let updated = try? await user.latestContextCue?.retrieveDataIfNeeded(),
                   let createdAt = updated.createdAt,
                   createdAt.isSameDay(as: Date.today),
                   !updated.emojis.isEmpty else {
-                      self?.isHidden = true
+                      self.isHidden = true
                       return
                   }
-            
-            self?.isHidden = false
-            await self?.animate(emojiIndex: 0, for: updated)
+            if !self.shouldStayHidden {
+                self.isHidden = false
+            }
+            await self.animate(emojiIndex: 0, for: updated)
         }
     }
     

@@ -13,7 +13,7 @@ class MiniBadgeView: BaseView {
     private let topView = BaseView()
     private let bottomView = BaseView()
     
-    private let amountLabel = ThemeLabel(font: .small, textColor: .T3)
+    private let amountLabel = ThemeLabel(font: .small, textColor: .T1)
     private let imageView = UIImageView(image: UIImage(named: "Jib"))
     
     override func initializeSubviews() {

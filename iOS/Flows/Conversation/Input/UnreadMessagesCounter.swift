@@ -26,7 +26,7 @@ class UnreadMessagesCounter: BaseView {
                                       seperator: "",
                                       seperatorSpacing: 0,
                                       font: FontType.small.font,
-                                      textColor: ThemeColor.T3.color,
+                                      textColor: ThemeColor.T1.color,
                                       animateInitialValue: true,
                                       gradientColor: nil,
                                       gradientStop: nil)

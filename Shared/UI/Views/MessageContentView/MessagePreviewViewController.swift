@@ -31,7 +31,7 @@ class MessagePreviewViewController: ViewController {
         self.content.layoutState = .expanded
         self.view.addSubview(self.content)
         self.content.configureBackground(color: ThemeColor.B6.color,
-                                         textColor: ThemeColor.T3.color,
+                                         textColor: ThemeColor.T1.color,
                                          brightness: 1.0,
                                          showBubbleTail: false,
                                          tailOrientation: .up)

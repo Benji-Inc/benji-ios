@@ -73,7 +73,7 @@ struct Theme {
     static let contentOffset: CGFloat = 24
     static let buttonHeight: CGFloat = 50
     static let iPadPortraitWidthRatio: CGFloat = 0.65
-    static let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+    static let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
 
     static func getPaddedWidth(with width: CGFloat) -> CGFloat {
         return width - ContentOffset.screenPadding.value.doubled

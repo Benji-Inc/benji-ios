@@ -74,20 +74,22 @@ class ContextCuesViewController: DiffableCollectionViewController<ContextCueColl
         return data
     }
     
-    private var appendTask: Task<Void, Never>?
+    private var loadTask: Task<Void, Never>?
+    func reloadContextCues() {
+        self.loadTask?.cancel()
         
-    func appendNew(contextCue: ContextCue) {
-        self.appendTask?.cancel()
-        
-        self.appendTask = Task { [weak self] in
+        self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             var snapshot = self.dataSource.snapshot()
-            guard snapshot.itemIdentifiers.count > 0 else { return }
+            
+            guard let user = self.person as? User,
+                  let contextCues = try? await ContextCue.fetchAll(for: user) else { return }
+            
+            let items: [ContextCueCollectionViewDataSource.ItemType] = contextCues.reversed().compactMap({ contextCue in
+                return .contextCue(contextCue)
+            })
         
-            let current = snapshot.itemIdentifiers(inSection: .contextCues)
-            if !current.contains(.contextCue(contextCue)) {
-                snapshot.insertItems([.contextCue(contextCue)], in: .contextCues, atIndex: 1)
-            }
+            snapshot.setItems(items, in: .contextCues)
             await self.dataSource.apply(snapshot)
         }
     }

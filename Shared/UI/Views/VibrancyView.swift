@@ -37,8 +37,8 @@ class DarkBlurView: UIVisualEffectView {
     let blurEffect: UIBlurEffect
 
     init() {
-        self.blurEffect = UIBlurEffect.init(style: .systemThickMaterial)
-        super.init(effect: UIBlurEffect.init(style: .systemThickMaterial))
+        self.blurEffect = UIBlurEffect.init(style: .systemThickMaterialDark)
+        super.init(effect: UIBlurEffect.init(style: .systemThickMaterialDark))
     }
 
     required init?(coder: NSCoder) {

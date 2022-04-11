@@ -93,9 +93,10 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             .filter { [unowned self] updatedPerson in
                 // Only handle person updates related to the currently assigned person.
                 self.person.personId ==  updatedPerson?.personId
-            }.mainSink { [unowned self] updatedPerson in
-                guard let user = updatedPerson as? User, let contextCue = user.latestContextCue else { return }
-                self.contextCuesVC.appendNew(contextCue: contextCue)
+            }.mainSink { [unowned self] person in
+                guard let user = person as? User else { return }
+                self.header.configure(with: user)
+                self.contextCuesVC.reloadContextCues()
             }.store(in: &self.cancellables)
     }
     

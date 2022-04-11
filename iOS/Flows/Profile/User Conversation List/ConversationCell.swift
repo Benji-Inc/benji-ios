@@ -73,9 +73,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.rightLabel)
         
-        let bubbleColor = ThemeColor.B1.color
+        let bubbleColor = ThemeColor.B4.color
         self.messageContent.configureBackground(color: bubbleColor,
-                                                textColor: ThemeColor.T3.color,
+                                                textColor: ThemeColor.T1.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
@@ -140,7 +140,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         let groupName = "Favorites  /"
         self.titleLabel.setTextColor(.T1)
         self.titleLabel.setText("\(groupName)  \(title)")
-        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.T1.color.withAlphaComponent(0.35)], to: groupName)
+        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.T1withAlpha.color], to: groupName)
         
         self.layoutNow()
     }

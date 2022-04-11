@@ -41,9 +41,9 @@ class RecentReplyCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.messageContent)
         self.messageContent.layoutState = .collapsed
         
-        let bubbleColor = ThemeColor.B1.color
+        let bubbleColor = ThemeColor.B4.color
         self.messageContent.configureBackground(color: bubbleColor.withAlphaComponent(0.8),
-                                                textColor: ThemeColor.T3.color,
+                                                textColor: ThemeColor.T1.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)

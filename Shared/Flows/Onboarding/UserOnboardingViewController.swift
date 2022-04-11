@@ -31,7 +31,7 @@ class UserOnboardingViewController: ViewController {
         
         self.view.addSubview(self.messageBubble)
         self.messageBubble.addSubview(self.textView)
-        self.textView.setTextColor(.T3)
+        self.textView.setTextColor(.T1)
 
         self.updateUI()
     }

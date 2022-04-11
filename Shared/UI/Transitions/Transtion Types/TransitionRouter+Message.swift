@@ -53,7 +53,7 @@ extension TransitionRouter {
         
         toView.configure(with: message)
         toView.bubbleView.setBubbleColor(ThemeColor.B6.color, animated: false)
-        toView.textView.setTextColor(.T3)
+        toView.textView.setTextColor(.T1)
         toView.bubbleView.tailLength = 0
         toView.bubbleView.orientation = fromView.bubbleView.orientation
         toView.size = fromView.bubbleView.bubbleFrame.size

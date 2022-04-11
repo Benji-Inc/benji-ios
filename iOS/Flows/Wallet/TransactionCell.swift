@@ -82,11 +82,13 @@ class TransactionContentView: BaseView, UIContentView {
         ])
                 
         self.titleLabel?.setFont(.small)
+        self.titleLabel?.setTextColor(.T1withAlpha)
         self.titleLabel?.alpha = 0.35
         self.titleLabel?.textAlignment = .left
         self.noteLabel?.setFont(.regular)
         self.noteLabel?.textAlignment = .left
         self.noteLabel?.lineBreakMode = .byTruncatingTail
+        self.noteLabel?.setTextColor(.T1)
         self.amountLabel?.setFont(.regular)
         self.amountLabel?.textAlignment = .right
         

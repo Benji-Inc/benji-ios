@@ -15,8 +15,8 @@ class UpsellContentView: BaseView {
     let closeImageView = UIImageView(image: UIImage(systemName: "xmark"))
     let imageView = UIImageView()
     let button = ThemeButton()
-    let label = ThemeLabel(font: .medium, textColor: .T3)
-    let subTitle = ThemeLabel(font: .regular, textColor: .T3)
+    let label = ThemeLabel(font: .medium, textColor: .T1)
+    let subTitle = ThemeLabel(font: .regular, textColor: .T1)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -48,7 +48,7 @@ class UpsellContentView: BaseView {
                    buttonTitle: Localized) {
         
         self.imageView.image = image
-        self.button.set(style: .custom(color: .white, textColor: .T2, text: buttonTitle))
+        self.button.set(style: .custom(color: .white, textColor: .D1, text: buttonTitle))
         self.label.setText(title)
         self.subTitle.setText(subtitle)
         self.layoutNow()
