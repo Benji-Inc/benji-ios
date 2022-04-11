@@ -124,8 +124,10 @@ final class User: PFUser {
         set { self.setObject(for: .timeZone, with: newValue) }
     }
     
+    #if IOS
     var latestContextCue: ContextCue? {
         get { return self.getObject(for: .latestContextCue) }
         set { self.setObject(for: .latestContextCue, with: newValue) }
     }
+    #endif 
 }

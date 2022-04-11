@@ -9,7 +9,7 @@
 import Foundation
 import Parse
 import PostHog
-#if !APPCLIP && !NOTIFICATION
+#if IOS
 import StreamChat
 #endif
 
@@ -58,7 +58,6 @@ class LaunchManager {
 
             // Pre-load contacts
             _ = ContactsManager.shared
-            _ = AchievementsManager.shared
 
             do {
                 async let first: Void
@@ -144,18 +143,7 @@ extension LaunchManager {
             await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
         }
 
-        var link = deepLink
-
-        // Used to load the initial conversation when a user has downloaded the full app from an app clip.
-        if let initial = try? await InitialConveration.retrieve() {
-            if let cidString = initial.conversationIdString {
-                link?.conversationId = try? ConversationId(cid: cidString)
-            }
-
-            link?.deepLinkTarget = .conversation
-        }
-
-        return .success(deepLink: link)
+        return .success(deepLink: deepLink)
     }
 #endif
 }

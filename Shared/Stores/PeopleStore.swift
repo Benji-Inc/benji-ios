@@ -256,16 +256,18 @@ class PeopleStore {
 
     // MARK: - Helper functions
 
+    #if IOS
     func getPeople(for conversation: ChatChannel) async -> [PersonType] {
         var people: [PersonType] = []
         let nonMeMembers = conversation.lastActiveMembers.filter { member in
             return member.id != User.current()?.objectId
         }
+        
         await nonMeMembers.userIDs.asyncForEach { userId in
             guard let person = await self.getPerson(withPersonId: userId) else { return }
             people.append(person)
         }
-
+        
         await self.unclaimedReservations.asyncForEach { (reservationId, reservation) in
             guard reservation.conversationCid == conversation.cid.description,
                     let contactId = reservation.contactId else { return }
@@ -276,6 +278,7 @@ class PeopleStore {
         
         return people
     }
+    #endif 
 
     func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundPerson: PersonType? = nil

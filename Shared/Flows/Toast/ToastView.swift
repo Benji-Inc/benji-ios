@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 enum ToastState {
     case hidden, present, left, expanded, alphaIn, dismiss, gone

@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import Localization
+import UIKit
 
 class PermissionSwitchView: BaseView {
 

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol EmotionCircleCollectionViewLayoutDataSource: AnyObject {
     func getId(forItemAt indexPath: IndexPath) -> String

@@ -12,9 +12,4 @@ enum MicroAnimation: String {
     case error = "error"
     case faceScan = "face_scan"
     case loading = "loading"
-    
-    case alertCircle = "alertCircle"
-    case checkMark = "checkmark"
-    case doubleCheckMark = "doublecheckmark"
-    case maxToMin = "maxToMin"
 }

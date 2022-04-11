@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import Combine
+import UIKit
 
 class ImageCaptureViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
 

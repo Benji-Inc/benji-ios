@@ -9,6 +9,7 @@
 import Foundation
 import Lottie
 import Localization
+import UIKit
 
 class UserOnboardingViewController: ViewController {
 

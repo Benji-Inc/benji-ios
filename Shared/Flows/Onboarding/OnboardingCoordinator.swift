@@ -124,21 +124,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
 
     func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController,
                                                andReturnCID cid: String?) {
-
-        if let cid = cid {
-            Task {
-                try await self.saveInitialConversation(with: cid)
-            }
-        }
-
         self.goToNextContentOrFinish()
-    }
-
-    private func saveInitialConversation(with conversationId: String?) async throws {
-        guard let id = conversationId else { return }
-        let object = InitialConveration()
-        object.conversationIdString = id
-        try await object.saveLocally()
     }
 
     func onboardingViewController(_ controller: OnboardingViewController, didEnterName name: String) {

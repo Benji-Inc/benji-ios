@@ -124,6 +124,7 @@ class UserNotificationManager: NSObject {
 
     // MARK: - Message Event Handling
 
+    #if IOS
     func handleRead(message: Messageable) {
         AchievementsManager.shared.createIfNeeded(with: .firstUnreadMessage, identifier: message.id)
         
@@ -147,6 +148,7 @@ class UserNotificationManager: NSObject {
             }
         }
     }
+    #endif 
     
     private func removedNotifications(with identifiers: [String]) {
         // It was suggested that in order for this to work it needs to be called on a background thread.

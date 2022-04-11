@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 /// A custom transitions that simultaneously slides the current VC vertically off the screen
 /// and the destination one onto it.
 class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
