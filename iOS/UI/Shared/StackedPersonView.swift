@@ -57,6 +57,7 @@ class StackedPersonView: BaseView {
         self.subviews.forEach { view in
             if let personView = view as? BorderedPersonView {
                 personView.shadowLayer.opacity = 0.0
+                personView.contextCueView.isVisible = false 
                 personView.frame = CGRect(x: xOffset,
                                           y: 0,
                                           width: self.height,
