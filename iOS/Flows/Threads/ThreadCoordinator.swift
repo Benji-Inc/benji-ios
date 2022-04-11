@@ -35,6 +35,8 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
     override func start() {
         super.start()
         
+        self.threadVC.messageContent.delegate = self 
+        
         self.threadVC.$selectedItems.mainSink { [unowned self] items in
             guard let first = items.first,
         case MessageSequenceItem.message(let cid, let messageID, _) = first else { return }
