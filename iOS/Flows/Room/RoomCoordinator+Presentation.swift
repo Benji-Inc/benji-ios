@@ -27,14 +27,6 @@ extension RoomCoordinator {
         })
         
         self.router.push(coordinator, cancelHandler: nil, animated: true)
-//        Task.onMainActorAsync {
-//            guard let cid = cid else { return }
-//            await Task.sleep(seconds: 0.1)
-//            await coordinator.listVC.scrollToConversation(with: cid,
-//                                                          messageId: messageId,
-//                                                          viewReplies: openReplies,
-//                                                          animateScroll: false)
-//        }
     }
     
     func presentPeoplePicker() {
