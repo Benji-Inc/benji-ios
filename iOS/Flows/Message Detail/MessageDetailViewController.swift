@@ -118,7 +118,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.messageController = controller
                 
-        data[.options] = [.option(.viewReplies), .option(.pin), .option(.edit), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+        data[.options] = [.option(.viewReplies), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
 
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
             return !reaction.author.isCurrentUser

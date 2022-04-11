@@ -47,6 +47,8 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                     self.presentAlert(for: type)
                 case .pin:
                     self.presentAlert(for: type)
+                case .quote:
+                    self.presentAlert(for: type)
                 case .more:
                     break
                 }
