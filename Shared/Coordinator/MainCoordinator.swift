@@ -53,11 +53,15 @@ class MainCoordinator: Coordinator<Void> {
             if let deepLink = deepLink {
                 self.handle(deeplink: deepLink)
             } else {
-                self.handle(deeplink: DeepLinkObject(target: .conversation))
+                self.handle(deeplink: DeepLinkObject(target: .room))
             }
 #elseif APPCLIP
             // Code your App Clip may access.
-          //  self.handleAppClip(result: launchStatus)
+            if let deepLink = deepLink {
+                self.handleAppClip(deepLink: deepLink)
+            } else {
+                self.handle(deeplink: DeepLinkObject(target: .login))
+            }
 #endif
         }
     }
@@ -95,7 +99,7 @@ class MainCoordinator: Coordinator<Void> {
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .home, .conversation, .wallet, .profile:
+        case .room, .conversation, .wallet, .profile:
 #if IOS
             Task {
                 await self.runRoomFlow(with: deeplink)

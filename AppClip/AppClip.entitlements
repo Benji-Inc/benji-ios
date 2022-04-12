@@ -12,5 +12,10 @@
 	<array>
 		<string>$(AppIdentifierPrefix)com.Jibber-Inc.iOS</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.Jibber</string>
+		<string>group.Jibber-staging</string>
+	</array>
 </dict>
 </plist>
