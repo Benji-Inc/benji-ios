@@ -307,7 +307,7 @@ class MessageContentView: BaseView {
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
         self.textView.textColor = textColor
-        self.textView.linkTextAttributes = [.foregroundColor: ThemeColor.D1.color, .underlineStyle: 0]
+        self.textView.linkTextAttributes = [.foregroundColor: ThemeColor.D6.color, .underlineStyle: 0]
 
         self.bubbleView.setBubbleColor(color.withAlphaComponent(brightness), animated: false)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
