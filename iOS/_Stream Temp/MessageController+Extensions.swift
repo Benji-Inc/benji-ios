@@ -61,9 +61,21 @@ extension MessageController {
 
     func addReaction(with type: ReactionType, extraData: [String: RawJSON] = [:]) async {
         return await withCheckedContinuation({ continuation in
+            let score: Int
+            switch type {
+            case .emotion(let emotion):
+                guard let message = self.message else {
+                    score = 0
+                    break
+                }
+                score = (message.emotionCounts[emotion] ?? 0) + 1
+            case .read:
+                score = 0
+            }
+
             self.addReaction(type.reaction,
-                             score: 0,
-                             enforceUnique: true,
+                             score: score,
+                             enforceUnique: false,
                              extraData: extraData) { error in
                 if let e = error {
                     logError(e)
