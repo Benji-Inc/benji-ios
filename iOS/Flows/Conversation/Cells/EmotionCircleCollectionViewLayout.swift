@@ -101,6 +101,9 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
 
         guard let collectionView = self.collectionView else { return }
 
+        let preexistingAttributes: [EmotionCircleAttributes]
+        = self.animator.dynamicItems(in: collectionView.bounds)
+
         self.resetBehaviorsIfNeeded()
 
         // Get all of the emotion attributes being managed by the animator.
@@ -118,8 +121,23 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
             if !animatorAttributes.contains(where: { attributes in
                 return attributes.id == id
             }) {
-                // The item's attributes aren't yet being managed by the animator. Add them now.
-                self.addEmotionAttributesToAnimator(for: indexPath, withId: id, addPush: true)
+
+                if let preexistingAttribute = preexistingAttributes.first(where: { attributes in
+                    return attributes.id == id
+                }) {
+                    let attributes = EmotionCircleAttributes(forCellWith: indexPath)
+                    attributes.id = id
+                    attributes.bounds = preexistingAttribute.bounds
+                    attributes.center = preexistingAttribute.center
+                    attributes.transform = preexistingAttribute.transform
+
+                    self.collisionBehavior.addItem(attributes)
+                    self.itemBehavior.addItem(attributes)
+                    self.noiseField.addItem(attributes)
+                } else {
+                    // The item's attributes aren't yet being managed by the animator. Add them now.
+                    self.addEmotionAttributesToAnimator(for: indexPath, withId: id, addPush: true)
+                }
             }
         }
     }
