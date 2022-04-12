@@ -13,6 +13,15 @@ class EmotionCircleView: BaseView {
 
     private let label = ThemeLabel(font: .small, textColor: .white)
 
+    init(emotion: Emotion) {
+        super.init()
+        self.configure(with: emotion)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     override func initializeSubviews() {
         super.initializeSubviews()
 

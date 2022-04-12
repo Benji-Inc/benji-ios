@@ -126,23 +126,32 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
 
         emotionsCounts
         = [.surprised : 1,
-           .avoidance : 1,
-           .paradoxical : 1]
+           .avoidance : 2,
+           .paradoxical : 1,
+           .heartbroken : 3,
+           .regret : 1,
+           .love : 2,
+           .anguish : 1,
+           .tranquil : 1,
+           .expecting : 1]
 
         self.emotionCollectionView.setEmotions(emotionsCounts)
 
         await Task.sleep(seconds: 1)
 
         emotionsCounts
-        = [.surprised : 1,
-           .avoidance : 1]
+        = [.surprised : 3,
+           .avoidance : 3]
 
         self.emotionCollectionView.setEmotions(emotionsCounts)
 
         await Task.sleep(seconds: 1)
 
-        emotionsCounts
-        = [.surprised : 2]
+        let randomEmotions = Emotion.allCases.random(10)
+        emotionsCounts.removeAll()
+        for randomEmotion in randomEmotions {
+            emotionsCounts[randomEmotion] = Int.random(min: 1, max: 3)
+        }
 
         self.emotionCollectionView.setEmotions(emotionsCounts)
 

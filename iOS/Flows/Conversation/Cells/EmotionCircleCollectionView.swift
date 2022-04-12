@@ -20,16 +20,16 @@ class EmotionCircleCollectionView: BaseView {
     private let itemBehavior = UIDynamicItemBehavior()
     private let noiseField = UIFieldBehavior.noiseField(smoothness: 0.2, animationSpeed: 1)
 
-    private let cellDiameter: CGFloat
+    private let circleDiameter: CGFloat
 
     init(cellDiameter: CGFloat) {
-        self.cellDiameter = cellDiameter
+        self.circleDiameter = cellDiameter
 
         super.init()
     }
 
     required init?(coder: NSCoder) {
-        self.cellDiameter = 100
+        self.circleDiameter = 80
         super.init(coder: coder)
     }
 
@@ -88,22 +88,25 @@ class EmotionCircleCollectionView: BaseView {
             // If we already have a view for this emotion, animate any size changes needed
             if let emotionView = self.emotionsViews[emotion] {
                 // Animate the size
-                let scale = CGFloat(count)
-                emotionView.size = CGSize(width: self.cellDiameter * scale,
-                                          height: self.cellDiameter * scale)
-                self.animator.updateItem(usingCurrentState: emotionView)
+                UIView.animate(withDuration: Theme.animationDurationStandard) {
+                    emotionView.size = self.getSize(forCount: count)
+                    // Call layout now so subviews are animated as well.
+                    emotionView.layoutNow()
+                    self.animator.updateItem(usingCurrentState: emotionView)
+                }
             } else {
                 // If we don't already have a view created for this emotion, create one now.
                 self.createAndAddEmotionsView(with: emotion, count: count)
             }
         }
 
-        // Find any emotions that are being removed and clean up their views.
+        // Find any emotions that were removed and clean up their views.
         for previousEmotion in previousEmotionCounts.keys {
             guard self.emotionCounts[previousEmotion].isNil,
                   let emotionView = self.emotionsViews[previousEmotion] else { continue }
 
             self.removeEmotionView(emotionView)
+            self.emotionsViews.removeValue(forKey: previousEmotion)
         }
     }
 
@@ -112,18 +115,18 @@ class EmotionCircleCollectionView: BaseView {
     private func createAndAddEmotionsView(with emotion: Emotion, count: Int) {
         guard self.width > 0, self.height > 0 else { return }
 
-        let emotionView = EmotionCircleView()
-        emotionView.configure(with: emotion)
-        let scale = CGFloat(count)
-        let clampedDiameter = clamp(self.cellDiameter * scale,
-                                    0,
-                                    min(self.width, self.height))
-        emotionView.size = CGSize(width: clampedDiameter, height: clampedDiameter)
-
+        let emotionView = EmotionCircleView(emotion: emotion)
+        let finalSize = self.getSize(forCount: count)
+        // Start the view in a random position
         emotionView.frame.origin
-        = CGPoint(x: CGFloat.random(in: 0...self.width - clampedDiameter),
-                  y: CGFloat.random(in: 0...self.height - clampedDiameter))
+        = CGPoint(x: CGFloat.random(in: 0...self.width - finalSize.width),
+                  y: CGFloat.random(in: 0...self.height - finalSize.height))
 
+        // Start the view off small and invisible. It will be animated to its final size and alpha.
+        emotionView.alpha = 0
+        emotionView.size = CGSize(width: 1, height: 1) // The initial size must be non-zero for the animator.
+
+        // Start managing this view
         self.emotionsViews[emotion] = emotionView
         self.addSubview(emotionView)
 
@@ -135,18 +138,44 @@ class EmotionCircleCollectionView: BaseView {
             guard !pushBehavior.active else { return }
             self.animator.removeBehavior(pushBehavior)
         }
-        self.animator.addBehavior(pushBehavior)
 
-        self.collisionBehavior.addItem(emotionView)
-        self.itemBehavior.addItem(emotionView)
-        self.noiseField.addItem(emotionView)
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            emotionView.alpha = 1
+            emotionView.size = finalSize
+            emotionView.layoutNow()
+        } completion: { completed in
+            guard completed else { return }
+            // Once we're done animating, the view's transform can be managed by the animator.
+            self.animator.addBehavior(pushBehavior)
+            self.collisionBehavior.addItem(emotionView)
+            self.itemBehavior.addItem(emotionView)
+            self.noiseField.addItem(emotionView)
+        }
     }
 
     private func removeEmotionView(_ emotionView: EmotionCircleView) {
-        emotionView.removeFromSuperview()
-        self.collisionBehavior.removeItem(emotionView)
-        self.itemBehavior.removeItem(emotionView)
-        self.noiseField.removeItem(emotionView)
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            emotionView.size = CGSize(width: 1, height: 1)
+            emotionView.alpha = 0
+            emotionView.layoutNow()
+        } completion: { _ in
+            emotionView.removeFromSuperview()
+            self.collisionBehavior.removeItem(emotionView)
+            self.itemBehavior.removeItem(emotionView)
+            self.noiseField.removeItem(emotionView)
+        }
+    }
+
+    // MARK: - Helper Functions
+
+    /// Gets the appropriate size for an emotion circle view taking this view's size and the emotion count into account.
+    func getSize(forCount count: Int) -> CGSize {
+        let scale = self.circleDiameter * sqrt(CGFloat(count))
+        let clampedDiameter = clamp(self.circleDiameter * scale,
+                                    0,
+                                    min(self.width, self.height))
+
+        return CGSize(width: clampedDiameter, height: clampedDiameter)
     }
 }
 
