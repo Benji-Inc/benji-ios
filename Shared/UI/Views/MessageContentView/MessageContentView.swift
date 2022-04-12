@@ -64,10 +64,7 @@ class MessageContentView: BaseView {
 
     /// A view to blur out the emotions collection view.
     let blurView = BlurView()
-    private lazy var emotionLayout = EmotionCircleCollectionViewLayout(cellDiameter: self.cellDiameter)
-    private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
-    private lazy var emotionDataSource
-    = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
+    lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: self.cellDiameter)
     
     let emotionLabel = ThemeLabel(font: .regular)
     let addEmotionButton = ThemeButton()
@@ -100,7 +97,6 @@ class MessageContentView: BaseView {
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
 
-        self.emotionLayout.dataSource = self.emotionDataSource
         self.bubbleView.addSubview(self.emotionCollectionView)
 
         self.bubbleView.addSubview(self.blurView)
@@ -289,12 +285,8 @@ class MessageContentView: BaseView {
 
         self.authorView.set(person: message.person)
 
-        let emotionsItems = message.emotions.map { emotion in
-            EmotionCircleItem(emotion: emotion)
-        }
-        var snapshot = self.emotionDataSource.snapshot()
-        snapshot.setItems(emotionsItems, in: .emotions)
-        self.emotionDataSource.apply(snapshot)
+        let emotionCounts = message.emotionCounts
+        self.emotionCollectionView.setEmotionsCounts(emotionCounts)
 
         self.setNeedsLayout()
     }
@@ -321,7 +313,7 @@ class MessageContentView: BaseView {
             self.blurView.effect = areShown ? nil : Theme.blurEffect
             
             if areShown {
-                if self.emotionDataSource.snapshot().numberOfItems == 0 {
+                if self.emotionCollectionView.emotionCounts.count == 0 {
                     self.emotionLabel.alpha = 0.2
                 }
                 

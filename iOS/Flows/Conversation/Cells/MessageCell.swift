@@ -146,6 +146,7 @@ class MessageCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.content.emotionCollectionView.setEmotionsCounts([:])
         self.content.setEmotions(areShown: false, animated: false)
         self.messageController = nil
         self.messageSubscriptions.removeAll()
