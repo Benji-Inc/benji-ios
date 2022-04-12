@@ -14,7 +14,7 @@ class MessageDetailViewState: ObservableObject {
     @Published var message: Messageable?
 
     var emotion: Emotion? {
-        return self.message?.emotions.first
+        return self.message?.emotionCounts.keys.first
     }
 
     init(message: Messageable?) {

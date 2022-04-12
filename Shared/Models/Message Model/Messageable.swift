@@ -40,7 +40,6 @@ protocol Messageable {
     var recentReplies: [Messageable] { get }
     var lastUpdatedAt: Date? { get }
 
-    var emotions: [Emotion] { get }
     var emotionCounts: [Emotion : Int] { get }
     var expression: String? { get }
 
