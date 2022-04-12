@@ -106,10 +106,13 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
 
         self.resetBehaviorsIfNeeded()
 
+        // Keep the collision boundaries up to date with the collection view.
+        self.collisionBehavior.removeAllBoundaries()
+        self.collisionBehavior.addBoundary(withIdentifier: NSString(string: "boundary"),
+                                           for: UIBezierPath(rect: collectionView.bounds))
+
         // Get all of the emotion attributes being managed by the animator.
-        // HACK: Due to an Apple bug, collision behaviors are incorrectly added to the items array,
-        // which causes a crash when we try to access the items.
-        // https://stackoverflow.com/questions/45774897/uidynamicanimator-itemsin-crashes-in-ios-11
+        // HACK: Due to an Apple bug. See function declaration
         let animatorAttributes: [EmotionCircleAttributes]
         = self.animator.dynamicItems(in: collectionView.bounds)
 
@@ -130,13 +133,10 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
                     attributes.bounds = preexistingAttribute.bounds
                     attributes.center = preexistingAttribute.center
                     attributes.transform = preexistingAttribute.transform
-
-                    self.collisionBehavior.addItem(attributes)
-                    self.itemBehavior.addItem(attributes)
-                    self.noiseField.addItem(attributes)
+                    self.addAttributes(attributes)
                 } else {
                     // The item's attributes aren't yet being managed by the animator. Add them now.
-                    self.addEmotionAttributesToAnimator(for: indexPath, withId: id, addPush: true)
+                    self.createEmotionAttributes(for: indexPath, withId: id)
                 }
             }
         }
@@ -173,7 +173,7 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Animator Functions
     
-    private func addEmotionAttributesToAnimator(for indexPath: IndexPath, withId id: String, addPush: Bool) {
+    private func createEmotionAttributes(for indexPath: IndexPath, withId id: String) {
         guard let collectionView = self.collectionView,
               collectionView.width > 0, collectionView.height > 0 else { return }
 
@@ -188,19 +188,22 @@ class EmotionCircleCollectionViewLayout: UICollectionViewLayout {
         = CGPoint(x: CGFloat.random(in: 0...collectionView.width - clampedDiameter),
                   y: CGFloat.random(in: 0...collectionView.height - clampedDiameter))
 
-
-        if addPush {
-            // Give the cell a little push to get them moving.
-            let pushBehavior = UIPushBehavior(items: [attributes], mode: .instantaneous)
-            pushBehavior.setAngle(CGFloat.random(in: 0...CGFloat.pi*2), magnitude: 0.3)
-            pushBehavior.action = { [unowned self, unowned pushBehavior] in
-                // Clean up the push after it's done
-                guard !pushBehavior.active else { return }
-                self.animator.removeBehavior(pushBehavior)
-            }
-            self.animator.addBehavior(pushBehavior)
+        // Give the cell a little push to get them moving.
+        let pushBehavior = UIPushBehavior(items: [attributes], mode: .instantaneous)
+        pushBehavior.setAngle(CGFloat.random(in: 0...CGFloat.pi*2), magnitude: 0.3)
+        pushBehavior.action = { [unowned self, unowned pushBehavior] in
+            // Clean up the push after it's done
+            guard !pushBehavior.active else { return }
+            self.animator.removeBehavior(pushBehavior)
         }
+        self.animator.addBehavior(pushBehavior)
 
+        self.collisionBehavior.addItem(attributes)
+        self.itemBehavior.addItem(attributes)
+        self.noiseField.addItem(attributes)
+    }
+
+    private func addAttributes(_ attributes: EmotionCircleAttributes) {
         self.collisionBehavior.addItem(attributes)
         self.itemBehavior.addItem(attributes)
         self.noiseField.addItem(attributes)
@@ -214,6 +217,7 @@ extension EmotionCircleCollectionViewLayout: UICollisionBehaviorDelegate {
                            withBoundaryIdentifier identifier: NSCopying?,
                            at p: CGPoint) {
 
+        // Lightly bounce away from the boundary.
         let vector = CGVector(dx: item.center.x - p.x, dy: item.center.y - p.y)
         let pushBehavior = UIPushBehavior(items: [item], mode: .instantaneous)
         pushBehavior.pushDirection = vector
