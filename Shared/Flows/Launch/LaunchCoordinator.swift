@@ -23,20 +23,19 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
         self.startLaunchTask()
     }
 
-    private var task: Task<Void, Never>?
+    private var launchTask: Task<Void, Never>?
 
     private func startLaunchTask() {
         self.splashVC.startLoadAnimation()
 
-        self.task?.cancel()
+        self.launchTask?.cancel()
 
-        self.task = Task { [weak self] in
+        self.launchTask = Task { [weak self] in
             let launchStatus = await LaunchManager.shared.launchApp(with: self?.deepLink)
 
             guard !Task.isCancelled else { return }
 
-            #warning("undo")
-//            self?.handle(launchStatus: launchStatus)
+            self?.handle(launchStatus: launchStatus)
         }
     }
 

@@ -25,15 +25,12 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     private let emotionNameLabel = ThemeLabel(font: .smallBold)
     private let label = ThemeLabel(font: .small)
-    private var emotions: Set<Emotion> = []
     
     override func initializeViews() {
         super.initializeViews()
 
         self.view.addSubview(self.emotionCollectionView)
-//        self.view.addSubview(self.blurView)
-        #warning("undo")
-        self.emotionCollectionView.backgroundColor = .gray
+        self.view.addSubview(self.blurView)
         
         self.view.addSubview(self.emotionNameLabel)
         self.view.addSubview(self.label)
@@ -43,16 +40,10 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.loadingView.loopMode = .loop
     }
 
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.emotionCollectionView.expandToSuperviewSize()
-    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
 
+        self.emotionCollectionView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
@@ -109,44 +100,12 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
             self.emotionNameLabel.alpha = 0.8
             self.label.alpha = 0.6
         })
-        
-        self.emotions.insert(emotion)
-        
-//        let items = self.emotions.compactMap { emotion in
-//            return EmotionCircleItem(emotion: emotion)
-//        }
 
-        var emotionsCounts: [Emotion : Int]
-        = [.surprised : 1]
+        let emotionsCounts = [emotion : 1]
 
         self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
 
-        await Task.sleep(seconds: 1)
-
-        emotionsCounts
-        = [.surprised : 1,
-           .avoidance : 1]
-
-        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
-
-        await Task.sleep(seconds: 1)
-
-        emotionsCounts
-        = [.avoidance : 2,
-           .surprised : 2,
-           .heartbroken : 3]
-
-        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
-
-        await Task.sleep(seconds: 1)
-
-        emotionsCounts
-        = [.surprised : 3,
-           .avoidance : 3]
-
-        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
-
-        await Task.sleep(seconds: 1)
+        await Task.sleep(seconds: 5)
 
         Task {
             await self.animateEmotions()

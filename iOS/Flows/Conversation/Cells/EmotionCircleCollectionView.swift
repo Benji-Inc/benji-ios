@@ -125,9 +125,11 @@ class EmotionCircleCollectionView: BaseView {
             self.animator.removeBehavior(pushBehavior)
         }
 
+        let currentCenter = emotionView.center
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             emotionView.alpha = 1
             emotionView.size = finalSize
+            emotionView.center = currentCenter
             emotionView.layoutNow()
         } completion: { completed in
             guard completed else { return }
@@ -142,8 +144,10 @@ class EmotionCircleCollectionView: BaseView {
     /// Resizes the emotion view to a size appropriate for the passed in count.
     private func resizeEmotionView(_ emotionView: EmotionCircleView, withCount count: Int) {
         // Animate the size
+        let currentCenter = emotionView.center
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             emotionView.size = self.getSize(forCount: count)
+            emotionView.center = currentCenter
             // Call layout now so subviews are animated as well.
             emotionView.layoutNow()
             self.animator.updateItem(usingCurrentState: emotionView)
@@ -156,11 +160,12 @@ class EmotionCircleCollectionView: BaseView {
 
         // Stop managing this view.
         self.emotionsViews.removeValue(forKey: emotion)
-
+        let currentCenter = emotionView.center
         // Animate out the view and remove it from the physics behaviors.
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             emotionView.size = CGSize(width: 1, height: 1)
             emotionView.alpha = 0
+            emotionView.center = currentCenter
             emotionView.layoutNow()
         } completion: { _ in
             emotionView.removeFromSuperview()
