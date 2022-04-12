@@ -107,8 +107,8 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
 
         await Task.sleep(seconds: 5)
 
-        Task {
-            await self.animateEmotions()
+        Task { [weak self] in
+            await self?.animateEmotions()
         }.add(to: self.autocancelTaskPool)
     }
 
