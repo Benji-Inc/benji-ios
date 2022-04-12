@@ -41,7 +41,7 @@ protocol Messageable {
     var lastUpdatedAt: Date? { get }
 
     var emotions: [Emotion] { get }
-    var emotionsDictionary: [Emotion : Int] { get }
+    var emotionCounts: [Emotion : Int] { get }
     var expression: String? { get }
 
     func setToConsumed() async 

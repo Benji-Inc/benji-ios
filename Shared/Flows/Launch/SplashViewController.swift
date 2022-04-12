@@ -19,10 +19,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     /// A view to blur out the emotions collection view.
     let blurView = BlurView()
-    private lazy var emotionLayout = EmotionCircleCollectionViewLayout(cellDiameter: 80)
-    private lazy var emotionCollectionView = CollectionView(layout: self.emotionLayout)
-    private lazy var emotionDataSource
-    = EmotionCircleCollectionViewDataSource(collectionView: self.emotionCollectionView)
+    private lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: 80)
 
     let loadingView = AnimationView.with(animation: .loading)
     
@@ -32,11 +29,10 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     override func initializeViews() {
         super.initializeViews()
-        
-        self.emotionLayout.dataSource = self.emotionDataSource
-        
+
         self.view.addSubview(self.emotionCollectionView)
-        self.view.addSubview(self.blurView)
+//        self.view.addSubview(self.blurView)
+        #warning("undo")
         
         self.view.addSubview(self.emotionNameLabel)
         self.view.addSubview(self.label)
@@ -109,17 +105,52 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         
         self.emotions.insert(emotion)
         
-        let items = self.emotions.compactMap { emotion in
-            return EmotionCircleItem(emotion: emotion)
-        }
-        
-        var snapshot = self.emotionDataSource.snapshot()
-        snapshot.setItems(items, in: .emotions)
-        await self.emotionDataSource.apply(snapshot)
-        
-        await Task.sleep(seconds: 5)
+//        let items = self.emotions.compactMap { emotion in
+//            return EmotionCircleItem(emotion: emotion)
+//        }
 
-        await self.animateEmotions()
+        var emotionsCounts: [Emotion : Int]
+        = [.surprised : 1]
+
+        self.emotionCollectionView.setEmotions(emotionsCounts)
+
+        await Task.sleep(seconds: 1)
+
+        emotionsCounts
+        = [.surprised : 1,
+           .avoidance : 1]
+
+        self.emotionCollectionView.setEmotions(emotionsCounts)
+
+        await Task.sleep(seconds: 1)
+
+        emotionsCounts
+        = [.surprised : 1,
+           .avoidance : 1,
+           .paradoxical : 1]
+
+        self.emotionCollectionView.setEmotions(emotionsCounts)
+
+        await Task.sleep(seconds: 1)
+
+        emotionsCounts
+        = [.surprised : 1,
+           .avoidance : 1]
+
+        self.emotionCollectionView.setEmotions(emotionsCounts)
+
+        await Task.sleep(seconds: 1)
+
+        emotionsCounts
+        = [.surprised : 2]
+
+        self.emotionCollectionView.setEmotions(emotionsCounts)
+
+        await Task.sleep(seconds: 1)
+
+        Task {
+            await self.animateEmotions()
+        }.add(to: self.autocancelTaskPool)
     }
 
     func stopLoadAnimation() {

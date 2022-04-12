@@ -285,7 +285,7 @@ class MessageContentView: BaseView {
 
         self.authorView.set(person: message.person)
 
-        let emotionCounts = message.emotionsDictionary
+        let emotionCounts = message.emotionCounts
         self.emotionCollectionView.setEmotions(emotionCounts)
 
         self.setNeedsLayout()

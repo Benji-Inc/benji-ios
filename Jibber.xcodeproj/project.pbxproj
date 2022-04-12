@@ -52,6 +52,8 @@
 		8057B59F27E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */; };
 		80580E1B2805E17600B7264C /* EmotionCircleCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */; };
 		80580E1D2805F1F900B7264C /* EmotionCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1C2805F1F900B7264C /* EmotionCircleView.swift */; };
+		80580E1E2805F82500B7264C /* EmotionCircleCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */; };
+		80580E1F2805F85900B7264C /* EmotionCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1C2805F1F900B7264C /* EmotionCircleView.swift */; };
 		805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8059AD4B27851162004330DC /* ChatUser+Extensions.swift */; };
 		80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
@@ -3142,6 +3144,7 @@
 				D61128BF2804EB4000574B96 /* PermissionsViewController.swift in Sources */,
 				D61128402804DBEE00574B96 /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D611281A2804DBC600574B96 /* CGFloat+Extensions.swift in Sources */,
+				80580E1F2805F85900B7264C /* EmotionCircleView.swift in Sources */,
 				D61128752804DC7200574B96 /* User+INPerson.swift in Sources */,
 				D61128962804DF7200574B96 /* TextView.swift in Sources */,
 				D61128812804DCBB00574B96 /* UserNotificationManager.swift in Sources */,
@@ -3228,6 +3231,7 @@
 				D611287A2804DCB000574B96 /* FontType.swift in Sources */,
 				D61128342804DBE400574B96 /* String+PhoneNumbers.swift in Sources */,
 				D61128142804DB9C00574B96 /* RootNavigationController.swift in Sources */,
+				80580E1E2805F82500B7264C /* EmotionCircleCollectionView.swift in Sources */,
 				D61128412804DBEE00574B96 /* UIWindow+Extensions.swift in Sources */,
 				D61128542804DC3200574B96 /* WelcomeViewController.swift in Sources */,
 				D61128A72804E55F00574B96 /* BorderedPersonView.swift in Sources */,

@@ -7,14 +7,12 @@
 //
 
 import Foundation
+import UIKit
 
 class EmotionCircleCollectionView: BaseView {
 
-    struct Item: Hashable {
-        let emotion: Emotion
-        let count: Int
-        // TODO: Only hash on the emotion type
-    }
+    var emotionCounts: [Emotion : Int] = [:]
+    var emotionsViews: [Emotion : EmotionCircleView] = [:]
 
     // Physics
     private lazy var animator = UIDynamicAnimator(referenceView: self)
@@ -81,28 +79,29 @@ class EmotionCircleCollectionView: BaseView {
         }
     }
 
-    var emotionCounts: [Emotion : Int] = [:]
-    var emotionsViews: [Emotion : EmotionCircleView] = [:]
-
     func setEmotions(_ emotionsCounts: [Emotion : Int]) {
         let previousEmotionCounts = self.emotionCounts
 
         self.emotionCounts = emotionsCounts
 
-        for (previousEmotion, count) in emotionsCounts {
+        for (emotion, count) in emotionsCounts {
             // If we already have a view for this emotion, animate any size changes needed
-            if let emotionView = self.emotionsViews[previousEmotion] {
+            if let emotionView = self.emotionsViews[emotion] {
                 // Animate the size
+                let scale = CGFloat(count)
+                emotionView.size = CGSize(width: self.cellDiameter * scale,
+                                          height: self.cellDiameter * scale)
+                self.animator.updateItem(usingCurrentState: emotionView)
             } else {
                 // If we don't already have a view created for this emotion, create one now.
-                self.createEmotionsView(with: Item(emotion: previousEmotion, count: 1))
+                self.createAndAddEmotionsView(with: emotion, count: count)
             }
         }
 
-        // Find any emotion views whose types are not in the new set of items and clean them up.
-        for (previousEmotion, count) in previousEmotionCounts {
+        // Find any emotions that are being removed and clean up their views.
+        for previousEmotion in previousEmotionCounts.keys {
             guard self.emotionCounts[previousEmotion].isNil,
-                  let emotionView = self.emotionsViews[previousEmotion] else { return }
+                  let emotionView = self.emotionsViews[previousEmotion] else { continue }
 
             self.removeEmotionView(emotionView)
         }
@@ -110,20 +109,22 @@ class EmotionCircleCollectionView: BaseView {
 
     // MARK: - Animator Functions
 
-    private func createEmotionsView(with emotionItem: Item) {
+    private func createAndAddEmotionsView(with emotion: Emotion, count: Int) {
         guard self.width > 0, self.height > 0 else { return }
 
         let emotionView = EmotionCircleView()
-        emotionView.configure(with: emotionItem.emotion)
-        let clampedDiameter = clamp(self.cellDiameter,
+        emotionView.configure(with: emotion)
+        let scale = CGFloat(count)
+        let clampedDiameter = clamp(self.cellDiameter * scale,
                                     0,
                                     min(self.width, self.height))
         emotionView.size = CGSize(width: clampedDiameter, height: clampedDiameter)
+
         emotionView.frame.origin
         = CGPoint(x: CGFloat.random(in: 0...self.width - clampedDiameter),
                   y: CGFloat.random(in: 0...self.height - clampedDiameter))
 
-        self.emotionsViews[emotionItem.emotion] = emotionView
+        self.emotionsViews[emotion] = emotionView
         self.addSubview(emotionView)
 
         // Give the view a little push to get it moving.

@@ -136,11 +136,11 @@ extension Message: Messageable {
         }
     }
 
-    var emotionsDictionary: [Emotion : Int] {
+    var emotionCounts: [Emotion : Int] {
         var dictionary: [Emotion : Int] = [:]
         self.reactionScores.forEach { (reaction, count) in
             guard let emotion = Emotion(rawValue: reaction.rawValue) else { return }
-            dictionary[emotion] = count
+            dictionary[emotion] = Int.random(min: 1, max: 3)
         }
         return dictionary
     }

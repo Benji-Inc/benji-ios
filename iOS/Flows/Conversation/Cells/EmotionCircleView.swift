@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class EmotionCircleView: BaseView {
 
@@ -39,5 +40,11 @@ class EmotionCircleView: BaseView {
         self.backgroundColor = emotion.color.withAlphaComponent(0.4)
 
         self.setNeedsLayout()
+    }
+
+    // MARK: - UIDynamicItem
+    
+    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
+        return .ellipse
     }
 }
