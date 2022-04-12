@@ -64,7 +64,7 @@ class MessageContentView: BaseView {
 
     /// A view to blur out the emotions collection view.
     let blurView = BlurView()
-    private lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: self.cellDiameter)
+    lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: self.cellDiameter)
     
     let emotionLabel = ThemeLabel(font: .regular)
     let addEmotionButton = ThemeButton()
