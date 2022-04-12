@@ -50,6 +50,8 @@
 		8057B59C27E2A10600B23D0D /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59627E2A10600B23D0D /* MemberCell.swift */; };
 		8057B59D27E2A10600B23D0D /* ConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */; };
 		8057B59F27E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */; };
+		80580E1B2805E17600B7264C /* EmotionCircleCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */; };
+		80580E1D2805F1F900B7264C /* EmotionCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1C2805F1F900B7264C /* EmotionCircleView.swift */; };
 		805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8059AD4B27851162004330DC /* ChatUser+Extensions.swift */; };
 		80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
@@ -1004,6 +1006,8 @@
 		8057B59627E2A10600B23D0D /* MemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailViewController.swift; sourceTree = "<group>"; };
 		8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCircleCollectionView.swift; sourceTree = "<group>"; };
+		80580E1C2805F1F900B7264C /* EmotionCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCircleView.swift; sourceTree = "<group>"; };
 		805881552743008D0004F2EA /* ConversationMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationMember+Extensions.swift"; sourceTree = "<group>"; };
 		8059AD4B27851162004330DC /* ChatUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatUser+Extensions.swift"; sourceTree = "<group>"; };
 		80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatClient+Extensions.swift"; sourceTree = "<group>"; };
@@ -1929,8 +1933,10 @@
 				8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */,
 				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
 				801D382127FF755500FC2263 /* EmotionCircleCell.swift */,
+				80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */,
 				80BF244727FE314100E2471E /* EmotionCircleCollectionViewDataSource.swift */,
 				80BF244527FE271500E2471E /* EmotionCircleCollectionViewLayout.swift */,
+				80580E1C2805F1F900B7264C /* EmotionCircleView.swift */,
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
@@ -3508,6 +3514,7 @@
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
 				80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */,
 				D671E1F326402B1F00BF2B8D /* ToastQueue.swift in Sources */,
+				80580E1D2805F1F900B7264C /* EmotionCircleView.swift in Sources */,
 				D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */,
@@ -3680,6 +3687,7 @@
 				D60CA47427ED1C1800F0871A /* OptionCell.swift in Sources */,
 				D64C323E270391AE004BC1BD /* Person.swift in Sources */,
 				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
+				80580E1B2805E17600B7264C /* EmotionCircleCollectionView.swift in Sources */,
 				D6DEC3EF27A1DA5D0072D9D0 /* RoomCoordinator.swift in Sources */,
 				D646D37227E54DFC0077D20B /* AttachmentLineView.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,

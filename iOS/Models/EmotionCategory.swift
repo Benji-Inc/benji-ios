@@ -96,7 +96,7 @@ enum EmotionCategory: Int, CaseIterable {
         case .unplanned:
             return [.bored, .dissapointment, .expecting, .regret, .discouraged, .resigned, .frustrated]
         case .beyondUs:
-            return [.awe, .wonder, .confused, .curious, .interested, .suprised]
+            return [.awe, .wonder, .confused, .curious, .interested, .surprised]
         case .areNotWhatTheySeem:
             return [.amused, .bittersweetness, .nostalgia, .cognitiveDissonance, .paradoxical, .ironic, .sarcastic]
         case .hurting:
@@ -155,7 +155,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case confused
     case curious
     case interested
-    case suprised
+    case surprised
     
     case amused
     case bittersweetness
@@ -289,7 +289,7 @@ enum Emotion: String, CaseIterable, Identifiable {
             return LocalizedString(id: "", default: "Is recognizing a gap in our knowledge about something that interests us, and becoming emotionally and cognitively invested in closing that gap through exploration and learning")
         case .interested:
             return LocalizedString(id: "", default: "Is a cognitive openness to engaging with a topic or experience")
-        case .suprised:
+        case .surprised:
             return LocalizedString(id: "", default: "An interruption caused by information that doesn’t fit with our current understanding or expectations")
         case .amused:
             return LocalizedString(id: "", default: "Is “pleasurable, relaxed excitation")
@@ -472,7 +472,7 @@ enum Emotion: String, CaseIterable, Identifiable {
             return #colorLiteral(red: 0.4941176471, green: 0.3411764706, blue: 0.7607843137, alpha: 1)
         case .interested:
             return #colorLiteral(red: 0.4039215686, green: 0.2274509804, blue: 0.7176470588, alpha: 1)
-        case .suprised:
+        case .surprised:
             return #colorLiteral(red: 0.368627451, green: 0.2078431373, blue: 0.6941176471, alpha: 1)
             
         case .amused:

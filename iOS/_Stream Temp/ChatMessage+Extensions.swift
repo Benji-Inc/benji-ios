@@ -135,6 +135,15 @@ extension Message: Messageable {
             return Emotion(rawValue: dict.key.rawValue)
         }
     }
+
+    var emotionsDictionary: [Emotion : Int] {
+        var dictionary: [Emotion : Int] = [:]
+        self.reactionScores.forEach { (reaction, count) in
+            guard let emotion = Emotion(rawValue: reaction.rawValue) else { return }
+            dictionary[emotion] = count
+        }
+        return dictionary
+    }
     
     var expression: String? {
         if let value = self.extraData["expression"],
