@@ -11,7 +11,9 @@ import Combine
 import ParseLiveQuery
 import Parse
 import Contacts
+#if IOS
 import StreamChat
+#endif
 
 /// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
 /// or it could just be another person that has been invited but not yet joined Jibber.

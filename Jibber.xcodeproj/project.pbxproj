@@ -148,7 +148,6 @@
 		D611280F2804DB6200574B96 /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D61128102804DB6A00574B96 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
 		D61128112804DB9C00574B96 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
-		D61128122804DB9C00574B96 /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D61128132804DB9C00574B96 /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
 		D61128142804DB9C00574B96 /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
 		D61128152804DB9C00574B96 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
@@ -3142,7 +3141,6 @@
 				D61128812804DCBB00574B96 /* UserNotificationManager.swift in Sources */,
 				D61128502804DC3200574B96 /* PhoneTextField.swift in Sources */,
 				D61128392804DBEE00574B96 /* UIControl+Extensions.swift in Sources */,
-				D61128122804DB9C00574B96 /* MainCoordinator+Launch.swift in Sources */,
 				D61128B82804E9F300574B96 /* PassThroughView.swift in Sources */,
 				D611287C2804DCB000574B96 /* ThemeColor.swift in Sources */,
 				D611283A2804DBEE00574B96 /* UIEdgeInsets+Extensions.swift in Sources */,
