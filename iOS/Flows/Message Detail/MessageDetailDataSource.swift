@@ -24,6 +24,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         case edit
         case pin
         case more
+        case quote
         
         var image: UIImage? {
             switch self {
@@ -35,6 +36,8 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                 return UIImage(systemName: "bookmark")
             case .more:
                 return UIImage(systemName: "ellipsis")
+            case .quote:
+                return UIImage(systemName: "quote.opening")
             }
         }
         
@@ -48,6 +51,8 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                 return "Pin"
             case .more:
                 return "More"
+            case .quote:
+                return "Quote"
             }
         }
         

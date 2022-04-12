@@ -19,16 +19,18 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
     var listVC: ConversationListViewController {
         return self.inputHandlerViewController as! ConversationListViewController
     }
-
+    
     init(router: Router,
          deepLink: DeepLinkable?,
          conversationMembers: [ConversationMember],
          startingConversationId: ConversationId?,
-         startingMessageId: MessageId?) {
+         startingMessageId: MessageId?,
+         openReplies: Bool = false) {
         
         let vc = ConversationListViewController(members: conversationMembers,
                                                 startingConversationID: startingConversationId,
-                                                startingMessageID: startingMessageId)
+                                                startingMessageID: startingMessageId,
+                                                openReplies: openReplies)
 
         super.init(with: vc, router: router, deepLink: deepLink)
 
@@ -95,8 +97,18 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
     override func presentProfile(for person: PersonType) {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
-            Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
+            switch result {
+            case .conversation(let cid):
+                Task.onMainActorAsync {
+                    await self.listVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
+                }
+            case .openReplies(let cid, let messageId):
+                Task.onMainActorAsync {
+                    await self.listVC.scrollToConversation(with: cid,
+                                                           messageId: messageId,
+                                                           viewReplies: true,
+                                                           animateScroll: false)
+                }
             }
         }
     }
@@ -128,5 +140,9 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
         } else {
             self.presentMessageDetail(for: messageInfo.0, messageId: messageInfo.1)
         }
+    }
+    
+    override func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        self.presentThread(for: messageInfo.0, messageId: messageInfo.1, startingReplyId: nil)
     }
 }

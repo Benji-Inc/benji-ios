@@ -35,6 +35,8 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
     override func start() {
         super.start()
         
+        self.threadVC.messageContent.delegate = self 
+        
         self.threadVC.$selectedItems.mainSink { [unowned self] items in
             guard let first = items.first,
         case MessageSequenceItem.message(let cid, let messageID, _) = first else { return }
@@ -46,7 +48,12 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
     override func presentProfile(for person: PersonType) {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
-            self.finishFlow(with: result)
+            switch result {
+            case .conversation(let cid):
+                self.finishFlow(with: cid)
+            case .openReplies(_, _):
+                break
+            }
         }
     }
     

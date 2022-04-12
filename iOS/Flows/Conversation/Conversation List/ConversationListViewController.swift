@@ -72,11 +72,14 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     /// The id of the conversation we should land on when this VC appears.
     private let startingConversationID: ConversationId?
     private let startingMessageID: MessageId?
+    private let openReplies: Bool
 
     init(members: [ConversationMember],
          startingConversationID: ConversationId?,
-         startingMessageID: MessageId?) {
+         startingMessageID: MessageId?,
+         openReplies: Bool) {
         
+        self.openReplies = openReplies
         self.members = members
         self.startingConversationID = startingConversationID
         self.startingMessageID = startingMessageID
@@ -102,7 +105,6 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         super.initializeViews()
         
         self.view.set(backgroundColor: .B0)
-       // self.modalPresentationStyle = .overCurrentContext
         
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
@@ -193,13 +195,16 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         guard let startingConversationID = self.startingConversationID else { return }
 
         Task {
-            await self.scrollToConversation(with: startingConversationID, messageId: self.startingMessageID)
+            await self.scrollToConversation(with: startingConversationID,
+                                            messageId: self.startingMessageID,
+                                            viewReplies: self.openReplies)
         }.add(to: self.autocancelTaskPool)
     }
 
     @MainActor
     func scrollToConversation(with cid: ConversationId,
                               messageId: MessageId?,
+                              viewReplies: Bool = false,
                               animateScroll: Bool = true,
                               animateSelection: Bool = true) async {
         
@@ -227,13 +232,19 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         // Determine if this is a reply message or regular message. If it's a reply, select the parent
         // message so we can open the thread experience.
         if let parentMessageId = message.parentMessageId {
-            await messagesCell.scrollToMessage(with: parentMessageId, animateScroll: true, animateSelection: true)
+            await messagesCell.scrollToMessage(with: parentMessageId, animateScroll: animateScroll, animateSelection: animateSelection)
 
             if let messageCell = messagesCell.getFrontmostCell() {
                 self.messageContentDelegate?.messageContent(messageCell.content, didTapMessage: (cid, messageId))
             }
+        } else if viewReplies {
+            await messagesCell.scrollToMessage(with: messageId, animateScroll: animateScroll, animateSelection: animateSelection)
+
+            if let messageCell = messagesCell.getFrontmostCell() {
+                self.messageContentDelegate?.messageContent(messageCell.content, didTapViewReplies: (cid, messageId))
+            }
         } else {
-            await messagesCell.scrollToMessage(with: messageId, animateScroll: true, animateSelection: true)
+            await messagesCell.scrollToMessage(with: messageId, animateScroll: animateScroll, animateSelection: animateSelection)
         }
     }
 

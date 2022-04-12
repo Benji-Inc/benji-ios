@@ -189,6 +189,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     @MainActor
     func scrollToConversation(with cid: ConversationId,
                               messageId: MessageId?,
+                              viewReplies: Bool = false, 
                               animateScroll: Bool,
                               animateSelection: Bool) async {
         guard let messageId = messageId else { return }

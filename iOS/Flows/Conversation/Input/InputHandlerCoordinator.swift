@@ -19,6 +19,7 @@ protocol SwipeableInputControllerHandler where Self: ViewController {
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
     func scrollToConversation(with cid: ConversationId,
                               messageId: MessageId?,
+                              viewReplies: Bool,
                               animateScroll: Bool,
                               animateSelection: Bool) async
 }
@@ -89,6 +90,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             guard let `self` = self else { return }
             await self.inputHandlerViewController.scrollToConversation(with: conversation.cid,
                                                                        messageId: unreadMessage.id,
+                                                                       viewReplies: false,
                                                                        animateScroll: true,
                                                                        animateSelection: true)
         }
@@ -257,6 +259,10 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     // MARK: - MessageCellDelegate
+    
+    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        
+    }
     
     func messageContent(_ content: MessageContentView,
                         didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {

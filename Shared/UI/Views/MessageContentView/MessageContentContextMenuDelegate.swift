@@ -54,7 +54,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
                                 children: [confirmDelete, neverMind])
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            self.content.delegate?.messageContent(self.content, didTapMessage: (cid, message.id))
+            self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, message.id))
         }
 
         let edit = UIAction(title: "Edit",
