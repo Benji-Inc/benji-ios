@@ -9,7 +9,6 @@
 import Foundation
 import StreamChat
 
-#if IOS
 extension MainCoordinator {
 
     @MainActor
@@ -36,4 +35,3 @@ extension MainCoordinator {
         ChatClient.shared?.disconnect()
     }
 }
-#endif

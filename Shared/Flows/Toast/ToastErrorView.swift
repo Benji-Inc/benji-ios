@@ -26,7 +26,7 @@ class ToastErrorView: ToastView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        #if !NOTIFICATION
+        #if !NOTIFICATION && !APPCLIP
         guard let superview = UIWindow.topWindow() else { return }
         self.label.setSize(withWidth: superview.width - Theme.contentOffset.doubled)
 

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class ToastQueue {
     static let shared = ToastQueue()

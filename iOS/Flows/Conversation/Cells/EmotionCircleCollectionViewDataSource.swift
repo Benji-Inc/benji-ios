@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 typealias EmotionCircleSection = EmotionCircleCollectionViewDataSource.SectionType
 typealias EmotionCircleItem = EmotionCircleCollectionViewDataSource.ItemType

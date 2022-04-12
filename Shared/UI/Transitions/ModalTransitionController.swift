@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 #if IOS
 protocol DismissInteractableController where Self: ViewController {

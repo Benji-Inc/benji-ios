@@ -57,7 +57,7 @@ class MainCoordinator: Coordinator<Void> {
             }
 #elseif APPCLIP
             // Code your App Clip may access.
-            self.handleAppClip(result: launchStatus)
+          //  self.handleAppClip(result: launchStatus)
 #endif
         }
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct AnimationCycle {
     var inFromPosition: AnimationPosition?

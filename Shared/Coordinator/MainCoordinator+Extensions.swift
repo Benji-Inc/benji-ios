@@ -39,7 +39,7 @@ extension MainCoordinator: LaunchManagerDelegate {
         switch result {
         case .success(let object):
             self.deepLink = object
-            self.runOnboardingFlow()
+            self.runOnboardingFlow(with: object)
         case .failed(_):
             break
         }
