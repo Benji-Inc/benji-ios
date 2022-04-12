@@ -33,6 +33,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.view.addSubview(self.emotionCollectionView)
 //        self.view.addSubview(self.blurView)
         #warning("undo")
+        self.emotionCollectionView.backgroundColor = .gray
         
         self.view.addSubview(self.emotionNameLabel)
         self.view.addSubview(self.label)
@@ -42,10 +43,16 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.loadingView.loopMode = .loop
     }
 
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.emotionCollectionView.expandToSuperviewSize()
+    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.emotionCollectionView.expandToSuperviewSize()
+
         self.blurView.expandToSuperviewSize()
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
@@ -112,7 +119,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         var emotionsCounts: [Emotion : Int]
         = [.surprised : 1]
 
-        self.emotionCollectionView.setEmotions(emotionsCounts)
+        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
 
         await Task.sleep(seconds: 1)
 
@@ -120,22 +127,16 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         = [.surprised : 1,
            .avoidance : 1]
 
-        self.emotionCollectionView.setEmotions(emotionsCounts)
+        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
 
         await Task.sleep(seconds: 1)
 
         emotionsCounts
-        = [.surprised : 1,
-           .avoidance : 2,
-           .paradoxical : 1,
-           .heartbroken : 3,
-           .regret : 1,
-           .love : 2,
-           .anguish : 1,
-           .tranquil : 1,
-           .expecting : 1]
+        = [.avoidance : 2,
+           .surprised : 2,
+           .heartbroken : 3]
 
-        self.emotionCollectionView.setEmotions(emotionsCounts)
+        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
 
         await Task.sleep(seconds: 1)
 
@@ -143,17 +144,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         = [.surprised : 3,
            .avoidance : 3]
 
-        self.emotionCollectionView.setEmotions(emotionsCounts)
-
-        await Task.sleep(seconds: 1)
-
-        let randomEmotions = Emotion.allCases.random(10)
-        emotionsCounts.removeAll()
-        for randomEmotion in randomEmotions {
-            emotionsCounts[randomEmotion] = Int.random(min: 1, max: 3)
-        }
-
-        self.emotionCollectionView.setEmotions(emotionsCounts)
+        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
 
         await Task.sleep(seconds: 1)
 

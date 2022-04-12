@@ -286,7 +286,7 @@ class MessageContentView: BaseView {
         self.authorView.set(person: message.person)
 
         let emotionCounts = message.emotionCounts
-        self.emotionCollectionView.setEmotions(emotionCounts)
+        self.emotionCollectionView.setEmotionsCounts(emotionCounts)
 
         self.setNeedsLayout()
     }
@@ -313,7 +313,7 @@ class MessageContentView: BaseView {
             self.blurView.effect = areShown ? nil : Theme.blurEffect
             
             if areShown {
-                if self.emotionCollectionView.emotionsViews.count == 0 {
+                if self.emotionCollectionView.emotionCounts.count == 0 {
                     self.emotionLabel.alpha = 0.2
                 }
                 
