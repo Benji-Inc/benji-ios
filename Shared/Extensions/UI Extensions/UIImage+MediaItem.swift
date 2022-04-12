@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 #if !APPCLIP && !NOTIFICATION && !NOTIFICATION_SERVICE
 // Code you don't want to use in your App Clip.

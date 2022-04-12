@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class BorderedPersonView: PersonView {
     
@@ -29,7 +30,9 @@ class BorderedPersonView: PersonView {
         return layer
     }()
     
+    #if IOS
     let contextCueView = ContextCueView()
+    #endif
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -38,8 +41,9 @@ class BorderedPersonView: PersonView {
         
         self.layer.insertSublayer(self.shadowLayer, at: 0)
         self.layer.insertSublayer(self.pulseLayer, at: 2)
-        
+        #if IOS
         self.addSubview(self.contextCueView)
+        #endif
     }
     
     override func layoutSubviews() {
@@ -49,9 +53,10 @@ class BorderedPersonView: PersonView {
         self.pulseLayer.cornerRadius = Theme.innerCornerRadius
         self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
-        
+        #if IOS
         self.contextCueView.pin(.right, offset: .negative(.short))
         self.contextCueView.pin(.bottom, offset: .negative(.short))
+        #endif
     }
 
     @MainActor
@@ -61,13 +66,17 @@ class BorderedPersonView: PersonView {
         guard let person = person else { return }
         
         self.setColors(for: person)
+        #if IOS
         self.contextCueView.configure(with: person)
+        #endif
     }
 
     override func didRecieveUpdateFor(person: PersonType) {
         super.didRecieveUpdateFor(person: person)
         self.setColors(for: person)
+        #if IOS
         self.contextCueView.configure(with: person)
+        #endif
     }
     
     private func setColors(for person: PersonType) {

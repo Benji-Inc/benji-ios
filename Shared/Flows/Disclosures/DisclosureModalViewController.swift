@@ -8,6 +8,7 @@
 
 import Foundation
 import Localization
+import UIKit
  
 struct HightlightedPhrase {
     var text: Localized

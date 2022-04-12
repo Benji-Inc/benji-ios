@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol Switchable: Equatable {
     var viewController: UIViewController & Sizeable { get }

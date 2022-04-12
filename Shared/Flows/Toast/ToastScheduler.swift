@@ -9,13 +9,16 @@
 import Foundation
 import Combine
 import Localization
+import UIKit
 
 enum ToastType {
+    #if IOS
     case newContextCue(ContextCue)
     case newMessage(Messageable)
-    case error(ClientError)
     case transaction(Transaction)
     case achievement(Achievement)
+    #endif
+    case error(ClientError)
     case basic(identifier: String,
                displayable: ImageDisplayable,
                title: Localized,
@@ -54,6 +57,7 @@ class ToastScheduler {
                                              title: title,
                                              description: description,
                                              deepLink: deepLink)
+            #if IOS
         case .newMessage(let message):
             toast = self.createMessageToast(for: message,
                                                position: position,
@@ -70,6 +74,7 @@ class ToastScheduler {
             toast = try? await self.createAchievementToast(for: achievement,
                                                              position: position,
                                                              duration: duration)
+            #endif
         }
 
         if let t = toast {
@@ -122,6 +127,7 @@ class ToastScheduler {
         return toast
     }
 
+    #if IOS
     private func createMessageToast(for message: Messageable,
                                     position: Toast.Position,
                                     duration: TimeInterval) -> Toast? {
@@ -220,4 +226,5 @@ class ToastScheduler {
 
         return toast
     }
+    #endif 
 }

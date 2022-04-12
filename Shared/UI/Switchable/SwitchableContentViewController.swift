@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingViewController {
 

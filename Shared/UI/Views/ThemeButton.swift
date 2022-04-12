@@ -10,6 +10,7 @@ import Foundation
 import Lottie
 import Combine
 import Localization
+import UIKit
 
 enum ButtonStyle {
     case normal(color: ThemeColor, text: Localized)

@@ -8,6 +8,7 @@
 
 import Foundation
 import Lottie
+import UIKit
 
 class CollectionView: UICollectionView {
 
