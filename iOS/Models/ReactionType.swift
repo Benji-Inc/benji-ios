@@ -241,7 +241,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case calm
     case contentment
     case gratitude
-    case forebodingJoy = "forbodeing joy"
+    case forebodingJoy = "forboding joy"
     case relief
     case tranquil
     
