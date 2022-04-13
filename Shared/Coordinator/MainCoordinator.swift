@@ -116,7 +116,7 @@ class MainCoordinator: Coordinator<Void> {
         case .login:
             self.runOnboardingFlow(with: deeplink)
         case .waitlist:
-            self.runOnboardingFlow(with: deeplink)
+            self.runWaitlistFlow(with: deeplink)
         }
     }
 
