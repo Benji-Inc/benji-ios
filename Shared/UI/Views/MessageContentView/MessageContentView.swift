@@ -286,7 +286,9 @@ class MessageContentView: BaseView {
         self.authorView.set(person: message.person)
 
         let emotionCounts = message.emotionCounts
-        self.emotionCollectionView.setEmotionsCounts(emotionCounts)
+        // Only animate changes to the emotion when they're not blurred out.
+        let isAnimated = self.areEmotionsShown
+        self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
 
         self.setNeedsLayout()
     }

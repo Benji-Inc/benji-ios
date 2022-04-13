@@ -73,40 +73,40 @@ class EmotionCircleCollectionView: BaseView {
             self.previousBounds = self.bounds
 
             let savedEmotionCounts = self.emotionCounts
-            self.removeAllEmotions()
-            self.setEmotionsCounts(savedEmotionCounts)
+            self.removeAllEmotions(animated: false)
+            self.setEmotionsCounts(savedEmotionCounts, animated: false)
         }
     }
 
     /// Displays emotion circles configured by the passed in emotion counts.
-    func setEmotionsCounts(_ emotionsCounts: [Emotion : Int]) {
+    func setEmotionsCounts(_ emotionsCounts: [Emotion : Int], animated: Bool) {
         self.emotionCounts = emotionsCounts
 
         for (emotion, count) in emotionsCounts {
             // If we already have a view for this emotion, animate any size changes needed.
             if let emotionView = self.emotionsViews[emotion] {
-                self.resizeEmotionView(emotionView, withCount: count)
+                self.resizeEmotionView(emotionView, withCount: count, animated: animated)
             } else {
                 // If we don't already have a view created for this emotion, create one now.
-                self.createAndAddEmotionsView(with: emotion, count: count)
+                self.createAndAddEmotionsView(with: emotion, count: count, animated: animated)
             }
         }
 
         // Clean up unneeded emotion views.
-        self.removeUnusedEmotionViews()
+        self.removeUnusedEmotionViews(animated: animated)
     }
 
     // MARK: - Emotion View Management
 
     /// Creates a new emotion view to display the given emotion and sized for the passed in count.
     /// The view is added as a subview and added to the animator.
-    private func createAndAddEmotionsView(with emotion: Emotion, count: Int) {
+    private func createAndAddEmotionsView(with emotion: Emotion, count: Int, animated: Bool) {
         guard self.width > 0, self.height > 0 else { return }
 
         let emotionView = EmotionCircleView(emotion: emotion)
         let finalSize = self.getSize(forCount: count)
         // Start the view in a random position
-        emotionView.frame.origin = self.getRandomPosition(forCount: count)
+        emotionView.center = self.getRandomPosition(forCount: count)
 
         // Start the view off small and invisible. It will be animated to its final size and alpha.
         emotionView.alpha = 0
@@ -125,11 +125,12 @@ class EmotionCircleCollectionView: BaseView {
             self.animator.removeBehavior(pushBehavior)
         }
 
-        let currentCenter = emotionView.center
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
+        let animationDuration = animated ? Theme.animationDurationStandard : 0
+        let targetCenter = emotionView.center
+        UIView.animate(withDuration: animationDuration) {
             emotionView.alpha = 1
             emotionView.size = finalSize
-            emotionView.center = currentCenter
+            emotionView.center = targetCenter
             emotionView.layoutNow()
         } completion: { completed in
             guard completed else { return }
@@ -142,10 +143,11 @@ class EmotionCircleCollectionView: BaseView {
     }
 
     /// Resizes the emotion view to a size appropriate for the passed in count.
-    private func resizeEmotionView(_ emotionView: EmotionCircleView, withCount count: Int) {
+    private func resizeEmotionView(_ emotionView: EmotionCircleView, withCount count: Int, animated: Bool) {
         // Animate the size
         let currentCenter = emotionView.center
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
+        let animationDuration = animated ? Theme.animationDurationStandard : 0
+        UIView.animate(withDuration: animationDuration) {
             emotionView.size = self.getSize(forCount: count)
             emotionView.center = currentCenter
             // Call layout now so subviews are animated as well.
@@ -155,14 +157,15 @@ class EmotionCircleCollectionView: BaseView {
     }
 
     /// Removes as a subview the view corresponding to the given emotion. The view is also removed from the animator.
-    private func removeEmotionView(for emotion: Emotion) {
+    private func removeEmotionView(for emotion: Emotion, animated: Bool) {
         guard let emotionView = self.emotionsViews[emotion] else { return }
 
         // Stop managing this view.
         self.emotionsViews.removeValue(forKey: emotion)
         let currentCenter = emotionView.center
+        let animationDuration = animated ? Theme.animationDurationStandard : 0
         // Animate out the view and remove it from the physics behaviors.
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
+        UIView.animate(withDuration: animationDuration) {
             emotionView.size = CGSize(width: 1, height: 1)
             emotionView.alpha = 0
             emotionView.center = currentCenter
@@ -176,18 +179,18 @@ class EmotionCircleCollectionView: BaseView {
     }
 
     /// Removes all emotion views that no longer have a related emotion count.
-    private func removeUnusedEmotionViews() {
+    private func removeUnusedEmotionViews(animated: Bool) {
         for emotion in self.emotionsViews.keys {
             guard self.emotionCounts[emotion].isNil else { continue }
-            self.removeEmotionView(for: emotion)
+            self.removeEmotionView(for: emotion, animated: animated)
         }
     }
 
     /// Removes all the emotion counts and their corresponding views.
-    private func removeAllEmotions() {
+    private func removeAllEmotions(animated: Bool) {
         self.emotionCounts.removeAll()
         for emotion in self.emotionsViews.keys {
-            self.removeEmotionView(for: emotion)
+            self.removeEmotionView(for: emotion, animated: animated)
         }
     }
 
