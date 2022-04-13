@@ -11,9 +11,16 @@ import Lottie
 import Localization
 import UIKit
 
+class OnboardingPersonView: BorderedPersonView {
+    override func setColors(for person: PersonType) {
+        self.pulseLayer.borderColor = ThemeColor.D6.color.cgColor
+        self.shadowLayer.shadowColor = ThemeColor.D6.color.cgColor
+    }
+}
+
 class UserOnboardingViewController: ViewController {
 
-    private(set) var personView = PersonView()
+    private(set) var personView = OnboardingPersonView()
 
     private(set) var nameLabel = ThemeLabel(font: .regular)
     private(set) var messageBubble = SpeechBubbleView(orientation: .up, bubbleColor: .D1)
@@ -21,7 +28,7 @@ class UserOnboardingViewController: ViewController {
 
     override func initializeViews() {
         super.initializeViews()
-
+        
         self.personView.isHidden = true 
 
         self.view.addSubview(self.nameLabel)
@@ -71,12 +78,12 @@ class UserOnboardingViewController: ViewController {
         
         self.messageBubble.size = self.textView.size
         self.messageBubble.size.width += Theme.ContentOffset.long.value.doubled
-        self.messageBubble.size.height += Theme.ContentOffset.long.value + Theme.ContentOffset.long.value.doubled
+        self.messageBubble.size.height += Theme.ContentOffset.long.value.doubled
         
         self.messageBubble.match(.top, to: .bottom, of: self.personView, offset: .standard)
         self.messageBubble.centerOnX()
         
-        self.textView.pin(.bottom, offset: .long)
+        self.textView.pin(.bottom, offset: .custom(6))
     }
 
     // MARK: PUBLIC

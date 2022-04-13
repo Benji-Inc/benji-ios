@@ -99,7 +99,7 @@ class MainCoordinator: Coordinator<Void> {
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .room, .conversation, .wallet, .profile:
+        case .room, .conversation, .wallet, .profile, .reservation:
 #if IOS
             Task {
                 await self.runRoomFlow(with: deeplink)
@@ -107,14 +107,13 @@ class MainCoordinator: Coordinator<Void> {
 #endif
         case .login:
             self.runOnboardingFlow(with: deeplink)
-        case .reservation:
-#if IOS
-            Task {
-                await self.runRoomFlow(with: deeplink)
-            }
-#endif
+        case .waitlist:
             self.runOnboardingFlow(with: deeplink)
         }
+    }
+    
+    func runWaitlistFlow(with deepLink: DeepLinkable?) {
+        
     }
 
     func runOnboardingFlow(with deepLink: DeepLinkable?) {
@@ -123,7 +122,7 @@ class MainCoordinator: Coordinator<Void> {
         self.router.setRootModule(coordinator, animated: true)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             // Attempt to take the user to the conversation screen after onboarding is complete.
-            self.handle(deeplink: DeepLinkObject(target: .conversation))
+            self.handle(deeplink: DeepLinkObject(target: .room))
         })
     }
 
