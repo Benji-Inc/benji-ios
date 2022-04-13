@@ -11,6 +11,9 @@ import UIKit
 
 class EmotionCircleCollectionView: BaseView {
 
+    var onTappedBackground: CompletionOptional = nil
+    var onTappedEmotion: ((Emotion) -> Void)?
+
     private let circleDiameter: CGFloat
 
     // MARK: - State Variable
@@ -40,6 +43,10 @@ class EmotionCircleCollectionView: BaseView {
 
     override func initializeSubviews() {
         super.initializeSubviews()
+
+        self.didSelect { [unowned self] in
+            self.onTappedBackground?()
+        }
 
         self.collisionBehavior.translatesReferenceBoundsIntoBoundary = false
         self.collisionBehavior.collisionMode = .boundaries
@@ -104,6 +111,9 @@ class EmotionCircleCollectionView: BaseView {
         guard self.width > 0, self.height > 0 else { return }
 
         let emotionView = EmotionCircleView(emotion: emotion)
+        emotionView.didSelect { [unowned self] in
+            self.onTappedEmotion?(emotion)
+        }
         let finalSize = self.getSize(forCount: count)
         // Start the view in a random position
         emotionView.center = self.getRandomPosition(forCount: count)

@@ -144,6 +144,14 @@ class MessageContentView: BaseView {
         self.showEmotionsButton.didSelect { [unowned self] in
             self.setEmotions(areShown: !self.areEmotionsShown, animated: true)
         }
+
+        self.emotionCollectionView.onTappedBackground = { [unowned self] in
+            self.setEmotions(areShown: false, animated: true)
+        }
+
+        self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
+            logDebug(emotion.rawValue)
+        }
         
         self.imageView.didSelect { [unowned self] in
             guard let message = self.message else { return }
@@ -176,7 +184,7 @@ class MessageContentView: BaseView {
         self.blurView.expandToSuperviewSize()
 
         // Don't show the emotions button in the collapsed state.
-        self.showEmotionsButton.squaredSize = self.layoutState == .expanded ? 38 : 0
+        self.showEmotionsButton.squaredSize = self.layoutState == .expanded ? 30 : 0
         self.showEmotionsButton.pin(.left, offset: .standard)
         self.showEmotionsButton.pin(.bottom, offset: .standard)
 
@@ -307,11 +315,16 @@ class MessageContentView: BaseView {
     }
 
     func setEmotions(areShown: Bool, animated: Bool) {
+        if !areShown {
+            self.blurView.alpha = 1
+        }
+
         let animationDuration = animated ? Theme.animationDurationStandard : 0
         UIView.animate(withDuration: animationDuration) {
             self.mainContentArea.alpha = areShown ? 0 : 1
             self.blurView.effect = areShown ? nil : Theme.blurEffect
-            
+            self.showEmotionsButton.alpha = areShown ? 0 : 1
+
             if areShown {
                 if self.emotionCollectionView.emotionCounts.count == 0 {
                     self.emotionLabel.alpha = 0.2
@@ -323,6 +336,11 @@ class MessageContentView: BaseView {
                 self.addEmotionButton.alpha = 0.0
                 self.addEmotionImageView.alpha = 0.0
                 self.emotionLabel.alpha = 0.0
+            }
+        } completion: { completed in
+            if areShown {
+                // Set the blur view alpha to 0 so it doesn't interfere with touches.
+                self.blurView.alpha = 0
             }
         }
     }
