@@ -13,6 +13,9 @@ import ScrollCounter
 
 class WaitlistViewController: ViewController {
         
+    private let titleLabel = ThemeLabel(font: .mediumBold)
+    private let bodyLabel = ThemeLabel(font: .regular)
+    private let currentPositionLabel = ThemeLabel(font: .regular)
     private let counter = NumberScrollCounter(value: 0,
                                               scrollDuration: Theme.animationDurationSlow,
                                               decimalPlaces: 0,
@@ -30,6 +33,7 @@ class WaitlistViewController: ViewController {
         super.initializeViews()
         
         self.view.set(backgroundColor: .B0)
+        self.view.addSubview(self.counter)
     }
 }
 

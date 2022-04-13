@@ -548,6 +548,7 @@
 		D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* ThemeLabel.swift */; };
 		D63DB29A25E999B200F6B323 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
+		D63DC4FB28075C4F00867A7F /* AppClipStaging.entitlements in Sources */ = {isa = PBXBuildFile; fileRef = D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -1193,6 +1194,7 @@
 		D63DB20025E968C300F6B323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		D63DB20225E968C300F6B323 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationAction.swift; sourceTree = "<group>"; };
+		D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClipStaging.entitlements; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -1679,6 +1681,7 @@
 			children = (
 				D61127FE2804D72D00574B96 /* Info.plist */,
 				D61127FF2804D72D00574B96 /* AppClip.entitlements */,
+				D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */,
 			);
 			path = AppClip;
 			sourceTree = "<group>";
@@ -3151,6 +3154,7 @@
 				D611281E2804DBC900574B96 /* Range+Extensions.swift in Sources */,
 				D61128A52804E4F300574B96 /* FaceDetectionViewController.swift in Sources */,
 				D61128BF2804EB4000574B96 /* PermissionsViewController.swift in Sources */,
+				D63DC4FB28075C4F00867A7F /* AppClipStaging.entitlements in Sources */,
 				D61128402804DBEE00574B96 /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D611281A2804DBC600574B96 /* CGFloat+Extensions.swift in Sources */,
 				D61128752804DC7200574B96 /* User+INPerson.swift in Sources */,
@@ -4077,7 +4081,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AppClip/AppClipStaging.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 863YH82QFN;
@@ -4096,8 +4101,9 @@
 				);
 				MARKETING_VERSION = 1.3.1;
 				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS.Clip";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging.Clip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				RELEASE_TYPE = DEBUG;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APPCLIP;
 				SWIFT_EMIT_LOC_STRINGS = YES;
