@@ -101,9 +101,8 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
             self.label.alpha = 0.6
         })
 
-        let emotionsCounts = [emotion : 1]
-
-        self.emotionCollectionView.setEmotionsCounts(emotionsCounts)
+        let emotionsCounts = [emotion : 4]
+        self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
 
         await Task.sleep(seconds: 5)
 

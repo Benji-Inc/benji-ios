@@ -51,6 +51,14 @@ class EmotionCircleView: BaseView {
         self.setNeedsLayout()
     }
 
+    // MARK: - Tap handling
+
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        // Only accept taps in their within the circles. Not the corners of the view.
+        let centerPoint = CGPoint(x: self.halfWidth, y: self.halfHeight)
+        return pow(centerPoint.x-point.x, 2) + pow(centerPoint.y - point.y, 2) <= pow(self.halfWidth, 2)
+    }
+
     // MARK: - UIDynamicItem
     
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
