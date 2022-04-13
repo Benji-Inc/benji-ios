@@ -281,7 +281,6 @@
 		D61128972804DFBA00574B96 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E521D30EB300204BEE /* BaseView.swift */; };
 		D61128982804E0E000574B96 /* SwitchableContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8B123CE403D0039DC5A /* SwitchableContentViewController.swift */; };
 		D61128992804E0E600574B96 /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
-		D611289A2804E0F200574B96 /* ModalTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553512746D4BB00B08459 /* ModalTransitionController.swift */; };
 		D611289B2804E10300574B96 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
 		D611289C2804E10F00574B96 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
 		D611289D2804E11900574B96 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BE2302683C0059BA75 /* PhotoViewController.swift */; };
@@ -353,6 +352,7 @@
 		D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C8F2732FFCF0013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		D6166C902732FFD00013E803 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
+		D6180E5A280780B80007363F /* ModalTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553512746D4BB00B08459 /* ModalTransitionController.swift */; };
 		D619C58927F129B70082AD19 /* EmotionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58827F129B70082AD19 /* EmotionsViewController.swift */; };
 		D619C58C27F129DC0082AD19 /* EmotionsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58B27F129DC0082AD19 /* EmotionsCollectionView.swift */; };
 		D619C58E27F129EB0082AD19 /* EmotionCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619C58D27F129EB0082AD19 /* EmotionCategoryCell.swift */; };
@@ -453,9 +453,7 @@
 		D63DB21425E998D700F6B323 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D63DB21525E998D700F6B323 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D63DB21825E998E900F6B323 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
-		D63DB21A25E998F000F6B323 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D63DB21B25E998F000F6B323 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
-		D63DB21D25E998F000F6B323 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD722BF295A00BA277D /* Coordinator.swift */; };
 		D63DB21E25E998FC00F6B323 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D63DB21F25E998FC00F6B323 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
 		D63DB22025E998FC00F6B323 /* Character+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */; };
@@ -726,7 +724,6 @@
 		D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */; };
-		D68C08262729D9280033C8AE /* PermissionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */; };
 		D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
 		D68C082A2729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
 		D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
@@ -3216,7 +3213,6 @@
 				D61128B32804E8AD00574B96 /* FullScreenViewController.swift in Sources */,
 				D61128632804DC4E00574B96 /* UserDefaultsManager.swift in Sources */,
 				D61128BC2804EB1F00574B96 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
-				D611289A2804E0F200574B96 /* ModalTransitionController.swift in Sources */,
 				D61128A22804E23600574B96 /* Connection+Cloud.swift in Sources */,
 				D611282B2804DBDA00574B96 /* PFFileObject+Extensions.swift in Sources */,
 				D61128B02804E88700574B96 /* NavigationController.swift in Sources */,
@@ -3300,6 +3296,7 @@
 				D61128972804DFBA00574B96 /* BaseView.swift in Sources */,
 				D61128B92804EA1F00574B96 /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D61128372804DBE700574B96 /* Task+TaskPool.swift in Sources */,
+				D6180E5A280780B80007363F /* ModalTransitionController.swift in Sources */,
 				D61128442804DBEE00574B96 /* UIScreen+Extensions.swift in Sources */,
 				D61128652804DC4E00574B96 /* LaunchManager.swift in Sources */,
 				D61128BB2804EAF000574B96 /* CollectionViewManagerCell.swift in Sources */,
@@ -3759,7 +3756,6 @@
 				D62ED57A279CB4A400F7C08A /* BorderedPersonView.swift in Sources */,
 				D61A33DA27D51D4C00056242 /* ContextCue.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
-				D63DB21D25E998F000F6B323 /* Coordinator.swift in Sources */,
 				D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */,
 				D63DB27225E9997F00F6B323 /* ResourceObject.swift in Sources */,
 				D63DB26725E9997200F6B323 /* ScreenSize.swift in Sources */,
@@ -3767,7 +3763,6 @@
 				D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */,
 				D6617CF726743DFE00439C06 /* Notice.swift in Sources */,
 				D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
-				D68C08262729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D605AC8527861C9A0015D800 /* BackgroundGradientView.swift in Sources */,
 				D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */,
 				D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */,
@@ -3824,7 +3819,6 @@
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,
 				D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D605AC9D27877F890015D800 /* MessageBubbleView.swift in Sources */,
-				D63DB21A25E998F000F6B323 /* Router.swift in Sources */,
 				8074DDCF27B1D0ED00594BAC /* Messageable.swift in Sources */,
 				D63DB23E25E9992900F6B323 /* UNNotification+Extensions.swift in Sources */,
 				D6AE0FAD267D037900C6B048 /* User+INPerson.swift in Sources */,
