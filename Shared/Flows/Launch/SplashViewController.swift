@@ -25,6 +25,9 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     private let emotionNameLabel = ThemeLabel(font: .smallBold)
     private let label = ThemeLabel(font: .small)
+
+    #warning("remove this")
+    var emotionGradient = EmotionGradientView(emotionCounts: [:])
     
     override func initializeViews() {
         super.initializeViews()
@@ -38,10 +41,17 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.view.addSubview(self.loadingView)
         self.loadingView.contentMode = .scaleAspectFit
         self.loadingView.loopMode = .loop
+
+        self.view.addSubview(self.emotionGradient)
+        let emotionCounts: [Emotion : Int] = [:]
+        self.emotionGradient.set(emotionCounts: emotionCounts)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.emotionGradient.squaredSize = 100
+        self.emotionGradient.centerOnXAndY()
 
         self.emotionCollectionView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
@@ -101,11 +111,19 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
             self.label.alpha = 0.6
         })
 
-        let emotionsCounts = [emotion : 1]
+        let emotionsCounts = [emotion : 4]
 
         self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
 
-        await Task.sleep(seconds: 5)
+        let randomEmotions = Emotion.allCases.random(Int.random(min: 1, max: 5))
+        var randomCounts: [Emotion : Int] = [:]
+        randomEmotions.forEach { emotion in
+            randomCounts[emotion] = Int.random(min: 1, max: 2)
+        }
+        logDebug(randomCounts)
+        self.emotionGradient.set(emotionCounts: randomCounts)
+
+        await Task.sleep(seconds: 2)
 
         Task { [weak self] in
             await self?.animateEmotions()

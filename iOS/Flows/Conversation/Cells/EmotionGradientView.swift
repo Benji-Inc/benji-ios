@@ -1,0 +1,78 @@
+//
+//  EmotionGradientView.swift
+//  Jibber
+//
+//  Created by Martin Young on 4/13/22.
+//  Copyright © 2022 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+class EmotionGradientView: BaseView {
+
+    private var gradientLayer = CAGradientLayer()
+
+    init(emotionCounts: [Emotion : Int]) {
+        super.init()
+
+        self.set(emotionCounts: emotionCounts)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.clipsToBounds = true
+        self.layer.borderWidth = 2
+        self.layer.masksToBounds = true
+
+        self.gradientLayer.type = .radial
+        self.gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        self.gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+
+        self.layer.addSublayer(self.gradientLayer)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.layer.cornerRadius = self.halfWidth
+
+        self.gradientLayer.frame = self.bounds
+    }
+
+    func set(emotionCounts: [Emotion : Int]) {
+        var colors: [UIColor] = []
+        for emotionCount in emotionCounts {
+            for _ in 0..<emotionCount.value {
+                colors.append(emotionCount.key.color)
+            }
+        }
+
+        if emotionCounts.isEmpty {
+            colors = [ThemeColor.B0.color, ThemeColor.B1.color]
+        }
+
+        colors = colors.sorted(by: { color1, color2 in
+            if color1.hue == color2.hue {
+                return color1.brightness < color2.brightness
+            }
+
+            return color1.hue < color2.hue
+        })
+        if let firstColor = colors.first {
+            colors.insert(firstColor.color(withBrightness: 0.75), at: 0)
+        }
+
+        let cgColors = colors.map({ color in
+            return color.cgColor
+        })
+
+        self.gradientLayer.colors = cgColors
+        self.layer.borderColor = cgColors.last
+    }
+}

@@ -73,7 +73,7 @@ class MessageContentView: BaseView {
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
     }
-    let emotionsButton = ThemeButton()
+    let showEmotionsButton = EmotionGradientView(emotionCounts: [:])
 
     var layoutState: Layout = .expanded
     private let cellDiameter: CGFloat
@@ -114,8 +114,7 @@ class MessageContentView: BaseView {
 
         self.bubbleView.addSubview(self.mainContentArea)
 
-        self.bubbleView.addSubview(self.emotionsButton)
-        self.emotionsButton.set(style: .normal(color: .red, text: ""))
+        self.bubbleView.addSubview(self.showEmotionsButton)
 
         self.mainContentArea.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
@@ -142,8 +141,7 @@ class MessageContentView: BaseView {
     }
     
     private func setupHandlers() {
-        
-        self.emotionsButton.didSelect { [unowned self] in
+        self.showEmotionsButton.didSelect { [unowned self] in
             self.setEmotions(areShown: !self.areEmotionsShown, animated: true)
         }
         
@@ -178,9 +176,9 @@ class MessageContentView: BaseView {
         self.blurView.expandToSuperviewSize()
 
         // Don't show the emotions button in the collapsed state.
-        self.emotionsButton.squaredSize = self.layoutState == .expanded ? 38 : 0
-        self.emotionsButton.pin(.left, offset: .standard)
-        self.emotionsButton.pin(.bottom, offset: .standard)
+        self.showEmotionsButton.squaredSize = self.layoutState == .expanded ? 38 : 0
+        self.showEmotionsButton.pin(.left, offset: .standard)
+        self.showEmotionsButton.pin(.bottom, offset: .standard)
 
         self.mainContentArea.pin(.left, offset: MessageContentView.padding)
         self.mainContentArea.pin(.top, offset: MessageContentView.padding)
@@ -289,7 +287,7 @@ class MessageContentView: BaseView {
         // Only animate changes to the emotion when they're not blurred out.
         let isAnimated = self.areEmotionsShown
         self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
-
+        self.showEmotionsButton.set(emotionCounts: emotionCounts)
         self.setNeedsLayout()
     }
 
