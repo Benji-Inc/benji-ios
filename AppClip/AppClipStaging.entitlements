@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>aps-environment</key>
+	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>appclips:joinjibber.com/pass</string>
@@ -10,7 +12,7 @@
 	</array>
 	<key>com.apple.developer.parent-application-identifiers</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.Jibber-Inc.iOS</string>
+		<string>$(AppIdentifierPrefix)com.Jibber-Inc.iOS-staging</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>

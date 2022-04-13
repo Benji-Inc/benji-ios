@@ -546,6 +546,7 @@
 		D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* ThemeLabel.swift */; };
 		D63DB29A25E999B200F6B323 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
+		D63DC4FB28075C4F00867A7F /* AppClipStaging.entitlements in Sources */ = {isa = PBXBuildFile; fileRef = D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -812,6 +813,10 @@
 		D6C3893A27287491004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893927287491004D29D5 /* StreamChat */; };
 		D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893B2728749C004D29D5 /* StreamChat */; };
 		D6C4BD4027C95E8400579014 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C4BD3F27C95E8400579014 /* ConversationCell.swift */; };
+		D6C7EC262805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
+		D6C7EC272805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
+		D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
+		D6C7EC2A2805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
 		D6CC1482276BE808005F617F /* EmotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1481276BE808005F617F /* EmotionView.swift */; };
 		D6CC1485276BEF5B005F617F /* Text+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1484276BEF5B005F617F /* Text+Extensions.swift */; };
@@ -1186,6 +1191,7 @@
 		D63DB20025E968C300F6B323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		D63DB20225E968C300F6B323 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationAction.swift; sourceTree = "<group>"; };
+		D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClipStaging.entitlements; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -1350,6 +1356,8 @@
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
 		D6C20127276CFDAC0085B187 /* MessageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailView.swift; sourceTree = "<group>"; };
 		D6C4BD3F27C95E8400579014 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
+		D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistCoordinator.swift; sourceTree = "<group>"; };
+		D6C7EC282805E64000A35808 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
 		D6CC1481276BE808005F617F /* EmotionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionView.swift; sourceTree = "<group>"; };
 		D6CC1484276BEF5B005F617F /* Text+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Extensions.swift"; sourceTree = "<group>"; };
@@ -1670,6 +1678,7 @@
 			children = (
 				D61127FE2804D72D00574B96 /* Info.plist */,
 				D61127FF2804D72D00574B96 /* AppClip.entitlements */,
+				D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */,
 			);
 			path = AppClip;
 			sourceTree = "<group>";
@@ -2171,6 +2180,7 @@
 		D6637A3225A3AB1700A4A3B7 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D6C7EC242805E61400A35808 /* Waitlist */,
 				D6F37D5E25B5D8300034C9C5 /* Avatar Profile */,
 				D68C08192729CF190033C8AE /* Disclosures */,
 				D68C0833272B2EAB0033C8AE /* Face */,
@@ -2487,6 +2497,15 @@
 				80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */,
 			);
 			path = "Swipeable Input";
+			sourceTree = "<group>";
+		};
+		D6C7EC242805E61400A35808 /* Waitlist */ = {
+			isa = PBXGroup;
+			children = (
+				D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */,
+				D6C7EC282805E64000A35808 /* WaitlistViewController.swift */,
+			);
+			path = Waitlist;
 			sourceTree = "<group>";
 		};
 		D6CC1483276BEF41005F617F /* SwiftUI */ = {
@@ -3109,6 +3128,7 @@
 				D61128732804DC6D00574B96 /* QuePositions.swift in Sources */,
 				D61128992804E0E600574B96 /* Switchable.swift in Sources */,
 				D611283B2804DBEE00574B96 /* UIViewController+Extensions.swift in Sources */,
+				D6C7EC272805E62D00A35808 /* WaitlistCoordinator.swift in Sources */,
 				D61128362804DBE700574B96 /* Task+Extensions.swift in Sources */,
 				D611285D2804DC4700574B96 /* MIMEType.swift in Sources */,
 				D611283F2804DBEE00574B96 /* UIView+Extensions.swift in Sources */,
@@ -3130,6 +3150,7 @@
 				D611281E2804DBC900574B96 /* Range+Extensions.swift in Sources */,
 				D61128A52804E4F300574B96 /* FaceDetectionViewController.swift in Sources */,
 				D61128BF2804EB4000574B96 /* PermissionsViewController.swift in Sources */,
+				D63DC4FB28075C4F00867A7F /* AppClipStaging.entitlements in Sources */,
 				D61128402804DBEE00574B96 /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D611281A2804DBC600574B96 /* CGFloat+Extensions.swift in Sources */,
 				80580E1F2805F85900B7264C /* EmotionCircleView.swift in Sources */,
@@ -3279,6 +3300,7 @@
 				D61128BB2804EAF000574B96 /* CollectionViewManagerCell.swift in Sources */,
 				D61128712804DC6D00574B96 /* EventLog.swift in Sources */,
 				D611285F2804DC4700574B96 /* StationaryPressRecognizer.swift in Sources */,
+				D6C7EC2A2805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D61128512804DC3200574B96 /* CodeViewController.swift in Sources */,
 				D611280F2804DB6200574B96 /* Lorem.swift in Sources */,
 				D61128262804DBD200574B96 /* MathFunctions.swift in Sources */,
@@ -3460,6 +3482,7 @@
 				D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D61A33CD27D4F27000056242 /* EmojiCollectionViewDataSource.swift in Sources */,
+				D6C7EC262805E62D00A35808 /* WaitlistCoordinator.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,
@@ -3551,6 +3574,7 @@
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
+				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
@@ -4051,7 +4075,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AppClip/AppClipStaging.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 863YH82QFN;
@@ -4070,8 +4095,9 @@
 				);
 				MARKETING_VERSION = 1.3.1;
 				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS.Clip";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging.Clip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				RELEASE_TYPE = DEBUG;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APPCLIP;
 				SWIFT_EMIT_LOC_STRINGS = YES;

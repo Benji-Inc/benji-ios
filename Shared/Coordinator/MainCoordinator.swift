@@ -53,11 +53,17 @@ class MainCoordinator: Coordinator<Void> {
             if let deepLink = deepLink {
                 self.handle(deeplink: deepLink)
             } else {
-                self.handle(deeplink: DeepLinkObject(target: .conversation))
+                self.handle(deeplink: DeepLinkObject(target: .room))
             }
 #elseif APPCLIP
             // Code your App Clip may access.
-          //  self.handleAppClip(result: launchStatus)
+            if let deepLink = deepLink {
+                self.handleAppClip(deepLink: deepLink)
+            } else if let user = User.current(), user.isOnboarded {
+                self.handle(deeplink: DeepLinkObject(target: .waitlist))
+            } else {
+                self.handleAppClip(deepLink: DeepLinkObject(target: .login))
+            }
 #endif
         }
     }
@@ -79,9 +85,15 @@ class MainCoordinator: Coordinator<Void> {
             self.runOnboardingFlow(with: deeplink)
             return
         }
+        
+        // Check if the user is on the waitlist.
+        if user.status == .waitlist {
+            self.runWaitlistFlow(with: deeplink)
+            return
+        }
 
         // As a final catch-all, make sure the user is fully activated.
-        guard user.status == .active || user.status == .waitlist else {
+        guard user.status == .active else {
             self.runOnboardingFlow(with: deeplink)
             return
         }
@@ -95,7 +107,7 @@ class MainCoordinator: Coordinator<Void> {
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .home, .conversation, .wallet, .profile:
+        case .room, .conversation, .wallet, .profile, .reservation:
 #if IOS
             Task {
                 await self.runRoomFlow(with: deeplink)
@@ -103,13 +115,8 @@ class MainCoordinator: Coordinator<Void> {
 #endif
         case .login:
             self.runOnboardingFlow(with: deeplink)
-        case .reservation:
-#if IOS
-            Task {
-                await self.runRoomFlow(with: deeplink)
-            }
-#endif
-            self.runOnboardingFlow(with: deeplink)
+        case .waitlist:
+            self.runWaitlistFlow(with: deeplink)
         }
     }
 
@@ -118,8 +125,18 @@ class MainCoordinator: Coordinator<Void> {
                                                 deepLink: deepLink)
         self.router.setRootModule(coordinator, animated: true)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-            // Attempt to take the user to the conversation screen after onboarding is complete.
-            self.handle(deeplink: DeepLinkObject(target: .conversation))
+            // Attempt to take the user to the room screen after onboarding is complete.
+            self.handle(deeplink: DeepLinkObject(target: .room))
+        })
+    }
+    
+    func runWaitlistFlow(with deepLink: DeepLinkable?) {
+        let coordinator = WaitlistCoordinator(router: self.router,
+                                                deepLink: deepLink)
+        self.router.setRootModule(coordinator, animated: true)
+        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+            // Attempt to take the user to the room screen after onboarding is complete.
+            self.handle(deeplink: DeepLinkObject(target: .room))
         })
     }
 

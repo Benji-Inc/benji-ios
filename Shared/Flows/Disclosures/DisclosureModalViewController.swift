@@ -17,15 +17,14 @@ struct HightlightedPhrase {
 
 class DisclosureModalViewController: ViewController {
 
-    private let blurView = BlurView()
-    let titleLabel = ThemeLabel(font: .medium)
+    let titleLabel = ThemeLabel(font: .mediumBold)
     let descriptionLabel = ThemeLabel(font: .regular)
     let contentView = BaseView()
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.blurView)
+        self.view.set(backgroundColor: .B0)
         self.view.addSubview(self.titleLabel)
         self.titleLabel.textAlignment = .center
         self.view.addSubview(self.descriptionLabel)
@@ -43,8 +42,6 @@ class DisclosureModalViewController: ViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
 
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
