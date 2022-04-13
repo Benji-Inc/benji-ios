@@ -115,12 +115,12 @@ class EmotionCircleCollectionView: BaseView {
             self.onTappedEmotion?(emotion)
         }
         let finalSize = self.getSize(forCount: count)
-        // Start the view in a random position
-        emotionView.center = self.getRandomPosition(forCount: count)
 
         // Start the view off small and invisible. It will be animated to its final size and alpha.
         emotionView.alpha = 0
         emotionView.size = CGSize(width: 1, height: 1) // The initial size must be non-zero for the animator.
+        // Start the view in a random position
+        emotionView.center = self.getRandomPosition(forCount: count)
 
         // Start managing this view
         self.emotionsViews[emotion] = emotionView
@@ -220,8 +220,8 @@ class EmotionCircleCollectionView: BaseView {
     private func getRandomPosition(forCount count: Int) -> CGPoint {
         let size = self.getSize(forCount: count)
 
-        return CGPoint(x: CGFloat.random(in: 0...self.width - size.width),
-                       y: CGFloat.random(in: 0...self.height - size.height))
+        return CGPoint(x: CGFloat.random(in: (size.width/2)...self.width - size.width/2),
+                       y: CGFloat.random(in: (size.height/2)...self.height - size.height/2))
     }
 }
 
