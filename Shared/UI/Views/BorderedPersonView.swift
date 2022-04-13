@@ -79,7 +79,7 @@ class BorderedPersonView: PersonView {
         #endif
     }
     
-    private func setColors(for person: PersonType) {
+    func setColors(for person: PersonType) {
         let isAvailable = person.focusStatus == .available
         let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.yellow.color.cgColor
 

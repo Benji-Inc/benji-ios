@@ -182,6 +182,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
 
     @MainActor
     private func hasNeededPermissions() async -> Bool {
+        #if IOS
         if INFocusStatusCenter.default.authorizationStatus != .authorized {
             return false
         } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
@@ -189,6 +190,10 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
         } else {
             return true
         }
+        #else
+        // No need to check permissions for AppClip
+        return true
+        #endif
     }
 
     @MainActor

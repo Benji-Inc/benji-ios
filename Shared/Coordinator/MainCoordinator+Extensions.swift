@@ -35,14 +35,9 @@ extension MainCoordinator: LaunchManagerDelegate {
     }
 
 #if APPCLIP
-    func handleAppClip(result: LaunchStatus) {
-        switch result {
-        case .success(let object):
-            self.deepLink = object
-            self.runOnboardingFlow(with: object)
-        case .failed(_):
-            break
-        }
+    func handleAppClip(deepLink object: DeepLinkable) {
+        self.deepLink = object
+        self.runOnboardingFlow(with: object)
     }
 #endif
 }
