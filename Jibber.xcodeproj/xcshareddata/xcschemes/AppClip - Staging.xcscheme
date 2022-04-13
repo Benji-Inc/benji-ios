@@ -70,15 +70,6 @@
             ReferencedContainer = "container:Jibber.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-            BuildableName = "Jibber.app"
-            BlueprintName = "Jibber"
-            ReferencedContainer = "container:Jibber.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCAppClipURL"
