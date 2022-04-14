@@ -267,3 +267,14 @@ extension MessageController {
         }
     }
 }
+
+extension MessageController: MessageSequenceController {
+
+    var streamCid: ConversationId? {
+        return self.cid
+    }
+    
+    var sequence: [Messageable] {
+        return Array(self.replies)
+    }
+}

@@ -9,34 +9,31 @@
 import Foundation
 
 class RepliesSequenceCollectionViewDataSource: MessageSequenceCollectionViewDataSource {
-    
-    override func set(messageSequence: MessageSequence,
+
+    override func set(messagesController: MessageSequenceController,
                       itemsToReconfigure: [MessageSequenceCollectionViewDataSource.ItemType] = [],
                       showLoadMore: Bool = false) {
-        
-        let allMessages = messageSequence.messages.filter { message in
-            return !message.isDeleted
-        }
 
-        guard let cid = messageSequence.streamCID else {
-            self.deleteAllItems()
-            return
+        self.messagesController = messagesController
+
+        let allMessages = messagesController.sequence.filter { message in
+            return !message.isDeleted
         }
 
         // The newest message is at the bottom, so reverse the order.
         var allMessageItems = allMessages.map { message in
-            return ItemType.message(cid: cid, messageID: message.id)
+            return ItemType.message(messageID: message.id)
         }
         allMessageItems = allMessageItems.reversed()
 
         if self.shouldPrepareToSend {
             allMessageItems.append(.placeholder)
         }
-        
+
         if showLoadMore {
-            allMessageItems.insert(.loadMore(cid: cid), at: 1)
+            allMessageItems.insert(.loadMore, at: 1)
         }
-        
+
         var snapshot = self.snapshot()
 
         var animateDifference = true

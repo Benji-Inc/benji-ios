@@ -90,7 +90,8 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         let query = ChannelListQuery(filter: .and([.equal("hidden", to: false), filter]),
                                      sort: [Sorting(key: .createdAt, isAscending: true)],
                                      pageSize: .channelsPageSize,
-                                     messagesLimit: .messagesPageSize)
+                                     messagesLimit: 3)//.messagesPageSize)
+        #warning("restore message limit")
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
 

@@ -8,8 +8,8 @@
 import UIKit
 
 protocol TimeMachineLayoutItemType {
-    /// A unique identifier for the item.
-    var layoutId: String { get }
+    /// A date associated with the time machine item
+    var date: Date { get }
 }
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
@@ -317,34 +317,30 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
-                guard let insertedId
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
+                guard let insertedDate
+                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else { break }
 
-                self.insertedIds.insert(insertedId)
+//                self.insertedIds.insert(insertedId)
 
-                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
-                if itemFocusPosition < self.zPosition {
-                    self.scrollOffsetAdjustment += self.itemHeight
-                }
+                self.scrollOffsetAdjustment += self.itemHeight
 
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate else { break }
-                guard let deletedId
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
+                guard let deletedDate
+                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else { break }
 
-                self.deletedIds.insert(deletedId)
+//                self.deletedIds.insert(deletedId)
 
-                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
+                self.scrollOffsetAdjustment -= self.itemHeight
 
-                if itemFocusPosition < self.zPosition {
-                    self.scrollOffsetAdjustment -= self.itemHeight
-                }
             case .reload, .move, .none:
                 break
             @unknown default:
                 break
             }
         }
+
+        logDebug("offset adjustment "+self.scrollOffsetAdjustment.description)
     }
 
     /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
@@ -376,7 +372,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         guard let appearingId = self.itemIds[itemIndexPath],
               !self.idsVisibleBeforeAnimation.contains(appearingId) else { return attributes }
 
-        // Items moving into visibility
+        // Pre-existing items moving into visibility
         // If the item existed before (wasn't just inserted), but was not visible,
         // modify it's attributes to make it appear properly.
         if !self.insertedIds.contains(appearingId) {
@@ -393,13 +389,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Items being inserted
         let normalizedZOffset: CGFloat
+        // Items added to the end of section should start big and shrink down to normal size.
         if itemIndexPath.item == self.numberOfItems(inSection: itemIndexPath.section) - 1 {
-            if itemIndexPath.section == 0 {
-                normalizedZOffset = 1
-            } else {
-                normalizedZOffset = 0
-            }
+            normalizedZOffset = 1
         } else {
+            // Items added to the beginning of the section should start small and grow to normal size.
             normalizedZOffset = -1
         }
         let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
