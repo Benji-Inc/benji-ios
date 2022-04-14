@@ -87,6 +87,8 @@ class EmotionCircleCollectionView: BaseView {
 
     /// Displays emotion circles configured by the passed in emotion counts.
     func setEmotionsCounts(_ emotionsCounts: [Emotion : Int], animated: Bool) {
+        guard emotionsCounts != self.emotionCounts else { return }
+
         self.emotionCounts = emotionsCounts
 
         for (emotion, count) in emotionsCounts {
