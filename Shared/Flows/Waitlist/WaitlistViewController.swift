@@ -52,7 +52,7 @@ class WaitlistViewController: ViewController {
             
             switch user.status {
             case .active:
-                self.titleLabel.setText("Contgrats! 🥳")
+                self.titleLabel.setText("Congrats! 🥳")
                 self.descriptionLabel.setText("You now have access to join Jibber!")
                 self.displayOverlay()
             case .waitlist:
