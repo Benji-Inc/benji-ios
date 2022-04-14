@@ -19,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ application: UIApplication,
-                     continue userActivity: NSUserActivity,
-                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return LaunchManager.shared.continueUser(activity: userActivity)
-    }
+//    func application(_ application: UIApplication,
+//                     continue userActivity: NSUserActivity,
+//                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+//        return LaunchManager.shared.continueUser(activity: userActivity)
+//    }
 
 #if !APPCLIP
     func application(_ application: UIApplication,
@@ -60,6 +60,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = scene as? UIWindowScene else { return }
+        
+        if let activity = connectionOptions.userActivities.first(where: { activity in
+            return activity.activityType == NSUserActivityTypeBrowsingWeb
+        }) {
+            LaunchManager.shared.continueUser(activity: activity)
+        }
 
 #if !NOTIFICATION
         let rootNavController = RootNavigationController()
@@ -70,7 +76,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        _ = LaunchManager.shared.continueUser(activity: userActivity)
+        LaunchManager.shared.continueUser(activity: userActivity)
     }
         
     func initializeKeyWindow(with rootViewController: UIViewController, for scene: UIWindowScene) {
