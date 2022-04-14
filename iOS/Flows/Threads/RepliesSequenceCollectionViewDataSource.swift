@@ -14,9 +14,9 @@ class RepliesSequenceCollectionViewDataSource: MessageSequenceCollectionViewData
                       itemsToReconfigure: [MessageSequenceCollectionViewDataSource.ItemType] = [],
                       showLoadMore: Bool = false) {
 
-        self.messagesController = messagesController
+        self.messageSequenceController = messagesController
 
-        let allMessages = messagesController.sequence.filter { message in
+        let allMessages = messagesController.messageArray.filter { message in
             return !message.isDeleted
         }
 

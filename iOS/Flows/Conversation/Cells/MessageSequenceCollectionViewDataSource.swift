@@ -28,7 +28,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 
     /// A conversation controller created for this message sequence
-    var messagesController: MessageSequenceController = EmptyMessageSequenceController()
+    var messageSequenceController: MessageSequenceController = EmptyMessageSequenceController()
 
     // Input handling
     weak var messageContentDelegate: MessageContentDelegate?
@@ -61,7 +61,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             let messageCell
             = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                            for: indexPath,
-                                                           item: (self.messagesController,
+                                                           item: (self.messageSequenceController,
                                                                   messageID,
                                                                   showDetail,
                                                                   collectionView))
@@ -74,7 +74,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             let loadMoreCell = collectionView.dequeueConfiguredReusableCell(using: self.loadMoreRegistration,
                                                                             for: indexPath,
                                                                             item: collectionView)
-            if let cid = self.messagesController.streamCid {
+            if let cid = self.messageSequenceController.streamCid {
                 loadMoreCell.handleLoadMoreMessages = { [unowned self] in
                     self.handleLoadMoreMessages?(cid)
                 }
@@ -87,7 +87,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         case .initial:
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.initialCellRegistration,
                                                                     for: indexPath,
-                                                                    item: (self.messagesController,
+                                                                    item: (self.messageSequenceController,
                                                                            collectionView))
             return cell
         }
@@ -99,10 +99,10 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
              itemsToReconfigure: [ItemType] = [],
              showLoadMore: Bool = false) {
 
-        self.messagesController = messagesController
+        self.messageSequenceController = messagesController
 
         // Don't show deleted messages
-        let messages = messagesController.sequence.filter { message in
+        let messages = messagesController.messageArray.filter { message in
             return !message.isDeleted
         }
 
@@ -161,7 +161,7 @@ extension MessageSequenceCollectionViewDataSource {
     static func createMessageCellRegistration() -> MessageCellRegistration {
         return MessageCellRegistration { cell, indexPath, item in
             let messagesController = item.messagesController
-            guard let message = messagesController.sequence.first(where: { message in
+            guard let message = messagesController.messageArray.first(where: { message in
                 message.id == item.messageID
             }) else { return }
 
@@ -180,9 +180,7 @@ extension MessageSequenceCollectionViewDataSource {
     
     static func createInitialCellRegistration() -> InitialMessageCellRegistration {
         return InitialMessageCellRegistration { cell, indexPath, item in
-            let messageSequence = item.0.sequence
-            #warning("fix this")
-//            cell.configure(with: controller.conversation)
+            cell.configure(with: item.0)
         }
     }
 }
@@ -202,7 +200,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
     private func getTimeMachineItem(forItem item: ItemType) -> TimeMachineLayoutItemType {
         switch item {
         case .message(let messageID, _):
-            guard let message = self.messagesController.getMessage(withId: messageID) else {
+            guard let message = self.messageSequenceController.getMessage(withId: messageID) else {
                 return TimeMachineLayoutItem(date: .distantPast)
             }
             return TimeMachineLayoutItem(date: message.createdAt)

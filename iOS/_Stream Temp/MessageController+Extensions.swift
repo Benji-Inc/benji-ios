@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Combine
 
 typealias MessageController = ChatMessageController
 
@@ -273,8 +274,33 @@ extension MessageController: MessageSequenceController {
     var streamCid: ConversationId? {
         return self.cid
     }
-    
-    var sequence: [Messageable] {
+
+    var messageSequence: MessageSequence? {
+        return self.message
+    }
+
+    var messageArray: [Messageable] {
         return Array(self.replies)
+    }
+
+    var messageSequenceChangePublisher: AnyPublisher<EntityChange<MessageSequence>, Never> {
+        return self.messageChangePublisher.map { messageChange in
+            let change: EntityChange<MessageSequence>
+
+            switch messageChange {
+            case .create(let message):
+                change = EntityChange.create(message)
+            case .update(let message):
+                change = EntityChange.update(message)
+            case .remove(let message):
+                change = EntityChange.remove(message)
+            }
+
+            return change
+        }.eraseToAnyPublisher()
+    }
+
+    var messagesChangesPublisher: AnyPublisher<[ListChange<ChatMessage>], Never> {
+        return self.repliesChangesPublisher
     }
 }

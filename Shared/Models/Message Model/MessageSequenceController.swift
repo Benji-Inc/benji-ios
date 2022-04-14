@@ -7,17 +7,26 @@
 //
 
 import Foundation
+import Combine
+import StreamChat
 
 protocol MessageSequenceController {
 
     var streamCid: ConversationId? { get }
-    var sequence: [Messageable] { get }
+    var messageSequence: MessageSequence? { get }
+    var messageArray: [Messageable] { get }
+
+    /// A publisher emitting a new value every time the channel changes.
+    var messageSequenceChangePublisher: AnyPublisher<EntityChange<MessageSequence>, Never> { get }
+
+    /// A publisher emitting a new value every time the list of the messages matching the query changes.
+    var messagesChangesPublisher: AnyPublisher<[ListChange<ChatMessage>], Never> { get }
 }
 
 extension MessageSequenceController {
 
     func getMessage(withId id: String) -> Messageable? {
-        return self.sequence.first { message in
+        return self.messageArray.first { message in
             return message.id == id
         }
     }
@@ -25,6 +34,15 @@ extension MessageSequenceController {
 
 /// An object representing a controller for a null message sequence. It will have no cid and an empty array of messages.
 struct EmptyMessageSequenceController: MessageSequenceController {
+
     var streamCid: ConversationId? = nil
-    var sequence: [Messageable] = []
+    var messageSequence: MessageSequence? = nil
+    var messageArray: [Messageable] = []
+
+    var messageSequenceChangePublisher: AnyPublisher<EntityChange<MessageSequence>, Never>
+    = PassthroughSubject<EntityChange<MessageSequence>, Never>().eraseToAnyPublisher()
+
+    var messagesChangesPublisher: AnyPublisher<[ListChange<ChatMessage>], Never>
+    = PassthroughSubject<[ListChange<ChatMessage>], Never>().eraseToAnyPublisher()
+
 }

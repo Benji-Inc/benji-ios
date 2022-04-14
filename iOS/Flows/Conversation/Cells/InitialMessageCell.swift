@@ -15,7 +15,7 @@ class InitialMessageCell: UICollectionViewCell {
     private(set) var label = ThemeLabel(font: .regular)
     private let borderView = BaseView()
     
-    private var controller: ConversationController?
+    private var controller: MessageSequenceController?
     private var cancellables = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
@@ -48,15 +48,18 @@ class InitialMessageCell: UICollectionViewCell {
         self.label.centerOnXAndY()
     }
     
-    func configure(with conversation: Conversation) {
-        self.controller = ChatClient.shared.channelController(for: conversation.cid)
-        self.update(with: conversation)
+    func configure(with messageSequenceController: MessageSequenceController) {
+        self.controller = messageSequenceController
+        if let messageSequence = messageSequenceController.messageSequence {
+            self.update(with: messageSequence)
+        }
+
         self.subscribeToUpdates()
     }
     
-    private func update(with conversation: Conversation) {
-        let dateString = Date.monthDayYear.string(from: conversation.createdAt)
-        if let title = conversation.title {
+    private func update(with messageSequence: MessageSequence) {
+        let dateString = Date.monthDayYear.string(from: messageSequence.createdAt)
+        if let title = messageSequence.title {
             self.label.setText("\(title.capitalized) was created on:\n\(dateString)")
         } else {
             self.label.setText("This conversation was created on:\n\(dateString)")
@@ -67,14 +70,12 @@ class InitialMessageCell: UICollectionViewCell {
     
     private func subscribeToUpdates() {
         self.controller?
-            .channelChangePublisher
+            .messageSequenceChangePublisher
             .mainSink { [unowned self] event in
                 switch event {
-                case .create(_):
-                    break
                 case .update(let conversation):
                     self.update(with: conversation)
-                case .remove(_):
+                case .create, .remove:
                     break
                 }
             }.store(in: &self.cancellables)
