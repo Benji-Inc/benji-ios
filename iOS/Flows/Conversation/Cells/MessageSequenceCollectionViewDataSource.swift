@@ -191,7 +191,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
 
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType {
         guard let item = self.itemIdentifier(for: indexPath) else {
-            return TimeMachineLayoutItem(date: Date.distantPast)
+            return TimeMachineLayoutItem(layoutId: "", date: Date.distantPast)
         }
 
         return self.getTimeMachineItem(forItem: item)
@@ -199,21 +199,27 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
 
     private func getTimeMachineItem(forItem item: ItemType) -> TimeMachineLayoutItemType {
         switch item {
-        case .message(let messageID, _):
-            guard let message = self.messageSequenceController.getMessage(withId: messageID) else {
-                return TimeMachineLayoutItem(date: .distantPast)
+        case .message(let messageId, _):
+            guard let message = self.messageSequenceController.getMessage(withId: messageId) else {
+                return TimeMachineLayoutItem(layoutId: "", date: .distantPast)
             }
-            return TimeMachineLayoutItem(date: message.createdAt)
+            return TimeMachineLayoutItem(layoutId: messageId, date: message.createdAt)
         case .loadMore:
-            return TimeMachineLayoutItem(date: .distantPast)
+            // Get the oldest loaded message and set the date slightly before that.
+            guard let oldestMessage = self.messageSequenceController.messageArray.first else {
+                return TimeMachineLayoutItem(layoutId: "loadMore", date: .distantPast)
+            }
+            #warning("Subtract a little off the date")
+            return TimeMachineLayoutItem(layoutId: "loadMore", date: oldestMessage.createdAt)
         case .initial:
-            return TimeMachineLayoutItem(date: .distantPast)
+            return TimeMachineLayoutItem(layoutId: "initial", date: .distantPast)
         case .placeholder:
-            return TimeMachineLayoutItem(date: .distantFuture)
+            return TimeMachineLayoutItem(layoutId: "placeholder", date: .distantFuture)
         }
     }
 }
 
 private struct TimeMachineLayoutItem: TimeMachineLayoutItemType {
+    var layoutId: String
     var date: Date
 }

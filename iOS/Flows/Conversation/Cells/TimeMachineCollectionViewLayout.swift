@@ -8,6 +8,8 @@
 import UIKit
 
 protocol TimeMachineLayoutItemType {
+    /// A unique identifier for the item.
+    var layoutId: String { get }
     /// A date associated with the time machine item
     var date: Date { get }
 }
@@ -77,13 +79,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
-    /// A cache of the ids for all items.
-    private(set) var itemIds: [IndexPath : String] = [:]
-
-    // MARK: - Private State Management
-
-    /// The ids of all items that existed before the latest invalidation.
-    private var itemIdsBeforeInvalidation: [IndexPath : String] = [:]
+    /// A cache of all the layout  items mapped to their index paths.
+    private(set) var layoutItems: [IndexPath : TimeMachineLayoutItemType] = [:]
 
     // MARK: - UICollectionViewLayout Overrides
 
@@ -132,17 +129,21 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         if customContext.shouldRecalculateZRanges {
-            self.itemIdsBeforeInvalidation = self.itemIds
+            self.layoutItemsBeforeInvalidation = self.layoutItems
 
-            self.itemIds.removeAll()
             self.itemFocusPositions.removeAll()
+            self.layoutItems.removeAll()
         }
     }
 
     override func prepare() {
         // Don't recalculate z ranges if we already have them cached.
         if self.itemFocusPositions.isEmpty {
-            self.prepareZPositionsAndRanges()
+            self.prepareFocusPositionsAndIds()
+
+            self.forEachIndexPath { indexPath in
+                self.layoutItems[indexPath] = self.dataSource?.getTimeMachineItem(forItemAt: indexPath)
+            }
         }
 
         // Calculate and cache the layout attributes for all the items.
@@ -152,7 +153,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     /// Updates the z ranges dictionary for all items.
-    private func prepareZPositionsAndRanges() {
+    private func prepareFocusPositionsAndIds() {
         // Store all the item focus positions for efficiency.
         self.forEachIndexPath { indexPath in
             self.itemFocusPositions[indexPath] = CGFloat(indexPath.item) * self.itemHeight
@@ -299,6 +300,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Ids of items that are being inserted.
     private var insertedIds: Set<String> = []
+    private var layoutItemsBeforeInvalidation: [IndexPath : TimeMachineLayoutItemType] = [:]
     /// Ids of items that are being deleted.
     private var deletedIds: Set<String> = []
     /// Ids of items that that were visible before the animation started.
@@ -308,6 +310,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// The z position before update animations started
     private var zPositionBeforeAnimation: CGFloat = 0
 
+    private var focusedItemDateBeforeAnimation: Date? = nil
+
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
 
@@ -316,22 +320,27 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         for update in updateItems {
             switch update.updateAction {
             case .insert:
-                guard let indexPath = update.indexPathAfterUpdate else { break }
-                guard let insertedDate
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else { break }
+                guard let indexPath = update.indexPathAfterUpdate,
+                      let itemId = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else {
+                    break
+                }
 
-//                self.insertedIds.insert(insertedId)
-
-                self.scrollOffsetAdjustment += self.itemHeight
+                self.insertedIds.insert(itemId)
+                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
+                if itemFocusPosition < self.zPosition {
+                    self.scrollOffsetAdjustment += self.itemHeight
+                }
 
             case .delete:
-                guard let indexPath = update.indexPathBeforeUpdate else { break }
-                guard let deletedDate
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else { break }
+                guard let indexPath = update.indexPathBeforeUpdate,
+                      let itemId = self.layoutItemsBeforeInvalidation[indexPath]?.layoutId else { break }
 
-//                self.deletedIds.insert(deletedId)
+                self.deletedIds.insert(itemId)
 
-                self.scrollOffsetAdjustment -= self.itemHeight
+                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
+                if itemFocusPosition < self.zPosition {
+                    self.scrollOffsetAdjustment -= self.itemHeight
+                }
 
             case .reload, .move, .none:
                 break
@@ -339,8 +348,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 break
             }
         }
-
-        logDebug("offset adjustment "+self.scrollOffsetAdjustment.description)
     }
 
     /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
@@ -350,7 +357,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Remember which items were visible before the animation started so we don't attempt to modify
         // their animations later.
-        if let itemId = self.itemIdsBeforeInvalidation[itemIndexPath] {
+        if let itemId = self.layoutItemsBeforeInvalidation[itemIndexPath]?.layoutId {
             self.idsVisibleBeforeAnimation.insert(itemId)
 
             // Items that are just moving are marked as "disappearing" by the collection view.
@@ -369,7 +376,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
         // Don't modify the attributes of items that were visible before the animation started.
-        guard let appearingId = self.itemIds[itemIndexPath],
+        guard let appearingId = self.layoutItems[itemIndexPath]?.layoutId,
               !self.idsVisibleBeforeAnimation.contains(appearingId) else { return attributes }
 
         // Pre-existing items moving into visibility
@@ -398,7 +405,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
         let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
                                                                 withNormalizedZOffset: normalizedZOffset)
-
         modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
 
         return modifiedAttributes
