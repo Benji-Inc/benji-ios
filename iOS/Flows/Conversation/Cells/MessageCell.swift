@@ -48,6 +48,10 @@ class MessageCell: UICollectionViewCell {
         self.content.bubbleView.addInteraction(contextMenuInteraction)
         
         self.contentView.addSubview(self.footerView)
+        self.footerView.replySummary.didTapViewReplies = { [unowned self] in
+            guard let cid = self.messageState.message?.streamCid, let messageId = self.messageState.message?.id else { return }
+            self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, messageId))
+        }
 
         self.conversationsManagerSubscription = ConversationsManager.shared.$activeConversation
             .removeDuplicates()
