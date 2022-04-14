@@ -39,11 +39,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         get { return self.dataSource.messageContentDelegate }
         set { self.dataSource.messageContentDelegate = newValue }
     }
-
-    // Detail View
-    @ObservedObject private var messageState = MessageDetailViewState(message: nil)
-    private lazy var detailView = MessageDetailView(config: self.messageState)
-    lazy var detailVC = NavBarIgnoringHostingController(rootView: self.detailView)
         
     /// If true we should scroll to the last item in the collection in layout subviews.
     private var scrollToLastItemOnLayout: Bool = true
@@ -121,9 +116,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
         
-        self.addChild(viewController: self.detailVC, toView: self.parentMessageView)
-        self.detailVC.view.alpha = 0
-        
         self.view.addSubview(self.pullView)
 
         self.collectionView.clipsToBounds = false
@@ -165,11 +157,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.parentMessageView.match(.top, to: .bottom, of: self.pullView)
         self.parentMessageView.centerOnX()
-
-        self.detailVC.view.expandToSuperviewWidth()
-        self.detailVC.view.height = 25
-        self.detailVC.view.pin(.bottom, offset: .long)
-        self.detailVC.view.centerOnX()
     }
 
     override func layoutCollectionView(_ collectionView: UICollectionView) {
@@ -299,11 +286,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.collectionViewDataWasLoaded()
 
         self.subscribeToUpdates()
-
-        // Setting this here fixes issue with recursion during presentation.
-        if let msg = self.messageController.message {
-            self.messageState.message = msg
-        }
         
         if let replyId = self.startingReplyId {
             Task {
@@ -396,9 +378,7 @@ extension ThreadViewController: TransitionableViewController {
         return .message(cell.content)
     }
     
-    func handleFinalPresentation() {
-        self.detailVC.view.alpha = 1.0
-    }
+    func handleFinalPresentation() { }
     
     func handlePresentationCompleted() {
         guard self.messageController.message.exists else { return }
@@ -407,7 +387,6 @@ extension ThreadViewController: TransitionableViewController {
     
     func handleInitialDismissal() {
         self.collectionView.alpha = 0
-        self.detailVC.view.alpha = 0
         self.pullView.alpha = 0.0
     }
     
@@ -443,7 +422,6 @@ extension ThreadViewController {
         self.messageController.messageChangePublisher.mainSink { [unowned self] changes in
             guard let msg = self.messageController.message else { return }
             self.parentMessageView.configure(with: msg)
-            self.messageState.message = msg
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in

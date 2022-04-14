@@ -40,7 +40,8 @@ extension TransitionRouter {
                                               toView: MessageContentView,
                                               transitionContext: UIViewControllerContextTransitioning) {
         
-        guard let interactableVC = self.toVC as? MessageInteractableController, let message = fromView.message else { return }
+        guard let interactableVC = self.toVC as? MessageInteractableController,
+                let message = fromView.message else { return }
         
         // Make sure we have all the components we need to complete this transition
         let snapshot = MessageContentView()

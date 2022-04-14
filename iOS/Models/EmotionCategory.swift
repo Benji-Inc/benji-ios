@@ -222,15 +222,11 @@ enum Emotion: String, CaseIterable, Identifiable {
     case pride
     case hubris
     case humility
-    
-    var emoji: String {
-        return "😮"
-    }
 
     var id: String {
         return self.rawValue
     }
-    
+
     var description: String {
         switch self {
         case .cognitiveDissonance:
