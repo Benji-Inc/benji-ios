@@ -117,9 +117,13 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                 let msg = controller.message else { return data }
         
         self.messageController = controller
-                
-        data[.options] = [.option(.viewReplies), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
-
+        
+        if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
+            data[.options] = [.option(.viewReplies), .option(.unpin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+        } else {
+            data[.options] = [.option(.viewReplies), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+        }
+            
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
             return !reaction.author.isCurrentUser
         }).compactMap({ read in
@@ -200,8 +204,14 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             try? await controller.synchronize()
                         
             var snapshot = self.dataSource.snapshot()
-                    
-            let optionItems: [MessageDetailDataSource.ItemType] = [.option(.viewReplies), .option(.pin), .option(.edit), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            
+            let optionItems: [MessageDetailDataSource.ItemType]
+            logDebug(msg.pinDetails.debugDescription)
+            if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
+                optionItems = [.option(.viewReplies), .option(.unpin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            } else {
+                optionItems = [.option(.viewReplies), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            }
             
             snapshot.setItems(optionItems, in: .options)
 
