@@ -24,6 +24,11 @@ class MessageCell: UICollectionViewCell {
     private var footerView = MessageFooterView()
     
     var shouldShowDetailBar: Bool = true
+    var shouldShowReplies: Bool = true {
+        didSet {
+            self.footerView.replySummary.isVisible = self.shouldShowReplies
+        }
+    }
 
     @Published private(set) var messageDetailState = MessageDetailState()
     private var conversationsManagerSubscription: AnyCancellable?

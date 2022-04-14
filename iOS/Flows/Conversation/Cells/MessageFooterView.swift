@@ -16,7 +16,7 @@ class MessageFooterView: BaseView {
     
     let stackedView = StackedPersonView()
     let replySummary = ReplySummaryView()
-    
+        
     override func initializeSubviews() {
         super.initializeSubviews()
         
