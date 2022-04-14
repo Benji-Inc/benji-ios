@@ -100,7 +100,6 @@ class ReplySummaryView: BaseView {
             
             
             self.setPrompt(for: message)
-            self.setReplyCount(for: message)
             
             self.subscribeToUpdates()
             self.setNeedsLayout()
@@ -117,11 +116,6 @@ class ReplySummaryView: BaseView {
             self.counter.suffix = message.totalReplyCount == 1 ? "reply" : "more replies"
             self.promptLabel.setText("")
         }
-        
-        self.setNeedsLayout()
-    }
-    
-    private func setReplyCount(for message: Messageable) {
         self.counter.setValue(Float(message.totalReplyCount), animated: true)
         self.setNeedsLayout()
     }
@@ -157,13 +151,9 @@ class ReplySummaryView: BaseView {
             cancellable.cancel()
         }
         
-        self.controller?.repliesChangesPublisher.mainSink { [unowned self] changes in
+        self.controller?.repliesChangesPublisher.mainSink { [unowned self] _ in
             guard let message = self.controller?.message else { return }
-            //self.dataSource.set(messageSequence: message)
+            self.setPrompt(for: message)
         }.store(in: &self.cancellables)
-
-//        let members = self.messageController.message?.threadParticipants.filter { member in
-//            return member.personId != ChatClient.shared.currentUserId
-//        } ?? []
     }
 }
