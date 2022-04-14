@@ -12,38 +12,6 @@ import StreamChat
 import Combine
 import Localization
 
-class RecentReplyView: BaseView {
-    let label = ThemeLabel(font: .small)
-    
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.addSubview(self.label)
-        self.label.textAlignment = .center
-        
-        self.set(backgroundColor: .B1withAlpha)
-        self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.BORDER.color.cgColor
-        self.layer.borderWidth = 0.5
-    }
-    
-    func configure(with text: Localized) {
-        self.label.setText(text)
-        self.setNeedsLayout()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.label.setSize(withWidth: 200)
-        
-        self.height = self.label.height + Theme.ContentOffset.standard.value.doubled
-        self.width = self.label.width + Theme.ContentOffset.standard.value.doubled
-        
-        self.label.centerOnXAndY()
-    }
-}
-
 class ReplySummaryView: BaseView {
     
     private var controller: MessageController?
