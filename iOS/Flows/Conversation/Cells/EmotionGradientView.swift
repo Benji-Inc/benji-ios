@@ -79,8 +79,8 @@ class EmotionGradientView: BaseView {
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         // Ensure that the tap area is big enough to be usable as a button.
-        let horizontalAdjustment = clamp(100 - self.bounds.width, min: 0)
-        let verticalAdjustment = clamp(100 - self.bounds.height, min: 0)
+        let horizontalAdjustment = clamp(44 - self.bounds.width, min: 0)
+        let verticalAdjustment = clamp(44 - self.bounds.height, min: 0)
         let extendedBounds = CGRect(x: self.bounds.x - horizontalAdjustment.half,
                                     y: self.bounds.y - horizontalAdjustment.half,
                                     width: self.bounds.width + horizontalAdjustment,
