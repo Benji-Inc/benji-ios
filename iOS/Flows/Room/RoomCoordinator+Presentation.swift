@@ -109,7 +109,9 @@ extension RoomCoordinator {
     private func presentPermissions() {
         self.removeChild()
         let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { _ in }
+        self.addChildAndStart(coordinator) { [unowned self] _ in
+            self.roomVC.dismiss(animated: true)
+        }
         self.router.present(coordinator, source: self.roomVC)
     }
 }

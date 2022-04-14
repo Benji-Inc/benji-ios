@@ -19,7 +19,8 @@ class PermissionsCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        self.permissionsVC.button.didSelect { [unowned self] in
+        self.permissionsVC.button.didSelect { [weak self] in
+            guard let `self` = self else { return }
             self.finishFlow(with: ())
         }
     }
