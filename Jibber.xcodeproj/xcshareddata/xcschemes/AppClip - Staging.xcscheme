@@ -64,25 +64,16 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D6C35A112776706E00BE64DC"
+            BlueprintIdentifier = "D61127ED2804D72C00574B96"
             BuildableName = "AppClip.app"
             BlueprintName = "AppClip"
             ReferencedContainer = "container:Jibber.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-            BuildableName = "Jibber.app"
-            BlueprintName = "Jibber"
-            ReferencedContainer = "container:Jibber.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCAppClipURL"
-            value = "https://joinjibber.com/pass?passId=AVaUnie3oO"
+            value = "https://joinjibber.com/reservation?reservationId= G9uW12XMBT"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

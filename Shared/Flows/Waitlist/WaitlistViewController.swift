@@ -31,6 +31,11 @@ class WaitlistViewController: ViewController {
             self.updateUI()
         }.store(in: &self.cancellables)
         
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.updateUI()
     }
     
