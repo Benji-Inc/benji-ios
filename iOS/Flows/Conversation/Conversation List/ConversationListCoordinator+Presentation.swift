@@ -213,6 +213,10 @@ extension ConversationListCoordinator {
                 Task.onMainActorAsync {
                     await self.listVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
                 }
+            case .message(let cid, let messageId):
+                Task.onMainActorAsync {
+                    await self.listVC.scrollToConversation(with: cid, messageId: messageId, animateScroll: true)
+                }
             }
         }
     }

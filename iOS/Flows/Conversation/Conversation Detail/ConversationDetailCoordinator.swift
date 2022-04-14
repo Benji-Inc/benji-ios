@@ -13,6 +13,7 @@ import Localization
 
 enum DetailCoordinatorResult {
     case conversation(ConversationId)
+    case message(ConversationId, MessageId)
 }
 
 class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorResult?> {
@@ -34,12 +35,15 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     override func start() {
         super.start()
         
+        self.detailVC.dataSource.messageContentDelegate = self
+        
         self.detailVC.$selectedItems.mainSink { [unowned self] items in
             guard let first = items.first else { return }
             
             switch first {
             case .pinnedMessage(let model):
-                break 
+                guard let cid = model.cid, let messageId = model.messageId else { return }
+                self.finishFlow(with: .message(cid, messageId))
             case .member(let member):
                 guard let person = PeopleStore.shared.people.first(where: { person in
                     return person.personId == member.personId
@@ -244,5 +248,50 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current()!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
             }
         }.add(to: self.taskPool)
+    }
+}
+
+extension ConversationDetailCoordinator: MessageContentDelegate {
+    
+    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+        self.finishFlow(with: .message(messageInfo.0, messageInfo.1))
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+        
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, let body):
+            guard let url = photo.url else { return }
+            let text = "\(message.author.givenName): \(body)"
+            self.presentImageFlow(for: [url], startingURL: url, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            break
+        }
+    }
+    
+    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
+        self.removeChild()
+        let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
+                                                    startURL: startingURL,
+                                                    body: body,
+                                                    router: self.router,
+                                                    deepLink: self.deepLink)
+        
+        self.addChildAndStart(imageCoordinator) { _ in }
+        
+        self.router.present(imageCoordinator, source: self.detailVC)
+    }
+    
+    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+        
     }
 }

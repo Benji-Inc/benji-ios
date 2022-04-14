@@ -82,6 +82,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
     private let infoConfig = ManageableCellRegistration<ConversationInfoCell>().provider
     private let editConfig = ManageableCellRegistration<ConversationEditCell>().provider
     private let pinConfig = ManageableCellRegistration<PinnedMessageCell>().provider
+    private let headerConfig = ManageableHeaderRegistration<SectionDividerView>().provider
     
     weak var messageContentDelegate: MessageContentDelegate?
 
@@ -128,15 +129,23 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         }
     }
     
-    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         
-        if kind == SectionBackgroundView.kind {
-            return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
-                                                                         for: indexPath)
+        switch section {
+        case .pins:
+            if kind == UICollectionView.elementKindSectionHeader {
+                let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+                header.leftLabel.setText("Pinned Messages")
+                header.imageView.isVisible = false
+                return header
+            } else {
+                return nil
+            }
+        default:
+            return nil
         }
-        
-        return nil
     }
 }

@@ -20,6 +20,8 @@ class PinnedMessageCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: PinModel?
     let label  = ThemeLabel(font: .regular)
     let content = MessageContentView()
+    // Context menu
+    private lazy var contextMenuDelegate = MessageContentContextMenuDelegate(content: self.content)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -31,6 +33,10 @@ class PinnedMessageCell: CollectionViewManagerCell, ManageableCell {
         self.label.alpha = 0.25
         self.label.setText("No pinned messages")
         self.contentView.addSubview(self.content)
+        
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
+        self.content.bubbleView.addInteraction(contextMenuInteraction)
+        self.content.bubbleView.setBubbleColor(ThemeColor.B6.color, animated: false)
     }
     
     func configure(with item: PinModel) {

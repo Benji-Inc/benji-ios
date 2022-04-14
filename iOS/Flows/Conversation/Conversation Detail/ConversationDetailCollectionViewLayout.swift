@@ -26,12 +26,12 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset,
-                                                             leading: inset,
+                                                             leading: 0,
                                                              bottom: inset,
-                                                             trailing: inset)
+                                                             trailing: 0)
                 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(220))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(MessageContentView.bubbleHeight))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                                 leading: sectionInset,
@@ -40,13 +40,20 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
                 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset,
+                section.contentInsets = NSDirectionalEdgeInsets(top: -sectionInset.half,
                                                                 leading: 0,
-                                                                bottom: 20,
+                                                                bottom: sectionInset,
                                                                 trailing: 0)
                 
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
                 
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                   leading: sectionInset,
+                                                                   bottom: 0,
+                                                                   trailing: 0)
+                section.boundarySupplementaryItems = [headerItem]
                 return section
             case .people, .options, .info:
                 // Item
