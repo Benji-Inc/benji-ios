@@ -20,6 +20,34 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
             let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
             
             switch sectionType {
+            case .pins:
+                let inset = Theme.ContentOffset.short.value
+                // Item
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: inset,
+                                                             leading: inset,
+                                                             bottom: inset,
+                                                             trailing: inset)
+                
+                // Group
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(220))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                leading: sectionInset,
+                                                                bottom: 0,
+                                                                trailing: sectionInset)
+                
+                // Section
+                let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset,
+                                                                leading: 0,
+                                                                bottom: 20,
+                                                                trailing: 0)
+                
+                section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+                
+                return section
             case .people, .options, .info:
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))

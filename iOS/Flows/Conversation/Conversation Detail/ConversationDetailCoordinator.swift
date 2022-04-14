@@ -38,6 +38,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             guard let first = items.first else { return }
             
             switch first {
+            case .pinnedMessage(let model):
+                break 
             case .member(let member):
                 guard let person = PeopleStore.shared.people.first(where: { person in
                     return person.personId == member.personId

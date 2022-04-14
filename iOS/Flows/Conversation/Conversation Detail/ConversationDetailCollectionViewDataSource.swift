@@ -17,6 +17,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
     enum SectionType: Int, CaseIterable {
         case info
         case people
+        case pins
         case options
     }
     
@@ -72,6 +73,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         case info(ChannelId)
         case editTopic(ChannelId)
         case detail(OptionType)
+        case pinnedMessage(PinModel)
     }
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
@@ -79,6 +81,9 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
     private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
     private let infoConfig = ManageableCellRegistration<ConversationInfoCell>().provider
     private let editConfig = ManageableCellRegistration<ConversationEditCell>().provider
+    private let pinConfig = ManageableCellRegistration<PinnedMessageCell>().provider
+    
+    weak var messageContentDelegate: MessageContentDelegate?
 
     // MARK: - Cell Dequeueing
 
@@ -113,6 +118,12 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
                                                                     item: type)
             
             cell.lineView.isHidden = shouldHideLine
+            return cell
+        case .pinnedMessage(let model):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.pinConfig,
+                                                                    for: indexPath,
+                                                                    item: model)
+            cell.content.delegate = self.messageContentDelegate
             return cell
         }
     }

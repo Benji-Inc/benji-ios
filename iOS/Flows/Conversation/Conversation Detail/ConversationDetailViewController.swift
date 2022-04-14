@@ -191,6 +191,16 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             return .member(member)
         })
         
+        var pinnedItems: [ConversationDetailItemType] = conversation.pinnedMessages.compactMap({ message in
+            return .pinnedMessage(PinModel(cid: message.cid, messageId: message.id))
+        })
+        
+        if pinnedItems.isEmpty {
+            pinnedItems = [.pinnedMessage(PinModel(cid: nil, messageId: nil))]
+        }
+        
+        data[.pins] = pinnedItems
+        
         if conversation.isOwnedByMe {
             data[.people]?.append(.detail(.add))
             data[.options] = [.detail(.hide), .detail(.leave), .detail(.delete)]
