@@ -10,10 +10,14 @@ import Foundation
 
 class RepliesSequenceCollectionViewDataSource: MessageSequenceCollectionViewDataSource {
     
+    override var shouldShowReplies: Bool {
+        return false
+    }
+    
     override func set(messageSequence: MessageSequence,
                       itemsToReconfigure: [MessageSequenceCollectionViewDataSource.ItemType] = [],
                       showLoadMore: Bool = false) {
-        
+                
         let allMessages = messageSequence.messages.filter { message in
             return !message.isDeleted
         }

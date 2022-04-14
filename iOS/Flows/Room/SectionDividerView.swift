@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RoomSectionDividerView: UICollectionReusableView {
+class SectionDividerView: UICollectionReusableView {
     
     let leftLabel = ThemeLabel(font: .regular)
     let imageView = UIImageView()

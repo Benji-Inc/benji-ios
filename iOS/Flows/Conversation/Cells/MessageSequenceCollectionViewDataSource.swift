@@ -32,6 +32,10 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     weak var messageContentDelegate: MessageContentDelegate?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
 
+    /// If true, show the replies for each message
+    var shouldShowReplies: Bool {
+        return true 
+    }
     /// If true, show the detail bar for each message
     var shouldShowDetailBar = true
     /// If true, push the bottom messages back to prepare for a new message.
@@ -60,6 +64,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                            for: indexPath,
                                                            item: (cid, messageID, showDetail, collectionView))
+            
+            messageCell.shouldShowReplies = self.shouldShowReplies
             messageCell.shouldShowDetailBar = self.shouldShowDetailBar
             messageCell.content.delegate = self.messageContentDelegate
 

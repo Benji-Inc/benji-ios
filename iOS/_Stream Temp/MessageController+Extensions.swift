@@ -58,6 +58,34 @@ extension MessageController {
             }
         }
     }
+    
+    /// Unpin the message this controller manages.
+    ///
+    func unpinMessage() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.unpin { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+    
+    /// Pin the message this controller manages with the provided values.
+    ///
+    func pinMessage() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.pin(MessagePinning.noExpiration) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
 
     func addReaction(with type: ReactionType, extraData: [String: RawJSON] = [:]) async {
         return await withCheckedContinuation({ continuation in

@@ -15,29 +15,29 @@ class MessageFooterView: BaseView {
     static let height: CGFloat = 25
     
     let stackedView = StackedPersonView()
-    let replyCount = ReplyCountView()
-    
+    let replySummary = ReplySummaryView()
+        
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.stackedView)
-        self.addSubview(self.replyCount)
+        self.addSubview(self.replySummary)
     }
     
     func configure(for message: Messageable) {
         self.stackedView.configure(with: message.nonMeConsumers)
-        self.replyCount.set(count: message.totalReplyCount)
-        self.replyCount.isVisible = message.totalReplyCount > 0
+        self.replySummary.configure(for: message)
     }
         
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.stackedView.pin(.left)
+        self.stackedView.pin(.right)
         self.stackedView.centerOnY()
         
-        self.replyCount.squaredSize = self.stackedView.height
-        self.replyCount.pin(.right)
-        self.replyCount.centerOnY()
+        self.replySummary.height = self.stackedView.height
+        self.replySummary.expandToSuperviewWidth()
+        self.replySummary.pin(.left)
+        self.replySummary.centerOnY()
     }
 }
