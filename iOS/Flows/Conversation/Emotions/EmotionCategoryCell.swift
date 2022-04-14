@@ -30,7 +30,7 @@ class EmotionSelectionView: BaseView {
     func configure(with item: Emotion, isSelected: Bool) {
         let color = item.color
 
-        self.label.setText(item.rawValue)
+        self.label.setText(item.description)
         self.label.textColor = color
         
         self.borderView.layer.borderColor = isSelected ? color.cgColor : color.withAlphaComponent(0.2).cgColor

@@ -186,8 +186,8 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { [unowned self] emotions in
             emotions.forEach { emotion in
-                logDebug(emotion.rawValue)
-                AnalyticsManager.shared.trackEvent(type: .emotionSelected, properties: ["value": emotion.rawValue])
+                AnalyticsManager.shared.trackEvent(type: .emotionSelected,
+                                                   properties: ["value": emotion.rawValue])
             }
             
             guard !emotions.isEmpty else { return }

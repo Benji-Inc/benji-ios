@@ -46,7 +46,7 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
             self.contentView.layer.borderColor = color.cgColor
             self.contentView.backgroundColor = color.withAlphaComponent(0.2)
             
-            self.emotionLabel.setText("(\(emotion.rawValue))")
+            self.emotionLabel.setText(emotion.description)
             self.emotionLabel.textColor = color
             
         } else {

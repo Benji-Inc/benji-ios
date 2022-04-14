@@ -15,7 +15,9 @@ class ConversationDetailCollectionViewLayout: UICollectionViewCompositionalLayou
         config.scrollDirection = .vertical
         
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = ConversationDetailCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = ConversationDetailCollectionViewDataSource.SectionType(rawValue: sectionIndex) else {
+                return nil
+            }
             
             let sectionInset: CGFloat = Theme.ContentOffset.xtraLong.value
             

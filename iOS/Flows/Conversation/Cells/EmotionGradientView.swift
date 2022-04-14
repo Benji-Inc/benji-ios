@@ -13,7 +13,7 @@ class EmotionGradientView: BaseView {
 
     private var gradientLayer = CAGradientLayer()
 
-    init(emotionCounts: [Emotion : Int]) {
+    init(emotionCounts: [Emotion : Int] = [:]) {
         super.init()
 
         self.set(emotionCounts: emotionCounts)
@@ -75,5 +75,17 @@ class EmotionGradientView: BaseView {
 
         self.gradientLayer.colors = cgColors
         self.layer.borderColor = cgColors.last
+    }
+
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        // Ensure that the tap area is big enough to be usable as a button.
+        let horizontalAdjustment = clamp(100 - self.bounds.width, min: 0)
+        let verticalAdjustment = clamp(100 - self.bounds.height, min: 0)
+        let extendedBounds = CGRect(x: self.bounds.x - horizontalAdjustment.half,
+                                    y: self.bounds.y - horizontalAdjustment.half,
+                                    width: self.bounds.width + horizontalAdjustment,
+                                    height: self.bounds.height + verticalAdjustment)
+
+        return extendedBounds.contains(point)
     }
 }

@@ -160,7 +160,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case amused
     case bittersweetness
     case nostalgia
-    case cognitiveDissonance = "cognitive dissonance"
+    case cognitiveDissonance
     case paradoxical
     case ironic
     case sarcastic
@@ -176,17 +176,17 @@ enum Emotion: String, CaseIterable, Identifiable {
     case empathy
     case sympathy
     case boundaries
-    case comparativeSuffering = "comparative suffering"
+    case comparativeSuffering
     
     case shame
-    case selfCompassion = "self-compassion"
+    case selfCompassion
     case perfectionism
     case guilty
     case humiliated
     case embarrased
     
     case belonging
-    case fittingIn = "fitting in"
+    case fittingIn
     case connected
     case disconnected
     case insecure
@@ -197,7 +197,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case lovelessness
     case heartbroken
     case trust
-    case selfTrust = "self-trust"
+    case selfTrust
     case betrayal
     case defensive
     case flooded
@@ -208,7 +208,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case calm
     case contentment
     case gratitude
-    case forebodingJoy = "forboding joy"
+    case forebodingJoy
     case relief
     case tranquil
     
@@ -217,7 +217,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case disgust
     case dehumanized
     case hated
-    case selfRighteous = "self-righteous"
+    case selfRighteous
     
     case pride
     case hubris
@@ -226,8 +226,31 @@ enum Emotion: String, CaseIterable, Identifiable {
     var emoji: String {
         return "😮"
     }
+
+    var id: String {
+        return self.rawValue
+    }
     
-    var id: Emotion { self }
+    var description: String {
+        switch self {
+        case .cognitiveDissonance:
+            return "cognitive dissonance"
+        case .comparativeSuffering:
+            return "comparative suffering"
+        case .selfCompassion:
+            return "self-compassion"
+        case .fittingIn:
+            return "fitting in"
+        case .selfTrust:
+            return "self-trust"
+        case .forebodingJoy:
+            return "forboding joy"
+        case .selfRighteous:
+            return "self-righteous"
+        default:
+            return self.rawValue
+        }
+    }
     
     var definition: Localized {
         switch self {
