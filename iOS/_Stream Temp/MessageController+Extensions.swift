@@ -59,7 +59,7 @@ extension MessageController {
         }
     }
     
-    /// Pin the message this controller manages with the provided values.
+    /// Unpin the message this controller manages.
     ///
     func unpinMessage() async throws {
         return try await withCheckedThrowingContinuation { continuation in
