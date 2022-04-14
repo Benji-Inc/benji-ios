@@ -54,7 +54,7 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
         self.footerView.replySummary.didTapViewReplies = { [unowned self] in
-            guard let cid = self.messageState.message?.streamCid, let messageId = self.messageState.message?.id else { return }
+            guard let cid = self.message?.streamCid, let messageId = self.message?.id else { return }
             self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, messageId))
         }
 
