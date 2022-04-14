@@ -294,6 +294,10 @@ class MessageContentView: BaseView {
         let emotionCounts = message.emotionCounts
         // Only animate changes to the emotion when they're not blurred out.
         let isAnimated = self.areEmotionsShown
+
+        if isAnimated {
+            self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
+        }
         self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
         self.showEmotionsButton.set(emotionCounts: emotionCounts)
         self.setNeedsLayout()
@@ -328,6 +332,8 @@ class MessageContentView: BaseView {
             if areShown {
                 if self.emotionCollectionView.emotionCounts.count == 0 {
                     self.emotionLabel.alpha = 0.2
+                } else {
+                    self.emotionLabel.alpha = 0.0
                 }
                 
                 self.addEmotionImageView.alpha = 1.0
