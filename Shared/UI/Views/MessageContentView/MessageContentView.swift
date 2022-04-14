@@ -73,7 +73,7 @@ class MessageContentView: BaseView {
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
     }
-    let showEmotionsButton = EmotionGradientView(emotionCounts: [:])
+    let showEmotionsButton = EmotionGradientView()
 
     var layoutState: Layout = .expanded
     private let cellDiameter: CGFloat
@@ -150,7 +150,7 @@ class MessageContentView: BaseView {
         }
 
         self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            logDebug(emotion.rawValue)
+            logDebug(emotion.id)
         }
         
         self.imageView.didSelect { [unowned self] in

@@ -91,7 +91,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.label.setText(emotion.definition)
         self.label.textColor = emotion.color
         
-        self.emotionNameLabel.setText(emotion.rawValue.capitalized)
+        self.emotionNameLabel.setText(emotion.description.capitalized)
         self.emotionNameLabel.textColor = emotion.color
     
         self.view.setNeedsLayout()

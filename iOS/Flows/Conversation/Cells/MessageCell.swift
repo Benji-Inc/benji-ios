@@ -18,7 +18,7 @@ struct MessageDetailState: Equatable {
 /// A cell for displaying individual messages, author and reactions.
 class MessageCell: UICollectionViewCell {
 
-    @ObservedObject var messageState = MessageDetailViewState(message: nil)
+    private var message: Messageable?
 
     let content = MessageContentView()
     private var footerView = MessageFooterView()
@@ -76,7 +76,7 @@ class MessageCell: UICollectionViewCell {
     func configure(with message: Messageable) {
         self.content.configure(with: message)
         
-        self.messageState.message = message
+        self.message = message
         
         self.footerView.configure(for: message)
         self.footerView.isVisible = self.shouldShowDetailBar
@@ -163,7 +163,7 @@ class MessageCell: UICollectionViewCell {
         // If the detail visibility changes for a message, we always want to cancel its tasks.
         self.messageDetailTasks.cancelAndRemoveAll()
 
-        guard let messageable = self.messageState.message,
+        guard let messageable = self.message,
               let cid = try? ConversationId(cid: messageable.conversationId) else { return }
 
         // If this item is showing its details, we may want to start the consumption process for it.

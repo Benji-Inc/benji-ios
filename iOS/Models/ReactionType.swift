@@ -30,7 +30,7 @@ enum ReactionType {
     init?(rawValue: String) {
         if rawValue == "read" {
             self = .read
-        } else if let e = Emotion.init(rawValue: rawValue) {
+        } else if let e = Emotion(rawValue: rawValue) {
             self = .emotion(e)
         } else {
             return nil

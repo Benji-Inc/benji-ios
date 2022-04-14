@@ -42,7 +42,7 @@ class EmotionCircleView: BaseView {
     }
 
     func configure(with emotion: Emotion) {
-        self.label.text = emotion.rawValue
+        self.label.text = emotion.description
 
         self.label.textColor = emotion.color
         self.layer.borderColor = emotion.color.cgColor
