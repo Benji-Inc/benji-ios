@@ -12,7 +12,7 @@ import Parse
 import Combine
 import Intents
 
-class OnboardingCoordinator: PresentableCoordinator<Void> {
+class OnboardingCoordinator: PresentableCoordinator<DeepLinkable?> {
 
     private lazy var onboardingVC = OnboardingViewController(with: self)
 
@@ -43,7 +43,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         case .needsVerification, .inactive, .waitlist, .none:
             initialContent = .welcome(self.onboardingVC.welcomeVC)
         case .active:
-            self.finishFlow(with: ())
+            self.finishFlow(with: nil)
             return
         }
 
@@ -151,7 +151,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
         } else if let user = User.current() {
             switch user.status {
             case .needsVerification, .none, .active:
-                self.finishFlow(with: ())
+                self.finishFlow(with: nil)
             case .inactive, .waitlist:
                 self.finalizeOnboarding(user: user)
             }
@@ -166,15 +166,19 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             }
             do {
                 try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
-                                             passId: self.onboardingVC.passId).makeRequest(andUpdate: [],
-                                                                                           viewsToIgnore: [self.onboardingVC.view])
+                                             passId: self.onboardingVC.passId)
+                .makeRequest(andUpdate: [], viewsToIgnore: [self.onboardingVC.view])
             } catch {
                 logError(error)
             }
             
             AnalyticsManager.shared.trackEvent(type: .finalizedOnboarding, properties: ["status": user.status?.rawValue ?? ""])
             await self.onboardingVC.hideLoading()
-            self.finishFlow(with: ())
+            
+            var deepLink = DeepLinkObject(target: .room)
+            deepLink.reservationId = self.onboardingVC.reservationId
+            deepLink.passId = self.onboardingVC.passId
+            self.finishFlow(with: deepLink)
         }
     }
 

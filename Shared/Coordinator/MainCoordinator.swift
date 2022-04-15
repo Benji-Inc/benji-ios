@@ -51,13 +51,13 @@ class MainCoordinator: Coordinator<Void> {
             // Don't handle the launch status if the task was cancelled.
             guard !Task.isCancelled else { return }
 
-#if IOS
+        #if IOS
             if let deepLink = deepLink {
                 self.handle(deeplink: deepLink)
             } else {
                 self.handle(deeplink: DeepLinkObject(target: .room))
             }
-#elseif APPCLIP
+        #elseif APPCLIP
             // Code your App Clip may access.
             if let deepLink = deepLink {
                 self.handleAppClip(deepLink: deepLink)
@@ -66,7 +66,7 @@ class MainCoordinator: Coordinator<Void> {
             } else {
                 self.handleAppClip(deepLink: DeepLinkObject(target: .login))
             }
-#endif
+        #endif
         }
     }
 
@@ -110,11 +110,13 @@ class MainCoordinator: Coordinator<Void> {
         // Now attempt to handle the deeplink.
         switch target {
         case .room, .conversation, .wallet, .profile, .reservation:
-#if IOS
+        #if IOS
             Task {
                 await self.runRoomFlow(with: deeplink)
             }
-#endif
+        #elseif APPCLIP
+            self.runWaitlistFlow(with: deeplink)
+        #endif
         case .login:
             self.runOnboardingFlow(with: deeplink)
         case .waitlist:
