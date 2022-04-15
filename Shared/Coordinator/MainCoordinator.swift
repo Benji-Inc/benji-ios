@@ -11,6 +11,8 @@ import UIKit
 import Parse
 
 class MainCoordinator: Coordinator<Void> {
+    
+    var launchActivity: LaunchActivity? 
 
     override func start() {
         super.start()
@@ -128,6 +130,10 @@ class MainCoordinator: Coordinator<Void> {
             // Attempt to take the user to the room screen after onboarding is complete.
             self.handle(deeplink: DeepLinkObject(target: .room))
         })
+        
+        if let launchActivity = self.launchActivity {
+            coordinator.handle(launchActivity: launchActivity)
+        }
     }
     
     func runWaitlistFlow(with deepLink: DeepLinkable?) {
