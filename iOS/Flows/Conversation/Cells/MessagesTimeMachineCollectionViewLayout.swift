@@ -100,11 +100,11 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                 let isScrolledToMostRecent
                 = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
 
-                let isMostRecentInBottomSection = indexPath.item == self.numberOfItems(inSection: 1) - 1
+                let isMostRecent = indexPath.item == self.numberOfItems(inSection: 0) - 1
 
                 // Always scroll to the end for new user messages, or if we're currently scrolled to the
                 // most recent message.
-                if isMostRecentInBottomSection || isScrolledToMostRecent {
+                if isMostRecent && isScrolledToMostRecent {
                     self.shouldScrollToEnd = true
                 }
             case .delete, .reload, .move, .none:

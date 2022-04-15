@@ -134,14 +134,14 @@ class SwipeInputPanGestureHandler {
         self.resetPreviewAndInputViews(didSend: sendableWillBeSent)
 
         self.viewController.delegate?.swipeableInputAccessory(self.viewController,
-                                                              didFinishSwipeSendingSendable: sendableWillBeSent)
+                                                              didFinishSwipeAndWillSend: sendableWillBeSent)
     }
 
     private func handlePanFailed() {
         self.inputView.inputContainerView.alpha = 1
         self.previewView?.removeFromSuperview()
         self.viewController.delegate?.swipeableInputAccessory(self.viewController,
-                                                              didFinishSwipeSendingSendable: false)
+                                                              didFinishSwipeAndWillSend: false)
     }
 
     /// Updates the position of the preview view based on the provided pan gesture offset. This function ensures that preview view's origin

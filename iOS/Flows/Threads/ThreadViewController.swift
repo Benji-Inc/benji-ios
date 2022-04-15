@@ -189,7 +189,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
             let threadLayout = self.threadCollectionView.threadLayout
-            guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
+            let yOffset = threadLayout.focusPosition(for: messageIndexPath)
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: animateScroll)
 

@@ -124,11 +124,15 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
     }
 
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
-                                 didFinishSwipeSendingSendable didSend: Bool) {
+                                 didFinishSwipeAndWillSend willSend: Bool) {
 
         self.collectionView.isUserInteractionEnabled = true
 
-        self.viewController.set(messageSequencePreparingToSend: nil)
+        // If we didn't send the message, manually cancel the prepareToSend state on the message sequence.
+        // (If we did send, the message sequence itself can cancel the prepare to send state.)
+        if !willSend {
+            self.viewController.set(messageSequencePreparingToSend: nil)
+        }
     }
 
     /// Gets the send position for the given preview view frame.

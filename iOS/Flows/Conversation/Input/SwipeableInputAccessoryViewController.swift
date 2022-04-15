@@ -24,7 +24,7 @@ protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
                                  withPreviewFrame frame: CGRect) -> Bool
     /// The accessory view finished its swipe interaction.
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
-                                 didFinishSwipeSendingSendable didSend: Bool)
+                                 didFinishSwipeAndWillSend willSend: Bool)
 }
 
 class SwipeableInputAccessoryViewController: UIInputViewController {

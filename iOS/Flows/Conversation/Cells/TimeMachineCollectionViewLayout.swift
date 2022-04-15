@@ -18,21 +18,12 @@ protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType
 }
 
-class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
-    /// If true, the z ranges for all the items should be recalculated.
-    var shouldRecalculateZRanges = true
-}
-
 /// A custom layout for a stack of cells laid out along the z axis.
 /// The stacks appear similar to Apple's Time Machine interface, with the newest item in front and older items going out into the distance.
 /// As the collection view scrolls up and down, the items move away and toward the user respectively.
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     typealias SectionIndex = Int
-
-    override class var invalidationContextClass: AnyClass {
-        return TimeMachineCollectionViewLayoutInvalidationContext.self
-    }
 
     // MARK: - Data Source
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
@@ -77,8 +68,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
-    /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
-    private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A cache of all the layout  items mapped to their index paths.
     private(set) var layoutItems: [IndexPath : TimeMachineLayoutItemType] = [:]
 
@@ -102,67 +91,30 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return true
     }
 
-    override func invalidationContext(forBoundsChange newBounds: CGRect)
-    -> UICollectionViewLayoutInvalidationContext {
-
-        let invalidationContext = super.invalidationContext(forBoundsChange: newBounds)
-
-        guard let customInvalidationContext
-                = invalidationContext as? TimeMachineCollectionViewLayoutInvalidationContext else {
-                    return invalidationContext
-                }
-
-        // Changing the bounds doesn't affect item z ranges.
-        customInvalidationContext.shouldRecalculateZRanges = false
-
-        return customInvalidationContext
-    }
-
-    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
-        super.invalidateLayout(with: context)
+    override func invalidateLayout() {
+        super.invalidateLayout()
 
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
 
-        guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else {
-            return
-        }
-
-        if customContext.shouldRecalculateZRanges {
-            self.layoutItemsBeforeInvalidation = self.layoutItems
-
-            self.itemFocusPositions.removeAll()
-            self.layoutItems.removeAll()
-        }
+        self.layoutItemsBeforeInvalidation = self.layoutItems
+        self.layoutItems.removeAll()
     }
 
     override func prepare() {
-        // Don't recalculate z ranges if we already have them cached.
-        if self.itemFocusPositions.isEmpty {
-            self.prepareFocusPositionsAndIds()
-
-            self.forEachIndexPath { indexPath in
-                self.layoutItems[indexPath] = self.dataSource?.getTimeMachineItem(forItemAt: indexPath)
-            }
-        }
-
         // Calculate and cache the layout attributes for all the items.
         self.forEachIndexPath { indexPath in
+            self.layoutItems[indexPath] = self.dataSource?.getTimeMachineItem(forItemAt: indexPath)
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
         }
-    }
 
-    /// Updates the z ranges dictionary for all items.
-    private func prepareFocusPositionsAndIds() {
-        // Store all the item focus positions for efficiency.
-        self.forEachIndexPath { indexPath in
-            self.itemFocusPositions[indexPath] = CGFloat(indexPath.item) * self.itemHeight
-        }
+        logDebug("\(self) prepared layout attributes for \(self.cellLayoutAttributes.count) items")
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
         let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+            #warning("Should we check for alpha?")
             return rect.intersects(attributes.frame) && attributes.alpha > 0
         }
 
@@ -187,7 +139,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private func getNormalizedZOffsetForItem(at indexPath: IndexPath,
                                              givenZPosition zPosition: CGFloat) -> CGFloat {
 
-        guard let focusPosition = self.itemFocusPositions[indexPath] else { return 0 }
+        let focusPosition = self.focusPosition(for: indexPath)
         let vectorToCurrentZ = zPosition - focusPosition
 
         let normalizedZOffset: CGFloat
@@ -253,6 +205,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     // MARK: - Attribute Helpers
+
+    func focusPosition(for indexPath: IndexPath) -> CGFloat {
+        return CGFloat(indexPath.item) * self.itemHeight
+    }
 
     /// Gets the index path of the frontmost item in the collection.
     func getFrontmostIndexPath() -> IndexPath? {
@@ -386,10 +342,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
                                                                      givenZPosition: self.zPositionBeforeAnimation)
             normalizedZOffset = clamp(normalizedZOffset, -1, 1)
+            logDebug("message \(appearingId) moving into visibility")
             let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
                                                                     withNormalizedZOffset: normalizedZOffset)
 
-            modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
+            modifiedAttributes?.center.y += 220// self.zPositionBeforeAnimation - self.zPosition
 
             return modifiedAttributes
         }
@@ -398,7 +355,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let normalizedZOffset: CGFloat
         // Items added to the end of section should start big and shrink down to normal size.
         if itemIndexPath.item == self.numberOfItems(inSection: itemIndexPath.section) - 1 {
-            normalizedZOffset = 1
+            #warning("Make this smarter")
+            normalizedZOffset = 0
         } else {
             // Items added to the beginning of the section should start small and grow to normal size.
             normalizedZOffset = -1
@@ -423,6 +381,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Scroll Content Offset Handling
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        logDebug("scroll to target \(CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment))")
+
         return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment)
     }
 

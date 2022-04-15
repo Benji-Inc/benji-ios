@@ -94,15 +94,16 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
 
     private func scrollToLastMessage() {
-        self.collectionLayout.prepare()
         let maxOffset = self.collectionLayout.maxZPosition
         self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
     }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
-    func set(conversation: Conversation) {
+    func set(conversation: Conversation, shouldPrepareToSend: Bool) {
         // Create a new conversation controller if this is a different conversation than before.
+        var updatedController = false
         if conversation.cid != self.conversation?.cid {
+            updatedController = true
             let conversationController = ChatClient.shared.channelController(for: conversation.cid)
             self.conversationController = conversationController
             self.subscribeToUpdates()
@@ -112,6 +113,13 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             }
         }
 
+        // Do nothing if neither the controller nor the prepareToSend state were changed.
+        if !updatedController && self.dataSource.shouldPrepareToSend == shouldPrepareToSend  {
+            return
+        }
+
+        self.dataSource.shouldPrepareToSend = shouldPrepareToSend
+        
         guard let conversationController = self.conversationController else { return }
 
         // Scroll to the last item when a new conversation is loaded.
@@ -123,19 +131,20 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.dataSource.set(messagesController: conversationController, showLoadMore: self.shouldShowLoadMore)
     }
 
-    func set(isPreparedToSend: Bool) {
-        self.dataSource.shouldPrepareToSend = isPreparedToSend
-    }
-
     func set(state: ConversationUIState) {
+        let stateBeforeUpdate = self.collectionLayout.uiState
+
         self.configureCollectionLayout(for: state)
 
         Task {
+            guard state != stateBeforeUpdate else { return }
+
             await self.dataSource.reconfigureAllItems()
-            if state == .write {
-                let maxOffset = self.collectionLayout.maxZPosition
-                self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
-            }
+
+            guard state == .write else { return }
+            // Auto scroll to the latest message when in the write mode.
+            let maxOffset = self.collectionLayout.maxZPosition
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
         }
     }
 
@@ -182,9 +191,14 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             .mainSink { [unowned self] changes in
                 guard let conversationController = self.conversationController else { return }
 
+                var isUserMessageInserted = false
                 var itemsToReconfigure: [MessageSequenceItem] = []
+
                 for change in changes {
                     switch change {
+                    case .insert(let message, _):
+                        guard message.isFromCurrentUser else { break }
+                        isUserMessageInserted = true
                     case .update(let message, _):
                         guard !message.isDeleted else { break }
                         itemsToReconfigure.append(.message(messageID: message.id))
@@ -192,6 +206,12 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                         break
                     }
                 }
+
+                // Once the user sends their message, we no longer need to be in the prepare state.
+                if isUserMessageInserted {
+                    self.dataSource.shouldPrepareToSend = false
+                }
+
                 self.dataSource.set(messagesController: conversationController,
                                     itemsToReconfigure: itemsToReconfigure,
                                     showLoadMore: self.shouldShowLoadMore)
@@ -210,7 +230,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
-            guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
+            let yOffset = self.collectionLayout.focusPosition(for: messageIndexPath)
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: animateScroll)
 
