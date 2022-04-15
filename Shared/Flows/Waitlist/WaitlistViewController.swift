@@ -12,14 +12,17 @@ import ParseLiveQuery
 
 class WaitlistViewController: ViewController {
     
-    private let titleLabel = ThemeLabel(font: .display)
-    private let descriptionLabel = ThemeLabel(font: .regular)
+    let personView = BorderedPersonView()
+    let titleLabel = ThemeLabel(font: .display)
+    let descriptionLabel = ThemeLabel(font: .regular)
     
     override func initializeViews() {
         super.initializeViews()
                 
         self.view.set(backgroundColor: .B0)
         
+        self.view.addSubview(self.personView)
+        self.personView.isVisible = false
         self.view.addSubview(self.titleLabel)
         self.titleLabel.textAlignment = .center
         self.view.addSubview(self.descriptionLabel)
@@ -30,7 +33,6 @@ class WaitlistViewController: ViewController {
         }).mainSink { type in
             self.updateUI()
         }.store(in: &self.cancellables)
-        
     }
     
     override func viewDidLoad() {
@@ -79,6 +81,10 @@ class WaitlistViewController: ViewController {
         self.descriptionLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .long)
         self.descriptionLabel.centerOnX()
+        
+        self.personView.squaredSize = 100
+        self.personView.centerOnX()
+        self.personView.match(.bottom, to: .top, of: self.titleLabel, offset: .negative(.screenPadding))
     }
     
     func displayOverlay() {

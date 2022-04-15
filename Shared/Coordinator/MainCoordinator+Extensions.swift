@@ -17,8 +17,12 @@ extension MainCoordinator: LaunchManagerDelegate {
             case .deepLink(let deepLinkable):
                 self.handle(deeplink: deepLinkable)
             default:
-                guard let furthestChild = self.furthestChild as? LaunchActivityHandler else { return }
-                furthestChild.handle(launchActivity: activity)
+                if let furthestChild = self.furthestChild as? LaunchActivityHandler {
+                    furthestChild.handle(launchActivity: activity)
+                } else {
+                    // We may not have completed launching yet, so store it
+                    self.launchActivity = activity
+                }
             }
         }
     }

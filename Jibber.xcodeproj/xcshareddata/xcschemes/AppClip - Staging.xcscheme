@@ -73,7 +73,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCAppClipURL"
-            value = "https://joinjibber.com/reservation?reservationId= G9uW12XMBT"
+            value = "https://joinjibber.com/reservation?reservationId=G9uW12XMBT"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
