@@ -33,6 +33,7 @@ class MessageCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        logDebug("initializing \(self)")
         self.initializeViews()
     }
 
@@ -86,6 +87,10 @@ class MessageCell: UICollectionViewCell {
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
+
+        // Make sure that the z index is up to date. Sometimes the collectionview layout doesn't
+        // update the position even though the attributes changed.
+        self.layer.zPosition = CGFloat(layoutAttributes.zIndex)
 
         guard let messageLayoutAttributes
                 = layoutAttributes as? ConversationMessageCellLayoutAttributes else {

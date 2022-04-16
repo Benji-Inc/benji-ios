@@ -70,6 +70,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A cache of all the layout  items mapped to their index paths.
     private(set) var layoutItems: [IndexPath : TimeMachineLayoutItemType] = [:]
+    /// Layout items that existed before that latest layout invalidation.
+    private var layoutItemsBeforeInvalidation: [IndexPath : TimeMachineLayoutItemType] = [:]
 
     // MARK: - UICollectionViewLayout Overrides
 
@@ -108,15 +110,19 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
         }
 
-        logDebug("\(self) prepared layout attributes for \(self.cellLayoutAttributes.count) items")
+        logDebug("prepared layout attributes for \(self.cellLayoutAttributes.count) items")
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
         let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
-            #warning("Should we check for alpha?")
-            return rect.intersects(attributes.frame) && attributes.alpha > 0
+            return rect.intersects(attributes.frame)
         }
+
+        if itemAttributes.count == 0 {
+            
+        }
+        logDebug("layoutAttributesForElementsInRect count \(itemAttributes.count)")
 
         return itemAttributes
     }
@@ -126,6 +132,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         if let attributes = self.cellLayoutAttributes[indexPath]  {
             return attributes
         }
+
 
         let normalizedZOffset = self.getNormalizedZOffsetForItem(at: indexPath,
                                                                  givenZPosition: self.zPosition)
@@ -233,7 +240,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     func getItemCenterPoint(withYOffset yOffset: CGFloat, scale: CGFloat) -> CGPoint {
-        
         guard let collectionView = self.collectionView else { return .zero }
         
         let contentRect = CGRect(x: collectionView.contentOffset.x,
@@ -256,7 +262,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Ids of items that are being inserted.
     private var insertedIds: Set<String> = []
-    private var layoutItemsBeforeInvalidation: [IndexPath : TimeMachineLayoutItemType] = [:]
+    private var insertedIndexPaths: Set<IndexPath> = []
     /// Ids of items that are being deleted.
     private var deletedIds: Set<String> = []
     /// Ids of items that that were visible before the animation started.
@@ -271,6 +277,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
 
+        logDebug("\t\t\t\t\t\t\t\t\t\t\t\t prepare for updates "+updateItems.description)
         self.zPositionBeforeAnimation = self.zPosition
 
         for update in updateItems {
@@ -282,10 +289,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 }
 
                 self.insertedIds.insert(itemId)
+                self.insertedIndexPaths.insert(indexPath)
                 let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
-                if itemFocusPosition < self.zPosition {
-                    self.scrollOffsetAdjustment += self.itemHeight
-                }
+                self.scrollOffsetAdjustment += self.itemHeight
 
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate,
@@ -306,56 +312,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
     }
 
-    /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
-    /// Per the docs:  "For each element on screen before the invalidation, finalLayoutAttributesForDisappearingXXX will be called..."
-    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        // Remember which items were visible before the animation started so we don't attempt to modify
-        // their animations later.
-        if let itemId = self.layoutItemsBeforeInvalidation[itemIndexPath]?.layoutId {
-            self.idsVisibleBeforeAnimation.insert(itemId)
-
-            // Items that are just moving are marked as "disappearing" by the collection view.
-            // Don't animate changes to these items or else weird animation issues will arise.
-            guard self.deletedIds.contains(itemId) else { return nil }
-        }
-
-        return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
-    }
-
     /// NOTE: "Appearing" does not mean the item wasn't visible before the animation.
     /// Per the docs: "For each element on screen after the invalidation, initialLayoutAttributesForAppearingXXX will be called..."
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
 
-        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-
-        // Don't modify the attributes of items that were visible before the animation started.
-        guard let appearingId = self.layoutItems[itemIndexPath]?.layoutId,
-              !self.idsVisibleBeforeAnimation.contains(appearingId) else { return attributes }
-
-        // Pre-existing items moving into visibility
-        // If the item existed before (wasn't just inserted), but was not visible,
-        // modify it's attributes to make it appear properly.
-        if !self.insertedIds.contains(appearingId) {
-            var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
-                                                                     givenZPosition: self.zPositionBeforeAnimation)
-            normalizedZOffset = clamp(normalizedZOffset, -1, 1)
-            logDebug("message \(appearingId) moving into visibility")
-            let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
-                                                                    withNormalizedZOffset: normalizedZOffset)
-
-            modifiedAttributes?.center.y += 220// self.zPositionBeforeAnimation - self.zPosition
-
-            return modifiedAttributes
+        // Only modify the attributes of items that are actually being inserted.
+        guard self.insertedIndexPaths.contains(itemIndexPath) else {
+            return super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
         }
 
         // Items being inserted
         let normalizedZOffset: CGFloat
         // Items added to the end of section should start big and shrink down to normal size.
         if itemIndexPath.item == self.numberOfItems(inSection: itemIndexPath.section) - 1 {
-            #warning("Make this smarter")
             normalizedZOffset = 0
         } else {
             // Items added to the beginning of the section should start small and grow to normal size.
@@ -370,10 +340,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     override func finalizeCollectionViewUpdates() {
         super.finalizeCollectionViewUpdates()
+        logDebug("\t\t\t\t\t\t\t\t\t\t\t\t finalizing collection view updates")
 
         self.insertedIds.removeAll()
+        self.insertedIndexPaths.removeAll()
         self.deletedIds.removeAll()
-        self.idsVisibleBeforeAnimation.removeAll()
         self.zPositionBeforeAnimation = 0
         self.scrollOffsetAdjustment = 0
     }
@@ -381,7 +352,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Scroll Content Offset Handling
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment)
+        return CGPoint(x: proposedContentOffset.x,
+                       y: proposedContentOffset.y + self.scrollOffsetAdjustment)
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
