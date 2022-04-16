@@ -12,7 +12,7 @@ import Combine
 
 class MessageFooterView: BaseView {
     
-    static let height: CGFloat = 25
+    static let height: CGFloat = 70
     
     let stackedView = StackedPersonView()
     let replySummary = ReplySummaryView()
@@ -20,6 +20,7 @@ class MessageFooterView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.set(backgroundColor: .red)
         self.addSubview(self.stackedView)
         self.addSubview(self.replySummary)
     }
@@ -33,11 +34,11 @@ class MessageFooterView: BaseView {
         super.layoutSubviews()
         
         self.stackedView.pin(.right)
-        self.stackedView.centerOnY()
+        self.stackedView.pin(.top)
         
         self.replySummary.height = MessageFooterView.height
         self.replySummary.expandToSuperviewWidth()
         self.replySummary.pin(.left)
-        self.replySummary.centerOnY()
+        self.replySummary.pin(.top)
     }
 }

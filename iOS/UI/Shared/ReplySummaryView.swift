@@ -19,7 +19,7 @@ class ReplySummaryView: BaseView {
     var cancellables = Set<AnyCancellable>()
     
     private let arrowImageView = UIImageView(image: UIImage(systemName: "arrow.turn.down.right"))
-    private let promptLabel = ThemeLabel(font: .small, textColor: .D1)
+    private let promptLabel = ThemeLabel(font: .smallBold, textColor: .D1)
     private let promptButton = ThemeButton()
     private let counter = NumberScrollCounter(value: 0,
                                               scrollDuration: Theme.animationDurationFast,
@@ -28,7 +28,7 @@ class ReplySummaryView: BaseView {
                                               suffix: nil,
                                               seperator: "",
                                               seperatorSpacing: 0,
-                                              font: FontType.small.font,
+                                              font: FontType.smallBold.font,
                                               textColor: ThemeColor.D1.color,
                                               animateInitialValue: true,
                                               gradientColor: ThemeColor.B0.color,
@@ -74,7 +74,7 @@ class ReplySummaryView: BaseView {
     private func setPrompt(for message: Messageable) {
         if message.totalReplyCount == 0 {
             self.promptLabel.isVisible = true
-            self.promptLabel.setText("Add reply")
+            self.promptLabel.setText("Reply")
             self.counter.isVisible = false
         } else {
             self.counter.isVisible = true
