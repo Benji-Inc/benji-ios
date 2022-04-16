@@ -120,7 +120,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         if itemAttributes.count == 0 {
-            
+
         }
         logDebug("layoutAttributesForElementsInRect count \(itemAttributes.count)")
 
@@ -260,47 +260,42 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Update Animation Handling
 
-    /// Ids of items that are being inserted.
-    private var insertedIds: Set<String> = []
+    /// Index paths of items that are being inserted.
     private var insertedIndexPaths: Set<IndexPath> = []
-    /// Ids of items that are being deleted.
-    private var deletedIds: Set<String> = []
-    /// Ids of items that that were visible before the animation started.
-    private var idsVisibleBeforeAnimation: Set<String> = []
     /// How much to adjust the proposed scroll offset.
     private var scrollOffsetAdjustment: CGFloat = 0
     /// The z position before update animations started
     private var zPositionBeforeAnimation: CGFloat = 0
 
-    private var focusedItemDateBeforeAnimation: Date? = nil
+    private var focusedItemDateBeforeAnimation: Date = .distantFuture
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
 
-        logDebug("\t\t\t\t\t\t\t\t\t\t\t\t prepare for updates "+updateItems.description)
         self.zPositionBeforeAnimation = self.zPosition
+        self.focusedItemDateBeforeAnimation
+        = self.getFocusedLayoutItemBeforeAnimation(forZPosition: self.zPosition)?.date ?? .distantFuture
 
         for update in updateItems {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate,
-                      let itemId = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else {
+                      let date = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else {
                     break
                 }
-
-                self.insertedIds.insert(itemId)
                 self.insertedIndexPaths.insert(indexPath)
-                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
-                self.scrollOffsetAdjustment += self.itemHeight
+
+                if date < self.focusedItemDateBeforeAnimation {
+                    self.scrollOffsetAdjustment += self.itemHeight
+                }
 
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate,
-                      let itemId = self.layoutItemsBeforeInvalidation[indexPath]?.layoutId else { break }
+                      let date = self.layoutItemsBeforeInvalidation[indexPath]?.date else {
+                    break
+                }
 
-                self.deletedIds.insert(itemId)
-
-                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
-                if itemFocusPosition < self.zPosition {
+                if date < self.focusedItemDateBeforeAnimation {
                     self.scrollOffsetAdjustment -= self.itemHeight
                 }
 
@@ -310,6 +305,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 break
             }
         }
+    }
+
+    /// Gets the layout item for the item what was in focus before the animation started at the given z position.
+    private func getFocusedLayoutItemBeforeAnimation(forZPosition zPosition: CGFloat)
+    -> TimeMachineLayoutItemType? {
+        if let closestItem = self.layoutItemsBeforeInvalidation.min(by: { kvp1, kvp2 in
+            let focus1 = self.focusPosition(for: kvp1.key)
+            let focus2 = self.focusPosition(for: kvp2.key)
+            return abs(focus1 - zPosition) < abs(focus2 - zPosition)
+        }) {
+            return closestItem.value
+        }
+
+        return nil
     }
 
     /// NOTE: "Appearing" does not mean the item wasn't visible before the animation.
@@ -340,11 +349,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     override func finalizeCollectionViewUpdates() {
         super.finalizeCollectionViewUpdates()
-        logDebug("\t\t\t\t\t\t\t\t\t\t\t\t finalizing collection view updates")
 
-        self.insertedIds.removeAll()
         self.insertedIndexPaths.removeAll()
-        self.deletedIds.removeAll()
         self.zPositionBeforeAnimation = 0
         self.scrollOffsetAdjustment = 0
     }
