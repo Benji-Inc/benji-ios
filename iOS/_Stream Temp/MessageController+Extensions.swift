@@ -194,7 +194,7 @@ extension MessageController {
                     AnalyticsManager.shared.trackEvent(type: .replySent, properties: nil)
                     
                     Task {
-                        await self.presentToast(for: sendable, messageId: messageId)
+                        await self.presentToast(for: sendable)
                     }
                     
                     continuation.resume(returning: messageId)
@@ -205,17 +205,17 @@ extension MessageController {
         }
     }
     
-    private func presentToast(for sendable: Sendable, messageId: String) async {
+    private func presentToast(for sendable: Sendable) async {
         
         switch sendable.deliveryType {
         case .timeSensitive:
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: messageId,
+            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.messageId,
                                                              displayable: User.current()!,
                                                              title: "Time-Sensitive Message Delivered",
                                                              description: "Your message was successfully delivered and will attempt to notify all members of this thread. You will receive a notification once any member has read this message.",
                                                              deepLink: nil))
         case .conversational:
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: messageId,
+            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.messageId,
                                                              displayable: User.current()!,
                                                              title: "Conversational Message Delivered ",
                                                              description: "Your message was successfully delivered and will attempt to notify all available members of this thread.",

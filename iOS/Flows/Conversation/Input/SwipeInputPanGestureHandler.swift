@@ -174,7 +174,15 @@ class SwipeInputPanGestureHandler {
 
             if previewView.deliveryType != panResult.deliveryType {
                 previewView.deliveryType = panResult.deliveryType
-                self.impactFeedback.impactOccurred()
+                
+                switch panResult.deliveryType {
+                case .timeSensitive:
+                    self.impactFeedback.impactOccurred(intensity: 1.0)
+                case .conversational:
+                    self.impactFeedback.impactOccurred(intensity: 0.8)
+                case .respectful:
+                    self.impactFeedback.impactOccurred(intensity: 0.6)
+                }
             }
         } else {
             if self.isPreviewInDropZone {
@@ -209,14 +217,14 @@ class SwipeInputPanGestureHandler {
         let normalized = -panOffset/self.totalDragDistance
         let adjustedNormalized = lerp(normalized, keyPoints: [0, 0.11, 0.22,    // No send
                                                               0.34, 0.35, 0.37, // Send with delivery mode low
-                                                              0.66, 0.68, 0.69, // Send with delivery mode med
-                                                              0.97, 0.98, 1])   // Send with delivery mode high
+                                                              0.56, 0.58, 0.59, // Send with delivery mode med
+                                                              0.77, 0.78, 0.8])   // Send with delivery mode high
 
         let deliveryType: MessageDeliveryType
         switch adjustedNormalized {
-        case 0..<0.66:
+        case 0..<0.56:
             deliveryType = .respectful
-        case 0.66..<0.97:
+        case 0.56..<0.77:
             deliveryType = .conversational
         default:
             deliveryType = .timeSensitive
