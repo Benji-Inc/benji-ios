@@ -257,7 +257,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private var insertedIndexPaths: Set<IndexPath> = []
     /// The z position before update animations started
     private var zPositionBeforeAnimation: CGFloat = 0
-
+    /// If true, we should adjust the scroll offset so the previously focused item remains in focus.
+    private var shouldScrollToPreviouslyFocusedDate = false
     private var focusedItemDateBeforeAnimation: Date = .distantFuture
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
@@ -270,9 +271,25 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         for update in updateItems {
             switch update.updateAction {
             case .insert:
-                guard let indexPath = update.indexPathAfterUpdate else { break }
+                guard let indexPath = update.indexPathAfterUpdate,
+                      let date = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else { break }
+
                 self.insertedIndexPaths.insert(indexPath)
-            case .delete, .reload, .move, .none:
+                if date < self.focusedItemDateBeforeAnimation {
+                    self.shouldScrollToPreviouslyFocusedDate = true
+                }
+            case .delete:
+                guard let indexPath = update.indexPathBeforeUpdate,
+                      let date = self.layoutItemsBeforeInvalidation[indexPath]?.date else {
+                    break
+                }
+
+                // Items deleted before the current focused item should increase the offset so the focused
+                // item doesn't move.
+                if date < self.focusedItemDateBeforeAnimation {
+                    self.shouldScrollToPreviouslyFocusedDate = true
+                }
+            case .reload, .move, .none:
                 break
             @unknown default:
                 break
@@ -325,16 +342,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         self.insertedIndexPaths.removeAll()
         self.zPositionBeforeAnimation = 0
+        self.shouldScrollToPreviouslyFocusedDate = false
     }
 
     // MARK: - Scroll Content Offset Handling
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
         // Move to the item that was focused before the animation, or an item nearby.
-        let focusPosition
-        = self.getFocusPositionOfItem(with: self.focusedItemDateBeforeAnimation) ?? proposedContentOffset.y
+        if self.shouldScrollToPreviouslyFocusedDate,
+           let focusPosition = self.getFocusPositionOfItem(with: self.focusedItemDateBeforeAnimation) {
 
-        return CGPoint(x: proposedContentOffset.x, y: focusPosition)
+            return CGPoint(x: proposedContentOffset.x, y: focusPosition)
+        }
+
+        return proposedContentOffset
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
