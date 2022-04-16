@@ -190,7 +190,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     func handle(launchActivity: LaunchActivity) {
-        guard let content = self.currentContent, case OnboardingContent.welcome = content else { return }
 
         switch launchActivity {
         case .onboarding(let phoneNumber):
@@ -203,14 +202,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .reservation(let reservationId):
             self.showLoading()
             Task {
-                let reservation = try await Reservation.getObject(with: reservationId)
+                let reservation = try? await Reservation.getObject(with: reservationId)
                 self.reservationId = reservationId
-                if let userId = reservation.createdBy?.objectId {
-                    try await self.updateInvitor(userId: userId)
-                    await self.hideLoading()
+                                
+                if let from = reservation?.createdBy?.objectId {
+                    try? await self.updateInvitor(userId: from)
                     self.switchTo(.phone(self.phoneVC))
                 }
-
+                await self.hideLoading()
             }
         case .pass(passId: let passId):
             Task {

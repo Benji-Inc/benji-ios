@@ -106,11 +106,11 @@ class LaunchManager {
 #endif
     }
     
-    func continueUser(activity: NSUserActivity) -> Bool {
+    func continueUser(activity: NSUserActivity)  {
         if activity.activityType == NSUserActivityTypeBrowsingWeb,
            let incomingURL = activity.webpageURL,
            let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
-            guard let path = components.path else { return true }
+            guard let path = components.path else { return }
             switch path {
             case "/onboarding":
                 if let item = components.queryItems?.first,
@@ -131,7 +131,6 @@ class LaunchManager {
                 break
             }
         }
-        return true
     }
 }
 

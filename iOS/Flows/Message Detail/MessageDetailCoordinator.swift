@@ -48,7 +48,9 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                 case .edit:
                     self.presentAlert(for: type)
                 case .pin:
-                    self.presentAlert(for: type)
+                    self.updatePin(shouldPin: true)
+                case .unpin:
+                    self.updatePin(shouldPin: false)
                 case .quote:
                     self.presentAlert(for: type)
                 case .more:
@@ -86,6 +88,18 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     
     private func handleEdit() {
         self.presentAlert(for: .edit)
+    }
+    
+    private func updatePin(shouldPin: Bool) {
+        guard let controller = self.messageVC.messageController else { return }
+        
+        Task {
+            if shouldPin {
+                try? await controller.pinMessage()
+            } else {
+                try? await controller.unpinMessage()
+            }
+        }
     }
     
     private func handleDelete() {

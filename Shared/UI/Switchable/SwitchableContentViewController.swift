@@ -23,61 +23,45 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
 
         self.currentCenterVC?.view.expandToSuperviewSize()
     }
+    
+    /// The currently running switch task that is presenting the content.
+    private var switchTask: Task<Void, Never>?
 
     func switchTo(_ content: ContentType) {
-        // Don't interrupt currently running animations.
-        if let animator = self.prepareAnimator, animator.isRunning { return }
-        if let animator = self.presentAnimator, animator.isRunning { return }
-
+        
+        self.switchTask?.cancel()
+        
         self.currentContent = content
 
-        self.prepareAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDurationStandard,
-                                                           curve: .easeOut,
-                                                           animations: {
-            self.prepareForPresentation()
-        })
+        self.switchTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.messageBubble.alpha = 0
+                self.textView.alpha = 0
+                self.currentCenterVC?.view.alpha = 0
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            self.currentCenterVC?.removeFromParentAndSuperviewIfNeeded()
+            self.updateUI()
+            self.currentCenterVC = content.viewController
 
-        self.prepareAnimator?.addCompletion({ (position) in
-            if position == .end {
-                self.currentCenterVC?.removeFromParentAndSuperviewIfNeeded()
-
-                self.updateUI()
-
-                self.currentCenterVC = content.viewController
-
-                if let contentVC = self.currentCenterVC {
-                    self.addChild(contentVC)
-                    self.view.insertSubview(contentVC.view, belowSubview: self.nameLabel)
-                }
-
-                self.willUpdateContent()
-
-                self.view.layoutNow()
-
-                self.animatePresentation()
+            if let contentVC = self.currentCenterVC {
+                self.addChild(contentVC)
+                self.view.insertSubview(contentVC.view, belowSubview: self.nameLabel)
             }
-        })
 
-        self.prepareAnimator?.startAnimation()
-    }
-
-    private func prepareForPresentation() {
-        self.messageBubble.alpha = 0
-        self.textView.alpha = 0
-        self.currentCenterVC?.view.alpha = 0
-    }
-
-    private func animatePresentation() {
-        self.presentAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDurationStandard,
-                                                           curve: .easeOut,
-                                                           animations: {
-
-            self.messageBubble.alpha = 1
-            self.textView.alpha = 1
-            self.currentCenterVC?.view.alpha = 1
-        })
-        
-        self.presentAnimator?.startAnimation()
+            self.willUpdateContent()
+            self.view.layoutNow()
+            
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.messageBubble.alpha = 1
+                self.textView.alpha = 1
+                self.currentCenterVC?.view.alpha = 1
+            })
+        }
     }
 
     /// Called whenever a new content vc is about to be presented.

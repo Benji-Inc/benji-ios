@@ -17,6 +17,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
     enum SectionType: Int, CaseIterable {
         case info
         case people
+        case pins
         case options
     }
     
@@ -72,6 +73,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         case info(ChannelId)
         case editTopic(ChannelId)
         case detail(OptionType)
+        case pinnedMessage(PinModel)
     }
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
@@ -79,6 +81,10 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
     private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
     private let infoConfig = ManageableCellRegistration<ConversationInfoCell>().provider
     private let editConfig = ManageableCellRegistration<ConversationEditCell>().provider
+    private let pinConfig = ManageableCellRegistration<PinnedMessageCell>().provider
+    private let headerConfig = ManageableHeaderRegistration<SectionDividerView>().provider
+    
+    weak var messageContentDelegate: MessageContentDelegate?
 
     // MARK: - Cell Dequeueing
 
@@ -114,18 +120,32 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
             
             cell.lineView.isHidden = shouldHideLine
             return cell
+        case .pinnedMessage(let model):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.pinConfig,
+                                                                    for: indexPath,
+                                                                    item: model)
+            cell.content.delegate = self.messageContentDelegate
+            return cell
         }
     }
     
-    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String,
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         
-        if kind == SectionBackgroundView.kind {
-            return collectionView.dequeueConfiguredReusableSupplementary(using: self.backgroundConfig,
-                                                                         for: indexPath)
+        switch section {
+        case .pins:
+            if kind == UICollectionView.elementKindSectionHeader {
+                let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+                header.leftLabel.setText("Pinned Messages")
+                header.imageView.isVisible = false
+                return header
+            } else {
+                return nil
+            }
+        default:
+            return nil
         }
-        
-        return nil
     }
 }

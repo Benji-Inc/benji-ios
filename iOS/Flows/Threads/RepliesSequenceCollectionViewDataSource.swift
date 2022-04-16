@@ -10,6 +10,10 @@ import Foundation
 
 class RepliesSequenceCollectionViewDataSource: MessageSequenceCollectionViewDataSource {
 
+    override var shouldShowReplies: Bool {
+        return false
+    }
+    
     override func set(messagesController: MessageSequenceController,
                       itemsToReconfigure: [MessageSequenceCollectionViewDataSource.ItemType] = [],
                       showLoadMore: Bool = false) {

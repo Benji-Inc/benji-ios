@@ -23,6 +23,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         case viewReplies
         case edit
         case pin
+        case unpin
         case more
         case quote
         
@@ -34,6 +35,8 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                 return UIImage(systemName: "pencil")
             case .pin:
                 return UIImage(systemName: "bookmark")
+            case .unpin:
+                return UIImage(systemName: "bookmark.slash")
             case .more:
                 return UIImage(systemName: "ellipsis")
             case .quote:
@@ -49,6 +52,8 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                 return "Edit"
             case .pin:
                 return "Pin"
+            case .unpin:
+                return "Unpin"
             case .more:
                 return "More"
             case .quote:

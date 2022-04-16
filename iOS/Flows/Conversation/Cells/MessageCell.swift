@@ -24,6 +24,11 @@ class MessageCell: UICollectionViewCell {
     private var footerView = MessageFooterView()
     
     var shouldShowDetailBar: Bool = true
+    var shouldShowReplies: Bool = true {
+        didSet {
+            self.footerView.replySummary.isVisible = self.shouldShowReplies
+        }
+    }
 
     @Published private(set) var messageDetailState = MessageDetailState()
     private var conversationsManagerSubscription: AnyCancellable?
@@ -49,6 +54,10 @@ class MessageCell: UICollectionViewCell {
         self.content.bubbleView.addInteraction(contextMenuInteraction)
         
         self.contentView.addSubview(self.footerView)
+        self.footerView.replySummary.didTapViewReplies = { [unowned self] in
+            guard let cid = self.message?.streamCid, let messageId = self.message?.id else { return }
+            self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, messageId))
+        }
 
         self.conversationsManagerSubscription = ConversationsManager.shared.$activeConversation
             .removeDuplicates()

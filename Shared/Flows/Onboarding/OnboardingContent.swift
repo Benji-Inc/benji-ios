@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Localization
+import Parse
 
 enum OnboardingContent: Switchable {
 
@@ -38,11 +39,17 @@ enum OnboardingContent: Switchable {
         case .welcome(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Welcome to Jibber!")
+                                   default: "Welcome! Jibber is an invite only messaging exprience redesigned to encourage empathy, establish privacy and promote community ownership/participation. If you don't have an invite, you can join the waitlist below.")
         case .phone(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "Confirm your number")
+            if let user = user, user.objectId != PFConfig.current().adminUserId {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Confirm your number, to claim your reservation")
+            } else {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Confirm your number")
+            }
         case .code(_):
             return LocalizedString(id: "",
                                    arguments: [],

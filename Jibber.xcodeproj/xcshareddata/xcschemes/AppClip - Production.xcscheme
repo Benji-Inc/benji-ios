@@ -64,7 +64,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D6C35A112776706E00BE64DC"
+            BlueprintIdentifier = "D61127ED2804D72C00574B96"
             BuildableName = "AppClip.app"
             BlueprintName = "AppClip"
             ReferencedContainer = "container:Jibber.xcodeproj">
@@ -87,8 +87,8 @@
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = ""
-            value = ""
+            key = "_XCAppClipURL"
+            value = "https://joinjibber.com/reservation?reservationId=G9uW12XMBT"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

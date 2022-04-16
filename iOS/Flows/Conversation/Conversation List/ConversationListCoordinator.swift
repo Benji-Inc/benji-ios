@@ -146,3 +146,18 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
         self.presentThread(for: messageInfo.0, messageId: messageInfo.1, startingReplyId: nil)
     }
 }
+
+extension ConversationListCoordinator: LaunchActivityHandler {
+    func handle(launchActivity: LaunchActivity) {
+        switch launchActivity {
+        case .onboarding(let phoneNumber):
+            logDebug("Launched with: \(phoneNumber)")
+        case .reservation(let reservationId):
+            logDebug("Launched with: \(reservationId)")
+        case .pass(let passId):
+            logDebug("Launched with: \(passId)")
+        case .deepLink(let deepLinkable):
+            logDebug("Launched with: \(deepLinkable)")
+        }
+    }
+}

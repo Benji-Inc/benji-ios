@@ -126,6 +126,21 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     }
 }
 
+extension RoomCoordinator: LaunchActivityHandler {
+    func handle(launchActivity: LaunchActivity) {
+        switch launchActivity {
+        case .onboarding(let phoneNumber):
+            logDebug("Launched with: \(phoneNumber)")
+        case .reservation(let reservationId):
+            logDebug("Launched with: \(reservationId)")
+        case .pass(let passId):
+            logDebug("Launched with: \(passId)")
+        case .deepLink(let deepLinkable):
+            logDebug("Launched with: \(deepLinkable)")
+        }
+    }
+}
+
 extension RoomCoordinator: MessageContentDelegate {
     
     func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {

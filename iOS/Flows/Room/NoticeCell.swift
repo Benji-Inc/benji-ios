@@ -62,7 +62,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         
         switch notice.type {
         case .timeSensitiveMessage:
-            guard let cidValue = notice.attributes?["channelId"] as? String,
+            guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String,
                   let authorId = ChatClient.shared.message(cid: cid, id: messageId)?.author.id,
@@ -95,7 +95,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             self.rightButtonLabel.setText("Ok")
             self.leftButtonLabel.setText("")
         case .messageRead:
-            guard let cidValue = notice.attributes?["channelId"] as? String,
+            guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String,
                   let authorId = ChatClient.shared.message(cid: cid, id: messageId)?.author.id,

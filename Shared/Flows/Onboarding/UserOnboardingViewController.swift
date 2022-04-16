@@ -22,7 +22,7 @@ class UserOnboardingViewController: ViewController {
 
     private(set) var personView = OnboardingPersonView()
 
-    private(set) var nameLabel = ThemeLabel(font: .regular)
+    private(set) var nameLabel = ThemeLabel(font: .regularBold)
     private(set) var messageBubble = SpeechBubbleView(orientation: .up, bubbleColor: .D1)
     private(set) var textView = OnboardingMessageTextView()
 
@@ -96,7 +96,15 @@ class UserOnboardingViewController: ViewController {
 }
 
 class OnboardingMessageTextView: TextView {
-
+    
+    init() {
+        super.init(frame: .zero, font: .small, textColor: .T1, textContainer: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func initializeViews() {
         super.initializeViews()
 
