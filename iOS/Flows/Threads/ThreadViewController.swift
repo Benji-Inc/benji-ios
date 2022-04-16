@@ -224,7 +224,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private func configureCollectionLayout(for state: ConversationUIState) {
         let threadLayout = self.threadCollectionView.threadLayout
         threadLayout.itemHeight
-        = MessageContentView.bubbleHeight + old_MessageDetailView.height + Theme.ContentOffset.long.value
+        = MessageContentView.bubbleHeight + Theme.ContentOffset.long.value
         
         switch state {
         case .read:
