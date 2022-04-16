@@ -381,8 +381,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Scroll Content Offset Handling
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        logDebug("scroll to target \(CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment))")
-
         return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment)
     }
 
