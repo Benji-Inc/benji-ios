@@ -65,8 +65,8 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String,
-                  let authorId = ChatClient.shared.message(cid: cid, id: messageId)?.author.id,
-                  let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else {
+                  let message = ChatClient.shared.message(cid: cid, id: messageId),
+                  let author = await PeopleStore.shared.getPerson(withPersonId: message.author.id) else {
                 self.showError()
                 return }
             
