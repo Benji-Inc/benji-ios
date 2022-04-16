@@ -278,6 +278,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 }
                 self.insertedIndexPaths.insert(indexPath)
 
+                // Items inserted before the current focused item should increase the offset so the focused
+                // item doesn't move.
                 if date < self.focusedItemDateBeforeAnimation {
                     self.scrollOffsetAdjustment += self.itemHeight
                 }
@@ -288,6 +290,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                     break
                 }
 
+                // Items deleted before the current focused item should increase the offset so the focused
+                // item doesn't move.
                 if date < self.focusedItemDateBeforeAnimation {
                     self.scrollOffsetAdjustment -= self.itemHeight
                 }
