@@ -168,7 +168,9 @@ extension MessageSequenceCollectionViewDataSource {
             let messagesController = item.messagesController
             guard let message = messagesController.messageArray.first(where: { message in
                 message.id == item.messageID
-            }) else { return }
+            }) else {
+                logDebug("WARNING: Message not found in the controller. Make sure that a sequence controller was assigned.")
+                return }
 
             cell.shouldShowDetailBar = item.showDetail
             cell.configure(with: message)
