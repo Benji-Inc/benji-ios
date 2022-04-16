@@ -44,8 +44,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     private var shouldShowLoadMore: Bool {
         guard let conversationController = self.conversationController else { return false }
 
-        #warning("undo")
-        if conversationController.messages.count < 3 {//}.messagesPageSize {
+        if conversationController.messages.count < .messagesPageSize {
             return false
         }
         return !conversationController.hasLoadedAllPreviousMessages
@@ -73,8 +72,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
-            #warning("undo")
-            self.conversationController?.loadPreviousMessages(limit: 3)
+            self.conversationController?.loadPreviousMessages(limit: .messagesPageSize)
         }
     }
 

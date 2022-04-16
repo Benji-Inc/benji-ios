@@ -109,8 +109,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             self.layoutItems[indexPath] = self.dataSource?.getTimeMachineItem(forItemAt: indexPath)
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
         }
-
-        logDebug("prepared layout attributes for \(self.cellLayoutAttributes.count) items")
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
@@ -118,11 +116,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
             return rect.intersects(attributes.frame)
         }
-
-        if itemAttributes.count == 0 {
-
-        }
-        logDebug("layoutAttributesForElementsInRect count \(itemAttributes.count)")
 
         return itemAttributes
     }

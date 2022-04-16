@@ -38,7 +38,6 @@ class MessageCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        logDebug("initializing \(self)")
         self.initializeViews()
     }
 

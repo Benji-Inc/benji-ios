@@ -88,10 +88,10 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
         let query = ChannelListQuery(filter: .and([.equal("hidden", to: false), filter]),
-                                     sort: [Sorting(key: .updatedAt, isAscending: false)],
-                                     pageSize: 1,
-                                     messagesLimit: 3)//.messagesPageSize)
-        #warning("restore message limit and page size, sort by created at  with ascending true.")
+                                     sort: [Sorting(key: .createdAt, isAscending: true)],
+                                     pageSize: .channelsPageSize,
+                                     messagesLimit: .messagesPageSize)
+        
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
 
@@ -169,8 +169,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     @MainActor
     func initializeDataSource() async {
         try? await self.conversationListController.synchronize()
-        #warning("restore")
-//        try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
+        try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
 
         let conversations = self.conversationListController.conversations
 

@@ -208,15 +208,15 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
             guard let message = self.messageSequenceController.getMessage(withId: messageId) else {
                 return TimeMachineLayoutItem(layoutId: "", date: .distantPast)
             }
-            #warning("actually return the message id")
-            return TimeMachineLayoutItem(layoutId: message.kind.text, date: message.createdAt)
+            return TimeMachineLayoutItem(layoutId: message.id, date: message.createdAt)
         case .loadMore:
             // Get the oldest loaded message and set the date slightly before that.
             guard let oldestMessage = self.messageSequenceController.messageArray.first else {
                 return TimeMachineLayoutItem(layoutId: "loadMore", date: .distantPast)
             }
-            #warning("Subtract a little off the date")
-            return TimeMachineLayoutItem(layoutId: "loadMore", date: oldestMessage.createdAt)
+
+            return TimeMachineLayoutItem(layoutId: "loadMore",
+                                         date: oldestMessage.createdAt - 0.001)
         case .initial:
             return TimeMachineLayoutItem(layoutId: "initial", date: .distantPast)
         case .placeholder:
