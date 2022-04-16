@@ -72,7 +72,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
-            self.conversationController?.loadPreviousMessages(limit: .messagesPageSize)
+            self.conversationController?.loadPreviousMessages()
         }
     }
 
