@@ -255,8 +255,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Index paths of items that are being inserted.
     private var insertedIndexPaths: Set<IndexPath> = []
-    /// How much to adjust the proposed scroll offset.
-    private var scrollOffsetAdjustment: CGFloat = 0
     /// The z position before update animations started
     private var zPositionBeforeAnimation: CGFloat = 0
 
@@ -272,31 +270,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         for update in updateItems {
             switch update.updateAction {
             case .insert:
-                guard let indexPath = update.indexPathAfterUpdate,
-                      let date = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else {
-                    break
-                }
+                guard let indexPath = update.indexPathAfterUpdate else { break }
                 self.insertedIndexPaths.insert(indexPath)
-
-                // Items inserted before the current focused item should increase the offset so the focused
-                // item doesn't move.
-                if date < self.focusedItemDateBeforeAnimation {
-                    self.scrollOffsetAdjustment += self.itemHeight
-                }
-
-            case .delete:
-                guard let indexPath = update.indexPathBeforeUpdate,
-                      let date = self.layoutItemsBeforeInvalidation[indexPath]?.date else {
-                    break
-                }
-
-                // Items deleted before the current focused item should increase the offset so the focused
-                // item doesn't move.
-                if date < self.focusedItemDateBeforeAnimation {
-                    self.scrollOffsetAdjustment -= self.itemHeight
-                }
-
-            case .reload, .move, .none:
+            case .delete, .reload, .move, .none:
                 break
             @unknown default:
                 break
@@ -349,14 +325,16 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         self.insertedIndexPaths.removeAll()
         self.zPositionBeforeAnimation = 0
-        self.scrollOffsetAdjustment = 0
     }
 
     // MARK: - Scroll Content Offset Handling
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        return CGPoint(x: proposedContentOffset.x,
-                       y: proposedContentOffset.y + self.scrollOffsetAdjustment)
+        // Move to the item that was focused before the animation, or an item nearby.
+        let focusPosition
+        = self.getFocusPositionOfItem(with: self.focusedItemDateBeforeAnimation) ?? proposedContentOffset.y
+
+        return CGPoint(x: proposedContentOffset.x, y: focusPosition)
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
@@ -367,6 +345,34 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)
         return newOffset
+    }
+
+    // MARK: - Scroll/Animation Helper Functions
+
+    /// Gets the focus position of the item associated with the passed in date.
+    /// If there is no item with that date, it finds the next oldest item.
+    /// If there is still no item found, then nil is returned.
+    private func getFocusPositionOfItem(with date: Date) -> CGFloat? {
+        var focusedIndexPath: IndexPath?
+        let itemCount = self.numberOfItems(inSection: 0)
+        for item in (0..<itemCount).reversed() {
+            let indexPath = IndexPath(item: item, section: 0)
+            guard let itemDate = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else {
+                continue
+            }
+
+            if itemDate <= date {
+                focusedIndexPath = indexPath
+                break
+            }
+        }
+
+        if let focusedIndexPath = focusedIndexPath {
+            return self.focusPosition(for: focusedIndexPath)
+        }
+
+        return nil
+
     }
 }
 

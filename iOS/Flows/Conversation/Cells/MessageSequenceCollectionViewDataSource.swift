@@ -213,7 +213,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
             return TimeMachineLayoutItem(layoutId: message.id, date: message.createdAt)
         case .loadMore:
             // Get the oldest loaded message and set the date slightly before that.
-            guard let oldestMessage = self.messageSequenceController.messageArray.first else {
+            guard let oldestMessage = self.messageSequenceController.messageArray.last else {
                 return TimeMachineLayoutItem(layoutId: "loadMore", date: .distantPast)
             }
 
