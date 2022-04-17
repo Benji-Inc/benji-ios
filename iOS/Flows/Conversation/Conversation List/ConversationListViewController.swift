@@ -55,8 +55,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     }()
     
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       collectionView: self.collectionView,
-                                                                       isConversationList: true)
+                                                                       collectionView: self.collectionView)
 
     override var inputAccessoryViewController: UIInputViewController? {
         return self.presentedViewController.isNil ? self.messageInputController : nil
@@ -367,38 +366,8 @@ extension ConversationListViewController: MessageSendingViewControllerType {
         self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID)
     }
 
-    func createNewConversation(_ sendable: Sendable) {
-        Task {
-            let username = User.current()?.initials ?? ""
-            let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
-            let userIDs = Set(self.members.userIDs)
-            do {
-                let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
-                                                                         name: nil,
-                                                                         imageURL: nil,
-                                                                         team: nil,
-                                                                         members: userIDs,
-                                                                         isCurrentUserMember: true,
-                                                                         messageOrdering: .bottomToTop,
-                                                                         invites: [],
-                                                                         extraData: [:])
-
-                try await controller.synchronize()
-
-                ConversationsManager.shared.activeConversation = controller.conversation
-
-                try await controller.createNewMessage(with: sendable)
-            } catch {
-                logError(error)
-            }
-        }
-    }
-
     func sendMessage(_ message: Sendable) {
-        guard let cid = self.getCurrentMessageSequence()?.streamCID else {
-            self.createNewConversation(message)
-            return
-        }
+        guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
 
         let conversationController = ChatClient.shared.channelController(for: cid)
 

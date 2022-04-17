@@ -13,18 +13,13 @@ import Combine
 protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
     /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ controller: SwipeableInputAccessoryViewController)
-    /// The accessory view updated the position of the sendable's preview view's position.
-    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
-                                 didUpdatePreviewFrame frame: CGRect,
-                                 for sendable: Sendable)
     /// The accessory view wants to send the sendable with the preview with the specified frame.
     /// The delegate should return true if the sendable was sent.
     func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
                                  triggeredSendFor sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) -> Bool
+                                 withPreviewFrame frame: CGRect) async -> Bool
     /// The accessory view finished its swipe interaction.
-    func swipeableInputAccessory(_ controller: SwipeableInputAccessoryViewController,
-                                 didFinishSwipeAndWillSend willSend: Bool)
+    func swipeableInputAccessoryDidFinishSwipe(_ controller: SwipeableInputAccessoryViewController)
 }
 
 class SwipeableInputAccessoryViewController: UIInputViewController {

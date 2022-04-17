@@ -69,9 +69,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         inputController.swipeInputView.textView.restorationIdentifier = "thread"
         return inputController
     }()
-    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       collectionView: self.threadCollectionView,
-                                                                       isConversationList: false)
+    lazy var swipeInputDelegate
+    = SwipeableInputAccessoryMessageSender(viewController: self, collectionView: self.threadCollectionView)
 
     override var inputAccessoryViewController: UIInputViewController? {
         return self.messageInputController
@@ -330,7 +329,7 @@ extension ThreadViewController: MessageSendingViewControllerType {
         self.dataSource.set(messagesController: self.messageController)
     }
 
-    func sendMessage(_ message: Sendable) {
+    func sendMessage(_ message: Sendable) async throws {
         Task {
             do {
                 try await self.messageController.createNewReply(with: message)
@@ -338,10 +337,6 @@ extension ThreadViewController: MessageSendingViewControllerType {
                 logError(error)
             }
         }.add(to: self.autocancelTaskPool)
-    }
-
-    func createNewConversation(_ sendable: Sendable) {
-        // Do nothing. New conversations can't be created from a thread view controller.
     }
 }
 
