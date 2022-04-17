@@ -12,6 +12,49 @@ import StreamChat
 import Combine
 import Localization
 
+class ReplyView: BaseView {
+    let personView = BorderedPersonView()
+    let dateLabel = ThemeLabel(font: .xtraSmall)
+    let label = ThemeLabel(font: .small)
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.personView)
+        self.addSubview(self.label)
+        self.addSubview(self.dateLabel)
+        self.dateLabel.alpha = 0.25
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.height = 24
+        self.personView.squaredSize = self.height
+        self.personView.pin(.left)
+        self.personView.pin(.top)
+        
+        self.label.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value)
+        self.label.match(.bottom, to: .bottom, of: self.personView)
+        self.label.match(.left, to: .right, of: self.personView, offset: .standard)
+        
+        self.dateLabel.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value)
+        self.dateLabel.match(.top, to: .top, of: self.personView)
+        self.dateLabel.match(.left, to: .right, of: self.personView, offset: .standard)
+    }
+    
+    func configure(with message: Messageable) {
+        if message.kind.hasText {
+            self.label.setText(message.kind.text)
+        } else {
+            self.label.setText("View reply")
+        }
+        self.personView.set(person: message.person)
+        self.dateLabel.text = message.createdAt.getTimeAgoString()
+        self.layoutNow()
+    }
+}
+
 class ReplySummaryView: BaseView {
     
     private var controller: MessageController?
@@ -19,7 +62,7 @@ class ReplySummaryView: BaseView {
     var cancellables = Set<AnyCancellable>()
     
     private let arrowImageView = UIImageView(image: UIImage(systemName: "arrow.turn.down.right"))
-    private let promptLabel = ThemeLabel(font: .small, textColor: .D1)
+    private let promptLabel = ThemeLabel(font: .smallBold, textColor: .D1)
     private let promptButton = ThemeButton()
     private let counter = NumberScrollCounter(value: 0,
                                               scrollDuration: Theme.animationDurationFast,
@@ -28,21 +71,25 @@ class ReplySummaryView: BaseView {
                                               suffix: nil,
                                               seperator: "",
                                               seperatorSpacing: 0,
-                                              font: FontType.small.font,
+                                              font: FontType.smallBold.font,
                                               textColor: ThemeColor.D1.color,
                                               animateInitialValue: true,
                                               gradientColor: ThemeColor.B0.color,
                                               gradientStop: 4)
+    
+   // private let replyView = ReplyView()
     
     var didTapViewReplies: CompletionOptional = nil
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
+//        self.addSubview(self.replyView)
+        
         self.addSubview(self.arrowImageView)
         self.arrowImageView.tintColor = ThemeColor.B4.color
         self.arrowImageView.contentMode = .scaleAspectFit
-        
+
         self.addSubview(self.promptLabel)
         self.addSubview(self.counter)
         self.addSubview(self.promptButton)
@@ -63,6 +110,18 @@ class ReplySummaryView: BaseView {
             guard !Task.isCancelled else { return }
             
             self.controller = ChatClient.shared.messageController(for: message)
+            
+//            if let controller = self.controller,
+//               controller.message!.replyCount > 0,
+//                !controller.hasLoadedAllPreviousReplies  {
+//                try? await controller.loadPreviousReplies()
+//            }
+//            logDebug(self.controller!.message!.replyCount)
+//            logDebug(self.controller!.hasLoadedAllPreviousReplies)
+//            
+//            if let reply = self.controller?.message?.recentReplies.first {
+//                self.replyView.configure(with: reply)
+//            }
 
             self.setPrompt(for: message)
             
@@ -74,7 +133,7 @@ class ReplySummaryView: BaseView {
     private func setPrompt(for message: Messageable) {
         if message.totalReplyCount == 0 {
             self.promptLabel.isVisible = true
-            self.promptLabel.setText("Add reply")
+            self.promptLabel.setText("Reply")
             self.counter.isVisible = false
         } else {
             self.counter.isVisible = true
@@ -88,6 +147,9 @@ class ReplySummaryView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+//        self.replyView.expandToSuperviewWidth()
+//        self.replyView.pin(.top)
         
         self.arrowImageView.squaredSize = 20
         self.arrowImageView.pin(.left)
@@ -103,7 +165,7 @@ class ReplySummaryView: BaseView {
         } else {
             self.counter.match(.left, to: .right, of: self.arrowImageView, offset: .standard)
         }
-        self.counter.centerOnY()
+        self.counter.centerY = self.arrowImageView.centerY
         
         self.promptButton.height = self.arrowImageView.height
         self.promptButton.width = self.width

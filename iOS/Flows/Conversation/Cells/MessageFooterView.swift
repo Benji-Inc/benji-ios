@@ -12,7 +12,7 @@ import Combine
 
 class MessageFooterView: BaseView {
     
-    static let height: CGFloat = 25
+    static let height: CGFloat = 70
     
     let stackedView = StackedPersonView()
     let replySummary = ReplySummaryView()
@@ -33,11 +33,11 @@ class MessageFooterView: BaseView {
         super.layoutSubviews()
         
         self.stackedView.pin(.right)
-        self.stackedView.centerOnY()
+        self.stackedView.pin(.top)
         
-        self.replySummary.height = self.stackedView.height
-        self.replySummary.expandToSuperviewWidth()
+        self.replySummary.height = MessageFooterView.height
+        self.replySummary.width = self.width - self.stackedView.width
         self.replySummary.pin(.left)
-        self.replySummary.centerOnY()
+        self.replySummary.pin(.top)
     }
 }

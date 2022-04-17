@@ -22,6 +22,7 @@ class PreviewMessageView: SpeechBubbleView {
         }
         set {
             self.deliveryTypeView.deliveryType = newValue
+            self.setNeedsLayout()
         }
     }
     @Published var messageKind: MessageKind?
@@ -87,6 +88,6 @@ class PreviewMessageView: SpeechBubbleView {
         self.textView.center.y = self.halfHeight - 6
 
         self.deliveryTypeView.pin(.right, offset: .custom(10))
-        self.deliveryTypeView.pin(.top, offset: .custom(-10))
+        self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height * 0.5))
     }
 }
