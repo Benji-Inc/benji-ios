@@ -8,8 +8,6 @@
 import UIKit
 
 protocol TimeMachineLayoutItemType {
-    /// A unique identifier for the item.
-    var layoutId: String { get }
     /// A date associated with the time machine item
     var date: Date { get }
 }

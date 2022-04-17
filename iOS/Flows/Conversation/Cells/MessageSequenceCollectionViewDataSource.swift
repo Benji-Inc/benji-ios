@@ -198,7 +198,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
 
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType {
         guard let item = self.itemIdentifier(for: indexPath) else {
-            return TimeMachineLayoutItem(layoutId: "", date: Date.distantPast)
+            return TimeMachineLayoutItem(date: Date.distantPast)
         }
 
         return self.getTimeMachineItem(forItem: item)
@@ -208,26 +208,24 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
         switch item {
         case .message(let messageId, _):
             guard let message = self.messageSequenceController.getMessage(withId: messageId) else {
-                return TimeMachineLayoutItem(layoutId: "", date: .distantPast)
+                return TimeMachineLayoutItem(date: .distantPast)
             }
-            return TimeMachineLayoutItem(layoutId: message.id, date: message.createdAt)
+            return TimeMachineLayoutItem(date: message.createdAt)
         case .loadMore:
             // Get the oldest loaded message and set the date slightly before that.
             guard let oldestMessage = self.messageSequenceController.messageArray.last else {
-                return TimeMachineLayoutItem(layoutId: "loadMore", date: .distantPast)
+                return TimeMachineLayoutItem(date: .distantPast)
             }
 
-            return TimeMachineLayoutItem(layoutId: "loadMore",
-                                         date: oldestMessage.createdAt - 0.001)
+            return TimeMachineLayoutItem(date: oldestMessage.createdAt - 0.001)
         case .initial:
-            return TimeMachineLayoutItem(layoutId: "initial", date: .distantPast)
+            return TimeMachineLayoutItem(date: .distantPast)
         case .placeholder:
-            return TimeMachineLayoutItem(layoutId: "placeholder", date: .distantFuture)
+            return TimeMachineLayoutItem(date: .distantFuture)
         }
     }
 }
 
 private struct TimeMachineLayoutItem: TimeMachineLayoutItemType {
-    var layoutId: String
     var date: Date
 }
