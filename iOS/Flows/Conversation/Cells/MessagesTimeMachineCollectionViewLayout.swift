@@ -73,6 +73,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                            width: self.collectionView!.width,
                            height: self.itemHeight)
         frame.center = center
+        //Shift the drop zone up a bit to account for the invisible space under the cell.
+        frame.top -= 60
         
         return frame
     }
