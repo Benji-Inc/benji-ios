@@ -21,8 +21,6 @@ class MessageDeliveryTypeBadgeView: BaseView {
 
         self.addSubview(self.imageView)
 
-        self.squaredSize = 25
-
         let configuration = UIImage.SymbolConfiguration(pointSize: 15)
         self.imageView.preferredSymbolConfiguration = configuration
         self.imageView.set(backgroundColor: .badgeHighlightTop)
@@ -34,11 +32,33 @@ class MessageDeliveryTypeBadgeView: BaseView {
             .mainSink { [unowned self] deliveryType in
                 self.imageView.isVisible = deliveryType.exists
                 self.imageView.image = deliveryType?.image
+                self.setNeedsLayout()
             }.store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        if let type = self.deliveryType {
+            switch type {
+            case .timeSensitive:
+                let configuration = UIImage.SymbolConfiguration(pointSize: 20)
+                self.imageView.preferredSymbolConfiguration = configuration
+                self.squaredSize = 30
+            case .conversational:
+                let configuration = UIImage.SymbolConfiguration(pointSize: 17.5)
+                self.imageView.preferredSymbolConfiguration = configuration
+                self.squaredSize = 27.5
+            case .respectful:
+                let configuration = UIImage.SymbolConfiguration(pointSize: 15)
+                self.imageView.preferredSymbolConfiguration = configuration
+                self.squaredSize = 25
+            }
+        } else {
+            let configuration = UIImage.SymbolConfiguration(pointSize: 15)
+            self.imageView.preferredSymbolConfiguration = configuration
+            self.squaredSize = 25
+        }
 
         self.imageView.roundCorners()
         self.imageView.expandToSuperviewSize()

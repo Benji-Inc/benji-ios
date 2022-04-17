@@ -191,13 +191,38 @@ extension MessageController {
                                 extraData: data) { result in
 
                 switch result {
-                case .success(let messageID):
+                case .success(let messageId):
                     AnalyticsManager.shared.trackEvent(type: .replySent, properties: nil)
-                    continuation.resume(returning: messageID)
+                    
+                    Task {
+                        await self.presentToast(for: sendable)
+                    }
+                    
+                    continuation.resume(returning: messageId)
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }
             }
+        }
+    }
+    
+    private func presentToast(for sendable: Sendable) async {
+        
+        switch sendable.deliveryType {
+        case .timeSensitive:
+            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.messageId,
+                                                             displayable: User.current()!,
+                                                             title: "Time-Sensitive Message Delivered",
+                                                             description: "Your message was successfully delivered and will attempt to notify all members of this thread. You will receive a notification once any member has read this message.",
+                                                             deepLink: nil))
+        case .conversational:
+            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.messageId,
+                                                             displayable: User.current()!,
+                                                             title: "Conversational Message Delivered ",
+                                                             description: "Your message was successfully delivered and will attempt to notify all available members of this thread.",
+                                                             deepLink: nil))
+        case .respectful:
+            break
         }
     }
 

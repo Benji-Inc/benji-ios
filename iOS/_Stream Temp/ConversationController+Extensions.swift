@@ -210,6 +210,7 @@ extension ConversationController {
                 case .success(let messageID):
                     Task {
                         await self.donateIntent(for: sendable)
+                        await self.presentToast(for: sendable, messageId: messageID)
                     }
                     AnalyticsManager.shared.trackEvent(type: .messageSent, properties: nil)
                     continuation.resume(returning: messageID)
@@ -217,6 +218,26 @@ extension ConversationController {
                     continuation.resume(throwing: error)
                 }
             }
+        }
+    }
+    
+    private func presentToast(for sendable: Sendable, messageId: String) async {
+        
+        switch sendable.deliveryType {
+        case .timeSensitive:
+            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.conversation.id,
+                                                             displayable: User.current()!,
+                                                             title: "Time-Sensitive Message Delivered",
+                                                             description: "Your message was successfully delivered and will attempt to notify all members of this conversation. You will receive a notification once any member has read this message.",
+                                                             deepLink: nil))
+        case .conversational:
+            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.conversation.id,
+                                                             displayable: User.current()!,
+                                                             title: "Conversational Message Delivered ",
+                                                             description: "Your message was successfully delivered and will attempt to notify all available members of this conversation.",
+                                                             deepLink: nil))
+        case .respectful:
+            break
         }
     }
 

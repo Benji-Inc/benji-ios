@@ -46,7 +46,8 @@ class SwipeableInputAccessoryView: BaseView {
     // When either of these two constraints are changed, the superview will resize to fit the new height.
     @IBOutlet var inputContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var avatarHeightConstraint: NSLayoutConstraint!
-
+    @IBOutlet var avatarTopConstraint: NSLayoutConstraint!
+    
     @IBOutlet var textViewCollapsedVerticalHeightContstraint: NSLayoutConstraint!
     @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
     @IBOutlet var textViewExpandedTopPinConstraint: NSLayoutConstraint!
@@ -104,7 +105,7 @@ class SwipeableInputAccessoryView: BaseView {
         let newInputHeight: CGFloat
         var textViewPadding: CGFloat = Theme.ContentOffset.short.value
         var newAddViewSize: CGFloat = 0
-        
+        var avatarTop: CGFloat = Theme.ContentOffset.long.value
         switch inputState {
         case .collapsed:
             NSLayoutConstraint.deactivate([self.textViewExpandedTopPinConstraint,
@@ -154,6 +155,8 @@ class SwipeableInputAccessoryView: BaseView {
 
             newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
+            
+            avatarTop = 34
         }
         
         self.unreadView.updateVisibility(for: inputState)
@@ -164,6 +167,7 @@ class SwipeableInputAccessoryView: BaseView {
             self.inputContainerHeightConstraint.constant = newInputHeight
             self.textViewLeadingConstraint.constant = textViewPadding
             self.textViewTrailingConstraint.constant = textViewPadding
+            self.avatarTopConstraint.constant = avatarTop
             // Layout the window so that our container view also animates
             self.window?.layoutNow()
         }
