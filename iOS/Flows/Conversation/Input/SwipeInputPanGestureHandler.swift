@@ -115,21 +115,21 @@ class SwipeInputPanGestureHandler {
         self.updatePreviewViewPosition(withOffset: panOffset)
 
         Task.onMainActorAsync { [weak self] in
-            var sendableWillBeSent = false
+            var sendableWasSent = false
 
             if let `self` = self,
                let sendable = self.viewController.sendable,
                let previewView = self.previewView,
                let delegate = self.viewController.delegate {
 
-                sendableWillBeSent = await delegate.swipeableInputAccessory(self.viewController,
-                                                                            triggeredSendFor: sendable,
-                                                                            withPreviewFrame: previewView.frame)
+                sendableWasSent = await delegate.swipeableInputAccessory(self.viewController,
+                                                                         triggeredSendFor: sendable,
+                                                                         withPreviewFrame: previewView.frame)
             }
 
             guard let `self` = self else { return }
 
-            self.resetPreviewAndInputViews(didSend: sendableWillBeSent)
+            self.resetPreviewAndInputViews(didSend: sendableWasSent)
 
             self.viewController.delegate?.swipeableInputAccessoryDidFinishSwipe(self.viewController)
         }
