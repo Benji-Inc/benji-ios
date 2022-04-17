@@ -36,7 +36,7 @@ class MessageFooterView: BaseView {
         self.stackedView.pin(.top)
         
         self.replySummary.height = MessageFooterView.height
-        self.replySummary.expandToSuperviewWidth()
+        self.replySummary.width = self.width - self.stackedView.width
         self.replySummary.pin(.left)
         self.replySummary.pin(.top)
     }
