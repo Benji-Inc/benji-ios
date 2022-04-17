@@ -257,6 +257,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private var zPositionBeforeAnimation: CGFloat = 0
     /// If true, we should adjust the scroll offset so the previously focused item remains in focus.
     private var shouldScrollToPreviouslyFocusedDate = false
+    /// The date of the item that was in focus before the animation started.
     private var focusedItemDateBeforeAnimation: Date = .distantFuture
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
