@@ -330,13 +330,7 @@ extension ThreadViewController: MessageSendingViewControllerType {
     }
 
     func sendMessage(_ message: Sendable) async throws {
-        Task {
-            do {
-                try await self.messageController.createNewReply(with: message)
-            } catch {
-                logError(error)
-            }
-        }.add(to: self.autocancelTaskPool)
+        try await self.messageController.createNewReply(with: message)
     }
 }
 

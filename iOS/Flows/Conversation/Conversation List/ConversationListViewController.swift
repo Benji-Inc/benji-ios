@@ -366,18 +366,12 @@ extension ConversationListViewController: MessageSendingViewControllerType {
         self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID)
     }
 
-    func sendMessage(_ message: Sendable) {
+    func sendMessage(_ message: Sendable) async throws {
         guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
 
         let conversationController = ChatClient.shared.channelController(for: cid)
 
-        Task {
-            do {
-                try await conversationController.createNewMessage(with: message)
-            } catch {
-                logError(error)
-            }
-        }
+        try await conversationController.createNewMessage(with: message)
     }
 }
 
