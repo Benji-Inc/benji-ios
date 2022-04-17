@@ -70,8 +70,6 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        
-
         if self.shouldShowReplies {
             self.footerView.width = self.contentView.width - Theme.ContentOffset.long.value.doubled
             self.footerView.height = MessageFooterView.height

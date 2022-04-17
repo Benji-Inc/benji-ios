@@ -20,7 +20,6 @@ class MessageFooterView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .red)
         self.addSubview(self.stackedView)
         self.addSubview(self.replySummary)
     }
