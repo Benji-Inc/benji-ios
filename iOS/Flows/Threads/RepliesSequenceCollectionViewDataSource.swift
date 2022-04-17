@@ -28,7 +28,6 @@ class RepliesSequenceCollectionViewDataSource: MessageSequenceCollectionViewData
         var allMessageItems = allMessages.map { message in
             return ItemType.message(messageID: message.id)
         }
-        allMessageItems = allMessageItems.reversed()
 
         if self.shouldPrepareToSend {
             allMessageItems.append(.placeholder)
