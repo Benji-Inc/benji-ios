@@ -154,9 +154,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.conversationController?
             .memberEventPublisher
             .mainSink(receiveValue: { [unowned self] event in
-                guard let conversationController = self.conversationController else {
-                    return
-                }
+                guard let conversationController = self.conversationController else { return }
                 switch event {
                 case _ as MemberAddedEvent, _ as MemberRemovedEvent:
                     let members = conversationController.conversation.lastActiveMembers.filter { member in
@@ -180,9 +178,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                     self.update(for: latest)
                 }
                 self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
-                
-                
-                
             }).store(in: &self.subscriptions)
         
         self.conversationController?
