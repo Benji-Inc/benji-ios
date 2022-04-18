@@ -86,15 +86,13 @@ class MessageCell: UICollectionViewCell {
 
     // MARK: Configuration
 
+
+
     func configure(with message: Messageable) {
         self.content.configure(with: message)
 
-        if message.isConsumedByMe ?? false {
-            self.content.textView.textColor = ThemeColor.T1.color
-        } else {
-            self.content.textView.textColor = ThemeColor.clear.color
-        }
-        
+        self.content.textView.textColor = self.getTextColor(for: message)
+
         self.message = message
         
         self.footerView.configure(for: message)
@@ -115,15 +113,8 @@ class MessageCell: UICollectionViewCell {
             return
         }
 
-        let textColor: UIColor
-        if self.message?.canBeConsumed ?? false {
-            textColor = ThemeColor.clear.color
-        } else {
-            textColor = ThemeColor.T1.color
-        }
-
         self.content.configureBackground(color: ThemeColor.B7.color,
-                                         textColor: textColor,
+                                         textColor: self.getTextColor(for: self.message),
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: false,
                                          tailOrientation: .down)
@@ -141,6 +132,14 @@ class MessageCell: UICollectionViewCell {
         self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
 
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
+    }
+
+    private func getTextColor(for message: Messageable?) -> UIColor {
+        if message?.canBeConsumed ?? false {
+            return ThemeColor.clear.color
+        } else {
+            return ThemeColor.T1.color
+        }
     }
 
     private var messageController: MessageController?
