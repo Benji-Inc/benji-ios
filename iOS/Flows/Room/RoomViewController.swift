@@ -26,7 +26,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     private(set) var conversationListController: ConversationListController?
     private lazy var refreshControl: UIRefreshControl = {
         let action = UIAction { [unowned self] _ in
-            self.reloadAllSections()
+            self.reloadTopSections()
         }
         let control = UIRefreshControl(frame: .zero, primaryAction: action)
         control.tintColor = ThemeColor.D6.color
@@ -144,12 +144,12 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     }
     
     
-    private var loadAllTask: Task<Void, Never>?
+    private var refreshTask: Task<Void, Never>?
     
-    private func reloadAllSections() {
-        self.loadAllTask?.cancel()
+    private func reloadTopSections() {
+        self.refreshTask?.cancel()
         
-        self.loadAllTask = Task { [weak self] in
+        self.refreshTask = Task { [weak self] in
             guard let `self` = self else { return }
             
             self.reloadNotices()
