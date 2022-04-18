@@ -34,6 +34,17 @@ class PeopleStore {
         allPeople.append(contentsOf: contactPeople)
         return allPeople
     }
+    
+    var connectedPeople: [PersonType] {
+        let allConnectionIds = self.allConnections.compactMap { connection in
+            return connection.nonMeUser?.objectId
+        }
+        
+        return self.people.filter { person in
+            return allConnectionIds.contains(person.personId)
+        }
+    }
+    
     /// A dictionary of all the fetched users, keyed by their user id.
     private(set) var usersDictionary: [String : User] = [:] {
         didSet {
