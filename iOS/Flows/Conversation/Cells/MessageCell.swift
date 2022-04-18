@@ -119,6 +119,11 @@ class MessageCell: UICollectionViewCell {
 
         self.footerView.alpha = messageLayoutAttributes.detailAlpha
 
+        // Hide the emotions view if the cell is scrolled out of focus.
+        if messageLayoutAttributes.detailAlpha < 0.5 && self.content.areEmotionsShown {
+            self.content.setEmotions(areShown: false, animated: true)
+        }
+
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
         self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
 
