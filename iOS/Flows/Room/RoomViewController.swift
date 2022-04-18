@@ -118,7 +118,9 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         var data: [RoomSectionType: [RoomItemType]] = [:]
         
         try? await NoticeStore.shared.initializeIfNeeded()
-        let notices = await NoticeStore.shared.getAllNotices()
+        let notices = await NoticeStore.shared.getAllNotices().filter({ notice in
+            return notice.type != .unreadMessages
+        })
         
         data[.notices] = notices.compactMap({ notice in
             return .notice(notice)
@@ -142,7 +144,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         
         return data
     }
-    
     
     private var refreshTask: Task<Void, Never>?
     

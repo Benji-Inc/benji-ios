@@ -42,12 +42,9 @@ class NoticeStore {
             throw error
         }
     }
-    
+        
     func getAllNotices() async -> [SystemNotice] {
         let existing = self.allNotices
-            .filter({ notice in
-                notice.type != .unreadMessages
-            })
             .compactMap { notice in
             return SystemNotice(with: notice)
         }.sorted()
