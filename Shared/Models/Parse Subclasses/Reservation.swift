@@ -210,22 +210,6 @@ extension Reservation: UIActivityItemSource {
         return query
     }
 
-    /// Returns all unclaimed reservations that have a related contact id.
-    static func getAllUnclaimedWithContact() async -> [Reservation] {
-        let query = Reservation.allUnclaimedWithContactQuery()
-        do {
-            let objects = try await query.findObjectsInBackground()
-            if let reservations = objects as? [Reservation] {
-                return reservations
-            } else {
-                return []
-            }
-        } catch {
-            logError(error)
-            return []
-        }
-    }
-
     /// Returns a parse query that gets unclaimed reservations that have a related contact id.
     static func allUnclaimedWithContactQuery() -> PFQuery<PFObject> {
         let query = Reservation.query()!

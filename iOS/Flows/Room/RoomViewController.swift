@@ -136,7 +136,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             return .memberId(type.personId)
         })
         
-        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.keys.compactMap { reservationId in
+        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservationWithoutContact.keys.compactMap { reservationId in
             return .add(reservationId)
         }
         
@@ -178,7 +178,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                 return .notice(notice)
             })
             
-            let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservations.keys.compactMap { reservationId in
+            let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservationWithoutContact.keys.compactMap { reservationId in
                 return .add(reservationId)
             }
             
@@ -200,7 +200,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         self.loadPeopleTask = Task { [weak self] in
             guard let `self` = self else { return }
                         
-            let items: [RoomItemType] = PeopleStore.shared.connectedPeople.filter({ type in
+            var items: [RoomItemType] = PeopleStore.shared.connectedPeople.filter({ type in
                 return !type.isCurrentUser
             }).sorted(by: { lhs, rhs in
                 guard let lhsUpdated = lhs.updatedAt,
@@ -209,6 +209,12 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             }).compactMap({ type in
                 return .memberId(type.personId)
             })
+            
+            let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservationWithoutContact.keys.compactMap { reservationId in
+                return .add(reservationId)
+            }
+            
+            items.append(contentsOf: addItems)
             
             var snapshot = self.dataSource.snapshot()
             snapshot.setItems(items, in: .members)
