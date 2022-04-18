@@ -135,6 +135,11 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
             .messagesChangesPublisher
             .mainSink { [unowned self] changes in
                 guard let conversationController = self.conversationController else { return }
+                if let latest = conversationController.channel?.latestMessages.first(where: { message in
+                    return !message.isDeleted
+                }) {
+                    self.update(for: latest)
+                }
                 self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
             }.store(in: &self.subscriptions)
     }
