@@ -31,11 +31,12 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
         self.launchTask?.cancel()
 
         self.launchTask = Task { [weak self] in
-            let launchStatus = await LaunchManager.shared.launchApp(with: self?.deepLink)
+            #warning("Restore")
+//            let launchStatus = await LaunchManager.shared.launchApp(with: self?.deepLink)
 
             guard !Task.isCancelled else { return }
 
-            self?.handle(launchStatus: launchStatus)
+//            self?.handle(launchStatus: launchStatus)
         }
     }
 

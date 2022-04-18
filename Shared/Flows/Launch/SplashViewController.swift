@@ -25,6 +25,9 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     private let emotionNameLabel = ThemeLabel(font: .smallBold)
     private let label = ThemeLabel(font: .small)
+
+    #warning("Remove test")
+    let textView = TextView(font: .regular, textColor: .T1)
     
     override func initializeViews() {
         super.initializeViews()
@@ -38,6 +41,14 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.view.addSubview(self.loadingView)
         self.loadingView.contentMode = .scaleAspectFit
         self.loadingView.loopMode = .loop
+
+        self.view.addSubview(self.textView)
+        self.textView.textContainer.lineBreakMode = .byTruncatingTail
+        self.textView.textAlignment = .left
+        self.textView.text = Lorem.paragraph() + "😀😢👨‍👨‍👧‍👧" + "END!"
+        self.textView.setTextColor(.clear)
+
+        logDebug(self.textView.text)
     }
 
     override func viewDidLayoutSubviews() {
@@ -57,12 +68,61 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.loadingView.size = CGSize(width: 18, height: 18)
         self.loadingView.pinToSafeAreaRight()
         self.loadingView.pinToSafeArea(.bottom, offset: .noOffset)
+
+        self.textView.setSize(withMaxWidth: self.view.width - 40)
+        self.textView.centerOnXAndY()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.stopLoadAnimation()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.animateInWords()
+    }
+
+    func animateInWords() {
+        Task {
+            let nsString = self.textView.attributedText.string as NSString
+            var substringRanges: [NSRange] = []
+            nsString.enumerateSubstrings(in: NSRange(location: 0, length: nsString.length),
+                                         options: .byComposedCharacterSequences) { (substring, substringRange, _, _) in
+
+                if substring != " " {
+                    logDebug("\(substring)")
+                    substringRanges.append(substringRange)
+                }
+            }
+
+            for substringRange in substringRanges {
+                let updatedText = self.textView.attributedText.mutableCopy() as! NSMutableAttributedString
+                updatedText.addAttribute(.foregroundColor,
+                                              value: ThemeColor.T1.color,
+                                              range: substringRange)
+
+                await withCheckedContinuation { continuation in
+                    UIView.transition(with: self.textView,
+                                      duration: 0.025,
+                                      options: .transitionCrossDissolve) {
+                        self.textView.attributedText = updatedText
+                    } completion: { completed in
+                        continuation.resume(returning: ())
+                    }
+                }
+            }
+        }
+    }
+
+    #warning("remove this")
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+
+        self.textView.setTextColor(.clear)
+        self.animateInWords()
     }
 
     func startLoadAnimation() {

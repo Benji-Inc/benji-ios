@@ -71,7 +71,6 @@ extension NSMutableAttributedString {
     }
 
     func linkItems() {
-
         // Find all substrings with a [<Link>](<Value>) structure
         // NOTE: Because value is technically a link, it can not have a space or it will cause a crash
         guard let regex = try? NSRegularExpression(pattern: "(\\[(.+?)\\]\\((.+?)\\))",
