@@ -152,6 +152,25 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         }
         
         self.conversationController?
+            .memberEventPublisher
+            .mainSink(receiveValue: { [unowned self] event in
+                guard let conversationController = self.conversationController else {
+                    return
+                }
+                switch event {
+                case _ as MemberAddedEvent, _ as MemberRemovedEvent:
+                    let members = conversationController.conversation.lastActiveMembers.filter { member in
+                        return member.personId != ChatClient.shared.currentUserId
+                    }
+                    
+                    self.stackedAvatarView.configure(with: members)
+                default:
+                    break
+                }
+                
+            }).store(in: &self.subscriptions)
+        
+        self.conversationController?
             .channelChangePublisher
             .mainSink(receiveValue: { [unowned self] _ in
                 guard let conversationController = self.conversationController else { return }
@@ -161,6 +180,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                     self.update(for: latest)
                 }
                 self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
+                
+                
+                
             }).store(in: &self.subscriptions)
         
         self.conversationController?
