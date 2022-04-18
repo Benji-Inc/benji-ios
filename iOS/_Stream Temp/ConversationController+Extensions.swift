@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Intents
+import Combine
 
 typealias ConversationController = ChatChannelController
 
@@ -484,5 +485,37 @@ extension ConversationController {
                 }
             }
         }
+    }
+}
+
+extension ConversationController: MessageSequenceController {
+
+    var streamCid: ConversationId? {
+        return self.cid
+    }
+
+    var messageSequence: MessageSequence? {
+        return self.conversation
+    }
+
+    var messageArray: [Messageable] {
+        return Array(self.messages)
+    }
+
+    var messageSequenceChangePublisher: AnyPublisher<EntityChange<MessageSequence>, Never> {
+        return self.channelChangePublisher.map { messageChange in
+            let change: EntityChange<MessageSequence>
+
+            switch messageChange {
+            case .create(let conversation):
+                change = EntityChange.create(conversation)
+            case .update(let conversation):
+                change = EntityChange.update(conversation)
+            case .remove(let conversation):
+                change = EntityChange.remove(conversation)
+            }
+
+            return change
+        }.eraseToAnyPublisher()
     }
 }

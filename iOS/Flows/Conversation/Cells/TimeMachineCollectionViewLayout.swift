@@ -8,17 +8,12 @@
 import UIKit
 
 protocol TimeMachineLayoutItemType {
-    /// A unique identifier for the item.
-    var layoutId: String { get }
+    /// A date associated with the time machine item
+    var date: Date { get }
 }
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType
-}
-
-class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
-    /// If true, the z ranges for all the items should be recalculated.
-    var shouldRecalculateZRanges = true
 }
 
 /// A custom layout for a stack of cells laid out along the z axis.
@@ -27,10 +22,6 @@ class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayout
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     typealias SectionIndex = Int
-
-    override class var invalidationContextClass: AnyClass {
-        return TimeMachineCollectionViewLayoutInvalidationContext.self
-    }
 
     // MARK: - Data Source
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
@@ -75,15 +66,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
-    /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
-    private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
-    /// A cache of the ids for all items.
-    private(set) var itemIds: [IndexPath : String] = [:]
-
-    // MARK: - Private State Management
-
-    /// The ids of all items that existed before the latest invalidation.
-    private var itemIdsBeforeInvalidation: [IndexPath : String] = [:]
+    /// A cache of all the layout  items mapped to their index paths.
+    private(set) var layoutItems: [IndexPath : TimeMachineLayoutItemType] = [:]
+    /// Layout items that existed before that latest layout invalidation.
+    private var layoutItemsBeforeInvalidation: [IndexPath : TimeMachineLayoutItemType] = [:]
 
     // MARK: - UICollectionViewLayout Overrides
 
@@ -105,64 +91,28 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return true
     }
 
-    override func invalidationContext(forBoundsChange newBounds: CGRect)
-    -> UICollectionViewLayoutInvalidationContext {
-
-        let invalidationContext = super.invalidationContext(forBoundsChange: newBounds)
-
-        guard let customInvalidationContext
-                = invalidationContext as? TimeMachineCollectionViewLayoutInvalidationContext else {
-                    return invalidationContext
-                }
-
-        // Changing the bounds doesn't affect item z ranges.
-        customInvalidationContext.shouldRecalculateZRanges = false
-
-        return customInvalidationContext
-    }
-
-    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
-        super.invalidateLayout(with: context)
+    override func invalidateLayout() {
+        super.invalidateLayout()
 
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
 
-        guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else {
-            return
-        }
-
-        if customContext.shouldRecalculateZRanges {
-            self.itemIdsBeforeInvalidation = self.itemIds
-
-            self.itemIds.removeAll()
-            self.itemFocusPositions.removeAll()
-        }
+        self.layoutItemsBeforeInvalidation = self.layoutItems
+        self.layoutItems.removeAll()
     }
 
     override func prepare() {
-        // Don't recalculate z ranges if we already have them cached.
-        if self.itemFocusPositions.isEmpty {
-            self.prepareZPositionsAndRanges()
-        }
-
         // Calculate and cache the layout attributes for all the items.
         self.forEachIndexPath { indexPath in
+            self.layoutItems[indexPath] = self.dataSource?.getTimeMachineItem(forItemAt: indexPath)
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
-        }
-    }
-
-    /// Updates the z ranges dictionary for all items.
-    private func prepareZPositionsAndRanges() {
-        // Store all the item focus positions for efficiency.
-        self.forEachIndexPath { indexPath in
-            self.itemFocusPositions[indexPath] = CGFloat(indexPath.item) * self.itemHeight
         }
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
         let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
-            return rect.intersects(attributes.frame) && attributes.alpha > 0
+            return rect.intersects(attributes.frame)
         }
 
         return itemAttributes
@@ -173,6 +123,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         if let attributes = self.cellLayoutAttributes[indexPath]  {
             return attributes
         }
+
 
         let normalizedZOffset = self.getNormalizedZOffsetForItem(at: indexPath,
                                                                  givenZPosition: self.zPosition)
@@ -186,7 +137,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private func getNormalizedZOffsetForItem(at indexPath: IndexPath,
                                              givenZPosition zPosition: CGFloat) -> CGFloat {
 
-        guard let focusPosition = self.itemFocusPositions[indexPath] else { return 0 }
+        let focusPosition = self.focusPosition(for: indexPath)
         let vectorToCurrentZ = zPosition - focusPosition
 
         let normalizedZOffset: CGFloat
@@ -253,6 +204,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Attribute Helpers
 
+    func focusPosition(for indexPath: IndexPath) -> CGFloat {
+        return CGFloat(indexPath.item) * self.itemHeight
+    }
+
     /// Gets the index path of the frontmost item in the collection.
     func getFrontmostIndexPath() -> IndexPath? {
         var indexPathCandidate: IndexPath?
@@ -276,7 +231,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     func getItemCenterPoint(withYOffset yOffset: CGFloat, scale: CGFloat) -> CGPoint {
-        
         guard let collectionView = self.collectionView else { return .zero }
         
         let contentRect = CGRect(x: collectionView.contentOffset.x,
@@ -297,47 +251,42 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Update Animation Handling
 
-    /// Ids of items that are being inserted.
-    private var insertedIds: Set<String> = []
-    /// Ids of items that are being deleted.
-    private var deletedIds: Set<String> = []
-    /// Ids of items that that were visible before the animation started.
-    private var idsVisibleBeforeAnimation: Set<String> = []
-    /// How much to adjust the proposed scroll offset.
-    private var scrollOffsetAdjustment: CGFloat = 0
+    /// Index paths of items that are being inserted.
+    private var insertedIndexPaths: Set<IndexPath> = []
     /// The z position before update animations started
     private var zPositionBeforeAnimation: CGFloat = 0
+    /// If true, we should adjust the scroll offset so the previously focused item remains in focus.
+    private var shouldScrollToPreviouslyFocusedDate = false
+    /// The date of the item that was in focus before the animation started.
+    private var focusedItemDateBeforeAnimation: Date = .distantFuture
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
 
         self.zPositionBeforeAnimation = self.zPosition
+        self.focusedItemDateBeforeAnimation
+        = self.getFocusedLayoutItemBeforeAnimation(forZPosition: self.zPosition)?.date ?? .distantFuture
 
         for update in updateItems {
             switch update.updateAction {
             case .insert:
-                guard let indexPath = update.indexPathAfterUpdate else { break }
-                guard let insertedId
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
+                guard let indexPath = update.indexPathAfterUpdate,
+                      let date = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else { break }
 
-                self.insertedIds.insert(insertedId)
-
-                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
-                if itemFocusPosition < self.zPosition {
-                    self.scrollOffsetAdjustment += self.itemHeight
+                self.insertedIndexPaths.insert(indexPath)
+                if date < self.focusedItemDateBeforeAnimation {
+                    self.shouldScrollToPreviouslyFocusedDate = true
+                }
+            case .delete:
+                guard let indexPath = update.indexPathBeforeUpdate,
+                      let date = self.layoutItemsBeforeInvalidation[indexPath]?.date else {
+                    break
                 }
 
-            case .delete:
-                guard let indexPath = update.indexPathBeforeUpdate else { break }
-                guard let deletedId
-                        = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).layoutId else { break }
-
-                self.deletedIds.insert(deletedId)
-
-                let itemFocusPosition = CGFloat(indexPath.item) * self.itemHeight
-
-                if itemFocusPosition < self.zPosition {
-                    self.scrollOffsetAdjustment -= self.itemHeight
+                // Items deleted before the current focused item should increase the offset so the focused
+                // item doesn't move.
+                if date < self.focusedItemDateBeforeAnimation {
+                    self.shouldScrollToPreviouslyFocusedDate = true
                 }
             case .reload, .move, .none:
                 break
@@ -347,22 +296,18 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
     }
 
-    /// NOTE: Disappearing does not mean that the item will not be visible after the animation.
-    /// Per the docs:  "For each element on screen before the invalidation, finalLayoutAttributesForDisappearingXXX will be called..."
-    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        // Remember which items were visible before the animation started so we don't attempt to modify
-        // their animations later.
-        if let itemId = self.itemIdsBeforeInvalidation[itemIndexPath] {
-            self.idsVisibleBeforeAnimation.insert(itemId)
-
-            // Items that are just moving are marked as "disappearing" by the collection view.
-            // Don't animate changes to these items or else weird animation issues will arise.
-            guard self.deletedIds.contains(itemId) else { return nil }
+    /// Gets the layout item for the item what was in focus before the animation started at the given z position.
+    private func getFocusedLayoutItemBeforeAnimation(forZPosition zPosition: CGFloat)
+    -> TimeMachineLayoutItemType? {
+        if let closestItem = self.layoutItemsBeforeInvalidation.min(by: { kvp1, kvp2 in
+            let focus1 = self.focusPosition(for: kvp1.key)
+            let focus2 = self.focusPosition(for: kvp2.key)
+            return abs(focus1 - zPosition) < abs(focus2 - zPosition)
+        }) {
+            return closestItem.value
         }
 
-        return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+        return nil
     }
 
     /// NOTE: "Appearing" does not mean the item wasn't visible before the animation.
@@ -370,41 +315,22 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
 
-        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-
-        // Don't modify the attributes of items that were visible before the animation started.
-        guard let appearingId = self.itemIds[itemIndexPath],
-              !self.idsVisibleBeforeAnimation.contains(appearingId) else { return attributes }
-
-        // Items moving into visibility
-        // If the item existed before (wasn't just inserted), but was not visible,
-        // modify it's attributes to make it appear properly.
-        if !self.insertedIds.contains(appearingId) {
-            var normalizedZOffset = self.getNormalizedZOffsetForItem(at: itemIndexPath,
-                                                                     givenZPosition: self.zPositionBeforeAnimation)
-            normalizedZOffset = clamp(normalizedZOffset, -1, 1)
-            let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
-                                                                    withNormalizedZOffset: normalizedZOffset)
-
-            modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
-
-            return modifiedAttributes
+        // Only modify the attributes of items that are actually being inserted.
+        guard self.insertedIndexPaths.contains(itemIndexPath) else {
+            return super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
         }
 
         // Items being inserted
         let normalizedZOffset: CGFloat
+        // Items added to the end of section should start big and shrink down to normal size.
         if itemIndexPath.item == self.numberOfItems(inSection: itemIndexPath.section) - 1 {
-            if itemIndexPath.section == 0 {
-                normalizedZOffset = 1
-            } else {
-                normalizedZOffset = 0
-            }
+            normalizedZOffset = 0
         } else {
+            // Items added to the beginning of the section should start small and grow to normal size.
             normalizedZOffset = -1
         }
         let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
                                                                 withNormalizedZOffset: normalizedZOffset)
-
         modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
 
         return modifiedAttributes
@@ -413,17 +339,22 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func finalizeCollectionViewUpdates() {
         super.finalizeCollectionViewUpdates()
 
-        self.insertedIds.removeAll()
-        self.deletedIds.removeAll()
-        self.idsVisibleBeforeAnimation.removeAll()
+        self.insertedIndexPaths.removeAll()
         self.zPositionBeforeAnimation = 0
-        self.scrollOffsetAdjustment = 0
+        self.shouldScrollToPreviouslyFocusedDate = false
     }
 
     // MARK: - Scroll Content Offset Handling
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffsetAdjustment)
+        // Move to the item that was focused before the animation, or an item nearby.
+        if self.shouldScrollToPreviouslyFocusedDate,
+           let focusPosition = self.getFocusPositionOfItem(with: self.focusedItemDateBeforeAnimation) {
+
+            return CGPoint(x: proposedContentOffset.x, y: focusPosition)
+        }
+
+        return proposedContentOffset
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
@@ -434,6 +365,34 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)
         return newOffset
+    }
+
+    // MARK: - Scroll/Animation Helper Functions
+
+    /// Gets the focus position of the item associated with the passed in date.
+    /// If there is no item with that date, it finds the next oldest item.
+    /// If there is still no item found, then nil is returned.
+    private func getFocusPositionOfItem(with date: Date) -> CGFloat? {
+        var focusedIndexPath: IndexPath?
+        let itemCount = self.numberOfItems(inSection: 0)
+        for item in (0..<itemCount).reversed() {
+            let indexPath = IndexPath(item: item, section: 0)
+            guard let itemDate = self.dataSource?.getTimeMachineItem(forItemAt: indexPath).date else {
+                continue
+            }
+
+            if itemDate <= date {
+                focusedIndexPath = indexPath
+                break
+            }
+        }
+
+        if let focusedIndexPath = focusedIndexPath {
+            return self.focusPosition(for: focusedIndexPath)
+        }
+
+        return nil
+
     }
 }
 

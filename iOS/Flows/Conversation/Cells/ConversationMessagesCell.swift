@@ -21,6 +21,7 @@ protocol ConversationUIStateSettable {
 class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettable, UICollectionViewDelegate {
 
     // Interaction handling
+
     var messageContentDelegate: MessageContentDelegate? {
         get { return self.dataSource.messageContentDelegate }
         set { self.dataSource.messageContentDelegate = newValue }
@@ -41,9 +42,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
     private(set) var conversationController: ConversationController?
     private var shouldShowLoadMore: Bool {
-        guard let conversationController = self.conversationController else {
-            return false
-        }
+        guard let conversationController = self.conversationController else { return false }
 
         if conversationController.messages.count < .messagesPageSize {
             return false
@@ -93,15 +92,16 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
     }
 
     private func scrollToLastMessage() {
-        self.collectionLayout.prepare()
         let maxOffset = self.collectionLayout.maxZPosition
         self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
     }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
-    func set(conversation: Conversation) {
+    func set(conversation: Conversation, shouldPrepareToSend: Bool) {
         // Create a new conversation controller if this is a different conversation than before.
+        var updatedController = false
         if conversation.cid != self.conversation?.cid {
+            updatedController = true
             let conversationController = ChatClient.shared.channelController(for: conversation.cid)
             self.conversationController = conversationController
             self.subscribeToUpdates()
@@ -111,28 +111,38 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             }
         }
 
+        // Do nothing if neither the controller nor the prepareToSend state were changed.
+        if !updatedController && self.dataSource.shouldPrepareToSend == shouldPrepareToSend  {
+            return
+        }
+
+        self.dataSource.shouldPrepareToSend = shouldPrepareToSend
+        
+        guard let conversationController = self.conversationController else { return }
+
         // Scroll to the last item when a new conversation is loaded.
         if self.dataSource.snapshot().itemIdentifiers.isEmpty {
             self.scrollToLastMessageIfNeccessary = true
             self.setNeedsLayout()
         }
 
-        self.dataSource.set(messageSequence: conversation, showLoadMore: self.shouldShowLoadMore)
-    }
-
-    func set(isPreparedToSend: Bool) {
-        self.dataSource.shouldPrepareToSend = isPreparedToSend
+        self.dataSource.set(messagesController: conversationController, showLoadMore: self.shouldShowLoadMore)
     }
 
     func set(state: ConversationUIState) {
+        let stateBeforeUpdate = self.collectionLayout.uiState
+
         self.configureCollectionLayout(for: state)
 
         Task {
+            guard state != stateBeforeUpdate else { return }
+
             await self.dataSource.reconfigureAllItems()
-            if state == .write {
-                let maxOffset = self.collectionLayout.maxZPosition
-                self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
-            }
+
+            guard state == .write else { return }
+            // Auto scroll to the latest message when in the write mode.
+            let maxOffset = self.collectionLayout.maxZPosition
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: true)
         }
     }
 
@@ -177,21 +187,30 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         self.conversationController?
             .messagesChangesPublisher
             .mainSink { [unowned self] changes in
-                guard let conversationController = self.conversationController,
-                      let cid = conversationController.cid else { return }
+                guard let conversationController = self.conversationController else { return }
 
+                var isUserMessageInserted = false
                 var itemsToReconfigure: [MessageSequenceItem] = []
+
                 for change in changes {
                     switch change {
+                    case .insert(let message, _):
+                        guard message.isFromCurrentUser else { break }
+                        isUserMessageInserted = true
                     case .update(let message, _):
-                        guard !message.isDeleted else  { break }
-                        itemsToReconfigure.append(.message(cid: cid, messageID: message.id))
+                        guard !message.isDeleted else { break }
+                        itemsToReconfigure.append(.message(messageID: message.id))
                     default:
                         break
                     }
                 }
-                let conversation = conversationController.conversation
-                self.dataSource.set(messageSequence: conversation,
+
+                // Once the user sends their message, we no longer need to be in the prepare state.
+                if isUserMessageInserted {
+                    self.dataSource.shouldPrepareToSend = false
+                }
+
+                self.dataSource.set(messagesController: conversationController,
                                     itemsToReconfigure: itemsToReconfigure,
                                     showLoadMore: self.shouldShowLoadMore)
             }.store(in: &self.subscriptions)
@@ -199,18 +218,17 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
     func scrollToMessage(with messageId: MessageId, animateScroll: Bool, animateSelection: Bool) async {
         let task = Task {
-            guard let conversationController = self.conversationController,
-                  let cid = conversationController.cid else { return }
+            guard let conversationController = self.conversationController else { return }
 
             try? await conversationController.loadNextMessages(including: messageId)
 
             guard !Task.isCancelled else { return }
 
-            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
+            let messageItem: MessageSequenceItem = .message(messageID: messageId)
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
-            guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
+            let yOffset = self.collectionLayout.focusPosition(for: messageIndexPath)
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: animateScroll)
 
@@ -253,7 +271,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
               cell.content.isUserInteractionEnabled else { return }
 
         switch item {
-        case .message(cid: let cid, messageID: let messageID, _):
+        case .message(messageID: let messageID, _):
+            guard let cid = self.conversation?.cid else { break }
             self.messageContentDelegate?.messageContent(cell.content, didTapMessage: (cid, messageID))
         case .loadMore, .placeholder, .initial:
             break

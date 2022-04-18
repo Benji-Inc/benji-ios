@@ -57,7 +57,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     // MARK: - Attribute Helpers
-
+    
     func getFrontmostCell() -> MessageCell? {
         guard let ip = self.getFrontmostIndexPath(),
               let cell = self.collectionView?.cellForItem(at: ip) as? MessageCell else {
@@ -73,6 +73,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                            width: self.collectionView!.width,
                            height: self.itemHeight)
         frame.center = center
+        //Shift the drop zone up a bit to account for the invisible space under the cell.
+        frame.top -= 60
         
         return frame
     }
@@ -100,11 +102,11 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                 let isScrolledToMostRecent
                 = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
 
-                let isMostRecentInBottomSection = indexPath.item == self.numberOfItems(inSection: 1) - 1
+                let isNewMostRecent = indexPath.item == self.numberOfItems(inSection: 0) - 1
 
-                // Always scroll to the end for new user messages, or if we're currently scrolled to the
-                // most recent message.
-                if isMostRecentInBottomSection || isScrolledToMostRecent {
+                // When a new message comes and we're at the front, always currently scrolled to the
+                // new message.
+                if isNewMostRecent && isScrolledToMostRecent {
                     self.shouldScrollToEnd = true
                 }
             case .delete, .reload, .move, .none:

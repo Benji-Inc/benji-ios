@@ -83,6 +83,7 @@
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80B899352807555C004C8096 /* EmotionGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B899342807555C004C8096 /* EmotionGradientView.swift */; };
 		80B899362807555C004C8096 /* EmotionGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B899342807555C004C8096 /* EmotionGradientView.swift */; };
+		80B899382808B64F004C8096 /* MessageSequenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B899372808B64F004C8096 /* MessageSequenceController.swift */; };
 		80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
 		80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */; };
@@ -1021,6 +1022,7 @@
 		80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80B899342807555C004C8096 /* EmotionGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionGradientView.swift; sourceTree = "<group>"; };
+		80B899372808B64F004C8096 /* MessageSequenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequenceController.swift; sourceTree = "<group>"; };
 		80BF68B0278D351600BFE828 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
 		80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryMessageSender.swift; sourceTree = "<group>"; };
@@ -1559,6 +1561,7 @@
 				D642735022C857760088256B /* MessageDeliveryType.swift */,
 				D6F33C6A24AFCF24009603FF /* MessageKind.swift */,
 				D615534B27458CEA00B08459 /* MessageSequence.swift */,
+				80B899372808B64F004C8096 /* MessageSequenceController.swift */,
 				80665BA527B2F2F3002A8F69 /* MockMessage.swift */,
 			);
 			path = "Message Model";
@@ -3501,6 +3504,7 @@
 				D671E1F326402B1F00BF2B8D /* ToastQueue.swift in Sources */,
 				80580E1D2805F1F900B7264C /* EmotionCircleView.swift in Sources */,
 				D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */,
+				80B899382808B64F004C8096 /* MessageSequenceController.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */,
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,

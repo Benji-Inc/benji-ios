@@ -17,6 +17,7 @@ protocol MessageSequence {
     var authorId: String { get }
     var attributes: [String: Any]? { get }
     var messages: [Messageable] { get }
+    var title: String? { get }
 
     // Stream variables
     var streamCID: ConversationId? { get }

@@ -187,4 +187,8 @@ extension Message: MessageSequence {
         let messageArray = Array(ChatClient.shared.messageController(for: self)?.replies ?? [])
         return messageArray
     }
+
+    var title: String? {
+        return nil
+    }
 }

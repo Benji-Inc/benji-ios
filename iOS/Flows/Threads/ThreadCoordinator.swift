@@ -39,7 +39,8 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
         
         self.threadVC.$selectedItems.mainSink { [unowned self] items in
             guard let first = items.first,
-        case MessageSequenceItem.message(let cid, let messageID, _) = first else { return }
+                  case MessageSequenceItem.message(let messageID, _) = first,
+                  let cid = self.threadVC.conversationController?.cid else { return }
             
             self.presentMessageDetail(for: cid, messageId: messageID)
         }.store(in: &self.cancellables)

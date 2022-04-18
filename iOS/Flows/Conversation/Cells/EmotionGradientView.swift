@@ -59,7 +59,7 @@ class EmotionGradientView: BaseView {
 
         // Sort the colors by hue so more similar colors are near each other.
         colors = colors.sorted(by: { color1, color2 in
-            if color1.hue == color2.hue {
+            if abs(color1.hue - color2.hue) < 0.01 {
                 return color1.brightness < color2.brightness
             }
 

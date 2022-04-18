@@ -28,7 +28,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     
     var messageContent: MessageContentView {
         if let first = self.collectionView.indexPathsForSelectedItems?.first,
-                let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
+           let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
             return cell.content
         } else {
             return self.parentMessageView
@@ -39,7 +39,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         get { return self.dataSource.messageContentDelegate }
         set { self.dataSource.messageContentDelegate = newValue }
     }
-        
+
     /// If true we should scroll to the last item in the collection in layout subviews.
     private var scrollToLastItemOnLayout: Bool = true
     
@@ -69,9 +69,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         inputController.swipeInputView.textView.restorationIdentifier = "thread"
         return inputController
     }()
-    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       collectionView: self.threadCollectionView,
-                                                                       isConversationList: false)
+    lazy var swipeInputDelegate
+    = SwipeableInputAccessoryMessageSender(viewController: self, collectionView: self.threadCollectionView)
 
     override var inputAccessoryViewController: UIInputViewController? {
         return self.messageInputController
@@ -82,28 +81,29 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
 
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
-        
+
     @Published var state: ConversationUIState = .read
 
     init(channelID: ChannelId,
          messageID: MessageId,
          startingReplyId: MessageId?) {
-
+        
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
         self.conversationController = ChatClient.shared.channelController(for: channelID,
-                                                                             messageOrdering: .topToBottom)
+                                                                          messageOrdering: .topToBottom)
         self.startingReplyId = startingReplyId
-
+        
         super.init(with: self.threadCollectionView)
 
+        self.dataSource.messageSequenceController = self.messageController
         self.threadCollectionView.threadLayout.dataSource = self.dataSource
         self.messageController.listOrdering = .bottomToTop
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func initializeViews() {
         super.initializeViews()
                 
@@ -144,7 +144,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                 self.updateUI(for: state, forceLayout: false)
             }.store(in: &self.cancellables)
         
-        self.collectionView.allowsMultipleSelection = false 
+        self.collectionView.allowsMultipleSelection = false
     }
 
     override func viewDidLayoutSubviews() {
@@ -176,22 +176,20 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     @MainActor
     func scrollToConversation(with cid: ConversationId,
                               messageId: MessageId?,
-                              viewReplies: Bool = false, 
+                              viewReplies: Bool = false,
                               animateScroll: Bool,
                               animateSelection: Bool) async {
         guard let messageId = messageId else { return }
         
         Task {
-            let cid = self.messageController.cid
-
             try? await self.messageController.loadNextReplies(including: messageId)
 
-            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
+            let messageItem = MessageSequenceItem.message(messageID: messageId)
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
             let threadLayout = self.threadCollectionView.threadLayout
-            guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
+            let yOffset = threadLayout.focusPosition(for: messageIndexPath)
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: animateScroll)
 
@@ -269,10 +267,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                 try await self.messageController.loadNextReplies(including: startingReplyId)
             }
 
-            let cid = self.messageController.cid
-
             let messages = self.messageController.replies.map { message in
-                return MessageSequenceItem.message(cid: cid, messageID: message.id)
+                return MessageSequenceItem.message(messageID: message.id)
             }
             data[.messages] = Array(messages)
         } catch {
@@ -303,12 +299,10 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection,
                                     MessageSequenceItem>) -> AnimationCycle? {
 
-        let cid = self.messageController.cid
-
         let startMessageIndex: Int
         if let startingReplyId = self.startingReplyId {
             startMessageIndex
-            = snapshot.indexOfItem(.message(cid: cid, messageID: startingReplyId)) ?? 0
+            = snapshot.indexOfItem(.message(messageID: startingReplyId)) ?? 0
         } else {
             startMessageIndex = self.messageController.replies.count - 1
         }
@@ -332,22 +326,11 @@ extension ThreadViewController: MessageSendingViewControllerType {
     func set(messageSequencePreparingToSend: MessageSequence?) {
         self.dataSource.shouldPrepareToSend = messageSequencePreparingToSend.exists
 
-        guard let message = self.messageController.message else { return }
-        self.dataSource.set(messageSequence: message)
+        self.dataSource.set(messagesController: self.messageController)
     }
 
-    func sendMessage(_ message: Sendable) {
-        Task {
-            do {
-                try await self.messageController.createNewReply(with: message)
-            } catch {
-                logError(error)
-            }
-        }.add(to: self.autocancelTaskPool)
-    }
-
-    func createNewConversation(_ sendable: Sendable) {
-        // Do nothing. New conversations can't be created from a thread view controller.
+    func sendMessage(_ message: Sendable) async throws {
+        try await self.messageController.createNewReply(with: message)
     }
 }
 
@@ -361,7 +344,7 @@ extension ThreadViewController: TransitionableViewController {
     
     var receivingDismissalType: TransitionType {
         if let first = self.collectionView.indexPathsForSelectedItems?.first,
-                let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
+           let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
             return .message(cell.content)
         } else {
             return .message(self.parentMessageView)
@@ -374,7 +357,7 @@ extension ThreadViewController: TransitionableViewController {
     
     var sendingPresentationType: TransitionType {
         guard let first = self.collectionView.indexPathsForSelectedItems?.first,
-                let cell = self.collectionView.cellForItem(at: first) as? MessageCell else { return .fade }
+              let cell = self.collectionView.cellForItem(at: first) as? MessageCell else { return .fade }
         return .message(cell.content)
     }
     
@@ -425,8 +408,7 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
-            guard let message = self.messageController.message else { return }
-            self.dataSource.set(messageSequence: message)
+            self.dataSource.set(messagesController: self.messageController)
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in

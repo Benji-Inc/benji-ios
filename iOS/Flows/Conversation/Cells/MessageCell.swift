@@ -100,6 +100,10 @@ class MessageCell: UICollectionViewCell {
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 
+        // Make sure that the z index is up to date. Sometimes the collectionview layout doesn't
+        // update the position even though the attributes changed.
+        self.layer.zPosition = CGFloat(layoutAttributes.zIndex)
+
         guard let messageLayoutAttributes
                 = layoutAttributes as? ConversationMessageCellLayoutAttributes else {
             return
