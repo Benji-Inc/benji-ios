@@ -1519,6 +1519,8 @@
 		802EDDA927ECD47E005ECA9C /* String Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */,
+				D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */,
 				802EDDAA27ECD496005ECA9C /* String+DataTypes.swift */,
 				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
 				D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */,
@@ -1898,8 +1900,6 @@
 				D69EB4492457EB4500473530 /* Error+Extensions.swift */,
 				802C448926CC76CC00A333A4 /* Logger.swift */,
 				D642735C22C90C640088256B /* Math Extensions */,
-				D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */,
-				D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */,
 				D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */,
 				D62BB742244DEEA400607677 /* Optional+Extensions.swift */,
 				D69EB4482457E5E500473530 /* Parse */,

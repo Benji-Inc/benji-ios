@@ -88,6 +88,12 @@ class MessageCell: UICollectionViewCell {
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
+
+        if message.isConsumedByMe ?? false {
+            self.content.textView.textColor = ThemeColor.T1.color
+        } else {
+            self.content.textView.textColor = ThemeColor.clear.color
+        }
         
         self.message = message
         
@@ -108,9 +114,16 @@ class MessageCell: UICollectionViewCell {
                 = layoutAttributes as? ConversationMessageCellLayoutAttributes else {
             return
         }
-        
+
+        let textColor: UIColor
+        if self.message?.canBeConsumed ?? false {
+            textColor = ThemeColor.clear.color
+        } else {
+            textColor = ThemeColor.T1.color
+        }
+
         self.content.configureBackground(color: ThemeColor.B7.color,
-                                         textColor: ThemeColor.T1.color,
+                                         textColor: textColor,
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: false,
                                          tailOrientation: .down)
@@ -202,7 +215,10 @@ class MessageCell: UICollectionViewCell {
         guard messageable.canBeConsumed else { return }
 
         Task {
-            await Task.snooze(seconds: 2)
+            guard !Task.isCancelled else { return }
+
+            await self.content.textView.startReadAnimation()
+
             guard !Task.isCancelled else { return }
 
             await messageable.setToConsumed()

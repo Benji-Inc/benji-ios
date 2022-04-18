@@ -378,7 +378,6 @@ extension MessageTextView {
 
     /// Updates the font size to be appropriate for the amount of text displayed.
     fileprivate func updateFontSize(state: MessageContentView.Layout) {
-        
         if state == .collapsed {
             self.font = FontType.regular.font
             return

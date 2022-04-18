@@ -71,4 +71,3 @@ extension NSAttributedString {
         return self.attributes(at: 0, effectiveRange: nil)
     }
 }
-

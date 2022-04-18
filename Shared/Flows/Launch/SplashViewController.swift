@@ -26,9 +26,6 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     private let emotionNameLabel = ThemeLabel(font: .smallBold)
     private let label = ThemeLabel(font: .small)
 
-    #warning("Remove test")
-    let textView = TextView(font: .regular, textColor: .T1)
-    
     override func initializeViews() {
         super.initializeViews()
 
@@ -41,14 +38,6 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.view.addSubview(self.loadingView)
         self.loadingView.contentMode = .scaleAspectFit
         self.loadingView.loopMode = .loop
-
-        self.view.addSubview(self.textView)
-        self.textView.textContainer.lineBreakMode = .byTruncatingTail
-        self.textView.textAlignment = .left
-        self.textView.text = Lorem.paragraphs(nbParagraphs: 5) + "😀😢👨‍👨‍👧‍👧" + "END!"
-        self.textView.setTextColor(.clear)
-
-        logDebug(self.textView.text)
     }
 
     override func viewDidLayoutSubviews() {
@@ -68,77 +57,12 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         self.loadingView.size = CGSize(width: 18, height: 18)
         self.loadingView.pinToSafeAreaRight()
         self.loadingView.pinToSafeArea(.bottom, offset: .noOffset)
-
-        self.textView.setSize(withMaxWidth: self.view.width - 40)
-        self.textView.centerOnXAndY()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.stopLoadAnimation()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        self.animateInWords()
-    }
-
-    var animationTask: Task<Void, Never>?
-    func animateInWords() {
-        self.animationTask?.cancel()
-
-        self.animationTask = Task {
-            await Task.sleep(seconds: 1)
-
-            let nsString = self.textView.attributedText.string as NSString
-            var substringRanges: [NSRange] = []
-            nsString.enumerateSubstrings(in: NSRange(location: 0, length: nsString.length),
-                                         options: .byComposedCharacterSequences) { (substring, substringRange, _, _) in
-
-                // There's no need to animate spaces.
-                guard substring != " " else { return }
-                substringRanges.append(substringRange)
-            }
-
-            let lookAheadCount = 5
-            for index in -lookAheadCount..<substringRanges.count {
-                guard !Task.isCancelled else { return }
-
-                let updatedText = self.textView.attributedText.mutableCopy() as! NSMutableAttributedString
-
-                let keyPoints: [CGFloat] = [1, 0.9, 0.7, 0.35, 0]
-
-                for i in 0...lookAheadCount {
-                    guard let nextRange = substringRanges[safe: index + i] else { continue }
-
-                    let alpha = lerp(CGFloat(i)/CGFloat(lookAheadCount), keyPoints: keyPoints)
-                    updatedText.addAttribute(.foregroundColor,
-                                             value: ThemeColor.T1.color.withAlphaComponent(alpha),
-                                             range: nextRange)
-
-                }
-
-                await withCheckedContinuation { continuation in
-                    UIView.transition(with: self.textView,
-                                      duration: 0.01,
-                                      options: [.transitionCrossDissolve, .curveLinear]) {
-                        self.textView.attributedText = updatedText
-                    } completion: { completed in
-                        continuation.resume(returning: ())
-                    }
-                }
-            }
-        }
-    }
-
-    #warning("remove this")
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-
-        self.textView.setTextColor(.clear)
-        self.animateInWords()
     }
 
     func startLoadAnimation() {
