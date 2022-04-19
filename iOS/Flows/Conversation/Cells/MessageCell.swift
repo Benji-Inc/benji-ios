@@ -86,12 +86,11 @@ class MessageCell: UICollectionViewCell {
 
     // MARK: Configuration
 
-
-
     func configure(with message: Messageable) {
         self.content.configure(with: message)
 
         self.content.textView.textColor = self.getTextColor(for: message)
+        self.content.newMessageIndicatorView.isVisible = message.canBeConsumed
 
         self.message = message
         
@@ -135,7 +134,7 @@ class MessageCell: UICollectionViewCell {
     }
 
     private func getTextColor(for message: Messageable?) -> UIColor {
-        if message?.canBeConsumed ?? false {
+        if message?.canBeConsumed ?? true {
             return ThemeColor.clear.color
         } else {
             return ThemeColor.T1.color

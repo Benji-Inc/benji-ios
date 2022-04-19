@@ -75,6 +75,8 @@ class MessageContentView: BaseView {
     }
     let showEmotionsButton = EmotionGradientView()
 
+    let newMessageIndicatorView = UIImageView(image: UIImage(systemName: "eyeglasses"))
+
     var layoutState: Layout = .expanded
     private let cellDiameter: CGFloat
     
@@ -136,6 +138,12 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
+
+        self.addSubview(self.newMessageIndicatorView)
+        self.newMessageIndicatorView.set(backgroundColor: .badgeHighlightTop)
+        self.newMessageIndicatorView.tintColor = ThemeColor.L1.color
+        self.newMessageIndicatorView.contentMode = .center
+        self.newMessageIndicatorView.isVisible = false
         
         self.setupHandlers()
     }
@@ -239,6 +247,12 @@ class MessageContentView: BaseView {
         }
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
+
+        // New Message Indicator
+        self.newMessageIndicatorView.size = CGSize(width: 40, height: 20)
+        self.newMessageIndicatorView.pin(.top, offset: .short)
+        self.newMessageIndicatorView.pin(.right, offset: .short)
+        self.newMessageIndicatorView.roundCorners()
     }
 
     private var linkProvider: LPMetadataProvider?
