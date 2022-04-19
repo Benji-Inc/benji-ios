@@ -25,7 +25,7 @@ class AttachmentLineView: UICollectionReusableView {
     func initializeViews() {
         
         self.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .B4)
+        self.lineView.set(backgroundColor: .B1)
         self.lineView.alpha = 0.5
         self.clipsToBounds = false 
     }

@@ -58,7 +58,7 @@ class MessageContentView: BaseView {
     /// Delivery view that shows how the message was sent
     let deliveryView = UIImageView()
     /// Text view for displaying the text of the message.
-    let textView = MessageTextView(font: .regular, textColor: .T1)
+    let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
@@ -105,7 +105,7 @@ class MessageContentView: BaseView {
         self.emotionLabel.alpha = 0 
         
         self.addEmotionImageView.contentMode = .scaleAspectFit
-        self.addEmotionImageView.tintColor = ThemeColor.T1.color
+        self.addEmotionImageView.tintColor = ThemeColor.white.color
         self.bubbleView.addSubview(self.addEmotionImageView)
         self.addEmotionImageView.alpha = 0
         self.bubbleView.addSubview(self.addEmotionButton)

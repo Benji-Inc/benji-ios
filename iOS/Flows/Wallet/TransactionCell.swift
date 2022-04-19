@@ -82,13 +82,13 @@ class TransactionContentView: BaseView, UIContentView {
         ])
                 
         self.titleLabel?.setFont(.small)
-        self.titleLabel?.setTextColor(.T1withAlpha)
+        self.titleLabel?.setTextColor(.whiteWithAlpha)
         self.titleLabel?.alpha = 0.35
         self.titleLabel?.textAlignment = .left
         self.noteLabel?.setFont(.regular)
         self.noteLabel?.textAlignment = .left
         self.noteLabel?.lineBreakMode = .byTruncatingTail
-        self.noteLabel?.setTextColor(.T1)
+        self.noteLabel?.setTextColor(.white)
         self.amountLabel?.setFont(.regular)
         self.amountLabel?.textAlignment = .right
         
@@ -136,7 +136,7 @@ class TransactionContentView: BaseView, UIContentView {
     private func setAmount(with amount: Double) {
         if amount < 0 {
             self.amountLabel?.setText("- \(amount * -1)")
-            self.amountLabel?.setTextColor(.T1)
+            self.amountLabel?.setTextColor(.white)
         } else {
             self.amountLabel?.setText("+ \(amount)")
             self.amountLabel?.setTextColor(.D6)

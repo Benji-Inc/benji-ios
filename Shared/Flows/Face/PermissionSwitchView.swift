@@ -74,11 +74,11 @@ class PermissionSwitchView: BaseView {
             self.updateUI(for: state)
         }.store(in: &self.cancellables)
 
-        self.layer.borderColor = ThemeColor.T1.color.cgColor
+        self.layer.borderColor = ThemeColor.white.color.cgColor
         self.layer.borderWidth = 2
         
         self.switchView.onTintColor = ThemeColor.D6.color
-        self.switchView.thumbTintColor = ThemeColor.L1.color
+        self.switchView.thumbTintColor = ThemeColor.white.color
     }
 
     override func layoutSubviews() {

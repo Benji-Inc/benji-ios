@@ -19,7 +19,7 @@ class BallanceDetailView: BaseView {
                                          seperator: ".",
                                          seperatorSpacing: 0,
                                          font: FontType.medium.font,
-                                         textColor: ThemeColor.T1.color,
+                                         textColor: ThemeColor.white.color,
                                          animateInitialValue: true,
                                          gradientColor: ThemeColor.B0.color,
                                          gradientStop: 4)

@@ -24,7 +24,7 @@ class MessageTopOptionCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.set(backgroundColor: .B6)
         self.contentView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.T1.color
+        self.imageView.tintColor = ThemeColor.white.color
         self.contentView.addSubview(self.label)
         self.label.textAlignment = .center
         

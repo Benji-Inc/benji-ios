@@ -27,7 +27,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.lineView)
         
-        self.lineView.set(backgroundColor: .B4)
+        self.lineView.set(backgroundColor: .B1)
         self.lineView.alpha = 0.5
     }
     
@@ -40,9 +40,9 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
             self.titleLabel.setTextColor(.D1)
             self.buttonTitleLabel.setTextColor(.D1)
         } else {
-            self.titleLabel.setTextColor(.T1)
+            self.titleLabel.setTextColor(.white)
             self.buttonTitleLabel.setText("Invite")
-            self.buttonTitleLabel.setTextColor(.T1)
+            self.buttonTitleLabel.setTextColor(.white)
             self.updateName(for: item, highlightText: item.highlightText)
         }
         
@@ -62,7 +62,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     }
     
     private func handle(isSelected: Bool) {
-        var color: ThemeColor = isSelected ? .D1 : .T1
+        var color: ThemeColor = isSelected ? .D1 : .white
         
         if let person = self.currentItem {
             if let _ = person.user {

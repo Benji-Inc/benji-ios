@@ -110,7 +110,7 @@ class MessageCell: UICollectionViewCell {
             return
         }
 
-        self.content.configureBackground(color: ThemeColor.B7.color,
+        self.content.configureBackground(color: ThemeColor.B6.color,
                                          textColor: self.getTextColor(for: self.message),
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: false,
@@ -135,7 +135,7 @@ class MessageCell: UICollectionViewCell {
         if message?.canBeConsumed ?? true {
             return ThemeColor.clear.color
         } else {
-            return ThemeColor.T1.color
+            return ThemeColor.white.color
         }
     }
 

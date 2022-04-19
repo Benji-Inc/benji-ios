@@ -39,7 +39,7 @@ class WelcomeViewController: ViewController, Sizeable, Completable {
         }
         
         self.view.addSubview(self.rsvpButton)
-        self.rsvpButton.set(style: .custom(color: .B5, textColor: .T4, text: "Enter Code"))
+        self.rsvpButton.set(style: .custom(color: .white, textColor: .B0, text: "Enter Code"))
         self.rsvpButton.didSelect { [unowned self] in
             AnalyticsManager.shared.trackEvent(type: .onboardingRSVPTapped, properties: nil)
             self.onDidComplete?(.success((.rsvp)))
