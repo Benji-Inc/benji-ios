@@ -27,7 +27,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.lineView)
         
-        self.lineView.set(backgroundColor: .B4)
+        self.lineView.set(backgroundColor: .B1)
         self.lineView.alpha = 0.5
     }
     

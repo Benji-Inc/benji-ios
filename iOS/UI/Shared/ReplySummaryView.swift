@@ -87,7 +87,7 @@ class ReplySummaryView: BaseView {
 //        self.addSubview(self.replyView)
         
         self.addSubview(self.arrowImageView)
-        self.arrowImageView.tintColor = ThemeColor.B4.color
+        self.arrowImageView.tintColor = ThemeColor.B1.color
         self.arrowImageView.contentMode = .scaleAspectFit
 
         self.addSubview(self.promptLabel)
