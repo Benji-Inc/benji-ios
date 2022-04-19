@@ -188,7 +188,7 @@ class SwipeInputPanGestureHandler {
                 // Apple bug where the trait collection for all subviews is dark, even though it should be light.
                 // So we have to access the window to get the correct trait.
                 if let window = UIWindow.topWindow(), window.traitCollection.userInterfaceStyle == .light {
-                    previewView.textView.setTextColor(.B3)
+                    previewView.textView.setTextColor(.B0)
                 } else {
                     previewView.textView.setTextColor(.T1)
                 }

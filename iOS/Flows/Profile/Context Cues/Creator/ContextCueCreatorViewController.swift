@@ -57,7 +57,7 @@ class ContextCueCreatorViewController: EmojiPickerViewController {
     }
     
     private func updateButton() {
-        self.button.set(style: .custom(color: .B5, textColor: .T4, text: self.getButtonTitle()))
+        self.button.set(style: .custom(color: .B5, textColor: .B0, text: self.getButtonTitle()))
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.showButton = self.selectedEmojis.count > 0
             self.view.layoutNow()

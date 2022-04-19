@@ -11,12 +11,12 @@ import Foundation
 class ModalPhotoViewController: PhotoViewController {
     
     private let gradientView = BackgroundGradientView()
-    private let label = ThemeLabel(font: .small, textColor: .B3)
+    private let label = ThemeLabel(font: .small, textColor: .B0)
     
     override func initializeViews() {
         super.initializeViews()
         
-        self.view.set(backgroundColor: .B3)
+        self.view.set(backgroundColor: .B0)
         
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {

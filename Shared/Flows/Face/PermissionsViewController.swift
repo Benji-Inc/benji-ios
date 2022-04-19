@@ -68,7 +68,7 @@ class PermissionsViewController: DisclosureModalViewController {
         #endif
 
         self.contentView.addSubview(self.button)
-        self.button.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
+        self.button.set(style: .custom(color: .B5, textColor: .B0, text: "Done"))
         self.button.isUserInteractionEnabled = false
 
         self.$state

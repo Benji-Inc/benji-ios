@@ -27,7 +27,7 @@ class MiniBadgeView: BaseView {
         self.topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
         self.insertSubview(self.bottomView, at: 0)
-        self.bottomView.set(backgroundColor: .badgeBottom)
+        self.bottomView.set(backgroundColor: .B0)
 
         self.bottomView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit

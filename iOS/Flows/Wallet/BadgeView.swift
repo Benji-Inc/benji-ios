@@ -27,7 +27,7 @@ class BadgeView: BaseView {
         self.topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
         self.insertSubview(self.bottomView, at: 0)
-        self.bottomView.set(backgroundColor: .badgeBottom)
+        self.bottomView.set(backgroundColor: .B0)
         self.bottomView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
     }
@@ -61,7 +61,7 @@ class BadgeView: BaseView {
             self.amountLabel.alpha = 1.0
         } else {
             self.topView.set(backgroundColor: .badgeTop)
-            self.bottomView.set(backgroundColor: .badgeBottom)
+            self.bottomView.set(backgroundColor: .B0)
             self.amountLabel.alpha = 0.5
         }
         self.layoutNow()
