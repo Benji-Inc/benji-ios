@@ -126,7 +126,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             
             self.titleLabel.setText("\(readers!.givenName.firstCapitalized) read:")
             self.descriptionLabel.setText(message.text)
-            self.rightButtonLabel.setText("Ok")
+            self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
             self.imageView.displayable = readers
         case .unreadMessages:
