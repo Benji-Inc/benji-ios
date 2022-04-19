@@ -21,7 +21,7 @@ extension RoomCoordinator {
                                                       conversationMembers: [],
                                                       startingConversationId: cid,
                                                       startingMessageId: messageId,
-                                                      openReplies: true)
+                                                      openReplies: openReplies)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             self.router.popModule() 
         })
@@ -36,9 +36,7 @@ extension RoomCoordinator {
         
         self.addChildAndStart(coordinator) { [unowned self] people in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                Task {
-                    await self.roomVC.reloadPeople()
-                }
+                self.roomVC.reloadPeople()
             }
         }
         
@@ -70,7 +68,7 @@ extension RoomCoordinator {
                 case .openReplies(let cid, let messageId):
                     self.presentConversation(with: cid,
                                              messageId: messageId,
-                                             openReplies: true)
+                                             openReplies: false)
                 }
             }
         }
