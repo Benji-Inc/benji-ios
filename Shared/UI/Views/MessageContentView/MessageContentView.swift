@@ -326,6 +326,14 @@ class MessageContentView: BaseView {
         self.bubbleView.orientation = tailOrientation
     }
 
+    func playReadAnimations() async {
+        await self.textView.startReadAnimation()
+        await UIView.awaitAnimation(with: .custom(1)) {
+            self.imageView.alpha = 1
+            self.linkView.alpha = 1
+        }
+    }
+
     func setEmotions(areShown: Bool, animated: Bool) {
         if !areShown {
             self.blurView.alpha = 1

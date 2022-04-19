@@ -90,6 +90,9 @@ class MessageCell: UICollectionViewCell {
         self.content.configure(with: message)
 
         self.content.textView.textColor = self.getTextColor(for: message)
+        self.content.imageView.alpha = message.canBeConsumed ? 0 : 1
+        self.content.linkView.alpha = message.canBeConsumed ? 0 : 1
+
         self.message = message
         
         self.footerView.configure(for: message)
@@ -213,7 +216,7 @@ class MessageCell: UICollectionViewCell {
         Task {
             guard !Task.isCancelled else { return }
 
-            await self.content.textView.startReadAnimation()
+            await self.content.playReadAnimations()
 
             guard !Task.isCancelled else { return }
 
