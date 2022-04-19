@@ -185,7 +185,7 @@ class TextView: UITextView {
         self.linkTextAttributes = [.foregroundColor: ThemeColor.D1.color, .underlineStyle: 0]
     }
 
-    func set(placeholder: Localized, color: ThemeColor = .T1withAlpha) {
+    func set(placeholder: Localized, color: ThemeColor = .whiteWithAlpha) {
         var styleAttributes = StringStyle(font: .regular, color: color).attributes
         let centeredParagraphStyle = NSMutableParagraphStyle()
         centeredParagraphStyle.alignment = .center

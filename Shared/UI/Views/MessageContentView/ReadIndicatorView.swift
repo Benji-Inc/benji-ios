@@ -35,7 +35,7 @@ class ReadIndicatorView: BaseView {
         self.layer.borderColor = ThemeColor.BORDER.color.cgColor
         self.layer.borderWidth = 0.5
         
-        self.imageView.tintColor = ThemeColor.T1withAlpha.color
+        self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
         self.imageView.contentMode = .scaleAspectFit
     }
     
@@ -49,12 +49,12 @@ class ReadIndicatorView: BaseView {
                         message.isConsumedByMe,
                         message.hasBeenConsumedBy.count == 1 {
                  self.counter.isVisible = false
-                 self.imageView.tintColor = ThemeColor.T1withAlpha.color
+                 self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
                  self.set(backgroundColor: .clear)
              } else {
                  self.counter.isVisible = true
                  self.counter.alpha = 0.35
-                 self.imageView.tintColor = ThemeColor.T1withAlpha.color
+                 self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
                  self.set(backgroundColor: .clear)
              }
             self.setNeedsLayout()

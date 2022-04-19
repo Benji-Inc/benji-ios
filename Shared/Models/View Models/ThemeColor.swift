@@ -20,7 +20,7 @@ enum ThemeColor: String, CaseIterable {
     case D1
     case D6
     case BORDER
-    case T1withAlpha
+    case whiteWithAlpha
     
     case badgeTop
     case badgeHighlightTop
@@ -29,16 +29,11 @@ enum ThemeColor: String, CaseIterable {
     case white
     case clear
     case red
-    case gray
     case yellow
 
     var color: UIColor {
         switch self {
             
-        case .B0:
-            return UIColor(named: "B0")!
-        case .gray:
-            return UIColor(named: "GRAY")!
         case .white:
             return UIColor(named: "WHITE")!
         case .clear:
@@ -47,10 +42,12 @@ enum ThemeColor: String, CaseIterable {
             return UIColor(named: "RED")!
         case .yellow:
             return UIColor(named: "YELLOW")!
-        case .B1withAlpha:
-            return ThemeColor.B1.color.withAlphaComponent(0.3)
         case .B1:
             return UIColor(named: "B1")!
+        case .B0:
+            return UIColor(named: "B0")!
+        case .B1withAlpha:
+            return ThemeColor.B1.color.withAlphaComponent(0.3)
         case .B2:
             return UIColor(named: "B2")!
         case .B5:
@@ -63,7 +60,7 @@ enum ThemeColor: String, CaseIterable {
             return UIColor(named: "D6")!
         case .BORDER:
             return UIColor(named: "BORDER")!
-        case .T1withAlpha:
+        case .whiteWithAlpha:
             return ThemeColor.white.color.withAlphaComponent(0.35)
         
             

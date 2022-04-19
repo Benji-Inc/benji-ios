@@ -140,7 +140,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         let groupName = "Favorites  /"
         self.titleLabel.setTextColor(.white)
         self.titleLabel.setText("\(groupName)  \(title)")
-        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.T1withAlpha.color], to: groupName)
+        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.whiteWithAlpha.color], to: groupName)
         
         self.layoutNow()
     }
