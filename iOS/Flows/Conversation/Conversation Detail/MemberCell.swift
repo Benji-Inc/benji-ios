@@ -66,7 +66,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         self.addSubview(self.focusCircle)
         
         self.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .B5)
+        self.lineView.set(backgroundColor: .white)
         self.lineView.alpha = 0.1
         
         self.subscribeToUpdates()

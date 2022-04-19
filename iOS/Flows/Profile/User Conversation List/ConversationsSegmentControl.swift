@@ -42,7 +42,7 @@ class ConversationsSegmentControl: UISegmentedControl {
         self.setTitleTextAttributes(attributes, for: .normal)
         self.setTitleTextAttributes(attributes, for: .selected)
         self.setTitleTextAttributes(attributes, for: .highlighted)
-        self.selectedSegmentTintColor = ThemeColor.B5.color.withAlphaComponent(0.1)
+        self.selectedSegmentTintColor = ThemeColor.white.color.withAlphaComponent(0.1)
     }
     
     required init?(coder: NSCoder) {

@@ -25,7 +25,7 @@ class ConversationEditCell: CollectionViewManagerCell, ManageableCell {
         self.label.setText("Edit")
         
         self.contentView.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .B5)
+        self.lineView.set(backgroundColor: .white)
         self.lineView.alpha = 0.1
     }
     

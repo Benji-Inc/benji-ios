@@ -21,7 +21,7 @@ class ExpressionView: BaseView {
         self.set(backgroundColor: .clear)
         
         self.addSubview(self.imageView)
-        self.imageView.tintColor = ThemeColor.B5.color.withAlphaComponent(0.3)
+        self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
         self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.label)
         

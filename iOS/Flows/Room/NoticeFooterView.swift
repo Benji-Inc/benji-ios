@@ -33,7 +33,7 @@ class NoticeFooterView: UICollectionReusableView {
     func initializeViews() {
         
         self.addSubview(self.pageIndicator)
-        self.pageIndicator.currentPageIndicatorTintColor = ThemeColor.B5.color
+        self.pageIndicator.currentPageIndicatorTintColor = ThemeColor.white.color
         self.pageIndicator.pageIndicatorTintColor = ThemeColor.B2.color
         self.pageIndicator.hidesForSinglePage = true
         

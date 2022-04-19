@@ -84,7 +84,7 @@ class SwipeableInputAccessoryView: BaseView {
         super.awakeFromNib()
         
         self.expressionView.configure(for: nil)
-        self.doneButton.set(style: .custom(color: .B5, textColor: .B0, text: "Done"))
+        self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
     }
 
     override func layoutSubviews() {
