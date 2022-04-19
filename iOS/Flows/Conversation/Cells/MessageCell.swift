@@ -135,7 +135,7 @@ class MessageCell: UICollectionViewCell {
         if message?.canBeConsumed ?? true {
             return ThemeColor.clear.color
         } else {
-            return ThemeColor.T1.color
+            return ThemeColor.white.color
         }
     }
 

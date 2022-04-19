@@ -29,7 +29,7 @@ class MessageDeliveryTypeBadgeView: BaseView {
 
         let configuration = UIImage.SymbolConfiguration(pointSize: 16.5)
         self.imageView.preferredSymbolConfiguration = configuration
-        self.imageView.tintColor = ThemeColor.T1.color
+        self.imageView.tintColor = ThemeColor.white.color
         self.imageView.contentMode = .center
 
         self.$deliveryType

@@ -21,7 +21,7 @@ class RoomAddCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.set(backgroundColor: .B6)
         self.contentView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.T1.color.withAlphaComponent(0.8)
+        self.imageView.tintColor = ThemeColor.white.color.withAlphaComponent(0.8)
         
         self.contentView.layer.borderColor = ThemeColor.BORDER.color.cgColor
         self.contentView.layer.borderWidth = 0.5

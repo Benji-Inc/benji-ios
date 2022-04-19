@@ -34,7 +34,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
                                          seperator: "",
                                          seperatorSpacing: 0,
                                          font: FontType.small.font,
-                                         textColor: ThemeColor.T1.color,
+                                         textColor: ThemeColor.white.color,
                                          animateInitialValue: true,
                                          gradientColor: nil,
                                          gradientStop: nil)
@@ -69,7 +69,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         
         let bubbleColor = ThemeColor.B1.color
         self.messageContent.configureBackground(color: bubbleColor.withAlphaComponent(0.8),
-                                                textColor: ThemeColor.T1.color,
+                                                textColor: ThemeColor.white.color,
                                                 brightness: 1.0,
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
@@ -119,9 +119,9 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         
         let title = self.conversationController?.conversation.title ?? "Untitled"
         let groupName = "Favorites  /"
-        self.titleLabel.setTextColor(.T1)
+        self.titleLabel.setTextColor(.white)
         self.titleLabel.setText("\(groupName)  \(title)")
-        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.T1.color.withAlphaComponent(0.35)], to: groupName)
+        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.white.color.withAlphaComponent(0.35)], to: groupName)
         
         self.layoutNow()
     }

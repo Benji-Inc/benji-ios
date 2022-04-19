@@ -64,7 +64,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         var color: ThemeColor {
             switch self {
             default:
-                return .T1
+                return .white
             }
         }
     }

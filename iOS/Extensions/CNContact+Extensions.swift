@@ -116,7 +116,7 @@ extension CNContact: PersonType {
 
         // Set the font size to something large so it will assured to be shrunk down to fit the label.
         label.font = FontType.regularBold.font.withSize(200)
-        label.textColor = ThemeColor.T1.color
+        label.textColor = ThemeColor.white.color
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
 

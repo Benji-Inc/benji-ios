@@ -51,7 +51,7 @@ class TextEntryField: BaseView, Sizeable {
                                               fontType: .regular,
                                               color: .T1withAlpha)
             self.textField.setPlaceholder(attributed: attributed)
-            self.textField.setDefaultAttributes(style: StringStyle(font: .regular, color: .T1),
+            self.textField.setDefaultAttributes(style: StringStyle(font: .regular, color: .white),
                                                 alignment: .center)
         }
 

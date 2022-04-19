@@ -162,7 +162,7 @@ class SwipeInputPanGestureHandler {
             if !self.isPreviewInDropZone {
                 self.animatePreviewScale(shouldScale: false)
                 previewView.setBubbleColor(ThemeColor.B6.color, animated: true)
-                previewView.textView.setTextColor(.T1)
+                previewView.textView.setTextColor(.white)
             }
             self.isPreviewInDropZone = true
 
@@ -190,7 +190,7 @@ class SwipeInputPanGestureHandler {
                 if let window = UIWindow.topWindow(), window.traitCollection.userInterfaceStyle == .light {
                     previewView.textView.setTextColor(.B0)
                 } else {
-                    previewView.textView.setTextColor(.T1)
+                    previewView.textView.setTextColor(.white)
                 }
             }
             self.isPreviewInDropZone = false

@@ -20,7 +20,7 @@ class ReadIndicatorView: BaseView {
                                               seperator: "",
                                               seperatorSpacing: 0,
                                               font: FontType.small.font,
-                                              textColor: ThemeColor.T1.color,
+                                              textColor: ThemeColor.white.color,
                                               animateInitialValue: true,
                                               gradientColor: nil,
                                               gradientStop: nil)
@@ -44,7 +44,7 @@ class ReadIndicatorView: BaseView {
              if message.canBeConsumed {
                  self.set(backgroundColor: .D6)
                  self.counter.isVisible = false
-                 self.imageView.tintColor = ThemeColor.T1.color
+                 self.imageView.tintColor = ThemeColor.white.color
              } else if !message.isFromCurrentUser,
                         message.isConsumedByMe,
                         message.hasBeenConsumedBy.count == 1 {

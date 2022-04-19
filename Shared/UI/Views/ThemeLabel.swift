@@ -45,7 +45,7 @@ class ThemeLabel: UILabel {
     /// The string attributes to apply to any text. This reflects the label's assigned font and font color.
     private var defaultAttributes: [NSAttributedString.Key : Any] {
         let font = self.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
-        let textColor = self.textColor ?? ThemeColor.T1.color
+        let textColor = self.textColor ?? ThemeColor.white.color
 
         return [.font : font,
                 .foregroundColor : textColor,
@@ -56,7 +56,7 @@ class ThemeLabel: UILabel {
 
     init(frame: CGRect = .zero,
          font: FontType,
-         textColor: ThemeColor = .T1) {
+         textColor: ThemeColor = .white) {
         
         self.kerning = font.kern
         self.stringCasing = .unchanged

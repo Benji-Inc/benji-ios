@@ -17,8 +17,8 @@ class ToastBannerView: ToastView {
     private let minimumHeight: CGFloat = ToastBannerView.padding.value.doubled + ToastBannerView.personHeight
 
     private let blurView = BlurView()
-    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .T1)
-    private let descriptionLabel = ThemeLabel(font: .small, textColor: .T1)
+    private let titleLabel = ThemeLabel(font: .regularBold, textColor: .white)
+    private let descriptionLabel = ThemeLabel(font: .small, textColor: .white)
     private let imageView = BorderedPersonView()
 
     let leftAnimator = UIViewPropertyAnimator(duration: 0.35,
@@ -53,7 +53,7 @@ class ToastBannerView: ToastView {
         self.addSubview(self.descriptionLabel)
         self.addSubview(self.titleLabel)
 
-        self.imageView.imageView.tintColor = ThemeColor.T1.color
+        self.imageView.imageView.tintColor = ThemeColor.white.color
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0

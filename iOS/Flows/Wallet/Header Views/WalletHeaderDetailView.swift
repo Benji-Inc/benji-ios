@@ -31,7 +31,7 @@ class WalletHeaderDetailView: BaseView {
         super.initializeSubviews()
         
         self.addSubview(self.detailDisclosure)
-        self.detailDisclosure.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
+        self.detailDisclosure.tintColor = ThemeColor.white.color.resolvedColor(with: self.traitCollection)
         self.detailDisclosure.isHidden = !self.showDetail
         
         self.addSubview(self.titleLabel)

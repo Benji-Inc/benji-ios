@@ -32,10 +32,10 @@ class ImageViewCoordinator: PresentableCoordinator<Void> {
         
         
         LightboxConfig.PageIndicator.textAttributes = [.font: FontType.xtraSmall.font,
-                                                       .foregroundColor: ThemeColor.T1.color.withAlphaComponent(0.2)]
+                                                       .foregroundColor: ThemeColor.white.color.withAlphaComponent(0.2)]
         
         LightboxConfig.InfoLabel.textAttributes = [.font: FontType.small.font,
-                                                   .foregroundColor: ThemeColor.T1.color]
+                                                   .foregroundColor: ThemeColor.white.color]
         
         LightboxConfig.CloseButton.text = ""
         LightboxConfig.CloseButton.image = UIImage(systemName: "xmark")

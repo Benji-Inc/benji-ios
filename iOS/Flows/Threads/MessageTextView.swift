@@ -76,7 +76,7 @@ class MessageTextView: TextView {
 
                     let alpha = lerp(CGFloat(i)/CGFloat(lookAheadCount), keyPoints: keyPoints)
                     updatedText.addAttribute(.foregroundColor,
-                                             value: ThemeColor.T1.color.withAlphaComponent(alpha),
+                                             value: ThemeColor.white.color.withAlphaComponent(alpha),
                                              range: nextRange)
 
                 }
@@ -92,7 +92,7 @@ class MessageTextView: TextView {
                 }
             }
 
-            self.textColor = ThemeColor.T1.color
+            self.textColor = ThemeColor.white.color
         }
 
         await self.animationTask?.value
