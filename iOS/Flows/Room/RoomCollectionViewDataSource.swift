@@ -38,6 +38,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     private let memberHeaderConfig = ManageableHeaderRegistration<SectionDividerView>().provider
     private let memberFooterConfig = ManageableFooterRegistration<SectionDividerView>().provider
     private let noticeCell = ManageableCellRegistration<NoticeCell>().provider
+    private let noticeFooter = ManageableFooterRegistration<NoticeFooterView>().provider
     
     var didSelectSegmentIndex: ((ConversationsSegmentControl.SegmentType) -> Void)? = nil
     var didSelectAddPerson: CompletionOptional = nil
@@ -125,8 +126,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
                 self.didSelectSegmentIndex?(index)
             }
             return header
-        default:
-            return nil
+        case .notices:
+            let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.noticeFooter, for: indexPath)
+            footer.pageIndicator.numberOfPages = self.snapshot().numberOfItems(inSection: section)
+            return footer
         }
     }
 }

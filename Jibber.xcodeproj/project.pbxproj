@@ -808,6 +808,8 @@
 		D6C3893A27287491004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893927287491004D29D5 /* StreamChat */; };
 		D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893B2728749C004D29D5 /* StreamChat */; };
 		D6C4BD4027C95E8400579014 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C4BD3F27C95E8400579014 /* ConversationCell.swift */; };
+		D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */; };
+		D6C64541280F4CEB00C10267 /* NoticeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */; };
 		D6C7EC262805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
 		D6C7EC272805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
 		D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
@@ -1347,6 +1349,8 @@
 		D6B95AF627236E1000FBE66A /* ConversationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsManager.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
 		D6C4BD3F27C95E8400579014 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
+		D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
+		D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeFooterView.swift; sourceTree = "<group>"; };
 		D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistCoordinator.swift; sourceTree = "<group>"; };
 		D6C7EC282805E64000A35808 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
@@ -2601,6 +2605,7 @@
 				D60B887A27F8A13A00B3E1C2 /* SectionDividerView.swift */,
 				D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */,
 				D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */,
+				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
 			);
 			path = Room;
 			sourceTree = "<group>";
@@ -2625,6 +2630,7 @@
 				8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */,
 				D615534D2745C1C900B08459 /* MessageContentView.swift */,
 				D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */,
+				D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */,
 			);
 			path = MessageContentView;
 			sourceTree = "<group>";
@@ -3523,6 +3529,7 @@
 				D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */,
 				8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */,
 				D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */,
+				D6C64541280F4CEB00C10267 /* NoticeFooterView.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
@@ -3548,6 +3555,7 @@
 				D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				D637651A27E936CB00CCDA7F /* SectionBackgroundView.swift in Sources */,
 				80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */,
+				D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
