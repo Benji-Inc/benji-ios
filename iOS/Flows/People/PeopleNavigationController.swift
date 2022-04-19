@@ -32,7 +32,7 @@ class PeopleNavigationController: NavigationController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
         
-        let textAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: ThemeColor.T1.color,
+        let textAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: ThemeColor.white.color,
                                                              .font : FontType.regularBold.font]
         self.navigationBar.titleTextAttributes = textAttributes
                 

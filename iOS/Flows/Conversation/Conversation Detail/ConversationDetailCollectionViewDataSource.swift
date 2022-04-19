@@ -57,11 +57,11 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         var color: ThemeColor {
             switch self {
             case .add:
-                return .T1
+                return .white
             case .hide:
-                return .T1
+                return .white
             case .leave:
-                return .T1
+                return .white
             case .delete:
                 return .red
             }

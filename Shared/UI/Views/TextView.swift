@@ -97,13 +97,13 @@ class TextView: UITextView {
         super.init(coder: aDecoder)
 
         self.font = FontType.regularBold.font
-        self.textColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
+        self.textColor = ThemeColor.white.color.resolvedColor(with: self.traitCollection)
 
         self.initializeViews()
     }
 
     convenience init() {
-        self.init(frame: .zero, font: .smallBold, textColor: .T1, textContainer: nil)
+        self.init(frame: .zero, font: .smallBold, textColor: .white, textContainer: nil)
     }
 
     func initializeViews() {
@@ -185,7 +185,7 @@ class TextView: UITextView {
         self.linkTextAttributes = [.foregroundColor: ThemeColor.D1.color, .underlineStyle: 0]
     }
 
-    func set(placeholder: Localized, color: ThemeColor = .T1withAlpha) {
+    func set(placeholder: Localized, color: ThemeColor = .whiteWithAlpha) {
         var styleAttributes = StringStyle(font: .regular, color: color).attributes
         let centeredParagraphStyle = NSMutableParagraphStyle()
         centeredParagraphStyle.alignment = .center

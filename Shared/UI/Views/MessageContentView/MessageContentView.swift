@@ -58,7 +58,7 @@ class MessageContentView: BaseView {
     /// Delivery view that shows how the message was sent
     let deliveryView = UIImageView()
     /// Text view for displaying the text of the message.
-    let textView = MessageTextView(font: .regular, textColor: .T1)
+    let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
     let linkView = LPLinkView()
 
@@ -74,8 +74,6 @@ class MessageContentView: BaseView {
         return self.blurView.effect == nil
     }
     let showEmotionsButton = EmotionGradientView()
-
-    let newMessageIndicatorView = UIImageView(image: UIImage(systemName: "eyeglasses"))
 
     var layoutState: Layout = .expanded
     private let cellDiameter: CGFloat
@@ -107,7 +105,7 @@ class MessageContentView: BaseView {
         self.emotionLabel.alpha = 0 
         
         self.addEmotionImageView.contentMode = .scaleAspectFit
-        self.addEmotionImageView.tintColor = ThemeColor.T1.color
+        self.addEmotionImageView.tintColor = ThemeColor.white.color
         self.bubbleView.addSubview(self.addEmotionImageView)
         self.addEmotionImageView.alpha = 0
         self.bubbleView.addSubview(self.addEmotionButton)
@@ -139,12 +137,6 @@ class MessageContentView: BaseView {
         self.dateView.alpha = 0.6
         self.mainContentArea.addSubview(self.emojiView)
 
-        self.addSubview(self.newMessageIndicatorView)
-        self.newMessageIndicatorView.set(backgroundColor: .badgeHighlightTop)
-        self.newMessageIndicatorView.tintColor = ThemeColor.L1.color
-        self.newMessageIndicatorView.contentMode = .center
-        self.newMessageIndicatorView.isVisible = false
-        
         self.setupHandlers()
     }
     
@@ -247,12 +239,6 @@ class MessageContentView: BaseView {
         }
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
-
-        // New Message Indicator
-        self.newMessageIndicatorView.size = CGSize(width: 40, height: 20)
-        self.newMessageIndicatorView.pin(.top, offset: .short)
-        self.newMessageIndicatorView.pin(.right, offset: .short)
-        self.newMessageIndicatorView.roundCorners()
     }
 
     private var linkProvider: LPMetadataProvider?

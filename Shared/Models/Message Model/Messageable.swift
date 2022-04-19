@@ -84,7 +84,7 @@ extension Messageable {
     var color: ThemeColor {
         if self.isFromCurrentUser {
             if self.deliveryType == .respectful {
-                return .T1
+                return .white
             } else {
                 return self.deliveryType.color
             }

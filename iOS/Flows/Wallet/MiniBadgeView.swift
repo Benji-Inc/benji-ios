@@ -13,7 +13,7 @@ class MiniBadgeView: BaseView {
     private let topView = BaseView()
     private let bottomView = BaseView()
     
-    private let amountLabel = ThemeLabel(font: .small, textColor: .T1)
+    private let amountLabel = ThemeLabel(font: .small, textColor: .white)
     private let imageView = UIImageView(image: UIImage(named: "Jib"))
     
     override func initializeSubviews() {
@@ -27,7 +27,7 @@ class MiniBadgeView: BaseView {
         self.topView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
         self.insertSubview(self.bottomView, at: 0)
-        self.bottomView.set(backgroundColor: .badgeBottom)
+        self.bottomView.set(backgroundColor: .B0)
 
         self.bottomView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit

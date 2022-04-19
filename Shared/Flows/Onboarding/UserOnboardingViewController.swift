@@ -39,7 +39,7 @@ class UserOnboardingViewController: ViewController {
         
         self.view.addSubview(self.messageBubble)
         self.messageBubble.addSubview(self.textView)
-        self.textView.setTextColor(.T1)
+        self.textView.setTextColor(.white)
 
         self.updateUI()
     }
@@ -98,7 +98,7 @@ class UserOnboardingViewController: ViewController {
 class OnboardingMessageTextView: TextView {
     
     init() {
-        super.init(frame: .zero, font: .small, textColor: .T1, textContainer: nil)
+        super.init(frame: .zero, font: .small, textColor: .white, textContainer: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

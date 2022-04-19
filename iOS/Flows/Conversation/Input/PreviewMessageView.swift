@@ -36,7 +36,7 @@ class PreviewMessageView: SpeechBubbleView {
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.addSubview(self.imageView)
         
-        self.imageView.layer.borderColor = ThemeColor.gray.color.cgColor
+        self.imageView.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
         self.imageView.layer.borderWidth = 2
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius

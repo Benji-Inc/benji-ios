@@ -52,10 +52,10 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
         } else {
             self.emotionLabel.setText("")
             self.label.setText("Select any emotion below to see what it means and add it to your message")
-            self.label.setTextColor(.T1)
+            self.label.setTextColor(.white)
             self.label.alpha = 0.2
             self.contentView.set(backgroundColor: .clear)
-            self.contentView.layer.borderColor = ThemeColor.T1.color.withAlphaComponent(0.2).cgColor
+            self.contentView.layer.borderColor = ThemeColor.white.color.withAlphaComponent(0.2).cgColor
         }
         
         self.setNeedsLayout()

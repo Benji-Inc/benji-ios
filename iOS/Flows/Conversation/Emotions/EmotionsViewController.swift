@@ -124,7 +124,7 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
     }
     
     private func updateButton() {
-        self.button.set(style: .custom(color: .B5, textColor: .T4, text: "Done"))
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.showButton = self.selectedEmotions.count > 0
             self.view.layoutNow()

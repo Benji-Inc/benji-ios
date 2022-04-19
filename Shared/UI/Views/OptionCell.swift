@@ -16,7 +16,7 @@ protocol OptionDisplayable {
 
 extension OptionDisplayable {
     var color: ThemeColor {
-        return .T1
+        return .white
     }
 }
 
@@ -31,12 +31,12 @@ class OptionCell: CollectionViewManagerCell {
         
         self.contentView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.T1.color
+        self.imageView.tintColor = ThemeColor.white.color
         
         self.contentView.addSubview(self.label)
         
         self.contentView.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .B5)
+        self.lineView.set(backgroundColor: .white)
         self.lineView.alpha = 0.1
     }
     

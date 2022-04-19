@@ -37,7 +37,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.topicLabel.textAlignment = .center
         
         self.view.addSubview(self.chevronImageView)
-        self.chevronImageView.tintColor = ThemeColor.T1.color
+        self.chevronImageView.tintColor = ThemeColor.white.color
         self.chevronImageView.contentMode = .scaleAspectFit
         
         self.view.addSubview(self.membersLabel)

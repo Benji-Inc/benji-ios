@@ -26,7 +26,7 @@ class UnreadMessagesCounter: BaseView {
                                       seperator: "",
                                       seperatorSpacing: 0,
                                       font: FontType.small.font,
-                                      textColor: ThemeColor.T1.color,
+                                      textColor: ThemeColor.white.color,
                                       animateInitialValue: true,
                                       gradientColor: nil,
                                       gradientStop: nil)
@@ -52,7 +52,7 @@ class UnreadMessagesCounter: BaseView {
         self.clipsToBounds = false
         
         self.addSubview(self.imageView)
-        self.imageView.tintColor = ThemeColor.T1.color.resolvedColor(with: self.traitCollection)
+        self.imageView.tintColor = ThemeColor.white.color.resolvedColor(with: self.traitCollection)
         
         self.addSubview(self.countCircle)
         self.countCircle.set(backgroundColor: .D6)

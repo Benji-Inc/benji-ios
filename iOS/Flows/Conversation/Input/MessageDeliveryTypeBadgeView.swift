@@ -15,52 +15,84 @@ class MessageDeliveryTypeBadgeView: BaseView {
     private var cancellables = Set<AnyCancellable>()
 
     private let imageView = UIImageView()
+    private let label = ThemeLabel(font: .small)
+    private let deliveryTypeLabel = ThemeLabel(font: .xtraSmall)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.addSubview(self.imageView)
+        self.addSubview(self.label)
+        self.addSubview(self.deliveryTypeLabel)
 
-        let configuration = UIImage.SymbolConfiguration(pointSize: 15)
+        self.set(backgroundColor: .badgeHighlightTop)
+
+        let configuration = UIImage.SymbolConfiguration(pointSize: 16.5)
         self.imageView.preferredSymbolConfiguration = configuration
-        self.imageView.set(backgroundColor: .badgeHighlightTop)
-        self.imageView.tintColor = ThemeColor.L1.color
+        self.imageView.tintColor = ThemeColor.white.color
         self.imageView.contentMode = .center
 
         self.$deliveryType
             .removeDuplicates()
             .mainSink { [unowned self] deliveryType in
-                self.imageView.isVisible = deliveryType.exists
-                self.imageView.image = deliveryType?.image
-                self.setNeedsLayout()
+                self.update(for: deliveryType)
             }.store(in: &self.cancellables)
+    }
+    
+    /// The currently running task.
+    private var animateTask: Task<Void, Never>?
+        
+    private func update(for type: MessageDeliveryType?) {
+        self.animateTask?.cancel()
+        
+        self.animateTask = Task { [weak self] in
+            guard let `self` = self, let type = type else {
+                await UIView.awaitAnimation(with: .fast, animations: {
+                    self?.alpha = 0.0
+                })
+                return
+            }
+            
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.alpha = 1.0
+                self.label.alpha = 0.0
+                self.deliveryTypeLabel.alpha = 0.0
+                self.imageView.alpha = 0.0
+                self.setNeedsLayout()
+            })
+            
+            self.imageView.image = type.image
+            self.deliveryTypeLabel.setText(type.displayName)
+            self.label.setText(type.description)
+            
+            guard !Task.isCancelled else { return }
+        
+            await UIView.awaitAnimation(with: .standard, animations: {
+                self.alpha = 1.0
+                self.label.alpha = 1.0
+                self.deliveryTypeLabel.alpha = 1.0
+                self.imageView.alpha = 1.0
+                self.setNeedsLayout()
+            })
+        }
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if let type = self.deliveryType {
-            switch type {
-            case .timeSensitive:
-                let configuration = UIImage.SymbolConfiguration(pointSize: 20)
-                self.imageView.preferredSymbolConfiguration = configuration
-                self.squaredSize = 30
-            case .conversational:
-                let configuration = UIImage.SymbolConfiguration(pointSize: 17.5)
-                self.imageView.preferredSymbolConfiguration = configuration
-                self.squaredSize = 27.5
-            case .respectful:
-                let configuration = UIImage.SymbolConfiguration(pointSize: 15)
-                self.imageView.preferredSymbolConfiguration = configuration
-                self.squaredSize = 25
-            }
-        } else {
-            let configuration = UIImage.SymbolConfiguration(pointSize: 15)
-            self.imageView.preferredSymbolConfiguration = configuration
-            self.squaredSize = 25
-        }
+        self.deliveryTypeLabel.setSize(withWidth: 200)
+        self.label.setSize(withWidth: 200)
+        self.height = 30
+        self.width = 30 + Theme.ContentOffset.short.value.doubled + self.label.width + Theme.ContentOffset.standard.value
+        self.imageView.squaredSize = self.height
+        self.imageView.pin(.left)
+        self.label.match(.left, to: .right, of: self.imageView)
+        self.deliveryTypeLabel.match(.left, to: .left, of: self.label)
+        
+        self.imageView.centerOnY()
+        self.deliveryTypeLabel.pin(.top, offset: .custom(2))
+        self.label.pin(.bottom, offset: .custom(4))
 
-        self.imageView.roundCorners()
-        self.imageView.expandToSuperviewSize()
+        self.layer.cornerRadius = self.halfHeight
     }
 }

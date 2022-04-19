@@ -14,8 +14,8 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: SystemNotice?
     
-    private let titleLabel = ThemeLabel(font: .mediumBold, textColor: .T1)
-    private let descriptionLabel = ThemeLabel(font: .regular, textColor: .T1)
+    private let titleLabel = ThemeLabel(font: .mediumBold, textColor: .white)
+    private let descriptionLabel = ThemeLabel(font: .regular, textColor: .white)
     private let imageView = BorderedPersonView()
     
     private let rightButtonLabel = ThemeLabel(font: .regularBold)
