@@ -25,6 +25,8 @@ class MessageTextView: TextView {
     }
 
     func setText(with message: Messageable) {
+        self.animationTask?.cancel()
+
         self.setText(message.kind.text)
     }
 
@@ -50,5 +52,82 @@ class MessageTextView: TextView {
 
         // Return nil to pass touch to next receiver
         return nil
+    }
+
+    var animationTask: Task<Void, Never>?
+
+    func startReadAnimation() async {
+        self.animationTask?.cancel()
+
+        self.animationTask = Task {
+            let nsString = self.attributedText.string as NSString
+            let substringRanges: [NSRange] = nsString.getRangesOfSubstringsSeparatedBySpaces()
+
+            let lookAheadCount = 5
+            for index in -lookAheadCount..<substringRanges.count {
+                guard !Task.isCancelled else { return }
+
+                let updatedText = self.attributedText.mutableCopy() as! NSMutableAttributedString
+
+                let keyPoints: [CGFloat] = [1, 0.9, 0.7, 0.35, 0]
+
+                for i in 0...lookAheadCount {
+                    guard let nextRange = substringRanges[safe: index + i] else { continue }
+
+                    let alpha = lerp(CGFloat(i)/CGFloat(lookAheadCount), keyPoints: keyPoints)
+                    updatedText.addAttribute(.foregroundColor,
+                                             value: ThemeColor.T1.color.withAlphaComponent(alpha),
+                                             range: nextRange)
+
+                }
+
+                await withCheckedContinuation { continuation in
+                    UIView.transition(with: self,
+                                      duration: 0.1,
+                                      options: [.transitionCrossDissolve, .curveLinear]) {
+                        self.attributedText = updatedText
+                    } completion: { completed in
+                        continuation.resume(returning: ())
+                    }
+                }
+            }
+
+            self.textColor = ThemeColor.T1.color
+        }
+
+        await self.animationTask?.value
+    }
+}
+
+
+fileprivate extension NSString {
+
+    func getRangesOfSubstringsSeparatedBySpaces() -> [NSRange] {
+        var substringRanges: [NSRange] = []
+
+        let fullRange = NSRange(location: 0, length: self.length)
+        var location: Int?
+        self.enumerateSubstrings(in: fullRange, options: .byComposedCharacterSequences)
+        { (substring, substringRange, _, _) in
+
+            if substring == " " {
+                if let location = location {
+                    substringRanges.append(NSRange(location: location,
+                                                   length: substringRange.location - location))
+                }
+
+                location = nil
+            } else {
+                if location.isNil {
+                    location = substringRange.location
+                }
+            }
+        }
+
+        if let location = location {
+            substringRanges.append(NSRange(location: location, length: self.length - location))
+        }
+
+        return substringRanges
     }
 }

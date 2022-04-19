@@ -88,7 +88,10 @@ class MessageCell: UICollectionViewCell {
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
-        
+
+        self.content.textView.textColor = self.getTextColor(for: message)
+        self.content.newMessageIndicatorView.isVisible = message.canBeConsumed
+
         self.message = message
         
         self.footerView.configure(for: message)
@@ -108,9 +111,9 @@ class MessageCell: UICollectionViewCell {
                 = layoutAttributes as? ConversationMessageCellLayoutAttributes else {
             return
         }
-        
+
         self.content.configureBackground(color: ThemeColor.B7.color,
-                                         textColor: ThemeColor.T1.color,
+                                         textColor: self.getTextColor(for: self.message),
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: false,
                                          tailOrientation: .down)
@@ -119,10 +122,23 @@ class MessageCell: UICollectionViewCell {
 
         self.footerView.alpha = messageLayoutAttributes.detailAlpha
 
+        // Hide the emotions view if the cell is scrolled out of focus.
+        if messageLayoutAttributes.detailAlpha < 0.5 && self.content.areEmotionsShown {
+            self.content.setEmotions(areShown: false, animated: true)
+        }
+
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
         self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
 
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
+    }
+
+    private func getTextColor(for message: Messageable?) -> UIColor {
+        if message?.canBeConsumed ?? true {
+            return ThemeColor.clear.color
+        } else {
+            return ThemeColor.T1.color
+        }
     }
 
     private var messageController: MessageController?
@@ -197,7 +213,10 @@ class MessageCell: UICollectionViewCell {
         guard messageable.canBeConsumed else { return }
 
         Task {
-            await Task.snooze(seconds: 2)
+            guard !Task.isCancelled else { return }
+
+            await self.content.textView.startReadAnimation()
+
             guard !Task.isCancelled else { return }
 
             await messageable.setToConsumed()

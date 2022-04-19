@@ -25,7 +25,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     private let emotionNameLabel = ThemeLabel(font: .smallBold)
     private let label = ThemeLabel(font: .small)
-    
+
     override func initializeViews() {
         super.initializeViews()
 
