@@ -9,7 +9,7 @@
 import Foundation
 
 class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
-    
+        
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
@@ -42,9 +42,29 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: sectionInset,
                                                                 leading: 0,
-                                                                bottom: 20,
+                                                                bottom: 0,
                                                                 trailing: 0)
+                section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+                    items.forEach { item in
+                        let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
+                        let minScale: CGFloat = 0.975
+                        let maxScale: CGFloat = 1.0
+                        let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
+                        item.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: scale, y: 1.0)
+                        
+                        if distanceFromCenter < 5 {
+                            NotificationCenter.default.post(name: .onNoticeIndexChanged, object: item.indexPath.row)
+                        }
+                    }
+                }
                 
+                let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30))
+                let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+                footerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                                   leading: 0,
+                                                                   bottom: 0,
+                                                                   trailing: 0)
+                section.boundarySupplementaryItems = [footerItem]
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
                 
                 return section
@@ -84,7 +104,7 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                    bottom: 0,
                                                                    trailing: 0)
                 section.boundarySupplementaryItems = [headerItem, footerItem]
-                section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+                section.orthogonalScrollingBehavior = .continuous
                 
                 return section
             case .conversations:
@@ -133,4 +153,8 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension Notification.Name {
+    static let onNoticeIndexChanged = Notification.Name("onNoticeIndexChanged")
 }
