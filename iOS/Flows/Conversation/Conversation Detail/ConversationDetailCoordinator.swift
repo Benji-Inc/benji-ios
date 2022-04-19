@@ -103,10 +103,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             }
         })
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            (action : UIAlertAction!) -> Void in
-            
-        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
 
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
@@ -115,7 +112,6 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     }
     
     func presentDetail(option: ConversationDetailCollectionViewDataSource.OptionType) {
-                
         let controller = ChatClient.shared.channelController(for: self.cid)
         
         var title: String = ""
@@ -170,10 +166,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             }
         })
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            (action : UIAlertAction!) -> Void in
-            
-        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
 
         alertController.addAction(primaryAction)
         alertController.addAction(cancelAction)

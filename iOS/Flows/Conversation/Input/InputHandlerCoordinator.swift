@@ -220,17 +220,15 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     // https://developer.apple.com/documentation/photokit/selecting_photos_and_videos_in_ios
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        
         Task.onMainActorAsync {
-    
-            self.inputHandlerViewController.dismiss(animated: true) { 
+            self.inputHandlerViewController.dismiss(animated: true) {
                 self.inputHandlerViewController.becomeFirstResponder()
             }
             
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             
             guard let indentifier = results.first?.assetIdentifier,
-                    let asset = PHAsset.fetchAssets(withLocalIdentifiers: [indentifier], options: nil).firstObject,
+                  let asset = PHAsset.fetchAssets(withLocalIdentifiers: [indentifier], options: nil).firstObject,
                   let kind = try? await AttachmentsManager.shared.getMessageKind(for: Attachment(asset: asset), body: text) else { return }
             
             self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
@@ -244,14 +242,17 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         picker.dismiss(animated: true) { [unowned self] in
             self.toPresentable().becomeFirstResponder()
             
             Task.onMainActorAsync {
                 let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
-                guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else { return }
+                guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else {
+                    return
+                }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }

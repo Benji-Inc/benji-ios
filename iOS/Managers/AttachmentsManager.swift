@@ -83,7 +83,7 @@ class AttachmentsManager {
 
                     try data?.write(to: url, options: .atomic)
                     try previewData?.write(to: previewURL, options: .atomic)
-                    let item = PhotoAttachment(url: url, previewUrl: previewURL, _data: data, info: info)
+                    let item = PhotoAttachment(url: url, previewUrl: previewURL, data: data, info: info)
                     continuation.resume(returning: .photo(photo: item, body: body))
                 } catch  {
                     logError(error)
@@ -106,7 +106,7 @@ class AttachmentsManager {
                 { (data, type, orientation, info) in
                     Task {
                         let url = try await self.getAssetURL(for: attachment.asset)
-                        let item = PhotoAttachment(url: url, _data: data, info: info)
+                        let item = PhotoAttachment(url: url, previewUrl: url, data: data, info: info)
                         continuation.resume(returning: .photo(photo: item, body: body))
                     }
                 }

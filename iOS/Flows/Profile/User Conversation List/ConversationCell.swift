@@ -146,7 +146,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     }
     
     private func subscribeToUpdates() {
-        
         self.subscriptions.forEach { cancellable in
             cancellable.cancel()
         }

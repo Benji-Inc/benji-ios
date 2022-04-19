@@ -14,10 +14,7 @@ struct PhotoAttachment: MediaItem {
     var url: URL?
     var previewUrl: URL?
 
-    var image: UIImage? {
-        guard let data = self.data else { return nil }
-        return UIImage(data: data)
-    }
+    var image: UIImage?
 
     var size: CGSize {
         guard let asset = self.info?[UIImagePickerController.InfoKey.phAsset] as? PHAsset else { return .zero }
@@ -34,9 +31,28 @@ struct PhotoAttachment: MediaItem {
     }
 
     var data: Data? {
-        return self._data
+        didSet {
+            self.convertDataIntoImage()
+        }
     }
 
-    var _data: Data?
     var info: [AnyHashable: Any]?
+
+    init(url: URL?, previewUrl: URL?, data: Data?, info: [AnyHashable : Any]?) {
+        self.url = url
+        self.previewUrl = previewUrl
+        self.data = data
+        self.info  = info
+
+        self.convertDataIntoImage()
+    }
+
+    mutating private func convertDataIntoImage() {
+        guard let data = self.data else {
+            self.image = nil
+            return
+        }
+
+        self.image = UIImage(data: data)
+    }
 }
