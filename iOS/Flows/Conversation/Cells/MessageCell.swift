@@ -90,8 +90,6 @@ class MessageCell: UICollectionViewCell {
         self.content.configure(with: message)
 
         self.content.textView.textColor = self.getTextColor(for: message)
-        self.content.newMessageIndicatorView.isVisible = message.canBeConsumed
-
         self.message = message
         
         self.footerView.configure(for: message)
