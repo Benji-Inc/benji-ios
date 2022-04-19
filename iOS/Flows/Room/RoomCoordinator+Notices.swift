@@ -15,7 +15,7 @@ extension RoomCoordinator {
     func handleRightOption(with notice: SystemNotice) {
         switch notice.type {
         case .timeSensitiveMessage, .messageRead:
-            guard let cidValue = notice.attributes?["channelId"] as? String,
+            guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String else { return }
             self.presentConversation(with: cid, messageId: messageId)
@@ -40,7 +40,7 @@ extension RoomCoordinator {
                     
                     if let n = notice.notice {
                         try n.delete()
-                        await self.roomVC.reloadNotices()
+                        self.roomVC.reloadNotices()
                     }
 
                 } catch {
@@ -51,7 +51,7 @@ extension RoomCoordinator {
             Task {
                 if let n = notice.notice {
                     try n.delete()
-                    await self.roomVC.reloadNotices()
+                    self.roomVC.reloadNotices()
                 }
             }
         case .unreadMessages:
@@ -73,7 +73,7 @@ extension RoomCoordinator {
                 
                 if let n = notice.notice {
                     try n.delete()
-                    await self.roomVC.reloadNotices()
+                    self.roomVC.reloadNotices()
                 }
             }
         default:

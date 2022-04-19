@@ -64,12 +64,21 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         case .timeSensitiveMessage:
             guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
-                  let messageId = notice.attributes?["messageId"] as? String,
-                  let message = ChatClient.shared.message(cid: cid, id: messageId),
-                  let author = await PeopleStore.shared.getPerson(withPersonId: message.author.id) else {
+                  let messageId = notice.attributes?["messageId"] as? String else {
                 self.showError()
                 return }
             
+            let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
+            try? await controller.synchronize()
+            
+            guard let message = controller.message,
+                  let author = await PeopleStore.shared.getPerson(withPersonId: message.author.personId) else {
+                self.showError()
+                return
+            }
+            
+            self.titleLabel.setText("\(author.givenName.firstCapitalized) said:")
+            self.descriptionLabel.setText(message.text)
             self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
             self.imageView.displayable = author
@@ -98,13 +107,28 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String,
-                  let authorId = ChatClient.shared.message(cid: cid, id: messageId)?.author.id,
-                  let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else { self.showError()
-                return }
+                    let userIds = notice.attributes?["userIds"] as? [String] else {
+                self.showError()
+                return
+            }
             
-            self.rightButtonLabel.setText("Ok")
+            let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
+            try? await controller.synchronize()
+            
+            guard let message = controller.message else {
+                self.showError()
+                return
+            }
+            
+            guard let readers = await userIds.asyncMap({ userId in
+                return await PeopleStore.shared.getPerson(withPersonId: userId)
+            }).first else { return }
+            
+            self.titleLabel.setText("\(readers!.givenName.firstCapitalized) read:")
+            self.descriptionLabel.setText(message.text)
+            self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
-            self.imageView.displayable = author
+            self.imageView.displayable = readers
         case .unreadMessages:
             let count = notice.notice?.unreadMessages.count ?? 0
             
@@ -116,7 +140,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             } else {
                 let text = "You have \(notice.notice?.unreadMessages.count ?? 0) unread messages."
                 self.descriptionLabel.setText(text)
-                self.rightButtonLabel.setText("View")
+                self.rightButtonLabel.setText("")
                 self.leftButtonLabel.setText("")
             }
             

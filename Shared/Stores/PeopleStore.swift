@@ -54,7 +54,21 @@ class PeopleStore {
     }
     
     private var contactsDictionary: [String : CNContact] = [:]
+    
+    var unclaimedReservationWithoutContact: [String: Reservation] {
+        return self.unclaimedReservations.filter { key in
+            return key.value.isClaimed == false && key.value.contactId.isNil
+        }
+    }
+    
+    var unclaimedReservationWithContact: [String: Reservation] {
+        return self.unclaimedReservations.filter { key in
+            return key.value.isClaimed == false && key.value.contactId.exists
+        }
+    }
+    
     private(set) var unclaimedReservations: [String : Reservation] = [:]
+    
     var usersArray: [User] {
         return Array(self.usersDictionary.values)
     }
@@ -121,7 +135,7 @@ class PeopleStore {
     }
 
     private func getAndStoreAllContactsWithUnclaimedReservations() async {
-        let reservations = await Reservation.getAllUnclaimedWithContact()
+        let reservations = await Reservation.getAllUnclaimed()
         reservations.forEach { reservation in
             if let reservationId = reservation.objectId {
                 self.unclaimedReservations[reservationId] = reservation
@@ -212,15 +226,16 @@ class PeopleStore {
         }
 
         // Observe changes to all unclaimed reservations that the user owns.
-        let reservationQuery = Reservation.allUnclaimedWithContactQuery()
+        let reservationQuery = Reservation.allUnclaimedQuery()
         let reservationSubscription = Client.shared.subscribe(reservationQuery)
         reservationSubscription.handleEvent { query, event in
             switch event {
             case .entered(let object), .created(let object), .updated(let object):
-                guard let reservation = object as? Reservation,
-                      let contactId = reservation.contactId else { return }
+                guard let reservation = object as? Reservation else { return }
 
                 self.unclaimedReservations[reservation.objectId!] = reservation
+                
+                guard let contactId = reservation.contactId else { return }
 
                 guard ContactsManager.shared.hasPermissions, let contact =
                         ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
@@ -228,11 +243,14 @@ class PeopleStore {
                         }
                 self.contactsDictionary[contactId] = contact
             case .left(let object), .deleted(let object):
-                guard let reservation = object as? Reservation,
-                      let contactId = reservation.contactId else { return }
+                guard let reservation = object as? Reservation else { return }
+
+                self.unclaimedReservations[reservation.objectId!] = nil
+
+                
+                guard let contactId = reservation.contactId else { return }
 
                 self.contactsDictionary[contactId] = nil
-                self.unclaimedReservations[reservation.objectId!] = nil
 
                 guard let contact =
                         ContactsManager.shared.searchForContact(with: .identifier(contactId)).first else {
@@ -300,7 +318,7 @@ class PeopleStore {
             foundPerson = user
         } else if let contact = self.contactsDictionary[personId] {
             foundPerson = contact
-        } else if let user = try? await User.getObject(with: personId) {
+        } else if let user = try? await User.getObject(with: personId).retrieveDataIfNeeded() {
             foundPerson = user
 
             // This is a newly retrieved person, so cache it and let subscribers know about it.
