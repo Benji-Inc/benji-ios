@@ -72,7 +72,6 @@ class DisplayableImageView: BaseView {
         self.$state.mainSink { [weak self] state in
             guard let `self` = self else { return }
 
-            logDebug("\(Unmanaged.passUnretained(self).toOpaque()) switched to \(state)")
             switch state {
             case .initial:
                 self.animationView.reset()

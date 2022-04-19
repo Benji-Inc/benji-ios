@@ -244,6 +244,9 @@ class MessageContentView: BaseView {
     private var linkProvider: LPMetadataProvider?
 
     func configure(with message: Messageable) {
+        // True we're changing what message to display
+        let isDifferentMessage = self.message?.id != message.id
+
         self.message = message
 
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
@@ -265,9 +268,14 @@ class MessageContentView: BaseView {
 
             switch message.kind {
             case .photo(photo: let photo, _):
+                // Only reload the picture if it's actually a new message.
                 guard let previewUrl = photo.previewUrl else { break }
-                self.imageView.displayable = previewUrl
+
+                if isDifferentMessage || self.imageView.displayable.isNil {
+                    self.imageView.displayable = previewUrl
+                }
             case .link(url: let url, _):
+                guard isDifferentMessage else { break }
                 self.linkProvider?.cancel()
 
                 let initialMetadata = LPLinkMetadata()
