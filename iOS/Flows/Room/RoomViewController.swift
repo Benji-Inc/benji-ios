@@ -118,9 +118,19 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         var data: [RoomSectionType: [RoomItemType]] = [:]
         
         try? await NoticeStore.shared.initializeIfNeeded()
-        let notices = await NoticeStore.shared.getAllNotices().filter({ notice in
+        var notices = await NoticeStore.shared.getAllNotices().filter({ notice in
             return notice.type != .unreadMessages
         })
+        
+        if notices.isEmpty {
+            let empty = SystemNotice(createdAt: Date(),
+                                     notice: nil,
+                                     type: .system,
+                                     priority: 0,
+                                     body: "Nothing to see here... yet.",
+                                     attributes: [:])
+            notices = [empty]
+        }
         
         data[.notices] = notices.compactMap({ notice in
             return .notice(notice)
@@ -172,17 +182,20 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             guard let `self` = self else { return }
             
             try? await NoticeStore.shared.initializeIfNeeded()
-            let notices = await NoticeStore.shared.getAllNotices()
-            
-            var items: [RoomItemType] = notices.compactMap({ notice in
-                return .notice(notice)
-            })
-            
-            let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservationWithoutContact.keys.compactMap { reservationId in
-                return .add(reservationId)
+            var notices = await NoticeStore.shared.getAllNotices()
+            if notices.isEmpty {
+                let empty = SystemNotice(createdAt: Date(),
+                                         notice: nil,
+                                         type: .system,
+                                         priority: 0,
+                                         body: "Nothing to see here... yet.",
+                                         attributes: [:])
+                notices = [empty]
             }
             
-            items.append(contentsOf: addItems)
+            let items: [RoomItemType] = notices.compactMap({ notice in
+                return .notice(notice)
+            })
             
             var snapshot = self.dataSource.snapshot()
             snapshot.setItems(items, in: .notices)
