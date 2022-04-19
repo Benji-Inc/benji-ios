@@ -14,7 +14,7 @@ class MessageFooterView: BaseView {
     
     static let height: CGFloat = 70
     
-    let readView = MessageReadView()
+    let readView = ReadIndicatorView()
     let replySummary = ReplySummaryView()
         
     override func initializeSubviews() {

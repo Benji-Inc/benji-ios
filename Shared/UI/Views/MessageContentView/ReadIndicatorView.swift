@@ -9,7 +9,7 @@
 import Foundation
 import ScrollCounter
 
-class MessageReadView: BaseView {
+class ReadIndicatorView: BaseView {
     
     private let imageView = UIImageView(image: UIImage(systemName: "eyeglasses"))
     private let counter = NumberScrollCounter(value: 0,
@@ -20,7 +20,7 @@ class MessageReadView: BaseView {
                                               seperator: "",
                                               seperatorSpacing: 0,
                                               font: FontType.small.font,
-                                              textColor: ThemeColor.T1withAlpha.color,
+                                              textColor: ThemeColor.T1.color,
                                               animateInitialValue: true,
                                               gradientColor: nil,
                                               gradientStop: nil)
@@ -53,6 +53,7 @@ class MessageReadView: BaseView {
                  self.set(backgroundColor: .clear)
              } else {
                  self.counter.isVisible = true
+                 self.counter.alpha = 0.35
                  self.imageView.tintColor = ThemeColor.T1withAlpha.color
                  self.set(backgroundColor: .clear)
              }
