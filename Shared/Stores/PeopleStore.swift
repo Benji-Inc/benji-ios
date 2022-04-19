@@ -318,7 +318,7 @@ class PeopleStore {
             foundPerson = user
         } else if let contact = self.contactsDictionary[personId] {
             foundPerson = contact
-        } else if let user = try? await User.getObject(with: personId) {
+        } else if let user = try? await User.getObject(with: personId).retrieveDataIfNeeded() {
             foundPerson = user
 
             // This is a newly retrieved person, so cache it and let subscribers know about it.
