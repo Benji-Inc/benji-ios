@@ -96,7 +96,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.init(with: self.threadCollectionView)
 
         self.dataSource.messageSequenceController = self.messageController
-        self.threadCollectionView.threadLayout.dataSource = self.dataSource
+        self.threadCollectionView.threadLayout.messageDataSource = self.dataSource
         self.messageController.listOrdering = .bottomToTop
     }
     

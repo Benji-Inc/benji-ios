@@ -194,7 +194,7 @@ extension MessageSequenceCollectionViewDataSource {
 
 // MARK: - TimelineCollectionViewLayoutDataSource
 
-extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayoutDataSource {
+extension MessageSequenceCollectionViewDataSource: MessagesTimeMachineCollectionViewLayoutDataSource {
 
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType {
         guard let item = self.itemIdentifier(for: indexPath) else {
@@ -222,6 +222,23 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
             return TimeMachineLayoutItem(date: .distantPast)
         case .placeholder:
             return TimeMachineLayoutItem(date: .distantFuture)
+        }
+    }
+
+    func isUserCreatedItem(at indexPath: IndexPath) -> Bool {
+        guard let item = self.itemIdentifier(for: indexPath) else { return false }
+
+        switch item {
+        case .message(let messageId, _):
+            // We should always scroll to the end when inserting messages from our selves
+            guard let message = self.messageSequenceController.getMessage(withId: messageId) else {
+                return false
+            }
+            return message.isFromCurrentUser
+        case .loadMore, .initial:
+            return false
+        case .placeholder:
+            return true
         }
     }
 }
