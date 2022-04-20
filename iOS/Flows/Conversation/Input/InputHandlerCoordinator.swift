@@ -119,7 +119,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     func presentExpressions() {
         let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
-            AnalyticsManager.shared.trackEvent(type: .expressionSelected, properties: ["value": result.emoji])
+            AnalyticsManager.shared.trackEvent(type: .expressionSelected,
+                                               properties: ["value" : result.emoji])
             self.inputHandlerViewController.swipeableVC.currentExpression = result
         }
     }
@@ -128,7 +129,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     func presentAttachments() {
         let coordinator = AttachmentsCoordinator(router: self.router, deepLink: self.deepLink)
-        
         self.present(coordinator) { [unowned self] result in
             self.handle(attachmentOption: result)
         }
@@ -138,21 +138,23 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                               finishedHandler: ((ChildResult) -> Void)? = nil,
                               cancelHandler: (() -> Void)? = nil) {
         self.removeChild()
-        
+        let previousFirstResponder = UIResponder.firstResponder
+
         // Because of how the People are presented, we need to properly reset the KeyboardManager.
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+        coordinator.toPresentable().dismissHandlers.append { [unowned self, weak previousFirstResponder] in
+            // Make sure the input view is shown after the presented view is dismissed.
             self.inputHandlerViewController.becomeFirstResponder()
+            // If there was a previous first responder, restore its first responder status.
+            previousFirstResponder?.becomeFirstResponder()
         }
         
         self.addChildAndStart(coordinator) { [unowned self, unowned coordinator] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.inputHandlerViewController.becomeFirstResponder()
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 finishedHandler?(result)
             }
         }
         
         self.inputHandlerViewController.resignFirstResponder()
-        self.inputHandlerViewController.updateUI(for: .read, forceLayout: true)
         self.router.present(coordinator, source: self.inputHandlerViewController, cancelHandler: cancelHandler)
     }
     
@@ -162,7 +164,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             guard let first = array.first else { return }
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             Task.onMainActorAsync {
-                guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: first, body: text) else { return }
+                guard let kind
+                        = try? await AttachmentsManager.shared.getMessageKind(for: first, body: text) else { return }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }

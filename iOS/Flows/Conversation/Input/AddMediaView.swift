@@ -37,6 +37,9 @@ class AddMediaView: ThemeButton {
         self.layer.cornerRadius = Theme.innerCornerRadius
                 
         self.addSubview(self.displayableImageView)
+        // Don't allow user interaction on the image so it doesn't interfere with the UIMenu interaction.
+        self.displayableImageView.isUserInteractionEnabled = false
+
         self.showsMenuAsPrimaryAction = true 
     }
     
@@ -54,7 +57,7 @@ class AddMediaView: ThemeButton {
         self.displayableImageView.displayable = item
         self.updateMenu(for: item)
     }
-    
+
     private func updateMenu(for item: MediaItem?) {
         if let item = item {
             self.menu = self.createMenu(for: item)
@@ -64,10 +67,9 @@ class AddMediaView: ThemeButton {
     }
     
     private func createMenu(for item: MediaItem) -> UIMenu {
-        
         let remove = UIAction(title: "Remove",
                               image: UIImage(systemName: "trash"),
-                              attributes: .destructive) { action in
+                              attributes: .destructive) { [unowned self] action in
             self.didSelectRemove?()
         }
 

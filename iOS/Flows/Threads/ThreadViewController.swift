@@ -77,7 +77,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
 
     override var canBecomeFirstResponder: Bool {
-        return true
+        return self.presentedViewController.isNil
     }
 
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
