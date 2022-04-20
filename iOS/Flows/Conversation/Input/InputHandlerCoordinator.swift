@@ -141,16 +141,16 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         let previousFirstResponder = UIResponder.firstResponder
 
         // Because of how the People are presented, we need to properly reset the KeyboardManager.
-        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+        coordinator.toPresentable().dismissHandlers.append { [unowned self, weak previousFirstResponder] in
+            // Make sure the input view is shown after the presented view is dismissed.
             self.inputHandlerViewController.becomeFirstResponder()
+            // If there was a previous first responder, restore its first responder status.
             previousFirstResponder?.becomeFirstResponder()
         }
         
         self.addChildAndStart(coordinator) { [unowned self, unowned coordinator] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.inputHandlerViewController.becomeFirstResponder()
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 finishedHandler?(result)
-                previousFirstResponder?.becomeFirstResponder()
             }
         }
         
