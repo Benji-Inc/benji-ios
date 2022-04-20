@@ -271,11 +271,12 @@ class MessageContentView: BaseView {
                 // Only reload the picture if it's actually a new message.
                 guard let previewUrl = photo.previewUrl else { break }
 
-                if isDifferentMessage || self.imageView.displayable.isNil {
+                if isDifferentMessage || self.imageView.imageView.image.isNil {
                     self.imageView.displayable = previewUrl
                 }
             case .link(url: let url, _):
-                guard isDifferentMessage else { break }
+                guard isDifferentMessage || url != self.linkView.metadata.originalURL else { break }
+
                 self.linkProvider?.cancel()
 
                 let initialMetadata = LPLinkMetadata()
@@ -284,6 +285,8 @@ class MessageContentView: BaseView {
 
                 self.linkProvider = LPMetadataProvider()
                 self.linkProvider?.startFetchingMetadata(for: url) { (metadata, error) in
+                    logDebug("finished fetch for \(url.debugDescription). Error is \(error.debugDescription)")
+
                     Task.onMainActor {
                         guard let metadata = metadata else { return }
                         self.linkView.metadata = metadata
