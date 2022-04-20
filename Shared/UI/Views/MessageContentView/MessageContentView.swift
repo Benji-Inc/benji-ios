@@ -244,6 +244,9 @@ class MessageContentView: BaseView {
     private var linkProvider: LPMetadataProvider?
 
     func configure(with message: Messageable) {
+        // True we're changing what message to display
+        let isDifferentMessage = self.message?.id != message.id
+
         self.message = message
 
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
@@ -265,9 +268,14 @@ class MessageContentView: BaseView {
 
             switch message.kind {
             case .photo(photo: let photo, _):
+                // Only reload the picture if it's actually a new message.
                 guard let previewUrl = photo.previewUrl else { break }
-                self.imageView.displayable = previewUrl
+
+                if isDifferentMessage || self.imageView.displayable.isNil {
+                    self.imageView.displayable = previewUrl
+                }
             case .link(url: let url, _):
+                guard isDifferentMessage else { break }
                 self.linkProvider?.cancel()
 
                 let initialMetadata = LPLinkMetadata()
@@ -316,6 +324,14 @@ class MessageContentView: BaseView {
         self.bubbleView.setBubbleColor(color.withAlphaComponent(brightness), animated: false)
         self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.bubbleView.orientation = tailOrientation
+    }
+
+    func playReadAnimations() async {
+        await self.textView.startReadAnimation()
+        await UIView.awaitAnimation(with: .custom(1)) {
+            self.imageView.alpha = 1
+            self.linkView.alpha = 1
+        }
     }
 
     func setEmotions(areShown: Bool, animated: Bool) {

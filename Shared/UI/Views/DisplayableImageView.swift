@@ -14,11 +14,6 @@ import Lottie
 
 class DisplayableImageView: BaseView {
 
-    private(set) var imageView = UIImageView()
-    var cancellables = Set<AnyCancellable>()
-
-    let blurView = BlurView()
-
     enum State {
         case initial
         case loading
@@ -28,16 +23,26 @@ class DisplayableImageView: BaseView {
 
     @Published var state: State = .initial
 
-    let animationView = AnimationView()
+    private(set) var imageView = UIImageView()
+    private let blurView = BlurView()
+    private let animationView = AnimationView()
+
+    var cancellables = Set<AnyCancellable>()
 
     private var displayableTask: Task<Void, Never>?
     var displayable: ImageDisplayable? {
         didSet {
+            // Don't load the displayable again if it hasn't changed.
+            if let displayable = self.displayable, displayable.isEqual(to: oldValue) {
+                return
+            }
+
             self.displayableTask?.cancel()
 
             // A nil displayable can be applied immediately without creating a task.
             guard let displayableRef = self.displayable else {
                 self.imageView.image = nil
+                self.state = .initial
                 return
             }
 
@@ -53,6 +58,7 @@ class DisplayableImageView: BaseView {
         configuration.requestCachePolicy = .returnCacheDataElseLoad
         return URLSession(configuration: configuration)
     }()
+
 
     // MARK: - Life cycle
 
@@ -123,8 +129,8 @@ class DisplayableImageView: BaseView {
     // MARK: - Image Retrieval/Setting
 
     private func updateImageView(with displayable: ImageDisplayable?) async {
-        if let photo = displayable?.image {
-            await self.set(image: photo, state: .success)
+        if let image = displayable?.image {
+            await self.set(image: image, state: .success)
         } else if let fileObject = displayable?.fileObject {
             await self.downloadAndSetImage(for: fileObject)
         } else if let url = displayable?.url  {

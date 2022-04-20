@@ -93,7 +93,7 @@ extension Message: Messageable {
         if let imageAttachment = self.imageAttachments.first {
             let attachment = PhotoAttachment(url: imageAttachment.imageURL,
                                              previewUrl: imageAttachment.imagePreviewURL,
-                                             _data: nil,
+                                             data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
         } else if self.text.isSingleLink,
