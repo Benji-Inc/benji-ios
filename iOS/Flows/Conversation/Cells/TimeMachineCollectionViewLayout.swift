@@ -332,6 +332,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
                                                                 withNormalizedZOffset: normalizedZOffset)
         modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
+        modifiedAttributes?.alpha = 0
 
         return modifiedAttributes
     }

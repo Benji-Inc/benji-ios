@@ -299,7 +299,7 @@ extension MessageController {
     /// Deletes the message this controller manages.
     func deleteMessage() async throws {
         return try await withCheckedThrowingContinuation { continuation in
-            self.deleteMessage { error in
+            self.deleteMessage(hard: true) { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {

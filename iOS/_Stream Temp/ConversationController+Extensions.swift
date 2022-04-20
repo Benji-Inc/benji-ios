@@ -413,7 +413,7 @@ extension ConversationController {
         }
 
         let messageController = self.client.messageController(cid: channelID, messageId: messageID)
-        messageController.deleteMessage(completion: completion)
+        messageController.deleteMessage(hard: true, completion: completion)
     }
 
     /// Delete the channel this controller manages.
