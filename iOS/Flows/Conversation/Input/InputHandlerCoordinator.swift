@@ -155,7 +155,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
         
         self.inputHandlerViewController.resignFirstResponder()
-        self.inputHandlerViewController.updateUI(for: .read, forceLayout: true)
         self.router.present(coordinator, source: self.inputHandlerViewController, cancelHandler: cancelHandler)
     }
     
