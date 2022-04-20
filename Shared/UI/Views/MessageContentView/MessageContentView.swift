@@ -285,8 +285,6 @@ class MessageContentView: BaseView {
 
                 self.linkProvider = LPMetadataProvider()
                 self.linkProvider?.startFetchingMetadata(for: url) { (metadata, error) in
-                    logDebug("finished fetch for \(url.debugDescription). Error is \(error.debugDescription)")
-
                     Task.onMainActor {
                         guard let metadata = metadata else { return }
                         self.linkView.metadata = metadata
