@@ -86,7 +86,6 @@ extension UIView: Selectable {
     }
 
     func currentFirstResponder() -> UIResponder? {
-
         if self.isFirstResponder {
             return self
         }
