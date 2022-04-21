@@ -144,7 +144,7 @@ extension MessageController {
             messageBody = body
         case .link(_, let stringURL):
             // The link URL is automatically detected by stream and added as an attachment.
-            // Removing extra whitespace and make links lower case.
+            // Remove extra whitespace and make links lower case.
             messageBody = stringURL.trimWhitespace().lowercased()
         case .attributedText, .video, .location, .emoji, .audio, .contact:
             throw(ClientError.apiError(detail: "Message type not supported."))
