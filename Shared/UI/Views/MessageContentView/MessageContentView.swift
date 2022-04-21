@@ -47,7 +47,7 @@ class MessageContentView: BaseView {
 
     /// A view that provides a safe area for  main message content (margins are already taken into account).
     /// Subviews includes author, attachments, text and date sent views.
-    private let mainContentArea = UIView()
+    let mainContentArea = UIView()
 
     /// A speech bubble background view for the message.
     let bubbleView = MessageBubbleView(orientation: .down)
