@@ -46,25 +46,23 @@ class EmotionGradientView: BaseView {
     }
 
     func set(emotionCounts: [Emotion : Int]) {
-        var colors: [UIColor] = []
+        var emotions: [Emotion] = []
         for emotionCount in emotionCounts {
             for _ in 0..<emotionCount.value {
-                colors.append(emotionCount.key.color)
+                emotions.append(emotionCount.key)
             }
         }
+        // Sort the colors by hue so more similar colors are near each other.
+        emotions = emotions.sorted()
 
-        if emotionCounts.isEmpty {
+        var colors: [UIColor] = emotions.map { emotion in
+            return emotion.color
+        }
+
+        if colors.isEmpty {
             colors = [ThemeColor.B0.color, ThemeColor.B1.color]
         }
 
-        // Sort the colors by hue so more similar colors are near each other.
-        colors = colors.sorted(by: { color1, color2 in
-            if abs(color1.hue - color2.hue) < 0.01 {
-                return color1.brightness < color2.brightness
-            }
-
-            return color1.hue < color2.hue
-        })
         if let firstColor = colors.first {
             colors.insert(firstColor.color(withBrightness: 0.75), at: 0)
         }

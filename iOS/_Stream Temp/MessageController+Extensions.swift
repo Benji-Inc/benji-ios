@@ -128,28 +128,35 @@ extension MessageController {
 
     @discardableResult
     func createNewReply(with sendable: Sendable) async throws -> MessageId {
+        let messageBody: String
+        var attachments: [AnyAttachmentPayload] = []
+
         switch sendable.kind {
         case .text(let text):
-            return try await self.createNewReply(sendable: sendable, text: text)
-        case .attributedText:
-            break
-        case .photo:
-            break
-        case .video:
-            break
-        case .location:
-            break
-        case .emoji:
-            break
-        case .audio:
-            break
-        case .contact:
-            break
-        case .link:
-            break
+            messageBody = text
+        case .photo(let item, let body):
+            if let url = item.url {
+                let attachement = try AnyAttachmentPayload(localFileURL: url,
+                                                           attachmentType: .image,
+                                                           extraData: nil)
+                attachments.append(attachement)
+            }
+            messageBody = body
+        case .link(_, let stringURL):
+            // The link URL is automatically detected by stream and added as an attachment.
+            // Remove extra whitespace and make links lower case.
+            messageBody = stringURL.trimWhitespace().lowercased()
+        case .attributedText, .video, .location, .emoji, .audio, .contact:
+            throw(ClientError.apiError(detail: "Message type not supported."))
         }
 
-        throw(ClientError.apiError(detail: "Message type not supported."))
+
+
+        return try await self.createNewReply(sendable: sendable,
+                                             text: messageBody,
+                                             attachments: attachments)
+
+
     }
 
     /// Creates a new reply message locally and schedules it for send.
@@ -292,7 +299,7 @@ extension MessageController {
     /// Deletes the message this controller manages.
     func deleteMessage() async throws {
         return try await withCheckedThrowingContinuation { continuation in
-            self.deleteMessage { error in
+            self.deleteMessage(hard: true) { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {

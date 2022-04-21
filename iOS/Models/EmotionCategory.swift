@@ -11,6 +11,7 @@ import Localization
 import UIKit
 
 enum EmotionCategory: Int, CaseIterable {
+
     case uncertain
     case compare
     case unplanned
@@ -23,7 +24,7 @@ enum EmotionCategory: Int, CaseIterable {
     case heartOpen
     case good
     case wronged
-    case selfAsses
+    case selfAssess
     
     var title: Localized {
         switch self {
@@ -51,8 +52,8 @@ enum EmotionCategory: Int, CaseIterable {
             return LocalizedString(id: "", default: "Life is good")
         case .wronged:
             return LocalizedString(id: "", default: "We feel wronged")
-        case .selfAsses:
-            return LocalizedString(id: "", default: "We self-asses")
+        case .selfAssess:
+            return LocalizedString(id: "", default: "We self-assess")
         }
     }
     
@@ -82,7 +83,7 @@ enum EmotionCategory: Int, CaseIterable {
             return #colorLiteral(red: 0.9450980392, green: 0.9725490196, blue: 0.9137254902, alpha: 1)
         case .wronged:
             return #colorLiteral(red: 0.9764705882, green: 0.9843137255, blue: 0.9058823529, alpha: 1)
-        case .selfAsses:
+        case .selfAssess:
             return #colorLiteral(red: 1, green: 0.9921568627, blue: 0.9058823529, alpha: 1)
         }
     }
@@ -113,7 +114,7 @@ enum EmotionCategory: Int, CaseIterable {
             return [.joy, .happy, .calm, .contentment, .gratitude, .forebodingJoy, .relief, .tranquil]
         case .wronged:
             return [.angry, .contempt, .disgust, .dehumanized, .hated, .selfRighteous]
-        case .selfAsses:
+        case .selfAssess:
             return [.pride, .hubris, .humility]
         }
     }
@@ -617,5 +618,25 @@ enum Emotion: String, CaseIterable, Identifiable {
         case .humility:
             return #colorLiteral(red: 1, green: 0.9450980392, blue: 0.462745098, alpha: 1)
         }
+    }
+}
+
+extension Emotion: Comparable {
+
+    private static let sortValues: [Emotion : Int] = {
+        let allCases = Emotion.allCases
+        var values: [Emotion : Int] = [:]
+        for (index, emotion) in allCases.enumerated() {
+            values[emotion] = index
+        }
+        return values
+    }()
+
+    static func < (lhs: Emotion, rhs: Emotion) -> Bool {
+        return lhs.sortIndex < rhs.sortIndex
+    }
+
+    private var sortIndex: Int {
+        return Emotion.sortValues[self] ?? 0
     }
 }

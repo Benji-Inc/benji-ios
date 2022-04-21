@@ -180,6 +180,7 @@ class MessageCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.content.imageView.displayable = nil
         self.content.emotionCollectionView.setEmotionsCounts([:], animated: false)
         self.content.setEmotions(areShown: false, animated: false)
         self.messageController = nil

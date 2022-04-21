@@ -253,6 +253,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Index paths of items that are being inserted.
     private var insertedIndexPaths: Set<IndexPath> = []
+    /// Index paths of items that are being deleted.
+    private var deletedIndexPaths: Set<IndexPath> = []
     /// The z position before update animations started
     private var zPositionBeforeAnimation: CGFloat = 0
     /// If true, we should adjust the scroll offset so the previously focused item remains in focus.
@@ -283,6 +285,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                     break
                 }
 
+                self.deletedIndexPaths.insert(indexPath)
+
                 // Items deleted before the current focused item should increase the offset so the focused
                 // item doesn't move.
                 if date < self.focusedItemDateBeforeAnimation {
@@ -310,6 +314,19 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return nil
     }
 
+    /// NOTE: "Disappearing" does not mean the item is being deleted.
+    /// Per the docs: "For each element on screen before the invalidation, finalLayoutAttributesForDisappearingXXX will be called..."
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        // If the item was already visible, there's no need to perform any animation.
+        guard self.deletedIndexPaths.contains(itemIndexPath) else { return nil }
+
+        let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+        attributes?.center.y -= self.zPositionBeforeAnimation - self.zPosition
+        return attributes
+    }
+
     /// NOTE: "Appearing" does not mean the item wasn't visible before the animation.
     /// Per the docs: "For each element on screen after the invalidation, initialLayoutAttributesForAppearingXXX will be called..."
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
@@ -332,6 +349,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let modifiedAttributes = self.layoutAttributesForItemAt(indexPath: itemIndexPath,
                                                                 withNormalizedZOffset: normalizedZOffset)
         modifiedAttributes?.center.y += self.zPositionBeforeAnimation - self.zPosition
+        modifiedAttributes?.alpha = 0
 
         return modifiedAttributes
     }
@@ -340,6 +358,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         super.finalizeCollectionViewUpdates()
 
         self.insertedIndexPaths.removeAll()
+        self.deletedIndexPaths.removeAll()
         self.zPositionBeforeAnimation = 0
         self.shouldScrollToPreviouslyFocusedDate = false
     }

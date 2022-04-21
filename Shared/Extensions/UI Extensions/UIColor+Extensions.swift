@@ -11,24 +11,6 @@ import UIKit
 
 extension UIColor {
 
-    var hue: CGFloat {
-        var hue: CGFloat = 0
-        self.getHue(&hue,
-                    saturation: nil,
-                    brightness: nil,
-                    alpha: nil)
-        return hue
-    }
-
-    var brightness: CGFloat {
-        var brightness: CGFloat = 0
-        self.getHue(nil,
-                    saturation: nil,
-                    brightness: &brightness,
-                    alpha: nil)
-        return brightness
-    }
-
     /// Returns a modified copy of this color with the specified brightness.
     /// A brightness of 1 leaves the color unchanged. 0.5 is a half as bright as the original color. 0 is black.
     func color(withBrightness brightness: CGFloat) -> UIColor {

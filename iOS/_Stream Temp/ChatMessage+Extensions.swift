@@ -96,12 +96,13 @@ extension Message: Messageable {
                                              data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
-        } else if self.text.isSingleLink,
-                  self.linkAttachments.count == 1,
-                  let linkAttachment = self.linkAttachments.first {
+        } else if self.text.isSingleLink, var url = self.text.getURLs().first {
+            // If the backend generated link attachments, then use those.
+            if self.linkAttachments.count == 1, let linkAttachment = self.linkAttachments.first {
+                url = linkAttachment.originalURL
+            }
             
-            guard var urlComponents = URLComponents(url: linkAttachment.originalURL,
-                                                    resolvingAgainstBaseURL: false) else {
+            guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
                 return .text(self.text)
             }
             

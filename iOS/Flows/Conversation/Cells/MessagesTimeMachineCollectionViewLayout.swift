@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol MessagesTimeMachineCollectionViewLayoutDataSource: TimeMachineCollectionViewLayoutDataSource {
+    /// Return true if the item at the given index path was created by the current user.
+    func isUserCreatedItem(at indexPath: IndexPath) -> Bool
+}
+
 /// A subclass of the TimeMachineLayout used to display messages.
 /// In addition to normal time machine functionality, this class also adjusts the color, brightness and other message specific attributes
 /// as the items move along the z axis.
@@ -15,6 +20,12 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationMessageCellLayoutAttributes.self
+    }
+
+    /// Setting this also sets the super class datasource variable.
+    weak var messageDataSource: MessagesTimeMachineCollectionViewLayoutDataSource? {
+        get { return self.dataSource as? MessagesTimeMachineCollectionViewLayoutDataSource }
+        set { self.dataSource = newValue }
     }
     
     // MARK: - Layout Configuration
@@ -73,7 +84,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                            width: self.collectionView!.width,
                            height: self.itemHeight)
         frame.center = center
-        //Shift the drop zone up a bit to account for the invisible space under the cell.
+        // Shift the drop zone up a bit to account for the invisible space under the cell.
         frame.top -= 60
         
         return frame
@@ -99,16 +110,27 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
 
-                let isScrolledToMostRecent
-                = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
+                let isUserCreatedItem: Bool
+                if let messageDataSource = self.messageDataSource {
+                    isUserCreatedItem = messageDataSource.isUserCreatedItem(at: indexPath)
+                } else {
+                    isUserCreatedItem = false
+                    logDebug("WARNING: No delegate is assigned to MessageLayout.")
+                }
 
-                let isNewMostRecent = indexPath.item == self.numberOfItems(inSection: 0) - 1
+                let isInsertedAtFront = indexPath.item == self.numberOfItems(inSection: 0) - 1
+
+                let isScrolledToFront
+                = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
 
                 // When a new message comes and we're at the front, always currently scrolled to the
                 // new message.
-                if isNewMostRecent && isScrolledToMostRecent {
+                if (isUserCreatedItem && isInsertedAtFront) || isScrolledToFront {
                     self.shouldScrollToEnd = true
+                    break
                 }
+
+
             case .delete, .reload, .move, .none:
                 break
             @unknown default:

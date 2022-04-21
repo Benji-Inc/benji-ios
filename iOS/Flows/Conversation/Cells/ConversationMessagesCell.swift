@@ -62,7 +62,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         super.init(frame: frame)
 
         self.configureCollectionLayout(for: .read)
-        self.collectionLayout.dataSource = self.dataSource
+        self.collectionLayout.messageDataSource = self.dataSource
         self.collectionView.delegate = self
 
         self.contentView.addSubview(self.collectionView)
