@@ -14,7 +14,7 @@ struct PhotoAttachment: MediaItem {
     var url: URL?
     var previewUrl: URL?
 
-    var image: UIImage?
+    private(set) var image: UIImage?
 
     var size: CGSize {
         guard let asset = self.info?[UIImagePickerController.InfoKey.phAsset] as? PHAsset else { return .zero }

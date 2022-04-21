@@ -1529,7 +1529,7 @@
 			path = "String Extensions";
 			sourceTree = "<group>";
 		};
-		80616E3326EAD1A900C077BA /* _Stream Temp */ = {
+		80616E3326EAD1A900C077BA /* Stream Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */,
@@ -1546,7 +1546,7 @@
 				8052574027441EAC00B6DC23 /* Filter+Extensions.swift */,
 				80251FF726F3D362006D7873 /* MessageController+Extensions.swift */,
 			);
-			path = "_Stream Temp";
+			path = "Stream Extensions";
 			sourceTree = "<group>";
 		};
 		8072253327AC8A8E00D7EBC0 /* SwiftUI */ = {
@@ -1845,7 +1845,7 @@
 		D6356D8425A36AC00015104F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				80616E3326EAD1A900C077BA /* _Stream Temp */,
+				80616E3326EAD1A900C077BA /* Stream Extensions */,
 				D61EC0D621D30C0500204BEE /* API */,
 				D6E65F17237791450061AA67 /* Collection View Management  */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
