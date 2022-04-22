@@ -112,7 +112,6 @@ extension UIView: Selectable {
     }
 
     func subviews<T: UIView>(type : T.Type) -> [T] {
-
         var matchingViews: [T] = []
 
         for view in self.subviews {
