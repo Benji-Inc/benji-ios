@@ -27,7 +27,9 @@ class ReadIndicatorView: BaseView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-        
+
+        self.height = 20
+
         self.addSubview(self.imageView)
         self.addSubview(self.counter)
         
@@ -67,17 +69,17 @@ class ReadIndicatorView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.height = 20
-        
+
         self.imageView.size = CGSize(width: 22, height: 10)
         self.imageView.centerOnY()
         
         self.counter.sizeToFit()
         self.counter.centerOnY()
         
-        if counter.isVisible {
-            self.width = Theme.ContentOffset.short.value.doubled + self.imageView.width + self.counter.width + Theme.ContentOffset.short.value            
+        if self.counter.isVisible {
+            self.width
+            = Theme.ContentOffset.short.value.doubled + self.imageView.width
+            + self.counter.width + Theme.ContentOffset.short.value
         } else {
             self.width = Theme.ContentOffset.short.value.doubled + self.imageView.width
         }

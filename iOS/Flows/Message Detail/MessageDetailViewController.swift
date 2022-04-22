@@ -206,11 +206,17 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             var snapshot = self.dataSource.snapshot()
             
             let optionItems: [MessageDetailDataSource.ItemType]
-            logDebug(msg.pinDetails.debugDescription)
             if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
-                optionItems = [.option(.viewReplies), .option(.unpin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+                optionItems = [.option(.viewReplies),
+                               .option(.unpin),
+                               .option(.quote),
+                               .more(MoreOptionModel(message: msg, option: .more))].reversed()
             } else {
-                optionItems = [.option(.viewReplies), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+                optionItems = [.option(.viewReplies),
+                               .option(.pin),
+                               .option(.quote),
+                               .more(MoreOptionModel(message: msg, option: .more))]
+                    .reversed()
             }
             
             snapshot.setItems(optionItems, in: .options)
