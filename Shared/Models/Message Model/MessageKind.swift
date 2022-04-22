@@ -137,10 +137,6 @@ struct EmptyMediaItem: MediaItem {
         return nil
     }
 
-    var previewUrl: URL? {
-        return nil
-    }
-
     var image: UIImage? {
         return nil
     }
@@ -168,9 +164,6 @@ protocol MediaItem: ImageDisplayable {
     /// The url where the media is located.
     var url: URL? { get }
 
-    /// Url to a preview of the media item.
-    var previewUrl: URL? { get }
-
     /// The image.
     var image: UIImage? { get }
 
@@ -186,7 +179,6 @@ protocol MediaItem: ImageDisplayable {
 
 private func ==(lhs: MediaItem, rhs: MediaItem) -> Bool {
     return lhs.url == rhs.url
-    && lhs.previewUrl == rhs.previewUrl
     && lhs.image == rhs.image
     && lhs.size == rhs.size
     && lhs.fileName == rhs.fileName

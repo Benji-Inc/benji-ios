@@ -269,10 +269,10 @@ class MessageContentView: BaseView {
             switch message.kind {
             case .photo(photo: let photo, _):
                 // Only reload the picture if it's actually a new message.
-                guard let previewUrl = photo.previewUrl else { break }
+                guard let photoUrl = photo.url else { break }
 
                 if isDifferentMessage || self.imageView.imageView.image.isNil {
-                    self.imageView.displayable = previewUrl
+                    self.imageView.displayable = photoUrl
                 }
             case .link(url: let url, _):
                 guard isDifferentMessage || url != self.linkView.metadata.originalURL else { break }
