@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import AVFoundation
 
 extension UIImage {
 
@@ -52,11 +53,46 @@ extension UIImage {
     var previewData: Data? {
         return self.jpegData(compressionQuality: 0.1)
     }
+
+    enum HEICError: Error {
+        case heicNotSupported
+        case cgImageMissing
+        case couldNotFinalize
+    }
+
+    func heicData(compressionQuality: CGFloat) throws -> Data {
+        let data = NSMutableData()
+        guard let imageDestination = CGImageDestinationCreateWithData(data,
+                                                                      AVFileType.heic as CFString,
+                                                                      1,
+                                                                      nil) else {
+            throw HEICError.heicNotSupported
+        }
+
+        guard let cgImage = self.cgImage else { throw HEICError.cgImageMissing }
+
+        let options: NSDictionary = [kCGImageDestinationLossyCompressionQuality: compressionQuality]
+
+        CGImageDestinationAddImage(imageDestination, cgImage, options)
+
+        guard CGImageDestinationFinalize(imageDestination) else {  throw HEICError.couldNotFinalize }
+
+        return data as Data
+    }
 }
 
 extension UIImage: ImageDisplayable {
 
     var image: UIImage? {
         return self
+    }
+}
+
+#warning("Remove")
+extension Data {
+    var prettySize: String {
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .binary
+        return formatter.string(fromByteCount: Int64(count))
     }
 }
