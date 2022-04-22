@@ -42,6 +42,8 @@ class PreviewMessageView: SpeechBubbleView {
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius
 
         self.addSubview(self.deliveryTypeView)
+        // Start the delivery type invisible so it doesn't briefly flicker on screen.
+        self.deliveryTypeView.alpha = 0
 
         self.$messageKind.mainSink { [unowned self] (kind) in
             guard let messageKind = kind else { return }
