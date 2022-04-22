@@ -53,6 +53,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
         self.messageContent.bubbleView.addInteraction(contextMenuInteraction)
+        // Ignore taps on any of the messages contents.
+        self.messageContent.mainContentArea.isUserInteractionEnabled = false
         
         self.contentView.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .white)

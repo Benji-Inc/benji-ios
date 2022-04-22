@@ -13,36 +13,38 @@ import Combine
 import Localization
 
 class ReplyView: BaseView {
+
     let personView = BorderedPersonView()
     let dateLabel = ThemeLabel(font: .xtraSmall)
     let label = ThemeLabel(font: .small)
-    
+
     override func initializeSubviews() {
         super.initializeSubviews()
-        
+
+        self.height = 24
+
         self.addSubview(self.personView)
         self.addSubview(self.label)
         self.addSubview(self.dateLabel)
         self.dateLabel.alpha = 0.25
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.height = 24
+
         self.personView.squaredSize = self.height
         self.personView.pin(.left)
         self.personView.pin(.top)
-        
+
         self.label.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value)
         self.label.match(.bottom, to: .bottom, of: self.personView)
         self.label.match(.left, to: .right, of: self.personView, offset: .standard)
-        
+
         self.dateLabel.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value)
         self.dateLabel.match(.top, to: .top, of: self.personView)
         self.dateLabel.match(.left, to: .right, of: self.personView, offset: .standard)
     }
-    
+
     func configure(with message: Messageable) {
         if message.kind.hasText {
             self.label.setText(message.kind.text)
@@ -103,7 +105,9 @@ class ReplySummaryView: BaseView {
     
     func configure(for message: Messageable) {
         self.loadTask?.cancel()
-        
+        self.setPrompt(for: message)
+        self.setNeedsLayout()
+
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
@@ -122,11 +126,8 @@ class ReplySummaryView: BaseView {
 //            if let reply = self.controller?.message?.recentReplies.first {
 //                self.replyView.configure(with: reply)
 //            }
-
-            self.setPrompt(for: message)
-            
             self.subscribeToUpdates()
-            self.setNeedsLayout()
+
         }
     }
     
@@ -172,9 +173,21 @@ class ReplySummaryView: BaseView {
         self.promptButton.left = self.arrowImageView.left
         self.promptButton.centerY = self.arrowImageView.centerY
     }
-    
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var width: CGFloat = 20 + Theme.ContentOffset.standard.value
+
+        if self.promptLabel.isVisible {
+            width += self.promptLabel.getSize(withWidth: 200).width
+        } else {
+            self.counter.sizeToFit()
+            width += self.counter.width
+        }
+
+        return CGSize(width: width, height: 30)
+    }
+
     private func subscribeToUpdates() {
-        
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
         }
