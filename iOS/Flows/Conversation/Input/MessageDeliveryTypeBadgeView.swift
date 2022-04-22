@@ -16,18 +16,16 @@ class MessageDeliveryTypeBadgeView: BaseView {
 
     private let imageView = UIImageView()
     private let label = ThemeLabel(font: .small)
-    private let deliveryTypeLabel = ThemeLabel(font: .xtraSmall)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.addSubview(self.imageView)
         self.addSubview(self.label)
-        self.addSubview(self.deliveryTypeLabel)
 
         self.set(backgroundColor: .badgeHighlightTop)
 
-        let configuration = UIImage.SymbolConfiguration(pointSize: 16.5)
+        let configuration = UIImage.SymbolConfiguration(pointSize: 12.5)
         self.imageView.preferredSymbolConfiguration = configuration
         self.imageView.tintColor = ThemeColor.white.color
         self.imageView.contentMode = .center
@@ -56,13 +54,11 @@ class MessageDeliveryTypeBadgeView: BaseView {
             await UIView.awaitAnimation(with: .standard, animations: {
                 self.alpha = 1.0
                 self.label.alpha = 0.0
-                self.deliveryTypeLabel.alpha = 0.0
                 self.imageView.alpha = 0.0
                 self.setNeedsLayout()
             })
             
             self.imageView.image = type.image
-            self.deliveryTypeLabel.setText(type.displayName)
             self.label.setText(type.description)
             
             guard !Task.isCancelled else { return }
@@ -70,7 +66,6 @@ class MessageDeliveryTypeBadgeView: BaseView {
             await UIView.awaitAnimation(with: .standard, animations: {
                 self.alpha = 1.0
                 self.label.alpha = 1.0
-                self.deliveryTypeLabel.alpha = 1.0
                 self.imageView.alpha = 1.0
                 self.setNeedsLayout()
             })
@@ -80,18 +75,15 @@ class MessageDeliveryTypeBadgeView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.deliveryTypeLabel.setSize(withWidth: 200)
         self.label.setSize(withWidth: 200)
-        self.height = 30
-        self.width = 30 + Theme.ContentOffset.short.value.doubled + self.label.width + Theme.ContentOffset.standard.value
+        self.height = 24
+        self.width = 24 + Theme.ContentOffset.short.value.doubled + self.label.width + Theme.ContentOffset.short.value
         self.imageView.squaredSize = self.height
-        self.imageView.pin(.left)
+        self.imageView.pin(.left, offset: .short)
         self.label.match(.left, to: .right, of: self.imageView)
-        self.deliveryTypeLabel.match(.left, to: .left, of: self.label)
         
         self.imageView.centerOnY()
-        self.deliveryTypeLabel.pin(.top, offset: .custom(2))
-        self.label.pin(.bottom, offset: .custom(4))
+        self.label.centerY = self.imageView.centerY
 
         self.layer.cornerRadius = self.halfHeight
     }
