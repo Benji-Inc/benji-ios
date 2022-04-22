@@ -80,7 +80,7 @@ class MessageFooterView: BaseView {
     private func getString(for deliveryStatus: DeliveryStatus) -> String {
         switch deliveryStatus {
         case .sending:
-            return "sending"
+            return "sending..."
         case .sent,.reading, .read:
             return "sent"
         case .error:
