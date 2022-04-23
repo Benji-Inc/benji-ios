@@ -28,7 +28,7 @@ class MessageFooterView: BaseView {
         self.readView.configure(with: message)
         self.replySummary.configure(for: message)
 
-        self.setNeedsLayout()
+        self.layoutNow()
     }
         
     override func layoutSubviews() {
@@ -37,7 +37,7 @@ class MessageFooterView: BaseView {
         self.readView.pin(.right)
         self.readView.pin(.top)
 
-        self.replySummary.sizeToFit()
+        self.replySummary.width = self.width - self.readView.width - Theme.ContentOffset.short.value
         self.replySummary.pin(.left)
         self.replySummary.pin(.top)
     }
