@@ -32,6 +32,9 @@ class InitialMessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.borderView)
         self.borderView.addSubview(self.label)
+        self.borderView.layer.cornerRadius = Theme.cornerRadius
+        self.borderView.layer.borderColor = ThemeColor.BORDER.color.cgColor
+        self.borderView.layer.borderWidth = 1
 
         self.label.alpha = 0
         self.label.textAlignment = .center
@@ -41,8 +44,8 @@ class InitialMessageCell: UICollectionViewCell {
         super.layoutSubviews()
         
         self.borderView.expandToSuperviewWidth()
-        self.borderView.height = MessageContentView.bubbleHeight - Theme.ContentOffset.short.value
-        self.borderView.pin(.bottom)
+        self.borderView.height = MessageContentView.bubbleHeight
+        self.borderView.pin(.top)
 
         self.label.setSize(withWidth: self.borderView.width - Theme.ContentOffset.standard.value.doubled)
         self.label.centerOnXAndY()
@@ -89,7 +92,7 @@ class InitialMessageCell: UICollectionViewCell {
             return
         }
         
-        self.label.alpha = messageLayoutAttributes.detailAlpha
+        self.label.alpha = clamp(messageLayoutAttributes.detailAlpha, 0.0, 0.35)
     }
     
     override func prepareForReuse() {
