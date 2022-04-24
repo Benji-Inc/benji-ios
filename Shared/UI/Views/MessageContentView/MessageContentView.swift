@@ -353,8 +353,12 @@ class MessageContentView: BaseView {
                     self.emotionLabel.alpha = 0.0
                 }
                 
-                self.addEmotionImageView.alpha = 1.0
-                self.addEmotionButton.alpha = 1.0
+                // Only allow the author to add emotions
+                if let msg = self.message, msg.isFromCurrentUser {
+                    self.addEmotionImageView.alpha = 1.0
+                    self.addEmotionButton.alpha = 1.0
+                }
+    
             } else {
                 self.addEmotionButton.alpha = 0.0
                 self.addEmotionImageView.alpha = 0.0

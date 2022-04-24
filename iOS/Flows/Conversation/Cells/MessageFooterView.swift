@@ -13,6 +13,7 @@ import Combine
 class MessageFooterView: BaseView {
     
     static let height: CGFloat = 70
+    static let collapsedHeight: CGFloat = 30 
 
     let replySummary = ReplySummaryView()
     let readView = ReadIndicatorView()
@@ -27,7 +28,6 @@ class MessageFooterView: BaseView {
     func configure(for message: Messageable) {
         self.readView.configure(with: message)
         self.replySummary.configure(for: message)
-
         self.layoutNow()
     }
         

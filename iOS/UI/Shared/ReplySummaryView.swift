@@ -134,9 +134,13 @@ class ReplySummaryView: BaseView {
     
     func configure(for message: Messageable) {
         self.loadTask?.cancel()
+        
+        self.promptLabel.isVisible = false
+        self.counter.isVisible = false
+        self.replyView.isVisible = false
+        
         self.setPrompt(for: message)
-        self.setNeedsLayout()
-
+        
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
@@ -175,6 +179,7 @@ class ReplySummaryView: BaseView {
             self.counter.suffix = remainingReplyCount == 1 ? " reply" : " more replies"
             self.promptLabel.isVisible = false
         }
+        
         self.counter.setValue(Float(remainingReplyCount), animated: true)
         self.layoutNow()
     }
@@ -189,12 +194,18 @@ class ReplySummaryView: BaseView {
         self.replyView.pin(.top)
         self.replyView.match(.left, to: .right, of: self.lineDotView, offset: .standard)
         
+        if self.replyView.isVisible {
+            self.height = self.replyView.height + 30
+        } else {
+            self.height = 30
+        }
+        
         self.promptLabel.setSize(withWidth: 200)
         self.promptLabel.match(.left, to: .right, of: self.lineDotView, offset: .standard)
-        
         self.promptLabel.pin(.bottom, offset: .custom(8))
         
         self.counter.sizeToFit()
+        
         if self.promptLabel.isVisible {
             self.counter.match(.left, to: .right, of: self.promptLabel, offset: .standard)
         } else {
@@ -206,12 +217,6 @@ class ReplySummaryView: BaseView {
         self.promptButton.width = self.width
         self.promptButton.left = self.lineDotView.left
         self.promptButton.pin(.bottom)
-        
-        if self.replyView.isVisible {
-            self.height = self.replyView.height + 30
-        } else {
-            self.height = 30
-        }
         
         self.lineDotView.expandToSuperviewHeight()
     }
