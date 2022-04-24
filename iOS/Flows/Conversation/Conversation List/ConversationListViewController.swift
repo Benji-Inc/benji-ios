@@ -167,6 +167,8 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
 
     @MainActor
     func initializeDataSource() async {
+        self.collectionView.animationView.play()
+        
         try? await self.conversationListController.synchronize()
         try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
 
@@ -192,6 +194,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
 
+        self.collectionView.animationView.stop()
         guard let startingConversationID = self.startingConversationID else { return }
 
         Task {

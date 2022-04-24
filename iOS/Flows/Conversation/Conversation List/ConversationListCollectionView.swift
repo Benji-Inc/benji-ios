@@ -49,13 +49,6 @@ extension ConversationListCollectionView: MessageSendingCollectionViewType {
 
     // MARK: - MessageSendingCollectionView
 
-    func getBottomFrontmostCell() -> MessageCell? {
-        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            return nil
-        }
-        return centerCell.getFrontmostCell()
-    }
-
     func getNewConversationContentOffset() -> CGPoint {
         let proposedXOffset = self.conversationLayout.collectionViewContentSize.width - self.width
         let proposedOffset = CGPoint(x: proposedXOffset, y: 0)
