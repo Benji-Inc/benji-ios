@@ -54,7 +54,7 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
         
-        self.footerView.replySummary.didSelectReaction = { [unowned self] emoji in
+        self.footerView.replySummary.didSelectEmoji = { [unowned self] emoji in
             self.addReply(with: emoji)
         }
         
@@ -256,6 +256,8 @@ class MessageCell: UICollectionViewCell {
                                         deliveryType: msg.deliveryType,
                                         expression: nil)
             try await controller.createNewReply(with: object)
+            
+            AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": text])
         }
     }
 }

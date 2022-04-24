@@ -114,7 +114,7 @@ class ReplySummaryView: BaseView {
     
     var didTapViewReplies: CompletionOptional = nil
     var didSelectSuggestion: ((SuggestedReply) -> Void)? = nil
-    var didSelectReaction: ((String) -> Void)? = nil
+    var didSelectEmoji: ((String) -> Void)? = nil
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -251,7 +251,7 @@ class ReplySummaryView: BaseView {
             if suggestion == .emoji {
                 let reactionElements: [UIMenuElement] = suggestion.emojiReactions.compactMap { emoji in
                     return UIAction(title: emoji, image: nil) { [unowned self] _ in
-                        self.didSelectReaction?(emoji)
+                        self.didSelectEmoji?(emoji)
                     }
                 }
                 let reactionMenu = UIMenu(title: suggestion.text,

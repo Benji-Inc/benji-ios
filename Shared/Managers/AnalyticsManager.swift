@@ -22,6 +22,7 @@ class AnalyticsManager {
         case deliveryTypeSelected = "DELIVERY_TYPE_SELECTED"
         case messageSent = "MESSAGE_SENT"
         case replySent = "REPLY_SENT"
+        case suggestionSelected = "SUGGESTION_SELECTED"
         case inviteSent = "INVITE_SENT"
         case conversationCreated = "CONVERSATION_CREATED"
         case contextCueCreated = "CONTEXT_CUE_CREATED"
