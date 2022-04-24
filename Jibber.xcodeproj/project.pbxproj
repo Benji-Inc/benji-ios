@@ -323,6 +323,12 @@
 		D61128C32804EDFA00574B96 /* MessageDeliveryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageDeliveryType.swift */; };
 		D61128C52804EF2E00574B96 /* ReactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61128C42804EF2E00574B96 /* ReactionType.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
+		D611F7B42815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
+		D611F7B52815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
+		D611F7B62815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
+		D611F7B72815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
+		D611F7B82815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
+		D611F7B92815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
 		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
 		D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA727ADC5F50058811C /* WalletCoordinator.swift */; };
@@ -1089,6 +1095,7 @@
 		D61127FF2804D72D00574B96 /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
 		D61128C42804EF2E00574B96 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
+		D611F7B32815A136006D09D3 /* SuggestedReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedReply.swift; sourceTree = "<group>"; };
 		D6129F9D27AB21720058811C /* UpsellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsellContentView.swift; sourceTree = "<group>"; };
 		D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestmentUpsellCell.swift; sourceTree = "<group>"; };
 		D6129FA727ADC5F50058811C /* WalletCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCoordinator.swift; sourceTree = "<group>"; };
@@ -2123,6 +2130,7 @@
 				D64C323D270391AE004BC1BD /* Person.swift */,
 				D61128C42804EF2E00574B96 /* ReactionType.swift */,
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
+				D611F7B32815A136006D09D3 /* SuggestedReply.swift */,
 				D6617CEF26743DCF00439C06 /* SystemNotice.swift */,
 				D671E1EE264029BC00BF2B8D /* Toast.swift */,
 			);
@@ -3234,6 +3242,7 @@
 				D611286A2804DC5400574B96 /* DeeplinkObject.swift in Sources */,
 				D61128782804DC7200574B96 /* User+Extensions.swift in Sources */,
 				D611281D2804DBC900574B96 /* Array+Extensions.swift in Sources */,
+				D611F7B92815A136006D09D3 /* SuggestedReply.swift in Sources */,
 				D61128772804DC7200574B96 /* User+Objectable.swift in Sources */,
 				D61128702804DC6D00574B96 /* Connection.swift in Sources */,
 				D61128A02804E21100574B96 /* UIResponder+Extensions.swift in Sources */,
@@ -3444,6 +3453,7 @@
 				D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D637651C27E959E200CCDA7F /* ConversationDetailCell.swift in Sources */,
+				D611F7B42815A136006D09D3 /* SuggestedReply.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D619C58927F129B70082AD19 /* EmotionsViewController.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
@@ -3768,6 +3778,7 @@
 				D63DB22625E9990900F6B323 /* CGPoint+Extensions.swift in Sources */,
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
+				D611F7B52815A136006D09D3 /* SuggestedReply.swift in Sources */,
 				D682B4162792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
 				D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */,
 				80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
@@ -3878,6 +3889,7 @@
 				D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */,
 				800718E02786211F005DD884 /* EventLog.swift in Sources */,
 				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
+				D611F7B62815A136006D09D3 /* SuggestedReply.swift in Sources */,
 				D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */,
 				D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */,
 				D68759622728A54300AF7C07 /* ImageDisplayable.swift in Sources */,
@@ -3928,6 +3940,7 @@
 				D61A9B5027D2AA3A008D8C57 /* Conversation+Intents.swift in Sources */,
 				D61A9B5427D2B160008D8C57 /* ImageDisplayable.swift in Sources */,
 				D68B723627D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
+				D611F7B72815A136006D09D3 /* SuggestedReply.swift in Sources */,
 				D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */,
 				D65D460527A9FE620019301C /* Notice.swift in Sources */,
 				D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */,
@@ -3954,6 +3967,7 @@
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
 				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,
 				D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */,
+				D611F7B82815A136006D09D3 /* SuggestedReply.swift in Sources */,
 				D6AE0FFF267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
 				D66ED458267D35E200332BA3 /* Config.swift in Sources */,
 				D66ED45B267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
