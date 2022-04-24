@@ -78,12 +78,6 @@ class MessageCell: UICollectionViewCell {
         self.content.expandToSuperviewWidth()
         self.content.pin(.top)
         self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.short.value)
-        
-//        if self.shouldShowReplies {
-//            
-//        } else {
-//            self.content.expandToSuperviewSize()
-//        }
     }
 
     // MARK: - Touch Handling
