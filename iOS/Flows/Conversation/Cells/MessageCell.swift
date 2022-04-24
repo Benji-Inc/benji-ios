@@ -70,18 +70,20 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if self.shouldShowReplies {
-            self.footerView.width = self.contentView.width - Theme.ContentOffset.long.value.doubled
-            self.footerView.height = MessageFooterView.height
-            self.footerView.centerOnX()
-            self.footerView.pin(.bottom)
-            
-            self.content.expandToSuperviewWidth()
-            self.content.pin(.top)
-            self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.short.value)
-        } else {
-            self.content.expandToSuperviewSize()
-        }
+        self.footerView.width = self.contentView.width - Theme.ContentOffset.long.value.doubled
+        self.footerView.height = self.shouldShowReplies ? MessageFooterView.height : MessageFooterView.collapsedHeight
+        self.footerView.centerOnX()
+        self.footerView.pin(.bottom)
+        
+        self.content.expandToSuperviewWidth()
+        self.content.pin(.top)
+        self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.short.value)
+        
+//        if self.shouldShowReplies {
+//            
+//        } else {
+//            self.content.expandToSuperviewSize()
+//        }
     }
 
     // MARK: - Touch Handling

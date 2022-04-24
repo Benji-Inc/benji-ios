@@ -12,6 +12,37 @@ import StreamChat
 import Combine
 import Localization
 
+class LineDotView: BaseView {
+    let lineView = BaseView()
+    let circleView = BaseView()
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.lineView)
+        self.lineView.set(backgroundColor: .B1)
+        self.lineView.width = 1.5
+        
+        self.addSubview(self.circleView)
+        self.circleView.set(backgroundColor: .B1)
+        self.circleView.layer.cornerRadius = 1
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.width = 6
+        
+        self.lineView.height = self.height - 12.5
+        self.lineView.pin(.top)
+        self.lineView.centerOnX()
+        
+        self.circleView.squaredSize = self.width
+        self.circleView.centerOnX()
+        self.circleView.pin(.bottom, offset: .custom(12.5))
+    }
+}
+
 class ReplyView: BaseView {
 
     let personView = BorderedPersonView()
@@ -22,7 +53,7 @@ class ReplyView: BaseView {
         super.initializeSubviews()
 
         self.height = 24
-
+        
         self.addSubview(self.personView)
         self.addSubview(self.label)
         self.addSubview(self.dateLabel)
@@ -31,7 +62,7 @@ class ReplyView: BaseView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
         self.personView.squaredSize = self.height
         self.personView.pin(.left)
         self.personView.pin(.top)
@@ -63,7 +94,7 @@ class ReplySummaryView: BaseView {
     
     var cancellables = Set<AnyCancellable>()
     
-    private let arrowImageView = UIImageView(image: UIImage(systemName: "arrow.turn.down.right"))
+    private let lineDotView = LineDotView()
     private let promptLabel = ThemeLabel(font: .smallBold, textColor: .D1)
     private let promptButton = ThemeButton()
     private let counter = NumberScrollCounter(value: 0,
@@ -79,19 +110,17 @@ class ReplySummaryView: BaseView {
                                               gradientColor: ThemeColor.B0.color,
                                               gradientStop: 4)
     
-   // private let replyView = ReplyView()
+    private let replyView = ReplyView()
     
     var didTapViewReplies: CompletionOptional = nil
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
-//        self.addSubview(self.replyView)
+        self.addSubview(self.replyView)
+        self.replyView.isVisible = false
         
-        self.addSubview(self.arrowImageView)
-        self.arrowImageView.tintColor = ThemeColor.B1.color
-        self.arrowImageView.contentMode = .scaleAspectFit
-
+        self.addSubview(self.lineDotView)
         self.addSubview(self.promptLabel)
         self.addSubview(self.counter)
         self.addSubview(self.promptButton)
@@ -105,9 +134,13 @@ class ReplySummaryView: BaseView {
     
     func configure(for message: Messageable) {
         self.loadTask?.cancel()
+        
+        self.promptLabel.isVisible = false
+        self.counter.isVisible = false
+        self.replyView.isVisible = false
+        
         self.setPrompt(for: message)
-        self.setNeedsLayout()
-
+        
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
@@ -115,76 +148,77 @@ class ReplySummaryView: BaseView {
             
             self.controller = ChatClient.shared.messageController(for: message)
             
-//            if let controller = self.controller,
-//               controller.message!.replyCount > 0,
-//                !controller.hasLoadedAllPreviousReplies  {
-//                try? await controller.loadPreviousReplies()
-//            }
-//            logDebug(self.controller!.message!.replyCount)
-//            logDebug(self.controller!.hasLoadedAllPreviousReplies)
-//            
-//            if let reply = self.controller?.message?.recentReplies.first {
-//                self.replyView.configure(with: reply)
-//            }
+            if let controller = self.controller,
+               controller.message!.replyCount > 0,
+                !controller.hasLoadedAllPreviousReplies  {
+                try? await controller.loadPreviousReplies()
+            }
+            
+            if let reply = self.controller?.message?.recentReplies.last {
+                self.replyView.isVisible = true
+                self.replyView.configure(with: reply)
+            } else {
+                self.replyView.isVisible = false
+            }
+            self.layoutNow()
             self.subscribeToUpdates()
-
         }
     }
     
     private func setPrompt(for message: Messageable) {
-        if message.totalReplyCount == 0 {
+        // Remaining replies minus the one being displayed.
+        let remainingReplyCount = clamp(message.totalReplyCount - 1, min: 0)
+        
+        if remainingReplyCount == 0 {
             self.promptLabel.isVisible = true
             self.promptLabel.setText("Reply")
             self.counter.isVisible = false
         } else {
             self.counter.isVisible = true
             self.counter.prefix = "View "
-            self.counter.suffix = message.totalReplyCount == 1 ? " reply" : " more replies"
+            self.counter.suffix = remainingReplyCount == 1 ? " reply" : " more replies"
             self.promptLabel.isVisible = false
         }
-        self.counter.setValue(Float(message.totalReplyCount), animated: true)
+        
+        self.counter.setValue(Float(remainingReplyCount), animated: true)
         self.layoutNow()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-//        self.replyView.expandToSuperviewWidth()
-//        self.replyView.pin(.top)
+        self.lineDotView.pin(.left)
+        self.lineDotView.pin(.top)
         
-        self.arrowImageView.squaredSize = 20
-        self.arrowImageView.pin(.left)
-        self.arrowImageView.pin(.top)
+        self.replyView.expandToSuperviewWidth()
+        self.replyView.pin(.top)
+        self.replyView.match(.left, to: .right, of: self.lineDotView, offset: .standard)
+        
+        if self.replyView.isVisible {
+            self.height = self.replyView.height + 30
+        } else {
+            self.height = 30
+        }
         
         self.promptLabel.setSize(withWidth: 200)
-        self.promptLabel.match(.left, to: .right, of: self.arrowImageView, offset: .standard)
-        self.promptLabel.centerY = self.arrowImageView.centerY
+        self.promptLabel.match(.left, to: .right, of: self.lineDotView, offset: .standard)
+        self.promptLabel.pin(.bottom, offset: .custom(8))
         
         self.counter.sizeToFit()
+        
         if self.promptLabel.isVisible {
             self.counter.match(.left, to: .right, of: self.promptLabel, offset: .standard)
         } else {
-            self.counter.match(.left, to: .right, of: self.arrowImageView, offset: .standard)
+            self.counter.match(.left, to: .right, of: self.lineDotView, offset: .standard)
         }
-        self.counter.centerY = self.arrowImageView.centerY
+        self.counter.pin(.bottom, offset: .custom(8))
         
-        self.promptButton.height = self.arrowImageView.height
+        self.promptButton.height = 30
         self.promptButton.width = self.width
-        self.promptButton.left = self.arrowImageView.left
-        self.promptButton.centerY = self.arrowImageView.centerY
-    }
-
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        var width: CGFloat = 20 + Theme.ContentOffset.standard.value
-
-        if self.promptLabel.isVisible {
-            width += self.promptLabel.getSize(withWidth: 200).width
-        } else {
-            self.counter.sizeToFit()
-            width += self.counter.width
-        }
-
-        return CGSize(width: width, height: 30)
+        self.promptButton.left = self.lineDotView.left
+        self.promptButton.pin(.bottom)
+        
+        self.lineDotView.expandToSuperviewHeight()
     }
 
     private func subscribeToUpdates() {
