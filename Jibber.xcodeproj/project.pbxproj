@@ -329,6 +329,10 @@
 		D611F7B72815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
 		D611F7B82815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
 		D611F7B92815A136006D09D3 /* SuggestedReply.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611F7B32815A136006D09D3 /* SuggestedReply.swift */; };
+		D611F7BA2815B0FD006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
+		D611F7BB2815B0FD006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
+		D611F7BC2815B0FE006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
+		D611F7BD2815B0FE006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129F9D27AB21720058811C /* UpsellContentView.swift */; };
 		D6129FA127AB23BC0058811C /* InvestmentUpsellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA027AB23BC0058811C /* InvestmentUpsellCell.swift */; };
 		D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA727ADC5F50058811C /* WalletCoordinator.swift */; };
@@ -3224,6 +3228,7 @@
 				D611287A2804DCB000574B96 /* FontType.swift in Sources */,
 				D61128342804DBE400574B96 /* String+PhoneNumbers.swift in Sources */,
 				D61128142804DB9C00574B96 /* RootNavigationController.swift in Sources */,
+				D611F7BD2815B0FE006D09D3 /* EmojiCategory.swift in Sources */,
 				80580E1E2805F82500B7264C /* EmotionCircleCollectionView.swift in Sources */,
 				D61128412804DBEE00574B96 /* UIWindow+Extensions.swift in Sources */,
 				D61128542804DC3200574B96 /* WelcomeViewController.swift in Sources */,
@@ -3887,6 +3892,7 @@
 				D66ED45C267D4B3F00332BA3 /* Array+Extensions.swift in Sources */,
 				D6AE0FF4267D2CD700C6B048 /* SessionManager.swift in Sources */,
 				D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */,
+				D611F7BA2815B0FD006D09D3 /* EmojiCategory.swift in Sources */,
 				800718E02786211F005DD884 /* EventLog.swift in Sources */,
 				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
 				D611F7B62815A136006D09D3 /* SuggestedReply.swift in Sources */,
@@ -3954,6 +3960,7 @@
 				D6AE0FF5267D2CD800C6B048 /* SessionManager.swift in Sources */,
 				D6AE0FF2267D2CCA00C6B048 /* ClientError.swift in Sources */,
 				D6AE0FFB267D2D9500C6B048 /* Objectable.swift in Sources */,
+				D611F7BB2815B0FD006D09D3 /* EmojiCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3964,6 +3971,7 @@
 				D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6CDA29327D16F9400823968 /* DeeplinkTarget.swift in Sources */,
 				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
+				D611F7BC2815B0FE006D09D3 /* EmojiCategory.swift in Sources */,
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
 				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,
 				D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */,

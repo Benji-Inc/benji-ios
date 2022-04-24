@@ -53,6 +53,21 @@ class MessageCell: UICollectionViewCell {
         self.content.bubbleView.addInteraction(contextMenuInteraction)
         
         self.contentView.addSubview(self.footerView)
+        
+        self.footerView.replySummary.didSelectReaction = { [unowned self] emoji in
+            self.addReply(with: emoji)
+        }
+        
+        self.footerView.replySummary.didSelectSuggestion = { [unowned self] suggestion in
+            guard let cid = self.message?.streamCid, let messageId = self.message?.id else { return }
+            switch suggestion {
+            case .other:
+                self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, messageId))
+            default:
+                self.addReply(with: suggestion.text)
+            }
+        }
+        
         self.footerView.replySummary.didTapViewReplies = { [unowned self] in
             guard let cid = self.message?.streamCid, let messageId = self.message?.id else { return }
             self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, messageId))
@@ -230,5 +245,17 @@ class MessageCell: UICollectionViewCell {
 
             await messageable.setToConsumed()
         }.add(to: self.messageDetailTasks)
+    }
+    
+    private func addReply(with text: String) {
+        guard let msg = self.message,
+                let controller = ChatClient.shared.messageController(for: msg) else { return }
+        
+        Task {
+            let object = SendableObject(kind: .text(text),
+                                        deliveryType: msg.deliveryType,
+                                        expression: nil)
+            try await controller.createNewReply(with: object)
+        }
     }
 }

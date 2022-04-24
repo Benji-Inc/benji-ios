@@ -7,24 +7,23 @@
 //
 
 import Foundation
+import UIKit
 
 enum SuggestedReply: CaseIterable {
     
-    case yes
-    case noThanks
     case ok
+    case noThanks
     case onMyWay
     case what
     case thanks
     case great
     case busy
+    case emoji
     case other
     
     var text: String {
         switch self {
             
-        case .yes:
-            return "Yes"
         case .noThanks:
             return "No thanks."
         case .ok:
@@ -39,8 +38,23 @@ enum SuggestedReply: CaseIterable {
             return "Great!"
         case .busy:
             return "I'm busy"
+        case .emoji:
+            return "Emoji"
         case .other:
             return "Other"
         }
+    }
+    
+    var image: UIImage? {
+        if self == .other {
+            return UIImage(systemName: "arrowshape.turn.up.left")
+        } else if self == .emoji {
+            return UIImage(systemName: "face.smiling")
+        }
+        return nil
+    }
+    
+    var emojiReactions: [String] {
+        return ["❤️", "👍", "👎", "😂", "😳", "🤨"]
     }
 }
