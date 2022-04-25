@@ -63,6 +63,10 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
         self.setNeedsLayout()
     }
     
+    override func getHighlighetedViews() -> [UIView] {
+        return []
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
 
