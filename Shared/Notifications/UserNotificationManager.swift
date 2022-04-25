@@ -200,6 +200,8 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
             deepLink.customMetadata = response.notification.customMetadata
             self.delegate?.userNotificationManager(willHandle: deepLink)
             completionHandler()
+        } else {
+            completionHandler()
         }
     }
 
@@ -214,7 +216,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
         switch suggestion {
         case .emoji:
             // Do nothing
-            break
+            completion()
         case .other:
             // Go to threads
             var deepLink = DeepLinkObject(target: .thread)
@@ -239,10 +241,25 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
                 let object = SendableObject(kind: .text(suggestion.text),
                                             deliveryType: controller.message!.deliveryType,
                                             expression: nil)
-                try await controller.createNewReply(with: object)
                 
-                AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": suggestion.text])
-                // Schedule notification that reply has been sent
+                do {
+                    try await controller.createNewReply(with: object)
+                    
+                    let content = UNMutableNotificationContent()
+                    content.title = "Reply sent"
+                    content.body = suggestion.text
+                    content.interruptionLevel = .active
+                    content.setData(value: response.notification.conversationId ?? "", for: .conversationId)
+                    content.setData(value: response.notification.conversationId ?? "", for: .messageId)
+                    content.setData(value: DeepLinkTarget.thread.rawValue, for: .target)
+                    content.categoryIdentifier = UserNotificationCategory.newMessage.rawValue
+                    
+                    await self.scheduleNotification(with: content)
+                    AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": suggestion.text])
+                } catch {
+                    logError(error)
+                }
+                
                 completion()
             }
         }
