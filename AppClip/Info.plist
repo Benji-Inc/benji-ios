@@ -11,10 +11,6 @@
 		<key>NSAppClipRequestLocationConfirmation</key>
 		<false/>
 	</dict>
-    <key>NSCameraUsageDescription</key>
-    <string>Create photo messages and profile pictures for yourself. </string>
-    <key>NSContactsUsageDescription</key>
-    <string>Select contacts to message. Contact information never leaves this device. </string>
 	<key>RELEASE_TYPE</key>
 	<string>${RELEASE_TYPE}</string>
 	<key>UIApplicationSceneManifest</key>
