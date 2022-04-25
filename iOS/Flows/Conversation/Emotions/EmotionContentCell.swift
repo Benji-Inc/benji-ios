@@ -14,37 +14,38 @@ struct EmotionContentModel: Hashable {
 }
 
 class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
+
     typealias ItemType = EmotionContentModel
     
     var currentItem: EmotionContentModel?
-    
+
+    let circleView = UIView()
     let label = ThemeLabel(font: .medium)
     let emotionLabel = ThemeLabel(font: .smallBold)
     
     override func initializeSubviews() {
         super.initializeSubviews()
-        
-        self.contentView.addSubview(self.label)
-        self.contentView.layer.cornerRadius = Theme.cornerRadius
-        self.contentView.clipsToBounds = true
-        self.contentView.layer.borderWidth = 2
 
+        self.contentView.addSubview(self.circleView)
+        self.circleView.clipsToBounds = true
+        self.circleView.layer.borderWidth = 2
+
+        self.circleView.addSubview(self.label)
         self.label.textAlignment = .center
         
-        self.contentView.addSubview(self.emotionLabel)
+        self.circleView.addSubview(self.emotionLabel)
     }
     
     func configure(with item: EmotionContentModel) {
         if let emotion = item.emotion {
-            
             let text = localized(emotion.definition).firstCapitalized
             let color = emotion.color
 
             self.label.setText(text)
             self.label.textColor = color
             self.label.alpha = 1.0
-            self.contentView.layer.borderColor = color.cgColor
-            self.contentView.backgroundColor = color.withAlphaComponent(0.2)
+            self.circleView.layer.borderColor = color.cgColor
+            self.circleView.backgroundColor = color.withAlphaComponent(0.2)
             
             self.emotionLabel.setText(emotion.description)
             self.emotionLabel.textColor = color
@@ -54,8 +55,8 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
             self.label.setText("Select any emotion below to see what it means and add it to your message")
             self.label.setTextColor(.white)
             self.label.alpha = 0.2
-            self.contentView.set(backgroundColor: .clear)
-            self.contentView.layer.borderColor = ThemeColor.white.color.withAlphaComponent(0.2).cgColor
+            self.circleView.set(backgroundColor: .clear)
+            self.circleView.layer.borderColor = ThemeColor.white.color.withAlphaComponent(0.2).cgColor
         }
         
         self.setNeedsLayout()
@@ -63,11 +64,15 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.label.setSize(withWidth: self.contentView.width * 0.8)
+
+        self.circleView.squaredSize = min(self.contentView.width, self.contentView.height)
+        self.circleView.centerOnXAndY()
+        self.circleView.makeRound()
+
+        self.label.setSize(withWidth: self.circleView.width * 0.8)
         self.label.centerOnXAndY()
         
-        self.emotionLabel.setSize(withWidth: self.contentView.width)
+        self.emotionLabel.setSize(withWidth: self.circleView.width)
         self.emotionLabel.centerOnX()
         self.emotionLabel.match(.bottom, to: .top, of: self.label, offset: .negative(.standard))
     }

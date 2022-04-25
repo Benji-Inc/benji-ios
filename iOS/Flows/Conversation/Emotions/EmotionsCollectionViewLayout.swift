@@ -15,7 +15,6 @@ class EmotionsCollectionViewLayout: UICollectionViewCompositionalLayout {
         config.scrollDirection = .vertical
 
         super.init(sectionProvider: { sectionIndex, environment in
-            
             guard let section = EmotionsCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
             
             let sectionInset = Theme.ContentOffset.xtraLong.value
@@ -50,9 +49,9 @@ class EmotionsCollectionViewLayout: UICollectionViewCompositionalLayout {
                 
                 return section
             case .categories:
-                
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset,
                                                              leading: inset,
@@ -60,7 +59,8 @@ class EmotionsCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                              trailing: inset)
                 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.7), heightDimension: .fractionalHeight(0.5))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.7),
+                                                       heightDimension: .fractionalHeight(0.5))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                                 leading: 0,
@@ -74,8 +74,12 @@ class EmotionsCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                 bottom: 0,
                                                                 trailing: sectionInset)
                 
-                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30))
-                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                            heightDimension: .estimated(30))
+                let headerItem
+                = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize,
+                                                              elementKind: UICollectionView.elementKindSectionHeader,
+                                                              alignment: .top)
                 headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                                    leading: 0,
                                                                    bottom: 0,

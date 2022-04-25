@@ -95,7 +95,7 @@ enum EmotionCategory: Int, CaseIterable {
         case .compare:
             return [.comparison, .admiration, .reverence, .envy, .jealous, .resentment, .schadenfreude, .freudenfreude]
         case .unplanned:
-            return [.bored, .dissapointment, .expecting, .regret, .discouraged, .resigned, .frustrated]
+            return [.bored, .disappointment, .expecting, .regret, .discouraged, .resigned, .frustrated]
         case .beyondUs:
             return [.awe, .wonder, .confused, .curious, .interested, .surprised]
         case .areNotWhatTheySeem:
@@ -144,7 +144,7 @@ enum Emotion: String, CaseIterable, Identifiable {
     case freudenfreude
     
     case bored
-    case dissapointment
+    case disappointment
     case expecting
     case regret
     case discouraged
@@ -287,7 +287,7 @@ enum Emotion: String, CaseIterable, Identifiable {
             return LocalizedString(id: "", default: "The enjoyment of another’s success and a subset of empathy")
         case .bored:
             return LocalizedString(id: "", default: "The uncomfortable state of wanting to engage in satisfying activity, but being unable to do it")
-        case .dissapointment:
+        case .disappointment:
             return LocalizedString(id: "", default: "Is unmet expectations. The more significant the expectations, the more significant the disappointment copyright.")
         case .expecting:
             return LocalizedString(id: "", default: "A picture in our head of how things are going to be and how they’re going to look")
@@ -469,7 +469,7 @@ enum Emotion: String, CaseIterable, Identifiable {
             
         case .bored:
             return #colorLiteral(red: 0.8823529412, green: 0.7450980392, blue: 0.9058823529, alpha: 1)
-        case .dissapointment:
+        case .disappointment:
             return #colorLiteral(red: 0.8078431373, green: 0.5764705882, blue: 0.8470588235, alpha: 1)
         case .expecting:
             return #colorLiteral(red: 0.7294117647, green: 0.4078431373, blue: 0.7843137255, alpha: 1)
