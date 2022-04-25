@@ -23,15 +23,15 @@ protocol Transitionable {
 
 extension Transitionable {
 
-    var receivingDismissalType: TransitionType {
-        return .fade
-    }
-
     var sendingPresentationType: TransitionType {
         return .fade
     }
 
     var sendingDismissalType: TransitionType {
+        return .fade
+    }
+
+    var receivingDismissalType: TransitionType {
         return .fade
     }
 
@@ -58,6 +58,7 @@ enum TransitionType: Equatable {
     case move(UIView)
     case fade
     case fill(UIView)
+    case blur
     #if IOS
     case message(MessageContentView)
     #endif
@@ -69,6 +70,8 @@ enum TransitionType: Equatable {
         case .fade:
             return Theme.animationDurationSlow
         case .fill(_):
+            return Theme.animationDurationSlow
+        case .blur:
             return Theme.animationDurationSlow
             #if IOS
         case .message(_):

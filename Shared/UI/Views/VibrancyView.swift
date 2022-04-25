@@ -65,7 +65,7 @@ class BlurView: UIVisualEffectView {
     }
 
     func showBlur(_ show: Bool) {
-        self.effect = show ? self.blurEffect : nil 
+        self.effect = show ? self.blurEffect : nil
     }
 }
 

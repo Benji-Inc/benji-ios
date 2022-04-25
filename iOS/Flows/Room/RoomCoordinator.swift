@@ -12,7 +12,7 @@ import StreamChat
 class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     
     lazy var roomVC = RoomViewController()
-    
+
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.roomVC
     }
@@ -170,5 +170,11 @@ extension RoomCoordinator: MessageContentDelegate {
     
     func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
         
+    }
+
+    func messageContent(_ content: MessageContentView,
+                        didTapEmotion emotion: Emotion,
+                        forMessage messageInfo: (ConversationId, MessageId)) {
+
     }
 }
