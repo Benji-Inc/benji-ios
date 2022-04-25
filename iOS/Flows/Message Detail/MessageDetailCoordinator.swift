@@ -182,6 +182,12 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
         self.presentEmotions(for: message)
     }
+
+    func messageContent(_ content: MessageContentView,
+                        didTapEmotion emotion: Emotion,
+                        forMessage messageInfo: (ConversationId, MessageId)) {
+
+    }
     
     func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
         self.removeChild()

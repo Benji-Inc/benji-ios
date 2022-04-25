@@ -268,13 +268,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
         
     }
-    
-    func messageContent(_ content: MessageContentView,
-                        didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
-        guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
-        self.presentEmotions(for: message)
-    }
-    
+
     func messageContent(_ content: MessageContentView,
                         didTapMessage messageInfo: (ConversationId, MessageId)) {
         
@@ -298,6 +292,28 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
             break
         }
+    }
+
+    func messageContent(_ content: MessageContentView,
+                        didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+        guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
+        self.presentEmotions(for: message)
+    }
+
+    func messageContent(_ content: MessageContentView,
+                        didTapEmotion emotion: Emotion,
+                        forMessage messageInfo: (ConversationId, MessageId)) {
+
+        guard let message = ChatClient.shared.messageController(cid: messageInfo.0,
+                                                                messageId: messageInfo.1).message else {
+            return
+        }
+
+        let coordinator = EmotionDetailCoordinator(router: self.router,
+                                                   deepLink: self.deepLink,
+                                                   emotions: message.emotions,
+                                                   startingEmotion: emotion)
+        self.present(coordinator)
     }
 }
 

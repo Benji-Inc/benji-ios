@@ -284,7 +284,14 @@ extension ConversationDetailCoordinator: MessageContentDelegate {
         self.router.present(imageCoordinator, source: self.detailVC)
     }
     
-    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView,
+                        didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
         
+    }
+
+    func messageContent(_ content: MessageContentView,
+                        didTapEmotion emotion: Emotion,
+                        forMessage messageInfo: (ConversationId, MessageId)) {
+
     }
 }

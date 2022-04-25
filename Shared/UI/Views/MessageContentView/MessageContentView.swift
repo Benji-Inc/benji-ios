@@ -18,6 +18,9 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
+    func messageContent(_ content: MessageContentView,
+                        didTapEmotion emotion: Emotion,
+                        forMessage messageInfo: (ConversationId, MessageId))
 }
 
 class MessageContentView: BaseView {
@@ -150,7 +153,10 @@ class MessageContentView: BaseView {
         }
 
         self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            logDebug(emotion.id)
+            guard let message = self.message else { return }
+            self.delegate?.messageContent(self,
+                                          didTapEmotion: emotion,
+                                          forMessage: (message.streamCid, message.id))
         }
         
         self.imageView.didSelect { [unowned self] in
