@@ -408,7 +408,20 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
-            self.dataSource.set(messagesController: self.messageController)
+            var itemsToReconfigure: [MessageSequenceItem] = []
+
+            for change in changes {
+                switch change {
+                case .update(let message, _):
+                    guard !message.isDeleted else { break }
+                    itemsToReconfigure.append(.message(messageID: message.id))
+                default:
+                    break
+                }
+            }
+
+            self.dataSource.set(messagesController: self.messageController,
+                                itemsToReconfigure: itemsToReconfigure)
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in
