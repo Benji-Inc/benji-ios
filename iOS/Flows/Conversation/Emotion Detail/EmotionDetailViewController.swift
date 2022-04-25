@@ -8,13 +8,25 @@
 
 import Foundation
 
+protocol EmotionDetailViewControllerDelegate: AnyObject {
+    func emotionDetailViewControllerDidFinish(_ controller: EmotionDetailViewController)
+}
+
 class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetailSection,
                                    EmotionDetailItem,
                                    EmotionDetailCollectionViewDataSource> {
 
-    var emotions: [Emotion]
+    unowned let delegate: EmotionDetailViewControllerDelegate
 
-    init(emotions: [Emotion], startingEmotion: Emotion?) {
+    var emotions: [Emotion]
+    private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+
+    init(emotions: [Emotion],
+         startingEmotion: Emotion?,
+         delegate: EmotionDetailViewControllerDelegate) {
+
+        self.delegate = delegate
+
         var sortedEmotions = emotions
         // Put the starting emotion at the front
         if let startingEmotion = startingEmotion {
@@ -24,6 +36,7 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
         self.emotions = sortedEmotions
 
         let collectionView = CollectionView(layout: EmotionDetailCollectionViewLayout())
+
         super.init(with: collectionView)
     }
 
@@ -35,6 +48,24 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
         super.viewDidLoad()
 
         self.loadInitialData()
+    }
+
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.modalPresentationStyle = .overFullScreen
+
+        self.view.insertSubview(self.blurView, at: 0)
+
+        self.view.didSelect { [unowned self] in
+            self.delegate.emotionDetailViewControllerDidFinish(self)
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
     }
 
     override func getAllSections() -> [EmotionDetailCollectionViewDataSource.SectionType] {
@@ -51,5 +82,16 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
         data[.emotions] = emotionsItems
 
         return data
+    }
+}
+
+extension EmotionDetailViewController: TransitionableViewController {
+
+    var sendingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var receivingPresentationType: TransitionType {
+        return .fade
     }
 }

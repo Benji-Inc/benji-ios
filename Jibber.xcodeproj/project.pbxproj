@@ -1724,15 +1724,15 @@
 			path = Wallet;
 			sourceTree = "<group>";
 		};
-		D61553602746E60400B08459 /* Transtion Types */ = {
+		D61553602746E60400B08459 /* Transition Types */ = {
 			isa = PBXGroup;
 			children = (
 				D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */,
 				D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */,
-				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
 				D61553612746E62D00B08459 /* TransitionRouter+Message.swift */,
+				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
 			);
-			path = "Transtion Types";
+			path = "Transition Types";
 			sourceTree = "<group>";
 		};
 		D619C58A27F129C00082AD19 /* Emotions */ = {
@@ -2314,9 +2314,9 @@
 				D615535B2746D64200B08459 /* DismissTransitionController.swift */,
 				D61553512746D4BB00B08459 /* ModalTransitionController.swift */,
 				D61553562746D5D200B08459 /* PanDismissInteractionController.swift */,
+				D61553602746E60400B08459 /* Transition Types */,
 				D677588225B09F4D007E0184 /* Transitionable.swift */,
 				D677588B25B09F9C007E0184 /* TransitionRouter.swift */,
-				D61553602746E60400B08459 /* Transtion Types */,
 			);
 			path = Transitions;
 			sourceTree = "<group>";

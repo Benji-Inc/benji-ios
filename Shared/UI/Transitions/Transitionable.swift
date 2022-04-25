@@ -23,15 +23,15 @@ protocol Transitionable {
 
 extension Transitionable {
 
-    var receivingDismissalType: TransitionType {
-        return .fade
-    }
-
     var sendingPresentationType: TransitionType {
         return .fade
     }
 
     var sendingDismissalType: TransitionType {
+        return .fade
+    }
+
+    var receivingDismissalType: TransitionType {
         return .fade
     }
 

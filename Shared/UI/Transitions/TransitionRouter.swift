@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+
 /// A custom transitions that simultaneously slides the current VC vertically off the screen
 /// and the destination one onto it.
 class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
@@ -15,7 +16,7 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     // The fromVC sets the stage for how it wants to get to the toVC
     private(set) var fromVC: TransitionableViewController
     private(set) var toVC: TransitionableViewController
-    private let operation: UINavigationController.Operation
+    let operation: UINavigationController.Operation
 
     let taskPool = TaskPool()
 
@@ -35,7 +36,6 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-
         let fromTransition = self.fromVC.getTransitionType(for: self.operation, isFromVC: true)
         let toTransition = self.toVC.getTransitionType(for: self.operation, isFromVC: false)
 
@@ -49,7 +49,7 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
         case (let .fill(expandingView), .fade):
             self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
         default:
-            self.fadeTranstion(fromColor: .clear, toColor: .clear, transitionContext: transitionContext)
+            self.fadeTranstion(transitionContext: transitionContext)
         }
     }
 
