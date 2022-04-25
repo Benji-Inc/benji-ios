@@ -51,7 +51,7 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
         case (.blur, _), (_, .blur):
             self.blur(transitionContext: transitionContext)
         default:
-            self.fadeTranstion(transitionContext: transitionContext)
+            self.fadeTransition(transitionContext: transitionContext)
         }
     }
 

@@ -12,7 +12,7 @@ import UIKit
 extension TransitionRouter {
 
     /// Fades out the fromVC and then fades in the toVC.
-    func fadeTranstion(transitionContext: UIViewControllerContextTransitioning) {
+    func fadeTransition(transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
 
         let isPresenting = self.operation == .push
