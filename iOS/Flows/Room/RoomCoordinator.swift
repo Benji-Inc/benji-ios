@@ -37,10 +37,10 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         guard let target = deepLink.deepLinkTarget else { return }
 
         switch target {
-        case .conversation:
+        case .conversation, .thread:
             let messageID = deepLink.messageId
             guard let cid = deepLink.conversationId else { break }
-            self.presentConversation(with: cid, messageId: messageID)
+            self.presentConversation(with: cid, messageId: messageID, openReplies: target == .thread)
         case .wallet:
             self.presentWallet()
         case .profile:

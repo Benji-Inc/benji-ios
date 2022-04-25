@@ -13,6 +13,7 @@ enum DeepLinkTarget: String, CaseIterable {
     case room
     case login
     case conversation
+    case thread
     case reservation
     case wallet
     case profile

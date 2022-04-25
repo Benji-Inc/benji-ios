@@ -113,6 +113,8 @@ class ReplySummaryView: BaseView {
     private let replyView = ReplyView()
     
     var didTapViewReplies: CompletionOptional = nil
+    var didSelectSuggestion: ((SuggestedReply) -> Void)? = nil
+    var didSelectEmoji: ((String) -> Void)? = nil
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -124,6 +126,7 @@ class ReplySummaryView: BaseView {
         self.addSubview(self.promptLabel)
         self.addSubview(self.counter)
         self.addSubview(self.promptButton)
+        self.promptButton.menu = self.addMenu()
         self.promptButton.didSelect { [unowned self] in
             self.didTapViewReplies?()
         }
@@ -154,12 +157,15 @@ class ReplySummaryView: BaseView {
                 try? await controller.loadPreviousReplies()
             }
             
-            if let reply = self.controller?.message?.recentReplies.last {
+            if let reply = self.controller?.message?.recentReplies.first {
                 self.replyView.isVisible = true
                 self.replyView.configure(with: reply)
             } else {
                 self.replyView.isVisible = false
             }
+            
+            self.promptButton.showsMenuAsPrimaryAction = self.replyView.isHidden
+            
             self.layoutNow()
             self.subscribeToUpdates()
         }
@@ -169,9 +175,13 @@ class ReplySummaryView: BaseView {
         // Remaining replies minus the one being displayed.
         let remainingReplyCount = clamp(message.totalReplyCount - 1, min: 0)
         
-        if remainingReplyCount == 0 {
+        if message.totalReplyCount == 0 {
             self.promptLabel.isVisible = true
             self.promptLabel.setText("Reply")
+            self.counter.isVisible = false
+        } else if remainingReplyCount == 0 {
+            self.promptLabel.isVisible = true
+            self.promptLabel.setText("View thread")
             self.counter.isVisible = false
         } else {
             self.counter.isVisible = true
@@ -230,5 +240,33 @@ class ReplySummaryView: BaseView {
             guard let message = self.controller?.message else { return }
             self.setPrompt(for: message)
         }.store(in: &self.cancellables)
+    }
+    
+    private func addMenu() -> UIMenu {
+        
+        var elements: [UIMenuElement] = []
+        
+        SuggestedReply.allCases.reversed().forEach { suggestion in
+            
+            if suggestion == .emoji {
+                let reactionElements: [UIMenuElement] = suggestion.emojiReactions.compactMap { emoji in
+                    return UIAction(title: emoji, image: nil) { [unowned self] _ in
+                        self.didSelectEmoji?(emoji)
+                    }
+                }
+                let reactionMenu = UIMenu(title: suggestion.text,
+                                          image: suggestion.image,
+                                          children: reactionElements)
+                elements.append(reactionMenu)
+                
+            } else {
+                let action = UIAction(title: suggestion.text, image: suggestion.image) { [unowned self] _ in
+                    self.didSelectSuggestion?(suggestion)
+                }
+                elements.append(action)
+            }
+        }
+
+        return UIMenu(title: "Suggestions", children: elements)
     }
 }

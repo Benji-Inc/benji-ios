@@ -49,11 +49,7 @@ class UserNotificationManager: NSObject {
             let settings = await self.getNotificationSettings()
 
             switch settings.authorizationStatus {
-            case .authorized:
-                await application.registerForRemoteNotifications()  // To update our token
-            case .provisional:
-                await application.registerForRemoteNotifications()  // To update our token
-            case .notDetermined:
+            case .authorized, .provisional, .notDetermined:
                 await self.register(with: [.alert, .sound, .badge, .provisional], application: application)
             case .denied, .ephemeral:
                 return
@@ -121,6 +117,13 @@ class UserNotificationManager: NSObject {
             }
         }
     }
+    
+    func scheduleNotification(with content: UNNotificationContent) async {
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: content,
+                                            trigger: nil)
+        try? await self.center.add(request)
+    }
 
     // MARK: - Message Event Handling
 
@@ -185,32 +188,81 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-
-        if let action = UserNotificationAction(rawValue: response.actionIdentifier) {
-            self.handle(action: action, for: response)
+        
+        if let suggestion = SuggestedReply.init(rawValue: response.actionIdentifier) {
+            #if IOS
+            self.handle(suggestion: suggestion, response: response, completion: completionHandler)
+            #else
+            completionHandler()
+            #endif
         } else if let target = response.notification.deepLinkTarget {
             var deepLink = DeepLinkObject(target: target)
             deepLink.customMetadata = response.notification.customMetadata
             self.delegate?.userNotificationManager(willHandle: deepLink)
+            completionHandler()
+        } else {
+            completionHandler()
         }
-
-        completionHandler()
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 openSettingsFor notification: UNNotification?) {}
-
-    private func handle(action: UserNotificationAction, for response: UNNotificationResponse) {
-        switch action {
-        case .sayHi:
-            if let target = response.notification.deepLinkTarget {
-                var deepLink = DeepLinkObject(target: target)
-                deepLink.customMetadata = response.notification.customMetadata
-
-                self.delegate?.userNotificationManager(willHandle: deepLink)
-            }
+    
+    #if IOS
+    private func handle(suggestion: SuggestedReply,
+                        response: UNNotificationResponse,
+                        completion: @escaping () -> Void) {
+        
+        switch suggestion {
+        case .emoji:
+            // Do nothing
+            completion()
+        case .other:
+            // Go to threads
+            var deepLink = DeepLinkObject(target: .thread)
+            deepLink.customMetadata = response.notification.customMetadata
+            self.delegate?.userNotificationManager(willHandle: deepLink)
+            completion()
         default:
-            break
+            guard let messageId = response.notification.messageId,
+                  let conversationId = response.notification.conversationId,
+                  let cid = try? ChannelId(cid: conversationId) else {
+                completion()
+                return
+            }
+            
+            Task {
+                let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
+                
+                if controller.message.isNil {
+                    try await controller.synchronize()
+                }
+
+                let object = SendableObject(kind: .text(suggestion.text),
+                                            deliveryType: controller.message!.deliveryType,
+                                            expression: nil)
+                
+                do {
+                    try await controller.createNewReply(with: object)
+                    
+                    let content = UNMutableNotificationContent()
+                    content.title = "You replied:"
+                    content.body = suggestion.text
+                    content.interruptionLevel = .active
+                    content.setData(value: response.notification.conversationId ?? "", for: .conversationId)
+                    content.setData(value: response.notification.conversationId ?? "", for: .messageId)
+                    content.setData(value: DeepLinkTarget.thread.rawValue, for: .target)
+                    content.categoryIdentifier = UserNotificationCategory.newMessage.rawValue
+                    
+                    await self.scheduleNotification(with: content)
+                    AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": suggestion.text])
+                } catch {
+                    logError(error)
+                }
+                
+                completion()
+            }
         }
     }
+    #endif
 }

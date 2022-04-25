@@ -101,7 +101,6 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
-        self.loadRecentReplies()
         self.subscribeToUpdates()
     }
     
@@ -119,9 +118,9 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         self.messageController = controller
         
         if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
-            data[.options] = [.option(.viewReplies), .option(.unpin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            data[.options] = [.option(.viewThread), .option(.unpin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
         } else {
-            data[.options] = [.option(.viewReplies), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            data[.options] = [.option(.viewThread), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
         }
             
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
@@ -135,8 +134,6 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         } else {
             data[.reads] = reads
         }
-
-        data[.recentReply] = [.reply(RecentReplyModel(reply: nil, isLoading: msg.replyCount > 0))]
         
         data[.metadata] = [.info(msg)]
         
@@ -159,35 +156,6 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                 self.messageContent.configure(with: self.message)
                 self.reloadDetailData()
             }).store(in: &self.cancellables)
-        
-        self.messageController?
-            .repliesChangesPublisher
-            .mainSink { [unowned self] _ in
-                self.loadRecentReplies()
-            }.store(in: &self.cancellables)
-    }
-    
-    /// The currently running task that is loading.
-    private var loadRepliesTask: Task<Void, Never>?
-    
-    private func loadRecentReplies() {
-        self.loadRepliesTask?.cancel()
-        
-        self.loadRepliesTask = Task { [weak self] in
-            guard let `self` = self,
-                let messageController = messageController else {
-                return
-            }
-
-            try? await messageController.loadPreviousReplies()
-            
-            let items: [MessageDetailDataSource.ItemType] = [.reply(RecentReplyModel(reply: messageController.replies.last, isLoading: false))]
-            
-            var snapshot = self.dataSource.snapshot()
-            snapshot.setItems(items, in: .recentReply)
-            
-            await self.dataSource.apply(snapshot)
-        }
     }
     
     /// The currently running task that is loading.
@@ -207,12 +175,12 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             
             let optionItems: [MessageDetailDataSource.ItemType]
             if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
-                optionItems = [.option(.viewReplies),
+                optionItems = [.option(.viewThread),
                                .option(.unpin),
                                .option(.quote),
                                .more(MoreOptionModel(message: msg, option: .more))].reversed()
             } else {
-                optionItems = [.option(.viewReplies),
+                optionItems = [.option(.viewThread),
                                .option(.pin),
                                .option(.quote),
                                .more(MoreOptionModel(message: msg, option: .more))]
