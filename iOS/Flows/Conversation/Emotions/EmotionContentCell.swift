@@ -71,8 +71,11 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
 
         self.label.setSize(withWidth: self.circleView.width * 0.8)
         self.label.centerOnXAndY()
-        
+
         self.emotionLabel.setSize(withWidth: self.circleView.width)
+
+        self.label.top += self.emotionLabel.height
+        
         self.emotionLabel.centerOnX()
         self.emotionLabel.match(.bottom, to: .top, of: self.label, offset: .negative(.standard))
     }
