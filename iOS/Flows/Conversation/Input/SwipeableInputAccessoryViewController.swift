@@ -152,7 +152,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.swipeInputView.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
             self.updateInputState(with: self.swipeInputView.textView.numberOfLines)
-            self.swipeInputView.countView.update(with: text.count,
+            self.swipeInputView.characterCountView.update(with: text.count,
                                                  max: self.swipeInputView.textView.maxLength)
         }.store(in: &self.cancellables)
 
@@ -250,7 +250,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.inputState = .collapsed
         self.swipeInputView.textView.reset()
         self.swipeInputView.inputContainerView.alpha = 1
-        self.swipeInputView.countView.alpha = 0.0        
+        self.swipeInputView.characterCountView.alpha = 0.0        
         self.currentMessageKind = .text("")
         self.resetExpression()
     }
