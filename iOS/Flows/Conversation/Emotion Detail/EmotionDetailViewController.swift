@@ -13,12 +13,15 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
                                    EmotionDetailCollectionViewDataSource> {
 
     var emotions: [Emotion]
-    let startingEmotion: Emotion?
-
 
     init(emotions: [Emotion], startingEmotion: Emotion?) {
-        self.emotions = emotions
-        self.startingEmotion = startingEmotion
+        var sortedEmotions = emotions
+        // Put the starting emotion at the front
+        if let startingEmotion = startingEmotion {
+            sortedEmotions.remove(object: startingEmotion)
+            sortedEmotions.insert(startingEmotion, at: 0)
+        }
+        self.emotions = sortedEmotions
 
         let collectionView = CollectionView(layout: EmotionDetailCollectionViewLayout())
         super.init(with: collectionView)
@@ -36,22 +39,6 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
 
     override func getAllSections() -> [EmotionDetailCollectionViewDataSource.SectionType] {
         return EmotionDetailCollectionViewDataSource.SectionType.allCases
-    }
-
-    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<EmotionDetailSection, EmotionDetailItem>)
-    -> AnimationCycle? {
-
-        var scrollToIndexPath: IndexPath? = nil
-        if let startingEmotion = self.startingEmotion,
-           let index = snapshot.indexOfItem(EmotionDetailItem(emotion: startingEmotion)) {
-
-            scrollToIndexPath = IndexPath(item: index, section: 0)
-        }
-
-        return AnimationCycle(inFromPosition: .inward,
-                              outToPosition: .inward,
-                              shouldConcatenate: false,
-                              scrollToIndexPath: scrollToIndexPath)
     }
 
     override func retrieveDataForSnapshot() async
