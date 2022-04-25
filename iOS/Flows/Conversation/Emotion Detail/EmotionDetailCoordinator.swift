@@ -7,3 +7,14 @@
 //
 
 import Foundation
+
+class EmotionDetailCoordinator: PresentableCoordinator<Void> {
+
+    #warning("Fix this")
+    private lazy var emotionDetailVC = EmotionDetailViewController(emotions: [.afraid, .bored, .calm, .dread],
+                                                                   startingEmotion: .calm)
+
+    override func toPresentable() -> DismissableVC {
+        return self.emotionDetailVC
+    }
+}

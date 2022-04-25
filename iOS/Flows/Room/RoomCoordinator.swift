@@ -12,8 +12,13 @@ import StreamChat
 class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     
     lazy var roomVC = RoomViewController()
-    
+
+    let testVC = EmotionDetailViewController(emotions: [.afraid, .bored, .calm, .dread],
+                                             startingEmotion: .calm)
+
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
+        return self.testVC
+        #warning("fix")
         return self.roomVC
     }
     

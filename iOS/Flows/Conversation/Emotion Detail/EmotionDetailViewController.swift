@@ -12,7 +12,14 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
                                    EmotionDetailItem,
                                    EmotionDetailCollectionViewDataSource> {
 
-    init() {
+    var emotions: [Emotion]
+    let startingEmotion: Emotion?
+
+
+    init(emotions: [Emotion], startingEmotion: Emotion?) {
+        self.emotions = emotions
+        self.startingEmotion = startingEmotion
+
         let collectionView = CollectionView(layout: EmotionDetailCollectionViewLayout())
         super.init(with: collectionView)
     }
@@ -21,16 +28,40 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.loadInitialData()
+    }
+
     override func getAllSections() -> [EmotionDetailCollectionViewDataSource.SectionType] {
         return EmotionDetailCollectionViewDataSource.SectionType.allCases
+    }
+
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<EmotionDetailSection, EmotionDetailItem>)
+    -> AnimationCycle? {
+
+        var scrollToIndexPath: IndexPath? = nil
+        if let startingEmotion = self.startingEmotion,
+           let index = snapshot.indexOfItem(EmotionDetailItem(emotion: startingEmotion)) {
+
+            scrollToIndexPath = IndexPath(item: index, section: 0)
+        }
+
+        return AnimationCycle(inFromPosition: .inward,
+                              outToPosition: .inward,
+                              shouldConcatenate: false,
+                              scrollToIndexPath: scrollToIndexPath)
     }
 
     override func retrieveDataForSnapshot() async
     -> [EmotionDetailCollectionViewDataSource.SectionType : [EmotionDetailCollectionViewDataSource.ItemType]] {
 
+        let emotionsItems = self.emotions.map { emotion in
+            return EmotionDetailItem(emotion: emotion)
+        }
         var data: [EmotionDetailSection : [EmotionDetailItem]] = [:]
-        #warning("Use real data")
-        data[.emotions] = [EmotionDetailItem(emotion: .admiration), EmotionDetailItem(emotion: .afraid)]
+        data[.emotions] = emotionsItems
 
         return data
     }

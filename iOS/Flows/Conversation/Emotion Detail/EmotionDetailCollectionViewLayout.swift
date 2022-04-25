@@ -33,12 +33,12 @@ class EmotionDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
 
                 // Group
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                       heightDimension: .fractionalHeight(0.4))
+                                                       heightDimension: .fractionalHeight(1.0))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: sectionInset,
-                                                                bottom: 0,
-                                                                trailing: sectionInset)
+                                                              leading: sectionInset,
+                                                              bottom: 0,
+                                                              trailing: sectionInset)
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
