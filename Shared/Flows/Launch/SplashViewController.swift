@@ -19,7 +19,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     
     /// A view to blur out the emotions collection view.
     let blurView = BlurView()
-    private lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: 80)
+    private lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: 100)
 
     let loadingView = AnimationView.with(animation: .loading)
 
@@ -67,9 +67,12 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     private func animateEmotions() async {
         guard !Task.isCancelled else { return }
         
-        guard let emotion = Emotion.allCases.randomElement() else { return }
+        let emotions = Emotion.allCases.random(Int.random(min: 1, max: 4))
+        var emotionsCounts: [Emotion : Int] = [:]
+        for emotion in emotions {
+            emotionsCounts[emotion] = Int.random(min: 1, max: 3)
+        }
 
-        let emotionsCounts = [emotion : 4]
         self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
 
         await Task.sleep(seconds: 5)

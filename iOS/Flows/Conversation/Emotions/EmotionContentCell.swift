@@ -20,8 +20,8 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: EmotionContentModel?
 
     let circleView = UIView()
-    let label = ThemeLabel(font: .medium)
     let emotionLabel = ThemeLabel(font: .smallBold)
+    let label = ThemeLabel(font: .regular)
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -75,7 +75,7 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
         self.emotionLabel.setSize(withWidth: self.circleView.width)
 
         self.label.top += self.emotionLabel.height
-        
+
         self.emotionLabel.centerOnX()
         self.emotionLabel.match(.bottom, to: .top, of: self.label, offset: .negative(.standard))
     }
