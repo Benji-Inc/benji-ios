@@ -246,7 +246,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
                     try await controller.createNewReply(with: object)
                     
                     let content = UNMutableNotificationContent()
-                    content.title = "Reply sent"
+                    content.title = "You replied:"
                     content.body = suggestion.text
                     content.interruptionLevel = .active
                     content.setData(value: response.notification.conversationId ?? "", for: .conversationId)

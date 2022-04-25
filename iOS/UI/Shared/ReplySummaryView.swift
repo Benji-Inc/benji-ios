@@ -157,7 +157,7 @@ class ReplySummaryView: BaseView {
                 try? await controller.loadPreviousReplies()
             }
             
-            if let reply = self.controller?.message?.recentReplies.last {
+            if let reply = self.controller?.message?.recentReplies.first {
                 self.replyView.isVisible = true
                 self.replyView.configure(with: reply)
             } else {
