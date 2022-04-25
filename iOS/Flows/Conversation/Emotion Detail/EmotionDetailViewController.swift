@@ -19,7 +19,6 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
     unowned let delegate: EmotionDetailViewControllerDelegate
 
     var emotions: [Emotion]
-    private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
 
     init(emotions: [Emotion],
          startingEmotion: Emotion?,
@@ -46,6 +45,8 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.modalPresentationStyle = .overFullScreen
 
         self.loadInitialData()
     }
@@ -53,21 +54,11 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
     override func initializeViews() {
         super.initializeViews()
 
-        self.modalPresentationStyle = .overFullScreen
-
-        self.view.insertSubview(self.blurView, at: 0)
-
         self.view.didSelect { [unowned self] in
             self.delegate.emotionDetailViewControllerDidFinish(self)
         }
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
-    }
-
+    
     override func getAllSections() -> [EmotionDetailCollectionViewDataSource.SectionType] {
         return EmotionDetailCollectionViewDataSource.SectionType.allCases
     }
@@ -88,10 +79,18 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
 extension EmotionDetailViewController: TransitionableViewController {
 
     var sendingPresentationType: TransitionType {
-        return .fade
+        return .blur
+    }
+
+    var sendingDismissalType: TransitionType {
+        return .blur
     }
 
     var receivingPresentationType: TransitionType {
-        return .fade
+        return .blur
+    }
+
+    var receivingDismissalType: TransitionType {
+        return .blur
     }
 }

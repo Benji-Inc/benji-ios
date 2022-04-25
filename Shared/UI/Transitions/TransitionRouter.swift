@@ -48,6 +48,8 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
             self.moveTranstion(fromView: fromView, toView: toView, transitionContext: transitionContext)
         case (let .fill(expandingView), .fade):
             self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
+        case (.blur, _), (_, .blur):
+            self.blur(transitionContext: transitionContext)
         default:
             self.fadeTranstion(transitionContext: transitionContext)
         }
