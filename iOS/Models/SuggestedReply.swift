@@ -9,17 +9,17 @@
 import Foundation
 import UIKit
 
-enum SuggestedReply: CaseIterable {
+enum SuggestedReply: String, CaseIterable {
     
-    case ok
-    case noThanks
-    case onMyWay
-    case what
-    case thanks
-    case great
-    case busy
-    case emoji
-    case other
+    case ok = "SUGGESTION_OK"
+    case noThanks = "SUGGESTION_NOTHANKS"
+    case onMyWay = "SUGGESTION_ONMYWAY"
+    case what = "SUGGESTION_WHAT"
+    case thanks = "SUGGESTION_THANKS"
+    case great = "SUGGESTION_GREAT"
+    case busy = "SUGGESTION_BUSY"
+    case emoji = "SUGGESTION_EMOJI"
+    case other = "SUGGESTION_OTHER"
     
     var text: String {
         switch self {
@@ -56,5 +56,24 @@ enum SuggestedReply: CaseIterable {
     
     var emojiReactions: [String] {
         return ["❤️", "👍", "👎", "😂", "😳", "🤨"]
+    }
+    
+    var action: UNNotificationAction? {
+        if self != .emoji {
+            
+            var icon: UNNotificationActionIcon? = nil
+            if self == .other {
+                icon = UNNotificationActionIcon(systemImageName: "arrowshape.turn.up.left")
+            } else if self == .emoji {
+                icon = UNNotificationActionIcon(systemImageName: "face.smiling")
+            }
+            
+            return UNNotificationAction(identifier: self.rawValue,
+                                        title: self.text,
+                                        options: .foreground,
+                                        icon: icon)
+        }
+        
+        return nil
     }
 }
