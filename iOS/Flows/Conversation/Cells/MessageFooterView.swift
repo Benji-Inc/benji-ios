@@ -12,7 +12,7 @@ import Combine
 
 class MessageFooterView: BaseView {
     
-    static let height: CGFloat = 70
+    static let height: CGFloat = 86
     static let collapsedHeight: CGFloat = 30 
 
     let replySummary = ReplySummaryView()
@@ -37,7 +37,7 @@ class MessageFooterView: BaseView {
         self.readView.pin(.right)
         self.readView.pin(.top)
 
-        self.replySummary.width = self.width - self.readView.width - Theme.ContentOffset.short.value
+        self.replySummary.width = self.width - self.readView.width - Theme.ContentOffset.standard.value
         self.replySummary.pin(.left)
         self.replySummary.pin(.top)
     }
