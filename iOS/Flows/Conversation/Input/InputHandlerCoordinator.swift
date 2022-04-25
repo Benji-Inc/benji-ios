@@ -70,7 +70,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             self.presentProfile(for: User.current()!)
         }
         
-        self.inputHandlerViewController.swipeableVC.swipeInputView.unreadView.didSelect { [unowned self] in
+        self.inputHandlerViewController.swipeableVC.swipeInputView.unreadMessagesView.didSelect { [unowned self] in
             self.scrollToUnreadMessage()
         }
     }

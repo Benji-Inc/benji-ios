@@ -25,7 +25,7 @@ class SwipeableInputAccessoryView: BaseView {
         
     /// An invisible button to handle taps and pan gestures.
     @IBOutlet var gestureButton: UIButton!
-    @IBOutlet var countView: CharacterCountView!
+    @IBOutlet var characterCountView: CharacterCountView!
     @IBOutlet var avatarView: BorderedPersonView!
 
     /// A view that contains delivery type and emotion selection views.
@@ -58,7 +58,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var addViewHeightContstrain: NSLayoutConstraint!
     @IBOutlet var addViewWidthContstrain: NSLayoutConstraint!
     
-    let unreadView = UnreadMessagesCounter()
+    let unreadMessagesView = UnreadMessagesCounter()
     let typingIndicatorView = TypingIndicatorView()
     
     // MARK: BaseView Setup and Layout
@@ -77,7 +77,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.avatarView.set(person: User.current()!)
         
         self.addSubview(self.typingIndicatorView)
-        self.addSubview(self.unreadView)
+        self.addSubview(self.unreadMessagesView)
     }
     
     override func awakeFromNib() {
@@ -90,8 +90,8 @@ class SwipeableInputAccessoryView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.unreadView.pin(.right, offset: .custom(26))
-        self.unreadView.bottom = 0
+        self.unreadMessagesView.pin(.right, offset: .custom(26))
+        self.unreadMessagesView.bottom = 0
         
         self.typingIndicatorView.width = self.width - 48
         self.typingIndicatorView.height = 16
@@ -159,7 +159,7 @@ class SwipeableInputAccessoryView: BaseView {
             avatarTop = 34
         }
         
-        self.unreadView.updateVisibility(for: inputState)
+        self.unreadMessagesView.updateVisibility(for: inputState)
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.addViewWidthContstrain.constant = newAddViewSize
@@ -180,9 +180,9 @@ class SwipeableInputAccessoryView: BaseView {
             self.avatarHeightConstraint.constant = showAvatar ? 44 : 0
                                     
             if shouldShowDetail {
-                self.countView.update(with: self.textView.text.count, max: self.textView.maxLength)
+                self.characterCountView.update(with: self.textView.text.count, max: self.textView.maxLength)
             } else {
-                self.countView.alpha = 0.0
+                self.characterCountView.alpha = 0.0
             }
             
             // Layout the window so that our container view also animates
@@ -195,7 +195,7 @@ class SwipeableInputAccessoryView: BaseView {
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        if self.unreadView.frame.contains(point) || self.typingIndicatorView.frame.contains(point) {
+        if self.unreadMessagesView.frame.contains(point) || self.typingIndicatorView.frame.contains(point) {
             return true
         }
         return super.point(inside: point, with: event)
