@@ -4,8 +4,6 @@
 <dict>
 	<key>API_TARGET</key>
 	<string>${API_TARGET}</string>
-    <key>RELEASE_TYPE</key>
-    <string>${RELEASE_TYPE}</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>
@@ -31,5 +29,7 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).IntentHandler</string>
 	</dict>
+	<key>RELEASE_TYPE</key>
+	<string>${RELEASE_TYPE}</string>
 </dict>
 </plist>

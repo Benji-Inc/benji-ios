@@ -39,6 +39,8 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
             break
         case .connnectionConfirmed:
             break
+        case .newMessage:
+            break 
         }
 
         self.view.layoutNow()

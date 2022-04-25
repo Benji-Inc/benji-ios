@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import ScrollCounter
 import StreamChat
 import Combine
 import Localization
+import UIKit
 
 class LineDotView: BaseView {
     let lineView = BaseView()
@@ -48,32 +48,50 @@ class ReplyView: BaseView {
     let personView = BorderedPersonView()
     let dateLabel = ThemeLabel(font: .xtraSmall)
     let label = ThemeLabel(font: .small)
+    let imageView = UIImageView()
+    
+    static let minimumHeight: CGFloat = 26
+    static let maxHeight: CGFloat = 58
 
     override func initializeSubviews() {
         super.initializeSubviews()
-
-        self.height = 24
         
         self.addSubview(self.personView)
         self.addSubview(self.label)
+        self.label.lineBreakMode = .byTruncatingTail
+        
         self.addSubview(self.dateLabel)
+        
+        self.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.tintColor = ThemeColor.white.color
+        
         self.dateLabel.alpha = 0.25
+        self.imageView.alpha = 0.25
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.personView.squaredSize = self.height
+        self.personView.squaredSize = ReplyView.minimumHeight
         self.personView.pin(.left)
         self.personView.pin(.top)
-
-        self.label.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value)
-        self.label.match(.bottom, to: .bottom, of: self.personView)
-        self.label.match(.left, to: .right, of: self.personView, offset: .standard)
+        
+        self.imageView.squaredSize = 8
+        self.imageView.match(.left, to: .right, of: self.personView, offset: .standard)
 
         self.dateLabel.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value)
         self.dateLabel.match(.top, to: .top, of: self.personView)
-        self.dateLabel.match(.left, to: .right, of: self.personView, offset: .standard)
+        self.dateLabel.match(.left, to: .right, of: self.imageView, offset: .custom(2))
+        
+        self.imageView.centerY = self.dateLabel.centerY
+
+        let maxLabelHeight = ReplyView.maxHeight - self.dateLabel.height - Theme.ContentOffset.short.value
+        self.label.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value, height: maxLabelHeight)
+        self.label.match(.top, to: .bottom, of: self.dateLabel, offset: .short)
+        self.label.match(.left, to: .right, of: self.personView, offset: .standard)
+        
+        self.height = clamp(self.label.bottom, ReplyView.minimumHeight, ReplyView.maxHeight)
     }
 
     func configure(with message: Messageable) {
@@ -82,6 +100,8 @@ class ReplyView: BaseView {
         } else {
             self.label.setText("View reply")
         }
+        
+        self.imageView.image = message.deliveryType.image
         self.personView.set(person: message.person)
         self.dateLabel.text = message.createdAt.getTimeAgoString()
         self.layoutNow()
@@ -91,28 +111,15 @@ class ReplyView: BaseView {
 class ReplySummaryView: BaseView {
     
     private var controller: MessageController?
-    
-    var cancellables = Set<AnyCancellable>()
-    
+        
     private let lineDotView = LineDotView()
     private let promptLabel = ThemeLabel(font: .smallBold, textColor: .D1)
     private let promptButton = ThemeButton()
-    private let counter = NumberScrollCounter(value: 0,
-                                              scrollDuration: Theme.animationDurationFast,
-                                              decimalPlaces: 0,
-                                              prefix: nil,
-                                              suffix: nil,
-                                              seperator: "",
-                                              seperatorSpacing: 0,
-                                              font: FontType.smallBold.font,
-                                              textColor: ThemeColor.D1.color,
-                                              animateInitialValue: true,
-                                              gradientColor: ThemeColor.B0.color,
-                                              gradientStop: 4)
-    
     private let replyView = ReplyView()
     
     var didTapViewReplies: CompletionOptional = nil
+    var didSelectSuggestion: ((SuggestedReply) -> Void)? = nil
+    var didSelectEmoji: ((String) -> Void)? = nil
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -122,8 +129,8 @@ class ReplySummaryView: BaseView {
         
         self.addSubview(self.lineDotView)
         self.addSubview(self.promptLabel)
-        self.addSubview(self.counter)
         self.addSubview(self.promptButton)
+        self.promptButton.menu = self.addMenu()
         self.promptButton.didSelect { [unowned self] in
             self.didTapViewReplies?()
         }
@@ -135,8 +142,6 @@ class ReplySummaryView: BaseView {
     func configure(for message: Messageable) {
         self.loadTask?.cancel()
         
-        self.promptLabel.isVisible = false
-        self.counter.isVisible = false
         self.replyView.isVisible = false
         
         self.setPrompt(for: message)
@@ -154,14 +159,16 @@ class ReplySummaryView: BaseView {
                 try? await controller.loadPreviousReplies()
             }
             
-            if let reply = self.controller?.message?.recentReplies.last {
+            if let reply = self.controller?.message?.recentReplies.first {
                 self.replyView.isVisible = true
                 self.replyView.configure(with: reply)
             } else {
                 self.replyView.isVisible = false
             }
+            
+            self.promptButton.showsMenuAsPrimaryAction = self.replyView.isHidden
+            
             self.layoutNow()
-            self.subscribeToUpdates()
         }
     }
     
@@ -169,18 +176,18 @@ class ReplySummaryView: BaseView {
         // Remaining replies minus the one being displayed.
         let remainingReplyCount = clamp(message.totalReplyCount - 1, min: 0)
         
-        if remainingReplyCount == 0 {
-            self.promptLabel.isVisible = true
+        if message.totalReplyCount == 0 {
             self.promptLabel.setText("Reply")
-            self.counter.isVisible = false
+        } else if remainingReplyCount == 0 {
+            self.promptLabel.setText("View thread")
         } else {
-            self.counter.isVisible = true
-            self.counter.prefix = "View "
-            self.counter.suffix = remainingReplyCount == 1 ? " reply" : " more replies"
-            self.promptLabel.isVisible = false
+            if remainingReplyCount == 1 {
+                self.promptLabel.setText("View \(remainingReplyCount) reply")
+            } else {
+                self.promptLabel.setText("View \(remainingReplyCount) more replies")
+            }
         }
         
-        self.counter.setValue(Float(remainingReplyCount), animated: true)
         self.layoutNow()
     }
     
@@ -204,31 +211,36 @@ class ReplySummaryView: BaseView {
         self.promptLabel.match(.left, to: .right, of: self.lineDotView, offset: .standard)
         self.promptLabel.pin(.bottom, offset: .custom(8))
         
-        self.counter.sizeToFit()
-        
-        if self.promptLabel.isVisible {
-            self.counter.match(.left, to: .right, of: self.promptLabel, offset: .standard)
-        } else {
-            self.counter.match(.left, to: .right, of: self.lineDotView, offset: .standard)
-        }
-        self.counter.pin(.bottom, offset: .custom(8))
-        
-        self.promptButton.height = 30
-        self.promptButton.width = self.width
-        self.promptButton.left = self.lineDotView.left
-        self.promptButton.pin(.bottom)
+        self.promptButton.expandToSuperviewSize()
         
         self.lineDotView.expandToSuperviewHeight()
     }
-
-    private func subscribeToUpdates() {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
+    
+    private func addMenu() -> UIMenu {
         
-        self.controller?.repliesChangesPublisher.mainSink { [unowned self] _ in
-            guard let message = self.controller?.message else { return }
-            self.setPrompt(for: message)
-        }.store(in: &self.cancellables)
+        var elements: [UIMenuElement] = []
+        
+        SuggestedReply.allCases.reversed().forEach { suggestion in
+            
+            if suggestion == .emoji {
+                let reactionElements: [UIMenuElement] = suggestion.emojiReactions.compactMap { emoji in
+                    return UIAction(title: emoji, image: nil) { [unowned self] _ in
+                        self.didSelectEmoji?(emoji)
+                    }
+                }
+                let reactionMenu = UIMenu(title: suggestion.text,
+                                          image: suggestion.image,
+                                          children: reactionElements)
+                elements.append(reactionMenu)
+                
+            } else {
+                let action = UIAction(title: suggestion.text, image: suggestion.image) { [unowned self] _ in
+                    self.didSelectSuggestion?(suggestion)
+                }
+                elements.append(action)
+            }
+        }
+
+        return UIMenu(title: "Suggestions", children: elements)
     }
 }

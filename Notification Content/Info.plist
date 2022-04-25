@@ -4,8 +4,6 @@
 <dict>
 	<key>API_TARGET</key>
 	<string>${API_TARGET}</string>
-	<key>RELEASE_TYPE</key>
-	<string>${RELEASE_TYPE}</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -44,6 +42,8 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.usernotifications.content-extension</string>
 	</dict>
+	<key>RELEASE_TYPE</key>
+	<string>${RELEASE_TYPE}</string>
 	<key>UIAppFonts</key>
 	<array/>
 </dict>

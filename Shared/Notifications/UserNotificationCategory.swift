@@ -10,10 +10,11 @@ import Foundation
 import UIKit
 
 enum UserNotificationCategory: String, CaseIterable {
-
+    
     case connectionRequest = "connectionRequest"
     case connnectionConfirmed = "connectionConfirmed"
-
+    case newMessage = "MESSAGE_NEW"
+    
     var category: UNNotificationCategory {
         switch self {
         case .connectionRequest:
@@ -24,21 +25,19 @@ enum UserNotificationCategory: String, CaseIterable {
                                           options: .customDismissAction)
         case .connnectionConfirmed:
             return UNNotificationCategory(identifier: self.rawValue,
-                                          actions: self.actions.map({ userAction in
-                                            return userAction.action
-                                          }),
+                                          actions: [],
                                           intentIdentifiers: [],
                                           hiddenPreviewsBodyPlaceholder: "",
                                           options: .customDismissAction)
-        }
-    }
-
-    var actions: [UserNotificationAction] {
-        switch self {
-        case .connnectionConfirmed:
-            return [.sayHi]
-        default:
-            return []
+        case .newMessage:
+            let actions: [UNNotificationAction] = SuggestedReply.allCases.compactMap { suggestion in
+                return suggestion.action
+            }
+            return UNNotificationCategory(identifier: self.rawValue,
+                                          actions: actions,
+                                          intentIdentifiers: [],
+                                          hiddenPreviewsBodyPlaceholder: "",
+                                          options: .customDismissAction)
         }
     }
 }

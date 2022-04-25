@@ -43,7 +43,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
             switch first {
             case .option(let type):
                 switch type {
-                case .viewReplies:
+                case .viewThread:
                     self.finishFlow(with: .message(self.message))
                 case .edit:
                     self.presentAlert(for: type)
@@ -61,9 +61,6 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                 self.presentProfile(for: author)
             case .info(_):
                 break
-            case .reply(let model):
-                guard let reply = model.reply else { return }
-                self.finishFlow(with: .reply(reply.id))
             case .more(_):
                 break
             }

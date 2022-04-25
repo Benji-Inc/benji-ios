@@ -14,13 +14,12 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
     enum SectionType: Int, CaseIterable {
         case options
         case reads
-        case recentReply
         case metadata
     }
     
     enum OptionType: Int, OptionDisplayable {
         
-        case viewReplies
+        case viewThread
         case edit
         case pin
         case unpin
@@ -29,7 +28,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         
         var image: UIImage? {
             switch self {
-            case .viewReplies:
+            case .viewThread:
                 return UIImage(systemName: "arrowshape.turn.up.left")
             case .edit:
                 return UIImage(systemName: "pencil")
@@ -46,8 +45,8 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         
         var title: String {
             switch self {
-            case .viewReplies:
-                return "Reply"
+            case .viewThread:
+                return "View Thread"
             case .edit:
                 return "Edit"
             case .pin:
@@ -74,14 +73,12 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         case option(OptionType)
         case read(ReadViewModel)
         case info(Message)
-        case reply(RecentReplyModel)
     }
     
     private let topOptionConfig = ManageableCellRegistration<MessageTopOptionCell>().provider
     private let readConfig = ManageableCellRegistration<MessageReadCell>().provider
     private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
-    private let replyConfig = ManageableCellRegistration<RecentReplyCell>().provider
     private let metadatConfig = ManageableCellRegistration<MessageMetadataCell>().provider
     private let moreConfige = ManageableCellRegistration<MessageMoreCell>().provider
     
@@ -110,11 +107,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.metadatConfig,
                                                                     for: indexPath,
                                                                     item: message)
-            return cell
-        case .reply(let model):
-            let cell = collectionView.dequeueConfiguredReusableCell(using: self.replyConfig,
-                                                                    for: indexPath,
-                                                                    item: model)
             return cell
         case .more(let model):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.moreConfige,
@@ -146,8 +138,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                 break
             case .reads:
                 header.leftLabel.setText("Read by")
-            case .recentReply:
-                header.leftLabel.setText("Latest reply")
             case .metadata:
                 header.leftLabel.setText("Metadata")
             }
