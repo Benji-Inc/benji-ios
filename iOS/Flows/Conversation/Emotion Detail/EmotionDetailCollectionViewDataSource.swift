@@ -8,10 +8,13 @@
 
 import Foundation
 
-class EmotionDetailCollectionViewDataSource: CollectionViewDataSource<EmotionDetailCollectionViewDataSource.SectionType,
-                                             EmotionDetailCollectionViewDataSource.ItemType> {
+typealias EmotionDetailSection = EmotionDetailCollectionViewDataSource.SectionType
+typealias EmotionDetailItem = EmotionDetailCollectionViewDataSource.ItemType
 
-    enum SectionType: Int, Hashable {
+class EmotionDetailCollectionViewDataSource: CollectionViewDataSource<EmotionDetailSection,
+                                             EmotionDetailItem> {
+
+    enum SectionType: Int, Hashable, CaseIterable {
         case emotions
     }
 

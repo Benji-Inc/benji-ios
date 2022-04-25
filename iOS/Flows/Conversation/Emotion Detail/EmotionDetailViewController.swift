@@ -8,43 +8,30 @@
 
 import Foundation
 
-class EmotionDetailViewController: DiffableCollectionViewController<EmotionsCollectionViewDataSource.SectionType,
-                                   EmotionsCollectionViewDataSource.ItemType,
-                                   EmotionsCollectionViewDataSource> {
+class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetailSection,
+                                   EmotionDetailItem,
+                                   EmotionDetailCollectionViewDataSource> {
 
     init() {
-        super.init(with: EmotionsCollectionView())
+        let collectionView = CollectionView(layout: EmotionDetailCollectionViewLayout())
+        super.init(with: collectionView)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func initializeViews() {
-        super.initializeViews()
-
-
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.loadInitialData()
-    }
-
-    override func getAllSections() -> [EmotionsCollectionViewDataSource.SectionType] {
-        return EmotionsCollectionViewDataSource.SectionType.allCases
+    override func getAllSections() -> [EmotionDetailCollectionViewDataSource.SectionType] {
+        return EmotionDetailCollectionViewDataSource.SectionType.allCases
     }
 
     override func retrieveDataForSnapshot() async
-    -> [EmotionsCollectionViewDataSource.SectionType : [EmotionsCollectionViewDataSource.ItemType]] {
-        var data: [EmotionsCollectionViewDataSource.SectionType : [EmotionsCollectionViewDataSource.ItemType]] = [:]
+    -> [EmotionDetailCollectionViewDataSource.SectionType : [EmotionDetailCollectionViewDataSource.ItemType]] {
 
-        data[.content] = [.emotion(EmotionContentModel(emotion: nil))]
+        var data: [EmotionDetailSection : [EmotionDetailItem]] = [:]
+        #warning("Use real data")
+        data[.emotions] = [EmotionDetailItem(emotion: .admiration), EmotionDetailItem(emotion: .afraid)]
 
-        data[.categories] = EmotionCategory.allCases.compactMap({ category in
-            return .category(EmotionCategoryModel(category: category, selectedEmotions: []))
-        })
         return data
     }
 }
