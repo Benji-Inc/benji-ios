@@ -247,13 +247,14 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
+
         picker.dismiss(animated: true) { [unowned self] in
             self.toPresentable().becomeFirstResponder()
-            
+
             Task.onMainActorAsync {
                 let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
-                guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else {
+                guard let kind
+                        = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else {
                     return
                 }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind

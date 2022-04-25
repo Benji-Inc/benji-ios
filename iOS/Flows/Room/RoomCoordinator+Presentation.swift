@@ -30,7 +30,6 @@ extension RoomCoordinator {
     }
     
     func presentPeoplePicker() {
-        
         self.removeChild()
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         

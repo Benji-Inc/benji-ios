@@ -42,7 +42,7 @@ class MessageDeliveryTypeBadgeView: BaseView {
         
     private func update(for type: MessageDeliveryType?) {
         self.animateTask?.cancel()
-        
+
         self.animateTask = Task { [weak self] in
             guard let `self` = self, let type = type else {
                 await UIView.awaitAnimation(with: .fast, animations: {

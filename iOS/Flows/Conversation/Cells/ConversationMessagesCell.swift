@@ -67,7 +67,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         self.contentView.addSubview(self.collectionView)
         
-        self.collectionView.backView.didSelect { [unowned self] in
+        self.collectionView.backView.didSelect(useImpact: false) { [unowned self] in
             self.handleCollectionViewTapped?()
         }
 

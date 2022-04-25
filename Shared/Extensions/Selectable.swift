@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol Selectable {
-    func didSelect(_ completion: CompletionOptional)
+    func didSelect(useImpact: Bool, _ completion: CompletionOptional)
 }
 
 private var selectionHandlerKey: UInt8 = 0
@@ -84,7 +84,7 @@ extension Selectable where Self: UIView {
         }
     }
 
-    func didSelect(_ completion: CompletionOptional) {
+    func didSelect(useImpact: Bool = true, _ completion: CompletionOptional) {
         self.selectionImpact = UIImpactFeedbackGenerator()
 
         // Remove the previous tap gesture recognizer so we don't call did select twice.
@@ -93,7 +93,9 @@ extension Selectable where Self: UIView {
         }
         
         let tapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] _ in
-            self.selectionImpact?.impactOccurred()
+            if useImpact {
+                self.selectionImpact?.impactOccurred()
+            }
             completion?()
         }
         self.addGestureRecognizer(tapRecognizer)

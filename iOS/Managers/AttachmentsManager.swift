@@ -74,16 +74,12 @@ class AttachmentsManager {
                     // Cache the image to get the urls for sending
                     let url = URL(fileURLWithPath: NSTemporaryDirectory(),
                                   isDirectory: true).appendingPathComponent(UUID().uuidString)
-                    let previewURL = URL(fileURLWithPath: NSTemporaryDirectory(),
-                                         isDirectory: true).appendingPathComponent(UUID().uuidString)
 
                     let image = info[.editedImage] as? UIImage
                     let data = image?.jpegData(compressionQuality: 1.0)
-                    let previewData = image?.previewData
-
                     try data?.write(to: url, options: .atomic)
-                    try previewData?.write(to: previewURL, options: .atomic)
-                    let item = PhotoAttachment(url: url, previewUrl: previewURL, data: data, info: info)
+
+                    let item = PhotoAttachment(url: url, data: data, info: info)
                     continuation.resume(returning: .photo(photo: item, body: body))
                 } catch  {
                     logError(error)
@@ -102,11 +98,11 @@ class AttachmentsManager {
                 continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
             case .image:
                 self.manager.requestImageDataAndOrientation(for: attachment.asset,
-                                                               options: PhotoRequestOptions())
+                                                            options: PhotoRequestOptions())
                 { (data, type, orientation, info) in
                     Task {
                         let url = try await self.getAssetURL(for: attachment.asset)
-                        let item = PhotoAttachment(url: url, previewUrl: url, data: data, info: info)
+                        let item = PhotoAttachment(url: url, data: data, info: info)
                         continuation.resume(returning: .photo(photo: item, body: body))
                     }
                 }

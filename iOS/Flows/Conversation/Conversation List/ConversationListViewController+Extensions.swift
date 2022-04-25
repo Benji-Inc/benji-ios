@@ -31,8 +31,6 @@ extension ConversationListViewController {
         self.dataSource.handleCollectionViewTapped = { [unowned self] in
             if self.messageInputController.swipeInputView.textView.isFirstResponder {
                 self.messageInputController.swipeInputView.textView.resignFirstResponder()
-            } else {
-                self.messageInputController.swipeInputView.textView.becomeFirstResponder()
             }
         }
     }

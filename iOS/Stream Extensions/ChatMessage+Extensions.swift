@@ -92,7 +92,6 @@ extension Message: Messageable {
     var kind: MessageKind {
         if let imageAttachment = self.imageAttachments.first {
             let attachment = PhotoAttachment(url: imageAttachment.imageURL,
-                                             previewUrl: imageAttachment.imagePreviewURL,
                                              data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
