@@ -32,7 +32,7 @@ class EmotionDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                              trailing: inset)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.85),
                                                        heightDimension: .fractionalHeight(1.0))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
@@ -47,7 +47,7 @@ class EmotionDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                 bottom: 20,
                                                                 trailing: 0)
 
-                section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+                section.orthogonalScrollingBehavior = .groupPagingCentered
 
                 return section
             }
