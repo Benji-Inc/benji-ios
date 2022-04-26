@@ -118,9 +118,17 @@ class UnreadMessagesCounter: BaseView {
         }
         self.subscribeToUpdates()
     }
+
+    func updateVisibility(for state: SwipeableInputAccessoryViewController.InputState) {
+        switch state {
+        case .collapsed:
+            self.animate(shouldShow: self.counter.currentValue != 0)
+        case .expanded:
+            self.animate(shouldShow: false)
+        }
+    }
     
     private func subscribeToUpdates() {
-        
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
         }
@@ -141,7 +149,7 @@ class UnreadMessagesCounter: BaseView {
         if count == 0 {
             self.animate(shouldShow: false)
         } else {
-            self.animate(shouldShow: true, delay: Theme.animationDurationSlow)
+            self.animate(shouldShow: true)
         }
     }
     
