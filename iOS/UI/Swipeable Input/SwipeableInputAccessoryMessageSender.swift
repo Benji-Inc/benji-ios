@@ -60,6 +60,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewControlle
             try await self.viewController.sendMessage(sendable)
             return true
         } catch {
+            await ToastScheduler.shared.schedule(toastType: .error(error))
             logError(error)
             return false
         }

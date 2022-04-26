@@ -44,6 +44,7 @@ extension RoomCoordinator {
                     }
 
                 } catch {
+                    await ToastScheduler.shared.schedule(toastType: .error(error))
                     logError(error)
                 }
             }

@@ -104,11 +104,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
             let controller = ChatClient.shared.messageController(cid: self.message.streamCid, messageId: self.message.id)
             try? await controller.deleteMessage()
             
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: UUID().uuidString,
-                                                             displayable: User.current()!,
-                                                             title: "Message Deleted",
-                                                             description: "Your message has successfully been deleted",
-                                                             deepLink: nil))
+            await ToastScheduler.shared.schedule(toastType: .success(UIImage(systemName: "trash")!, "Message Deleted"))
             
             self.finishFlow(with: .none)
         }

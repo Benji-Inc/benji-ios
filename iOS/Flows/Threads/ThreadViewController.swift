@@ -274,6 +274,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             }
             data[.messages] = Array(messages)
         } catch {
+            await ToastScheduler.shared.schedule(toastType: .error(error))
             logError(error)
         }
         

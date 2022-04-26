@@ -19,7 +19,7 @@ enum ToastType {
     case achievement(Achievement)
     #endif
     case success(UIImage, String)
-    case error(ClientError)
+    case error(Error)
     case basic(identifier: String,
                displayable: ImageDisplayable,
                title: Localized,
@@ -109,7 +109,7 @@ class ToastScheduler {
         return toast
     }
 
-    private func createErrorToast(for error: ClientError,
+    private func createErrorToast(for error: Error,
                                   position: Toast.Position,
                                   duration: TimeInterval) -> Toast? {
         guard let image = UIImage(systemName: "exclamationmark.triangle") else { return nil }
