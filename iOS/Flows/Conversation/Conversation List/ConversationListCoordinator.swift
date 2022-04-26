@@ -130,6 +130,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         ConversationsManager.shared.activeConversation = controller.conversation
+        ConversationsManager.shared.activeController = controller
     }
     
     override func messageContent(_ content: MessageContentView,

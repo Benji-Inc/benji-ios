@@ -33,6 +33,7 @@ class ConversationsManager: EventsControllerDelegate {
 
     private let controller = ChatClient.shared.eventsController()
 
+    @Published var activeController: MessageSequenceController? 
     @Published var activeConversation: Conversation?
 
     @Published var reactionEvent: Event?

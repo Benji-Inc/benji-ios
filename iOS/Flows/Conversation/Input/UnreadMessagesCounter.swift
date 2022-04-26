@@ -32,7 +32,8 @@ class UnreadMessagesCounter: BaseView {
                                       gradientStop: nil)
     
     private var controller: MessageSequenceController?
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
+    private var subscriptions = Set<AnyCancellable>()
     
     deinit {
         self.cancellables.forEach { cancellable in
@@ -59,34 +60,11 @@ class UnreadMessagesCounter: BaseView {
         self.countCircle.set(backgroundColor: .D6)
         
         self.addSubview(self.counter)
-                
-        ConversationsManager.shared
-            .$activeConversation
-            .mainSink { [unowned self] conversation in
-                guard let conversation = conversation else {
-                    self.animate(shouldShow: false)
-                    return
-                }
-                self.update(count: conversation.totalUnread)
-            }.store(in: &self.cancellables)
         
-        ConversationsManager.shared
-            .$messageEvent
-            .mainSink { [unowned self] event in
-                guard let messageEvent = event as? MessageNewEvent,
-                      let conversation = ConversationsManager.shared.activeConversation,
-                      messageEvent.cid == conversation.cid else { return }
-                self.update(count: conversation.totalUnread)
-            }.store(in: &self.cancellables)
-        
-        ConversationsManager.shared
-            .$reactionEvent
-            .mainSink { [unowned self] event in
-                guard let reactionEvent = event as? ReactionNewEvent,
-                      let conversation = ConversationsManager.shared.activeConversation,
-                      reactionEvent.cid == conversation.cid else { return }
-                self.update(count: conversation.totalUnread)
-            }.store(in: &self.cancellables)
+        ConversationsManager.shared.$activeController.mainSink { [unowned self] active in
+            guard let active = active else { return }
+            self.configure(witch: active)
+        }.store(in: &self.cancellables)
     }
     
     override func layoutSubviews() {
@@ -111,7 +89,7 @@ class UnreadMessagesCounter: BaseView {
         self.countCircle.center = self.counter.center
     }
     
-    func configure(witch controller: MessageSequenceController) {
+    private func configure(witch controller: MessageSequenceController) {
         self.controller = controller
         if let sequence = controller.messageSequence {
             self.update(count: sequence.totalUnread)
@@ -129,7 +107,7 @@ class UnreadMessagesCounter: BaseView {
     }
     
     private func subscribeToUpdates() {
-        self.cancellables.forEach { cancellable in
+        self.subscriptions.forEach { cancellable in
             cancellable.cancel()
         }
         
@@ -140,7 +118,17 @@ class UnreadMessagesCounter: BaseView {
                 case .update(let sequence), .create(let sequence), .remove(let sequence):
                     self.update(count: sequence.totalUnread)
                 }
-            }.store(in: &self.cancellables)
+            }.store(in: &self.subscriptions)
+        
+        self.controller?
+            .messagesChangesPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                guard let sequence = self.controller?.messageSequence else {
+                    return
+                }
+
+                self.update(count: sequence.totalUnread)
+            }).store(in: &self.cancellables)
     }
     
     private func update(count: Int) {
