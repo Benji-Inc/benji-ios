@@ -218,36 +218,45 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         
         guard let cell = self.collectionView.cellForItem(at: conversationIndexPath),
               let messagesCell = cell as? ConversationMessagesCell else {
-                  return
-              }
+            return
+        }
 
         guard let messageId = messageId else {
-            self.collectionView.scrollToItem(at: conversationIndexPath, at: .centeredHorizontally, animated: false)
+            self.collectionView.scrollToItem(at: conversationIndexPath,
+                                             at: .centeredHorizontally,
+                                             animated: false)
             return
         }
 
         let messageController = ChatClient.shared.messageController(cid: cid, messageId: messageId)
-
         try? await messageController.synchronize()
-
         guard let message = messageController.message else { return }
 
-        // Determine if this is a reply message or regular message. If it's a reply, select the parent
-        // message so we can open the thread experience.
+        // Determine if this is a reply message or regular message.
         if let parentMessageId = message.parentMessageId {
-            await messagesCell.scrollToMessage(with: parentMessageId, animateScroll: animateScroll, animateSelection: animateSelection)
+            // It's a reply, select the parent message so we can open the thread experience.
+            await messagesCell.scrollToMessage(with: parentMessageId,
+                                               animateScroll: animateScroll,
+                                               animateSelection: animateSelection)
 
             if let messageCell = messagesCell.getFrontmostCell() {
-                self.messageContentDelegate?.messageContent(messageCell.content, didTapMessage: (cid, messageId))
+                self.messageContentDelegate?.messageContent(messageCell.content,
+                                                            didTapMessage: (cid, messageId))
             }
         } else if viewReplies {
-            await messagesCell.scrollToMessage(with: messageId, animateScroll: animateScroll, animateSelection: animateSelection)
+            // It's not a parent message, but we still want to see the replies.
+            await messagesCell.scrollToMessage(with: messageId,
+                                               animateScroll: animateScroll,
+                                               animateSelection: animateSelection)
 
             if let messageCell = messagesCell.getFrontmostCell() {
-                self.messageContentDelegate?.messageContent(messageCell.content, didTapViewReplies: (cid, messageId))
+                self.messageContentDelegate?.messageContent(messageCell.content,
+                                                            didTapViewReplies: (cid, messageId))
             }
         } else {
-            await messagesCell.scrollToMessage(with: messageId, animateScroll: animateScroll, animateSelection: animateSelection)
+            await messagesCell.scrollToMessage(with: messageId,
+                                               animateScroll: animateScroll,
+                                               animateSelection: animateSelection)
         }
     }
 
