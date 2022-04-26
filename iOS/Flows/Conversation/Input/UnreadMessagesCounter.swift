@@ -97,7 +97,12 @@ class UnreadMessagesCounter: BaseView {
         self.subscribeToUpdates()
     }
 
+    /// The last input state the counter has received.
+    private var inputState: SwipeableInputAccessoryViewController.InputState = .collapsed
+
     func updateVisibility(for state: SwipeableInputAccessoryViewController.InputState) {
+        self.inputState = state
+
         switch state {
         case .collapsed:
             self.animate(shouldShow: self.counter.currentValue != 0)
@@ -136,7 +141,7 @@ class UnreadMessagesCounter: BaseView {
 
         if count == 0 {
             self.animate(shouldShow: false)
-        } else {
+        } else if self.inputState == .collapsed {
             self.animate(shouldShow: true)
         }
     }
