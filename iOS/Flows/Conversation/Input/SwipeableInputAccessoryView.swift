@@ -115,7 +115,7 @@ class SwipeableInputAccessoryView: BaseView {
                                          self.textViewCollapsedVerticalHeightContstraint])
             
             if !self.textView.text.isEmpty || self.textView.isFirstResponder {
-                textViewPadding = self.expressionView.right //+ AddMediaView.collapsedHeight
+                textViewPadding = self.expressionView.right 
             }
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
