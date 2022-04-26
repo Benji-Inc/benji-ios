@@ -22,6 +22,8 @@ class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
     private var footerView = MessageFooterView()
+    /// A view to tint the whole cell, indicating that it is unread.
+    private var unreadOverlay = BaseView()
     
     var shouldShowDetailBar: Bool = true
     var shouldShowReplies: Bool = true {
@@ -53,6 +55,10 @@ class MessageCell: UICollectionViewCell {
         self.content.bubbleView.addInteraction(contextMenuInteraction)
         
         self.contentView.addSubview(self.footerView)
+
+        self.contentView.addSubview(self.unreadOverlay)
+        self.unreadOverlay.set(backgroundColor: .D6)
+        self.unreadOverlay.alpha = 0
         
         self.footerView.replySummary.didSelectEmoji = { [unowned self] emoji in
             self.addReply(with: emoji)
@@ -93,6 +99,9 @@ class MessageCell: UICollectionViewCell {
         self.content.expandToSuperviewWidth()
         self.content.pin(.top)
         self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.short.value)
+
+        self.unreadOverlay.frame  = self.content.frame
+        self.unreadOverlay.roundCorners()
     }
 
     // MARK: - Touch Handling
@@ -114,6 +123,7 @@ class MessageCell: UICollectionViewCell {
         self.content.textView.textColor = self.getTextColor(for: message)
         self.content.imageView.alpha = message.canBeConsumed ? 0 : 1
         self.content.linkView.alpha = message.canBeConsumed ? 0 : 1
+        self.unreadOverlay.alpha = message.canBeConsumed ? 0.1 : 0
 
         self.message = message
         
@@ -239,6 +249,9 @@ class MessageCell: UICollectionViewCell {
         Task {
             guard !Task.isCancelled else { return }
 
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.unreadOverlay.alpha = 0
+            }
             await self.content.playReadAnimations()
 
             guard !Task.isCancelled else { return }
