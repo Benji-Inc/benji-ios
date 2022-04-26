@@ -318,6 +318,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
             let conversation = Conversation.conversation(cid)
             // Sets the active conversation
             ConversationsManager.shared.activeConversation = conversation
+            ConversationsManager.shared.activeController = ConversationController.controller(cid)
 
             self.messageInputTask = Task { [weak self] in
                 let people = await PeopleStore.shared.getPeople(for: conversation)
@@ -342,6 +343,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
             }
         } else {
             ConversationsManager.shared.activeConversation = nil
+            ConversationsManager.shared.activeController = nil 
 
             self.messageInputController.updateSwipeHint(shouldPlay: true)
 
