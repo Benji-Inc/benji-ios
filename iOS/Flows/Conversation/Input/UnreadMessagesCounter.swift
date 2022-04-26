@@ -79,11 +79,12 @@ class UnreadMessagesCounter: BaseView {
         self.imageView.centerOnXAndY()
         
         self.counter.sizeToFit()
-        
-        self.countCircle.squaredSize = 20
+
+        self.countCircle.width = self.counter.width + Theme.ContentOffset.long.value
+        self.countCircle.height = 20
         self.countCircle.makeRound()
-        
-        self.counter.x = self.width - 8
+
+        self.counter.pin(.right, offset: .standard)
         self.counter.y = 0
         
         self.countCircle.center = self.counter.center
@@ -149,6 +150,7 @@ class UnreadMessagesCounter: BaseView {
     private func animate(shouldShow: Bool, delay: TimeInterval = 0.0) {
         UIView.animate(withDuration: Theme.animationDurationFast, delay: delay) {
             self.alpha = shouldShow ? 1.0 : 0.0
+            self.layoutNow()
         }
     }
 }
