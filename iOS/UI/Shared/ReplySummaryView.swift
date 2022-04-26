@@ -55,6 +55,7 @@ class ReplySummaryView: BaseView {
     var didTapViewReplies: CompletionOptional = nil
     var didSelectSuggestion: ((SuggestedReply) -> Void)? = nil
     var didSelectEmoji: ((String) -> Void)? = nil
+    private var replyCount = 0
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -79,8 +80,7 @@ class ReplySummaryView: BaseView {
 
         if let existing = self.controller,
             existing.messageId == controller.messageId,
-           controller.hasLoadedAllPreviousReplies,
-           existing.replies == controller.replies {
+           self.replyCount == controller.message?.replyCount {
             return
         }
         
@@ -102,6 +102,8 @@ class ReplySummaryView: BaseView {
                 !controller.hasLoadedAllPreviousReplies  {
                 try? await controller.loadPreviousReplies()
             }
+            
+            self.replyCount = controller.message?.replyCount ?? 0 
             
             if let reply = self.controller?.message?.recentReplies.first {
                 self.replyView.isVisible = true
