@@ -30,6 +30,8 @@ class PreviewMessageView: SpeechBubbleView {
 
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.tailLength = 0
 
         self.addSubview(self.textView)
         self.textView.textAlignment = .left
@@ -70,6 +72,9 @@ class PreviewMessageView: SpeechBubbleView {
             case .link(_, let stringURL):
                 self.textView.text = stringURL
             }
+            
+            self.imageView.isVisible = self.imageView.displayable.exists
+
             self.layoutNow()
         }.store(in: &self.cancellables)
     }
@@ -77,19 +82,22 @@ class PreviewMessageView: SpeechBubbleView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        var maxWidth: CGFloat = self.width - self.imageView.width - Theme.ContentOffset.long.value
+        
+        if self.imageView.isHidden {
+            maxWidth = self.width - Theme.ContentOffset.long.value.doubled
+        }
+        
+        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height)
+        self.textView.pin(.left, offset: .long)
+        self.textView.center.y = self.halfHeight
+        
         self.imageView.squaredSize = 40
         self.imageView.centerOnX()
-        self.imageView.pin(.bottom, offset: .custom(24))
-        self.imageView.pin(.left, offset: .long)
+        self.imageView.pin(.bottom, offset: .custom(12))
+        self.imageView.pin(.right, offset: .long)
 
-        self.imageView.isVisible = self.imageView.displayable.exists
-
-        let maxWidth: CGFloat = self.width - self.imageView.right - Theme.ContentOffset.long.value
-        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height)
-        self.textView.match(.left, to: .right, of: self.imageView)
-        self.textView.center.y = self.halfHeight - 6
-
-        self.deliveryTypeView.pin(.right, offset: .custom(10))
+        self.deliveryTypeView.centerOnX()
         self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height * 0.5))
     }
 }

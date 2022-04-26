@@ -34,7 +34,7 @@ class SwipeableInputAccessoryView: BaseView {
     
     // MARK: - Layout/Animation Properties
 
-    static let inputContainerCollapsedHeight: CGFloat = 76
+    static let inputContainerCollapsedHeight: CGFloat = 64
 
     // Override intrinsic content size so that height is adjusted for safe areas and text input.
     // https://stackoverflow.com/questions/46282987/iphone-x-how-to-handle-view-controller-inputaccessoryview
@@ -71,6 +71,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.autoresizingMask = .flexibleHeight
 
+        self.inputContainerView.tailLength = 0
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
                 
@@ -114,7 +115,7 @@ class SwipeableInputAccessoryView: BaseView {
                                          self.textViewCollapsedVerticalHeightContstraint])
             
             if !self.textView.text.isEmpty || self.textView.isFirstResponder {
-                textViewPadding = self.addView.left + AddMediaView.collapsedHeight
+                textViewPadding = self.expressionView.right 
             }
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
@@ -156,7 +157,7 @@ class SwipeableInputAccessoryView: BaseView {
             newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
             
-            avatarTop = 34
+            avatarTop = 46
         }
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {

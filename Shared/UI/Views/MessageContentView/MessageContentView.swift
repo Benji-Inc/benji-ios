@@ -57,7 +57,7 @@ class MessageContentView: BaseView {
     let authorView = PersonView()
     let emojiView = EmojiCircleView()
     /// Date view that shows when the message was last updated.
-    let dateView = ThemeLabel(font: .small, textColor: .white)
+    let dateView = MessageDateLabel(font: .small)
     /// Delivery view that shows how the message was sent
     let deliveryView = UIImageView()
     /// Text view for displaying the text of the message.
@@ -264,7 +264,7 @@ class MessageContentView: BaseView {
             self.emojiView.set(text: expression)
         }
 
-        self.dateView.text = message.createdAt.getTimeAgoString()
+        self.dateView.configure(with: message)
         self.deliveryView.image = message.deliveryType.image
 
         if message.isDeleted {

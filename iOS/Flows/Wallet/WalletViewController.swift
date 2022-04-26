@@ -13,17 +13,17 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
                             WalletCollectionViewDataSource> {
     
     private let topGradientView
-    = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+    = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                    startPoint: .topCenter,
                    endPoint: .bottomCenter)
     
     private let bottomGradientView
-    = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+    = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                    startPoint: .bottomCenter,
                    endPoint: .topCenter)
     
     private let walletGradientView
-    = GradientView(with: [ThemeColor.B6.color.cgColor,
+    = GradientPassThroughView(with: [ThemeColor.B6.color.cgColor,
                           ThemeColor.B6.color.cgColor,
                           ThemeColor.B6.color.cgColor,
                           ThemeColor.B6.color.withAlphaComponent(0.0).cgColor],

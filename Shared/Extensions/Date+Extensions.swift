@@ -93,6 +93,18 @@ extension Date {
         formatter.dateFormat = "E, h:mm a"
         return formatter
     }
+    
+    static var hourMinuteTimeOfDayWithWeekday: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a, E"
+        return formatter
+    }
+    
+    static var hourMinuteTimeOfDayWithDate: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a, MMM d"
+        return formatter
+    }
 
     static var hourMinuteTimeOfDay: DateFormatter {
         let formatter = DateFormatter()
@@ -231,6 +243,8 @@ extension Date {
         let aMinuteAgo = now.subtract(component: .minute, amount: 1)
         let anHourAgo = now.subtract(component: .hour, amount: 1)
         let aDayAgo = now.subtract(component: .day, amount: 1)
+        let twoDaysAgo = now.subtract(component: .day, amount: 2)
+        let aWeekAgo = now.subtract(component: .weekday, amount: 1)
 
         if self.isBetween(now, and: aMinuteAgo!) {
             return "Just now"
@@ -249,9 +263,12 @@ extension Date {
             } else {
                 return "\(abs(diff)) hours ago"
             }
-        // Else show time
+        } else if self.isBetween(now, and: twoDaysAgo!) {
+            return "\(Date.hourMinuteTimeOfDay.string(from: self)), Yesterday"
+        } else if self.isBetween(now, and: aWeekAgo!) {
+            return Date.hourMinuteTimeOfDayWithWeekday.string(from: self)
         } else {
-            return Date.hourMinuteTimeOfDay.string(from: self)
+            return Date.hourMinuteTimeOfDayWithDate.string(from: self)
         }
     }
     
