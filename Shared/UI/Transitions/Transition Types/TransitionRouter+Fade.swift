@@ -26,6 +26,7 @@ extension TransitionRouter {
 
         let toVCFinalFrame = transitionContext.finalFrame(for: self.toVC)
         if toVCFinalFrame != .zero {
+            containerView.addSubview(self.toVC.view)
             self.toVC.view.frame = toVCFinalFrame
             self.toVC.view.layoutIfNeeded()
         }
