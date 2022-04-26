@@ -299,7 +299,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
                                               didUpdateCentered cid: ConversationId?) {
 
-        self.update(withCenteredCid: cid)
+        self.updateUI(withCenteredCid: cid)
     }
 
     /// A task for updating the message input accessory.
@@ -307,7 +307,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
     /// A task to become or resign first responder status.
     private var firstResponderTask: Task<Void, Never>?
 
-    private func update(withCenteredCid cid: ConversationId?) {
+    private func updateUI(withCenteredCid cid: ConversationId?) {
         self.messageInputTask?.cancel()
         self.firstResponderTask?.cancel()
 
@@ -325,7 +325,8 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
                 guard !Task.isCancelled else { return }
 
                 self?.messageInputController.resetExpression()
-                self?.messageInputController.swipeInputView.textView.setPlaceholder(for: people, isReply: false)
+                self?.messageInputController.swipeInputView.textView.setPlaceholder(for: people,
+                                                                                    isReply: false)
                 self?.messageInputController.updateSwipeHint(shouldPlay: true)
             }
 

@@ -158,8 +158,6 @@ class SwipeableInputAccessoryView: BaseView {
             
             avatarTop = 34
         }
-        
-        self.unreadMessagesView.updateVisibility(for: inputState)
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.addViewWidthContstrain.constant = newAddViewSize

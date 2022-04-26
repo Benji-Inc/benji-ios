@@ -59,27 +59,33 @@ class UnreadMessagesCounter: BaseView {
         
         self.addSubview(self.counter)
                 
-        ConversationsManager.shared.$activeConversation.mainSink { [unowned self] conversation in
-            guard let conversation = conversation else {
-                self.animate(shouldShow: false)
-                return
-            }
-            self.update(count: conversation.totalUnread)
-        }.store(in: &self.cancellables)
+        ConversationsManager.shared
+            .$activeConversation
+            .mainSink { [unowned self] conversation in
+                guard let conversation = conversation else {
+                    self.animate(shouldShow: false)
+                    return
+                }
+                self.update(count: conversation.totalUnread)
+            }.store(in: &self.cancellables)
         
-        ConversationsManager.shared.$messageEvent.mainSink { [unowned self] event in
-            guard let messageEvent = event as? MessageNewEvent,
-                  let conversation = ConversationsManager.shared.activeConversation,
-                  messageEvent.cid == conversation.cid else { return }
-            self.update(count: conversation.totalUnread)
-        }.store(in: &self.cancellables)
+        ConversationsManager.shared
+            .$messageEvent
+            .mainSink { [unowned self] event in
+                guard let messageEvent = event as? MessageNewEvent,
+                      let conversation = ConversationsManager.shared.activeConversation,
+                      messageEvent.cid == conversation.cid else { return }
+                self.update(count: conversation.totalUnread)
+            }.store(in: &self.cancellables)
         
-        ConversationsManager.shared.$reactionEvent.mainSink { [unowned self] event in
-            guard let reactionEvent = event as? ReactionNewEvent,
-                  let conversation = ConversationsManager.shared.activeConversation,
-                  reactionEvent.cid == conversation.cid else { return }
-            self.update(count: conversation.totalUnread)
-        }.store(in: &self.cancellables)
+        ConversationsManager.shared
+            .$reactionEvent
+            .mainSink { [unowned self] event in
+                guard let reactionEvent = event as? ReactionNewEvent,
+                      let conversation = ConversationsManager.shared.activeConversation,
+                      reactionEvent.cid == conversation.cid else { return }
+                self.update(count: conversation.totalUnread)
+            }.store(in: &self.cancellables)
     }
     
     override func layoutSubviews() {
@@ -106,17 +112,11 @@ class UnreadMessagesCounter: BaseView {
     
     func update(count: Int) {
         self.counter.setValue(Float(count))
+
         if count == 0 {
-            self.animate(shouldShow: false, delay: Theme.animationDurationSlow)
-        }
-    }
-    
-    func updateVisibility(for state: SwipeableInputAccessoryViewController.InputState) {
-        switch state {
-        case .collapsed:
-            self.animate(shouldShow: self.counter.currentValue != 0)
-        case .expanded:
             self.animate(shouldShow: false)
+        } else {
+            self.animate(shouldShow: true, delay: Theme.animationDurationSlow)
         }
     }
     

@@ -132,7 +132,9 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
         ConversationsManager.shared.activeConversation = controller.conversation
     }
     
-    override func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+    override func messageContent(_ content: MessageContentView,
+                                 didTapMessage messageInfo: (ConversationId, MessageId)) {
+
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
         if let parentId = message.parentMessageId {
@@ -142,7 +144,9 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
         }
     }
     
-    override func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+    override func messageContent(_ content: MessageContentView,
+                                 didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        
         self.presentThread(for: messageInfo.0, messageId: messageInfo.1, startingReplyId: nil)
     }
 }
