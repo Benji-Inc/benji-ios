@@ -18,6 +18,7 @@ protocol MessageSequence {
     var attributes: [String: Any]? { get }
     var messages: [Messageable] { get }
     var title: String? { get }
+    var totalUnread: Int { get }
 
     // Stream variables
     var streamCID: ConversationId? { get }
@@ -36,5 +37,16 @@ extension MessageSequence {
     var isCreatedByCurrentUser: Bool {
         guard let user = User.current() else { return false }
         return user.objectId == self.authorId
+    }
+    
+    var totalUnread: Int {
+        var total: Int = 0
+        self.messages.forEach { message in
+            if !message.isFromCurrentUser, !message.isConsumedByMe, !message.isDeleted {
+                total += 1
+            }
+        }
+        
+        return total
     }
 }

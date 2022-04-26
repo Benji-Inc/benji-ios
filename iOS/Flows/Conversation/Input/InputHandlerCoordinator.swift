@@ -70,19 +70,21 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             self.presentProfile(for: User.current()!)
         }
         
-        self.inputHandlerViewController.swipeableVC.swipeInputView.unreadMessagesView.didSelect { [unowned self] in
-            self.scrollToUnreadMessage()
-        }
+        self.inputHandlerViewController.swipeableVC.swipeInputView.unreadMessagesCounter
+            .didSelect { [unowned self] in
+                self.scrollToUnreadMessage()
+            }
     }
     
     /// The currently running task that is loading.
     private var loadTask: Task<Void, Never>?
     
     func scrollToUnreadMessage() {
+        // Find the oldest unread message.
         guard let conversation = ConversationsManager.shared.activeConversation,
-                let unreadMessage = conversation.messages.first(where: { message in
-            return !message.isFromCurrentUser && !message.isConsumedByMe
-        }) else { return }
+              let unreadMessage = conversation.messages.reversed().first(where: { message in
+                  return !message.isFromCurrentUser && !message.isConsumedByMe
+              }) else { return }
         
         self.loadTask?.cancel()
         

@@ -220,7 +220,12 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         let task = Task {
             guard let conversationController = self.conversationController else { return }
 
-            try? await conversationController.loadNextMessages(including: messageId)
+            // Load the message if necessary
+            if !conversationController.messages.contains(where: { message in
+                message.id == messageId
+            }) {
+                try? await conversationController.loadNextMessages(including: messageId)
+            }
 
             guard !Task.isCancelled else { return }
 

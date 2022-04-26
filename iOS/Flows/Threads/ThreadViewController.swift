@@ -88,7 +88,9 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
          messageID: MessageId,
          startingReplyId: MessageId?) {
         
-        self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
+        let controller = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
+        ConversationsManager.shared.activeController = controller
+        self.messageController = controller
         self.conversationController = ChatClient.shared.channelController(for: channelID,
                                                                           messageOrdering: .topToBottom)
         self.startingReplyId = startingReplyId

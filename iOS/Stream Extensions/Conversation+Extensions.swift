@@ -109,17 +109,6 @@ extension Conversation: MessageSequence {
         let messageArray = Array(ChatClient.shared.channelController(for: self.cid).messages)
         return messageArray
     }
-    
-    var totalUnread: Int {
-        var total: Int = 0
-        self.messages.forEach { message in
-            if !message.isFromCurrentUser, !message.isConsumedByMe, !message.isDeleted {
-                total += 1
-            }
-        }
-        
-        return total 
-    }
 
     var streamCID: ConversationId? {
         return self.cid

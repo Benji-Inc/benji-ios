@@ -13,7 +13,7 @@ import StreamChat
 
 class UnreadMessagesCounter: BaseView {
     
-    let imageView = UIImageView(image: UIImage(systemName: "chevron.up"))
+    let imageView = UIImageView(image: UIImage(systemName: "eyeglasses"))
     let circle = BaseView()
     
     let countCircle = BaseView()
@@ -31,7 +31,9 @@ class UnreadMessagesCounter: BaseView {
                                       gradientColor: nil,
                                       gradientStop: nil)
     
-    var cancellables = Set<AnyCancellable>()
+    private var controller: MessageSequenceController?
+    private var cancellables = Set<AnyCancellable>()
+    private var subscriptions = Set<AnyCancellable>()
     
     deinit {
         self.cancellables.forEach { cancellable in
@@ -58,27 +60,10 @@ class UnreadMessagesCounter: BaseView {
         self.countCircle.set(backgroundColor: .D6)
         
         self.addSubview(self.counter)
-                
-        ConversationsManager.shared.$activeConversation.mainSink { [unowned self] conversation in
-            guard let conversation = conversation else {
-                self.animate(shouldShow: false)
-                return
-            }
-            self.update(count: conversation.totalUnread)
-        }.store(in: &self.cancellables)
         
-        ConversationsManager.shared.$messageEvent.mainSink { [unowned self] event in
-            guard let messageEvent = event as? MessageNewEvent,
-                  let conversation = ConversationsManager.shared.activeConversation,
-                  messageEvent.cid == conversation.cid else { return }
-            self.update(count: conversation.totalUnread)
-        }.store(in: &self.cancellables)
-        
-        ConversationsManager.shared.$reactionEvent.mainSink { [unowned self] event in
-            guard let reactionEvent = event as? ReactionNewEvent,
-                  let conversation = ConversationsManager.shared.activeConversation,
-                  reactionEvent.cid == conversation.cid else { return }
-            self.update(count: conversation.totalUnread)
+        ConversationsManager.shared.$activeController.mainSink { [unowned self] active in
+            guard let active = active else { return }
+            self.configure(witch: active)
         }.store(in: &self.cancellables)
     }
     
@@ -94,24 +79,31 @@ class UnreadMessagesCounter: BaseView {
         self.imageView.centerOnXAndY()
         
         self.counter.sizeToFit()
-        
-        self.countCircle.squaredSize = 20
+
+        self.countCircle.width = self.counter.width + Theme.ContentOffset.long.value
+        self.countCircle.height = 20
         self.countCircle.makeRound()
-        
-        self.counter.x = self.width - 8
+
+        self.counter.pin(.right, offset: .standard)
         self.counter.y = 0
         
         self.countCircle.center = self.counter.center
     }
     
-    func update(count: Int) {
-        self.counter.setValue(Float(count))
-        if count == 0 {
-            self.animate(shouldShow: false, delay: Theme.animationDurationSlow)
+    private func configure(witch controller: MessageSequenceController) {
+        self.controller = controller
+        if let sequence = controller.messageSequence {
+            self.update(count: sequence.totalUnread)
         }
+        self.subscribeToUpdates()
     }
-    
+
+    /// The last input state the counter has received.
+    private var inputState: SwipeableInputAccessoryViewController.InputState = .collapsed
+
     func updateVisibility(for state: SwipeableInputAccessoryViewController.InputState) {
+        self.inputState = state
+
         switch state {
         case .collapsed:
             self.animate(shouldShow: self.counter.currentValue != 0)
@@ -120,9 +112,45 @@ class UnreadMessagesCounter: BaseView {
         }
     }
     
+    private func subscribeToUpdates() {
+        self.subscriptions.forEach { cancellable in
+            cancellable.cancel()
+        }
+        
+        self.controller?
+            .messageSequenceChangePublisher
+            .mainSink { [unowned self] event in
+                switch event {
+                case .update(let sequence), .create(let sequence), .remove(let sequence):
+                    self.update(count: sequence.totalUnread)
+                }
+            }.store(in: &self.subscriptions)
+        
+        self.controller?
+            .messagesChangesPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                guard let sequence = self.controller?.messageSequence else {
+                    return
+                }
+
+                self.update(count: sequence.totalUnread)
+            }).store(in: &self.cancellables)
+    }
+    
+    private func update(count: Int) {
+        self.counter.setValue(Float(count))
+
+        if count == 0 {
+            self.animate(shouldShow: false)
+        } else if self.inputState == .collapsed {
+            self.animate(shouldShow: true)
+        }
+    }
+    
     private func animate(shouldShow: Bool, delay: TimeInterval = 0.0) {
         UIView.animate(withDuration: Theme.animationDurationFast, delay: delay) {
             self.alpha = shouldShow ? 1.0 : 0.0
+            self.layoutNow()
         }
     }
 }

@@ -130,9 +130,12 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
         try await controller.synchronize()
         AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
         ConversationsManager.shared.activeConversation = controller.conversation
+        ConversationsManager.shared.activeController = controller
     }
     
-    override func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+    override func messageContent(_ content: MessageContentView,
+                                 didTapMessage messageInfo: (ConversationId, MessageId)) {
+
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
         if let parentId = message.parentMessageId {
@@ -142,7 +145,9 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
         }
     }
     
-    override func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+    override func messageContent(_ content: MessageContentView,
+                                 didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+        
         self.presentThread(for: messageInfo.0, messageId: messageInfo.1, startingReplyId: nil)
     }
 }

@@ -79,6 +79,7 @@ class ReplySummaryView: BaseView {
 
         if let existing = self.controller,
             existing.messageId == controller.messageId,
+           controller.hasLoadedAllPreviousReplies,
            existing.replies == controller.replies {
             return
         }

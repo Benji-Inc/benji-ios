@@ -58,7 +58,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var addViewHeightContstrain: NSLayoutConstraint!
     @IBOutlet var addViewWidthContstrain: NSLayoutConstraint!
     
-    let unreadMessagesView = UnreadMessagesCounter()
+    let unreadMessagesCounter = UnreadMessagesCounter()
     let typingIndicatorView = TypingIndicatorView()
     
     // MARK: BaseView Setup and Layout
@@ -78,7 +78,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.avatarView.set(person: User.current()!)
         
         self.addSubview(self.typingIndicatorView)
-        self.addSubview(self.unreadMessagesView)
+        self.addSubview(self.unreadMessagesCounter)
     }
     
     override func awakeFromNib() {
@@ -91,8 +91,8 @@ class SwipeableInputAccessoryView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.unreadMessagesView.pin(.right, offset: .custom(26))
-        self.unreadMessagesView.bottom = 0
+        self.unreadMessagesCounter.pin(.right, offset: .custom(26))
+        self.unreadMessagesCounter.bottom = 0
         
         self.typingIndicatorView.width = self.width - 48
         self.typingIndicatorView.height = 16
@@ -159,9 +159,9 @@ class SwipeableInputAccessoryView: BaseView {
             
             avatarTop = 46
         }
-        
-        self.unreadMessagesView.updateVisibility(for: inputState)
 
+        self.unreadMessagesCounter.updateVisibility(for: inputState)
+        
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.addViewWidthContstrain.constant = newAddViewSize
             self.addViewHeightContstrain.constant = newAddViewSize
@@ -196,7 +196,7 @@ class SwipeableInputAccessoryView: BaseView {
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        if self.unreadMessagesView.frame.contains(point) || self.typingIndicatorView.frame.contains(point) {
+        if self.unreadMessagesCounter.frame.contains(point) || self.typingIndicatorView.frame.contains(point) {
             return true
         }
         return super.point(inside: point, with: event)
