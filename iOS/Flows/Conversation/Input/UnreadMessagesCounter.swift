@@ -31,6 +31,7 @@ class UnreadMessagesCounter: BaseView {
                                       gradientColor: nil,
                                       gradientStop: nil)
     
+    private var controller: MessageSequenceController?
     var cancellables = Set<AnyCancellable>()
     
     deinit {
@@ -104,7 +105,31 @@ class UnreadMessagesCounter: BaseView {
         self.countCircle.center = self.counter.center
     }
     
-    func update(count: Int) {
+    func configure(witch controller: MessageSequenceController) {
+        self.controller = controller
+        if let sequence = controller.messageSequence {
+            self.update(count: sequence.totalUnread)
+        }
+        self.subscribeToUpdates()
+    }
+    
+    private func subscribeToUpdates() {
+        
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+        
+        self.controller?
+            .messageSequenceChangePublisher
+            .mainSink { [unowned self] event in
+                switch event {
+                case .update(let sequence), .create(let sequence), .remove(let sequence):
+                    self.update(count: sequence.totalUnread)
+                }
+            }.store(in: &self.cancellables)
+    }
+    
+    private func update(count: Int) {
         self.counter.setValue(Float(count))
         if count == 0 {
             self.animate(shouldShow: false, delay: Theme.animationDurationSlow)
