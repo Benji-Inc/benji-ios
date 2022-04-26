@@ -75,6 +75,14 @@ class ReplySummaryView: BaseView {
     private var loadTask: Task<Void, Never>?
     
     func configure(for message: Messageable) {
+        guard let controller = ChatClient.shared.messageController(for: message) else { return }
+
+        if let existing = self.controller,
+            existing.messageId == controller.messageId,
+           existing.replies == controller.replies {
+            return
+        }
+        
         self.loadTask?.cancel()
         
         self.replyView.isVisible = false
@@ -86,7 +94,7 @@ class ReplySummaryView: BaseView {
             
             guard !Task.isCancelled else { return }
             
-            self.controller = ChatClient.shared.messageController(for: message)
+            self.controller = controller
             
             if let controller = self.controller,
                controller.message!.replyCount > 0,
@@ -103,7 +111,9 @@ class ReplySummaryView: BaseView {
             
             self.promptButton.showsMenuAsPrimaryAction = self.replyView.isHidden
             
-            self.layoutNow()
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.layoutNow()
+            })
         }
     }
     
