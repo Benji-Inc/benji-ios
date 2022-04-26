@@ -11,7 +11,7 @@ import Foundation
 class ReplyView: BaseView {
 
     let personView = BorderedPersonView()
-    let dateLabel = ThemeLabel(font: .xtraSmall)
+    let dateLabel = MessageDateLabel(font: .xtraSmall)
     let label = ThemeLabel(font: .small)
     let imageView = UIImageView()
     
@@ -68,7 +68,7 @@ class ReplyView: BaseView {
         
         self.imageView.image = message.deliveryType.image
         self.personView.set(person: message.person)
-        self.dateLabel.text = message.createdAt.getTimeAgoString()
+        self.dateLabel.configure(with: message)
         self.layoutNow()
     }
 }

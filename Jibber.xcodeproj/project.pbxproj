@@ -607,6 +607,7 @@
 		D650C21025B7D6F20037C59A /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C20F25B7D6F20037C59A /* Attachment.swift */; };
 		D65519F32589591D00B901E4 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealias.swift */; };
 		D656BF0D28183C0900723068 /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D656BF0C28183C0900723068 /* ReplyView.swift */; };
+		D656BF0F281845B800723068 /* MessageDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D656BF0E281845B800723068 /* MessageDateLabel.swift */; };
 		D656EF442765A11900FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF432765A11900FF6E2C /* Localization */; };
 		D656EF482765A12A00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF472765A12A00FF6E2C /* Localization */; };
 		D656EF4A2765A13100FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF492765A13100FF6E2C /* Localization */; };
@@ -1251,6 +1252,7 @@
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D656BF0C28183C0900723068 /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
+		D656BF0E281845B800723068 /* MessageDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDateLabel.swift; sourceTree = "<group>"; };
 		D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyUnreadMessageCell.swift; sourceTree = "<group>"; };
 		D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadMessagesCounter.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -2662,6 +2664,7 @@
 			children = (
 				8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */,
 				D615534D2745C1C900B08459 /* MessageContentView.swift */,
+				D656BF0E281845B800723068 /* MessageDateLabel.swift */,
 				D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */,
 				D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */,
 			);
@@ -3438,6 +3441,7 @@
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6DEC40027A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
+				D656BF0F281845B800723068 /* MessageDateLabel.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,
