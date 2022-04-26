@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ToastErrorView: ToastView {
+class ToastStatusView: ToastView {
 
     private let label = ThemeLabel(font: .smallBold, textColor: .red)
     private let blurView = BlurView()

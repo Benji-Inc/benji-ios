@@ -18,6 +18,7 @@ enum ToastType {
     case transaction(Transaction)
     case achievement(Achievement)
     #endif
+    case success(UIImage, String)
     case error(ClientError)
     case basic(identifier: String,
                displayable: ImageDisplayable,
@@ -45,6 +46,11 @@ class ToastScheduler {
         var toast: Toast? = nil
 
         switch toastType {
+        case .success(let image, let text):
+            toast = self.createSuccessToast(for: text,
+                                            image: image,
+                                            position: position,
+                                            duration: duration)
         case .error(let error):
             toast = self.createErrorToast(for: error,
                                              position: position,
@@ -81,6 +87,27 @@ class ToastScheduler {
             ToastQueue.shared.add(toast: t)
         }
     }
+    
+    private func createSuccessToast(for text: String,
+                                    image: UIImage,
+                                    position: Toast.Position,
+                                    duration: TimeInterval) -> Toast? {
+
+        let toast = Toast(id: UUID().uuidString,
+                          priority: 1,
+                          title: "",
+                          description: text,
+                          displayable: image,
+                          deeplink: nil,
+                          type: .status,
+                          position: position,
+                          duration: duration,
+                          didTap: { [unowned self] in
+            self.delegate?.didInteractWith(type: .success(image, text), deeplink: nil)
+        })
+
+        return toast
+    }
 
     private func createErrorToast(for error: ClientError,
                                   position: Toast.Position,
@@ -93,7 +120,7 @@ class ToastScheduler {
                           description: error.localizedDescription,
                           displayable: image,
                           deeplink: nil,
-                          type: .error,
+                          type: .status,
                           position: position,
                           duration: duration,
                           didTap: { [unowned self] in
