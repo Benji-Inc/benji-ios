@@ -99,7 +99,7 @@ class ToastScheduler {
                           description: text,
                           displayable: image,
                           deeplink: nil,
-                          type: .status,
+                          type: .success,
                           position: position,
                           duration: duration,
                           didTap: { [unowned self] in
@@ -120,7 +120,7 @@ class ToastScheduler {
                           description: error.localizedDescription,
                           displayable: image,
                           deeplink: nil,
-                          type: .status,
+                          type: .error,
                           position: position,
                           duration: duration,
                           didTap: { [unowned self] in

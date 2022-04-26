@@ -7,35 +7,63 @@
 //
 
 import Foundation
+import UIKit
 
 class ToastStatusView: ToastView {
 
-    private let label = ThemeLabel(font: .smallBold, textColor: .red)
+    private let imageView = UIImageView()
+    private let label = ThemeLabel(font: .regular)
     private let blurView = BlurView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.addSubview(self.blurView)
+        self.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.image = self.toast.displayable.image
+        
         self.addSubview(self.label)
-        self.backgroundColor = ThemeColor.red.color.withAlphaComponent(0.2)
+        
+        if self.toast.type == .success {
+            self.imageView.tintColor = ThemeColor.white.color
+            self.backgroundColor = ThemeColor.D6.color.withAlphaComponent(0.2)
+            self.label.setTextColor(.white)
+        } else {
+            self.backgroundColor = ThemeColor.red.color.withAlphaComponent(0.2)
+            self.imageView.tintColor = ThemeColor.red.color
+            self.label.setTextColor(.red)
+        }
 
-        self.label.setText(toast.description)
+        self.label.setText(self.toast.description)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        #if !NOTIFICATION && !APPCLIP
+        #if !NOTIFICATION
         guard let superview = UIWindow.topWindow() else { return }
-        self.label.setSize(withWidth: superview.width - Theme.contentOffset.doubled)
+        let imageSize: CGFloat = 24
+        
+        let maxWidth = superview.width - (Theme.ContentOffset.xtraLong.value * 3) - imageSize
+        self.label.setSize(withWidth: maxWidth)
+        
+        self.imageView.squaredSize = imageSize
+        
+        let width = self.label.width + Theme.ContentOffset.long.value.doubled + self.imageView.width + Theme.ContentOffset.long.value
+        self.size = CGSize(width: width,
+                           height: self.label.height + Theme.ContentOffset.long.value.doubled)
 
-        self.size = CGSize(width: self.label.width + Theme.contentOffset, height: self.label.height + Theme.contentOffset)
+        self.imageView.centerOnY()
+        self.imageView.pin(.left, offset: .long)
 
-        self.label.centerOnXAndY()
+        self.label.match(.left, to: .right, of: self.imageView, offset: .long)
+        self.label.centerOnY()
+        
         self.centerOnX()
-
+        
         self.blurView.expandToSuperviewSize()
+
         #endif
     }
 }

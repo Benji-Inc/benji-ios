@@ -60,7 +60,7 @@ fileprivate class Toaster {
         switch toast.type {
         case .banner:
             toastView = ToastBannerView(with: toast)
-        case .status:
+        case .success, .error:
             toastView = ToastStatusView(with: toast)
         }
 

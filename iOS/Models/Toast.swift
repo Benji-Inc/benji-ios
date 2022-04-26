@@ -13,7 +13,8 @@ struct Toast: Equatable {
 
     enum DisplayType {
         case banner
-        case status
+        case success
+        case error 
     }
 
     enum Position {
