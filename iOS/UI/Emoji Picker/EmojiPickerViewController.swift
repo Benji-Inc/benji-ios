@@ -16,7 +16,7 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
             
     @Published var selectedEmojis: [Emoji] = []
     
-    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
 

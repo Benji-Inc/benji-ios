@@ -1,5 +1,5 @@
 //
-//  GradientView.swift
+//  GradientPassThroughView.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 7/3/19.
@@ -44,7 +44,7 @@ class GradientLayer: CAGradientLayer {
     }
 }
 
-class GradientView: BaseView {
+class GradientPassThroughView: PassThroughView {
 
     private lazy var gradient = CAGradientLayer(start: self.start,
                                                 end: self.end,

@@ -19,7 +19,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     lazy var contextCuesVC = ContextCuesViewController(person: self.person)
     private let contextCueHeaderLabel = ThemeLabel(font: .regular)
     
-    private let segmentGradientView = GradientView(with: [ThemeColor.B6.color.cgColor,
+    private let segmentGradientView = GradientPassThroughView(with: [ThemeColor.B6.color.cgColor,
                                                          ThemeColor.B6.color.cgColor,
                                                          ThemeColor.B6.color.cgColor,
                                                          ThemeColor.B6.color.withAlphaComponent(0.0).cgColor],
@@ -30,7 +30,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     private(set) var conversationListController: ConversationListController?
     
-    private let bottomGradientView = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
         

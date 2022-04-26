@@ -419,7 +419,7 @@
 		D61EC0F721D316F100204BEE /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D61EC0F921D317AB00204BEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
 		D6203A2A27EB8F28002FEAF5 /* InputHandlerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6203A2927EB8F28002FEAF5 /* InputHandlerCoordinator.swift */; };
-		D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
+		D621A219271F54EC00BAD7C2 /* GradientPassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientPassThroughView.swift */; };
 		D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222E5C27A09FF8001806D6 /* PeopleFooterView.swift */; };
 		D6222E5F27A0C5FC001806D6 /* PeopleNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6222E5E27A0C5FC001806D6 /* PeopleNavigationController.swift */; };
@@ -704,7 +704,7 @@
 		D682B4162792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
 		D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */; };
-		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
+		D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientPassThroughView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D6850D5A2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
 		D6850D5B2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
@@ -1311,7 +1311,7 @@
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
 		D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
 		D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsMessagesCellAttributes.swift; sourceTree = "<group>"; };
-		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		D684840922CD48D000362AC3 /* GradientPassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientPassThroughView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D6850D592798967E001327D3 /* PullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullView.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
@@ -2297,7 +2297,7 @@
 		D67243E027861C2A004C0A52 /* Gradients */ = {
 			isa = PBXGroup;
 			children = (
-				D684840922CD48D000362AC3 /* GradientView.swift */,
+				D684840922CD48D000362AC3 /* GradientPassThroughView.swift */,
 			);
 			path = Gradients;
 			sourceTree = "<group>";
@@ -3610,7 +3610,7 @@
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* RoomAddCell.swift in Sources */,
-				D684840A22CD48D000362AC3 /* GradientView.swift in Sources */,
+				D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */,
 				801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
@@ -3778,7 +3778,7 @@
 				D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */,
 				D6617CF726743DFE00439C06 /* Notice.swift in Sources */,
 				D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
-				D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */,
+				D621A219271F54EC00BAD7C2 /* GradientPassThroughView.swift in Sources */,
 				D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */,
 				D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */,
 				D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,

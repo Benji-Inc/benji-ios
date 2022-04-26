@@ -17,12 +17,12 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
                                         ActiveConversationable {
     
     private let topGradientView
-    = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+    = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                    startPoint: .topCenter,
                    endPoint: .bottomCenter)
     
     private let bottomGradientView
-      = GradientView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+      = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                      startPoint: .bottomCenter,
                      endPoint: .topCenter)
         
