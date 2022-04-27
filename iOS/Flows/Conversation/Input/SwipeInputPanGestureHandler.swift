@@ -80,6 +80,7 @@ class SwipeInputPanGestureHandler {
         self.previewView = PreviewMessageView(orientation: .down,
                                               bubbleColor: object.deliveryType.color.color)
         self.previewView?.frame = self.inputView.inputContainerView.frame
+        self.previewView?.set(expression: self.viewController.currentExpression)
         self.previewView?.messageKind = self.viewController.currentMessageKind
         self.previewView?.showShadow(withOffset: 8)
         self.inputView.addSubview(self.previewView!)

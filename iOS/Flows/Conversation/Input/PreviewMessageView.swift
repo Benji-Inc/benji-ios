@@ -12,6 +12,7 @@ import Combine
 class PreviewMessageView: SpeechBubbleView {
 
     private let minHeight: CGFloat = 52
+    private let expressionView = ExpressionView()
     let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
     private let deliveryTypeView = MessageDeliveryTypeBadgeView()
@@ -32,6 +33,8 @@ class PreviewMessageView: SpeechBubbleView {
         super.initializeSubviews()
         
         self.tailLength = 0
+
+        self.addSubview(self.expressionView)
 
         self.addSubview(self.textView)
         self.textView.textAlignment = .left
@@ -82,22 +85,33 @@ class PreviewMessageView: SpeechBubbleView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        var maxWidth: CGFloat = self.width - self.imageView.width - Theme.ContentOffset.long.value
+        self.expressionView.squaredSize = 40
+        self.imageView.squaredSize = 40
+
+        var maxWidth: CGFloat
+        = self.width - self.expressionView.width - self.imageView.width - Theme.ContentOffset.long.value.doubled
         
         if self.imageView.isHidden {
-            maxWidth = self.width - Theme.ContentOffset.long.value.doubled
+            maxWidth = self.width - Theme.ContentOffset.long.value
         }
+
+        self.expressionView.pin(.left, offset: .long)
+        self.expressionView.pin(.bottom, offset: .long)
         
         self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height)
-        self.textView.pin(.left, offset: .long)
+        self.textView.match(.left, to: .right, of: self.expressionView)
         self.textView.center.y = self.halfHeight
-        
-        self.imageView.squaredSize = 40
+
         self.imageView.centerOnX()
         self.imageView.pin(.bottom, offset: .custom(12))
         self.imageView.pin(.right, offset: .long)
 
         self.deliveryTypeView.centerOnX()
         self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height * 0.5))
+    }
+
+    func set(expression: Emoji?) {
+        self.expressionView.isVisible = expression.exists
+        self.expressionView.configure(for: expression)
     }
 }
