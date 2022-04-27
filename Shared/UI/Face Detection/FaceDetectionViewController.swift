@@ -60,11 +60,9 @@ class FaceDetectionViewController: ImageCaptureViewController {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
         let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
-        let detectFaceRectRequest = VNDetectFaceRectanglesRequest(completionHandler: self.detectedFaceRect)
 
         do {
             try self.sequenceHandler.perform([detectFaceRequest,
-                                              detectFaceRectRequest,
                                               self.segmentationRequest],
                                              on: imageBuffer,
                                              orientation: self.orientation)
@@ -87,10 +85,6 @@ class FaceDetectionViewController: ImageCaptureViewController {
         }
 
         self.faceDetected = true
-    }
-
-    private func detectedFaceRect(request: VNRequest, error: Error?) {
-
     }
 
     override func photoOutput(_ output: AVCapturePhotoOutput,
@@ -116,7 +110,13 @@ class FaceDetectionViewController: ImageCaptureViewController {
             self.eyesAreClosed = face.leftEyeClosed && face.rightEyeClosed
             self.isSmiling = face.hasSmile
 
-            finalCIImage = ciImage.cropped(to: face.bounds)
+            var adjustedFaceBounds = face.bounds
+            adjustedFaceBounds.size.height = face.bounds.height * 1.8
+            adjustedFaceBounds.size.width = adjustedFaceBounds.height
+            adjustedFaceBounds.centerY = face.bounds.centerY + face.bounds.height * 0.2
+            adjustedFaceBounds.centerX = face.bounds.centerX
+
+            finalCIImage = ciImage.cropped(to: adjustedFaceBounds)
         } else {
             self.eyesAreClosed = false
             self.isSmiling = false
@@ -136,7 +136,6 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
     // Performs the blend operation.
     func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) {
-
         let color = CIColor(color: UIColor.clear)
 
         // Create CIImage objects for the video frame and the segmentation mask.
