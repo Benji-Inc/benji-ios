@@ -55,6 +55,13 @@ class PeopleStore {
     
     private var contactsDictionary: [String : CNContact] = [:]
     
+    var sortedUnclaimedReservationWithoutContact: [Reservation] {
+        return Array(self.unclaimedReservationWithoutContact.values).sorted { lhs, rhs in
+            guard let lhsDate = lhs.createdAt, let rhsDate = rhs.createdAt else { return false }
+            return lhsDate > rhsDate
+        }
+    }
+    
     var unclaimedReservationWithoutContact: [String: Reservation] {
         return self.unclaimedReservations.filter { key in
             return key.value.isClaimed == false && key.value.contactId.isNil

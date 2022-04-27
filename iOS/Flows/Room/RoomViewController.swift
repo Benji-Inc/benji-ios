@@ -146,8 +146,9 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             return .memberId(type.personId)
         })
         
-        let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservationWithoutContact.keys.compactMap { reservationId in
-            return .add(reservationId)
+        let addItems: [RoomItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
+            guard let id = reservation.objectId else { return nil }
+            return .add(id)
         }
         
         data[.members]?.append(contentsOf: addItems)
@@ -223,8 +224,9 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                 return .memberId(type.personId)
             })
             
-            let addItems: [RoomItemType] = PeopleStore.shared.unclaimedReservationWithoutContact.keys.compactMap { reservationId in
-                return .add(reservationId)
+            let addItems: [RoomItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
+                guard let id = reservation.objectId else { return nil }
+                return .add(id)
             }
             
             items.append(contentsOf: addItems)
