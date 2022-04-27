@@ -38,7 +38,8 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
         self.profileVC.dataSource.messageContentDelegate = self 
                 
         if let user = self.person as? User, user.isCurrentUser {
-            self.profileVC.header.personView.didSelect { [unowned self] in
+            
+            self.profileVC.header.didSelectUpdateProfilePicture = { [unowned self] in
                 self.presentProfilePicture()
             }
         

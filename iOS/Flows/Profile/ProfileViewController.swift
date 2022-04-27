@@ -57,6 +57,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.view.set(backgroundColor: .B0)
                 
         self.view.addSubview(self.header)
+        
         self.addChild(viewController: self.contextCuesVC, toView: self.view)
         
         self.view.addSubview(self.contextCueHeaderLabel)
