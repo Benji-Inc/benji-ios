@@ -110,6 +110,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
             self.eyesAreClosed = face.leftEyeClosed && face.rightEyeClosed
             self.isSmiling = face.hasSmile
 
+            // Increase the bounds around the face so it's not too zoomed in.
             var adjustedFaceBounds = face.bounds
             adjustedFaceBounds.size.height = face.bounds.height * 1.8
             adjustedFaceBounds.size.width = adjustedFaceBounds.height
