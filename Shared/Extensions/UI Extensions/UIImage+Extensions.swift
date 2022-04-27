@@ -57,43 +57,8 @@ extension UIImage {
         return image.withRenderingMode(self.renderingMode)
     }
 
-    func centerCroppedImage() -> UIImage {
-        // Get the shortest side
-        let sideLength = min(self.size.width, self.size.height)
-
-        // Determines the x,y coordinate of a centered
-        // sideLength by sideLength square
-        let originalSize = self.size
-        let xOffset = (originalSize.width - sideLength)/2
-        let yOffset = (originalSize.height - sideLength)/2
-
-        // The area of the image that we want to keep.
-        let cropRect = CGRect(x: xOffset,
-                              y: yOffset,
-                              width: sideLength,
-                              height: sideLength).integral
-
-        // Center crop the image and covert back to a UIImage
-        if let originalCGImage = self.cgImage {
-            let croppedCGImage = originalCGImage.cropping(to: cropRect)!
-            return UIImage(cgImage: croppedCGImage,
-                           scale: self.imageRendererFormat.scale,
-                           orientation: self.imageOrientation)
-        } else if let originalCIImage = self.ciImage {
-            let croppedCIImage = originalCIImage.cropped(to: cropRect)
-
-            let context = CIContext()
-            let croppedCGImage = context.createCGImage(croppedCIImage, from: croppedCIImage.extent)!
-            return UIImage(cgImage: croppedCGImage,
-                           scale: self.imageRendererFormat.scale,
-                           orientation: self.imageOrientation)
-        }
-
-        return self
-    }
-
     var previewPngData: Data? {
-        return self.centerCroppedImage().imageWith(maxSideLength: 150).pngData()
+        return self.imageWith(maxSideLength: 150).pngData()
     }
 }
 

@@ -35,7 +35,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
     }()
     
     let orientation: CGImagePropertyOrientation = .left
-        
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -54,29 +54,33 @@ class FaceDetectionViewController: ImageCaptureViewController {
     override func captureOutput(_ output: AVCaptureOutput,
                                 didOutput sampleBuffer: CMSampleBuffer,
                                 from connection: AVCaptureConnection) {
+
         super.captureOutput(output, didOutput: sampleBuffer, from: connection)
         
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
         let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
+        let detectFaceRectRequest = VNDetectFaceRectanglesRequest(completionHandler: self.detectedFaceRect)
 
         do {
-            try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
+            try self.sequenceHandler.perform([detectFaceRequest,
+                                              detectFaceRectRequest,
+                                              self.segmentationRequest],
                                              on: imageBuffer,
                                              orientation: self.orientation)
 
             // Get the pixel buffer that contains the mask image.
-            guard let maskPixelBuffer =
-                    segmentationRequest.results?.first?.pixelBuffer else { return }
+            guard let maskPixelBuffer
+                    = self.segmentationRequest.results?.first?.pixelBuffer else { return }
             // Process the images.
             self.blend(original: imageBuffer, mask: maskPixelBuffer)
 
         } catch {
-
+            logError(error)
         }
     }
 
-    func detectedFace(request: VNRequest, error: Error?) {
+    private func detectedFace(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
             self.faceDetected = false
             return
@@ -85,43 +89,53 @@ class FaceDetectionViewController: ImageCaptureViewController {
         self.faceDetected = true
     }
 
+    private func detectedFaceRect(request: VNRequest, error: Error?) {
+
+    }
+
     override func photoOutput(_ output: AVCapturePhotoOutput,
-                     didFinishProcessingPhoto photo: AVCapturePhoto,
-                     error: Error?) {
+                              didFinishProcessingPhoto photo: AVCapturePhoto,
+                              error: Error?) {
 
         guard let connection = output.connection(with: .video) else { return }
         connection.automaticallyAdjustsVideoMirroring = true
 
         guard let ciImage = self.currentCIImage else { return }
 
-        let image = UIImage(ciImage: ciImage, scale: 1.0, orientation: .up)
+        // If we find a face in the image, we'll crop around it and store it here.
+        var finalCIImage = ciImage
 
-        let imageOptions = NSMutableDictionary(object: NSNumber(value: 5) as NSNumber, forKey: CIDetectorImageOrientation as NSString)
+        let imageOptions = NSMutableDictionary(object: NSNumber(value: 5) as NSNumber,
+                                               forKey: CIDetectorImageOrientation as NSString)
         imageOptions[CIDetectorEyeBlink] = true
-        let accuracy = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
+        let accuracy = [CIDetectorAccuracy : CIDetectorAccuracyHigh]
         let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: accuracy)
         let faces = faceDetector?.features(in: ciImage, options: imageOptions as? [String : AnyObject])
 
         if let face = faces?.first as? CIFaceFeature {
             self.eyesAreClosed = face.leftEyeClosed && face.rightEyeClosed
             self.isSmiling = face.hasSmile
+
+            finalCIImage = ciImage.cropped(to: face.bounds)
         } else {
             self.eyesAreClosed = false
-            self.isSmiling = false 
+            self.isSmiling = false
         }
 
+        // CGImages play nicer with UIKit.
+        // Per the docs: "Due to Core Image's coordinate system mismatch with UIKit, this filtering
+        // approach may yield unexpected results when displayed in a UIImageView with contentMode."
+        let context = CIContext()
+        let cgImage = context.createCGImage(finalCIImage, from: finalCIImage.extent)!
 
+        let image = UIImage(cgImage: cgImage, scale: 1, orientation: .up)
         self.didCapturePhoto?(image)
     }
-}
-
-extension FaceDetectionViewController {
 
     // MARK: - Process Results
 
     // Performs the blend operation.
-    func blend(original framePixelBuffer: CVPixelBuffer,
-               mask maskPixelBuffer: CVPixelBuffer) {
+    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) {
 
         let color = CIColor(color: UIColor.clear)
 
@@ -153,6 +167,8 @@ extension FaceDetectionViewController {
         self.currentCIImage = blendFilter.outputImage?.oriented(.leftMirrored)
     }
 }
+
+// MARK: - MTKViewDelegate
 
 extension FaceDetectionViewController: MTKViewDelegate {
 
