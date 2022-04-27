@@ -18,6 +18,10 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
     private var showButton: Bool = true
     
     @Published var selectedEmotions: [Emotion] = []
+    
+    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
 
     init() {
         super.init(with: EmotionsCollectionView())
@@ -40,8 +44,10 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         
         self.view.set(backgroundColor: .B0)
         
+        
         self.collectionView.allowsMultipleSelection = true
         
+        self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.button)
         
         self.$selectedEmotions.mainSink { [unowned self] items in
@@ -74,6 +80,10 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         } else {
             self.button.top = self.view.height
         }
+        
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
     }
     
     private func removeLastEmotion() {

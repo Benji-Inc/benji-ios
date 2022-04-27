@@ -26,6 +26,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     let button = ThemeButton()
     private var showButton: Bool = true
     
+    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
+    
     private let loadingView = InvitationLoadingView()
     
     private(set) var allPeople: [Person] = []
@@ -58,6 +62,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
                 
         self.setupNavigationBar()
 
+        self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.button)
         
         KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self]  _ in
@@ -114,6 +119,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         } else {
             self.button.top = self.view.height
         }
+        
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
     }
     
     func updateSelectedPeopleItems() {
