@@ -25,6 +25,11 @@ class ProfileHeaderView: BaseView {
         
     let personView = BorderedPersonView()
     
+    let menuImageView = UIImageView(image: UIImage(systemName: "ellipsis"))
+    let menuButton = ThemeButton()
+    
+    var didSelectUpdateProfilePicture: CompletionOptional = nil
+    
     override func initializeSubviews() {
         super.initializeSubviews()
         
@@ -51,6 +56,13 @@ class ProfileHeaderView: BaseView {
         
         self.addSubview(self.focusCircle)
         self.addSubview(self.personView)
+        
+        self.addSubview(self.menuImageView)
+        self.menuImageView.contentMode = .scaleAspectFit
+        self.menuImageView.tintColor = ThemeColor.white.color.withAlphaComponent(0.25)
+        
+        self.addSubview(self.menuButton)
+        self.menuButton.showsMenuAsPrimaryAction = true
     }
     
     @MainActor
@@ -82,6 +94,8 @@ class ProfileHeaderView: BaseView {
             self.focusLabel.setText("Unavailable")
             self.focusCircle.set(backgroundColor: FocusStatus.focused.color)
         }
+        
+        self.menuButton.menu = self.createMenu(for: person)
         
         self.setNeedsLayout()
     }
@@ -121,5 +135,29 @@ class ProfileHeaderView: BaseView {
         self.memberLabel.setSize(withWidth: self.width)
         self.memberLabel.match(.left, to: .right, of: self.nameLabel, offset: .short)
         self.memberLabel.bottom = self.nameLabel.bottom - 2
+        
+        self.menuImageView.squaredSize = 26
+        self.menuImageView.pin(.top, offset: .negative(.custom(10)))
+        self.menuImageView.pin(.right, offset: .xtraLong)
+        
+        self.menuButton.squaredSize = 44
+        self.menuButton.center = self.menuImageView.center
+        self.menuButton.pin(.top)
+    }
+    
+    private func createMenu(for person: PersonType) -> UIMenu? {
+        guard person.isCurrentUser else { return nil }
+        
+        let remove = UIAction(title: "Update Picture",
+                              image: UIImage(systemName: "camera"),
+                              attributes: []) { [unowned self] action in
+            self.didSelectUpdateProfilePicture?()
+        }
+
+        return UIMenu.init(title: "Menu",
+                           image: nil,
+                           identifier: nil,
+                           options: [],
+                           children: [remove])
     }
 }

@@ -19,11 +19,18 @@ struct MessageDetailState: Equatable {
 class MessageCell: UICollectionViewCell {
 
     private var message: Messageable?
+    
+    lazy var shadowLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.shadowColor = ThemeColor.D6.color.cgColor
+        layer.shadowOpacity = 1.0
+        layer.shadowOffset = .zero
+        layer.shadowRadius = 8
+        return layer
+    }()
 
     let content = MessageContentView()
     private var footerView = MessageFooterView()
-    /// A view to tint the whole cell, indicating that it is unread.
-    private var unreadOverlay = BaseView()
     
     var shouldShowDetailBar: Bool = true
     var shouldShowReplies: Bool = true {
@@ -49,16 +56,14 @@ class MessageCell: UICollectionViewCell {
     }
 
     private func initializeViews() {
+        
+        self.contentView.layer.insertSublayer(self.shadowLayer, at: 0)
         self.contentView.addSubview(self.content)
 
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
         self.content.bubbleView.addInteraction(contextMenuInteraction)
         
         self.contentView.addSubview(self.footerView)
-
-        self.contentView.addSubview(self.unreadOverlay)
-        self.unreadOverlay.set(backgroundColor: .D6)
-        self.unreadOverlay.alpha = 0
         
         self.footerView.replySummary.didSelectEmoji = { [unowned self] emoji in
             self.addReply(with: emoji)
@@ -100,8 +105,7 @@ class MessageCell: UICollectionViewCell {
         self.content.pin(.top)
         self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.short.value)
 
-        self.unreadOverlay.frame  = self.content.frame
-        self.unreadOverlay.roundCorners()
+        self.shadowLayer.shadowPath = UIBezierPath(rect: self.content.bounds).cgPath
     }
 
     // MARK: - Touch Handling
@@ -123,7 +127,7 @@ class MessageCell: UICollectionViewCell {
         self.content.textView.textColor = self.getTextColor(for: message)
         self.content.imageView.alpha = message.canBeConsumed ? 0 : 1
         self.content.linkView.alpha = message.canBeConsumed ? 0 : 1
-        self.unreadOverlay.alpha = message.canBeConsumed ? 0.1 : 0
+        self.shadowLayer.opacity = !message.isConsumedByMe ? 1.0 : 0
 
         self.message = message
         
@@ -249,10 +253,11 @@ class MessageCell: UICollectionViewCell {
         Task {
             guard !Task.isCancelled else { return }
 
-            UIView.animate(withDuration: Theme.animationDurationFast) {
-                self.unreadOverlay.alpha = 0
-            }
             await self.content.playReadAnimations()
+            
+            UIView.animate(withDuration: Theme.animationDurationFast, delay: 0.1) {
+                self.shadowLayer.opacity = 0
+            }
 
             guard !Task.isCancelled else { return }
 

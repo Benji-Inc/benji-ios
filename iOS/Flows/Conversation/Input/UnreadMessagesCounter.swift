@@ -84,8 +84,8 @@ class UnreadMessagesCounter: BaseView {
         self.countCircle.height = 20
         self.countCircle.makeRound()
 
-        self.counter.pin(.right, offset: .standard)
-        self.counter.y = 0
+        self.counter.pin(.right, offset: .custom(2))
+        self.counter.y = -2
         
         self.countCircle.center = self.counter.center
     }

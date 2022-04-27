@@ -42,8 +42,8 @@ class NoticeStore {
             throw error
         }
     }
-        
-    func getAllNotices() async -> [SystemNotice] {
+     
+    func getAllNotices() -> [SystemNotice] {
         let existing = self.allNotices
             .compactMap { notice in
             return SystemNotice(with: notice)
