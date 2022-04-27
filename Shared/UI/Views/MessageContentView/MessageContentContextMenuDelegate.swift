@@ -29,9 +29,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
     }
 
     private func makeContextMenu() -> UIMenu {
-        guard let message = self.content.message as? Message, let cid = message.cid else {
-            return UIMenu()
-        }
+        guard let message = self.content.message as? Message, let cid = message.cid else { return UIMenu() }
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
@@ -112,6 +110,30 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
         return preview
     }
 
+    private weak var firstResponderBeforeDisplay: UIResponder?
+    private weak var inputHandlerBeforeDisplay: InputHandlerViewContoller?
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                willDisplayMenuFor configuration: UIContextMenuConfiguration,
+                                animator: UIContextMenuInteractionAnimating?) {
+
+        self.firstResponderBeforeDisplay = UIResponder.firstResponder
+        self.inputHandlerBeforeDisplay = self.firstResponderBeforeDisplay?.inputHandlerViewController
+    }
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                willEndFor configuration: UIContextMenuConfiguration,
+                                animator: UIContextMenuInteractionAnimating?) {
+
+
+        // HACK: The input handler has problems becoming first responder again after the context menu
+        // disappears. The text view also becomes unresponsive. To get around this, reset the responder
+        // status on the input handler.
+        self.inputHandlerBeforeDisplay?.resignFirstResponder()
+        self.inputHandlerBeforeDisplay?.becomeFirstResponder()
+
+        self.firstResponderBeforeDisplay?.becomeFirstResponder()
+    }
+
     // MARK: - Message Consumption
 
     func setToRead() {
@@ -126,5 +148,17 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
         Task {
             try await msg.setToUnconsumed()
         }
+    }
+}
+
+fileprivate extension UIResponder {
+
+    /// Returns the nearest input handler view controller in the responder chain that has an input accessory view or input accessory VC.
+    var inputHandlerViewController: InputHandlerViewContoller? {
+        if let vc = self as? InputHandlerViewContoller {
+            return vc
+        }
+
+        return self.next?.inputHandlerViewController
     }
 }
