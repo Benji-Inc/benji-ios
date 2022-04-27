@@ -13,6 +13,29 @@ import UIKit
 import MetalKit
 import CoreImage.CIFilterBuiltins
 
+class MetalView: MTKView {
+
+    var context: CIContext
+    var commandQueue: MTLCommandQueue
+
+    override init(frame frameRect: CGRect, device: MTLDevice?) {
+        let dev = device ?? MTLCreateSystemDefaultDevice()!
+        self.context = CIContext(mtlDevice: dev, options: [.cacheIntermediates : false])
+        self.commandQueue = dev.makeCommandQueue()!
+
+        super.init(frame: frameRect, device: dev)
+
+        self.isPaused = true
+        self.enableSetNeedsDisplay = false
+        self.framebufferOnly = false
+        self.isOpaque = false
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class FaceDetectionViewController: ImageCaptureViewController {
 
     var segmentationRequest = VNGeneratePersonSegmentationRequest()
@@ -22,29 +45,23 @@ class FaceDetectionViewController: ImageCaptureViewController {
     @Published var eyesAreClosed = false
     @Published var isSmiling = false
 
-    // The Metal pipeline.
-    var metalDevice: MTLDevice!
-    var metalCommandQueue: MTLCommandQueue!
-
-    // The Core Image pipeline.
-    var ciContext: CIContext!
     var currentCIImage: CIImage? {
         didSet {
             self.cameraView.draw()
         }
     }
 
-    lazy var cameraView = MTKView()
+    lazy var cameraView: MetalView = {
+        let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
+        metalView.delegate = self
+        return metalView
+    }()
     
     let orientation: CGImagePropertyOrientation = .left
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard self.metalDevice.isNil else { return }
-        self.setupMetal()
-        self.setupCoreImage()
-        
+
         self.view.addSubview(self.cameraView)
         self.view.addSubview(self.boxView)
     }
@@ -102,7 +119,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
         let image = UIImage(ciImage: ciImage, scale: 1.0, orientation: .up)
 
-        let imageOptions =  NSMutableDictionary(object: NSNumber(value: 5) as NSNumber, forKey: CIDetectorImageOrientation as NSString)
+        let imageOptions = NSMutableDictionary(object: NSNumber(value: 5) as NSNumber, forKey: CIDetectorImageOrientation as NSString)
         imageOptions[CIDetectorEyeBlink] = true
         let accuracy = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
         let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: accuracy)

@@ -243,7 +243,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func updateUser(with image: UIImage) async {
-        guard let data = image.previewData else { return }
+        guard let data = image.previewPngData else { return }
                 
         do {
             await UIView.awaitAnimation(with: .fast, animations: {
