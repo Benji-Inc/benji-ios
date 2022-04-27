@@ -11,6 +11,15 @@ import Intents
 import StreamChat
 import Parse
 
+extension ChatMessage {
+    var inAttachements: [INSendMessageAttachment] {
+        return self.imageAttachments.compactMap { attachement in
+            let file = INFile(fileURL: attachement.imagePreviewURL, filename: attachement.title, typeIdentifier: "public.png")
+            return INSendMessageAttachment.init(audioMessageFile: file)
+        }
+    }
+}
+
 class NotificationService: UNNotificationServiceExtension {
 
     /// The current notification request that we're processing.
@@ -217,9 +226,9 @@ class NotificationService: UNNotificationServiceExtension {
                               content: content.body,
                               speakableGroupName: self.conversation?.speakableGroupName,
                               conversationIdentifier: self.conversation?.cid.description,
-                              serviceName: nil,
+                              serviceName: "Jibber",
                               sender: self.author,
-                              attachments: nil)
+                              attachments: self.message?.inAttachements)
 
         let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
         interaction.direction = .incoming

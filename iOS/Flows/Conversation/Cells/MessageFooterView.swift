@@ -60,10 +60,10 @@ class MessageFooterView: BaseView {
         self.replySummary.pin(.top)
 
         self.readView.pin(.right)
-        self.readView.pin(.top)
+        self.readView.pin(.top, offset: .short)
 
         self.statusLabel.setSize(withWidth: self.width)
-        self.statusLabel.pin(.top)
+        self.statusLabel.pin(.top, offset: .short)
         self.statusLabel.pin(.right)
     }
 

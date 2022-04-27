@@ -127,7 +127,7 @@ class MessageCell: UICollectionViewCell {
         self.content.textView.textColor = self.getTextColor(for: message)
         self.content.imageView.alpha = message.canBeConsumed ? 0 : 1
         self.content.linkView.alpha = message.canBeConsumed ? 0 : 1
-        self.shadowLayer.opacity = !message.isConsumedByMe ? 1.0 : 0
+        self.shadowLayer.opacity = message.canBeConsumed ? 1.0 : 0
 
         self.message = message
         
