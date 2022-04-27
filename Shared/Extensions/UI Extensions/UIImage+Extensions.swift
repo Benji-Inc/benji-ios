@@ -51,9 +51,6 @@ extension UIImage {
             self.draw(in: CGRect(origin: .zero, size: newSize))
         }
 
-        logDebug("original size \(Float(self.pngData()!.count)/1_000_000)")
-        logDebug("shrunk size \(Float(image.withRenderingMode(self.renderingMode).pngData()!.count)/1_000_000)")
-        logDebug("new dimensions are \(newSize)")
         return image.withRenderingMode(self.renderingMode)
     }
 
