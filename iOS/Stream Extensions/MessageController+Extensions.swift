@@ -107,6 +107,9 @@ extension MessageController {
                              enforceUnique: false,
                              extraData: extraData) { error in
                 if let e = error {
+                    Task {
+                        await ToastScheduler.shared.schedule(toastType: .error(e))
+                    }
                     logError(e)
                 }
                 continuation.resume(returning: ())
@@ -217,17 +220,10 @@ extension MessageController {
         
         switch sendable.deliveryType {
         case .timeSensitive:
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.messageId,
-                                                             displayable: User.current()!,
-                                                             title: "Time-Sensitive Message Delivered",
-                                                             description: "Your message was successfully delivered and will attempt to notify all members of this thread. You will receive a notification once any member has read this message.",
-                                                             deepLink: nil))
+            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Reply delivered. Will notify all members of this conversation."))
+            
         case .conversational:
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.messageId,
-                                                             displayable: User.current()!,
-                                                             title: "Conversational Message Delivered ",
-                                                             description: "Your message was successfully delivered and will attempt to notify all available members of this thread.",
-                                                             deepLink: nil))
+            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Reply delivered. Will attempt to notify all members of this conversation."))
         case .respectful:
             break
         }

@@ -198,7 +198,7 @@ extension Reservation: UIActivityItemSource {
                 return []
             }
         } catch {
-            logError(error)
+            await ToastScheduler.shared.schedule(toastType: .error(error))
             return []
         }
     }

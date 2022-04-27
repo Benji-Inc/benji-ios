@@ -60,8 +60,8 @@ fileprivate class Toaster {
         switch toast.type {
         case .banner:
             toastView = ToastBannerView(with: toast)
-        case .error:
-            toastView = ToastErrorView(with: toast)
+        case .success, .error:
+            toastView = ToastStatusView(with: toast)
         }
 
         if let current = self.items.first {

@@ -76,6 +76,8 @@ class ToastView: BaseView, ToastViewable {
             self.dismiss()
         }
 
+        self.isHidden = true
+        
         Task {
             await Task.snooze(seconds: 0.1)
             self.update(for: self.state)
@@ -144,6 +146,7 @@ class ToastView: BaseView, ToastViewable {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
             }
         case .present:
+            self.isHidden = false 
             if self.toast.position == .top {
                 self.top = superView.top + self.screenOffset
             } else {

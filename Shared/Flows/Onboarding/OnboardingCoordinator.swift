@@ -135,8 +135,8 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
                 try await user.saveLocalThenServer()
 
                 self.goToNextContentOrFinish()
-            } catch  {
-                logError(error)
+            } catch {
+                await ToastScheduler.shared.schedule(toastType: .error(error))
             }
         }
     }
@@ -169,7 +169,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
                                              passId: self.onboardingVC.passId)
                 .makeRequest(andUpdate: [], viewsToIgnore: [self.onboardingVC.view])
             } catch {
-                logError(error)
+                await ToastScheduler.shared.schedule(toastType: .error(error))
             }
             
             AnalyticsManager.shared.trackEvent(type: .finalizedOnboarding, properties: ["status": user.status?.rawValue ?? ""])

@@ -225,17 +225,11 @@ extension ConversationController {
         
         switch sendable.deliveryType {
         case .timeSensitive:
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.conversation.id,
-                                                             displayable: User.current()!,
-                                                             title: "Time-Sensitive Message Delivered",
-                                                             description: "Your message was successfully delivered and will attempt to notify all members of this conversation. You will receive a notification once any member has read this message.",
-                                                             deepLink: nil))
+            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Message delivered. Will notify all members of this conversation."))
+            
         case .conversational:
-            await ToastScheduler.shared.schedule(toastType: .basic(identifier: self.conversation.id,
-                                                             displayable: User.current()!,
-                                                             title: "Conversational Message Delivered ",
-                                                             description: "Your message was successfully delivered and will attempt to notify all available members of this conversation.",
-                                                             deepLink: nil))
+            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Message delivered. Will attempt to notify all members of this conversation."))
+        
         case .respectful:
             break
         }

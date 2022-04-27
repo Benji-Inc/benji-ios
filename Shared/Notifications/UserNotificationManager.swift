@@ -257,7 +257,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
                     await self.scheduleNotification(with: content)
                     AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": suggestion.text])
                 } catch {
-                    logError(error)
+                    await ToastScheduler.shared.schedule(toastType: .error(error))
                 }
                 
                 completion()

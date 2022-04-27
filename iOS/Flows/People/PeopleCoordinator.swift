@@ -163,6 +163,7 @@ extension PeopleCoordinator {
         do {
             return try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
         } catch {
+            await ToastScheduler.shared.schedule(toastType: .error(error))
             logError(error)
             return nil
         }

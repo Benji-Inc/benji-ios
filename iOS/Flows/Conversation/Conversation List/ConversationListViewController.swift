@@ -285,6 +285,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
             do {
                 try await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
             } catch {
+                await ToastScheduler.shared.schedule(toastType: .error(error))
                 logError(error)
             }
             self.isLoadingConversations = false

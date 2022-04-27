@@ -43,14 +43,15 @@ extension RoomCoordinator {
     }
     
     func presentWallet() {
+        
         self.removeChild()
-        
+
         let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
-        
+
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) 
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
         }
-        
+
         self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
     }
     
