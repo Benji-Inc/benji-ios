@@ -50,24 +50,23 @@ class MessageDeliveryTypeBadgeView: BaseView {
                 })
                 return
             }
-            
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.alpha = 1.0
+
+            await UIView.awaitAnimation(with: .fast, animations: {
                 self.label.alpha = 0.0
                 self.imageView.alpha = 0.0
-                self.setNeedsLayout()
             })
-            
+
+            guard !Task.isCancelled else { return }
+
             self.imageView.image = type.image
             self.label.setText(type.description)
-            
-            guard !Task.isCancelled else { return }
-        
-            await UIView.awaitAnimation(with: .standard, animations: {
+            self.label.alpha = 1
+            self.imageView.alpha = 1
+
+            self.layoutNow()
+
+            await UIView.awaitAnimation(with: .fast, animations: {
                 self.alpha = 1.0
-                self.label.alpha = 1.0
-                self.imageView.alpha = 1.0
-                self.setNeedsLayout()
             })
         }
     }
