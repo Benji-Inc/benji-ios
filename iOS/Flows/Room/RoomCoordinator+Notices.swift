@@ -18,6 +18,10 @@ extension RoomCoordinator {
             guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String else { return }
+            if let n = notice.notice {
+                try? n.delete()
+                self.roomVC.reloadNotices()
+            }
             self.presentConversation(with: cid, messageId: messageId)
         case .connectionRequest:
             Task {
