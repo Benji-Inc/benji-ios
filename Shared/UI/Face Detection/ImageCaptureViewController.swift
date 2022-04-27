@@ -11,7 +11,9 @@ import AVFoundation
 import Combine
 import UIKit
 
-class ImageCaptureViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
+class ImageCaptureViewController: ViewController,
+                                  AVCaptureVideoDataOutputSampleBufferDelegate,
+                                  AVCapturePhotoCaptureDelegate {
 
     let session = AVCaptureSession()
     var capturePhotoOutput: AVCapturePhotoOutput!

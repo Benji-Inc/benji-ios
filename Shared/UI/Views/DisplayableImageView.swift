@@ -59,7 +59,6 @@ class DisplayableImageView: BaseView {
         return URLSession(configuration: configuration)
     }()
 
-
     // MARK: - Life cycle
 
     override func initializeSubviews() {

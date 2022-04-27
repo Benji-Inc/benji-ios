@@ -35,22 +35,28 @@ extension UIImage {
         return image!
     }
 
-    func scaled(by scale: CGFloat) -> UIImage {
-        let size = self.size.applying(CGAffineTransform(scaleX: scale, y: scale))
-        let hasAlpha = false
-        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+    /// Returns a new version of this image scaled proportionally so no side is greater than maxSideLength.
+    func imageWith(maxSideLength: CGFloat) -> UIImage {
+        let scale: CGFloat
 
-        UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
-        draw(in: CGRect(origin: CGPoint.zero, size: size))
+        if self.size.width > self.size.height {
+            scale = min(maxSideLength/self.size.width, 1)
+        } else {
+            scale = min(maxSideLength/self.size.height, 1)
+        }
 
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
+        let newSize = CGSize(width: scale * self.size.width,
+                             height: scale * self.size.height)
 
-        return scaledImage
+        let image = UIGraphicsImageRenderer(size: newSize).image { _ in
+            self.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+
+        return image.withRenderingMode(self.renderingMode)
     }
 
-    var previewData: Data? {
-        return self.jpegData(compressionQuality: 0.1)
+    var previewPngData: Data? {
+        return self.imageWith(maxSideLength: 150).pngData()
     }
 }
 
