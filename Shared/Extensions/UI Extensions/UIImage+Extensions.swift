@@ -35,6 +35,7 @@ extension UIImage {
         return image!
     }
 
+    /// Returns a new version of this image scaled proportionally so no side is greater than maxSideLength.
     func imageWith(maxSideLength: CGFloat) -> UIImage {
         let scale: CGFloat
 
