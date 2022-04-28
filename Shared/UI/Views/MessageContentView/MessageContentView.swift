@@ -95,8 +95,6 @@ class MessageContentView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        logDebug(UIScreen.currentSize.rawValue)
-
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
 

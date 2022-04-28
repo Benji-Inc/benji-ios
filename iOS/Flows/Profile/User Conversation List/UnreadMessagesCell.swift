@@ -89,19 +89,24 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
                 if let latest = self.conversationController?.channel?.latestMessages, latest.isEmpty  {
                     try? await self.conversationController?.synchronize()
                 }
-                     
+                                     
                 if let conversation = self.conversationController?.conversation {
                     self.setNumberOfUnread(value: conversation.totalUnread)
+                } else {
+                    self.showError()
                 }
+                
                 self.subscribeToUpdates()
             }
             
             guard !Task.isCancelled else { return }
             
-            if let latest = self.conversationController?.channel?.latestMessages.first(where: { message in
+            if let latest = self.conversationController?.conversation?.messages.first(where: { message in
                 return !message.isDeleted && message.id == unreadMessageId
             }) {
                 self.update(for: latest)
+            } else {
+                self.showError()
             }
         }
     }
@@ -113,11 +118,11 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     }
     
     @MainActor
-    private func update(for message: Message) {
+    private func update(for message: Messageable) {
         self.messageContent.configure(with: message)
         self.leftLabel.setText(message.createdAt.getDaysAgoString())
         
-        let title = self.conversationController?.conversation.title ?? "Untitled"
+        let title = self.conversationController?.conversation?.title ?? "Untitled"
         let groupName = "Favorites  /"
         self.titleLabel.setTextColor(.white)
         self.titleLabel.setText("\(groupName)  \(title)")
@@ -135,26 +140,34 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         self.conversationController?
             .channelChangePublisher
             .mainSink(receiveValue: { [unowned self] _ in
-                guard let conversationController = self.conversationController else { return }
-                if let latest = conversationController.channel?.latestMessages.first(where: { message in
+                guard let conversation = self.conversationController?.conversation else { return }
+                if let latest = conversation.latestMessages.first(where: { message in
                     return !message.isDeleted
                 }) {
                     self.update(for: latest)
                 }
-                self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
+                self.setNumberOfUnread(value: conversation.totalUnread)
             }).store(in: &self.subscriptions)
         
         self.conversationController?
             .messagesChangesPublisher
             .mainSink { [unowned self] changes in
-                guard let conversationController = self.conversationController else { return }
-                if let latest = conversationController.channel?.latestMessages.first(where: { message in
+                guard let conversation = self.conversationController?.conversation else { return }
+                if let latest = conversation.latestMessages.first(where: { message in
                     return !message.isDeleted
                 }) {
                     self.update(for: latest)
                 }
-                self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
+                self.setNumberOfUnread(value: conversation.totalUnread)
             }.store(in: &self.subscriptions)
+    }
+    
+    func showError() {
+        self.titleLabel.setText("Zero unread messages.")
+        self.messageContent.isVisible = false
+        self.rightLabel.isVisible = false
+        self.leftLabel.isVisible = false 
+        self.setNeedsLayout()
     }
     
     override func layoutSubviews() {

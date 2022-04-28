@@ -98,20 +98,23 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: ConversationId) {
         
         Task.onMainActorAsync {
+            let controller = ChatClient.shared.channelController(for: item)
             
-            if self.conversationController?.cid != item {
-                self.conversationController = ChatClient.shared.channelController(for: item)
-                if let latest = self.conversationController?.channel?.latestMessages, latest.isEmpty  {
+            if self.conversationController?.cid != item,
+               let conversation = controller.conversation {
+                self.conversationController = controller
+                
+                if conversation.latestMessages.isEmpty  {
                     try? await self.conversationController?.synchronize()
                 }
                 
-                let members = self.conversationController?.conversation.lastActiveMembers.filter { member in
+                let members = conversation.lastActiveMembers.filter { member in
                     return member.personId != ChatClient.shared.currentUserId
-                } ?? []
+                }
                 
                 self.stackedAvatarView.configure(with: members)
                 
-                self.setNumberOfUnread(value: self.conversationController!.conversation.totalUnread)
+                self.setNumberOfUnread(value: conversation.totalUnread)
                 self.subscribeToUpdates()
             }
             
@@ -138,7 +141,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.messageContent.configure(with: message)
         self.leftLabel.setText(message.createdAt.getDaysAgoString())
         
-        let title = self.conversationController?.conversation.title ?? "Untitled"
+        let title = self.conversationController?.conversation?.title ?? "Untitled"
         let groupName = "Favorites  /"
         self.titleLabel.setTextColor(.white)
         self.titleLabel.setText("\(groupName)  \(title)")
@@ -158,9 +161,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                 guard let conversationController = self.conversationController else { return }
                 switch event {
                 case _ as MemberAddedEvent, _ as MemberRemovedEvent:
-                    let members = conversationController.conversation.lastActiveMembers.filter { member in
+                    let members = conversationController.conversation?.lastActiveMembers.filter { member in
                         return member.personId != ChatClient.shared.currentUserId
-                    }
+                    } ?? []
                     
                     self.stackedAvatarView.configure(with: members)
                 default:
@@ -172,25 +175,25 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.conversationController?
             .channelChangePublisher
             .mainSink(receiveValue: { [unowned self] _ in
-                guard let conversationController = self.conversationController else { return }
-                if let latest = conversationController.channel?.latestMessages.first(where: { message in
+                guard let conversation = self.conversationController?.conversation else { return }
+                if let latest = conversation.latestMessages.first(where: { message in
                     return !message.isDeleted
                 }) {
                     self.update(for: latest)
                 }
-                self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
+                self.setNumberOfUnread(value: conversation.totalUnread)
             }).store(in: &self.subscriptions)
         
         self.conversationController?
             .messagesChangesPublisher
             .mainSink { [unowned self] _ in
-                guard let conversationController = self.conversationController else { return }
-                if let latest = conversationController.channel?.latestMessages.first(where: { message in
+                guard let conversation = self.conversationController?.conversation else { return }
+                if let latest = conversation.latestMessages.first(where: { message in
                     return !message.isDeleted
                 }) {
                     self.update(for: latest)
                 }
-                self.setNumberOfUnread(value: conversationController.conversation.totalUnread)
+                self.setNumberOfUnread(value: conversation.totalUnread)
             }.store(in: &self.subscriptions)
     }
     

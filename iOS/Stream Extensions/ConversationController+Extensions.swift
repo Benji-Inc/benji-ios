@@ -15,8 +15,8 @@ typealias ConversationController = ChatChannelController
 
 extension ConversationController {
 
-    var conversation: Conversation {
-        return self.channel!
+    var conversation: Conversation? {
+        return self.channel
     }
 
     /// Creates a conversation controller using the shared ChatClient.
@@ -30,7 +30,7 @@ extension ConversationController {
     }
 
     func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
-        return self.conversation.getOldestUnreadMessage(withUserID: userID)
+        return self.conversation?.getOldestUnreadMessage(withUserID: userID)
     }
 
     /// Loads previous messages from backend including the one specified.
@@ -38,8 +38,9 @@ extension ConversationController {
     ///   - messageId: ID of the last fetched message. You will get messages `older` and including the provided ID.
     ///   - limit: Limit for page size.
     func loadPreviousMessages(including messageId: MessageId, limit: Int = 25) async throws {
+        guard let cid = self.cid else { return }
         try await self.loadPreviousMessages(before: messageId, limit: limit)
-        let controller = ChatClient.shared.messageController(cid: self.cid, messageId: messageId)
+        let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
         if let messageBefore = self.messages.first(where: { message in
             return message.createdAt < controller.message!.createdAt
         }) {
@@ -113,9 +114,9 @@ extension ConversationController {
 
     func donateIntent(for sendable: Sendable) async {
         guard case MessageKind.text(let text) = sendable.kind else { return }
-        let memberIDs = self.conversation.lastActiveMembers.compactMap { member in
+        let memberIDs = self.conversation?.lastActiveMembers.compactMap { member in
             return member.personId
-        }
+        } ?? []
 
         let recipients = PeopleStore.shared.usersArray.filter { user in
             return memberIDs.contains(user.objectId ?? String())
@@ -130,8 +131,8 @@ extension ConversationController {
         let intent = INSendMessageIntent(recipients: recipients,
                                          outgoingMessageType: .outgoingMessageText,
                                          content: text,
-                                         speakableGroupName: self.conversation.speakableGroupName,
-                                         conversationIdentifier: self.conversation.cid.id,
+                                         speakableGroupName: self.conversation?.speakableGroupName,
+                                         conversationIdentifier: self.conversation?.cid.id,
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)

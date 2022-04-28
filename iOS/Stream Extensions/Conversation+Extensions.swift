@@ -18,7 +18,7 @@ extension Conversation {
     }
 
     /// Returns the conversation with the specified cid using the shared ChatClient.
-    static func conversation(_ cid: ConversationId) -> Conversation {
+    static func conversation(_ cid: ConversationId) -> Conversation? {
         return ConversationController.controller(cid).conversation
     }
 

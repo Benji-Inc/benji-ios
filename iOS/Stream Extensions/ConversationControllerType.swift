@@ -13,7 +13,7 @@ import StreamChat
 /// message threads (MessageController) and conversations (ConversationController) in a unified way.
 protocol ConversationControllerType {
     /// The conversation related to this controller.
-    var conversation: Conversation { get }
+    var conversation: Conversation? { get }
     /// The original message if this is controller for message  thread.
     var rootMessage: Message? { get }
     /// The messages currenlty loaded on this controller. In a thread, these would be reply messages.
@@ -28,8 +28,8 @@ extension ConversationControllerType {
         return self.rootMessage.exists
     }
 
-    var cid: ConversationId {
-        return self.conversation.cid
+    var cid: ConversationId? {
+        return self.conversation?.cid
     }
 
     var rootMessageID: MessageId? {
@@ -54,7 +54,7 @@ extension MessageController: ConversationControllerType {
         return self.replies
     }
 
-    var conversation: Conversation {
+    var conversation: Conversation? {
         return ChatClient.shared.channelController(for: self.cid).conversation
     }
     

@@ -183,7 +183,10 @@ extension ConversationListCollectionViewDataSource {
             let conversationController = ChatClient.shared.channelController(for: item.channelID)
 
             let isPreparedToSend = conversationController.cid == item.dataSource.conversationPreparingToSend
-            cell.set(conversation: conversationController.conversation, shouldPrepareToSend: isPreparedToSend)
+            if let conversation = conversationController.conversation {
+                cell.set(conversation: conversation, shouldPrepareToSend: isPreparedToSend)
+            }
+            
             cell.set(state: item.uiState)
         }
     }

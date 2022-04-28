@@ -162,7 +162,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     /// A task for loading data and subscribing to conversation updates.
     private var loadPeopleTask: Task<Void, Never>?
     
-    private func setMembers(for conversation: Conversation) {
+    private func setMembers(for conversation: Conversation?) {
+        guard let conversation = conversation else {
+            return
+        }
         self.loadPeopleTask?.cancel()
         
         self.loadPeopleTask = Task { [weak self] in
