@@ -14,7 +14,9 @@ import MetalKit
 import CoreImage.CIFilterBuiltins
 
 /// A view controller that allows a user to capture an image of their face.
-class FaceImageCaptureViewController: ImageCaptureViewController {
+class FaceImageCaptureViewController: ViewController {
+
+    var didCapturePhoto: ((UIImage) -> Void)?
 
     @Published var faceDetected = false
     @Published var eyesAreClosed = false
@@ -37,11 +39,16 @@ class FaceImageCaptureViewController: ImageCaptureViewController {
 
     let orientation: CGImagePropertyOrientation = .left
 
+    let faceCaptureSession = PhotoCaptureSession()
+
+    /// A request to separate a person from the background in an image.
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
     private var sequenceHandler = VNSequenceRequestHandler()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.faceCaptureSession.avCaptureDelegate = self
 
         self.view.addSubview(self.cameraView)
         self.view.addSubview(self.faceBoxView)
@@ -49,25 +56,24 @@ class FaceImageCaptureViewController: ImageCaptureViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        self.faceBoxView.expandToSuperviewSize()
-        
+
         self.cameraView.expandToSuperviewSize()
+        self.faceBoxView.expandToSuperviewSize()
     }
+}
 
-    override func captureOutput(_ output: AVCaptureOutput,
-                                didOutput sampleBuffer: CMSampleBuffer,
-                                from connection: AVCaptureConnection) {
+extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
-        super.captureOutput(output, didOutput: sampleBuffer, from: connection)
-        
+    func captureOutput(_ output: AVCaptureOutput,
+                       didOutput sampleBuffer: CMSampleBuffer,
+                       from connection: AVCaptureConnection) {
+
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
         let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
 
         do {
-            try self.sequenceHandler.perform([detectFaceRequest,
-                                              self.segmentationRequest],
+            try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
                                              on: imageBuffer,
                                              orientation: self.orientation)
 
@@ -91,9 +97,44 @@ class FaceImageCaptureViewController: ImageCaptureViewController {
         self.faceDetected = true
     }
 
-    override func photoOutput(_ output: AVCapturePhotoOutput,
-                              didFinishProcessingPhoto photo: AVCapturePhoto,
-                              error: Error?) {
+    /// Makes the image black and white, and makes the background clear.
+    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) {
+        let color = CIColor(color: UIColor.clear)
+
+        // Create CIImage objects for the video frame and the segmentation mask.
+        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(self.orientation)
+        var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
+
+        // Scale the mask image to fit the bounds of the video frame.
+        let scaleX = originalImage.extent.width / maskImage.extent.width
+        let scaleY = originalImage.extent.height / maskImage.extent.height
+        maskImage = maskImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
+
+        let solidColor = CIImage(color: color).cropped(to: maskImage.extent)
+
+        // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
+
+        let filter = CIFilter(name: "CIPhotoEffectMono")
+        filter?.setValue(originalImage, forKey: "inputImage")
+
+        guard let bwImage = filter?.outputImage else { return }
+
+        // Blend the original, background, and mask images.
+        let blendFilter = CIFilter.blendWithRedMask()
+        blendFilter.inputImage = bwImage
+        blendFilter.backgroundImage = solidColor
+        blendFilter.maskImage = maskImage
+
+        // Set the new, blended image as current.
+        self.currentCIImage = blendFilter.outputImage?.oriented(.leftMirrored)
+    }
+}
+
+extension FaceImageCaptureViewController: AVCapturePhotoCaptureDelegate {
+
+    func photoOutput(_ output: AVCapturePhotoOutput,
+                     didFinishProcessingPhoto photo: AVCapturePhoto,
+                     error: Error?) {
 
         guard let connection = output.connection(with: .video) else { return }
         connection.automaticallyAdjustsVideoMirroring = true
@@ -135,40 +176,6 @@ class FaceImageCaptureViewController: ImageCaptureViewController {
 
         let image = UIImage(cgImage: cgImage, scale: 1, orientation: .up)
         self.didCapturePhoto?(image)
-    }
-
-    // MARK: - Process Results
-
-    // Performs the blend operation.
-    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) {
-        let color = CIColor(color: UIColor.clear)
-
-        // Create CIImage objects for the video frame and the segmentation mask.
-        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(self.orientation)
-        var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
-
-        // Scale the mask image to fit the bounds of the video frame.
-        let scaleX = originalImage.extent.width / maskImage.extent.width
-        let scaleY = originalImage.extent.height / maskImage.extent.height
-        maskImage = maskImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
-
-        let solidColor = CIImage(color: color).cropped(to: maskImage.extent)
-
-        // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
-
-        let filter = CIFilter(name: "CIPhotoEffectMono")
-        filter?.setValue(originalImage, forKey: "inputImage")
-
-        guard let bwImage = filter?.outputImage else { return }
-
-        // Blend the original, background, and mask images.
-        let blendFilter = CIFilter.blendWithRedMask()
-        blendFilter.inputImage = bwImage
-        blendFilter.backgroundImage = solidColor
-        blendFilter.maskImage = maskImage
-
-        // Set the new, blended image as current.
-        self.currentCIImage = blendFilter.outputImage?.oriented(.leftMirrored)
     }
 }
 

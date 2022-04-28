@@ -31,7 +31,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     let errorView = ErrorView()
     private var errorOffset: CGFloat = -100
 
-    lazy var cameraVC = FaceImageCaptureViewController()
+    lazy var faceCaptureVC = FaceImageCaptureViewController()
     
     override var analyticsIdentifier: String? {
         return "SCREEN_PHOTO"
@@ -62,7 +62,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.view.addSubview(self.animationView)
         self.animationView.alpha = 0
-        self.addChild(viewController: self.cameraVC)
+        self.addChild(viewController: self.faceCaptureVC)
 
         self.view.addSubview(self.errorView)
         self.view.addSubview(self.tapView)
@@ -72,7 +72,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             case .initial:
                 self.currentState = .scanEyesOpen
             case .scanEyesOpen:
-                guard self.cameraVC.faceDetected else { return }
+                guard self.faceCaptureVC.faceDetected else { return }
                 self.currentState = .captureEyesOpen
             case .captureEyesOpen, .didCaptureEyesOpen:
                 break
@@ -83,10 +83,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             }
         }
 
-        self.cameraVC.didCapturePhoto = { [unowned self] image in
+        self.faceCaptureVC.didCapturePhoto = { [unowned self] image in
             switch self.currentState {
             case .captureEyesOpen:
-                if self.cameraVC.isSmiling {
+                if self.faceCaptureVC.isSmiling {
                     self.currentState = .didCaptureEyesOpen
                     self.animateError(with: nil, show: false)
                     Task {
@@ -106,7 +106,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 self.handle(state: state)
             }.store(in: &self.cancellables)
 
-        self.cameraVC.$faceDetected
+        self.faceCaptureVC.$faceDetected
             .removeDuplicates()
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
                 switch self.currentState {
@@ -135,7 +135,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         
         self.tapView.expandToSuperviewSize()
         
-        self.cameraVC.view.expandToSuperviewSize()
+        self.faceCaptureVC.view.expandToSuperviewSize()
     }
 
     private func handle(state: PhotoState) {
@@ -182,7 +182,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animateError(with: "No face detected.", show: !isDetected)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.cameraVC.cameraView.alpha = isDetected ? 1.0 : 0.25
+            self.faceCaptureVC.cameraView.alpha = isDetected ? 1.0 : 0.25
         } completion: { completed in
 
         }
@@ -192,10 +192,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animateError(with: "Don't forget to smile.", show: true)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.cameraVC.cameraView.alpha = 0.5
+            self.faceCaptureVC.cameraView.alpha = 0.5
         } completion: { completed in
             UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
-                self.cameraVC.cameraView.alpha = 1.0
+                self.faceCaptureVC.cameraView.alpha = 1.0
             } completion: { _ in
                 Task {
                     await Task.sleep(seconds: 2.0)
@@ -207,19 +207,19 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleScanState() {
-        if !self.cameraVC.session.isRunning {
-            self.cameraVC.begin()
+        if !self.faceCaptureVC.faceCaptureSession.session.isRunning {
+            self.faceCaptureVC.faceCaptureSession.begin()
         }
 
         UIView.animate(withDuration: 0.2, animations: {
             self.animationView.alpha = 0
-            self.cameraVC.faceBoxView.alpha = 1.0
+            self.faceCaptureVC.faceBoxView.alpha = 1.0
             self.view.layoutNow()
         })
     }
 
     private func handleCaptureState() {
-        self.cameraVC.capturePhoto()
+        self.faceCaptureVC.faceCaptureSession.capturePhoto()
     }
 
     private func animateError(with message: String?, show: Bool) {
@@ -248,7 +248,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 
         do {
             await UIView.awaitAnimation(with: .fast, animations: {
-                self.cameraVC.faceBoxView.alpha = 0.0
+                self.faceCaptureVC.faceBoxView.alpha = 0.0
             })
             try await self.presentDisclosure(with: data)
         } catch {
