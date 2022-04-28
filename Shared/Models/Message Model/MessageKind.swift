@@ -70,6 +70,7 @@ enum MessageKind {
 }
 
 extension MessageKind: Equatable {
+    
     static func == (lhs: MessageKind, rhs: MessageKind) -> Bool {
         switch (lhs, rhs) {
         case (.text(let lhsText), .text(let rhsText)):
