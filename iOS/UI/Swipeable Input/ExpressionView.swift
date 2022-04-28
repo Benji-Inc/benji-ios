@@ -38,12 +38,15 @@ class ExpressionView: BaseView {
         self.label.setSize(withWidth: self.width)
         self.label.centerOnXAndY()
 
+        self.expressionImageView.expandToSuperviewSize()
+
         self.imageView.squaredSize = self.width * 0.8
         self.imageView.centerOnXAndY()
     }
 
     func configure(with expression: Expression?) {
-        self.isVisible = expression.exists
+        self.expressionImageView.displayable = expression?.imageURL
+        self.configure(for: expression?.emoji)
     }
 
     private func configure(for emoji: Emoji?) {
