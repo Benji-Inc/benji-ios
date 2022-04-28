@@ -99,7 +99,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         
         self.headerView.height = 46
         self.headerView.expandToSuperviewWidth()
-        self.headerView.pinToSafeArea(.top, offset: .xtraLong)
+        self.headerView.pinToSafeArea(.top, offset: .noOffset)
         
         self.topGradientView.expandToSuperviewWidth()
         self.topGradientView.height = self.headerView.bottom

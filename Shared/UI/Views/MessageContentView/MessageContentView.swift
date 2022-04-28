@@ -31,7 +31,7 @@ class MessageContentView: BaseView {
     }
 
     // Sizing
-    static let bubbleHeight: CGFloat = 188
+    static let bubbleHeight: CGFloat = UIScreen.currentSize == .phoneMedium ? 148 : 188
     static let collapsedHeight: CGFloat = 78 - MessageContentView.bubbleTailLength
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
@@ -94,6 +94,8 @@ class MessageContentView: BaseView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        logDebug(UIScreen.currentSize.rawValue)
 
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()

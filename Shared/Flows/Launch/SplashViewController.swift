@@ -42,7 +42,8 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
 
         self.loadingView.size = CGSize(width: 18, height: 18)
         self.loadingView.pinToSafeAreaRight()
-        self.loadingView.pinToSafeArea(.bottom, offset: .noOffset)
+        let offset: CGFloat = self.view.safeAreaInsets.bottom == 0 ? Theme.ContentOffset.xtraLong.value : 0
+        self.loadingView.pinToSafeArea(.bottom, offset: .custom(offset))
     }
 
     override func viewWillDisappear(_ animated: Bool) {
