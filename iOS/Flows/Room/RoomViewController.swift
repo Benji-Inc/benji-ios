@@ -136,6 +136,8 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             return .notice(notice)
         })
         
+        try? await PeopleStore.shared.initializeIfNeeded()
+        
         data[.members] = PeopleStore.shared.connectedPeople.filter({ type in
             return !type.isCurrentUser
         }).sorted(by: { lhs, rhs in
@@ -268,7 +270,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                     var snapshot = self.dataSource.snapshot()
                     snapshot.setItems([.empty], in: .conversations)
                     await self.dataSource.apply(snapshot)
-                    return 
+                    return
                 }
                                 
                 let conversationIds = models.compactMap { model in
