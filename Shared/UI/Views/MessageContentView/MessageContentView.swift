@@ -307,6 +307,7 @@ class MessageContentView: BaseView {
             }
         }
 
+        // An optimization so that the expression doesn't reload when the message finishes sending.
         if self.authorView.displayable.isNil {
             if let expressionURL = message.expression?.imageURL {
                 self.authorView.displayable = expressionURL
