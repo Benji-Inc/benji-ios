@@ -83,6 +83,8 @@
 		80B046F32819FB180079AE47 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B046F22819FB180079AE47 /* MetalView.swift */; };
 		80B046F42819FB180079AE47 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B046F22819FB180079AE47 /* MetalView.swift */; };
 		80B046F52819FB180079AE47 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B046F22819FB180079AE47 /* MetalView.swift */; };
+		80B046F7281AF95E0079AE47 /* ExpressionAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B046F6281AF95E0079AE47 /* ExpressionAttachment.swift */; };
+		80B046F9281AFBD70079AE47 /* JibberAttachmentCodingKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B046F8281AFBD70079AE47 /* JibberAttachmentCodingKeys.swift */; };
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80B899352807555C004C8096 /* EmotionGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B899342807555C004C8096 /* EmotionGradientView.swift */; };
 		80B899362807555C004C8096 /* EmotionGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B899342807555C004C8096 /* EmotionGradientView.swift */; };
@@ -1039,6 +1041,8 @@
 		809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListViewController+Extensions.swift"; sourceTree = "<group>"; };
 		80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
 		80B046F22819FB180079AE47 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		80B046F6281AF95E0079AE47 /* ExpressionAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionAttachment.swift; sourceTree = "<group>"; };
+		80B046F8281AFBD70079AE47 /* JibberAttachmentCodingKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JibberAttachmentCodingKeys.swift; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80B899342807555C004C8096 /* EmotionGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionGradientView.swift; sourceTree = "<group>"; };
 		80B899372808B64F004C8096 /* MessageSequenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequenceController.swift; sourceTree = "<group>"; };
@@ -1568,7 +1572,9 @@
 				809EDC69273ECBC300597473 /* ConversationListController+Extensions.swift */,
 				805881552743008D0004F2EA /* ConversationMember+Extensions.swift */,
 				80616E3426EAD2F300C077BA /* DataController+Async.swift */,
+				80B046F6281AF95E0079AE47 /* ExpressionAttachment.swift */,
 				8052574027441EAC00B6DC23 /* Filter+Extensions.swift */,
+				80B046F8281AFBD70079AE47 /* JibberAttachmentCodingKeys.swift */,
 				80251FF726F3D362006D7873 /* MessageController+Extensions.swift */,
 			);
 			path = "Stream Extensions";
@@ -3479,6 +3485,7 @@
 				8057B59D27E2A10600B23D0D /* ConversationDetailViewController.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
 				80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
+				80B046F9281AFBD70079AE47 /* JibberAttachmentCodingKeys.swift in Sources */,
 				D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */,
 				D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */,
 				80632D93278534E600D3A65B /* EventLogger.swift in Sources */,
@@ -3587,6 +3594,7 @@
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
+				80B046F7281AF95E0079AE47 /* ExpressionAttachment.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
 				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,
 				804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */,
