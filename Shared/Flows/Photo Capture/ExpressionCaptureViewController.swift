@@ -36,7 +36,12 @@ class ExpressionPhotoCaptureViewController: ViewController {
         }
 
         self.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            self.onDidComplete?(.success(image))
+            var finalImage = image
+            if let previewData = image.previewHeicData, let previewImage = UIImage(data: previewData) {
+                finalImage = previewImage
+            }
+
+            self.onDidComplete?(.success(finalImage))
         }
     }
 

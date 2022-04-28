@@ -19,8 +19,18 @@ class ExpressionCoordinator: PresentableCoordinator<URL?> {
     override func start() {
         super.start()
         
-        self.photoVC.onDidComplete = { [unowned self] _ in
-            logDebug("did complete")
+        self.photoVC.onDidComplete = { [unowned self] result in
+            switch result {
+            case .success(let expressionImage):
+                guard let expressionImage = expressionImage else {
+                    self.finishFlow(with: nil)
+                    break
+                }
+                let url = try? AttachmentsManager.shared.createTemporaryPngURL(for: expressionImage)
+                self.finishFlow(with: url)
+            case .failure:
+                break
+            }
         }
     }
 }

@@ -215,6 +215,7 @@ class MessageCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.content.authorView.displayable = nil
         self.content.imageView.displayable = nil
         self.content.emotionCollectionView.setEmotionsCounts([:], animated: false)
         self.content.setEmotions(areShown: false, animated: false)

@@ -154,16 +154,7 @@ extension Message: Messageable {
     }
 
     var expressionURL: URL? {
-        for attachment in self.imageAttachments {
-            guard let isExpressionData = attachment.extraData?["isExpression"],
-                  case RawJSON.bool(let isExpression) = isExpressionData else { continue }
-
-            if isExpression {
-                return attachment.imageURL
-            }
-        }
-
-        return nil
+        return self.expressionImageAttachments.first?.imageURL
     }
     
     static func message(with cid: ConversationId, messageId: MessageId) -> Message {

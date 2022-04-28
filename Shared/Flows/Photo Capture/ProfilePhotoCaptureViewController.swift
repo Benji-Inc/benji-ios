@@ -28,9 +28,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
 
     var onDidComplete: ((Result<UIImage?, Error>) -> Void)?
 
-    /// If true, the person must be smiling to capture a photo
-    var requireSmileForCapture = true
-
     // MARK: - Views
 
     lazy var faceCaptureVC = FaceImageCaptureViewController()
@@ -94,15 +91,16 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.faceCaptureVC.didCapturePhoto = { [unowned self] image in
             switch self.currentState {
             case .captureEyesOpen:
-                // If the user needs to smile, let them know.
-                if self.requireSmileForCapture && !self.faceCaptureVC.isSmiling {
-                    self.handleNotSmiling()
-                } else {
-                    // Otherwise, send the image to the completion handler
+                if self.faceCaptureVC.isSmiling {
                     self.currentState = .didCaptureEyesOpen
                     self.animateError(with: nil, show: false)
 
-                    self.onDidComplete?(.success(image))
+                    Task {
+                        await self.updateUser(with: image)
+                    }
+                } else {
+                    // If the user needs to smile, let them know.
+                    self.handleNotSmiling()
                 }
             default:
                 break
@@ -254,7 +252,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     }
 
     private func updateUser(with image: UIImage) async {
-        guard let data = image.previewPngData else { return }
+        guard let data = image.previewHeicData else { return }
                 
         do {
             await UIView.awaitAnimation(with: .fast, animations: {

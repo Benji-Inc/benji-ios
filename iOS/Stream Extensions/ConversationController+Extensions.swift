@@ -149,17 +149,9 @@ extension ConversationController {
         switch sendable.kind {
         case .text(let text):
             messageBody = text
-
-            let attachment
-            = try AnyAttachmentPayload(localFileURL: URL(fileURLWithPath: "file:///var/mobile/Media/DCIM/101APPLE/IMG_1261.HEIC"),
-                                       attachmentType: AttachmentType(rawValue: "expression"))
-            attachments.append(attachment)
         case .photo(let item, let body):
             if let url = item.url {
-                let extraData: [String : RawJSON] = ["isExpression" : .bool(true)]
-                let attachment = try AnyAttachmentPayload(localFileURL: url,
-                                                          attachmentType: .image,
-                                                          extraData: extraData)
+                let attachment = try AnyAttachmentPayload(localFileURL: url, attachmentType: .image)
                 attachments.append(attachment)
             }
             messageBody = body
@@ -169,6 +161,14 @@ extension ConversationController {
             messageBody = stringURL.trimWhitespace().lowercased()
         case .attributedText, .video, .location, .emoji, .audio, .contact:
             throw(ClientError.apiError(detail: "Message type not supported."))
+        }
+
+        if let expressionURL = sendable.expressionURL {
+            let extraData: [String : RawJSON] = ["isExpression" : .bool(true)]
+            let expressionAttachment = try AnyAttachmentPayload(localFileURL: expressionURL,
+                                                                 attachmentType: .image,
+                                                                 extraData: extraData)
+            attachments.append(expressionAttachment)
         }
 
         return try await self.createNewMessage(sendable: sendable,

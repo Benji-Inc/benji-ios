@@ -68,7 +68,7 @@ class SwipeInputPanGestureHandler {
         let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     deliveryType: .respectful,
                                     expression: self.viewController.currentExpression,
-                                    expressionURL: nil,
+                                    expressionURL: self.viewController.expressionImageURL,
                                     previousMessage: self.viewController.editableMessage)
         self.viewController.sendable = object
 

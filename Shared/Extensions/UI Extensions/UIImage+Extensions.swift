@@ -8,17 +8,18 @@
 
 import Foundation
 import Parse
+import AVFoundation
 
 extension UIImage {
 
     func grayscaleImage() -> UIImage? {
         let ciImage = CIImage(image: self)
         guard let grayscale = ciImage?.applyingFilter("CIColorControls",
-                                                      parameters: [ kCIInputSaturationKey: 0.0 ]) else { return nil
+                                                      parameters: [ kCIInputSaturationKey: 0.0 ]) else {
+            return nil
         }
         
         return UIImage(ciImage: grayscale)
-
     }
 
     static func imageWithColor(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
@@ -55,8 +56,12 @@ extension UIImage {
         return image.withRenderingMode(self.renderingMode)
     }
 
-    var previewPngData: Data? {
-        return self.imageWith(maxSideLength: 150).pngData()
+    var previewData: Data? {
+        logDebug("initial size was \(Float(self.pngData()!.count)/1_000_000)")
+        let data = try? self.imageWith(maxSideLength: 200).heicData(compressionQuality: 0.1)
+        logDebug("reduced size was \(Float(data!.count)/1_000_000)")
+
+        return data
     }
 }
 
@@ -64,5 +69,37 @@ extension UIImage: ImageDisplayable {
 
     var image: UIImage? {
         return self
+    }
+}
+
+
+// MARK: - HEIC Compression
+
+extension UIImage {
+
+    enum HEICError: Error {
+        case heicNotSupported
+        case cgImageMissing
+        case couldNotFinalize
+    }
+
+    // Taken from https://www.raywenderlich.com/4726843-heic-image-compression-for-ios
+    func heicData(compressionQuality: CGFloat) throws -> Data {
+        let data = NSMutableData()
+        guard let imageDestination
+                = CGImageDestinationCreateWithData(data, AVFileType.heic as CFString, 1, nil) else {
+            throw HEICError.heicNotSupported
+        }
+
+        guard let cgImage = self.cgImage else { throw HEICError.cgImageMissing }
+
+        let options: NSDictionary = [kCGImageDestinationLossyCompressionQuality : compressionQuality]
+
+        CGImageDestinationAddImage(imageDestination, cgImage, options)
+        guard CGImageDestinationFinalize(imageDestination) else {
+            throw HEICError.couldNotFinalize
+        }
+
+        return data as Data
     }
 }

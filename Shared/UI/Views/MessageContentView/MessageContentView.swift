@@ -308,10 +308,12 @@ class MessageContentView: BaseView {
         }
 
         #warning("Make more robust")
-        if let expressionURL = message.expressionURL {
-            self.authorView.displayable = expressionURL
-        } else {
-            self.authorView.set(person: message.person)
+        if self.authorView.displayable.isNil {
+            if let expressionURL = message.expressionURL {
+                self.authorView.displayable = expressionURL
+            } else {
+                self.authorView.set(person: message.person)
+            }
         }
 
         let emotionCounts = message.emotionCounts
