@@ -34,16 +34,15 @@ class ImageCaptureViewController: ViewController,
 
     private(set) var cameraType: CameraType = .front
     var flashMode: AVCaptureDevice.FlashMode = .auto
-    
-    var boxView = BoxView() 
 
+    /// Configures and starts an AV capture session. Requests access for video  capture if needed.
     func begin() {
-        Task {
+        Task { [weak self] in
             let authorized = await AVCaptureDevice.requestAccess(for: AVMediaType.video)
 
             if authorized {
-                self.configureCaptureSession()
-                self.session.startRunning()
+                self?.configureCaptureSession()
+                self?.session.startRunning()
             }
         }.add(to: self.autocancelTaskPool)
     }
@@ -116,6 +115,7 @@ class ImageCaptureViewController: ViewController,
         self.session.addOutput(self.capturePhotoOutput)
     }
 
+    /// Captures a photo of the current state of the capture output.
     func capturePhoto() {
         // Make sure capturePhotoOutput is valid
         guard let capturePhotoOutput = self.capturePhotoOutput else { return }

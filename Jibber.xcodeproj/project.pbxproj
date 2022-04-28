@@ -303,7 +303,7 @@
 		D61128A22804E23600574B96 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D61128A32804E24600574B96 /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
 		D61128A42804E3DF00574B96 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
-		D61128A52804E4F300574B96 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
+		D61128A52804E4F300574B96 /* FaceImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceImageCaptureViewController.swift */; };
 		D61128A62804E4F800574B96 /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
 		D61128A72804E55F00574B96 /* BorderedPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedPersonView.swift */; };
 		D61128A82804E5D200574B96 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
@@ -545,7 +545,7 @@
 		D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
 		D63DB28325E9999C00F6B323 /* TransitionRouter+Fade.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */; };
 		D63DB28425E9999C00F6B323 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
-		D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
+		D63DB28625E999A100F6B323 /* FaceImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceImageCaptureViewController.swift */; };
 		D63DB28925E999A600F6B323 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
 		D63DB28B25E999A600F6B323 /* SwitchableContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8B123CE403D0039DC5A /* SwitchableContentViewController.swift */; };
@@ -891,7 +891,7 @@
 		D6E974362752C47F00D95F08 /* EmotionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* EmotionCategory.swift */; };
 		D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
-		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
+		D6EB4DF023540E48005BF3B4 /* FaceImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceImageCaptureViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
@@ -1427,7 +1427,7 @@
 		D6E974352752C47F00D95F08 /* EmotionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCategory.swift; sourceTree = "<group>"; };
 		D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
-		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
+		D6EB4DEF23540E48005BF3B4 /* FaceImageCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceImageCaptureViewController.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
@@ -2003,7 +2003,7 @@
 			isa = PBXGroup;
 			children = (
 				D66AB0F1277A46F2007A35D1 /* BoxView.swift */,
-				D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */,
+				D6EB4DEF23540E48005BF3B4 /* FaceImageCaptureViewController.swift */,
 				D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */,
 				80B046F22819FB180079AE47 /* MetalView.swift */,
 			);
@@ -3171,7 +3171,7 @@
 				D611286C2804DC5400574B96 /* ClientError.swift in Sources */,
 				D611289C2804E10F00574B96 /* VibrancyView.swift in Sources */,
 				D611281E2804DBC900574B96 /* Range+Extensions.swift in Sources */,
-				D61128A52804E4F300574B96 /* FaceDetectionViewController.swift in Sources */,
+				D61128A52804E4F300574B96 /* FaceImageCaptureViewController.swift in Sources */,
 				D61128BF2804EB4000574B96 /* PermissionsViewController.swift in Sources */,
 				D61128402804DBEE00574B96 /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D611281A2804DBC600574B96 /* CGFloat+Extensions.swift in Sources */,
@@ -3443,7 +3443,7 @@
 				D6E974362752C47F00D95F08 /* EmotionCategory.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6DEC40027A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift in Sources */,
-				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
+				D6EB4DF023540E48005BF3B4 /* FaceImageCaptureViewController.swift in Sources */,
 				D656BF0F281845B800723068 /* MessageDateLabel.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
@@ -3792,7 +3792,7 @@
 				D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				D621A219271F54EC00BAD7C2 /* GradientPassThroughView.swift in Sources */,
 				D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */,
-				D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */,
+				D63DB28625E999A100F6B323 /* FaceImageCaptureViewController.swift in Sources */,
 				D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				D63DB27F25E9999C00F6B323 /* TransitionRouter+Fill.swift in Sources */,
 				D63DB22C25E9991800F6B323 /* PFInstallation+Extensions.swift in Sources */,

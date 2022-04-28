@@ -8,21 +8,19 @@
 
 import Foundation
 
-class ExpressionCoordinator: PresentableCoordinator<Emoji> {
-    
-    lazy var expressionVC = ExpressionViewController()
-    lazy var emojiNav = EmojiNavigationViewController(with: self.expressionVC)
+class ExpressionCoordinator: PresentableCoordinator<URL?> {
+
+    lazy var photoVC = PhotoViewController()
 
     override func toPresentable() -> DismissableVC {
-        return self.emojiNav
+        return self.photoVC
     }
     
     override func start() {
         super.start()
         
-        self.expressionVC.$selectedEmojis.mainSink { [unowned self] items in
-            guard let first = items.first else { return }
-            self.finishFlow(with: first)
-        }.store(in: &self.cancellables)
+        self.photoVC.onDidComplete = { [unowned self] _ in
+            logDebug("did complete")
+        }
     }
 }

@@ -307,7 +307,12 @@ class MessageContentView: BaseView {
             }
         }
 
-        self.authorView.set(person: message.person)
+        #warning("Make more robust")
+        if let expressionURL = message.expressionURL {
+            self.authorView.displayable = expressionURL
+        } else {
+            self.authorView.set(person: message.person)
+        }
 
         let emotionCounts = message.emotionCounts
         // Only animate changes to the emotion when they're not blurred out.

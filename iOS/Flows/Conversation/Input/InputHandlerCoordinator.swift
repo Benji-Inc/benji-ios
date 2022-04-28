@@ -120,10 +120,9 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     func presentExpressions() {
         let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator) { [unowned self] result in
-            AnalyticsManager.shared.trackEvent(type: .expressionSelected,
-                                               properties: ["value" : result.emoji])
-            self.inputHandlerViewController.swipeableVC.currentExpression = result
+        self.present(coordinator) { [unowned self] expressionURL in
+            AnalyticsManager.shared.trackEvent(type: .expressionMade)
+            self.inputHandlerViewController.swipeableVC.expressionImageURL = expressionURL
         }
     }
     

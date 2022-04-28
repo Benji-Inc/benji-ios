@@ -23,6 +23,7 @@ enum PhotoState {
 }
 
 class PhotoViewController: ViewController, Sizeable, Completable {
+
     typealias ResultType = Void
 
     var onDidComplete: ((Result<Void, Error>) -> Void)?
@@ -30,7 +31,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     let errorView = ErrorView()
     private var errorOffset: CGFloat = -100
 
-    lazy var cameraVC = FaceDetectionViewController()
+    lazy var cameraVC = FaceImageCaptureViewController()
     
     override var analyticsIdentifier: String? {
         return "SCREEN_PHOTO"
@@ -212,7 +213,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         UIView.animate(withDuration: 0.2, animations: {
             self.animationView.alpha = 0
-            self.cameraVC.boxView.alpha = 1.0
+            self.cameraVC.faceBoxView.alpha = 1.0
             self.view.layoutNow()
         })
     }
@@ -247,7 +248,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 
         do {
             await UIView.awaitAnimation(with: .fast, animations: {
-                self.cameraVC.boxView.alpha = 0.0
+                self.cameraVC.faceBoxView.alpha = 0.0
             })
             try await self.presentDisclosure(with: data)
         } catch {

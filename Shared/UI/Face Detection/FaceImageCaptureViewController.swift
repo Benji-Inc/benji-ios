@@ -13,10 +13,8 @@ import UIKit
 import MetalKit
 import CoreImage.CIFilterBuiltins
 
-class FaceDetectionViewController: ImageCaptureViewController {
-
-    var segmentationRequest = VNGeneratePersonSegmentationRequest()
-    var sequenceHandler = VNSequenceRequestHandler()
+/// A view controller that allows a user to capture an image of their face.
+class FaceImageCaptureViewController: ImageCaptureViewController {
 
     @Published var faceDetected = false
     @Published var eyesAreClosed = false
@@ -28,25 +26,31 @@ class FaceDetectionViewController: ImageCaptureViewController {
         }
     }
 
+    /// Shows a live preview of the image the user could take.
     lazy var cameraView: MetalView = {
         let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
         metalView.delegate = self
         return metalView
     }()
-    
+    /// A view to help the user center their face in the image.
+    var faceBoxView = BoxView()
+
     let orientation: CGImagePropertyOrientation = .left
+
+    private var segmentationRequest = VNGeneratePersonSegmentationRequest()
+    private var sequenceHandler = VNSequenceRequestHandler()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.addSubview(self.cameraView)
-        self.view.addSubview(self.boxView)
+        self.view.addSubview(self.faceBoxView)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.boxView.expandToSuperviewSize()
+        self.faceBoxView.expandToSuperviewSize()
         
         self.cameraView.expandToSuperviewSize()
     }
@@ -170,7 +174,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
 // MARK: - MTKViewDelegate
 
-extension FaceDetectionViewController: MTKViewDelegate {
+extension FaceImageCaptureViewController: MTKViewDelegate {
 
     func draw(in view: MTKView) {
         guard let metalView = view as? MetalView else { return }

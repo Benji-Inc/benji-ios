@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import Localization
 
+/// A view controller that gives feedback on selfies taken by the user.
 class FaceDisclosureViewController: DisclosureModalViewController {
 
     enum CaptureType {
