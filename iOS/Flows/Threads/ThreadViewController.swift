@@ -110,8 +110,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.initializeViews()
                 
         self.messageInputController.resetExpression()
-        
-        self.view.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.5)
 
         self.modalPresentationStyle = .overCurrentContext
 

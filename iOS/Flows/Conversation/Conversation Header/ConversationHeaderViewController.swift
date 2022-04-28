@@ -50,6 +50,8 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .removeDuplicates()
             .mainSink { [unowned self] conversation in
                 guard let convo = conversation else {
+                    self.topicLabel.text = nil
+                    self.membersLabel.text = nil 
                     self.topicLabel.isVisible = false
                     self.membersLabel.isVisible = false
                     self.chevronImageView.isVisible = false

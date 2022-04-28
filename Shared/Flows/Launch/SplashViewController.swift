@@ -18,7 +18,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     }
     
     /// A view to blur out the emotions collection view.
-    let blurView = BlurView()
+    let blurView = DarkBlurView()
     private lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: 100)
 
     let loadingView = AnimationView.with(animation: .loading)
