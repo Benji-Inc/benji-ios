@@ -240,8 +240,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
 
                 let object = SendableObject(kind: .text(suggestion.text),
                                             deliveryType: controller.message!.deliveryType,
-                                            expression: nil,
-                                            expressionURL: nil)
+                                            expression: nil)
                 
                 do {
                     try await controller.createNewReply(with: object)

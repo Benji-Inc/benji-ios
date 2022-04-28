@@ -26,7 +26,6 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.modalPresentationStyle = .overFullScreen
 
         self.addChild(viewController: self.faceCaptureVC)
-        #warning("Improve?")
         self.faceCaptureVC.faceBoxView.alpha = 1
 
         self.view.addSubview(self.tapView)
@@ -37,7 +36,7 @@ class ExpressionPhotoCaptureViewController: ViewController {
 
         self.faceCaptureVC.didCapturePhoto = { [unowned self] image in
             var finalImage = image
-            if let previewData = image.previewHeicData, let previewImage = UIImage(data: previewData) {
+            if let previewData = image.previewData, let previewImage = UIImage(data: previewData) {
                 finalImage = previewImage
             }
 

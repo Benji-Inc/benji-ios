@@ -24,9 +24,9 @@ enum PhotoState {
 
 class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
 
-    typealias ResultType = UIImage?
+    typealias ResultType = Void
 
-    var onDidComplete: ((Result<UIImage?, Error>) -> Void)?
+    var onDidComplete: ((Result<Void, Error>) -> Void)?
 
     // MARK: - Views
 
@@ -247,12 +247,11 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             cancellable.cancel()
         }
 
-        #warning("Don't return nil")
-        self.complete(with: .success(nil))
+        self.complete(with: .success(()))
     }
 
     private func updateUser(with image: UIImage) async {
-        guard let data = image.previewHeicData else { return }
+        guard let data = image.previewData else { return }
                 
         do {
             await UIView.awaitAnimation(with: .fast, animations: {

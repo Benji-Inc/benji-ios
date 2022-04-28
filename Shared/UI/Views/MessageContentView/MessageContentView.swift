@@ -263,8 +263,8 @@ class MessageContentView: BaseView {
         self.linkView.isVisible = message.kind.isLink
         self.emojiView.isVisible = message.expression.exists
         
-        if let expression = message.expression {
-            self.emojiView.set(text: expression)
+        if let emoji = message.expression?.emojiString {
+            self.emojiView.set(text: emoji)
         }
 
         self.dateView.configure(with: message)
@@ -307,9 +307,8 @@ class MessageContentView: BaseView {
             }
         }
 
-        #warning("Make more robust")
         if self.authorView.displayable.isNil {
-            if let expressionURL = message.expressionURL {
+            if let expressionURL = message.expression?.imageURL {
                 self.authorView.displayable = expressionURL
             } else {
                 self.authorView.set(person: message.person)

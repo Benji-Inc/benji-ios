@@ -272,8 +272,7 @@ class MessageCell: UICollectionViewCell {
         Task {
             let object = SendableObject(kind: .text(text),
                                         deliveryType: msg.deliveryType,
-                                        expression: nil,
-                                        expressionURL: nil)
+                                        expression: nil)
             try await controller.createNewReply(with: object)
             
             AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": text])

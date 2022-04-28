@@ -88,7 +88,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         switch self.captureType {
         case .smiling:
-            let file = PFFileObject(name:"small_image.png", data: data)
+            let file = PFFileObject(name:"small_image.heic", data: data)
             currentUser.smallImage = file
         }
 

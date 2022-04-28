@@ -145,16 +145,15 @@ extension Message: Messageable {
         return dictionary
     }
     
-    var expression: String? {
-        if let value = self.extraData["expression"],
-           case RawJSON.string(let string) = value {
-            return string
-        }
-        return nil
-    }
+    var expression: Expression? {
+        let expressionURL = self.expressionImageAttachments.first?.imageURL
 
-    var expressionURL: URL? {
-        return self.expressionImageAttachments.first?.imageURL
+        var emoji: Emoji? = nil
+        if let value = self.extraData["expression"], case RawJSON.string(let string) = value {
+            emoji = Emoji(with: string)
+        }
+
+        return Expression(imageURL: expressionURL, emoji: emoji)
     }
     
     static func message(with cid: ConversationId, messageId: MessageId) -> Message {

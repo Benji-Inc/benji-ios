@@ -12,8 +12,7 @@ import Intents
 protocol Sendable: AnyObject {
     var kind: MessageKind { get set }
     var deliveryType: MessageDeliveryType { get set }
-    var expression: Emoji? { get set }
-    var expressionURL: URL? { get set }
+    var expression: Expression? { get set }
     var previousMessage: Messageable? { get set }
     var isSendable: Bool { get }
 }
@@ -23,23 +22,20 @@ class SendableObject: Sendable {
     var kind: MessageKind
     var deliveryType: MessageDeliveryType
     var previousMessage: Messageable?
-    var expression: Emoji?
-    var expressionURL: URL?
+    var expression: Expression?
 
     var isSendable: Bool {
-        return self.kind.isSendable || self.expressionURL.exists
+        return self.kind.isSendable || self.expression.exists
     }
 
     init(kind: MessageKind,
          deliveryType: MessageDeliveryType,
-         expression: Emoji?,
-         expressionURL: URL?,
+         expression: Expression?,
          previousMessage: Messageable? = nil) {
 
         self.kind = kind
         self.deliveryType = deliveryType
         self.expression = expression
-        self.expressionURL = expressionURL
         self.previousMessage = previousMessage
     }
 }

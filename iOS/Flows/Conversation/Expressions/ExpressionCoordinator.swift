@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ExpressionCoordinator: PresentableCoordinator<URL?> {
+class ExpressionCoordinator: PresentableCoordinator<Expression?> {
 
     lazy var photoVC = ExpressionPhotoCaptureViewController()
 
@@ -27,7 +27,7 @@ class ExpressionCoordinator: PresentableCoordinator<URL?> {
                     break
                 }
                 let url = try? AttachmentsManager.shared.createTemporaryPngURL(for: expressionImage)
-                self.finishFlow(with: url)
+                self.finishFlow(with: Expression(imageURL: url, emoji: nil))
             case .failure:
                 break
             }

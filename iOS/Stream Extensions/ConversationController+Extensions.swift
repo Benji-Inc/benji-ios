@@ -163,7 +163,7 @@ extension ConversationController {
             throw(ClientError.apiError(detail: "Message type not supported."))
         }
 
-        if let expressionURL = sendable.expressionURL {
+        if let expressionURL = sendable.expression?.imageURL {
             let extraData: [String : RawJSON] = ["isExpression" : .bool(true)]
             let expressionAttachment = try AnyAttachmentPayload(localFileURL: expressionURL,
                                                                  attachmentType: .image,
@@ -200,8 +200,8 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation { continuation in
             var data = extraData
-            if let expression = sendable.expression {
-                data["expression"] = .string(expression.emoji)
+            if let emoji = sendable.expression?.emojiString {
+                data["expression"] = .string(emoji)
             }
             data["context"] = .string(sendable.deliveryType.rawValue)
             self.createNewMessage(text: text,
@@ -365,8 +365,8 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation({ continuation in
             var data = extraData
-            if let expression = sendable.expression {
-                data["expression"] = .string(expression.emoji)
+            if let emoji = sendable.expression?.emojiString {
+                data["expression"] = .string(emoji)
             }
             data["context"] = .string(sendable.deliveryType.rawValue)
             messageController.createNewReply(text: text,
