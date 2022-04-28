@@ -131,6 +131,9 @@ class MessageContentView: BaseView {
 
         // Make sure the author, date and emoji view are on top of the other content
         self.mainContentArea.addSubview(self.authorView)
+        self.authorView.set(backgroundColor: .B6)
+        self.authorView.layer.cornerRadius = Theme.innerCornerRadius
+        
         self.mainContentArea.addSubview(self.deliveryView)
         self.deliveryView.contentMode = .scaleAspectFit
         self.deliveryView.alpha = 0.6

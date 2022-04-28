@@ -57,12 +57,15 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         self.view.addSubview(self.personView)
         self.personView.state = .loading
         self.personView.tintColor = .white
+        self.personView.layer.borderColor = ThemeColor.white.color.cgColor
+        self.personView.layer.borderWidth = 2
+        self.personView.layer.cornerRadius = Theme.cornerRadius
 
         self.titleLabel.setText("Uploading")
 
         self.button.isHidden = true
         self.contentView.addSubview(self.button)
-        self.button.set(style: .normal(color: .B0, text: "Next"))
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Next"))
     }
 
     override func viewDidLayoutSubviews() {
