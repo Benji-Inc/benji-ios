@@ -261,7 +261,7 @@ class MessageContentView: BaseView {
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
         self.imageView.isVisible = message.kind.isImage
         self.linkView.isVisible = message.kind.isLink
-        self.emojiView.isVisible = message.expression.exists
+        self.emojiView.isVisible = message.expression?.emoji != nil
         
         if let emoji = message.expression?.emojiString {
             self.emojiView.set(text: emoji)

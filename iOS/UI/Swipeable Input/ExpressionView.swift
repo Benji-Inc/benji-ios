@@ -42,33 +42,8 @@ class ExpressionView: BaseView {
         self.imageView.centerOnXAndY()
     }
 
-//    func configure(for message: Messageable) {
-//        let controller = ChatClient.shared.messageController(for: message)
-//
-//        guard let data = controller?.message?.extraData["expression"] else {
-//            self.isVisible = false
-//            return
-//        }
-//
-//        guard case .array(let JSONObjects) = data, let expressionJSON = JSONObjects.first else {
-//            self.isVisible = false
-//            return
-//        }
-//
-//        guard case .string(let value) = expressionJSON, let emoji = EmojiCategory.allEmojis.first(where: { emoji in
-//            return emoji.emoji == value
-//        }) else {
-//            self.isVisible = false
-//            return
-//        }
-//
-//        self.isVisible = true
-//        self.configure(for: emoji)
-//
-//    }
-
     func configure(with expression: Expression?) {
-
+        self.isVisible = expression.exists
     }
 
     private func configure(for emoji: Emoji?) {
