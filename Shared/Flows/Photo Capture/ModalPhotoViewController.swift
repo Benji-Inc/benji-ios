@@ -8,7 +8,8 @@
 
 import Foundation
 
-class ModalPhotoViewController: PhotoViewController {
+/// A profile photo view controller with a popopver presentation style.
+class ModalPhotoViewController: ProfilePhotoCaptureViewController {
     
     private let label = ThemeLabel(font: .small, textColor: .B0)
     

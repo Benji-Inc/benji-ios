@@ -10,7 +10,7 @@ import Foundation
 
 class ExpressionCoordinator: PresentableCoordinator<URL?> {
 
-    lazy var photoVC = PhotoViewController()
+    lazy var photoVC = ExpressionPhotoCaptureViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.photoVC

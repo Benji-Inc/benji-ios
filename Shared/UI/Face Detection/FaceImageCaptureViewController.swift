@@ -14,15 +14,16 @@ import MetalKit
 import CoreImage.CIFilterBuiltins
 
 /// A view controller that allows a user to capture an image of their face.
+/// A live preview of the camera is shown on the main view.
 class FaceImageCaptureViewController: ViewController {
 
     var didCapturePhoto: ((UIImage) -> Void)?
 
-    @Published var faceDetected = false
-    @Published var eyesAreClosed = false
-    @Published var isSmiling = false
+    @Published private(set) var faceDetected = false
+    @Published private(set) var eyesAreClosed = false
+    @Published private(set) var isSmiling = false
 
-    var currentCIImage: CIImage? {
+    private var currentCIImage: CIImage? {
         didSet {
             self.cameraView.draw()
         }
@@ -39,7 +40,7 @@ class FaceImageCaptureViewController: ViewController {
 
     let orientation: CGImagePropertyOrientation = .left
 
-    let faceCaptureSession = PhotoCaptureSession()
+    private let faceCaptureSession = PhotoCaptureSession()
 
     /// A request to separate a person from the background in an image.
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
@@ -59,6 +60,22 @@ class FaceImageCaptureViewController: ViewController {
 
         self.cameraView.expandToSuperviewSize()
         self.faceBoxView.expandToSuperviewSize()
+    }
+
+    // MARK: - Photo Capture Session
+
+    /// Returns true if the underlaying photo capture session is running.
+    var isSessionRunning: Bool {
+        return self.faceCaptureSession.session.isRunning
+    }
+
+    /// Starts the face capture session so that we can display the photo preview and capture a photo.
+    func beginSession() {
+        self.faceCaptureSession.begin()
+    }
+
+    func capturePhoto() {
+        self.faceCaptureSession.capturePhoto()
     }
 }
 

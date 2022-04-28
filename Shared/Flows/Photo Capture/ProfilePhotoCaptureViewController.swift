@@ -22,21 +22,18 @@ enum PhotoState {
     case finish
 }
 
-class PhotoViewController: ViewController, Sizeable, Completable {
+class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
 
-    typealias ResultType = Void
+    typealias ResultType = UIImage?
 
-    var onDidComplete: ((Result<Void, Error>) -> Void)?
+    var onDidComplete: ((Result<UIImage?, Error>) -> Void)?
 
-    let errorView = ErrorView()
-    private var errorOffset: CGFloat = -100
+    /// If true, the person must be smiling to capture a photo
+    var requireSmileForCapture = true
+
+    // MARK: - Views
 
     lazy var faceCaptureVC = FaceImageCaptureViewController()
-    
-    override var analyticsIdentifier: String? {
-        return "SCREEN_PHOTO"
-    }
-
     private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
         let vc = FaceDisclosureViewController(with: .smiling)
         vc.dismissHandlers.append { [unowned self] in
@@ -47,13 +44,24 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
         return vc
     }()
-
     private var tapView = BaseView()
-
     private let animationView = AnimationView.with(animation: .faceScan)
-    private var previousScanState: PhotoState = .scanEyesOpen
 
+    let errorView = PhotoErrorView()
+    private var errorOffset: CGFloat = -100
+
+    // MARK: - Analytics
+
+    override var analyticsIdentifier: String? {
+        return "SCREEN_PHOTO"
+    }
+
+    // MARK: - State
+
+    private var previousScanState: PhotoState = .scanEyesOpen
     @Published var currentState: PhotoState = .initial
+
+    // MARK: - Life Cycle
 
     override func initializeViews() {
         super.initializeViews()
@@ -86,14 +94,15 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.faceCaptureVC.didCapturePhoto = { [unowned self] image in
             switch self.currentState {
             case .captureEyesOpen:
-                if self.faceCaptureVC.isSmiling {
+                // If the user needs to smile, let them know.
+                if self.requireSmileForCapture && !self.faceCaptureVC.isSmiling {
+                    self.handleNotSmiling()
+                } else {
+                    // Otherwise, send the image to the completion handler
                     self.currentState = .didCaptureEyesOpen
                     self.animateError(with: nil, show: false)
-                    Task {
-                        await self.updateUser(with: image)
-                    }.add(to: self.autocancelTaskPool)
-                } else {
-                    self.handleNotSmiling()
+
+                    self.onDidComplete?(.success(image))
                 }
             default:
                 break
@@ -207,8 +216,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleScanState() {
-        if !self.faceCaptureVC.faceCaptureSession.session.isRunning {
-            self.faceCaptureVC.faceCaptureSession.begin()
+        if !self.faceCaptureVC.isSessionRunning {
+            self.faceCaptureVC.beginSession()
         }
 
         UIView.animate(withDuration: 0.2, animations: {
@@ -219,7 +228,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleCaptureState() {
-        self.faceCaptureVC.faceCaptureSession.capturePhoto()
+        self.faceCaptureVC.capturePhoto()
     }
 
     private func animateError(with message: String?, show: Bool) {
@@ -240,7 +249,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             cancellable.cancel()
         }
 
-        self.complete(with: .success(()))
+        #warning("Don't return nil")
+        self.complete(with: .success(nil))
     }
 
     private func updateUser(with image: UIImage) async {
@@ -278,7 +288,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 }
 
-class ErrorView: BaseView {
+
+class PhotoErrorView: BaseView {
 
     let label = ThemeLabel(font: .smallBold, textColor: .red)
     private let blurView = BlurView()

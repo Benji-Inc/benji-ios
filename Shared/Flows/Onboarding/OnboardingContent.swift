@@ -17,7 +17,7 @@ enum OnboardingContent: Switchable {
     case phone(PhoneViewController)
     case code(CodeViewController)
     case name(NameViewController)
-    case photo(PhotoViewController)
+    case photo(ProfilePhotoCaptureViewController)
 
     var viewController: UIViewController & Sizeable {
         switch self {
