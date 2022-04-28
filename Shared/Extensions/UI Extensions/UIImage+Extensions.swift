@@ -57,11 +57,7 @@ extension UIImage {
     }
 
     var previewData: Data? {
-        logDebug("initial size was \(Float(self.pngData()!.count)/1_000_000)")
-        let data = try? self.imageWith(maxSideLength: 200).heicData(compressionQuality: 0.1)
-        logDebug("reduced size was \(Float(data!.count)/1_000_000)")
-
-        return data
+        return try? self.imageWith(maxSideLength: 200).heicData(compressionQuality: 0.1)
     }
 }
 

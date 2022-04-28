@@ -10,8 +10,5 @@ import Foundation
 
 struct Expression {
     var imageURL: URL?
-    var emoji: Emoji?
-    var emojiString: String? {
-        return self.emoji?.emoji
-    }
+    var emojiString: String?
 }

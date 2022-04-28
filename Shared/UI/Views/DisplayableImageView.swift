@@ -185,7 +185,12 @@ class DisplayableImageView: BaseView {
     @MainActor
     func set(image: UIImage?, state: State) async {
         self.state = state
-        self.imageView.image = await image?.byPreparingForDisplay()
+
+        if let preparedImage = await image?.byPreparingForDisplay() {
+            self.imageView.image = preparedImage
+        } else {
+            self.imageView.image = image
+        }
 
         self.setNeedsLayout()
     }

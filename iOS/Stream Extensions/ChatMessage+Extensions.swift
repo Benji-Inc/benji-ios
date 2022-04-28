@@ -148,12 +148,12 @@ extension Message: Messageable {
     var expression: Expression? {
         let expressionURL = self.expressionImageAttachments.first?.imageURL
 
-        var emoji: Emoji? = nil
+        var emojiString: String? = nil
         if let value = self.extraData["expression"], case RawJSON.string(let string) = value {
-            emoji = Emoji(with: string)
+            emojiString = string
         }
 
-        return Expression(imageURL: expressionURL, emoji: emoji)
+        return Expression(imageURL: expressionURL, emojiString: emojiString)
     }
     
     static func message(with cid: ConversationId, messageId: MessageId) -> Message {

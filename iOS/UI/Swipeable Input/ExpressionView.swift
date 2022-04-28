@@ -47,11 +47,11 @@ class ExpressionView: BaseView {
     func configure(with expression: Expression?) {
         self.expressionImageView.displayable = expression?.imageURL
         self.expressionImageView.isVisible = expression?.imageURL != nil
-        self.configure(for: expression?.emoji)
+        self.configure(forEmojiString: expression?.emojiString)
     }
 
-    private func configure(for emoji: Emoji?) {
-        if let e = emoji?.emoji {
+    private func configure(forEmojiString string: String?) {
+        if let e = string {
             self.label.setText(e)
             self.label.isVisible = true
             self.imageView.isVisible = false
