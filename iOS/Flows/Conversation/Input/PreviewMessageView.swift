@@ -40,7 +40,7 @@ class PreviewMessageView: SpeechBubbleView {
         self.textView.textAlignment = .left
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
         self.addSubview(self.imageView)
-        
+
         self.imageView.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
         self.imageView.layer.borderWidth = 2
         self.imageView.layer.masksToBounds = true
@@ -88,17 +88,13 @@ class PreviewMessageView: SpeechBubbleView {
         self.expressionView.squaredSize = 40
         self.imageView.squaredSize = 40
 
-        var maxWidth: CGFloat
-        = self.width - self.expressionView.width - self.imageView.width - Theme.ContentOffset.long.value.doubled
-        
-        if self.imageView.isHidden {
-            maxWidth = self.width - Theme.ContentOffset.long.value
-        }
+        let maxWidth: CGFloat
+        = self.width - self.expressionView.width - self.imageView.width - Theme.ContentOffset.long.value
 
         self.expressionView.pin(.left, offset: .long)
         self.expressionView.pin(.bottom, offset: .long)
         
-        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height)
+        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height + Theme.ContentOffset.long.value)
         self.textView.match(.left, to: .right, of: self.expressionView)
         self.textView.center.y = self.halfHeight
 
