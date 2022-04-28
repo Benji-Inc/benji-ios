@@ -82,7 +82,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         self.loadConversationTask?.cancel()
         
         self.loadConversationTask = Task { [weak self] in
-            guard let `self` = self, let unreadMessageId = item.messageIds.first else { return }
+            guard let `self` = self else { return }
             
             if self.conversationController?.cid != item.cid {
                 self.conversationController = ChatClient.shared.channelController(for: item.cid)
@@ -102,7 +102,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
             guard !Task.isCancelled else { return }
             
             if let latest = self.conversationController?.conversation?.messages.first(where: { message in
-                return !message.isDeleted && message.id == unreadMessageId
+                return !message.isDeleted && message.canBeConsumed
             }) {
                 self.update(for: latest)
             } else {

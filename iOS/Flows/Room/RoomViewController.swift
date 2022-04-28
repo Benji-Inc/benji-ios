@@ -256,11 +256,20 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
                 return system.notice?.type == .unreadMessages
             }), let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
-                if let cid = try? ConversationId(cid: dict.key), ChatClient.shared.channelController(for: cid).conversation.exists {
+                if let cid = try? ConversationId(cid: dict.key),
+                    let conversation = ChatClient.shared.channelController(for: cid).conversation,
+                   conversation.totalUnread > 0 {
                     return UnreadMessagesModel(cid: cid, messageIds: dict.value)
                 }
                 return nil
             }) {
+                
+                if models.isEmpty {
+                    var snapshot = self.dataSource.snapshot()
+                    snapshot.setItems([.empty], in: .conversations)
+                    await self.dataSource.apply(snapshot)
+                    return 
+                }
                                 
                 let conversationIds = models.compactMap { model in
                     return model.cid

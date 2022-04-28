@@ -2641,6 +2641,7 @@
 			isa = PBXGroup;
 			children = (
 				D60B887227F7732100B3E1C2 /* NoticeCell.swift */,
+				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
 				D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */,
 				D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */,
 				D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */,
@@ -2649,10 +2650,9 @@
 				D60B887627F7CB1300B3E1C2 /* RoomCoordinator+Presentation.swift */,
 				D60B886C27F6206C00B3E1C2 /* RoomHeaderView.swift */,
 				D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */,
-				D60B887A27F8A13A00B3E1C2 /* SectionDividerView.swift */,
 				D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */,
 				D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */,
-				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
+				D60B887A27F8A13A00B3E1C2 /* SectionDividerView.swift */,
 			);
 			path = Room;
 			sourceTree = "<group>";
