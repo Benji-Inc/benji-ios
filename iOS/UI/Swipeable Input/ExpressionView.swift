@@ -46,6 +46,7 @@ class ExpressionView: BaseView {
 
     func configure(with expression: Expression?) {
         self.expressionImageView.displayable = expression?.imageURL
+        self.expressionImageView.isVisible = expression?.imageURL != nil
         self.configure(for: expression?.emoji)
     }
 
