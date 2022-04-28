@@ -79,11 +79,22 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
+        self.headerView.update(person: User.current()!)
         self.startLoadRecentTask()
         self.subscribeToUpdates()
     }
     
     private func subscribeToUpdates() {
+        
+        PeopleStore.shared.$personUpdated
+            .filter({ type in
+                guard let t = type else { return false }
+                return t.isCurrentUser
+            })
+            .mainSink { [unowned self] person in
+                guard let person = person else { return }
+                self.headerView.update(person: person)
+        }.store(in: &self.cancellables)
         
         PeopleStore.shared.$personDeleted.mainSink { [unowned self] _ in
             self.reloadPeople()

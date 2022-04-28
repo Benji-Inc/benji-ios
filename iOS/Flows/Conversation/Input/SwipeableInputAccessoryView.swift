@@ -84,6 +84,7 @@ class SwipeableInputAccessoryView: BaseView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        self.avatarView.contextCueView.currentSize = .small
         self.expressionView.configure(for: nil)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
     }
