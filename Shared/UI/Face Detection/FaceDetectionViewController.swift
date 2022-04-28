@@ -112,7 +112,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
             // Increase the bounds around the face so it's not too zoomed in.
             var adjustedFaceBounds = face.bounds
-            adjustedFaceBounds.size.height = face.bounds.height * 1.8
+            adjustedFaceBounds.size.height = face.bounds.height * 2.2
             adjustedFaceBounds.size.width = adjustedFaceBounds.height
             adjustedFaceBounds.centerY = face.bounds.centerY + face.bounds.height * 0.2
             adjustedFaceBounds.centerX = face.bounds.centerX
@@ -152,7 +152,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
         // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
 
-        let filter = CIFilter(name: "CIPhotoEffectMono")
+        let filter = CIFilter(name: "CIPhotoEffectNoir")
         filter?.setValue(originalImage, forKey: "inputImage")
 
         guard let bwImage = filter?.outputImage else { return }

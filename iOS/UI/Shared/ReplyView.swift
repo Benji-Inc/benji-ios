@@ -10,7 +10,7 @@ import Foundation
 
 class ReplyView: BaseView {
 
-    let personView = BorderedPersonView()
+    let personView = PersonGradientView()
     let dateLabel = MessageDateLabel(font: .xtraSmall)
     let label = ThemeLabel(font: .small)
     let imageView = UIImageView()
@@ -67,7 +67,9 @@ class ReplyView: BaseView {
         }
         
         self.imageView.image = message.deliveryType.image
-        self.personView.set(person: message.person)
+        self.personView.set(person: message.person,
+                            emotionCounts: message.emotionCounts,
+                            defaultColors: [.B0, .B1])
         self.dateLabel.configure(with: message)
         self.layoutNow()
     }

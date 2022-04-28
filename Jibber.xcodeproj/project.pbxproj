@@ -877,6 +877,8 @@
 		D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFA27C5B4EC00BDCD01 /* UserConversationsDataSource.swift */; };
 		D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFC27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift */; };
 		D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */; };
+		D6D9ECBD281AFA0C000C5C46 /* PersonGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */; };
+		D6D9ECBE281B0C6D000C5C46 /* GradientPassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientPassThroughView.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D6DEC3ED27A1D9520072D9D0 /* RoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */; };
 		D6DEC3EF27A1DA5D0072D9D0 /* RoomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */; };
@@ -1413,6 +1415,7 @@
 		D6D96EFA27C5B4EC00BDCD01 /* UserConversationsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversationsDataSource.swift; sourceTree = "<group>"; };
 		D6D96EFC27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversationsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsSegmentControl.swift; sourceTree = "<group>"; };
+		D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonGradientView.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewController.swift; sourceTree = "<group>"; };
 		D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCoordinator.swift; sourceTree = "<group>"; };
@@ -2193,8 +2196,7 @@
 				D6E974302752B4B000D95F08 /* MessageContentView */,
 				D60CA47327ED1C1800F0871A /* OptionCell.swift */,
 				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
-				D66F0FE122C041AF00BA277D /* PersonView.swift */,
-				D650C1E025B5F1730037C59A /* PersonView+Extensions.swift */,
+				D6D9ECBB281AF9F6000C5C46 /* Person Views */,
 				D6850D592798967E001327D3 /* PullView.swift */,
 				D646D36F27E544990077D20B /* SectionHeaderView.swift */,
 				D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */,
@@ -2623,6 +2625,16 @@
 				D6D96EFA27C5B4EC00BDCD01 /* UserConversationsDataSource.swift */,
 			);
 			path = "User Conversation List";
+			sourceTree = "<group>";
+		};
+		D6D9ECBB281AF9F6000C5C46 /* Person Views */ = {
+			isa = PBXGroup;
+			children = (
+				D66F0FE122C041AF00BA277D /* PersonView.swift */,
+				D650C1E025B5F1730037C59A /* PersonView+Extensions.swift */,
+				D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */,
+			);
+			path = "Person Views";
 			sourceTree = "<group>";
 		};
 		D6DEC3EB27A1D9370072D9D0 /* Room */ = {
@@ -3318,6 +3330,7 @@
 				D61128372804DBE700574B96 /* Task+TaskPool.swift in Sources */,
 				D6180E5A280780B80007363F /* ModalTransitionController.swift in Sources */,
 				D61128442804DBEE00574B96 /* UIScreen+Extensions.swift in Sources */,
+				D6D9ECBE281B0C6D000C5C46 /* GradientPassThroughView.swift in Sources */,
 				D61128652804DC4E00574B96 /* LaunchManager.swift in Sources */,
 				D61128BB2804EAF000574B96 /* CollectionViewManagerCell.swift in Sources */,
 				D61128712804DC6D00574B96 /* EventLog.swift in Sources */,
@@ -3432,6 +3445,7 @@
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D60B885627F231E000B3E1C2 /* MessageTopOptionCell.swift in Sources */,
 				D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
+				D6D9ECBD281AFA0C000C5C46 /* PersonGradientView.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				80D5C290281719BF00182DB6 /* EmotionDetailCollectionViewDataSource.swift in Sources */,
 				D60CA47827EE299A00F0871A /* EmojiPickerViewController.swift in Sources */,
