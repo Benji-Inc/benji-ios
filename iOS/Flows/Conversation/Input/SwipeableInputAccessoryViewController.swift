@@ -51,6 +51,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     // MARK: - Message State
 
     @Published var currentExpression: Emoji?
+    @Published var expressionImageURL: URL?
 
     var editableMessage: Messageable?
     @Published var currentMessageKind: MessageKind = .text(String())
@@ -75,7 +76,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     
     func resetExpression() {
         self.currentExpression = nil
-        self.swipeInputView.expressionView.configure(for: nil)
+        self.expressionImageURL = nil
     }
 
     private lazy var panRecognizer
@@ -169,6 +170,11 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         
         self.$currentExpression.mainSink { [unowned self] value in
             self.swipeInputView.expressionView.configure(for: value)
+        }.store(in: &self.cancellables)
+
+        self.$expressionImageURL.mainSink { [unowned self] url in
+            #warning("Show the expression image")
+//            self.swipeInputView.expressionView.configure(for: value)
         }.store(in: &self.cancellables)
         
         self.$currentMessageKind

@@ -42,6 +42,7 @@ protocol Messageable {
 
     var emotionCounts: [Emotion : Int] { get }
     var expression: String? { get }
+    var expressionURL: URL? { get }
 
     func setToConsumed() async 
     func setToUnconsumed() async throws

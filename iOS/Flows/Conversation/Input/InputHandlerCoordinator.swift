@@ -162,12 +162,13 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     func handle(attachmentOption option: AttachmentOption) {
         switch option {
-        case .attachments(let array):
-            guard let first = array.first else { return }
+        case .attachments(let attachments):
+            guard let firstAttachment = attachments.first else { return }
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             Task.onMainActorAsync {
                 guard let kind
-                        = try? await AttachmentsManager.shared.getMessageKind(for: first, body: text) else { return }
+                        = try? await AttachmentsManager.shared.getMessageKind(for: firstAttachment,
+                                                                              body: text) else { return }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }

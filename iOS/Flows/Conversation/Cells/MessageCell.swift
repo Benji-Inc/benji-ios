@@ -56,7 +56,6 @@ class MessageCell: UICollectionViewCell {
     }
 
     private func initializeViews() {
-        
         self.contentView.layer.insertSublayer(self.shadowLayer, at: 0)
         self.contentView.addSubview(self.content)
 
@@ -272,7 +271,8 @@ class MessageCell: UICollectionViewCell {
         Task {
             let object = SendableObject(kind: .text(text),
                                         deliveryType: msg.deliveryType,
-                                        expression: nil)
+                                        expression: nil,
+                                        expressionURL: nil)
             try await controller.createNewReply(with: object)
             
             AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": text])

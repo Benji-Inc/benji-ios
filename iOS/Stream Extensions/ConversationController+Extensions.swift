@@ -149,12 +149,18 @@ extension ConversationController {
         switch sendable.kind {
         case .text(let text):
             messageBody = text
+
+            let attachment
+            = try AnyAttachmentPayload(localFileURL: URL(fileURLWithPath: "file:///var/mobile/Media/DCIM/101APPLE/IMG_1261.HEIC"),
+                                       attachmentType: AttachmentType(rawValue: "expression"))
+            attachments.append(attachment)
         case .photo(let item, let body):
             if let url = item.url {
-                let attachement = try AnyAttachmentPayload(localFileURL: url,
-                                                           attachmentType: .image,
-                                                           extraData: nil)
-                attachments.append(attachement)
+                let extraData: [String : RawJSON] = ["isExpression" : .bool(true)]
+                let attachment = try AnyAttachmentPayload(localFileURL: url,
+                                                          attachmentType: .image,
+                                                          extraData: extraData)
+                attachments.append(attachment)
             }
             messageBody = body
         case .link(_, let stringURL):
@@ -225,10 +231,14 @@ extension ConversationController {
         
         switch sendable.deliveryType {
         case .timeSensitive:
-            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Message delivered. Will notify all members of this conversation."))
+            await ToastScheduler.shared
+                .schedule(toastType: .success(sendable.deliveryType.image!,
+                                              "Message delivered. Will notify all members of this conversation."))
             
         case .conversational:
-            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Message delivered. Will attempt to notify all members of this conversation."))
+            await ToastScheduler.shared
+                .schedule(toastType: .success(sendable.deliveryType.image!,
+                                              "Message delivered. Will attempt to notify all members of this conversation."))
         
         case .respectful:
             break
