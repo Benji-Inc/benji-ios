@@ -11,4 +11,5 @@ import Foundation
 struct Expression {
     var imageURL: URL?
     var emojiString: String?
+    var emotionCounts: [Emotion: Int] = [:]
 }

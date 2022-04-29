@@ -29,6 +29,15 @@ class PersonGradientView: DisplayableImageView {
     }
     
     // MARK: - Open setters
+    
+    func set(expression: Expression, defaultColors: [ThemeColor] = [.B0, .B6]) {
+        
+        if let expressionURL = expression.imageURL {
+            self.set(person: expressionURL, emotionCounts: expression.emotionCounts)
+        } else {
+            self.set(person: User.current()!, emotionCounts: expression.emotionCounts)
+        }
+    }
 
     func set(person: ImageDisplayable?,
              emotionCounts: [Emotion: Int],

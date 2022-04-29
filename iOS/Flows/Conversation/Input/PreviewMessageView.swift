@@ -12,7 +12,7 @@ import Combine
 class PreviewMessageView: SpeechBubbleView {
 
     private let minHeight: CGFloat = 52
-    private let expressionView = ExpressionView()
+    private let personGradientView = PersonGradientView()
     let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
     private let deliveryTypeView = MessageDeliveryTypeBadgeView()
@@ -34,7 +34,7 @@ class PreviewMessageView: SpeechBubbleView {
         
         self.tailLength = 0
 
-        self.addSubview(self.expressionView)
+        self.addSubview(self.personGradientView)
 
         self.addSubview(self.textView)
         self.textView.textAlignment = .left
@@ -85,17 +85,17 @@ class PreviewMessageView: SpeechBubbleView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.expressionView.squaredSize = 40
+        self.personGradientView.squaredSize = 40
         self.imageView.squaredSize = 40
 
         let maxWidth: CGFloat
-        = self.width - self.expressionView.width - self.imageView.width - Theme.ContentOffset.long.value
+        = self.width - self.personGradientView.width - self.imageView.width - Theme.ContentOffset.long.value
 
-        self.expressionView.pin(.left, offset: .long)
-        self.expressionView.pin(.bottom, offset: .long)
+        self.personGradientView.pin(.left, offset: .long)
+        self.personGradientView.pin(.bottom, offset: .long)
         
         self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height + Theme.ContentOffset.long.value)
-        self.textView.match(.left, to: .right, of: self.expressionView)
+        self.textView.match(.left, to: .right, of: self.personGradientView)
         self.textView.center.y = self.halfHeight
 
         self.imageView.centerOnX()
@@ -107,7 +107,12 @@ class PreviewMessageView: SpeechBubbleView {
     }
 
     func set(expression: Expression?) {
-        self.expressionView.isVisible = expression.exists
-        self.expressionView.configure(with: expression)
+        self.personGradientView.isVisible = expression.exists
+        
+        guard let expression = expression else {
+            return
+        }
+        
+        self.personGradientView.set(expression: expression)
     }
 }

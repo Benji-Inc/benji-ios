@@ -10,11 +10,10 @@ import Foundation
 import UIKit
 import StreamChat
 
-class ExpressionView: BaseView {
+class AddExpressionView: BaseView {
         
     let imageView = UIImageView(image: UIImage(systemName: "face.smiling"))
-    let expressionImageView = DisplayableImageView()
-    let label = ThemeLabel(font: .contextCues)
+    let personGradientView = PersonGradientView()
         
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -25,9 +24,7 @@ class ExpressionView: BaseView {
         self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
         self.imageView.contentMode = .scaleAspectFit
 
-        self.addSubview(self.expressionImageView)
-
-        self.addSubview(self.label)
+        self.addSubview(self.personGradientView)
         
         self.clipsToBounds = false
     }
@@ -35,31 +32,19 @@ class ExpressionView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.label.setSize(withWidth: self.width)
-        self.label.centerOnXAndY()
-
-        self.expressionImageView.expandToSuperviewSize()
+        self.personGradientView.expandToSuperviewSize()
 
         self.imageView.squaredSize = self.width * 0.8
         self.imageView.centerOnXAndY()
     }
 
     func configure(with expression: Expression?) {
-        self.expressionImageView.displayable = expression?.imageURL
-        self.expressionImageView.isVisible = expression?.imageURL != nil
-        self.configure(forEmojiString: expression?.emojiString)
-    }
-
-    private func configure(forEmojiString string: String?) {
-        if let e = string {
-            self.label.setText(e)
-            self.label.isVisible = true
-            self.imageView.isVisible = false
-        } else {
-            self.label.isVisible = false
-            self.imageView.isVisible = true
+        self.personGradientView.isVisible = expression.exists
+        
+        guard let expression = expression else {
+            return
         }
 
-        self.setNeedsLayout()
+        self.personGradientView.set(expression: expression)
     }
 }

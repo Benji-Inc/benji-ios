@@ -30,7 +30,7 @@ class SwipeableInputAccessoryView: BaseView {
 
     /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
-    @IBOutlet var expressionView: ExpressionView!
+    @IBOutlet var expressionView: AddExpressionView!
     
     // MARK: - Layout/Animation Properties
 
