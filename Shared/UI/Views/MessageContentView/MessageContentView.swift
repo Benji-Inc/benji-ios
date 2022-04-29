@@ -289,15 +289,6 @@ class MessageContentView: BaseView {
             }
         }
 
-        // An optimization so that the expression doesn't reload when the message finishes sending.
-        if self.authorView.displayable.isNil {
-            if let expressionURL = message.expression?.imageURL {
-                self.authorView.displayable = expressionURL
-            } else {
-                self.authorView.set(person: message.person)
-            }
-        }
-
         let emotionCounts = message.emotionCounts
         // Only animate changes to the emotion when they're not blurred out.
         let isAnimated = self.areEmotionsShown
@@ -306,7 +297,15 @@ class MessageContentView: BaseView {
             self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
         }
         self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
-        self.authorView.set(person: message.person, emotionCounts: emotionCounts)
+
+        // An optimization so that the expression doesn't reload when the message finishes sending.
+        if self.authorView.displayable.isNil {
+            if let expressionURL = message.expression?.imageURL {
+                self.authorView.set(person: expressionURL, emotionCounts: emotionCounts)
+            } else {
+                self.authorView.set(person: message.person, emotionCounts: emotionCounts)
+            }
+        }
 
         self.setNeedsLayout()
     }

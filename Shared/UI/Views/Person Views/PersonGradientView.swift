@@ -30,7 +30,7 @@ class PersonGradientView: DisplayableImageView {
     
     // MARK: - Open setters
 
-    func set(person: PersonType?,
+    func set(person: ImageDisplayable?,
              emotionCounts: [Emotion: Int],
              defaultColors: [ThemeColor] = [.B0, .B6]) {
         self.displayable = person
