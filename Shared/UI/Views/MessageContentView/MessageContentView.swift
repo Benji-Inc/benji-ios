@@ -151,20 +151,20 @@ class MessageContentView: BaseView {
         }
 
         self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            guard let message = self.message else { return }
+            guard let message = self.message, let cid = message.streamCid else { return }
             self.delegate?.messageContent(self,
                                           didTapEmotion: emotion,
-                                          forMessage: (message.streamCid, message.id))
+                                          forMessage: (cid, message.id))
         }
         
         self.imageView.didSelect { [unowned self] in
-            guard let message = self.message else { return }
-            self.delegate?.messageContent(self, didTapAttachmentForMessage: (message.streamCid, message.id))
+            guard let message = self.message, let cid = message.streamCid else { return }
+            self.delegate?.messageContent(self, didTapAttachmentForMessage: (cid, message.id))
         }
         
         self.addEmotionButton.didSelect { [unowned self] in
-            guard let message = self.message else { return }
-            self.delegate?.messageContent(self, didTapAddEmotionsForMessage: (message.streamCid, message.id))
+            guard let message = self.message, let cid = message.streamCid else { return }
+            self.delegate?.messageContent(self, didTapAddEmotionsForMessage: (cid, message.id))
         }
     }
 

@@ -63,6 +63,7 @@ class ReplyView: BaseView {
         if message.kind.hasText {
             self.label.setText(message.kind.text)
         } else {
+            //
             self.label.setText("View reply")
         }
         

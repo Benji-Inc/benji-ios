@@ -93,4 +93,18 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
             break
         }
     }
+    
+    override func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
+        let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
+                                                    startURL: startingURL,
+                                                    body: body,
+                                                    router: self.router,
+                                                    deepLink: self.deepLink)
+        self.threadVC.isPresentingImage = true
+        self.present(imageCoordinator) { [unowned self] _ in
+            self.threadVC.isPresentingImage = false
+        } cancelHandler: { [unowned self] in 
+            self.threadVC.isPresentingImage = false
+        }
+    }
 }
