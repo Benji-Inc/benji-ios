@@ -823,6 +823,7 @@
 		D6BF814D2721EE9B006D7760 /* ToastQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQueue.swift */; };
 		D6BF814F2721EEBF006D7760 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
 		D6BF81512721EEE1006D7760 /* ToastBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastBannerView.swift */; };
+		D6C31EAC281C66CB00FF6C56 /* ExpressionCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C31EAB281C66CB00FF6C56 /* ExpressionCreationViewController.swift */; };
 		D6C3892F2724B8E5004D29D5 /* MessageDeliveryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageDeliveryType.swift */; };
 		D6C389312724B8F9004D29D5 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6C3893627287307004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893527287307004D29D5 /* StreamChat */; };
@@ -1380,6 +1381,7 @@
 		D6B95AF2272324BD00FBE66A /* PeopleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleStore.swift; sourceTree = "<group>"; };
 		D6B95AF627236E1000FBE66A /* ConversationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsManager.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
+		D6C31EAB281C66CB00FF6C56 /* ExpressionCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCreationViewController.swift; sourceTree = "<group>"; };
 		D6C4BD3F27C95E8400579014 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
 		D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeFooterView.swift; sourceTree = "<group>"; };
@@ -1702,6 +1704,7 @@
 			children = (
 				D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */,
 				D60CA48027EE74FC00F0871A /* ExpressionViewController.swift */,
+				D6C31EAB281C66CB00FF6C56 /* ExpressionCreationViewController.swift */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -3660,6 +3663,7 @@
 				809EDC6C273ECEF000597473 /* ConversationListViewController+Extensions.swift in Sources */,
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
 				D6CC148D276C003E005F617F /* View+Extensions.swift in Sources */,
+				D6C31EAC281C66CB00FF6C56 /* ExpressionCreationViewController.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				807A7BC526C5B5A20023A71E /* Task+Extensions.swift in Sources */,
 				D605AC9C27877F890015D800 /* MessageBubbleView.swift in Sources */,

@@ -10,27 +10,17 @@ import Foundation
 
 class ExpressionCoordinator: PresentableCoordinator<Expression?> {
 
-    private lazy var photoVC = ExpressionPhotoCaptureViewController()
+    private lazy var expressionVC = ExpressionCreationViewController()
 
     override func toPresentable() -> DismissableVC {
-        return self.photoVC
+        return self.expressionVC
     }
     
     override func start() {
         super.start()
         
-        self.photoVC.onDidComplete = { [unowned self] result in
-            switch result {
-            case .success(let expressionData):
-                guard let expressionData = expressionData else {
-                    self.finishFlow(with: nil)
-                    break
-                }
-                let url = try? AttachmentsManager.shared.createTemporaryHeicURL(for: expressionData)
-                self.finishFlow(with: Expression(imageURL: url, emojiString: nil))
-            case .failure:
-                break
-            }
+        self.expressionVC.didCompleteExpression = { [unowned self] expression in
+            self.finishFlow(with: expression)
         }
     }
 }
