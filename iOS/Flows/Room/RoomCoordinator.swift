@@ -106,7 +106,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         }.store(in: &self.cancellables)
     }
     
-    func createNewConversation() async throws -> Conversation {
+    func createNewConversation() async throws -> Conversation? {
         let username = User.current()?.initials ?? ""
         let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
         let userIDs = Set([User.current()!.objectId!])

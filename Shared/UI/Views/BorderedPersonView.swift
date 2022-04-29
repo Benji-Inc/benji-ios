@@ -89,33 +89,6 @@ class BorderedPersonView: PersonView {
         }
     }
     
-    func beginTyping() {
-        self.pulseLayer.removeAllAnimations()
-        self.pulseLayer.strokeColor = self.pulseLayer.borderColor
-        
-        let scale = CABasicAnimation(keyPath: "transform.scale")
-        scale.toValue = 1.2
-        scale.fromValue = 1.0
-        
-        let fade = CABasicAnimation(keyPath: "opacity")
-        fade.toValue = 1.0
-        fade.fromValue = 0.35
-        
-        let group = CAAnimationGroup()
-        group.animations = [scale, fade]
-        group.duration = 1
-        group.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        group.autoreverses = true
-        group.repeatCount = .infinity
-        
-        self.pulseLayer.add(group, forKey: "pulsing")
-    }
-
-    func endTyping() {
-        self.pulseLayer.strokeColor = ThemeColor.clear.color.cgColor
-        self.pulseLayer.removeAllAnimations()
-    }
-    
     @MainActor
     override func set(image: UIImage?, state: State) async {
         await super.set(image: image, state: state)

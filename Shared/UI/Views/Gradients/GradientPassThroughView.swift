@@ -31,7 +31,11 @@ class GradientLayer: CAGradientLayer {
             return color.color.cgColor
         }
         
-        self.colors = cgColors
+        self.updateCGColors(with: cgColors)
+    }
+    
+    func updateCGColors(with colors: [CGColor]) {
+        self.colors = colors
         self.setNeedsLayout()
     }
     

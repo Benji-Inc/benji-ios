@@ -36,7 +36,6 @@ class MessagePreviewViewController: ViewController {
                                          showBubbleTail: false,
                                          tailOrientation: .up)
         self.content.configure(with: self.message)
-        self.content.showEmotionsButton.isVisible = false 
 
         let maxWidth = window.width - Theme.ContentOffset.xtraLong.value.doubled
         var size = self.content.getSize(with: maxWidth)

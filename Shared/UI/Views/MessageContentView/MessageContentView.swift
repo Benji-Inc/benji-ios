@@ -31,7 +31,7 @@ class MessageContentView: BaseView {
     }
 
     // Sizing
-    static let bubbleHeight: CGFloat = 188
+    static let bubbleHeight: CGFloat = UIScreen.currentSize == .phoneMedium ? 148 : 188
     static let collapsedHeight: CGFloat = 78 - MessageContentView.bubbleTailLength
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
@@ -54,8 +54,7 @@ class MessageContentView: BaseView {
 
     /// A speech bubble background view for the message.
     let bubbleView = MessageBubbleView(orientation: .down)
-    let authorView = PersonView()
-    let emojiView = EmojiCircleView()
+    let authorView = PersonGradientView()
     /// Date view that shows when the message was last updated.
     let dateView = MessageDateLabel(font: .small)
     /// Delivery view that shows how the message was sent
@@ -76,8 +75,7 @@ class MessageContentView: BaseView {
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
     }
-    let showEmotionsButton = EmotionGradientView()
-
+    
     var layoutState: Layout = .expanded
     private let cellDiameter: CGFloat
     
@@ -96,7 +94,7 @@ class MessageContentView: BaseView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-
+        
         self.addSubview(self.bubbleView)
         self.bubbleView.roundCorners()
 
@@ -116,8 +114,6 @@ class MessageContentView: BaseView {
         self.addEmotionButton.alpha = 0 
 
         self.bubbleView.addSubview(self.mainContentArea)
-
-        self.bubbleView.addSubview(self.showEmotionsButton)
 
         self.mainContentArea.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
@@ -141,13 +137,12 @@ class MessageContentView: BaseView {
         
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
-        self.mainContentArea.addSubview(self.emojiView)
 
         self.setupHandlers()
     }
     
     private func setupHandlers() {
-        self.showEmotionsButton.didSelect { [unowned self] in
+        self.authorView.didSelect { [unowned self] in
             self.setEmotions(areShown: !self.areEmotionsShown, animated: true)
         }
 
@@ -156,20 +151,20 @@ class MessageContentView: BaseView {
         }
 
         self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            guard let message = self.message else { return }
+            guard let message = self.message, let cid = message.streamCid else { return }
             self.delegate?.messageContent(self,
                                           didTapEmotion: emotion,
-                                          forMessage: (message.streamCid, message.id))
+                                          forMessage: (cid, message.id))
         }
         
         self.imageView.didSelect { [unowned self] in
-            guard let message = self.message else { return }
-            self.delegate?.messageContent(self, didTapAttachmentForMessage: (message.streamCid, message.id))
+            guard let message = self.message, let cid = message.streamCid else { return }
+            self.delegate?.messageContent(self, didTapAttachmentForMessage: (cid, message.id))
         }
         
         self.addEmotionButton.didSelect { [unowned self] in
-            guard let message = self.message else { return }
-            self.delegate?.messageContent(self, didTapAddEmotionsForMessage: (message.streamCid, message.id))
+            guard let message = self.message, let cid = message.streamCid else { return }
+            self.delegate?.messageContent(self, didTapAddEmotionsForMessage: (cid, message.id))
         }
     }
 
@@ -192,11 +187,6 @@ class MessageContentView: BaseView {
 
         self.blurView.expandToSuperviewSize()
 
-        // Don't show the emotions button in the collapsed state.
-        self.showEmotionsButton.squaredSize = self.layoutState == .expanded ? 30 : 0
-        self.showEmotionsButton.pin(.left, offset: .standard)
-        self.showEmotionsButton.pin(.bottom, offset: .standard)
-
         self.mainContentArea.pin(.left, offset: MessageContentView.padding)
         self.mainContentArea.pin(.top, offset: MessageContentView.padding)
         self.mainContentArea.expand(.right, padding: MessageContentView.padding.value)
@@ -206,9 +196,6 @@ class MessageContentView: BaseView {
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         self.authorView.pin(.top)
         self.authorView.pin(.left)
-
-        self.emojiView.center = CGPoint(x: self.authorView.width - Theme.ContentOffset.short.value,
-                                        y: self.authorView.height)
         
         // Delivery View
         self.deliveryView.squaredSize = 11
@@ -261,11 +248,6 @@ class MessageContentView: BaseView {
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
         self.imageView.isVisible = message.kind.isImage
         self.linkView.isVisible = message.kind.isLink
-        self.emojiView.isVisible = message.expression?.emojiString != nil
-        
-        if let emoji = message.expression?.emojiString {
-            self.emojiView.set(text: emoji)
-        }
 
         self.dateView.configure(with: message)
         self.deliveryView.image = message.deliveryType.image
@@ -324,7 +306,8 @@ class MessageContentView: BaseView {
             self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
         }
         self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
-        self.showEmotionsButton.set(emotionCounts: emotionCounts)
+        self.authorView.set(person: message.person, emotionCounts: emotionCounts)
+
         self.setNeedsLayout()
     }
 
@@ -360,7 +343,6 @@ class MessageContentView: BaseView {
         UIView.animate(withDuration: animationDuration) {
             self.mainContentArea.alpha = areShown ? 0 : 1
             self.blurView.effect = areShown ? nil : Theme.blurEffect
-            self.showEmotionsButton.alpha = areShown ? 0 : 1
 
             if areShown {
                 if self.emotionCollectionView.emotionCounts.count == 0 {

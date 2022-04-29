@@ -11,7 +11,11 @@ import UIKit
 
 class EmotionGradientView: BaseView {
 
-    private var gradientLayer = CAGradientLayer()
+    private var gradientLayer = GradientLayer.init(with: [],
+                                                   startPoint: .topLeft,
+                                                   endPoint: .bottomRight)
+    
+    var defaultColors: [ThemeColor] = [.B0, .B6]
 
     init(emotionCounts: [Emotion : Int] = [:]) {
         super.init()
@@ -29,10 +33,6 @@ class EmotionGradientView: BaseView {
         self.clipsToBounds = true
         self.layer.borderWidth = 2
         self.layer.masksToBounds = true
-
-        self.gradientLayer.type = .radial
-        self.gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        self.gradientLayer.endPoint = CGPoint(x: 1, y: 1)
 
         self.layer.addSublayer(self.gradientLayer)
     }
@@ -60,7 +60,9 @@ class EmotionGradientView: BaseView {
         }
 
         if colors.isEmpty {
-            colors = [ThemeColor.B0.color, ThemeColor.B1.color]
+            colors = self.defaultColors.compactMap({ themeColor in
+                return themeColor.color
+            })
         }
 
         if let firstColor = colors.first {
@@ -71,7 +73,7 @@ class EmotionGradientView: BaseView {
             return color.cgColor
         })
 
-        self.gradientLayer.colors = cgColors
+        self.gradientLayer.updateCGColors(with: cgColors)
         self.layer.borderColor = cgColors.last
     }
 

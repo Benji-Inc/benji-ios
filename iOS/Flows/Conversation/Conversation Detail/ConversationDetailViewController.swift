@@ -179,7 +179,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         
         var data: [ConversationDetailSectionType: [ConversationDetailItemType]] = [:]
         
-        let conversation = self.conversationController.conversation
+        guard let conversation = self.conversationController.conversation else { return data }
         
         data[.info] = [.info(conversation.cid), .editTopic(conversation.cid)]
         

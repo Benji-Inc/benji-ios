@@ -79,11 +79,22 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
+        self.headerView.update(person: User.current()!)
         self.startLoadRecentTask()
         self.subscribeToUpdates()
     }
     
     private func subscribeToUpdates() {
+        
+        PeopleStore.shared.$personUpdated
+            .filter({ type in
+                guard let t = type else { return false }
+                return t.isCurrentUser
+            })
+            .mainSink { [unowned self] person in
+                guard let person = person else { return }
+                self.headerView.update(person: person)
+        }.store(in: &self.cancellables)
         
         PeopleStore.shared.$personDeleted.mainSink { [unowned self] _ in
             self.reloadPeople()
@@ -99,7 +110,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         
         self.headerView.height = 46
         self.headerView.expandToSuperviewWidth()
-        self.headerView.pinToSafeArea(.top, offset: .xtraLong)
+        self.headerView.pinToSafeArea(.top, offset: .noOffset)
         
         self.topGradientView.expandToSuperviewWidth()
         self.topGradientView.height = self.headerView.bottom
@@ -135,6 +146,8 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         data[.notices] = notices.compactMap({ notice in
             return .notice(notice)
         })
+        
+        try? await PeopleStore.shared.initializeIfNeeded()
         
         data[.members] = PeopleStore.shared.connectedPeople.filter({ type in
             return !type.isCurrentUser
@@ -256,12 +269,21 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
                 return system.notice?.type == .unreadMessages
             }), let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
-                if let cid = try? ConversationId(cid: dict.key) {
+                if let cid = try? ConversationId(cid: dict.key),
+                    let conversation = ChatClient.shared.channelController(for: cid).conversation,
+                   conversation.totalUnread > 0 {
                     return UnreadMessagesModel(cid: cid, messageIds: dict.value)
                 }
                 return nil
             }) {
                 
+                if models.isEmpty {
+                    var snapshot = self.dataSource.snapshot()
+                    snapshot.setItems([.empty], in: .conversations)
+                    await self.dataSource.apply(snapshot)
+                    return
+                }
+                                
                 let conversationIds = models.compactMap { model in
                     return model.cid
                 }

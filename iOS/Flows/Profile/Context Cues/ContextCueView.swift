@@ -15,10 +15,10 @@ class EmojiCircleView: BaseView {
         case small
     }
     
-    let label = ThemeLabel(font: .small)
-    var currentSize: Size = .small {
+    lazy var label = ThemeLabel(font: self.currentSize == .small ? .xtraSmall : .regular)
+    var currentSize: Size = .large {
         didSet {
-            self.label.setFont(self.currentSize == .small ? .small : .regular)
+            self.label.setFont(self.currentSize == .small ? .xtraSmall : .regular)
             self.layoutNow()
         }
     }
@@ -39,11 +39,12 @@ class EmojiCircleView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.squaredSize = self.currentSize == .small ? 22 : 30
+        self.squaredSize = self.currentSize == .small ? 16 : 30
         self.makeRound()
 
-        self.label.setSize(withWidth: self.height * 0.8)
-        self.label.centerOnXAndY()
+        self.label.expandToSuperviewSize()
+        self.label.centerY = self.halfHeight + 0.5
+        self.label.centerX = self.halfWidth + 0.5
     }
 }
 

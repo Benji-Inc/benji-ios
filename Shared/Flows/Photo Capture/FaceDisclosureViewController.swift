@@ -94,6 +94,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         do {
             try await currentUser.saveToServer()
+            await ToastScheduler.shared.schedule(toastType: .success(UIImage(systemName: "person.crop.circle")!, "Profile picture updated"))
             Task.onMainActor {
                 self.updateUI(data: data)
             }

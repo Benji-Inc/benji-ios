@@ -22,7 +22,7 @@ class Router: NSObject, UINavigationControllerDelegate {
     // True if the router is currently in the process of dismissing a module.
     private var isDismissing = false
 
-    private let modalTransitionRouter = ModalTransitionController()
+    let modalTransitionRouter = ModalTransitionController()
 
     init(navController: UINavigationController) {
         self.navController = navController

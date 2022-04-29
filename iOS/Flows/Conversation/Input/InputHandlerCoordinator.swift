@@ -74,6 +74,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             .didSelect { [unowned self] in
                 self.scrollToUnreadMessage()
             }
+        
+        self.inputHandlerViewController.messageContentDelegate = self 
     }
     
     /// The currently running task that is loading.
@@ -317,19 +319,13 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                                    startingEmotion: emotion)
         self.present(coordinator)
     }
-}
-
-// MARK: - Image View Flow
-
-extension InputHandlerCoordinator {
-
+    
     func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
         let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
                                                     startURL: startingURL,
                                                     body: body,
                                                     router: self.router,
                                                     deepLink: self.deepLink)
-
         self.present(imageCoordinator)
     }
 }

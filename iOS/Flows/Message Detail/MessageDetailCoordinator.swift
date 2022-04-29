@@ -101,7 +101,8 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     
     private func handleDelete() {
         Task {
-            let controller = ChatClient.shared.messageController(cid: self.message.streamCid, messageId: self.message.id)
+            guard let cid = self.message.streamCid else { return }
+            let controller = ChatClient.shared.messageController(cid: cid, messageId: self.message.id)
             try? await controller.deleteMessage()
             
             await ToastScheduler.shared.schedule(toastType: .success(UIImage(systemName: "trash")!, "Message Deleted"))

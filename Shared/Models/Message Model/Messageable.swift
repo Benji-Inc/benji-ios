@@ -59,8 +59,8 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
 
 extension Messageable {
 
-    var streamCid: ChannelId {
-        return try! ChannelId(cid: self.conversationId)
+    var streamCid: ChannelId? {
+        return try? ChannelId(cid: self.conversationId)
     }
 
     var canBeConsumed: Bool {
