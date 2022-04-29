@@ -10,7 +10,7 @@ import Foundation
 
 class ExpressionPhotoCaptureViewController: ViewController {
 
-    var onDidComplete: ((Result<UIImage?, Error>) -> Void)?
+    var onDidComplete: ((Result<Data?, Error>) -> Void)?
 
     // MARK: - Views
 
@@ -35,12 +35,9 @@ class ExpressionPhotoCaptureViewController: ViewController {
         }
 
         self.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            var finalImage = image
-            if let previewData = image.previewData, let previewImage = UIImage(data: previewData) {
-                finalImage = previewImage
-            }
+            let imageData = image.previewData
 
-            self.onDidComplete?(.success(finalImage))
+            self.onDidComplete?(.success(imageData))
         }
     }
 

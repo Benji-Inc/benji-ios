@@ -91,12 +91,10 @@ class AttachmentsManager {
         }
     }
 
-    func createTemporaryPngURL(for image: UIImage) throws -> URL {
+    func createTemporaryURL(for data: Data) throws -> URL {
         let url = URL(fileURLWithPath: NSTemporaryDirectory(),
                       isDirectory: true).appendingPathComponent(UUID().uuidString)
-
-        let data = image.pngData()
-        try data?.write(to: url, options: .atomic)
+        try data.write(to: url, options: .atomic)
 
         return url
     }

@@ -21,12 +21,12 @@ class ExpressionCoordinator: PresentableCoordinator<Expression?> {
         
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
-            case .success(let expressionImage):
-                guard let expressionImage = expressionImage else {
+            case .success(let expressionData):
+                guard let expressionData = expressionData else {
                     self.finishFlow(with: nil)
                     break
                 }
-                let url = try? AttachmentsManager.shared.createTemporaryPngURL(for: expressionImage)
+                let url = try? AttachmentsManager.shared.createTemporaryURL(for: expressionData)
                 self.finishFlow(with: Expression(imageURL: url, emojiString: nil))
             case .failure:
                 break
