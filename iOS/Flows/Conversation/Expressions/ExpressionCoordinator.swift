@@ -26,7 +26,7 @@ class ExpressionCoordinator: PresentableCoordinator<Expression?> {
                     self.finishFlow(with: nil)
                     break
                 }
-                let url = try? AttachmentsManager.shared.createTemporaryURL(for: expressionData)
+                let url = try? AttachmentsManager.shared.createTemporaryHeicURL(for: expressionData)
                 self.finishFlow(with: Expression(imageURL: url, emojiString: nil))
             case .failure:
                 break

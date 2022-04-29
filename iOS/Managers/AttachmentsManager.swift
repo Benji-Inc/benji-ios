@@ -91,9 +91,9 @@ class AttachmentsManager {
         }
     }
 
-    func createTemporaryURL(for data: Data) throws -> URL {
+    func createTemporaryHeicURL(for data: Data) throws -> URL {
         let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                      isDirectory: true).appendingPathComponent(UUID().uuidString)
+                      isDirectory: true).appendingPathComponent(UUID().uuidString+".heic")
         try data.write(to: url, options: .atomic)
 
         return url
