@@ -35,7 +35,12 @@ class PersonGradientView: DisplayableImageView {
              defaultColors: [ThemeColor] = [.B0, .B6]) {
         self.displayable = person
         self.emotionGradientView.defaultColors = defaultColors
-        self.emotionGradientView.set(emotionCounts: emotionCounts)
+        let last = self.emotionGradientView.set(emotionCounts: emotionCounts).last
+                
+        self.layer.borderWidth = 2
+        self.layer.borderColor = last?.withAlphaComponent(0.9).cgColor 
+        self.layer.masksToBounds = true
+        
         self.setNeedsLayout()
     }
     

@@ -131,7 +131,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
 
         // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
 
-        let filter = CIFilter(name: "CIPhotoEffectMono")
+        let filter = CIFilter(name: "CIPhotoEffectNoir")
         filter?.setValue(originalImage, forKey: "inputImage")
 
         guard let bwImage = filter?.outputImage else { return }
