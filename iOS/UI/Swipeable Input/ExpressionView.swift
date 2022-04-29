@@ -13,6 +13,7 @@ import StreamChat
 class ExpressionView: BaseView {
         
     let imageView = UIImageView(image: UIImage(systemName: "face.smiling"))
+    let expressionImageView = DisplayableImageView()
     let label = ThemeLabel(font: .contextCues)
         
     override func initializeSubviews() {
@@ -23,37 +24,34 @@ class ExpressionView: BaseView {
         self.addSubview(self.imageView)
         self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
         self.imageView.contentMode = .scaleAspectFit
+
+        self.addSubview(self.expressionImageView)
+
         self.addSubview(self.label)
         
         self.clipsToBounds = false
     }
-    
-    func configure(for message: Messageable) {
-        let controller = ChatClient.shared.messageController(for: message)
-        
-        guard let data = controller?.message?.extraData["expression"] else {
-            self.isVisible = false
-            return
-        }
 
-        guard case .array(let JSONObjects) = data, let expressionJSON = JSONObjects.first else {
-            self.isVisible = false
-            return
-        }
+    override func layoutSubviews() {
+        super.layoutSubviews()
 
-        guard case .string(let value) = expressionJSON, let emoji = EmojiCategory.allEmojis.first(where: { emoji in
-            return emoji.emoji == value 
-        }) else {
-            self.isVisible = false
-            return
-        }
+        self.label.setSize(withWidth: self.width)
+        self.label.centerOnXAndY()
 
-        self.isVisible = true
-        self.configure(for: emoji)
+        self.expressionImageView.expandToSuperviewSize()
+
+        self.imageView.squaredSize = self.width * 0.8
+        self.imageView.centerOnXAndY()
     }
-    
-    func configure(for emoji: Emoji?) {
-        if let e = emoji?.emoji {
+
+    func configure(with expression: Expression?) {
+        self.expressionImageView.displayable = expression?.imageURL
+        self.expressionImageView.isVisible = expression?.imageURL != nil
+        self.configure(forEmojiString: expression?.emojiString)
+    }
+
+    private func configure(forEmojiString string: String?) {
+        if let e = string {
             self.label.setText(e)
             self.label.isVisible = true
             self.imageView.isVisible = false
@@ -61,17 +59,7 @@ class ExpressionView: BaseView {
             self.label.isVisible = false
             self.imageView.isVisible = true
         }
-        
+
         self.setNeedsLayout()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.label.setSize(withWidth: self.width)
-        self.label.centerOnXAndY()
-        
-        self.imageView.squaredSize = self.width * 0.8
-        self.imageView.centerOnXAndY()
     }
 }

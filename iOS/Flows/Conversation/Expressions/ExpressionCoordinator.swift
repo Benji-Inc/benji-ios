@@ -8,21 +8,29 @@
 
 import Foundation
 
-class ExpressionCoordinator: PresentableCoordinator<Emoji> {
-    
-    lazy var expressionVC = ExpressionViewController()
-    lazy var emojiNav = EmojiNavigationViewController(with: self.expressionVC)
+class ExpressionCoordinator: PresentableCoordinator<Expression?> {
+
+    private lazy var photoVC = ExpressionPhotoCaptureViewController()
 
     override func toPresentable() -> DismissableVC {
-        return self.emojiNav
+        return self.photoVC
     }
     
     override func start() {
         super.start()
         
-        self.expressionVC.$selectedEmojis.mainSink { [unowned self] items in
-            guard let first = items.first else { return }
-            self.finishFlow(with: first)
-        }.store(in: &self.cancellables)
+        self.photoVC.onDidComplete = { [unowned self] result in
+            switch result {
+            case .success(let expressionData):
+                guard let expressionData = expressionData else {
+                    self.finishFlow(with: nil)
+                    break
+                }
+                let url = try? AttachmentsManager.shared.createTemporaryHeicURL(for: expressionData)
+                self.finishFlow(with: Expression(imageURL: url, emojiString: nil))
+            case .failure:
+                break
+            }
+        }
     }
 }

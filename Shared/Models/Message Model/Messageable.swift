@@ -41,7 +41,7 @@ protocol Messageable {
     var lastUpdatedAt: Date? { get }
 
     var emotionCounts: [Emotion : Int] { get }
-    var expression: String? { get }
+    var expression: Expression? { get }
 
     func setToConsumed() async 
     func setToUnconsumed() async throws
@@ -59,8 +59,8 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
 
 extension Messageable {
 
-    var streamCid: ChannelId {
-        return try! ChannelId(cid: self.conversationId)
+    var streamCid: ChannelId? {
+        return try? ChannelId(cid: self.conversationId)
     }
 
     var canBeConsumed: Bool {

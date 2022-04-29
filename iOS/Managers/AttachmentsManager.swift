@@ -90,6 +90,14 @@ class AttachmentsManager {
             }
         }
     }
+
+    func createTemporaryHeicURL(for data: Data) throws -> URL {
+        let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+                      isDirectory: true).appendingPathComponent(UUID().uuidString+".heic")
+        try data.write(to: url, options: .atomic)
+
+        return url
+    }
     
     func getMessageKind(for attachment: Attachment, body: String) async throws -> MessageKind {
         let messageKind: MessageKind = try await withCheckedThrowingContinuation { continuation in

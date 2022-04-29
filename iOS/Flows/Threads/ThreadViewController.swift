@@ -26,6 +26,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     var blurView = DarkBlurView()
     let parentMessageView = MessageContentView()
     
+    var isPresentingImage: Bool = false
+    
     var messageContent: MessageContentView {
         if let first = self.collectionView.indexPathsForSelectedItems?.first,
            let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
@@ -110,8 +112,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         super.initializeViews()
                 
         self.messageInputController.resetExpression()
-        
-        self.view.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.5)
 
         self.modalPresentationStyle = .overCurrentContext
 
@@ -346,7 +346,9 @@ extension ThreadViewController: TransitionableViewController {
     }
     
     var receivingDismissalType: TransitionType {
-        if let first = self.collectionView.indexPathsForSelectedItems?.first,
+        if self.isPresentingImage {
+            return .fade
+        } else if let first = self.collectionView.indexPathsForSelectedItems?.first,
            let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
             return .message(cell.content)
         } else {
@@ -359,7 +361,7 @@ extension ThreadViewController: TransitionableViewController {
     }
     
     var sendingPresentationType: TransitionType {
-        guard let first = self.collectionView.indexPathsForSelectedItems?.first,
+        guard !self.isPresentingImage, let first = self.collectionView.indexPathsForSelectedItems?.first,
               let cell = self.collectionView.cellForItem(at: first) as? MessageCell else { return .fade }
         return .message(cell.content)
     }

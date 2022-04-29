@@ -146,11 +146,11 @@ class ReplySummaryView: BaseView {
         self.lineDotView.pin(.top)
         
         self.replyView.expandToSuperviewWidth()
-        self.replyView.pin(.top)
+        self.replyView.pin(.top, offset: .short)
         self.replyView.match(.left, to: .right, of: self.lineDotView, offset: .standard)
         
         if self.replyView.isVisible {
-            self.height = self.replyView.height + 30
+            self.height = self.replyView.height + 30 + Theme.ContentOffset.short.value
         } else {
             self.height = 30
         }

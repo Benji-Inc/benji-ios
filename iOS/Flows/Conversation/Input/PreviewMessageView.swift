@@ -106,8 +106,8 @@ class PreviewMessageView: SpeechBubbleView {
         self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height * 0.5))
     }
 
-    func set(expression: Emoji?) {
+    func set(expression: Expression?) {
         self.expressionView.isVisible = expression.exists
-        self.expressionView.configure(for: expression)
+        self.expressionView.configure(with: expression)
     }
 }

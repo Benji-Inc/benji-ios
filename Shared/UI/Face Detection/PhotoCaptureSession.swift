@@ -11,41 +11,33 @@ import AVFoundation
 import Combine
 import UIKit
 
-class ImageCaptureViewController: ViewController,
-                                  AVCaptureVideoDataOutputSampleBufferDelegate,
-                                  AVCapturePhotoCaptureDelegate {
+class PhotoCaptureSession {
+
+    weak var avCaptureDelegate: (AVCaptureVideoDataOutputSampleBufferDelegate & AVCapturePhotoCaptureDelegate)?
 
     let session = AVCaptureSession()
-    var capturePhotoOutput: AVCapturePhotoOutput!
+    private var capturePhotoOutput: AVCapturePhotoOutput!
 
-    let dataOutputQueue = DispatchQueue(label: "video data queue",
-                                        qos: .userInitiated,
-                                        attributes: [],
-                                        autoreleaseFrequency: .workItem)
+    private let dataOutputQueue = DispatchQueue(label: "video data queue",
+                                                qos: .userInitiated,
+                                                attributes: [],
+                                                autoreleaseFrequency: .workItem)
     private var videoOutput: AVCaptureVideoDataOutput?
 
-    var didCapturePhoto: ((UIImage) -> Void)?
     var currentPosition: AVCaptureDevice.Position = .front
 
-    enum CameraType {
-        case front
-        case back
-    }
-
-    private(set) var cameraType: CameraType = .front
     var flashMode: AVCaptureDevice.FlashMode = .auto
-    
-    var boxView = BoxView() 
 
+    /// Configures and starts an AV capture session. Requests access for video  capture if needed.
     func begin() {
-        Task {
+        Task { [weak self] in
             let authorized = await AVCaptureDevice.requestAccess(for: AVMediaType.video)
 
-            if authorized {
-                self.configureCaptureSession()
-                self.session.startRunning()
-            }
-        }.add(to: self.autocancelTaskPool)
+            guard authorized else { return }
+
+            self?.configureCaptureSession()
+            self?.session.startRunning()
+        }
     }
 
     func stop() {
@@ -60,26 +52,7 @@ class ImageCaptureViewController: ViewController,
         }
     }
 
-    func toggleFlash() {
-        if self.flashMode == .on {
-            self.flashMode = .off
-        } else if self.flashMode == .off {
-            self.flashMode = .on
-        }
-    }
-
-    func flipCamera() {
-        if self.currentPosition == .front {
-            self.currentPosition = .back
-        } else {
-            self.currentPosition = .front
-        }
-
-        self.stop()
-        self.begin()
-    }
-
-    func configureCaptureSession() {
+    private func configureCaptureSession() {
         // Define the capture device we want to use
         guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                    for: .video,
@@ -99,7 +72,7 @@ class ImageCaptureViewController: ViewController,
 
         // Create the video data output
         self.videoOutput = AVCaptureVideoDataOutput()
-        self.videoOutput!.setSampleBufferDelegate(self, queue: self.dataOutputQueue)
+        self.videoOutput!.setSampleBufferDelegate(self.avCaptureDelegate, queue: self.dataOutputQueue)
         self.videoOutput!.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
 
         // Add the video output to the capture session
@@ -116,6 +89,9 @@ class ImageCaptureViewController: ViewController,
         self.session.addOutput(self.capturePhotoOutput)
     }
 
+    // MARK: - Photo Capture
+
+    /// Captures a photo of the current state of the capture output.
     func capturePhoto() {
         // Make sure capturePhotoOutput is valid
         guard let capturePhotoOutput = self.capturePhotoOutput else { return }
@@ -126,26 +102,6 @@ class ImageCaptureViewController: ViewController,
         photoSettings.flashMode = self.flashMode
         // Call capturePhoto method by passing our photo settings and a
         // delegate implementing AVCapturePhotoCaptureDelegate
-        capturePhotoOutput.capturePhoto(with: photoSettings, delegate: self)
-    }
-
-    func photoOutput(_ output: AVCapturePhotoOutput,
-                     didFinishProcessingPhoto photo: AVCapturePhoto,
-                     error: Error?) {
-
-        guard let connection = output.connection(with: .video) else { return }
-        connection.automaticallyAdjustsVideoMirroring = true
-
-        guard error == nil,
-              let imageData = photo.fileDataRepresentation(),
-              let image = UIImage.init(data: imageData , scale: 1.0) else { return }
-
-        self.didCapturePhoto?(image)
-    }
-
-    func captureOutput(_ output: AVCaptureOutput,
-                       didOutput sampleBuffer: CMSampleBuffer,
-                       from connection: AVCaptureConnection) {
-
+        capturePhotoOutput.capturePhoto(with: photoSettings, delegate: self.avCaptureDelegate!)
     }
 }

@@ -15,8 +15,8 @@ typealias ConversationController = ChatChannelController
 
 extension ConversationController {
 
-    var conversation: Conversation {
-        return self.channel!
+    var conversation: Conversation? {
+        return self.channel
     }
 
     /// Creates a conversation controller using the shared ChatClient.
@@ -30,7 +30,7 @@ extension ConversationController {
     }
 
     func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
-        return self.conversation.getOldestUnreadMessage(withUserID: userID)
+        return self.conversation?.getOldestUnreadMessage(withUserID: userID)
     }
 
     /// Loads previous messages from backend including the one specified.
@@ -38,8 +38,9 @@ extension ConversationController {
     ///   - messageId: ID of the last fetched message. You will get messages `older` and including the provided ID.
     ///   - limit: Limit for page size.
     func loadPreviousMessages(including messageId: MessageId, limit: Int = 25) async throws {
+        guard let cid = self.cid else { return }
         try await self.loadPreviousMessages(before: messageId, limit: limit)
-        let controller = ChatClient.shared.messageController(cid: self.cid, messageId: messageId)
+        let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
         if let messageBefore = self.messages.first(where: { message in
             return message.createdAt < controller.message!.createdAt
         }) {
@@ -113,9 +114,9 @@ extension ConversationController {
 
     func donateIntent(for sendable: Sendable) async {
         guard case MessageKind.text(let text) = sendable.kind else { return }
-        let memberIDs = self.conversation.lastActiveMembers.compactMap { member in
+        let memberIDs = self.conversation?.lastActiveMembers.compactMap { member in
             return member.personId
-        }
+        } ?? []
 
         let recipients = PeopleStore.shared.usersArray.filter { user in
             return memberIDs.contains(user.objectId ?? String())
@@ -130,8 +131,8 @@ extension ConversationController {
         let intent = INSendMessageIntent(recipients: recipients,
                                          outgoingMessageType: .outgoingMessageText,
                                          content: text,
-                                         speakableGroupName: self.conversation.speakableGroupName,
-                                         conversationIdentifier: self.conversation.cid.id,
+                                         speakableGroupName: self.conversation?.speakableGroupName,
+                                         conversationIdentifier: self.conversation?.cid.id,
                                          serviceName: nil,
                                          sender: sender,
                                          attachments: nil)
@@ -151,10 +152,8 @@ extension ConversationController {
             messageBody = text
         case .photo(let item, let body):
             if let url = item.url {
-                let attachement = try AnyAttachmentPayload(localFileURL: url,
-                                                           attachmentType: .image,
-                                                           extraData: nil)
-                attachments.append(attachement)
+                let attachment = try AnyAttachmentPayload(localFileURL: url, attachmentType: .image)
+                attachments.append(attachment)
             }
             messageBody = body
         case .link(_, let stringURL):
@@ -163,6 +162,14 @@ extension ConversationController {
             messageBody = stringURL.trimWhitespace().lowercased()
         case .attributedText, .video, .location, .emoji, .audio, .contact:
             throw(ClientError.apiError(detail: "Message type not supported."))
+        }
+
+        if let expressionURL = sendable.expression?.imageURL {
+            let extraData: [String : RawJSON] = ["isExpression" : .bool(true)]
+            let expressionAttachment = try AnyAttachmentPayload(localFileURL: expressionURL,
+                                                                 attachmentType: .image,
+                                                                 extraData: extraData)
+            attachments.append(expressionAttachment)
         }
 
         return try await self.createNewMessage(sendable: sendable,
@@ -194,8 +201,8 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation { continuation in
             var data = extraData
-            if let expression = sendable.expression {
-                data["expression"] = .string(expression.emoji)
+            if let emoji = sendable.expression?.emojiString {
+                data["expression"] = .string(emoji)
             }
             data["context"] = .string(sendable.deliveryType.rawValue)
             self.createNewMessage(text: text,
@@ -225,10 +232,14 @@ extension ConversationController {
         
         switch sendable.deliveryType {
         case .timeSensitive:
-            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Message delivered. Will notify all members of this conversation."))
+            await ToastScheduler.shared
+                .schedule(toastType: .success(sendable.deliveryType.image!,
+                                              "Message delivered. Will notify all members of this conversation."))
             
         case .conversational:
-            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.image!, "Message delivered. Will attempt to notify all members of this conversation."))
+            await ToastScheduler.shared
+                .schedule(toastType: .success(sendable.deliveryType.image!,
+                                              "Message delivered. Will attempt to notify all members of this conversation."))
         
         case .respectful:
             break
@@ -355,8 +366,8 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation({ continuation in
             var data = extraData
-            if let expression = sendable.expression {
-                data["expression"] = .string(expression.emoji)
+            if let emoji = sendable.expression?.emojiString {
+                data["expression"] = .string(emoji)
             }
             data["context"] = .string(sendable.deliveryType.rawValue)
             messageController.createNewReply(text: text,

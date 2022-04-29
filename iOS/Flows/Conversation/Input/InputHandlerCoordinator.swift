@@ -74,6 +74,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             .didSelect { [unowned self] in
                 self.scrollToUnreadMessage()
             }
+        
+        self.inputHandlerViewController.messageContentDelegate = self 
     }
     
     /// The currently running task that is loading.
@@ -120,10 +122,9 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     func presentExpressions() {
         let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator) { [unowned self] result in
-            AnalyticsManager.shared.trackEvent(type: .expressionSelected,
-                                               properties: ["value" : result.emoji])
-            self.inputHandlerViewController.swipeableVC.currentExpression = result
+        self.present(coordinator) { [unowned self] expression in
+            AnalyticsManager.shared.trackEvent(type: .expressionMade)
+            self.inputHandlerViewController.swipeableVC.currentExpression = expression
         }
     }
     
@@ -162,12 +163,13 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     func handle(attachmentOption option: AttachmentOption) {
         switch option {
-        case .attachments(let array):
-            guard let first = array.first else { return }
+        case .attachments(let attachments):
+            guard let firstAttachment = attachments.first else { return }
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             Task.onMainActorAsync {
                 guard let kind
-                        = try? await AttachmentsManager.shared.getMessageKind(for: first, body: text) else { return }
+                        = try? await AttachmentsManager.shared.getMessageKind(for: firstAttachment,
+                                                                              body: text) else { return }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
             }
@@ -317,19 +319,13 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                                    startingEmotion: emotion)
         self.present(coordinator)
     }
-}
-
-// MARK: - Image View Flow
-
-extension InputHandlerCoordinator {
-
+    
     func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
         let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
                                                     startURL: startingURL,
                                                     body: body,
                                                     router: self.router,
                                                     deepLink: self.deepLink)
-
         self.present(imageCoordinator)
     }
 }

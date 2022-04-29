@@ -127,10 +127,9 @@ extension ConversationListCoordinator {
     
     func presentDeleteConversationAlert(cid: ConversationId?) {
         guard let cid = cid else { return }
-        
+                
         let controller = ChatClient.shared.channelController(for: cid)
-        
-        guard controller.conversation.memberCount <= 1 else { return }
+        guard let conversation = controller.conversation, conversation.memberCount <= 1 else { return }
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         

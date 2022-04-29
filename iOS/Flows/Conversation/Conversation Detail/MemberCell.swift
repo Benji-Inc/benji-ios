@@ -110,16 +110,6 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
             }
             
             self.setNeedsLayout()
-            
-            guard let typingUsers = item.conversationController?.conversation.currentlyTypingUsers else { return }
-            
-            if typingUsers.contains(where: { typingUser in
-                typingUser.personId == personId
-            }) {
-                self.personView.beginTyping()
-            } else {
-                self.personView.endTyping()
-            }
         }
     }
     

@@ -186,8 +186,8 @@ extension MessageController {
 
         return try await withCheckedThrowingContinuation { continuation in
             var data = extraData
-            if let expression = sendable.expression {
-                data["expression"] = .string(expression.emoji)
+            if let emoji = sendable.expression?.emojiString {
+                data["expression"] = .string(emoji)
             }
             data["context"] = .string(sendable.deliveryType.rawValue)
             

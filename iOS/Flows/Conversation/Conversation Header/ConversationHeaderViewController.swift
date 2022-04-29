@@ -50,6 +50,8 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .removeDuplicates()
             .mainSink { [unowned self] conversation in
                 guard let convo = conversation else {
+                    self.topicLabel.text = nil
+                    self.membersLabel.text = nil 
                     self.topicLabel.isVisible = false
                     self.membersLabel.isVisible = false
                     self.chevronImageView.isVisible = false
@@ -162,7 +164,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     /// A task for loading data and subscribing to conversation updates.
     private var loadPeopleTask: Task<Void, Never>?
     
-    private func setMembers(for conversation: Conversation) {
+    private func setMembers(for conversation: Conversation?) {
+        guard let conversation = conversation else {
+            return
+        }
         self.loadPeopleTask?.cancel()
         
         self.loadPeopleTask = Task { [weak self] in

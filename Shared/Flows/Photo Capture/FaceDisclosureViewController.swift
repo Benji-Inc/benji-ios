@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import Localization
 
+/// A view controller that gives feedback on selfies taken by the user.
 class FaceDisclosureViewController: DisclosureModalViewController {
 
     enum CaptureType {
@@ -87,12 +88,13 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         switch self.captureType {
         case .smiling:
-            let file = PFFileObject(name:"small_image.png", data: data)
+            let file = PFFileObject(name:"small_image.heic", data: data)
             currentUser.smallImage = file
         }
 
         do {
             try await currentUser.saveToServer()
+            await ToastScheduler.shared.schedule(toastType: .success(UIImage(systemName: "person.crop.circle")!, "Profile picture updated"))
             Task.onMainActor {
                 self.updateUI(data: data)
             }

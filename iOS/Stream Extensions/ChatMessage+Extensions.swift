@@ -90,7 +90,7 @@ extension Message: Messageable {
     }
     
     var kind: MessageKind {
-        if let imageAttachment = self.imageAttachments.first {
+        if let imageAttachment = self.nonExpressionImageAttachments.first {
             let attachment = PhotoAttachment(url: imageAttachment.imageURL,
                                              data: nil,
                                              info: nil)
@@ -145,12 +145,15 @@ extension Message: Messageable {
         return dictionary
     }
     
-    var expression: String? {
-        if let value = self.extraData["expression"],
-           case RawJSON.string(let string) = value {
-            return string
+    var expression: Expression? {
+        let expressionURL = self.expressionImageAttachments.first?.imageURL
+
+        var emojiString: String? = nil
+        if let value = self.extraData["expression"], case RawJSON.string(let string) = value {
+            emojiString = string
         }
-        return nil
+
+        return Expression(imageURL: expressionURL, emojiString: emojiString)
     }
     
     static func message(with cid: ConversationId, messageId: MessageId) -> Message {
@@ -190,5 +193,26 @@ extension Message: MessageSequence {
 
     var title: String? {
         return nil
+    }
+}
+
+// MARK: - Attachments
+
+extension Message {
+
+    var nonExpressionImageAttachments: [ChatMessageImageAttachment] {
+        let imageAttachments = self.imageAttachments
+
+        return imageAttachments.filter { imageAttachment in
+            return !imageAttachment.isExpression
+        }
+    }
+
+    var expressionImageAttachments: [ChatMessageImageAttachment] {
+        let imageAttachments = self.imageAttachments
+
+        return imageAttachments.filter { imageAttachment in
+            return imageAttachment.isExpression
+        }
     }
 }

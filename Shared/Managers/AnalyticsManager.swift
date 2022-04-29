@@ -19,6 +19,7 @@ class AnalyticsManager {
         case onboardingRSVPTapped = "ONBOARDING_RSVP_TAPPED"
         case emotionSelected = "EMOTION_SELECTED"
         case expressionSelected = "EXPRESSION_SELECTED"
+        case expressionMade = "EXPRESSION_MADE"
         case deliveryTypeSelected = "DELIVERY_TYPE_SELECTED"
         case messageSent = "MESSAGE_SENT"
         case replySent = "REPLY_SENT"

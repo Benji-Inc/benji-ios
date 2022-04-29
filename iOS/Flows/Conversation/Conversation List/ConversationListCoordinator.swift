@@ -33,8 +33,6 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
                                                 openReplies: openReplies)
 
         super.init(with: vc, router: router, deepLink: deepLink)
-
-        vc.messageContentDelegate = self
     }
 
     override func start() {

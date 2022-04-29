@@ -61,7 +61,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.addChild(viewController: self.contextCuesVC, toView: self.view)
         
         self.view.addSubview(self.contextCueHeaderLabel)
-        self.contextCueHeaderLabel.setText("What I'm up too...")
+        self.contextCueHeaderLabel.setText("What I'm up to...")
         
         self.view.addSubview(self.bottomGradientView)
         
@@ -199,7 +199,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
             try? await NoticeStore.shared.initializeIfNeeded()
             
-            if let unreadNotice = await NoticeStore.shared.getAllNotices().first(where: { system in
+            if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
                 return system.notice?.type == .unreadMessages
             }) {
                 

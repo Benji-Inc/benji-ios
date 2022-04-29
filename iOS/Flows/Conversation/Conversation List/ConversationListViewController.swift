@@ -324,8 +324,8 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
         // Reset the input accessory view.
         self.messageInputController.updateSwipeHint(shouldPlay: false)
 
-        if let cid = cid {
-            let conversation = Conversation.conversation(cid)
+        if let cid = cid, let conversation = Conversation.conversation(cid) {
+            
             // Sets the active conversation
             ConversationsManager.shared.activeConversation = conversation
             ConversationsManager.shared.activeController = ConversationController.controller(cid)

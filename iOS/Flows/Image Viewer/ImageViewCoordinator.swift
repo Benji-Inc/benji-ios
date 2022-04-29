@@ -77,11 +77,21 @@ class ImageViewCoordinator: PresentableCoordinator<Void> {
 
         super.init(router: router, deepLink: deepLink)
     }
+    
+    override func start() {
+        super.start()
+        
+        self.imageViewController.transitioningDelegate = self.router.modalTransitionRouter
+    }
 }
 
 // MARK: - ImageViewController
 
-class ImageViewController: LightboxController, Dismissable {
+class ImageViewController: LightboxController, Dismissable, TransitionableViewController {
+    
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
 
     var dismissHandlers: [DismissHandler] = []
     

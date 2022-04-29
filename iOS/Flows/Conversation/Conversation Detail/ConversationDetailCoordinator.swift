@@ -175,10 +175,9 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     }
     
     func presentPeoplePicker() {
-        
-        self.removeChild()
+        guard let conversation = ConversationController.controller(self.cid).conversation else { return }
 
-        let conversation = ConversationController.controller(self.cid).conversation
+        self.removeChild()
 
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.selectedConversationCID = self.cid
