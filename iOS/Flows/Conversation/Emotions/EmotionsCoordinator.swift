@@ -19,8 +19,8 @@ class EmotionsCoordinator: PresentableCoordinator<[Emotion]> {
     override func start() {
         super.start()
         
-        self.emotionsVC.button.didSelect { [unowned self] in
-            self.finishFlow(with: self.emotionsVC.selectedEmotions)
-        }
+        //self.emotionsVC.button.didSelect { [unowned self] in
+//            self.finishFlow(with: self.emotionsVC.selectedEmotions)
+//        }
     }
 }

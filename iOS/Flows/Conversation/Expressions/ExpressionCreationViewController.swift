@@ -25,7 +25,11 @@ class ExpressionCreationViewController: ViewController {
     private lazy var emotionsVC = EmotionsViewController()
     
     let leftButton = ThemeButton()
+    let leftImageView = UIImageView(image: UIImage(systemName: "arrow.backward.circle.fill"))
+    
     let rightButton = ThemeButton()
+    let rightImageView = UIImageView(image: UIImage(systemName: "arrow.right.circle.fill"))
+
     let doneButton = ThemeButton()
     
     private let scrollView = UIScrollView()
@@ -71,14 +75,16 @@ class ExpressionCreationViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         self.view.addSubview(self.bottomGradientView)
         
+        self.view.addSubview(self.leftImageView)
+        self.leftImageView.tintColor = ThemeColor.white.color
         self.view.addSubview(self.leftButton)
-        self.leftButton.set(style: .normal(color: .yellow, text: ""))
         self.leftButton.didSelect { [unowned self] in
             self.state = .review
         }
         
+        self.view.addSubview(self.rightImageView)
+        self.rightImageView.tintColor = ThemeColor.white.color 
         self.view.addSubview(self.rightButton)
-        self.rightButton.set(style: .normal(color: .red, text: ""))
         self.rightButton.didSelect { [unowned self] in
             self.state = .emotionSelection
         }
@@ -110,16 +116,20 @@ class ExpressionCreationViewController: ViewController {
         
         self.scrollView.expandToSuperviewSize()
         
-        self.leftButton.squaredSize = 40
-        self.leftButton.pinToSafeAreaLeft()
-        self.leftButton.pinToSafeAreaBottom()
+        self.leftImageView.squaredSize = Theme.buttonHeight
+        self.leftImageView.pinToSafeAreaLeft()
+        self.leftImageView.pinToSafeAreaBottom()
         
-        self.rightButton.squaredSize = 40
-        self.rightButton.pinToSafeAreaRight()
-        self.rightButton.pinToSafeAreaBottom()
+        self.leftButton.frame = self.leftImageView.frame
         
-        self.doneButton.height = 40
-        self.doneButton.width = 80
+        self.rightImageView.squaredSize = Theme.buttonHeight
+        self.rightImageView.pinToSafeAreaRight()
+        self.rightImageView.pinToSafeAreaBottom()
+        
+        self.rightButton.frame = self.rightImageView.frame
+        
+        self.doneButton.height = Theme.buttonHeight
+        self.doneButton.width = 125
         self.doneButton.pinToSafeAreaRight()
         self.doneButton.pinToSafeAreaBottom()
         
@@ -145,16 +155,22 @@ class ExpressionCreationViewController: ViewController {
         switch state {
         case .capture:
             self.rightButton.isVisible = true
+            self.rightImageView.isVisible = true
             self.leftButton.isVisible = false
+            self.leftImageView.isVisible = false
             self.doneButton.isVisible = false
         case .review:
             self.rightButton.isVisible = true
+            self.rightImageView.isVisible = true
             self.leftButton.isVisible = false
+            self.leftImageView.isVisible = false
             self.doneButton.isVisible = false
             self.scrollView.scrollHorizontallyTo(view: self.expressionPhotoVC.view, animated: true)
         case .emotionSelection:
             self.rightButton.isVisible = false
+            self.rightImageView.isVisible = false
             self.leftButton.isVisible = true
+            self.leftImageView.isVisible = true
             self.doneButton.isVisible = true
             self.scrollView.scrollHorizontallyTo(view: self.emotionsVC.view, animated: true)
         }

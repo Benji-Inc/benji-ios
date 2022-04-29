@@ -14,14 +14,7 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
                               EmotionsCollectionViewDataSource.ItemType,
                               EmotionsCollectionViewDataSource> {
     
-    let button = ThemeButton()
-    private var showButton: Bool = true
-    
     @Published var selectedEmotions: [Emotion] = []
-    
-    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .bottomCenter,
-                                                  endPoint: .topCenter)
 
     init() {
         super.init(with: EmotionsCollectionView())
@@ -34,25 +27,7 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
     override func initializeViews() {
         super.initializeViews()
         
-        self.modalPresentationStyle = .popover
-        if let pop = self.popoverPresentationController {
-            let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.prefersGrabberVisible = true 
-        }
-        
-        self.view.set(backgroundColor: .B0)
-        
-        
         self.collectionView.allowsMultipleSelection = true
-        
-        self.view.addSubview(self.bottomGradientView)
-        self.view.addSubview(self.button)
-        
-        self.$selectedEmotions.mainSink { [unowned self] items in
-            self.updateButton()
-        }.store(in: &self.cancellables)
         
         self.dataSource.didSelectEmotion = { [unowned self] emotion in
             self.handleSelected(emotion: emotion)
@@ -67,23 +42,6 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         super.viewDidLoad()
         
         self.loadInitialData()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.button.setSize(with: self.view.width)
-        self.button.centerOnX()
-        
-        if self.showButton {
-            self.button.pinToSafeAreaBottom()
-        } else {
-            self.button.top = self.view.height
-        }
-        
-        self.bottomGradientView.expandToSuperviewWidth()
-        self.bottomGradientView.height = 94
-        self.bottomGradientView.pin(.bottom)
     }
     
     private func removeLastEmotion() {
@@ -130,14 +88,6 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
             snapshot.setItems(categoryItems, in: .categories)
             
             await self.dataSource.apply(snapshot)
-        }
-    }
-    
-    private func updateButton() {
-        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.showButton = self.selectedEmotions.count > 0
-            self.view.layoutNow()
         }
     }
     
