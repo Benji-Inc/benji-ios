@@ -24,6 +24,7 @@ class ExpressionPhotoCaptureViewController: ViewController {
         super.initializeViews()
 
         self.modalPresentationStyle = .overFullScreen
+        self.view.set(backgroundColor: .B0)
 
         self.addChild(viewController: self.faceCaptureVC)
         self.faceCaptureVC.faceBoxView.alpha = 1
