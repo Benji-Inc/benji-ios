@@ -17,6 +17,7 @@ class PersonGradientView: DisplayableImageView {
         
         self.insertSubview(self.emotionGradientView, at: 0)
 
+        self.set(emotionCounts: [:])
         self.subscribeToUpdates()
     }
     
@@ -30,24 +31,27 @@ class PersonGradientView: DisplayableImageView {
     
     // MARK: - Open setters
     
-    func set(expression: Expression, defaultColors: [ThemeColor] = [.B0, .B6]) {
+    func set(expression: Expression?, defaultColors: [ThemeColor] = [.B0, .B6]) {
         
-        if let expressionURL = expression.imageURL {
-            self.set(person: expressionURL, emotionCounts: expression.emotionCounts)
+        if let expression = expression, let expressionURL = expression.imageURL {
+            self.set(displayable: expressionURL)
+            self.set(emotionCounts: expression.emotionCounts)
         } else {
-            self.set(person: User.current()!, emotionCounts: expression.emotionCounts)
+            self.set(displayable: User.current()!)
+            self.set(emotionCounts: expression?.emotionCounts ?? [:])
         }
     }
 
-    func set(person: ImageDisplayable?,
-             emotionCounts: [Emotion: Int],
-             defaultColors: [ThemeColor] = [.B0, .B6]) {
-        self.displayable = person
+    func set(displayable: ImageDisplayable?) {
+        self.displayable = displayable
+    }
+    
+    func set(emotionCounts: [Emotion: Int], defaultColors: [ThemeColor] = [.B0, .B6]) {
         self.emotionGradientView.defaultColors = defaultColors
         let last = self.emotionGradientView.set(emotionCounts: emotionCounts).last
                 
         self.layer.borderWidth = 2
-        self.layer.borderColor = last?.withAlphaComponent(0.9).cgColor 
+        self.layer.borderColor = last?.withAlphaComponent(0.9).cgColor
         self.layer.masksToBounds = true
         
         self.setNeedsLayout()

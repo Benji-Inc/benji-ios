@@ -298,12 +298,7 @@ class MessageContentView: BaseView {
         }
         self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
 
-        if let expressionURL = message.expression?.imageURL {
-            self.authorView.set(person: expressionURL, emotionCounts: emotionCounts)
-        } else {
-            self.authorView.set(person: message.person, emotionCounts: emotionCounts)
-        }
-
+        self.authorView.set(expression: message.expression)
         self.setNeedsLayout()
     }
 

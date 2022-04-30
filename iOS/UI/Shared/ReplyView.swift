@@ -71,9 +71,7 @@ class ReplyView: BaseView {
         }
         
         self.imageView.image = message.deliveryType.image
-        self.personView.set(person: message.person,
-                            emotionCounts: message.emotionCounts,
-                            defaultColors: [.B0, .B1])
+        self.personView.set(expression: message.expression, defaultColors: [.B0, .B1])
         self.dateLabel.configure(with: message)
         self.layoutNow()
     }

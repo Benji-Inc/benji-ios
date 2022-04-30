@@ -15,6 +15,8 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
                               EmotionsCollectionViewDataSource> {
     
     @Published var selectedEmotions: [Emotion] = []
+    
+    let personGradientView = PersonGradientView()
 
     init() {
         super.init(with: EmotionsCollectionView())
@@ -29,6 +31,8 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         
         self.collectionView.allowsMultipleSelection = true
         
+        self.view.addSubview(self.personGradientView)
+        
         self.dataSource.didSelectEmotion = { [unowned self] emotion in
             self.handleSelected(emotion: emotion)
         }
@@ -42,6 +46,14 @@ class EmotionsViewController: DiffableCollectionViewController<EmotionsCollectio
         super.viewDidLoad()
         
         self.loadInitialData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.personGradientView.squaredSize = 75
+        self.personGradientView.pinToSafeAreaLeft()
+        self.personGradientView.pinToSafeAreaTop()
     }
     
     private func removeLastEmotion() {

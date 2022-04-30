@@ -21,19 +21,14 @@ class ExpressionCreationViewController: ViewController {
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
     
+    let blurView = DarkBlurView()
+    private lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: 100)
+
     private lazy var expressionPhotoVC = ExpressionPhotoCaptureViewController()
     private lazy var emotionsVC = EmotionsViewController()
-    
-    let leftButton = ThemeButton()
-    let leftImageView = UIImageView(image: UIImage(systemName: "arrow.backward.circle.fill"))
-    
-    let rightButton = ThemeButton()
-    let rightImageView = UIImageView(image: UIImage(systemName: "arrow.right.circle.fill"))
 
     let doneButton = ThemeButton()
-    
-    private let scrollView = UIScrollView()
-    
+        
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
     @Published private var state: State = .capture
@@ -51,12 +46,23 @@ class ExpressionCreationViewController: ViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.scrollView.isScrollEnabled = false
-        self.scrollView.isPagingEnabled = true
+        self.view.addSubview(self.emotionCollectionView)
+        self.view.addSubview(self.blurView)
         
-        self.view.addSubview(self.scrollView)
-        
-        self.addChild(viewController: self.expressionPhotoVC, toView: self.scrollView)
+        self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
+            guard let imageData = image.previewData else { return }
+            self.expressionPhotoVC.faceCaptureVC.view.isVisible = false
+            self.expressionPhotoVC.personGradientView.isVisible = true
+            self.expressionPhotoVC.personGradientView.set(displayable: UIImage(data: imageData))
+            self.expressionPhotoVC.animate(text: "Tap again to retake")
+            self.expressionPhotoVC.faceCaptureVC.stopSession()
+            
+            self.emotionsVC.personGradientView.set(displayable: UIImage(data: imageData))
+            
+            self.state = .emotionSelection
+        }
+                
+        self.addChild(viewController: self.expressionPhotoVC)
         self.expressionPhotoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let expressionData):
@@ -64,33 +70,21 @@ class ExpressionCreationViewController: ViewController {
                     return
                 }
                 self.imageURL = try? AttachmentsManager.shared.createTemporaryHeicURL(for: expressionData)
-                self.state = .review
+                //self.state = .emotionSelection
             case .failure:
                 break
             }
         }
         
-        self.addChild(viewController: self.emotionsVC, toView: self.scrollView)
+        self.addChild(viewController: self.emotionsVC)
+        self.emotionsVC.view.alpha = 0
         
         self.view.set(backgroundColor: .B0)
         self.view.addSubview(self.bottomGradientView)
         
-        self.view.addSubview(self.leftImageView)
-        self.leftImageView.tintColor = ThemeColor.white.color
-        self.view.addSubview(self.leftButton)
-        self.leftButton.didSelect { [unowned self] in
-            self.state = .review
-        }
-        
-        self.view.addSubview(self.rightImageView)
-        self.rightImageView.tintColor = ThemeColor.white.color 
-        self.view.addSubview(self.rightButton)
-        self.rightButton.didSelect { [unowned self] in
-            self.state = .emotionSelection
-        }
-        
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+        
         self.doneButton.didSelect { [unowned self] in
             var emotionCounts: [Emotion: Int] = [:]
             self.emotionsVC.selectedEmotions.forEach { emotion in
@@ -109,70 +103,63 @@ class ExpressionCreationViewController: ViewController {
             .mainSink { [unowned self] state in
                 self.update(for: state)
             }.store(in: &self.cancellables)
+        
+        self.emotionsVC.$selectedEmotions.mainSink { [unowned self] emotions in
+            var emotionsCounts: [Emotion: Int] = [:]
+            emotions.forEach { emotion in
+                emotionsCounts[emotion] = 1
+            }
+            self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
+            self.expressionPhotoVC.personGradientView.set(emotionCounts: emotionsCounts)
+            self.emotionsVC.personGradientView.set(emotionCounts: emotionsCounts)
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.scrollView.expandToSuperviewSize()
-        
-        self.leftImageView.squaredSize = Theme.buttonHeight
-        self.leftImageView.pinToSafeAreaLeft()
-        self.leftImageView.pinToSafeAreaBottom()
-        
-        self.leftButton.frame = self.leftImageView.frame
-        
-        self.rightImageView.squaredSize = Theme.buttonHeight
-        self.rightImageView.pinToSafeAreaRight()
-        self.rightImageView.pinToSafeAreaBottom()
-        
-        self.rightButton.frame = self.rightImageView.frame
+        self.emotionCollectionView.expandToSuperviewSize()
+        self.blurView.expandToSuperviewSize()
         
         self.doneButton.height = Theme.buttonHeight
         self.doneButton.width = 125
         self.doneButton.pinToSafeAreaRight()
         self.doneButton.pinToSafeAreaBottom()
         
-        self.expressionPhotoVC.view.expandToSuperviewHeight()
-        self.expressionPhotoVC.view.width = self.view.width
-        self.expressionPhotoVC.view.pin(.top)
-        self.expressionPhotoVC.view.pin(.left)
-        
-        self.emotionsVC.view.expandToSuperviewHeight()
-        self.emotionsVC.view.width = self.view.width
-        self.emotionsVC.view.pin(.top)
-        self.emotionsVC.view.match(.left, to: .right, of: self.expressionPhotoVC.view)
+        self.expressionPhotoVC.view.expandToSuperviewSize()
+        self.emotionsVC.view.expandToSuperviewSize()
         
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
         self.bottomGradientView.pin(.bottom)
-        
-        self.scrollView.contentSize = CGSize(width: self.emotionsVC.view.right,
-                                             height: self.view.height)
     }
     
     private func update(for state: State) {
         switch state {
         case .capture:
-            self.rightButton.isVisible = true
-            self.rightImageView.isVisible = true
-            self.leftButton.isVisible = false
-            self.leftImageView.isVisible = false
             self.doneButton.isVisible = false
         case .review:
-            self.rightButton.isVisible = true
-            self.rightImageView.isVisible = true
-            self.leftButton.isVisible = false
-            self.leftImageView.isVisible = false
-            self.doneButton.isVisible = false
-            self.scrollView.scrollHorizontallyTo(view: self.expressionPhotoVC.view, animated: true)
+            UIView.animateKeyframes(withDuration: 1.0, delay: 0.0, animations: {
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                    self.emotionsVC.view.alpha = 0.0
+                }
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
+                    self.expressionPhotoVC.view.alpha = 1.0
+                }
+            })
         case .emotionSelection:
-            self.rightButton.isVisible = false
-            self.rightImageView.isVisible = false
-            self.leftButton.isVisible = true
-            self.leftImageView.isVisible = true
-            self.doneButton.isVisible = true
-            self.scrollView.scrollHorizontallyTo(view: self.emotionsVC.view, animated: true)
+            UIView.animateKeyframes(withDuration: 1.0, delay: 0.0, animations: {
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                    self.expressionPhotoVC.view.alpha = 0.0
+                }
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
+                    self.emotionsVC.view.alpha = 1.0
+                }
+            })
         }
     }
 }

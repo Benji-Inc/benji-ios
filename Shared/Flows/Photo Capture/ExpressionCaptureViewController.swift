@@ -17,14 +17,13 @@ class ExpressionPhotoCaptureViewController: ViewController {
     lazy var faceCaptureVC = FaceImageCaptureViewController()
     /// Tapping on this view will trigger the photo capture.
     private var tapView = BaseView()
+    private let label = ThemeLabel(font: .medium)
+    let personGradientView = PersonGradientView()
 
     // MARK: - Life Cycle
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.modalPresentationStyle = .overFullScreen
-        self.view.set(backgroundColor: .B0)
 
         self.addChild(viewController: self.faceCaptureVC)
         self.faceCaptureVC.faceBoxView.alpha = 0
@@ -34,16 +33,27 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.faceCaptureVC.view.clipsToBounds = true 
 
         self.view.addSubview(self.tapView)
+        
+        self.view.addSubview(self.label)
+        
+        self.view.addSubview(self.personGradientView)
+        self.personGradientView.isVisible = false
 
         self.tapView.didSelect { [unowned self] in
-            self.faceCaptureVC.capturePhoto()
+            if self.faceCaptureVC.isSessionRunning {
+                self.faceCaptureVC.capturePhoto()
+            } else {
+                self.faceCaptureVC.view.isVisible = true
+                self.personGradientView.isVisible = false 
+                self.faceCaptureVC.beginSession()
+            }
         }
-
-        self.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            let imageData = image.previewData
-
-            self.onDidComplete?(.success(imageData))
-        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.animate(text: "Tap to take picture")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -63,5 +73,34 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.faceCaptureVC.view.makeRound()
 
         self.tapView.expandToSuperviewSize()
+        
+        self.personGradientView.frame = self.faceCaptureVC.view.frame
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.label.centerOnXAndY()
+    }
+    
+    private var animateTask: Task<Void, Never>?
+    
+    func animate(text: String) {
+        
+        self.animateTask?.cancel()
+        
+        self.animateTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 0
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            self.label.setText(text)
+            self.view.layoutNow()
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 1.0
+            })
+        }
     }
 }

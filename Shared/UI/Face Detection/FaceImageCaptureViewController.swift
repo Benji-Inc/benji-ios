@@ -73,6 +73,11 @@ class FaceImageCaptureViewController: ViewController {
     func beginSession() {
         self.faceCaptureSession.begin()
     }
+    
+    /// Stops the face capture session.
+    func stopSession() {
+        self.faceCaptureSession.stop()
+    }
 
     func capturePhoto() {
         self.faceCaptureSession.capturePhoto()

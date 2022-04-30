@@ -12,17 +12,17 @@ import UIKit
 
 enum EmotionCategory: Int, CaseIterable {
 
+    case heartOpen
+    case good
+    case connection
+    case others
     case uncertain
     case compare
     case unplanned
     case beyondUs
     case areNotWhatTheySeem
     case hurting
-    case others
     case fallShort
-    case connection
-    case heartOpen
-    case good
     case wronged
     case selfAssess
     
