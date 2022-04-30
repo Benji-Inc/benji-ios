@@ -164,11 +164,23 @@ extension ConversationController {
             throw(ClientError.apiError(detail: "Message type not supported."))
         }
 
-        if let expressionURL = sendable.expression?.imageURL {
-            let extraData: [String : RawJSON] = ["isExpression" : .bool(true)]
+        if let expression = sendable.expression, let expressionURL = expression.imageURL {
+            var emotionsDict: [String: RawJSON] = [:]
+            
+            expression.emotionCounts.keys.forEach { emotion in
+                if let count = expression.emotionCounts[emotion] {
+                    emotionsDict[emotion.rawValue] = .number(Double(count))
+                }
+            }
+            
+            let extraData: [String : RawJSON] = ["isExpression" : .bool(true),
+                                                 "author": .string(User.current()!.objectId!),
+                                                 "emotions": .dictionary(emotionsDict)]
+            
+            logDebug(expressionURL)
             let expressionAttachment = try AnyAttachmentPayload(localFileURL: expressionURL,
-                                                                 attachmentType: .image,
-                                                                 extraData: extraData)
+                                                                attachmentType: .image,
+                                                                extraData: extraData)
             attachments.append(expressionAttachment)
         }
 

@@ -10,7 +10,7 @@ import Foundation
 
 class ExpressionCoordinator: PresentableCoordinator<Expression?> {
 
-    private lazy var expressionVC = ExpressionCreationViewController()
+    private lazy var expressionVC = ExpressionViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.expressionVC

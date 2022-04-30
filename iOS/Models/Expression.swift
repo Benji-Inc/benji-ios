@@ -9,6 +9,7 @@
 import Foundation
 
 struct Expression {
+    var author: String? 
     var imageURL: URL?
     var emojiString: String?
     var emotionCounts: [Emotion: Int] = [:]

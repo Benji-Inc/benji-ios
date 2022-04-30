@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class ExpressionCreationViewController: ViewController {
+class ExpressionViewController: ViewController {
     
     enum State {
         case capture
