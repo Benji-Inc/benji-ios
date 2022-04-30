@@ -10,15 +10,12 @@ import Foundation
 
 class ExpressionPhotoCaptureViewController: ViewController {
 
-    var onDidComplete: ((Result<Data?, Error>) -> Void)?
-
     // MARK: - Views
 
     lazy var faceCaptureVC = FaceImageCaptureViewController()
     /// Tapping on this view will trigger the photo capture.
     private var tapView = BaseView()
     private let label = ThemeLabel(font: .medium)
-    let personGradientView = PersonGradientView()
 
     // MARK: - Life Cycle
 
@@ -35,16 +32,12 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.view.addSubview(self.tapView)
         
         self.view.addSubview(self.label)
-        
-        self.view.addSubview(self.personGradientView)
-        self.personGradientView.isVisible = false
 
         self.tapView.didSelect { [unowned self] in
             if self.faceCaptureVC.isSessionRunning {
                 self.faceCaptureVC.capturePhoto()
             } else {
                 self.faceCaptureVC.view.isVisible = true
-                self.personGradientView.isVisible = false 
                 self.faceCaptureVC.beginSession()
             }
         }
@@ -73,8 +66,6 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.faceCaptureVC.view.makeRound()
 
         self.tapView.expandToSuperviewSize()
-        
-        self.personGradientView.frame = self.faceCaptureVC.view.frame
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.label.centerOnXAndY()

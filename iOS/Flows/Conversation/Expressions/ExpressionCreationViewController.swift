@@ -13,7 +13,6 @@ class ExpressionCreationViewController: ViewController {
     
     enum State {
         case capture
-        case review
         case emotionSelection
     }
     
@@ -26,6 +25,7 @@ class ExpressionCreationViewController: ViewController {
 
     private lazy var expressionPhotoVC = ExpressionPhotoCaptureViewController()
     private lazy var emotionsVC = EmotionsViewController()
+    let personGradientView = PersonGradientView()
 
     let doneButton = ThemeButton()
         
@@ -48,34 +48,8 @@ class ExpressionCreationViewController: ViewController {
         
         self.view.addSubview(self.emotionCollectionView)
         self.view.addSubview(self.blurView)
-        
-        self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            guard let imageData = image.previewData else { return }
-            self.expressionPhotoVC.faceCaptureVC.view.isVisible = false
-            self.expressionPhotoVC.personGradientView.isVisible = true
-            self.expressionPhotoVC.personGradientView.set(displayable: UIImage(data: imageData))
-            self.expressionPhotoVC.animate(text: "Tap again to retake")
-            self.expressionPhotoVC.faceCaptureVC.stopSession()
-            
-            self.emotionsVC.personGradientView.set(displayable: UIImage(data: imageData))
-            
-            self.state = .emotionSelection
-        }
                 
         self.addChild(viewController: self.expressionPhotoVC)
-        self.expressionPhotoVC.onDidComplete = { [unowned self] result in
-            switch result {
-            case .success(let expressionData):
-                guard let expressionData = expressionData else {
-                    return
-                }
-                self.imageURL = try? AttachmentsManager.shared.createTemporaryHeicURL(for: expressionData)
-                //self.state = .emotionSelection
-            case .failure:
-                break
-            }
-        }
-        
         self.addChild(viewController: self.emotionsVC)
         self.emotionsVC.view.alpha = 0
         
@@ -84,6 +58,33 @@ class ExpressionCreationViewController: ViewController {
         
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+        
+        self.view.addSubview(self.personGradientView)
+        self.personGradientView.alpha = 0.0
+        
+        self.setupHandlers()
+    }
+    
+    private func setupHandlers() {
+        
+        self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
+            guard let imageData = image.previewData else { return }
+            
+            self.imageURL = try? AttachmentsManager.shared.createTemporaryHeicURL(for: imageData)
+            
+            self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
+            self.personGradientView.alpha = 1.0
+            self.personGradientView.set(displayable: UIImage(data: imageData))
+            self.expressionPhotoVC.animate(text: "Tap again to retake")
+            self.expressionPhotoVC.faceCaptureVC.stopSession()
+                        
+            self.state = .emotionSelection
+        }
+        
+        self.personGradientView.didSelect { [unowned self] in
+            guard self.state == .emotionSelection else { return }
+            self.state = .capture
+        }
         
         self.doneButton.didSelect { [unowned self] in
             var emotionCounts: [Emotion: Int] = [:]
@@ -110,8 +111,7 @@ class ExpressionCreationViewController: ViewController {
                 emotionsCounts[emotion] = 1
             }
             self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
-            self.expressionPhotoVC.personGradientView.set(emotionCounts: emotionsCounts)
-            self.emotionsVC.personGradientView.set(emotionCounts: emotionsCounts)
+            self.personGradientView.set(emotionCounts: emotionsCounts)
         }.store(in: &self.cancellables)
     }
     
@@ -121,10 +121,14 @@ class ExpressionCreationViewController: ViewController {
         self.emotionCollectionView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
         
-        self.doneButton.height = Theme.buttonHeight
-        self.doneButton.width = 125
-        self.doneButton.pinToSafeAreaRight()
-        self.doneButton.pinToSafeAreaBottom()
+        self.doneButton.setSize(with: self.view.width)
+        self.doneButton.centerOnX()
+
+        if self.state == .capture {
+            self.doneButton.top = self.view.height
+        } else {
+            self.doneButton.pinToSafeAreaBottom()
+        }
         
         self.expressionPhotoVC.view.expandToSuperviewSize()
         self.emotionsVC.view.expandToSuperviewSize()
@@ -132,14 +136,24 @@ class ExpressionCreationViewController: ViewController {
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
         self.bottomGradientView.pin(.bottom)
+        
+        if self.state == .emotionSelection {
+            self.personGradientView.squaredSize = 75
+            self.personGradientView.pinToSafeAreaLeft()
+            self.personGradientView.pinToSafeAreaTop()
+        } else {
+            self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.view.frame
+        }
     }
     
     private func update(for state: State) {
         switch state {
         case .capture:
-            self.doneButton.isVisible = false
-        case .review:
-            UIView.animateKeyframes(withDuration: 1.0, delay: 0.0, animations: {
+            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
+                    self.view.layoutNow()
+                }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
                     self.emotionsVC.view.alpha = 0.0
@@ -149,8 +163,22 @@ class ExpressionCreationViewController: ViewController {
                     self.expressionPhotoVC.view.alpha = 1.0
                 }
             })
+            
+            UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
+                self.expressionPhotoVC.faceCaptureVC.view.alpha = 1.0
+                self.personGradientView.alpha = 0.0
+            } completion: { _ in
+                if !self.expressionPhotoVC.faceCaptureVC.isSessionRunning {
+                    self.expressionPhotoVC.faceCaptureVC.beginSession()
+                }
+            }
+            
         case .emotionSelection:
-            UIView.animateKeyframes(withDuration: 1.0, delay: 0.0, animations: {
+            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
+                    self.view.layoutNow()
+                }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
                     self.expressionPhotoVC.view.alpha = 0.0
