@@ -20,6 +20,7 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
+                        for expression: Expression,
                         forMessage messageInfo: (ConversationId, MessageId))
 }
 
@@ -151,9 +152,11 @@ class MessageContentView: BaseView {
         }
 
         self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            guard let message = self.message, let cid = message.streamCid else { return }
+            guard let message = self.message, let cid = message.streamCid,
+                  let expression = self.message?.authorExpression  else { return }
             self.delegate?.messageContent(self,
                                           didTapEmotion: emotion,
+                                          for: expression,
                                           forMessage: (cid, message.id))
         }
         

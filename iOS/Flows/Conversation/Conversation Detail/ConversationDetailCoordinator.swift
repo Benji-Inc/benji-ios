@@ -290,6 +290,7 @@ extension ConversationDetailCoordinator: MessageContentDelegate {
 
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
+                        for expression: Expression, 
                         forMessage messageInfo: (ConversationId, MessageId)) {
 
     }

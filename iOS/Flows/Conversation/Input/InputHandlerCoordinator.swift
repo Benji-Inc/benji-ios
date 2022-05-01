@@ -306,13 +306,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
+                        for expression: Expression,
                         forMessage messageInfo: (ConversationId, MessageId)) {
-
-        guard let message = ChatClient.shared.messageController(cid: messageInfo.0,
-                                                                messageId: messageInfo.1).message,
-        let expression = message.authorExpression else {
-            return
-        }
 
         let coordinator = EmotionDetailCoordinator(router: self.router,
                                                    deepLink: self.deepLink,
