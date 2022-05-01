@@ -137,11 +137,6 @@ extension Message: Messageable {
     }
 
     var emotionCounts: [Emotion : Int] {
-//        var dictionary: [Emotion : Int] = [:]
-//        self.reactionScores.forEach { (reaction, count) in
-//            guard let emotion = Emotion(rawValue: reaction.rawValue) else { return }
-//            dictionary[emotion] = count
-//        }
         return self.expression?.emotionCounts ?? [:]
     }
     
