@@ -309,13 +309,14 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                         forMessage messageInfo: (ConversationId, MessageId)) {
 
         guard let message = ChatClient.shared.messageController(cid: messageInfo.0,
-                                                                messageId: messageInfo.1).message else {
+                                                                messageId: messageInfo.1).message,
+        let expression = message.authorExpression else {
             return
         }
 
         let coordinator = EmotionDetailCoordinator(router: self.router,
                                                    deepLink: self.deepLink,
-                                                   emotions: message.emotions,
+                                                   expression: expression,
                                                    startingEmotion: emotion)
         self.present(coordinator)
     }

@@ -18,15 +18,17 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
 
     unowned let delegate: EmotionDetailViewControllerDelegate
 
-    var emotions: [Emotion]
+    private var emotions: [Emotion]
+    private let expression: Expression
 
-    init(emotions: [Emotion],
+    init(expression: Expression,
          startingEmotion: Emotion?,
          delegate: EmotionDetailViewControllerDelegate) {
 
+        self.expression = expression
         self.delegate = delegate
 
-        var sortedEmotions = emotions
+        var sortedEmotions = expression.emotions
         // Put the starting emotion at the front
         if let startingEmotion = startingEmotion {
             sortedEmotions.remove(object: startingEmotion)

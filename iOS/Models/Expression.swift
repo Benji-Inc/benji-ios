@@ -13,4 +13,7 @@ struct Expression {
     var imageURL: URL?
     var emojiString: String?
     var emotionCounts: [Emotion: Int] = [:]
+    var emotions: [Emotion] {
+        return Array(self.emotionCounts.keys)
+    }
 }

@@ -10,10 +10,10 @@ import Foundation
 
 class EmotionDetailCoordinator: PresentableCoordinator<Void> {
 
-    private let emotions: [Emotion]
+    private let expression: Expression
     private let startingEmotion: Emotion?
     private lazy var emotionDetailVC: EmotionDetailViewController = {
-        return EmotionDetailViewController(emotions: self.emotions,
+        return EmotionDetailViewController(expression: self.expression,
                                            startingEmotion: self.startingEmotion,
                                            delegate: self)
     }()
@@ -24,10 +24,10 @@ class EmotionDetailCoordinator: PresentableCoordinator<Void> {
 
     init(router: Router,
          deepLink: DeepLinkable?,
-         emotions: [Emotion],
+         expression: Expression,
          startingEmotion: Emotion?) {
 
-        self.emotions = emotions
+        self.expression = expression
         self.startingEmotion = startingEmotion
 
         super.init(router: router, deepLink: deepLink)

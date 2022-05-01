@@ -130,46 +130,38 @@ extension Message: Messageable {
         return self.latestReplies
     }
     
-    var emotions: [Emotion] {
-        return self.reactionScores.compactMap { dict in
-            return Emotion(rawValue: dict.key.rawValue)
-        }
-    }
-
-    var emotionCounts: [Emotion : Int] {
-        return self.expression?.emotionCounts ?? [:]
-    }
-    
-    var expression: Expression? {
-        guard let attachment = self.expressionImageAttachments.first else { return nil }
+    var expressions: [Expression] {
         
-        let expressionURL = self.expressionImageAttachments.first?.imageURL
+        return self.expressionImageAttachments.compactMap { attachment in
+            
+            let expressionURL = self.expressionImageAttachments.first?.imageURL
 
-        var emojiString: String? = nil
-        if let value = self.extraData["expression"], case RawJSON.string(let string) = value {
-            emojiString = string
-        }
-        
-        var emotionCounts: [Emotion: Int] = [:]
-        if let value = attachment.extraData?["emotions"], case RawJSON.dictionary(let dict) = value {
-            dict.keys.forEach { key in
-                if let emotion = Emotion(rawValue: key),
-                    let value = dict[key],
-                   case RawJSON.number(let count) = value {
-                    emotionCounts[emotion] = Int(count)
+            var emojiString: String? = nil
+            if let value = self.extraData["expression"], case RawJSON.string(let string) = value {
+                emojiString = string
+            }
+            
+            var emotionCounts: [Emotion: Int] = [:]
+            if let value = attachment.extraData?["emotions"], case RawJSON.dictionary(let dict) = value {
+                dict.keys.forEach { key in
+                    if let emotion = Emotion(rawValue: key),
+                        let value = dict[key],
+                       case RawJSON.number(let count) = value {
+                        emotionCounts[emotion] = Int(count)
+                    }
                 }
             }
-        }
-        
-        var author: String?
-        if let value = attachment.extraData?["author"], case RawJSON.string(let string) = value {
-            author = string
-        }
+            
+            var author: String?
+            if let value = attachment.extraData?["author"], case RawJSON.string(let string) = value {
+                author = string
+            }
 
-        return Expression(author: author,
-                          imageURL: expressionURL,
-                          emojiString: emojiString,
-                          emotionCounts: emotionCounts)
+            return Expression(author: author,
+                              imageURL: expressionURL,
+                              emojiString: emojiString,
+                              emotionCounts: emotionCounts)
+        }
     }
     
     static func message(with cid: ConversationId, messageId: MessageId) -> Message {

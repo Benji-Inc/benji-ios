@@ -40,8 +40,7 @@ protocol Messageable {
     var recentReplies: [Messageable] { get }
     var lastUpdatedAt: Date? { get }
 
-    var emotionCounts: [Emotion : Int] { get }
-    var expression: Expression? { get }
+    var expressions: [Expression] { get }
 
     func setToConsumed() async 
     func setToUnconsumed() async throws
@@ -106,6 +105,12 @@ extension Messageable {
     var nonMeConsumers: [PersonType] {
         return self.hasBeenConsumedBy.filter { person in
             return !person.isCurrentUser
+        }
+    }
+    
+    var authorExpression: Expression? {
+        return self.expressions.first { expression in
+            return expression.author == User.current()?.objectId
         }
     }
 }

@@ -97,7 +97,8 @@ extension MessageController {
                     score = 0
                     break
                 }
-                score = (message.emotionCounts[emotion] ?? 0) + 1
+                score = 1 
+                //score = (message.emotionCounts[emotion] ?? 0) + 1
             case .read:
                 score = 0
             }
