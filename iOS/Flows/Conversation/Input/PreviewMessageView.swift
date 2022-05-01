@@ -113,6 +113,6 @@ class PreviewMessageView: SpeechBubbleView {
             return
         }
         
-        self.personGradientView.set(expression: expression)
+        self.personGradientView.set(expression: expression, author: User.current()!.objectId!)
     }
 }

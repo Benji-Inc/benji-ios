@@ -31,13 +31,16 @@ class PersonGradientView: DisplayableImageView {
     
     // MARK: - Open setters
     
-    func set(expression: Expression?, defaultColors: [ThemeColor] = [.B0, .B6]) {
+    func set(expression: Expression?,
+             author: String,
+             defaultColors: [ThemeColor] = [.B0, .B6]) {
+        
         Task {
             if let expression = expression, let expressionURL = expression.imageURL {
                 self.set(displayable: expressionURL)
                 self.set(emotionCounts: expression.emotionCounts)
-            } else if let author = await PeopleStore.shared.getPerson(withPersonId: expression?.author ?? "") {
-                self.set(displayable: author)
+            } else if let person = await PeopleStore.shared.getPerson(withPersonId: author) {
+                self.set(displayable: person)
                 self.set(emotionCounts: expression?.emotionCounts ?? [:])
             } else {
                 self.set(displayable: User.current()!)

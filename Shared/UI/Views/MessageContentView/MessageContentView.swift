@@ -301,7 +301,7 @@ class MessageContentView: BaseView {
         }
         self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
 
-        self.authorView.set(expression: message.authorExpression)
+        self.authorView.set(expression: message.authorExpression, author: message.authorId)
         self.setNeedsLayout()
     }
 

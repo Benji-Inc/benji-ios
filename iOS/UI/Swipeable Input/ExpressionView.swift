@@ -45,6 +45,6 @@ class AddExpressionView: BaseView {
             return
         }
 
-        self.personGradientView.set(expression: expression)
+        self.personGradientView.set(expression: expression, author: User.current()!.objectId!)
     }
 }
