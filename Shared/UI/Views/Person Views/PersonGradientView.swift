@@ -43,8 +43,7 @@ class PersonGradientView: DisplayableImageView {
                 self.set(displayable: person)
                 self.set(emotionCounts: expression?.emotionCounts ?? [:])
             } else {
-                self.set(displayable: User.current()!)
-                self.set(emotionCounts: expression?.emotionCounts ?? [:])
+                logDebug("no person found for \(author)")
             }
         }
     }
