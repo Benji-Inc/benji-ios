@@ -80,19 +80,19 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
 
 extension ExpressionDetailViewController: TransitionableViewController {
 
-    var sendingPresentationType: TransitionType {
+    var dismissalType: TransitionType {
         return .blur
     }
 
-    var sendingDismissalType: TransitionType {
+    var presentationType: TransitionType {
         return .blur
     }
 
-    var receivingPresentationType: TransitionType {
-        return .blur
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
     }
 
-    var receivingDismissalType: TransitionType {
-        return .blur
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
     }
 }

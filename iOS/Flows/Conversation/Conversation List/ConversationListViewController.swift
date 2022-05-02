@@ -395,24 +395,36 @@ extension ConversationListViewController: MessageSendingViewControllerType {
 
 extension ConversationListViewController: TransitionableViewController {
 
-    var receivingPresentationType: TransitionType {
-        return .fade
+    var presentationType: TransitionType {
+        return .fadeOutIn
     }
 
-    var receivingDismissalType: TransitionType {
-        guard let messageContent = self.getCentmostMessageCellContent() else {
-            return .fade
-        }
-
-        return .message(messageContent)
+    var dismissalType: TransitionType {
+        return self.presentationType
     }
 
-    var sendingPresentationType: TransitionType {
-        guard let messageContent = self.getCentmostMessageCellContent() else {
-            return .fade
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        switch toVCPresentationType {
+        case .message:
+            guard let messageContent = self.getCentmostMessageCellContent() else { break }
+            return .message(messageContent)
+        default:
+            break
         }
 
-        return .message(messageContent)
+        return toVCPresentationType
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        switch fromVCDismissalType {
+        case .message:
+            guard let messageContent = self.getCentmostMessageCellContent() else { break }
+            return .message(messageContent)
+        default:
+            break
+        }
+
+        return fromVCDismissalType
     }
 
     func getCentmostMessageCellContent() -> MessageContentView? {

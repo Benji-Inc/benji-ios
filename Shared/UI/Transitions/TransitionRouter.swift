@@ -32,26 +32,73 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return self.fromVC.sendingPresentationType.duration
+        let isPresenting = self.operation == .push
+        if isPresenting {
+            return self.toVC.presentationType.duration
+        } else {
+            return self.fromVC.dismissalType.duration
+        }
     }
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let fromTransition = self.fromVC.getTransitionType(for: self.operation, isFromVC: true)
-        let toTransition = self.toVC.getTransitionType(for: self.operation, isFromVC: false)
+        let isPresenting = self.operation == .push
 
-        switch (fromTransition, toTransition) {
-            #if IOS
-        case (let .message(fromView), let .message(toView)):
-            self.messageTranstion(fromView: fromView, toView: toView, transitionContext: transitionContext)
-            #endif 
-        case (let .move(fromView), let .move(toView)):
-            self.moveTranstion(fromView: fromView, toView: toView, transitionContext: transitionContext)
-        case (let .fill(expandingView), .fade):
-            self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
-        case (.blur, _), (_, .blur):
-            self.blur(transitionContext: transitionContext)
-        default:
+        let presentedVCTransition: TransitionType
+        let presentingVCTransition: TransitionType
+        if isPresenting {
+            presentedVCTransition = self.toVC.presentationType
+            presentingVCTransition = self.fromVC.getFromVCPresentationType(for: presentedVCTransition)
+        } else {
+            presentedVCTransition = self.fromVC.dismissalType
+            presentingVCTransition = self.toVC.getToVCDismissalType(for: presentedVCTransition)
+        }
+
+
+        switch presentedVCTransition {
+        case .move(let presentedView):
+            // A move transition required that both VCs support the move style.
+            // If one does not, fall back to a cross dissolve animation.
+            switch presentingVCTransition {
+            case .move(let presentingView):
+                if isPresenting {
+                    self.moveTranstion(fromView: presentingView,
+                                       toView: presentedView,
+                                       transitionContext: transitionContext)
+                } else {
+                    self.moveTranstion(fromView: presentedView,
+                                       toView: presentingView,
+                                       transitionContext: transitionContext)
+                }
+            default:
+                self.crossDissolveTransition(transitionContext: transitionContext)
+            }
+        case .fadeOutIn:
             self.fadeTransition(transitionContext: transitionContext)
+        case .crossDissolve:
+            self.crossDissolveTransition(transitionContext: transitionContext)
+        case .fill(let expandingView):
+            self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
+        case .blur:
+            self.blur(transitionContext: transitionContext)
+#if IOS
+        case .message(let presentedView):
+            // Message transitions require that both VCs support the message transition style.
+            // If one doesn't, then fallback to cross dissolve.
+            switch presentingVCTransition {
+            case .message(let presentingView):
+                if isPresenting {
+                    self.messageTranstion(fromView: presentingView,
+                                          toView: presentedView,
+                                          transitionContext: transitionContext)
+                } else {
+                    self.messageTranstion(fromView: presentedView,
+                                          toView: presentingView,
+                                          transitionContext: transitionContext)
+                }
+            default:
+                self.crossDissolveTransition(transitionContext: transitionContext)
+            }
+#endif
         }
     }
 

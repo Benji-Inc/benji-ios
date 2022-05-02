@@ -27,9 +27,25 @@ protocol OnboardingViewControllerDelegate: AnyObject {
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>,
                                 TransitionableViewController {
 
-    var receivingPresentationType: TransitionType {
-        return .fade
+    // MARK: - Transitionable
+
+    var presentationType: TransitionType {
+        return .fadeOutIn
     }
+
+    var dismissalType: TransitionType {
+        return self.presentationType
+    }
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
+    }
+
+    // MARK: - Views
 
     lazy var welcomeVC = WelcomeViewController()
     lazy var phoneVC = PhoneViewController()

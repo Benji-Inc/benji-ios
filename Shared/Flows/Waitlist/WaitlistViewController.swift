@@ -101,7 +101,20 @@ class WaitlistViewController: ViewController {
 }
 
 extension WaitlistViewController: TransitionableViewController {
-    var receivingPresentationType: TransitionType {
-        return .fade
+
+    var presentationType: TransitionType {
+        return .fadeOutIn
+    }
+
+    var dismissalType: TransitionType {
+        return self.presentationType
+    }
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
     }
 }

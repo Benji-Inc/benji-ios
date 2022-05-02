@@ -209,12 +209,31 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
 }
 
 extension MessageDetailViewController: TransitionableViewController {
-    var receivingPresentationType: TransitionType {
+
+    var presentationType: TransitionType {
         return .message(self.messageContentView)
     }
     
-    var sendingDismissalType: TransitionType {
+    var dismissalType: TransitionType {
         return .message(self.messageContentView)
+    }
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        switch toVCPresentationType {
+        case .message:
+            return .message(self.messageContentView)
+        default:
+            return toVCPresentationType
+        }
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        switch fromVCDismissalType {
+        case .message:
+            return .message(self.messageContentView)
+        default:
+            return fromVCDismissalType
+        }
     }
     
     func prepareForPresentation() {
