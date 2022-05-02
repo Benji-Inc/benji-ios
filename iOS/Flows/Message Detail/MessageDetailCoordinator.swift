@@ -172,9 +172,9 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         }
     }
     
-    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {
         guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
-        self.presentEmotions(for: message)
+        self.presentExpressionCreation(for: message)
     }
 
     func messageContent(_ content: MessageContentView,
@@ -197,23 +197,26 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
     }
     
-    func presentEmotions(for message: Messageable) {
-        let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { [unowned self] emotions in
-            emotions.forEach { emotion in
+    
+    func presentExpressionCreation(for message: Messageable) {
+        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            guard let expression = result else { return }
+            
+            expression.emotions.forEach { emotion in
                 AnalyticsManager.shared.trackEvent(type: .emotionSelected,
                                                    properties: ["value": emotion.rawValue])
             }
             
-            guard !emotions.isEmpty else { return }
-            
-            guard let controller = ChatClient.shared.messageController(for: message) else { return }
-            
-            Task {
-                await emotions.asyncForEach { emotion in
-                    await controller.addReaction(with: .emotion(emotion))
-                }
-            }
+//            guard !expression.emotions.isEmpty else { return }
+//            
+//            guard let controller = ChatClient.shared.messageController(for: message) else { return }
+//            
+//            Task {
+//                await emotions.asyncForEach { emotion in
+//                    await controller.addReaction(with: .emotion(emotion))
+//                }
+//            }
             
             self.messageVC.dismiss(animated: true)
         }

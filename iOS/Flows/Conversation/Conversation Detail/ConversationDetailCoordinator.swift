@@ -284,7 +284,7 @@ extension ConversationDetailCoordinator: MessageContentDelegate {
     }
     
     func messageContent(_ content: MessageContentView,
-                        didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+                        didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {
         
     }
 
