@@ -58,7 +58,7 @@ class ExpressionPhotoCaptureViewController: ViewController {
         super.viewDidLayoutSubviews()
         
         self.faceCaptureVC.view.expandToSuperviewSize()
-        self.faceCaptureVC.cameraView.makeRound()
+        self.faceCaptureVC.cameraViewContainer.makeRound()
 
         self.tapView.expandToSuperviewSize()
         

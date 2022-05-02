@@ -150,7 +150,7 @@ class ExpressionViewController: ViewController {
             self.personGradientView.pinToSafeAreaLeft()
             self.personGradientView.pinToSafeAreaTop()
         } else {
-            self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.view.frame
+            self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.cameraViewContainer.frame
         }
     }
     
