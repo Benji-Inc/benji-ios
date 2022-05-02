@@ -35,8 +35,6 @@ class FaceImageCaptureViewController: ViewController {
         metalView.delegate = self
         return metalView
     }()
-    /// A view to help the user center their face in the image.
-    var faceBoxView = BoxView()
 
     let orientation: CGImagePropertyOrientation = .left
 
@@ -50,16 +48,20 @@ class FaceImageCaptureViewController: ViewController {
         super.viewDidLoad()
 
         self.faceCaptureSession.avCaptureDelegate = self
+        
+        self.cameraView.layer.borderColor = ThemeColor.B1.color.cgColor
+        self.cameraView.layer.borderWidth = 2
+        self.cameraView.clipsToBounds = true
 
         self.view.addSubview(self.cameraView)
-        self.view.addSubview(self.faceBoxView)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.cameraView.expandToSuperviewSize()
-        self.faceBoxView.expandToSuperviewSize()
+        
+        self.cameraView.squaredSize = self.view.height * 0.4
+        self.cameraView.pinToSafeArea(.top, offset: .custom(20))
+        self.cameraView.centerOnX()
     }
 
     // MARK: - Photo Capture Session

@@ -17,6 +17,10 @@ class ExpressionViewController: ViewController {
         case emotionSelection
     }
     
+    override var analyticsIdentifier: String? {
+        return "SCREEN_EXPRESSION"
+    }
+    
     private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)

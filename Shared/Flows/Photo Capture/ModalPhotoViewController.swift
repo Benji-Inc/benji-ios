@@ -11,7 +11,7 @@ import Foundation
 /// A profile photo view controller with a popopver presentation style.
 class ModalPhotoViewController: ProfilePhotoCaptureViewController {
     
-    private let label = ThemeLabel(font: .small, textColor: .B0)
+    private let label = ThemeLabel(font: .medium, textColor: .white)
     
     override func initializeViews() {
         super.initializeViews()
@@ -38,10 +38,8 @@ class ModalPhotoViewController: ProfilePhotoCaptureViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-                
-        self.label.setSize(withWidth: self.view.width)
-        let offset = ((self.view.width * 0.9) * 0.5) + Theme.ContentOffset.long.value
-        self.label.center.y = (self.view.halfHeight * 0.95) - offset
-        self.label.centerOnX()
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.label.centerOnXAndY()
     }
 }

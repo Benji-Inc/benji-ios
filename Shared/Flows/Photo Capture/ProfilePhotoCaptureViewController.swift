@@ -133,16 +133,18 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.faceCaptureVC.view.expandToSuperviewSize()
+
+        self.faceCaptureVC.cameraView.roundCorners()
 
         self.animationView.size = CGSize(width: 140, height: 140)
         self.animationView.centerOnX()
-        self.animationView.centerY = self.view.centerY * 0.95
+        self.animationView.centerY = self.faceCaptureVC.cameraView.centerY
 
         self.errorView.bottom = self.view.height - self.errorOffset
         
         self.tapView.expandToSuperviewSize()
-        
-        self.faceCaptureVC.view.expandToSuperviewSize()
     }
 
     private func handle(state: PhotoState) {
@@ -220,7 +222,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
 
         UIView.animate(withDuration: 0.2, animations: {
             self.animationView.alpha = 0
-            self.faceCaptureVC.faceBoxView.alpha = 1.0
             self.view.layoutNow()
         })
     }
@@ -254,9 +255,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         guard let data = image.previewData else { return }
                 
         do {
-            await UIView.awaitAnimation(with: .fast, animations: {
-                self.faceCaptureVC.faceBoxView.alpha = 0.0
-            })
             try await self.presentDisclosure(with: data)
         } catch {
             self.animateError(with: "There was an error uploading your photo.", show: true)
