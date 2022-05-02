@@ -110,17 +110,11 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                                    properties: ["value": emotion.rawValue])
             }
             
-            guard !expression.emotions.isEmpty else { return }
-            
-            // add new expression attachement. 
-            
-//            guard let controller = ChatClient.shared.messageController(for: message) else { return }
-//
-//            Task {
-//                await emotions.asyncForEach { emotion in
-//                    await controller.addReaction(with: .emotion(emotion))
-//                }
-//            }
+            guard let controller = ChatClient.shared.messageController(for: message) else { return }
+
+            Task {
+                try await controller.add(expression: expression)
+            }
         }
     }
     
@@ -316,7 +310,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         Task.onMainActorAsync {
             guard let object = try? await Expression.getObject(with: expression.expressionId) else { return }
             
-            let coordinator = EmotionDetailCoordinator(router: self.router,
+            let coordinator = ExpressionDetailCoordinator(router: self.router,
                                                        deepLink: self.deepLink,
                                                        expression: object,
                                                        startingEmotion: emotion)

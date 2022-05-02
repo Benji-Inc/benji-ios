@@ -8,12 +8,12 @@
 
 import Foundation
 
-class EmotionDetailCoordinator: PresentableCoordinator<Void> {
+class ExpressionDetailCoordinator: PresentableCoordinator<Void> {
 
     private let expression: Expression
     private let startingEmotion: Emotion?
-    private lazy var emotionDetailVC: EmotionDetailViewController = {
-        return EmotionDetailViewController(expression: self.expression,
+    private lazy var emotionDetailVC: ExpressionDetailViewController = {
+        return ExpressionDetailViewController(expression: self.expression,
                                            startingEmotion: self.startingEmotion,
                                            delegate: self)
     }()
@@ -34,9 +34,9 @@ class EmotionDetailCoordinator: PresentableCoordinator<Void> {
     }
 }
 
-extension EmotionDetailCoordinator: EmotionDetailViewControllerDelegate {
+extension ExpressionDetailCoordinator: ExpressionDetailViewControllerDelegate {
 
-    func emotionDetailViewControllerDidFinish(_ controller: EmotionDetailViewController) {
+    func emotionDetailViewControllerDidFinish(_ controller: ExpressionDetailViewController) {
         self.finishFlow(with: ())
     }
 }

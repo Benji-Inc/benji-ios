@@ -24,6 +24,15 @@ protocol MessageContentDelegate: AnyObject {
                         forMessage messageInfo: (ConversationId, MessageId))
 }
 
+extension MessageContentDelegate {
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {}
+    
+    func messageContent(_ content: MessageContentView,
+                        didTapEmotion emotion: Emotion,
+                        for expression: ExpressionInfo,
+                        forMessage messageInfo: (ConversationId, MessageId)) {}
+}
+
 class MessageContentView: BaseView {
     
     enum Layout {
@@ -70,8 +79,8 @@ class MessageContentView: BaseView {
     lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: self.cellDiameter)
     
     let emotionLabel = ThemeLabel(font: .regular)
-//    let addEmotionButton = ThemeButton()
-//    let addEmotionImageView = UIImageView(image: UIImage(systemName: "plus"))
+    let addEmotionButton = ThemeButton()
+    let addEmotionImageView = UIImageView(image: UIImage(systemName: "plus"))
 
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
@@ -106,13 +115,13 @@ class MessageContentView: BaseView {
         self.emotionLabel.setText("Empty")
         self.emotionLabel.alpha = 0 
         
-//        self.addEmotionImageView.contentMode = .scaleAspectFit
-//        self.addEmotionImageView.tintColor = ThemeColor.white.color
-//        self.bubbleView.addSubview(self.addEmotionImageView)
-//        self.addEmotionImageView.alpha = 0
-//        self.bubbleView.addSubview(self.addEmotionButton)
-//        self.addEmotionButton.set(style: .normal(color: .clear, text: ""))
-//        self.addEmotionButton.alpha = 0
+        self.addEmotionImageView.contentMode = .scaleAspectFit
+        self.addEmotionImageView.tintColor = ThemeColor.white.color
+        self.bubbleView.addSubview(self.addEmotionImageView)
+        self.addEmotionImageView.alpha = 0
+        self.bubbleView.addSubview(self.addEmotionButton)
+        self.addEmotionButton.set(style: .normal(color: .clear, text: ""))
+        self.addEmotionButton.alpha = 0
 
         self.bubbleView.addSubview(self.mainContentArea)
 
@@ -165,10 +174,10 @@ class MessageContentView: BaseView {
             self.delegate?.messageContent(self, didTapAttachmentForMessage: (cid, message.id))
         }
         
-//        self.addEmotionButton.didSelect { [unowned self] in
-//            guard let message = self.message, let cid = message.streamCid else { return }
-//            self.delegate?.messageContent(self, didTapAddExpressionForMessage: (cid, message.id))
-//        }
+        self.addEmotionButton.didSelect { [unowned self] in
+            guard let message = self.message, let cid = message.streamCid else { return }
+            self.delegate?.messageContent(self, didTapAddExpressionForMessage: (cid, message.id))
+        }
     }
 
     override func layoutSubviews() {
@@ -181,12 +190,12 @@ class MessageContentView: BaseView {
         self.emotionLabel.setSize(withWidth: self.width)
         self.emotionLabel.centerOnXAndY()
         
-//        self.addEmotionImageView.squaredSize = 20
-//        self.addEmotionImageView.pin(.right, offset: .long)
-//        self.addEmotionImageView.pin(.bottom, offset: .long)
-//
-//        self.addEmotionButton.squaredSize = 50
-//        self.addEmotionButton.center = self.addEmotionImageView.center
+        self.addEmotionImageView.squaredSize = 20
+        self.addEmotionImageView.pin(.right, offset: .long)
+        self.addEmotionImageView.pin(.bottom, offset: .long)
+
+        self.addEmotionButton.squaredSize = 50
+        self.addEmotionButton.center = self.addEmotionImageView.center
 
         self.blurView.expandToSuperviewSize()
 
@@ -318,6 +327,7 @@ class MessageContentView: BaseView {
                 self.authorView.set(info: info, author: message.authorId)
             } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId){
                 self.authorView.set(displayable: author)
+                self.authorView.set(emotionCounts: [:])
             }
             
             self.setNeedsLayout()
@@ -365,14 +375,14 @@ class MessageContentView: BaseView {
                 }
                 
                 // Only allow the author to add emotions
-//                if let msg = self.message, msg.isFromCurrentUser {
-//                    self.addEmotionImageView.alpha = 1.0
-//                    self.addEmotionButton.alpha = 1.0
-//                }
+                if let msg = self.message, msg.isFromCurrentUser, msg.authorExpression.isNil {
+                    self.addEmotionImageView.alpha = 1.0
+                    self.addEmotionButton.alpha = 1.0
+                }
     
             } else {
-//                self.addEmotionButton.alpha = 0.0
-//                self.addEmotionImageView.alpha = 0.0
+                self.addEmotionButton.alpha = 0.0
+                self.addEmotionImageView.alpha = 0.0
                 self.emotionLabel.alpha = 0.0
             }
         } completion: { completed in

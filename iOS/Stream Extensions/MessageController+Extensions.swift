@@ -87,18 +87,52 @@ extension MessageController {
             }
         }
     }
+    
+    func add(expression: Expression) async throws {
+        
+        let text = self.message?.text ?? ""
+        var extraData = self.message?.extraData ?? [:]
+        var expressions: [RawJSON] = []
+        if let value = extraData["expressions"], case RawJSON.array(let array) = value {
+            expressions = array
+        }
+        do {
+            let saved = try await expression.saveToServer()
+            
+            let expressionDict: [String: RawJSON] = ["authorId": .string(User.current()!.objectId!),
+                                                     "expressionId": .string(saved.objectId!)]
+            expressions.append(.dictionary(expressionDict))
+            
+            extraData["expressions"] = .array(expressions)
+        } catch {
+            throw(ClientError.apiError(detail: "Error saving expression for message."))
+        }
+        
+        return await withCheckedContinuation({ continuation in
+            
+            self.editMessage(text: text,
+                             extraData: extraData) { error in
+                
+                if let e = error {
+                    Task {
+                        await ToastScheduler.shared.schedule(toastType: .error(e))
+                    }
+                    logError(e)
+                } else {
+                    Task {
+                        let image = UIImage(systemName: "face.smiling")!
+                        await ToastScheduler.shared.schedule(toastType: .success(image, "Expression added"))
+                    }
+                }
+                continuation.resume(returning: ())
+            }
+        })
+    }
 
     func addReaction(with type: ReactionType, extraData: [String: RawJSON] = [:]) async {
         return await withCheckedContinuation({ continuation in
             let score: Int
             switch type {
-            case .emotion(let emotion):
-                guard let message = self.message else {
-                    score = 0
-                    break
-                }
-                score = 1 
-                //score = (message.emotionCounts[emotion] ?? 0) + 1
             case .read:
                 score = 0
             }
@@ -134,6 +168,7 @@ extension MessageController {
     func createNewReply(with sendable: Sendable) async throws -> MessageId {
         let messageBody: String
         var attachments: [AnyAttachmentPayload] = []
+        var extraData: [String: RawJSON] = [:]
 
         switch sendable.kind {
         case .text(let text):
@@ -153,14 +188,24 @@ extension MessageController {
         case .attributedText, .video, .location, .emoji, .audio, .contact:
             throw(ClientError.apiError(detail: "Message type not supported."))
         }
-
-
+        
+        if let expression = sendable.expression {
+            do {
+                let saved = try await expression.saveToServer()
+                
+                let expressionDict: [String: RawJSON] = ["authorId": .string(User.current()!.objectId!),
+                                                         "expressionId": .string(saved.objectId!)]
+                
+                extraData = ["expressions" : .array([.dictionary(expressionDict)])]
+            } catch {
+                throw(ClientError.apiError(detail: "Error saving expression for message."))
+            }
+        }
 
         return try await self.createNewReply(sendable: sendable,
                                              text: messageBody,
-                                             attachments: attachments)
-
-
+                                             attachments: attachments,
+                                             extraData: extraData)
     }
 
     /// Creates a new reply message locally and schedules it for send.
@@ -187,9 +232,6 @@ extension MessageController {
 
         return try await withCheckedThrowingContinuation { continuation in
             var data = extraData
-            if let emoji = sendable.expression?.emojiString {
-                data["expression"] = .string(emoji)
-            }
             data["context"] = .string(sendable.deliveryType.rawValue)
             
             self.createNewReply(text: text,

@@ -8,22 +8,22 @@
 
 import Foundation
 
-protocol EmotionDetailViewControllerDelegate: AnyObject {
-    func emotionDetailViewControllerDidFinish(_ controller: EmotionDetailViewController)
+protocol ExpressionDetailViewControllerDelegate: AnyObject {
+    func emotionDetailViewControllerDidFinish(_ controller: ExpressionDetailViewController)
 }
 
-class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetailSection,
+class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDetailSection,
                                    EmotionDetailItem,
                                    EmotionDetailCollectionViewDataSource> {
 
-    unowned let delegate: EmotionDetailViewControllerDelegate
+    unowned let delegate: ExpressionDetailViewControllerDelegate
 
     private var emotions: [Emotion]
     private let expression: Expression
 
     init(expression: Expression,
          startingEmotion: Emotion?,
-         delegate: EmotionDetailViewControllerDelegate) {
+         delegate: ExpressionDetailViewControllerDelegate) {
 
         self.expression = expression
         self.delegate = delegate
@@ -78,7 +78,7 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
     }
 }
 
-extension EmotionDetailViewController: TransitionableViewController {
+extension ExpressionDetailViewController: TransitionableViewController {
 
     var sendingPresentationType: TransitionType {
         return .blur
