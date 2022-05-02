@@ -209,11 +209,11 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
 }
 
 extension MessageDetailViewController: TransitionableViewController {
-    var receivingPresentationType: TransitionType {
+    var toVCPresentationType: TransitionType {
         return .message(self.messageContentView)
     }
     
-    var sendingDismissalType: TransitionType {
+    var fromVCDismissalType: TransitionType {
         return .message(self.messageContentView)
     }
     

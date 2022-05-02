@@ -384,7 +384,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
 }
 
 extension RoomViewController: TransitionableViewController {
-    var receivingPresentationType: TransitionType {
-        return .fade
+    var toVCPresentationType: TransitionType {
+        return .fadeOutIn
     }
 }

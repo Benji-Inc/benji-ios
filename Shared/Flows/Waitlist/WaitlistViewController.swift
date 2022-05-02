@@ -97,7 +97,7 @@ class WaitlistViewController: ViewController {
 }
 
 extension WaitlistViewController: TransitionableViewController {
-    var receivingPresentationType: TransitionType {
-        return .fade
+    var toVCPresentationType: TransitionType {
+        return .fadeOutIn
     }
 }

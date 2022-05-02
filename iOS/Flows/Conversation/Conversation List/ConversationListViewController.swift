@@ -395,21 +395,21 @@ extension ConversationListViewController: MessageSendingViewControllerType {
 
 extension ConversationListViewController: TransitionableViewController {
 
-    var receivingPresentationType: TransitionType {
-        return .fade
+    var toVCPresentationType: TransitionType {
+        return .fadeOutIn
     }
 
-    var receivingDismissalType: TransitionType {
+    var toVCDismissalType: TransitionType {
         guard let messageContent = self.getCentmostMessageCellContent() else {
-            return .fade
+            return .fadeOutIn
         }
 
         return .message(messageContent)
     }
 
-    var sendingPresentationType: TransitionType {
+    var fromVCPresentationType: TransitionType {
         guard let messageContent = self.getCentmostMessageCellContent() else {
-            return .fade
+            return .fadeOutIn
         }
 
         return .message(messageContent)

@@ -341,13 +341,13 @@ extension ThreadViewController: MessageSendingViewControllerType {
 
 extension ThreadViewController: TransitionableViewController {
     
-    var receivingPresentationType: TransitionType {
+    var toVCPresentationType: TransitionType {
         return .message(self.parentMessageView)
     }
     
-    var receivingDismissalType: TransitionType {
+    var toVCDismissalType: TransitionType {
         if self.isPresentingImage {
-            return .fade
+            return .fadeOutIn
         } else if let first = self.collectionView.indexPathsForSelectedItems?.first,
            let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
             return .message(cell.content)
@@ -356,13 +356,13 @@ extension ThreadViewController: TransitionableViewController {
         }
     }
 
-    var sendingDismissalType: TransitionType {
+    var fromVCDismissalType: TransitionType {
         return .message(self.parentMessageView)
     }
     
-    var sendingPresentationType: TransitionType {
+    var fromVCPresentationType: TransitionType {
         guard !self.isPresentingImage, let first = self.collectionView.indexPathsForSelectedItems?.first,
-              let cell = self.collectionView.cellForItem(at: first) as? MessageCell else { return .fade }
+              let cell = self.collectionView.cellForItem(at: first) as? MessageCell else { return .fadeOutIn }
         return .message(cell.content)
     }
     

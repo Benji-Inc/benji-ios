@@ -107,6 +107,9 @@
 		80E228D827C6C70000AF37AC /* SwipeInputHintAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E228D727C6C70000AF37AC /* SwipeInputHintAnimator.swift */; };
 		80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E228DC27C80B1C00AF37AC /* MessageDetailViewController.swift */; };
 		80E228DF27C8132500AF37AC /* MessageDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E228DE27C8132500AF37AC /* MessageDetailCoordinator.swift */; };
+		80E970FE28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E970FD28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift */; };
+		80E970FF28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E970FD28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift */; };
+		80E9710028204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E970FD28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift */; };
 		80F1C4D6270E505E00616F01 /* Equatable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F1C4D5270E505E00616F01 /* Equatable+Extensions.swift */; };
 		80F1C4D8270E505E00616F01 /* Equatable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F1C4D5270E505E00616F01 /* Equatable+Extensions.swift */; };
 		80F88BAE26F11F02006C7677 /* ConversationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F88BAD26F11F02006C7677 /* ConversationController+Extensions.swift */; };
@@ -1065,6 +1068,7 @@
 		80E228D727C6C70000AF37AC /* SwipeInputHintAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInputHintAnimator.swift; sourceTree = "<group>"; };
 		80E228DC27C80B1C00AF37AC /* MessageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailViewController.swift; sourceTree = "<group>"; };
 		80E228DE27C8132500AF37AC /* MessageDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDetailCoordinator.swift; sourceTree = "<group>"; };
+		80E970FD28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+CrossDissolve.swift"; sourceTree = "<group>"; };
 		80F1C4D5270E505E00616F01 /* Equatable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Equatable+Extensions.swift"; sourceTree = "<group>"; };
 		80F88BAD26F11F02006C7677 /* ConversationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationController+Extensions.swift"; sourceTree = "<group>"; };
 		80FA868B26F111830053101B /* ChatMessage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatMessage+Extensions.swift"; sourceTree = "<group>"; };
@@ -1761,6 +1765,7 @@
 				D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */,
 				D61553612746E62D00B08459 /* TransitionRouter+Message.swift */,
 				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
+				80E970FD28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift */,
 			);
 			path = "Transition Types";
 			sourceTree = "<group>";
@@ -3280,6 +3285,7 @@
 				D61128342804DBE400574B96 /* String+PhoneNumbers.swift in Sources */,
 				D61128142804DB9C00574B96 /* RootNavigationController.swift in Sources */,
 				D611F7BD2815B0FE006D09D3 /* EmojiCategory.swift in Sources */,
+				80E9710028204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift in Sources */,
 				80580E1E2805F82500B7264C /* EmotionCircleCollectionView.swift in Sources */,
 				D61128412804DBEE00574B96 /* UIWindow+Extensions.swift in Sources */,
 				D61128542804DC3200574B96 /* WelcomeViewController.swift in Sources */,
@@ -3610,6 +3616,7 @@
 				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
+				80E970FE28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift in Sources */,
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
@@ -3920,6 +3927,7 @@
 				D660C4CA2793626700221F76 /* AddView.swift in Sources */,
 				D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */,
 				8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
+				80E970FF28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift in Sources */,
 				D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,
 				D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
 				D63DB22125E9990100F6B323 /* Array+Extensions.swift in Sources */,

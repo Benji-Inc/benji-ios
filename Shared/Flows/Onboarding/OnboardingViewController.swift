@@ -27,8 +27,8 @@ protocol OnboardingViewControllerDelegate: AnyObject {
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>,
                                 TransitionableViewController {
 
-    var receivingPresentationType: TransitionType {
-        return .fade
+    var toVCPresentationType: TransitionType {
+        return .fadeOutIn
     }
 
     lazy var welcomeVC = WelcomeViewController()

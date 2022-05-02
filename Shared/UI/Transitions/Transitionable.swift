@@ -12,53 +12,49 @@ import UIKit
 protocol TransitionableViewController where Self: UIViewController & Transitionable { }
 
 protocol Transitionable {
-    var sendingPresentationType: TransitionType { get }
-    var sendingDismissalType: TransitionType { get }
-    var receivingPresentationType: TransitionType { get }
-    var receivingDismissalType: TransitionType { get }
-    var transitionDuration: TimeInterval { get }
 
-    func getTransitionType(for operation: UINavigationController.Operation, isFromVC: Bool) -> TransitionType
+    /// The transition to use when this transitionable is being presented by another transitionable.
+    var toVCPresentationType: TransitionType { get }
+    /// The transition to use when this transitionable is being dismissed..
+    var fromVCDismissalType: TransitionType { get }
+
+    /// The transition to use when this transitionable is presenting another transitionable.
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType
+    /// The transition to use when this transitionable is dismissing another transitionable.
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType
+
+    /// How long a transition should last.
+    var transitionDuration: TimeInterval { get }
 }
 
 extension Transitionable {
 
-    var sendingPresentationType: TransitionType {
-        return .fade
+    var fromVCDismissalType: TransitionType {
+        return self.toVCPresentationType
     }
 
-    var sendingDismissalType: TransitionType {
-        return .fade
+    /// The transition to use when this transitionable is presenting another transitionable.
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
     }
-
-    var receivingDismissalType: TransitionType {
-        return .fade
+    /// The transition to use when this transitionable is dismissing another transitionable.
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
     }
 
     // Uses the types duration as the default but a controller can also override
     var transitionDuration: TimeInterval {
-        return self.receivingPresentationType.duration
-    }
-
-    func getTransitionType(for operation: UINavigationController.Operation, isFromVC: Bool) -> TransitionType {
-        switch operation {
-        case .none:
-            return isFromVC ? self.sendingPresentationType : self.receivingPresentationType
-        case .push:
-            return isFromVC ? self.sendingPresentationType : self.receivingPresentationType
-        case .pop:
-            return isFromVC ? self.sendingDismissalType : self.receivingDismissalType
-        @unknown default:
-            return self.receivingPresentationType
-        }
+        return self.toVCPresentationType.duration
     }
 }
 
 enum TransitionType: Equatable {
     case move(UIView)
-    case fade
+    case fadeOutIn
+    case crossDissolve
     case fill(UIView)
     case blur
+
     #if IOS
     case message(MessageContentView)
     #endif
@@ -67,7 +63,9 @@ enum TransitionType: Equatable {
         switch self {
         case .move(_):
             return Theme.animationDurationSlow
-        case .fade:
+        case .fadeOutIn:
+            return Theme.animationDurationSlow
+        case .crossDissolve:
             return Theme.animationDurationSlow
         case .fill(_):
             return Theme.animationDurationSlow
