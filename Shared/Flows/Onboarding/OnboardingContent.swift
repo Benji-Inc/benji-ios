@@ -39,7 +39,7 @@ enum OnboardingContent: Switchable {
         case .welcome(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Welcome! Jibber is an invite only messaging exprience redesigned to encourage empathy, establish privacy and promote community ownership/participation. If you don't have an invite, you can join the waitlist below.")
+                                   default: "Welcome! Jibber is an invite only messaging experience redesigned to encourage empathy, establish privacy and promote community ownership/participation. If you don't have an invite, you can join the waitlist below.")
         case .phone(_):
             if let user = user, user.objectId != PFConfig.current().adminUserId {
                 return LocalizedString(id: "",

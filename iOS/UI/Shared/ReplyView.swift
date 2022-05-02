@@ -62,14 +62,17 @@ class ReplyView: BaseView {
     func configure(with message: Messageable) {
         if message.kind.hasText {
             self.label.setText(message.kind.text)
+        } else if message.kind.isImage {
+            self.label.setText("Tap to view image")
+        } else if message.kind.isLink {
+            self.label.setText("Tap to view link")
         } else {
-            //
             self.label.setText("View reply")
         }
         
         self.imageView.image = message.deliveryType.image
-        self.personView.set(person: message.person,
-                            emotionCounts: message.emotionCounts,
+        self.personView.set(info: message.authorExpression,
+                            author: message.authorId,
                             defaultColors: [.B0, .B1])
         self.dateLabel.configure(with: message)
         self.layoutNow()

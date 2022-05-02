@@ -25,15 +25,15 @@ class AddMediaView: ThemeButton {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .B6)
+        self.set(backgroundColor: .clear)
         
         self.addSubview(self.plusImageView)
         self.plusImageView.image = UIImage(systemName: "plus")
-        self.plusImageView.tintColor = UIColor.white.withAlphaComponent(0.8)
+        self.plusImageView.contentMode = .scaleAspectFit
+        self.plusImageView.tintColor = ThemeColor.whiteWithAlpha.color
+        self.displayableImageView.isVisible = false
+    
         
-        self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
-        self.layer.borderWidth = 1
-        self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.innerCornerRadius
                 
         self.addSubview(self.displayableImageView)
@@ -48,7 +48,7 @@ class AddMediaView: ThemeButton {
         
         self.displayableImageView.expandToSuperviewSize()
         
-        self.plusImageView.squaredSize = self.height * 0.5
+        self.plusImageView.squaredSize = self.width * 0.7
         self.plusImageView.centerOnXAndY()
     }
     

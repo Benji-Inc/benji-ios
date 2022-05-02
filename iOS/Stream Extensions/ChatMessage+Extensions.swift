@@ -130,30 +130,20 @@ extension Message: Messageable {
         return self.latestReplies
     }
     
-    var emotions: [Emotion] {
-        return self.reactionScores.compactMap { dict in
-            return Emotion(rawValue: dict.key.rawValue)
+    var expressions: [ExpressionInfo] {
+        guard let value = self.extraData["expressions"], case RawJSON.array(let array) = value else { return [] }
+        
+        var values: [ExpressionInfo] = []
+        
+        array.forEach { value in
+            if case RawJSON.dictionary(let dict) = value,
+                let authorValue = dict["authorId"], case RawJSON.string(let authorId) = authorValue,
+               let expressionValue = dict["expressionId"], case RawJSON.string(let expressionId) = expressionValue {
+                values.append(ExpressionInfo(authorId: authorId, expressionId: expressionId))
+            }
         }
-    }
-
-    var emotionCounts: [Emotion : Int] {
-        var dictionary: [Emotion : Int] = [:]
-        self.reactionScores.forEach { (reaction, count) in
-            guard let emotion = Emotion(rawValue: reaction.rawValue) else { return }
-            dictionary[emotion] = count
-        }
-        return dictionary
-    }
-    
-    var expression: Expression? {
-        let expressionURL = self.expressionImageAttachments.first?.imageURL
-
-        var emojiString: String? = nil
-        if let value = self.extraData["expression"], case RawJSON.string(let string) = value {
-            emojiString = string
-        }
-
-        return Expression(imageURL: expressionURL, emojiString: emojiString)
+        
+        return values 
     }
     
     static func message(with cid: ConversationId, messageId: MessageId) -> Message {

@@ -167,14 +167,4 @@ extension RoomCoordinator: MessageContentDelegate {
             break
         }
     }
-    
-    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-
-    func messageContent(_ content: MessageContentView,
-                        didTapEmotion emotion: Emotion,
-                        forMessage messageInfo: (ConversationId, MessageId)) {
-
-    }
 }

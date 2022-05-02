@@ -118,17 +118,6 @@ extension ProfileCoordinator: MessageContentDelegate {
         }
     }
     
-    func messageContent(_ content: MessageContentView,
-                        didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-
-    func messageContent(_ content: MessageContentView,
-                        didTapEmotion emotion: Emotion,
-                        forMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
     func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
         self.removeChild()
         
