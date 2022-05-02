@@ -307,7 +307,6 @@
 		D61128A32804E24600574B96 /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
 		D61128A42804E3DF00574B96 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D61128A52804E4F300574B96 /* FaceImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceImageCaptureViewController.swift */; };
-		D61128A62804E4F800574B96 /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
 		D61128A72804E55F00574B96 /* BorderedPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedPersonView.swift */; };
 		D61128A82804E5D200574B96 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
 		D61128A92804E5E700574B96 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
@@ -743,8 +742,6 @@
 		D68C082A2729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
 		D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
-		D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
-		D68C0832272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
@@ -1333,7 +1330,6 @@
 		D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCoordinator.swift; sourceTree = "<group>"; };
 		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
-		D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDisclosureViewController.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
@@ -2401,7 +2397,6 @@
 			isa = PBXGroup;
 			children = (
 				8056B323281B32A600358880 /* ExpressionPhotoCaptureViewController.swift */,
-				D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */,
 				D62ED57B279CB96E00F7C08A /* ModalPhotoViewController.swift */,
 				D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */,
 				D68C08272729D9980033C8AE /* PermissionsViewController.swift */,
@@ -3319,7 +3314,6 @@
 				D61128622804DC4E00574B96 /* KeyboardManager.swift in Sources */,
 				D611282A2804DBD600574B96 /* NSAttributedString+Extensions.swift in Sources */,
 				D611287E2804DCB000574B96 /* StringCasing.swift in Sources */,
-				D61128A62804E4F800574B96 /* FaceDisclosureViewController.swift in Sources */,
 				D611288B2804DD4600574B96 /* PeopleStore.swift in Sources */,
 				D61128222804DBCD00574B96 /* Error+Extensions.swift in Sources */,
 				D61128332804DBE400574B96 /* String+Extensions.swift in Sources */,
@@ -3621,7 +3615,6 @@
 				D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
-				D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D6129F9E27AB21720058811C /* UpsellContentView.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
@@ -3783,7 +3776,6 @@
 				807C63F027CD7F100017112E /* ContactsManager.swift in Sources */,
 				D63DB22825E9991300F6B323 /* Optional+Extensions.swift in Sources */,
 				D666127127E2BB13006CDF3D /* AchievementType.swift in Sources */,
-				D68C0832272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
 				800718DE27861507005DD884 /* EventLog.swift in Sources */,
 				D62C9CC3266C3CAC00BB9632 /* UserDefaultsManager.swift in Sources */,
 				D63DB21F25E998FC00F6B323 /* CGRect+Extensions.swift in Sources */,

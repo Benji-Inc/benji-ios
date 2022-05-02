@@ -65,7 +65,10 @@ class FaceImageCaptureViewController: ViewController {
         self.cameraViewContainer.pinToSafeArea(.top, offset: .custom(20))
         self.cameraViewContainer.centerOnX()
         
-        self.cameraView.expandToSuperviewSize()
+        self.cameraView.width = self.cameraViewContainer.width
+        self.cameraView.height = self.cameraViewContainer.height * 1.25
+        self.cameraView.pin(.top)
+        self.cameraView.centerOnX()
     }
 
     // MARK: - Photo Capture Session
