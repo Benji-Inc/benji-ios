@@ -25,6 +25,7 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.addChild(viewController: self.faceCaptureVC)
         self.faceCaptureVC.faceBoxView.alpha = 0
         
+        self.faceCaptureVC.faceCaptureSession.flashMode = .off
         self.faceCaptureVC.view.layer.borderColor = ThemeColor.B1.color.cgColor
         self.faceCaptureVC.view.layer.borderWidth = 2
         self.faceCaptureVC.view.clipsToBounds = true 

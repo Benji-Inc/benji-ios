@@ -40,7 +40,7 @@ class FaceImageCaptureViewController: ViewController {
 
     let orientation: CGImagePropertyOrientation = .left
 
-    private let faceCaptureSession = PhotoCaptureSession()
+    let faceCaptureSession = PhotoCaptureSession()
 
     /// A request to separate a person from the background in an image.
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
