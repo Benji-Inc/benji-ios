@@ -32,14 +32,14 @@ class WelcomeViewController: ViewController, Sizeable, Completable {
         super.initializeViews()
         
         self.view.addSubview(self.waitlistButton)
-        self.waitlistButton.set(style: .custom(color: .D1, textColor: .white, text: "Begin"))
+        self.waitlistButton.set(style: .custom(color: .D1, textColor: .white, text: "Join Waitlist / Login"))
         self.waitlistButton.didSelect { [unowned self] in
             AnalyticsManager.shared.trackEvent(type: .onboardingBeginTapped, properties: nil)
             self.onDidComplete?(.success((.waitlist)))
         }
         
         self.view.addSubview(self.rsvpButton)
-        self.rsvpButton.set(style: .custom(color: .white, textColor: .B0, text: "Enter Code"))
+        self.rsvpButton.set(style: .custom(color: .white, textColor: .B0, text: "Enter Invite Code"))
         self.rsvpButton.didSelect { [unowned self] in
             AnalyticsManager.shared.trackEvent(type: .onboardingRSVPTapped, properties: nil)
             self.onDidComplete?(.success((.rsvp)))

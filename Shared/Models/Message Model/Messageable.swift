@@ -40,9 +40,9 @@ protocol Messageable {
     var recentReplies: [Messageable] { get }
     var lastUpdatedAt: Date? { get }
 
-    var expressions: [Expression] { get }
+    var expressions: [ExpressionInfo] { get }
 
-    func setToConsumed() async 
+    func setToConsumed() async
     func setToUnconsumed() async throws
     func appendAttributes(with attributes: [String: Any]) async throws -> Messageable
 }
@@ -108,9 +108,9 @@ extension Messageable {
         }
     }
     
-    var authorExpression: Expression? {
-        return self.expressions.first { expression in
-            return expression.author == User.current()?.objectId
+    var authorExpression: ExpressionInfo? {
+        return self.expressions.first { info in
+            return info.authorId == User.current()?.objectId
         }
     }
 }

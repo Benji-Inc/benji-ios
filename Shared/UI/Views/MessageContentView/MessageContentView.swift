@@ -20,7 +20,7 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
-                        for expression: Expression,
+                        for expression: ExpressionInfo,
                         forMessage messageInfo: (ConversationId, MessageId))
 }
 
@@ -291,18 +291,37 @@ class MessageContentView: BaseView {
                 break
             }
         }
+        
+        self.loadExpressions(for: message)
+    }
+    
+    /// The currently running task that is loading the expressions.
+    private var loadTask: Task<Void, Never>?
+    
+    private func loadExpressions(for message: Messageable) {
+        self.loadTask?.cancel()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            if let info = message.authorExpression,
+               let expression = try? await Expression.getObject(with: info.expressionId) {
+                let emotionCounts = expression.emotionCounts 
+                // Only animate changes to the emotion when they're not blurred out.
+                let isAnimated = self.areEmotionsShown
 
-        let emotionCounts = message.authorExpression?.emotionCounts ?? [:]
-        // Only animate changes to the emotion when they're not blurred out.
-        let isAnimated = self.areEmotionsShown
+                if isAnimated {
+                    self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
+                }
+                self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
 
-        if isAnimated {
-            self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
+                self.authorView.set(info: info, author: message.authorId)
+            } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId){
+                self.authorView.set(displayable: author)
+            }
+            
+            self.setNeedsLayout()
         }
-        self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
-
-        self.authorView.set(expression: message.authorExpression, author: message.authorId)
-        self.setNeedsLayout()
     }
 
     /// Sets the background color and shows/hides the bubble tail.

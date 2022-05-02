@@ -130,38 +130,20 @@ extension Message: Messageable {
         return self.latestReplies
     }
     
-    var expressions: [Expression] {
+    var expressions: [ExpressionInfo] {
+        guard let value = self.extraData["expressions"], case RawJSON.array(let array) = value else { return [] }
         
-        return self.expressionImageAttachments.compactMap { attachment in
-            
-            let expressionURL = self.expressionImageAttachments.first?.imageURL
-
-            var emojiString: String? = nil
-            if let value = self.extraData["expression"], case RawJSON.string(let string) = value {
-                emojiString = string
+        var values: [ExpressionInfo] = []
+        
+        array.forEach { value in
+            if case RawJSON.dictionary(let dict) = value,
+                let authorValue = dict["authorId"], case RawJSON.string(let authorId) = authorValue,
+               let expressionValue = dict["expressionId"], case RawJSON.string(let expressionId) = expressionValue {
+                values.append(ExpressionInfo(authorId: authorId, expressionId: expressionId))
             }
-            
-            var emotionCounts: [Emotion: Int] = [:]
-            if let value = attachment.extraData?["emotions"], case RawJSON.dictionary(let dict) = value {
-                dict.keys.forEach { key in
-                    if let emotion = Emotion(rawValue: key),
-                        let value = dict[key],
-                       case RawJSON.number(let count) = value {
-                        emotionCounts[emotion] = Int(count)
-                    }
-                }
-            }
-            
-            var author: String?
-            if let value = attachment.extraData?["author"], case RawJSON.string(let string) = value {
-                author = string
-            }
-
-            return Expression(author: author,
-                              imageURL: expressionURL,
-                              emojiString: emojiString,
-                              emotionCounts: emotionCounts)
         }
+        
+        return values 
     }
     
     static func message(with cid: ConversationId, messageId: MessageId) -> Message {

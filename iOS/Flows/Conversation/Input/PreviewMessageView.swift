@@ -110,9 +110,10 @@ class PreviewMessageView: SpeechBubbleView {
         self.personGradientView.isVisible = expression.exists
         
         guard let expression = expression else {
+            self.personGradientView.set(displayable: User.current())
             return
         }
         
-        self.personGradientView.set(expression: expression, author: User.current()!.objectId!)
+        self.personGradientView.set(expression: expression)
     }
 }

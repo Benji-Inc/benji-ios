@@ -31,21 +31,35 @@ class PersonGradientView: DisplayableImageView {
     
     // MARK: - Open setters
     
-    func set(expression: Expression?,
+    /// The currently running task that is loading the expression.
+    private var loadTask: Task<Void, Never>?
+    
+    func set(info: ExpressionInfo?,
              author: String,
              defaultColors: [ThemeColor] = [.B0, .B6]) {
         
-        Task {
-            if let expression = expression, let expressionURL = expression.imageURL {
-                self.set(displayable: expressionURL)
-                self.set(emotionCounts: expression.emotionCounts)
+        self.loadTask?.cancel()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            if let expressionId = info?.expressionId, let expression = try? await Expression.getObject(with: expressionId) {
+                self.set(expression: expression)
             } else if let person = await PeopleStore.shared.getPerson(withPersonId: author) {
                 self.set(displayable: person)
-                self.set(emotionCounts: expression?.emotionCounts ?? [:])
+                self.set(emotionCounts: [:])
             } else {
                 logDebug("no person found for \(author)")
             }
+            
+            self.setNeedsLayout()
         }
+    }
+    
+    func set(expression: Expression) {
+        self.set(displayable: expression)
+        self.set(emotionCounts: expression.emotionCounts)
+        self.setNeedsLayout()
     }
 
     func set(displayable: ImageDisplayable?) {

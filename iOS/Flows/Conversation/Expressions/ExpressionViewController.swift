@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import Parse
 
 class ExpressionViewController: ViewController {
     
@@ -33,7 +34,7 @@ class ExpressionViewController: ViewController {
     
     @Published private var state: State = .capture
     
-    private var imageURL: URL?
+    private var data: Data?
     
     override func initializeViews() {
         super.initializeViews()
@@ -68,13 +69,12 @@ class ExpressionViewController: ViewController {
     private func setupHandlers() {
         
         self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            guard let imageData = image.previewData else { return }
-            
-            self.imageURL = try? AttachmentsManager.shared.createTemporaryHeicURL(for: imageData)
-            
+            guard let data = image.previewData else { return }
+            self.data = data
+                        
             self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
             self.personGradientView.alpha = 1.0
-            self.personGradientView.set(displayable: UIImage(data: imageData))
+            self.personGradientView.set(displayable: UIImage(data: data))
             self.expressionPhotoVC.animate(text: "Tap again to retake")
             self.expressionPhotoVC.faceCaptureVC.stopSession()
                         
@@ -87,14 +87,18 @@ class ExpressionViewController: ViewController {
         }
         
         self.doneButton.didSelect { [unowned self] in
+            guard let data = self.data else { return }
             var emotionCounts: [Emotion: Int] = [:]
             self.emotionsVC.selectedEmotions.forEach { emotion in
                 emotionCounts[emotion] = 1
             }
-
-            let expression = Expression(imageURL: self.imageURL,
-                                        emojiString: nil,
-                                        emotionCounts: emotionCounts)
+            
+            let expression = Expression()
+            
+            expression.author = User.current()
+            expression.file = PFFileObject(name: "expression.heic", data: data)
+            expression.emotionCounts = emotionCounts
+            expression.emojiString = nil
             
             self.didCompleteExpression?(expression)
         }

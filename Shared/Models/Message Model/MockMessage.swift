@@ -28,7 +28,7 @@ struct MockMessage: Messageable {
     var totalReplyCount: Int = 0
     var recentReplies: [Messageable] = []
     var lastUpdatedAt: Date? = Date()
-    var expressions: [Expression] = []
+    var expressions: [ExpressionInfo] = []
     
     func setToConsumed() async { }
     func setToUnconsumed() async throws { }

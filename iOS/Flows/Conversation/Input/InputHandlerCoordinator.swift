@@ -310,14 +310,18 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
-                        for expression: Expression,
+                        for expression: ExpressionInfo,
                         forMessage messageInfo: (ConversationId, MessageId)) {
-
-        let coordinator = EmotionDetailCoordinator(router: self.router,
-                                                   deepLink: self.deepLink,
-                                                   expression: expression,
-                                                   startingEmotion: emotion)
-        self.present(coordinator)
+        
+        Task.onMainActorAsync {
+            guard let object = try? await Expression.getObject(with: expression.expressionId) else { return }
+            
+            let coordinator = EmotionDetailCoordinator(router: self.router,
+                                                       deepLink: self.deepLink,
+                                                       expression: object,
+                                                       startingEmotion: emotion)
+            self.present(coordinator)
+        }
     }
     
     func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {

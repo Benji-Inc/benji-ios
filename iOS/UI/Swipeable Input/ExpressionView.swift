@@ -44,7 +44,7 @@ class AddExpressionView: BaseView {
         guard let expression = expression else {
             return
         }
-
-        self.personGradientView.set(expression: expression, author: User.current()!.objectId!)
+        
+        self.personGradientView.set(expression: expression)
     }
 }

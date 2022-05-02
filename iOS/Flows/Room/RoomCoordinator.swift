@@ -174,7 +174,7 @@ extension RoomCoordinator: MessageContentDelegate {
 
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
-                        for expression: Expression, 
+                        for expression: ExpressionInfo, 
                         forMessage messageInfo: (ConversationId, MessageId)) {
 
     }

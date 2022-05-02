@@ -595,7 +595,6 @@
 		D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C324127039646004BC1BD /* MessageComposerViewController.swift */; };
 		D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
-		D64C6A7E23294A8600DB7257 /* ConversationKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7D23294A8600DB7257 /* ConversationKey.swift */; };
 		D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */; };
 		D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */; };
 		D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8AF23CE3E7F0039DC5A /* OnboardingContent.swift */; };
@@ -1246,7 +1245,6 @@
 		D64C324127039646004BC1BD /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
 		D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationLoadingView.swift; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
-		D64C6A7D23294A8600DB7257 /* ConversationKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationKey.swift; sourceTree = "<group>"; };
 		D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extensions.swift"; sourceTree = "<group>"; };
 		D64C6AA523307DB300DB7257 /* Jibber.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Jibber.entitlements; sourceTree = "<group>"; };
 		D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -2095,6 +2093,7 @@
 		D6617CF326743DFE00439C06 /* Parse Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				8056B325281B448A00358880 /* Expression.swift */,
 				D69D2F9927C0070C001D8855 /* Achievement.swift */,
 				D666126C27E29AED006CDF3D /* AchievementType.swift */,
 				D678EC2326F530850071DB0D /* Circle.swift */,
@@ -2164,9 +2163,7 @@
 			isa = PBXGroup;
 			children = (
 				D695B44125BA398400843780 /* Attachments */,
-				D64C6A7D23294A8600DB7257 /* ConversationKey.swift */,
 				D6E974352752C47F00D95F08 /* EmotionCategory.swift */,
-				8056B325281B448A00358880 /* Expression.swift */,
 				D6617CF326743DFE00439C06 /* Parse Subclasses */,
 				D64C323D270391AE004BC1BD /* Person.swift */,
 				D61128C42804EF2E00574B96 /* ReactionType.swift */,
@@ -3474,7 +3471,6 @@
 				D60B886727F4F7C200B3E1C2 /* ReplySummaryView.swift in Sources */,
 				D62ED579279CA2ED00F7C08A /* BorderedPersonView.swift in Sources */,
 				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
-				D64C6A7E23294A8600DB7257 /* ConversationKey.swift in Sources */,
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
 				D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */,
 				D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */,
