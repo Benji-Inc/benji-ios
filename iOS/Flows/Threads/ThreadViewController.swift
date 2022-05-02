@@ -340,30 +340,47 @@ extension ThreadViewController: MessageSendingViewControllerType {
 // MARK: - TransitionableViewController
 
 extension ThreadViewController: TransitionableViewController {
-    
-    var toVCPresentationType: TransitionType {
+
+    var presentationType: TransitionType {
         return .message(self.parentMessageView)
-    }
-    
-    var toVCDismissalType: TransitionType {
-        if self.isPresentingImage {
-            return .fadeOutIn
-        } else if let first = self.collectionView.indexPathsForSelectedItems?.first,
-           let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
-            return .message(cell.content)
-        } else {
-            return .message(self.parentMessageView)
-        }
     }
 
-    var fromVCDismissalType: TransitionType {
+    var dismissalType: TransitionType {
         return .message(self.parentMessageView)
     }
-    
-    var fromVCPresentationType: TransitionType {
-        guard !self.isPresentingImage, let first = self.collectionView.indexPathsForSelectedItems?.first,
-              let cell = self.collectionView.cellForItem(at: first) as? MessageCell else { return .fadeOutIn }
-        return .message(cell.content)
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        switch toVCPresentationType {
+        case .message:
+            guard !self.isPresentingImage,
+                  let first = self.collectionView.indexPathsForSelectedItems?.first,
+                  let cell = self.collectionView.cellForItem(at: first) as? MessageCell else {
+                break
+            }
+
+            return .message(cell.content)
+        default:
+            break
+        }
+
+        return toVCPresentationType
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        switch fromVCDismissalType {
+        case .message:
+            guard !self.isPresentingImage,
+                  let first = self.collectionView.indexPathsForSelectedItems?.first,
+                  let cell = self.collectionView.cellForItem(at: first) as? MessageCell else {
+                break
+            }
+
+            return .message(cell.content)
+        default:
+            break
+        }
+
+        return fromVCDismissalType
     }
     
     func handleFinalPresentation() { }

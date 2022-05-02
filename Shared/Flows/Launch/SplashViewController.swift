@@ -13,8 +13,22 @@ import Localization
 
 class SplashViewController: FullScreenViewController, TransitionableViewController {
 
-    var toVCPresentationType: TransitionType {
+    // MARK: - Transitionable
+    
+    var presentationType: TransitionType {
         return .fadeOutIn
+    }
+
+    var dismissalType: TransitionType {
+        return self.presentationType
+    }
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
     }
     
     /// A view to blur out the emotions collection view.

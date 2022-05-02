@@ -34,9 +34,9 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         let isPresenting = self.operation == .push
         if isPresenting {
-            return self.toVC.toVCPresentationType.duration
+            return self.toVC.presentationType.duration
         } else {
-            return self.fromVC.fromVCDismissalType.duration
+            return self.fromVC.dismissalType.duration
         }
     }
 
@@ -46,10 +46,10 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
         let presentedVCTransition: TransitionType
         let presentingVCTransition: TransitionType
         if isPresenting {
-            presentedVCTransition = self.toVC.toVCPresentationType
+            presentedVCTransition = self.toVC.presentationType
             presentingVCTransition = self.fromVC.getFromVCPresentationType(for: presentedVCTransition)
         } else {
-            presentedVCTransition = self.fromVC.fromVCDismissalType
+            presentedVCTransition = self.fromVC.dismissalType
             presentingVCTransition = self.toVC.getToVCDismissalType(for: presentedVCTransition)
         }
 

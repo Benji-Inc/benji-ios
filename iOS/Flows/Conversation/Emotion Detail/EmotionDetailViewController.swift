@@ -78,19 +78,19 @@ class EmotionDetailViewController: DiffableCollectionViewController<EmotionDetai
 
 extension EmotionDetailViewController: TransitionableViewController {
 
-    var fromVCPresentationType: TransitionType {
+    var dismissalType: TransitionType {
         return .blur
     }
 
-    var fromVCDismissalType: TransitionType {
+    var presentationType: TransitionType {
         return .blur
     }
 
-    var toVCPresentationType: TransitionType {
-        return .blur
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
     }
 
-    var toVCDismissalType: TransitionType {
-        return .blur
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
     }
 }

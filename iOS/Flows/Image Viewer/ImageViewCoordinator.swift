@@ -89,12 +89,20 @@ class ImageViewCoordinator: PresentableCoordinator<Void> {
 
 class ImageViewController: LightboxController, Dismissable, TransitionableViewController {
 
-    var fromVCDismissalType: TransitionType {
+    var dismissalType: TransitionType {
         return .crossDissolve
     }
     
-    var toVCPresentationType: TransitionType {
+    var presentationType: TransitionType {
         return .crossDissolve
+    }
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
     }
 
     var dismissHandlers: [DismissHandler] = []

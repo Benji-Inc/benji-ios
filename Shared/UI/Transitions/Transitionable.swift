@@ -14,13 +14,13 @@ protocol TransitionableViewController where Self: UIViewController & Transitiona
 protocol Transitionable {
 
     /// The transition to use when this transitionable is being presented by another transitionable.
-    var toVCPresentationType: TransitionType { get }
+    var presentationType: TransitionType { get }
     /// The transition to use when this transitionable is being dismissed..
-    var fromVCDismissalType: TransitionType { get }
+    var dismissalType: TransitionType { get }
 
-    /// The transition to use when this transitionable is presenting another transitionable.
+    /// The transition to use when this transitionable is presenting another  with the given transition type.
     func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType
-    /// The transition to use when this transitionable is dismissing another transitionable.
+    /// The transition to use when this transitionable is dismissing another transitionable of the given type.
     func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType
 
     /// How long a transition should last.
@@ -29,26 +29,14 @@ protocol Transitionable {
 
 extension Transitionable {
 
-    var fromVCDismissalType: TransitionType {
-        return self.toVCPresentationType
-    }
-
-    /// The transition to use when this transitionable is presenting another transitionable.
-    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
-        return toVCPresentationType
-    }
-    /// The transition to use when this transitionable is dismissing another transitionable.
-    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
-        return fromVCDismissalType
-    }
-
     // Uses the types duration as the default but a controller can also override
     var transitionDuration: TimeInterval {
-        return self.toVCPresentationType.duration
+        return self.presentationType.duration
     }
 }
 
 enum TransitionType: Equatable {
+
     case move(UIView)
     case fadeOutIn
     case crossDissolve
