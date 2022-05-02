@@ -164,6 +164,15 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func willUpdateContent() {
         super.willUpdateContent()
+        
+        switch self.currentContent {
+        case .photo:
+            self.personView.isVisible = false
+            self.messageBubble.isVisible = false
+        default:
+            self.personView.isVisible = true
+            self.messageBubble.isVisible = true
+        }
 
         self.personView.isHidden = self.invitor.isNil
     }

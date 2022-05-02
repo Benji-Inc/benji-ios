@@ -15,12 +15,15 @@ import UIKit
 class PermissionsViewController: DisclosureModalViewController {
 
     enum State {
+        case initial
         case focusAsk
         case notificationAsk
         case finished
 
         var title: Localized {
             switch self {
+            case .initial:
+                return ""
             case .focusAsk:
                 return "Focus Status"
             case .notificationAsk:
@@ -32,6 +35,9 @@ class PermissionsViewController: DisclosureModalViewController {
 
         var description: HightlightedPhrase {
             switch self {
+            case .initial:
+                return HightlightedPhrase(text: "",
+                                          highlightedWords: [])
             case .focusAsk:
                 return HightlightedPhrase(text: "Changing Focus status updates your profile so people see if you are available or busy and filters out unnecessary notifications.",
                                           highlightedWords: [])
@@ -45,7 +51,7 @@ class PermissionsViewController: DisclosureModalViewController {
         }
     }
 
-    @Published var state: State = .focusAsk
+    @Published var state: State = .initial
 
     private let focusSwitchView = PermissionSwitchView(with: .focus)
     private let notificationSwitchView = PermissionSwitchView(with: .notificaitons)
@@ -69,13 +75,24 @@ class PermissionsViewController: DisclosureModalViewController {
 
         self.contentView.addSubview(self.button)
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-        self.button.isUserInteractionEnabled = false
+        self.button.isEnabled = false
+        self.button.alpha = 0.1
 
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
             self.updateUI(for: state)
         }.store(in: &self.cancellables)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if INFocusStatusCenter.default.authorizationStatus == .authorized {
+            self.state = .notificationAsk
+        } else {
+            self.state = .focusAsk
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -102,13 +119,15 @@ class PermissionsViewController: DisclosureModalViewController {
         } completion: { completed in
             self.titleLabel.setText(state.title)
             self.updateDescription(with: state.description)
-            self.view.layoutNow()
             
+            logDebug(state.title.defaultString ?? "")
+
             UIView.animate(withDuration: 0.2) {
                 self.titleLabel.alpha = 1.0
                 self.descriptionLabel.alpha = 1.0
+                self.view.layoutNow()
             } completion: { _ in
-                if state == .focusAsk {
+                if state == .focusAsk || state == .notificationAsk {
                     Task {
                         await self.layoutSwitches()
                     }
@@ -116,7 +135,8 @@ class PermissionsViewController: DisclosureModalViewController {
                     self.focusSwitchView.state = .hidden
                     self.notificationSwitchView.state = .hidden
 
-                    self.button.isUserInteractionEnabled = true
+                    self.button.isEnabled = true
+                    self.button.alpha = 1.0
                 }
             }
         }
@@ -138,8 +158,10 @@ class PermissionsViewController: DisclosureModalViewController {
         @unknown default:
             break
         }
+        
+        let status = await UserNotificationManager.shared.getNotificationSettings().authorizationStatus
 
-        if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+        if status != .authorized {
             if INFocusStatusCenter.default.authorizationStatus == .authorized {
                 self.notificationSwitchView.state = .enabled
                 self.state = .notificationAsk
@@ -148,6 +170,9 @@ class PermissionsViewController: DisclosureModalViewController {
             }
 
         } else {
+            if INFocusStatusCenter.default.authorizationStatus == .authorized, status == .authorized {
+                self.state = .finished
+            }
             self.notificationSwitchView.state = .enabled
             self.notificationSwitchView.switchView.setOn(true, animated: true)
         }

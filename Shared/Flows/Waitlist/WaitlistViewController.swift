@@ -12,6 +12,10 @@ import ParseLiveQuery
 
 class WaitlistViewController: ViewController {
     
+    override var analyticsIdentifier: String? {
+        return "SCREEN_WAITLIST"
+    }
+    
     let personView = BorderedPersonView()
     let titleLabel = ThemeLabel(font: .display)
     let descriptionLabel = ThemeLabel(font: .regular)

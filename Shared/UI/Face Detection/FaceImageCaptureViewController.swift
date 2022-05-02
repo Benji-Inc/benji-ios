@@ -28,6 +28,8 @@ class FaceImageCaptureViewController: ViewController {
             self.cameraView.draw()
         }
     }
+    
+    let cameraViewContainer = UIView()
 
     /// Shows a live preview of the image the user could take.
     lazy var cameraView: MetalView = {
@@ -35,8 +37,6 @@ class FaceImageCaptureViewController: ViewController {
         metalView.delegate = self
         return metalView
     }()
-    /// A view to help the user center their face in the image.
-    var faceBoxView = BoxView()
 
     let orientation: CGImagePropertyOrientation = .left
 
@@ -50,16 +50,25 @@ class FaceImageCaptureViewController: ViewController {
         super.viewDidLoad()
 
         self.faceCaptureSession.avCaptureDelegate = self
-
-        self.view.addSubview(self.cameraView)
-        self.view.addSubview(self.faceBoxView)
+        
+        self.view.addSubview(self.cameraViewContainer)
+        self.cameraViewContainer.addSubview(self.cameraView)
+        self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
+        self.cameraViewContainer.layer.borderWidth = 2
+        self.cameraViewContainer.clipsToBounds = true
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.cameraView.expandToSuperviewSize()
-        self.faceBoxView.expandToSuperviewSize()
+        
+        self.cameraViewContainer.squaredSize = self.view.height * 0.4
+        self.cameraViewContainer.pinToSafeArea(.top, offset: .custom(20))
+        self.cameraViewContainer.centerOnX()
+        
+        self.cameraView.width = self.cameraViewContainer.width
+        self.cameraView.height = self.cameraViewContainer.height * 1.25
+        self.cameraView.pin(.top)
+        self.cameraView.centerOnX()
     }
 
     // MARK: - Photo Capture Session

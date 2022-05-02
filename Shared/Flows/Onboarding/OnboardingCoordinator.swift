@@ -161,9 +161,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     func finalizeOnboarding(user: User) {
         Task {
             self.onboardingVC.showLoading()
-            if await !self.hasNeededPermissions() {
-                await self.presentPermissions()
-            }
+
             do {
                 try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
                                              passId: self.onboardingVC.passId)
@@ -179,41 +177,6 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             deepLink.reservationId = self.onboardingVC.reservationId
             deepLink.passId = self.onboardingVC.passId
             self.finishFlow(with: deepLink)
-        }
-    }
-
-    // MARK: - Permissions Flow
-
-    @MainActor
-    private func hasNeededPermissions() async -> Bool {
-        #if IOS
-        if INFocusStatusCenter.default.authorizationStatus != .authorized {
-            return false
-        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
-            return false
-        } else {
-            return true
-        }
-        #else
-        // No need to check permissions for AppClip
-        return true
-        #endif
-    }
-
-    @MainActor
-    private func presentPermissions() async {
-        return await withCheckedContinuation { continuation in
-            let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-            
-            coordinator.toPresentable().dismissHandlers.append {
-                continuation.resume(returning: ())
-            }
-            
-            self.addChildAndStart(coordinator) { [unowned self] result in
-                self.router.dismiss(source: self.onboardingVC, animated: true)
-            }
-            
-            self.router.present(coordinator, source: self.onboardingVC)
         }
     }
 }

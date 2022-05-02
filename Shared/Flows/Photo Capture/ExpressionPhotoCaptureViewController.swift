@@ -23,12 +23,8 @@ class ExpressionPhotoCaptureViewController: ViewController {
         super.initializeViews()
 
         self.addChild(viewController: self.faceCaptureVC)
-        self.faceCaptureVC.faceBoxView.alpha = 0
         
         self.faceCaptureVC.faceCaptureSession.flashMode = .off
-        self.faceCaptureVC.view.layer.borderColor = ThemeColor.B1.color.cgColor
-        self.faceCaptureVC.view.layer.borderWidth = 2
-        self.faceCaptureVC.view.clipsToBounds = true 
 
         self.view.addSubview(self.tapView)
         
@@ -61,10 +57,8 @@ class ExpressionPhotoCaptureViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.faceCaptureVC.view.squaredSize = self.view.height * 0.4
-        self.faceCaptureVC.view.pinToSafeArea(.top, offset: .custom(20))
-        self.faceCaptureVC.view.centerOnX()
-        self.faceCaptureVC.view.makeRound()
+        self.faceCaptureVC.view.expandToSuperviewSize()
+        self.faceCaptureVC.cameraViewContainer.makeRound()
 
         self.tapView.expandToSuperviewSize()
         
