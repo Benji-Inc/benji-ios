@@ -66,7 +66,7 @@ enum TransitionType: Equatable {
         case .fadeOutIn:
             return Theme.animationDurationSlow
         case .crossDissolve:
-            return Theme.animationDurationSlow
+            return Theme.animationDurationFast
         case .fill(_):
             return Theme.animationDurationSlow
         case .blur:

@@ -14,11 +14,10 @@ extension TransitionRouter {
     /// Dissolves from fromVC to the toVC and vice versa.
     func crossDissolveTransition(transitionContext: UIViewControllerContextTransitioning) {
         let containerView = transitionContext.containerView
-        containerView.backgroundColor = .red
+
+        var presentingVCSuperview: UIView?
 
         // We only need to add the toVC to the container if we're presenting it.
-
-
         let isPresenting = self.operation == .push
         if isPresenting {
             containerView.addSubview(self.toVC.view)
@@ -27,10 +26,11 @@ extension TransitionRouter {
             self.toVC.navigationController?.navigationBar.alpha = 0
             self.toVC.view.alpha = 0
         } else {
+            presentingVCSuperview = self.toVC.view.superview
             containerView.insertSubview(self.toVC.view, at: 0)
         }
 
-        UIView.animate(withDuration: 5,// self.transitionDuration(using: transitionContext),
+        UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
                        delay: 0,
                        options: .curveLinear) {
             if isPresenting {
@@ -41,11 +41,13 @@ extension TransitionRouter {
                 self.fromVC.navigationController?.navigationBar.alpha = 0
             }
         } completion: { (completed) in
-            transitionContext.completeTransition(true)
             if isPresenting {
-
-                                self.fromVC.view.removeFromSuperview()
+                self.fromVC.view.removeFromSuperview()
+            } else {
+                presentingVCSuperview?.addSubview(self.toVC.view)
             }
+            transitionContext.completeTransition(true)
+
         }
     }
 }
