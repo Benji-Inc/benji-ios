@@ -201,16 +201,11 @@ extension MessageDetailCoordinator: MessageContentDelegate {
                                                    properties: ["value": emotion.rawValue])
             }
             
-//            guard !expression.emotions.isEmpty else { return }
-//            
-//            guard let controller = ChatClient.shared.messageController(for: message) else { return }
-//            
-//            Task {
-//                await emotions.asyncForEach { emotion in
-//                    await controller.addReaction(with: .emotion(emotion))
-//                }
-//            }
-            
+            guard let controller = ChatClient.shared.messageController(for: message) else { return }
+
+            Task {
+                try await controller.add(expression: expression)
+            }
             self.messageVC.dismiss(animated: true)
         }
         self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
