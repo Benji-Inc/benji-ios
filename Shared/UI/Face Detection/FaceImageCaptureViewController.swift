@@ -28,6 +28,8 @@ class FaceImageCaptureViewController: ViewController {
             self.cameraView.draw()
         }
     }
+    
+    let cameraViewContainer = UIView()
 
     /// Shows a live preview of the image the user could take.
     lazy var cameraView: MetalView = {
@@ -49,19 +51,21 @@ class FaceImageCaptureViewController: ViewController {
 
         self.faceCaptureSession.avCaptureDelegate = self
         
-        self.cameraView.layer.borderColor = ThemeColor.B1.color.cgColor
-        self.cameraView.layer.borderWidth = 2
-        self.cameraView.clipsToBounds = true
-
-        self.view.addSubview(self.cameraView)
+        self.view.addSubview(self.cameraViewContainer)
+        self.cameraViewContainer.addSubview(self.cameraView)
+        self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
+        self.cameraViewContainer.layer.borderWidth = 2
+        self.cameraViewContainer.clipsToBounds = true
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.cameraView.squaredSize = self.view.height * 0.4
-        self.cameraView.pinToSafeArea(.top, offset: .custom(20))
-        self.cameraView.centerOnX()
+        self.cameraViewContainer.squaredSize = self.view.height * 0.4
+        self.cameraViewContainer.pinToSafeArea(.top, offset: .custom(20))
+        self.cameraViewContainer.centerOnX()
+        
+        self.cameraView.expandToSuperviewSize()
     }
 
     // MARK: - Photo Capture Session

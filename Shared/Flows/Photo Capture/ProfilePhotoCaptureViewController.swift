@@ -18,6 +18,7 @@ enum PhotoState {
     case scanEyesOpen
     case captureEyesOpen
     case didCaptureEyesOpen
+    case review
     case error
     case finish
 }
@@ -31,18 +32,12 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     // MARK: - Views
 
     lazy var faceCaptureVC = FaceImageCaptureViewController()
-    private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
-        let vc = FaceDisclosureViewController(with: .smiling)
-        vc.dismissHandlers.append { [unowned self] in
-            self.currentState = .finish
-        }
-        vc.button.didSelect { [unowned self] in
-            vc.dismiss(animated: true, completion: nil)
-        }
-        return vc
-    }()
+
     private var tapView = BaseView()
     private let animationView = AnimationView.with(animation: .faceScan)
+    private let imageView = DisplayableImageView()
+    private let button = ThemeButton()
+    private let label = ThemeLabel(font: .medium, textColor: .white)
 
     let errorView = PhotoErrorView()
     private var errorOffset: CGFloat = -100
@@ -68,10 +63,67 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.view.addSubview(self.animationView)
         self.animationView.alpha = 0
         self.addChild(viewController: self.faceCaptureVC)
+        
+        self.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.D6.color.cgColor
+        self.faceCaptureVC.cameraViewContainer.backgroundColor = ThemeColor.D6.color.withAlphaComponent(0.1)
 
         self.view.addSubview(self.errorView)
         self.view.addSubview(self.tapView)
+        self.view.addSubview(self.imageView)
+        self.imageView.alpha = 0.0
 
+        self.view.addSubview(self.button)
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+        
+        self.view.insertSubview(self.label, belowSubview: self.errorView)
+        self.label.setText("Smile then tap")
+
+        self.setupHandlers()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.currentState = .initial
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.faceCaptureVC.view.expandToSuperviewSize()
+
+        self.faceCaptureVC.cameraViewContainer.roundCorners()
+
+        self.animationView.size = CGSize(width: 140, height: 140)
+        self.animationView.centerOnX()
+        self.animationView.centerY = self.faceCaptureVC.cameraViewContainer.centerY
+
+        self.errorView.bottom = self.view.height - self.errorOffset
+        
+        self.tapView.expandToSuperviewSize()
+        
+        self.button.setSize(with: self.view.width)
+        self.button.centerOnX()
+
+        if self.currentState == .review {
+            self.button.pinToSafeAreaBottom()
+        } else {
+            self.button.top = self.view.height
+        }
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.label.centerOnXAndY()
+    }
+    
+    private func setupHandlers() {
+        
+        self.button.didSelect { [unowned self] in
+            Task {
+                guard let image = self.imageView.displayable?.image else { return }
+                await self.updateUser(with: image)
+            }
+        }
+        
         self.tapView.didSelect { [unowned self] in
             switch self.currentState {
             case .initial:
@@ -81,6 +133,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
                 self.currentState = .captureEyesOpen
             case .captureEyesOpen, .didCaptureEyesOpen:
                 break
+            case .review:
+                self.currentState = .scanEyesOpen
             case .finish:
                 break
             case .error:
@@ -94,10 +148,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
                 if self.faceCaptureVC.isSmiling {
                     self.currentState = .didCaptureEyesOpen
                     self.animateError(with: nil, show: false)
-
-                    Task {
-                        await self.updateUser(with: image)
-                    }
+                    self.imageView.displayable = image
+                    self.currentState = .review
                 } else {
                     // If the user needs to smile, let them know.
                     self.handleNotSmiling()
@@ -125,28 +177,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             }).store(in: &self.cancellables)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.currentState = .initial
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.faceCaptureVC.view.expandToSuperviewSize()
-
-        self.faceCaptureVC.cameraView.roundCorners()
-
-        self.animationView.size = CGSize(width: 140, height: 140)
-        self.animationView.centerOnX()
-        self.animationView.centerY = self.faceCaptureVC.cameraView.centerY
-
-        self.errorView.bottom = self.view.height - self.errorOffset
-        
-        self.tapView.expandToSuperviewSize()
-    }
-
     private func handle(state: PhotoState) {
         switch state {
         case .initial:
@@ -160,6 +190,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             self.handleCaptureState()
         case .error, .didCaptureEyesOpen:
             break
+        case .review:
+            self.handleReviewState()
         case .finish:
             Task {
                 await self.handleFinishState()
@@ -221,6 +253,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         }
 
         UIView.animate(withDuration: 0.2, animations: {
+            self.imageView.alpha = 0
             self.animationView.alpha = 0
             self.view.layoutNow()
         })
@@ -228,6 +261,20 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
 
     private func handleCaptureState() {
         self.faceCaptureVC.capturePhoto()
+    }
+    
+    private func handleReviewState() {
+        
+        if self.faceCaptureVC.isSessionRunning {
+            self.faceCaptureVC.stopSession()
+        }
+        
+        self.label.setText("Tap again to retake")
+        
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.imageView.alpha = 1.0
+            self.view.layoutNow()
+        }
     }
 
     private func animateError(with message: String?, show: Bool) {
@@ -252,33 +299,20 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     }
 
     private func updateUser(with image: UIImage) async {
-        guard let data = image.previewData else { return }
-                
+        guard let currentUser = User.current(), let data = image.previewData else { return }
+        
+        let file = PFFileObject(name:"small_image.heic", data: data)
+        currentUser.smallImage = file
+
         do {
-            try await self.presentDisclosure(with: data)
+            await self.button.handleEvent(status: .loading)
+            try await currentUser.saveToServer()
+            await ToastScheduler.shared.schedule(toastType: .success(UIImage(systemName: "person.crop.circle")!, "Profile picture updated"))
+            await self.button.handleEvent(status: .complete)
+            
+            self.currentState = .finish
         } catch {
             self.animateError(with: "There was an error uploading your photo.", show: true)
-        }
-    }
-
-    @MainActor
-    private func presentDisclosure(with data: Data) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            switch self.currentState {
-            case .didCaptureEyesOpen:
-                self.present(self.smilingDisclosureVC, animated: true, completion: { [unowned self] in
-                    Task {
-                        do {
-                            try await self.smilingDisclosureVC.updateUser(with: data)
-                            continuation.resume(returning: ())
-                        } catch {
-                            continuation.resume(throwing: error)
-                        }
-                    }
-                })
-            default:
-                continuation.resume(returning: ())
-            }
         }
     }
 }

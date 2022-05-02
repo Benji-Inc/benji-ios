@@ -82,6 +82,8 @@ enum OnboardingContent: Switchable {
                 return "Good one!"
             case .captureEyesOpen:
                 return "Try again"
+            case .review:
+                return "Looking good! 😄"
             case .error:
                 return ""
             case .finish:
