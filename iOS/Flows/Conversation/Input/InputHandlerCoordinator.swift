@@ -100,22 +100,20 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentEmotions(for message: Messageable) {
-        let coordinator = EmotionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator) { emotions in
-            emotions.forEach { emotion in
+    func presentExpressionCreation(for message: Messageable) {
+        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+        self.present(coordinator) { result in
+            guard let expression = result else { return }
+            
+            expression.emotions.forEach { emotion in
                 AnalyticsManager.shared.trackEvent(type: .emotionSelected,
                                                    properties: ["value": emotion.rawValue])
             }
             
-            guard !emotions.isEmpty else { return }
-            
             guard let controller = ChatClient.shared.messageController(for: message) else { return }
-            
+
             Task {
-                await emotions.asyncForEach { emotion in
-                    await controller.addReaction(with: .emotion(emotion))
-                }
+                try await controller.add(expression: expression)
             }
         }
     }
@@ -299,25 +297,25 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
 
     func messageContent(_ content: MessageContentView,
-                        didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId)) {
+                        didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {
         guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
-        self.presentEmotions(for: message)
+        self.presentExpressionCreation(for: message)
     }
 
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
+                        for expression: ExpressionInfo,
                         forMessage messageInfo: (ConversationId, MessageId)) {
-
-        guard let message = ChatClient.shared.messageController(cid: messageInfo.0,
-                                                                messageId: messageInfo.1).message else {
-            return
+        
+        Task.onMainActorAsync {
+            guard let object = try? await Expression.getObject(with: expression.expressionId) else { return }
+            
+            let coordinator = ExpressionDetailCoordinator(router: self.router,
+                                                       deepLink: self.deepLink,
+                                                       expression: object,
+                                                       startingEmotion: emotion)
+            self.present(coordinator)
         }
-
-        let coordinator = EmotionDetailCoordinator(router: self.router,
-                                                   deepLink: self.deepLink,
-                                                   emotions: message.emotions,
-                                                   startingEmotion: emotion)
-        self.present(coordinator)
     }
     
     func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {

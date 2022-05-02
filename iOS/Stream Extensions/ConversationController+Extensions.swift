@@ -146,6 +146,7 @@ extension ConversationController {
     func createNewMessage(with sendable: Sendable) async throws -> MessageId {
         let messageBody: String
         var attachments: [AnyAttachmentPayload] = []
+        var extraData: [String: RawJSON] = [:]
 
         switch sendable.kind {
         case .text(let text):
@@ -163,18 +164,24 @@ extension ConversationController {
         case .attributedText, .video, .location, .emoji, .audio, .contact:
             throw(ClientError.apiError(detail: "Message type not supported."))
         }
-
-        if let expressionURL = sendable.expression?.imageURL {
-            let extraData: [String : RawJSON] = ["isExpression" : .bool(true)]
-            let expressionAttachment = try AnyAttachmentPayload(localFileURL: expressionURL,
-                                                                 attachmentType: .image,
-                                                                 extraData: extraData)
-            attachments.append(expressionAttachment)
+        
+        if let expression = sendable.expression {
+            do {
+                let saved = try await expression.saveToServer()
+                
+                let expressionDict: [String: RawJSON] = ["authorId": .string(User.current()!.objectId!),
+                                                         "expressionId": .string(saved.objectId!)]
+                
+                extraData = ["expressions" : .array([.dictionary(expressionDict)])]
+            } catch {
+                throw(ClientError.apiError(detail: "Error saving expression for message."))
+            }
         }
 
         return try await self.createNewMessage(sendable: sendable,
                                                text: messageBody,
-                                               attachments: attachments)
+                                               attachments: attachments,
+                                               extraData: extraData)
     }
 
     /// Creates a new message locally and schedules it for send.
@@ -201,9 +208,6 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation { continuation in
             var data = extraData
-            if let emoji = sendable.expression?.emojiString {
-                data["expression"] = .string(emoji)
-            }
             data["context"] = .string(sendable.deliveryType.rawValue)
             self.createNewMessage(text: text,
                                   pinning: pinning,

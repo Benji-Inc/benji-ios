@@ -40,7 +40,7 @@ class FaceImageCaptureViewController: ViewController {
 
     let orientation: CGImagePropertyOrientation = .left
 
-    private let faceCaptureSession = PhotoCaptureSession()
+    let faceCaptureSession = PhotoCaptureSession()
 
     /// A request to separate a person from the background in an image.
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
@@ -72,6 +72,11 @@ class FaceImageCaptureViewController: ViewController {
     /// Starts the face capture session so that we can display the photo preview and capture a photo.
     func beginSession() {
         self.faceCaptureSession.begin()
+    }
+    
+    /// Stops the face capture session.
+    func stopSession() {
+        self.faceCaptureSession.stop()
     }
 
     func capturePhoto() {
@@ -131,7 +136,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
 
         // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
 
-        let filter = CIFilter(name: "CIPhotoEffectMono")
+        let filter = CIFilter(name: "CIPhotoEffectNoir")
         filter?.setValue(originalImage, forKey: "inputImage")
 
         guard let bwImage = filter?.outputImage else { return }

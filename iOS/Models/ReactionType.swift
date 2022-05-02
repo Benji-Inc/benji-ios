@@ -11,13 +11,10 @@ import StreamChat
 
 enum ReactionType {
 
-    case emotion(Emotion)
     case read
     
     var rawValue: String {
         switch self {
-        case .emotion(let emotion):
-            return emotion.rawValue
         case .read:
             return "read"
         }
@@ -30,8 +27,6 @@ enum ReactionType {
     init?(rawValue: String) {
         if rawValue == "read" {
             self = .read
-        } else if let e = Emotion(rawValue: rawValue) {
-            self = .emotion(e)
         } else {
             return nil
         }

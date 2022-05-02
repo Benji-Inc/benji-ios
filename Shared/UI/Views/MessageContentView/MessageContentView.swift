@@ -17,10 +17,20 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
-    func messageContent(_ content: MessageContentView, didTapAddEmotionsForMessage messageInfo: (ConversationId, MessageId))
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId))
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
+                        for expression: ExpressionInfo,
                         forMessage messageInfo: (ConversationId, MessageId))
+}
+
+extension MessageContentDelegate {
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {}
+    
+    func messageContent(_ content: MessageContentView,
+                        didTapEmotion emotion: Emotion,
+                        for expression: ExpressionInfo,
+                        forMessage messageInfo: (ConversationId, MessageId)) {}
 }
 
 class MessageContentView: BaseView {
@@ -111,7 +121,7 @@ class MessageContentView: BaseView {
         self.addEmotionImageView.alpha = 0
         self.bubbleView.addSubview(self.addEmotionButton)
         self.addEmotionButton.set(style: .normal(color: .clear, text: ""))
-        self.addEmotionButton.alpha = 0 
+        self.addEmotionButton.alpha = 0
 
         self.bubbleView.addSubview(self.mainContentArea)
 
@@ -151,9 +161,11 @@ class MessageContentView: BaseView {
         }
 
         self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            guard let message = self.message, let cid = message.streamCid else { return }
+            guard let message = self.message, let cid = message.streamCid,
+                  let expression = self.message?.authorExpression  else { return }
             self.delegate?.messageContent(self,
                                           didTapEmotion: emotion,
+                                          for: expression,
                                           forMessage: (cid, message.id))
         }
         
@@ -164,7 +176,7 @@ class MessageContentView: BaseView {
         
         self.addEmotionButton.didSelect { [unowned self] in
             guard let message = self.message, let cid = message.streamCid else { return }
-            self.delegate?.messageContent(self, didTapAddEmotionsForMessage: (cid, message.id))
+            self.delegate?.messageContent(self, didTapAddExpressionForMessage: (cid, message.id))
         }
     }
 
@@ -181,7 +193,7 @@ class MessageContentView: BaseView {
         self.addEmotionImageView.squaredSize = 20
         self.addEmotionImageView.pin(.right, offset: .long)
         self.addEmotionImageView.pin(.bottom, offset: .long)
-        
+
         self.addEmotionButton.squaredSize = 50
         self.addEmotionButton.center = self.addEmotionImageView.center
 
@@ -288,23 +300,38 @@ class MessageContentView: BaseView {
                 break
             }
         }
+        
+        self.loadExpressions(for: message)
+    }
+    
+    /// The currently running task that is loading the expressions.
+    private var loadTask: Task<Void, Never>?
+    
+    private func loadExpressions(for message: Messageable) {
+        self.loadTask?.cancel()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            if let info = message.authorExpression,
+               let expression = try? await Expression.getObject(with: info.expressionId) {
+                let emotionCounts = expression.emotionCounts 
+                // Only animate changes to the emotion when they're not blurred out.
+                let isAnimated = self.areEmotionsShown
 
-        let emotionCounts = message.emotionCounts
-        // Only animate changes to the emotion when they're not blurred out.
-        let isAnimated = self.areEmotionsShown
+                if isAnimated {
+                    self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
+                }
+                self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
 
-        if isAnimated {
-            self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
+                self.authorView.set(info: info, author: message.authorId)
+            } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId){
+                self.authorView.set(displayable: author)
+                self.authorView.set(emotionCounts: [:])
+            }
+            
+            self.setNeedsLayout()
         }
-        self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
-
-        if let expressionURL = message.expression?.imageURL {
-            self.authorView.set(person: expressionURL, emotionCounts: emotionCounts)
-        } else {
-            self.authorView.set(person: message.person, emotionCounts: emotionCounts)
-        }
-
-        self.setNeedsLayout()
     }
 
     /// Sets the background color and shows/hides the bubble tail.
@@ -348,7 +375,7 @@ class MessageContentView: BaseView {
                 }
                 
                 // Only allow the author to add emotions
-                if let msg = self.message, msg.isFromCurrentUser {
+                if let msg = self.message, msg.isFromCurrentUser, msg.authorExpression.isNil {
                     self.addEmotionImageView.alpha = 1.0
                     self.addEmotionButton.alpha = 1.0
                 }

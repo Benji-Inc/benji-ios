@@ -57,7 +57,7 @@ extension UIImage {
     }
 
     var previewData: Data? {
-        return try? self.imageWith(maxSideLength: 200).heicData(compressionQuality: 0.1)
+        return try? self.imageWith(maxSideLength: 200).heicData(compressionQuality: 0.6)
     }
 }
 

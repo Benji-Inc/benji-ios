@@ -33,7 +33,7 @@ class PermissionsViewController: DisclosureModalViewController {
         var description: HightlightedPhrase {
             switch self {
             case .focusAsk:
-                return HightlightedPhrase(text: "Changing Focus status updates your picture so people see if you are available or busy.",
+                return HightlightedPhrase(text: "Changing Focus status updates your profile so people see if you are available or busy and filters out unnecessary notifications.",
                                           highlightedWords: [])
             case .notificationAsk:
                 return HightlightedPhrase(text: "Allowing Notifications means you never miss out on what’s important. No noise.",
