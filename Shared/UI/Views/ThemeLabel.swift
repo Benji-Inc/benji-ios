@@ -100,6 +100,10 @@ class ThemeLabel: UILabel {
     func setTextColor(_ textColor: ThemeColor) {
         self.textColor = textColor.color.resolvedColor(with: self.traitCollection)
     }
+    
+    func resetToDefaultAttributes() {
+        self.setTextWithAttributes(self.text ?? "")
+    }
 
     func add(attributes: [NSAttributedString.Key : Any], to text: String) {
         guard let existingText = self.attributedText else { return }

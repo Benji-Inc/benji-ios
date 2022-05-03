@@ -36,7 +36,7 @@ class TypingIndicatorView: BaseView {
             if let cid = conversation?.cid {
                 self.subscribeToUpdates(for: cid)
             } else {
-                self.hideTyping()
+                self.hideText()
             }
         }.store(in: &self.cancellables)
     }
@@ -71,7 +71,7 @@ class TypingIndicatorView: BaseView {
         
         guard typers.count > 0 else {
             // If no one is typying, hide
-            self.hideTyping()
+            self.hideText()
             return
         }
         
@@ -90,8 +90,13 @@ class TypingIndicatorView: BaseView {
         
         text.append(" is typing...")
         
+        self.animate(text: text, highlights: names)
+    }
+    
+    func animate(text: String, highlights: [String]) {
+        
         self.label.setText(text)
-        names.forEach { highlight in
+        highlights.forEach { highlight in
             self.label.add(attributes: [.font: FontType.smallBold.font], to: highlight)
         }
         
@@ -103,13 +108,13 @@ class TypingIndicatorView: BaseView {
         }
     }
     
-    func hideTyping() {
+    func hideText() {
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.label.alpha = 0.0
         } completion: { _ in
             
             // Important to reset the text, to clear out the attributes
-            self.label.setText("")
+            self.label.resetToDefaultAttributes()
             self.label.transform = CGAffineTransform.init(translationX: -5, y: 0)
         }
     }
