@@ -110,7 +110,7 @@ extension Messageable {
     
     var authorExpression: ExpressionInfo? {
         return self.expressions.first { info in
-            return info.authorId == User.current()?.objectId
+            return info.authorId == self.authorId
         }
     }
 }

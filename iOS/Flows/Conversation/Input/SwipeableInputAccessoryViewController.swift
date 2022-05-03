@@ -59,6 +59,14 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     // MARK: - Layout/Animation Properties
 
     private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self.swipeInputView)
+    
+    deinit {
+        if let currentExpression = currentExpression {
+            Task {
+                try await currentExpression.deleteInBackground()
+            }
+        }
+    }
 
     // MARK: BaseView Setup and Layout
 

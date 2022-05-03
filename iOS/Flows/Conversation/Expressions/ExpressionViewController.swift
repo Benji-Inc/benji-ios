@@ -91,20 +91,9 @@ class ExpressionViewController: ViewController {
         }
         
         self.doneButton.didSelect { [unowned self] in
-            guard let data = self.data else { return }
-            var emotionCounts: [Emotion: Int] = [:]
-            self.emotionsVC.selectedEmotions.forEach { emotion in
-                emotionCounts[emotion] = 1
+            Task {
+                await self.createExpression()
             }
-            
-            let expression = Expression()
-            
-            expression.author = User.current()
-            expression.file = PFFileObject(name: "expression.heic", data: data)
-            expression.emotionCounts = emotionCounts
-            expression.emojiString = nil
-            
-            self.didCompleteExpression?(expression)
         }
         
         self.$state
@@ -152,6 +141,25 @@ class ExpressionViewController: ViewController {
         } else {
             self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.cameraViewContainer.frame
         }
+    }
+    
+    private func createExpression() async {
+        guard let data = self.data else { return }
+        var emotionCounts: [Emotion: Int] = [:]
+        self.emotionsVC.selectedEmotions.forEach { emotion in
+            emotionCounts[emotion] = 1
+        }
+        
+        let expression = Expression()
+        
+        expression.author = User.current()
+        expression.file = PFFileObject(name: "expression.heic", data: data)
+        expression.emotionCounts = emotionCounts
+        expression.emojiString = nil
+        
+        guard let saved = try? await expression.saveToServer() else { return }
+        
+        self.didCompleteExpression?(saved)
     }
     
     private func update(for state: State) {

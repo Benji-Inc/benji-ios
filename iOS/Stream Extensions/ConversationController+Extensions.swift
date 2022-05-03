@@ -166,16 +166,10 @@ extension ConversationController {
         }
         
         if let expression = sendable.expression {
-            do {
-                let saved = try await expression.saveToServer()
-                
-                let expressionDict: [String: RawJSON] = ["authorId": .string(User.current()!.objectId!),
-                                                         "expressionId": .string(saved.objectId!)]
-                
-                extraData = ["expressions" : .array([.dictionary(expressionDict)])]
-            } catch {
-                throw(ClientError.apiError(detail: "Error saving expression for message."))
-            }
+            let expressionDict: [String: RawJSON] = ["authorId": .string(User.current()!.objectId!),
+                                                     "expressionId": .string(expression.objectId!)]
+            
+            extraData = ["expressions" : .array([.dictionary(expressionDict)])]
         }
 
         return try await self.createNewMessage(sendable: sendable,
