@@ -12,6 +12,18 @@ import UIKit
 import Combine
 import Lottie
 
+struct DisplayableImage: ImageDisplayable {
+    var image: UIImage?
+    var url: URL?
+    var fileObject: PFFileObject?
+    
+    init?(with displayable: ImageDisplayable?) {
+        self.image = displayable?.image
+        self.url = displayable?.url
+        self.fileObject = displayable?.fileObject
+    }
+}
+
 class DisplayableImageView: BaseView {
 
     enum State {
@@ -30,17 +42,18 @@ class DisplayableImageView: BaseView {
     var cancellables = Set<AnyCancellable>()
 
     private var displayableTask: Task<Void, Never>?
-    var displayable: ImageDisplayable? {
+    
+    private var displaybleImage: DisplayableImage? {
         didSet {
             // Don't load the displayable again if it hasn't changed.
-            if let displayable = self.displayable, displayable.isEqual(to: oldValue) {
+            if let displayable = self.displaybleImage, displayable.isEqual(to: oldValue) {
                 return
             }
 
             self.displayableTask?.cancel()
 
             // A nil displayable can be applied immediately without creating a task.
-            guard let displayableRef = self.displayable else {
+            guard let displayableRef = self.displaybleImage else {
                 self.imageView.image = nil
                 self.state = .initial
                 return
@@ -49,6 +62,12 @@ class DisplayableImageView: BaseView {
             self.displayableTask = Task {
                 await self.updateImageView(with: displayableRef)
             }
+        }
+    }
+    
+    var displayable: ImageDisplayable? {
+        didSet {
+            self.displaybleImage = DisplayableImage(with: self.displayable)
         }
     }
 
