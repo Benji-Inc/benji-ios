@@ -883,6 +883,12 @@
 		D6D9ECBD281AFA0C000C5C46 /* PersonGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */; };
 		D6D9ECBE281B0C6D000C5C46 /* GradientPassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientPassThroughView.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
+		D6DD0C312822F370004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C302822F370004999F2 /* Sentry */; };
+		D6DD0C332822F3B7004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C322822F3B7004999F2 /* Sentry */; };
+		D6DD0C352822F3C3004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C342822F3C3004999F2 /* Sentry */; };
+		D6DD0C372822F3CD004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C362822F3CD004999F2 /* Sentry */; };
+		D6DD0C392822F3D5004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C382822F3D5004999F2 /* Sentry */; };
+		D6DD0C3B2822F3DE004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C3A2822F3DE004999F2 /* Sentry */; };
 		D6DEC3ED27A1D9520072D9D0 /* RoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */; };
 		D6DEC3EF27A1DA5D0072D9D0 /* RoomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationListCoordinator+Presentation.swift */; };
@@ -1462,6 +1468,7 @@
 				D61128092804D89100574B96 /* Lottie in Frameworks */,
 				91C4F105D5CDD409D028D428 /* Pods_AppClip.framework in Frameworks */,
 				D61128922804DF4300574B96 /* UIKit.framework in Frameworks */,
+				D6DD0C3B2822F3DE004999F2 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1474,6 +1481,7 @@
 				D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */,
 				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
 				D656EF442765A11900FF6E2C /* Localization in Frameworks */,
+				D6DD0C312822F370004999F2 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1484,6 +1492,7 @@
 				D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */,
 				D63DB1FB25E968C300F6B323 /* UserNotificationsUI.framework in Frameworks */,
 				D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */,
+				D6DD0C332822F3B7004999F2 /* Sentry in Frameworks */,
 				D6C3893A27287491004D29D5 /* StreamChat in Frameworks */,
 				D656EF482765A12A00FF6E2C /* Localization in Frameworks */,
 				D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */,
@@ -1498,6 +1507,7 @@
 				D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */,
 				D656EF4A2765A13100FF6E2C /* Localization in Frameworks */,
 				6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */,
+				D6DD0C352822F3C3004999F2 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1505,6 +1515,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6DD0C372822F3CD004999F2 /* Sentry in Frameworks */,
 				D6AE0F7E267CFA6C00C6B048 /* Intents.framework in Frameworks */,
 				D656EF4C2765A13600FF6E2C /* Localization in Frameworks */,
 				D6977D6527D1780900A65330 /* StreamChat in Frameworks */,
@@ -1519,6 +1530,7 @@
 				D6AE0F89267CFA6D00C6B048 /* IntentsUI.framework in Frameworks */,
 				D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */,
 				C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */,
+				D6DD0C392822F3D5004999F2 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2727,6 +2739,7 @@
 				D61128062804D88600574B96 /* Localization */,
 				D61128082804D89100574B96 /* Lottie */,
 				D611280A2804D8A400574B96 /* PhoneNumberKit */,
+				D6DD0C3A2822F3DE004999F2 /* Sentry */,
 			);
 			productName = AppClip;
 			productReference = D61127EE2804D72C00574B96 /* AppClip.app */;
@@ -2759,6 +2772,7 @@
 				D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */,
 				D6C3893527287307004D29D5 /* StreamChat */,
 				D656EF432765A11900FF6E2C /* Localization */,
+				D6DD0C302822F370004999F2 /* Sentry */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -2783,6 +2797,7 @@
 				D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */,
 				D6C3893927287491004D29D5 /* StreamChat */,
 				D656EF472765A12A00FF6E2C /* Localization */,
+				D6DD0C322822F3B7004999F2 /* Sentry */,
 			);
 			productName = OursNotificationContent;
 			productReference = D63DB1F725E968C300F6B323 /* Notification Content.appex */;
@@ -2805,6 +2820,7 @@
 			packageProductDependencies = (
 				D6C3893B2728749C004D29D5 /* StreamChat */,
 				D656EF492765A13100FF6E2C /* Localization */,
+				D6DD0C342822F3C3004999F2 /* Sentry */,
 			);
 			productName = NotificationService;
 			productReference = D6AE0F6D267CF9CA00C6B048 /* Notification Service.appex */;
@@ -2827,6 +2843,7 @@
 			packageProductDependencies = (
 				D656EF4B2765A13600FF6E2C /* Localization */,
 				D6977D6427D1780900A65330 /* StreamChat */,
+				D6DD0C362822F3CD004999F2 /* Sentry */,
 			);
 			productName = "Intents Extension";
 			productReference = D6AE0F7C267CFA6C00C6B048 /* Intents Extension.appex */;
@@ -2848,6 +2865,7 @@
 			name = "Intents ExtensionUI";
 			packageProductDependencies = (
 				D656EF4D2765A13B00FF6E2C /* Localization */,
+				D6DD0C382822F3D5004999F2 /* Sentry */,
 			);
 			productName = "Intents ExtensionUI";
 			productReference = D6AE0F87267CFA6D00C6B048 /* Intents ExtensionUI.appex */;
@@ -2905,6 +2923,7 @@
 				D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
 				D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */,
+				D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = D61EC0BD21D3071400204BEE /* Products */;
 			projectDirPath = "";
@@ -4729,6 +4748,14 @@
 				minimumVersion = 4.12.0;
 			};
 		};
+		D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -4805,6 +4832,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
 			productName = StreamChat;
+		};
+		D6DD0C302822F370004999F2 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		D6DD0C322822F3B7004999F2 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		D6DD0C342822F3C3004999F2 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		D6DD0C362822F3CD004999F2 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		D6DD0C382822F3D5004999F2 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		D6DD0C3A2822F3DE004999F2 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6DD0C2F2822F370004999F2 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
