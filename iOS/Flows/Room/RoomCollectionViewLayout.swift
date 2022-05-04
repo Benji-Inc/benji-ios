@@ -121,9 +121,9 @@ class RoomCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(180))
                 let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                              leading: 0,
+                                                              leading: sectionInset,
                                                               bottom: 0,
-                                                              trailing: 0)
+                                                              trailing: sectionInset)
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)

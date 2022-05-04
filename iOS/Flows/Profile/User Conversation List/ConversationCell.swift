@@ -200,7 +200,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let maxWidth = self.width * 0.9
+        let maxWidth = self.width 
         
         self.messageContent.width = maxWidth
         self.messageContent.height = MessageContentView.collapsedHeight
