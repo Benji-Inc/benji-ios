@@ -8,11 +8,13 @@
 
 import Foundation
 import os
+import Sentry
 
 func logDebug(_ message: CustomStringConvertible) {
     Logger().log(level: .debug, "🟡 === \(message.description)")
 }
 
 func logError(_ error: Error) {
+    SentrySDK.capture(error: error)
     Logger().log(level: .debug, "🔴 === \(error.localizedDescription)")
 }
