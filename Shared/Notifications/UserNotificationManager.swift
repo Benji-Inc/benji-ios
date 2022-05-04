@@ -137,7 +137,7 @@ class UserNotificationManager: NSObject {
                 var badgeCount = self.application?.applicationIconBadgeNumber ?? 0
                 delivered.forEach { note in
                     if note.request.content.messageId == message.id {
-                        identifiers.append(message.id)
+                        identifiers.append(note.request.identifier)
                     }
 
                     if message.deliveryType == .timeSensitive {
@@ -147,17 +147,20 @@ class UserNotificationManager: NSObject {
 
                 // Must be called on Main thread or will crash
                 self.application?.applicationIconBadgeNumber = badgeCount
-                self.removedNotifications(with: identifiers)
+                self.removeNotifications(with: identifiers)
             }
         }
     }
     #endif 
     
-    private func removedNotifications(with identifiers: [String]) {
-        // It was suggested that in order for this to work it needs to be called on a background thread.
+    // It was suggested that in order for this to work it needs to be called on a background thread.
+    private func removeNotifications(with identifiers: [String]) {
         Task {
-            self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
-            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
+            DispatchQueue.global(qos: .background).async { [unowned self] in
+                //background code
+                self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+                self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
+            }
         }
     }
 }

@@ -301,7 +301,9 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     private func updateUser(with image: UIImage) async {
         guard let currentUser = User.current(), let data = image.previewData else { return }
         
-        let file = PFFileObject(name:"small_image.heic", data: data)
+        let nowString = Date.now.ISO8601Format().removeAllNonNumbers()
+    
+        let file = PFFileObject(name:"\(nowString).heic", data: data)
         currentUser.smallImage = file
 
         do {
