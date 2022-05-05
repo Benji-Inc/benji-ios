@@ -239,13 +239,14 @@ extension MessageController {
 
                 switch result {
                 case .success(let messageId):
+                    continuation.resume(returning: messageId)
+
                     AnalyticsManager.shared.trackEvent(type: .replySent, properties: nil)
+                    AchievementsManager.shared.createIfNeeded(with: .firstReply)
                     
                     Task {
                         await self.presentToast(for: sendable)
                     }
-                    
-                    continuation.resume(returning: messageId)
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }

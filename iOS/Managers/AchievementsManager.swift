@@ -100,7 +100,10 @@ class AchievementsManager {
             achievement = await self.createAchievement(with: selectedType)
         }
         
-        if let _ = achievement {
+        if let achievement = achievement {
+            Task {
+                await ToastScheduler.shared.schedule(toastType: .achievement(achievement))
+            }
             AnalyticsManager.shared.trackEvent(type: .achievementCreated, properties: ["value": selectedType.type!])
         }
     }
