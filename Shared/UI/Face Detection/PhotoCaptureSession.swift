@@ -72,14 +72,19 @@ class PhotoCaptureSession {
 
         // Create the video data output
         self.videoOutput = AVCaptureVideoDataOutput()
-        self.videoOutput!.setSampleBufferDelegate(self.avCaptureDelegate, queue: self.dataOutputQueue)
-        self.videoOutput!.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
+        
+        guard let videoOutput = self.videoOutput else {
+            return
+        }
+
+        videoOutput.setSampleBufferDelegate(self.avCaptureDelegate, queue: self.dataOutputQueue)
+        videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
 
         // Add the video output to the capture session
-        guard self.session.canAddOutput(self.videoOutput!) else { return }
+        guard self.session.canAddOutput(videoOutput) else { return }
         self.session.addOutput(self.videoOutput!)
 
-        let videoConnection = self.videoOutput?.connection(with: .video)
+        let videoConnection = videoOutput.connection(with: .video)
         videoConnection?.videoOrientation = .portrait
 
         // Get an instance of ACCapturePhotoOutput class
