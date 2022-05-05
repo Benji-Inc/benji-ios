@@ -200,6 +200,15 @@ extension PeopleCoordinator {
     @MainActor
     func finishInviting() async {
         await self.peopleNavController.peopleVC.finishInviting()
+        
+        if self.invitedPeople.count >= 3 {
+            AchievementsManager.shared.createIfNeeded(with: .groupOfPlus)
+        }
+        
+        if self.invitedPeople.count >= 1 {
+            AchievementsManager.shared.createIfNeeded(with: .firstGroup)
+        }
+        
         self.finishFlow(with: self.invitedPeople)
     }
 }
@@ -239,6 +248,7 @@ extension PeopleCoordinator: MFMessageComposeViewControllerDelegate {
             if let rsvp = self.selectedReservation?.objectId {
                 properties = ["value": rsvp]
             }
+            AchievementsManager.shared.createIfNeeded(with: .sendInvite)
             AnalyticsManager.shared.trackEvent(type: .inviteSent, properties: properties)
             controller.dismiss(animated: true) {
                 // Get the person object for the person that was just invited with a text.

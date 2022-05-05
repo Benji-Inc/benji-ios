@@ -194,6 +194,7 @@ extension MessageController {
                                                      "expressionId": .string(expression.objectId!)]
             
             extraData = ["expressions" : .array([.dictionary(expressionDict)])]
+            AchievementsManager.shared.createIfNeeded(with: .firstExpression)
         }
 
         return try await self.createNewReply(sendable: sendable,
@@ -239,13 +240,14 @@ extension MessageController {
 
                 switch result {
                 case .success(let messageId):
+                    continuation.resume(returning: messageId)
+
                     AnalyticsManager.shared.trackEvent(type: .replySent, properties: nil)
+                    AchievementsManager.shared.createIfNeeded(with: .firstReply)
                     
                     Task {
                         await self.presentToast(for: sendable)
                     }
-                    
-                    continuation.resume(returning: messageId)
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }

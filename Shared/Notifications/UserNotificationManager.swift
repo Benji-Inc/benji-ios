@@ -129,7 +129,7 @@ class UserNotificationManager: NSObject {
 
     #if IOS
     func handleRead(message: Messageable) {
-        AchievementsManager.shared.createIfNeeded(with: .firstUnreadMessage, identifier: message.id)
+        AchievementsManager.shared.createIfNeeded(with: .firstUnreadMessage)
         
         self.center.getDeliveredNotifications { [unowned self] delivered in
             Task.onMainActor {

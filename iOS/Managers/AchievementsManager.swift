@@ -12,15 +12,6 @@ import Parse
 
 class AchievementsManager {
     
-    enum LocalAchievementType: String {
-        case sendInvite = "INVITE_SENT"
-        case firstMessage = "FIRST_MESSAGE"
-        case firstUnreadMessage = "FIRST_UNREAD_MESSAGE"
-        case groupOfPlus = "GROUP_OF_PLUS"
-        case firstGroup = "FIRST_GROUP"
-        case firstFeeling = "FIRST_FEELING"
-    }
-    
     static let shared = AchievementsManager()
     
     private(set) var achievements: [Achievement] = []
@@ -68,9 +59,8 @@ class AchievementsManager {
         let subscription = Client.shared.subscribe(query)
         subscription.handleEvent { query, event in
             switch event {
-            case .updated(let object):
-                guard let achievement = object as? Achievement,
-                        !self.achievements.contains(achievement) else { return }
+            case .created(let object):
+                guard let achievement = object as? Achievement else { return }
                 
                 Task {
                     await ToastScheduler.shared.schedule(toastType: .achievement(achievement))
@@ -82,28 +72,19 @@ class AchievementsManager {
         }
     }
     
-    func createIfNeeded(with type: LocalAchievementType, identifier: String) {
-        
-        let id = type.rawValue + identifier
-        var current = UserDefaultsManager.getStrings(for: .localAchievements)
-        guard !current.contains(id) else { return }
-        
-        current.append(id)
-        UserDefaultsManager.update(key: .localAchievements, with: current)
-        
+    func createIfNeeded(with type: AchievementType.LocalType) {
+
         Task {
-            
             // If we already have an initialization task, wait for it to finish.
             if let initializeTask = self.initializeTask {
                 try await initializeTask.value
-                return
             }
             
             await self.create(with: type)
         }
     }
     
-    private func create(with type: LocalAchievementType) async {
+    private func create(with type: AchievementType.LocalType) async {
         
         guard let selectedType = self.types.first(where: { t in
             return t.type == type.rawValue
@@ -119,7 +100,10 @@ class AchievementsManager {
             achievement = await self.createAchievement(with: selectedType)
         }
         
-        if let _ = achievement {
+        if let achievement = achievement {
+            Task {
+                await ToastScheduler.shared.schedule(toastType: .achievement(achievement))
+            }
             AnalyticsManager.shared.trackEvent(type: .achievementCreated, properties: ["value": selectedType.type!])
         }
     }
