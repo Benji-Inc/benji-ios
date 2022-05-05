@@ -170,6 +170,8 @@ extension ConversationController {
                                                      "expressionId": .string(expression.objectId!)]
             
             extraData = ["expressions" : .array([.dictionary(expressionDict)])]
+            
+            AchievementsManager.shared.createIfNeeded(with: .firstExpression)
         }
 
         return try await self.createNewMessage(sendable: sendable,

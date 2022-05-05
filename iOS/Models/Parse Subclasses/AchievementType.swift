@@ -27,6 +27,7 @@ final class AchievementType: PFObject, PFSubclassing {
         case firstGroup = "FIRST_GROUP"
         case firstFeeling = "FIRST_FEELING"
         case firstReply = "FIRST_REPLY"
+        case firstExpression = "FIRST_EXPRESSION"
     }
 
     static func parseClassName() -> String {

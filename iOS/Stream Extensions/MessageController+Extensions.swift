@@ -194,6 +194,7 @@ extension MessageController {
                                                      "expressionId": .string(expression.objectId!)]
             
             extraData = ["expressions" : .array([.dictionary(expressionDict)])]
+            AchievementsManager.shared.createIfNeeded(with: .firstExpression)
         }
 
         return try await self.createNewReply(sendable: sendable,
