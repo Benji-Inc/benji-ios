@@ -213,12 +213,14 @@ extension ConversationController {
 
                 switch result {
                 case .success(let messageID):
+                    continuation.resume(returning: messageID)
+
                     Task {
                         await self.donateIntent(for: sendable)
                         await self.presentToast(for: sendable, messageId: messageID)
                     }
+                    AchievementsManager.shared.createIfNeeded(with: .firstMessage)
                     AnalyticsManager.shared.trackEvent(type: .messageSent, properties: nil)
-                    continuation.resume(returning: messageID)
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }
@@ -302,34 +304,6 @@ extension ConversationController {
         })
     }
 
-    @discardableResult
-    func createNewReply(for messageID: MessageId, with sendable: Sendable) async throws -> MessageId {
-        switch sendable.kind {
-        case .text(let text):
-            return try await self.createNewReply(sendable: sendable,
-                                                 messageID: messageID,
-                                                 text: text)
-        case .attributedText:
-            break
-        case .photo:
-            break
-        case .video:
-            break
-        case .location:
-            break
-        case .emoji:
-            break
-        case .audio:
-            break
-        case .contact:
-            break
-        case .link:
-            break
-        }
-
-        throw(ClientError.apiError(detail: "Message type not supported."))
-    }
-
     /// Creates a new reply message locally and schedules it for send.
     ///
     /// - Parameters:
@@ -364,9 +338,6 @@ extension ConversationController {
 
         return try await withCheckedThrowingContinuation({ continuation in
             var data = extraData
-            if let emoji = sendable.expression?.emojiString {
-                data["expression"] = .string(emoji)
-            }
             data["context"] = .string(sendable.deliveryType.rawValue)
             messageController.createNewReply(text: text,
                                              pinning: pinning,
@@ -378,11 +349,12 @@ extension ConversationController {
                                              extraData: data) { result in
                 switch result {
                 case .success(let messageId):
+                    continuation.resume(returning: messageId)
                     Task {
                         await self.donateIntent(for: sendable)
                     }
+                    AchievementsManager.shared.createIfNeeded(with: .firstReply)
                     AnalyticsManager.shared.trackEvent(type: .replySent, properties: nil)
-                    continuation.resume(returning: messageId)
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }

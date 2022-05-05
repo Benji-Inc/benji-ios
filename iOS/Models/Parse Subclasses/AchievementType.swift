@@ -18,6 +18,16 @@ enum AchievementTypeKey: String {
 }
 
 final class AchievementType: PFObject, PFSubclassing {
+    
+    enum LocalType: String {
+        case sendInvite = "INVITE_SENT"
+        case firstMessage = "FIRST_MESSAGE"
+        case firstUnreadMessage = "FIRST_UNREAD_MESSAGE"
+        case groupOfPlus = "GROUP_OF_PLUS"
+        case firstGroup = "FIRST_GROUP"
+        case firstFeeling = "FIRST_FEELING"
+        case firstReply = "FIRST_REPLY"
+    }
 
     static func parseClassName() -> String {
         return String(describing: self)
@@ -41,6 +51,13 @@ final class AchievementType: PFObject, PFSubclassing {
     
     var type: String? {
         get { self.getObject(for: .type) }
+    }
+    
+    var localType: LocalType? {
+        get {
+            guard let value = self.type else { return nil }
+            return LocalType.init(rawValue: value)
+        }
     }
 }
 
