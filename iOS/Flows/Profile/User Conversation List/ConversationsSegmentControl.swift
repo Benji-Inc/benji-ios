@@ -30,7 +30,7 @@ class ConversationsSegmentControl: UISegmentedControl {
             self.didSelectSegmentIndex?(.all)
         }
         
-        let archiveAction = UIAction(title: "Unread") { _ in
+        let archiveAction = UIAction(title: "Urgent") { _ in
             self.didSelectSegmentIndex?(.unread)
         }
             

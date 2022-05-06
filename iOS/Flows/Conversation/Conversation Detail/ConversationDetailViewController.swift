@@ -139,7 +139,9 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             .mainSink(receiveValue: { [unowned self] event in
                 switch event as MemberEvent {
                 case let event as MemberAddedEvent:
-                    self.add(member: event.member)
+                    Task {
+                        await self.add(member: event.member)
+                    }
                 case let event as MemberRemovedEvent:
                     let member = Member(personId: event.user.personId,
                                         conversationController: self.conversationController)
@@ -166,9 +168,25 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         await self.dataSource.apply(snapshot)
     }
     
-    private func add(member: ChatChannelMember) {
-        let member = Member(personId: member.personId, conversationController: self.conversationController)
-        self.dataSource.appendItems([.member(member)], toSection: .people)
+    private func add(member: ChatChannelMember) async {
+        guard let conversation = self.conversationController.conversation else { return }
+        
+        let newItem = Member(personId: member.personId, conversationController: self.conversationController)
+        
+        let members = await PeopleStore.shared.getPeople(for: conversation)
+        
+        var items: [ConversationDetailCollectionViewDataSource.ItemType] = members.compactMap({ value in
+            let item = Member(personId: value.personId,
+                                conversationController: self.conversationController)
+            return .member(item)
+        })
+        
+        items.append(.member(newItem))
+        
+        var snapshot = self.dataSource.snapshot()
+        snapshot.setItems([], in: .people)
+        snapshot.setItems(items, in: .people)
+        await self.dataSource.apply(snapshot)
     }
     
     override func getAllSections() -> [ConversationDetailCollectionViewDataSource.SectionType] {

@@ -15,6 +15,7 @@ class EmptyUnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: UserConversationsDataSource.ItemType?
     
     let titleLabel = ThemeLabel(font: .regular)
+    let label = ThemeLabel(font: .small)
         
     private var conversationController: ConversationController?
     
@@ -24,6 +25,11 @@ class EmptyUnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.titleLabel)
         self.titleLabel.textAlignment = .center
         self.titleLabel.setText("You are all caught up! 🥳")
+        
+        self.contentView.addSubview(self.label)
+        self.label.textAlignment = .center
+        self.label.alpha = 0.25
+        self.label.setText("Unread urgent messages will show here.")
     }
     
     private var loadConversationTask: Task<Void, Never>?
@@ -34,6 +40,11 @@ class EmptyUnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
         
         self.titleLabel.setSize(withWidth: self.width)
-        self.titleLabel.centerOnXAndY()
+        self.titleLabel.centerOnX()
+        self.titleLabel.centerY = self.height * 0.4
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.width))
+        self.label.pin(.bottom, offset: .standard)
+        self.label.centerOnX()
     }
 }

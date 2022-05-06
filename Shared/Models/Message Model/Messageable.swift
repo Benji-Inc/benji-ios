@@ -37,6 +37,7 @@ protocol Messageable {
     var kind: MessageKind { get }
     var isDeleted: Bool { get }
     var totalReplyCount: Int { get }
+    var totalUnreadReplyCount: Int { get }
     var recentReplies: [Messageable] { get }
     var lastUpdatedAt: Date? { get }
 
@@ -113,4 +114,16 @@ extension Messageable {
             return info.authorId == self.authorId
         }
     }
+    
+    var totalUnreadReplyCount: Int {
+        var count: Int = 0
+        self.recentReplies.forEach { reply in
+            if reply.canBeConsumed {
+                count += 1
+            }
+        }
+        
+        return count
+    }
+
 }

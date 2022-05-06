@@ -56,6 +56,7 @@ class ReplySummaryView: BaseView {
     var didSelectSuggestion: ((SuggestedReply) -> Void)? = nil
     var didSelectEmoji: ((String) -> Void)? = nil
     private var replyCount = 0
+    private var totalUnreadReplyCount: Int = 0
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -80,7 +81,8 @@ class ReplySummaryView: BaseView {
 
         if let existing = self.controller,
             existing.messageId == controller.messageId,
-           self.replyCount == controller.message?.replyCount {
+            self.replyCount == controller.message?.replyCount,
+            self.totalUnreadReplyCount == controller.message?.totalUnreadReplyCount {
             return
         }
         
@@ -123,13 +125,18 @@ class ReplySummaryView: BaseView {
     private func setPrompt(for message: Messageable) {
         // Remaining replies minus the one being displayed.
         let remainingReplyCount = clamp(message.totalReplyCount - 1, min: 0)
+        self.totalUnreadReplyCount = message.totalUnreadReplyCount
         
         if message.totalReplyCount == 0 {
             self.promptLabel.setText("Reply")
-        } else if remainingReplyCount == 0 {
+        } else if remainingReplyCount == 0, self.totalUnreadReplyCount == 0 {
             self.promptLabel.setText("View thread")
         } else {
-            if remainingReplyCount == 1 {
+            if self.totalUnreadReplyCount == 1 {
+                self.promptLabel.setText("View \(self.totalUnreadReplyCount) unread reply")
+            } else if self.totalUnreadReplyCount > 1 {
+                self.promptLabel.setText("View \(self.totalUnreadReplyCount) unread replies")
+            } else if remainingReplyCount == 1 {
                 self.promptLabel.setText("View \(remainingReplyCount) reply")
             } else {
                 self.promptLabel.setText("View \(remainingReplyCount) more replies")

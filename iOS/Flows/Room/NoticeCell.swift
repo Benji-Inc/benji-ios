@@ -31,6 +31,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.layer.cornerRadius = Theme.cornerRadius
         
         self.contentView.addSubview(self.imageView)
+        
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.descriptionLabel)
         
@@ -81,7 +82,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             self.descriptionLabel.setText(message.text)
             self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
-            self.imageView.displayable = author
+            self.imageView.set(person: author)
         case .connectionRequest:
             guard let connectionId = notice.attributes?["connectionId"] as? String,
                   let connection = PeopleStore.shared.allConnections.first(where: { existing in
@@ -89,8 +90,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
                   }) else {
                 self.showError()
                 return }
-            
-            self.imageView.displayable = connection.nonMeUser
+            self.imageView.set(person: connection.nonMeUser)
             self.rightButtonLabel.setText("Accept")
             self.leftButtonLabel.setText("Decline")
         case .connectionConfirmed:
@@ -100,7 +100,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
                   }) else { self.showError()
                 return }
             
-            self.imageView.displayable = connection.nonMeUser
+            self.imageView.set(person: connection.nonMeUser)
             self.rightButtonLabel.setText("Ok")
             self.leftButtonLabel.setText("")
         case .messageRead:
@@ -128,7 +128,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             self.descriptionLabel.setText(message.text)
             self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
-            self.imageView.displayable = readers
+            self.imageView.set(person: readers)
         case .unreadMessages:
             let count = notice.notice?.unreadMessages.count ?? 0
             
