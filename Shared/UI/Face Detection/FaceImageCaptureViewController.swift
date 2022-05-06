@@ -45,6 +45,12 @@ class FaceImageCaptureViewController: ViewController {
     /// A request to separate a person from the background in an image.
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
     private var sequenceHandler = VNSequenceRequestHandler()
+    
+    deinit {
+        if self.isSessionRunning {
+            self.stopSession()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
