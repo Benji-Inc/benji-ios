@@ -86,15 +86,18 @@ class FaceImageCaptureViewController: ViewController {
 
     /// Starts the face capture session so that we can display the photo preview and capture a photo.
     func beginSession() {
+        guard !self.isSessionRunning else { return }
         self.faceCaptureSession.begin()
     }
     
     /// Stops the face capture session.
     func stopSession() {
+        guard self.isSessionRunning else { return }
         self.faceCaptureSession.stop()
     }
 
     func capturePhoto() {
+        guard self.isSessionRunning else { return }
         self.faceCaptureSession.capturePhoto()
     }
 }
