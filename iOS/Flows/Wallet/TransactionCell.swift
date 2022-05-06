@@ -119,7 +119,7 @@ class TransactionContentView: BaseView, UIContentView {
             }
             
             if let achievement = try? await transaction.achievement?.retrieveDataIfNeeded(),
-                let type = achievement.type {
+               let type = try? await achievement.type?.retrieveDataIfNeeded() {
                 self.badgeView?.configure(with: type)
                 self.badgeView?.isVisible = true
                 self.amountLabel?.isVisible = false
