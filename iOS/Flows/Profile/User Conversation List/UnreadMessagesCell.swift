@@ -163,7 +163,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     }
     
     func showError() {
-        self.titleLabel.setText("Zero unread messages.")
+        self.titleLabel.setText("You have 0 unread urgent messages.")
         self.messageContent.isVisible = false
         self.rightLabel.isVisible = false
         self.leftLabel.isVisible = false 
