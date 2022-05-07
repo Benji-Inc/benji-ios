@@ -50,11 +50,10 @@ struct VideoAttachment: MediaItem {
     }
     
     private func getVideoSnapshot() -> UIImage? {
-        guard let url = url else {
+        guard self.image.isNil, let url = url else {
             return nil
         }
 
-        
         let asset = AVURLAsset(url: url)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true

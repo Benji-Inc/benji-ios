@@ -105,9 +105,11 @@ extension MessageKind {
         return !self.text.isEmpty
     }
 
-    var isImage: Bool {
+    var hasImage: Bool {
         switch self {
         case .photo:
+            return true
+        case .video:
             return true
         default:
             return false

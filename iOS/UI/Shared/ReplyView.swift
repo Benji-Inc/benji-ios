@@ -62,7 +62,7 @@ class ReplyView: BaseView {
     func configure(with message: Messageable) {
         if message.kind.hasText {
             self.label.setText(message.kind.text)
-        } else if message.kind.isImage {
+        } else if message.kind.hasImage {
             self.label.setText("Tap to view image")
         } else if message.kind.isLink {
             self.label.setText("Tap to view link")

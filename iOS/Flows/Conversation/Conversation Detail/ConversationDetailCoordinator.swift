@@ -262,24 +262,24 @@ extension ConversationDetailCoordinator: MessageContentDelegate {
 
         switch message.kind {
         case .photo(photo: let photo, let body):
-            guard let url = photo.url else { return }
             let text = "\(message.author.givenName): \(body)"
-            self.presentImageFlow(for: [url], startingURL: url, body: text)
-        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            self.presentMediaFlow(for: [photo], startingItem: nil, body: text)
+        case .video(video: let video, body: let body):
+            let text = "\(message.author.givenName): \(body)"
+            self.presentMediaFlow(for: [video], startingItem: nil, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
             break
         }
     }
     
-    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
+    func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
         self.removeChild()
-        let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
-                                                    startURL: startingURL,
+        let coordinator = ImageViewCoordinator(items: mediaItems,
+                                                    startingItem: startingItem,
                                                     body: body,
                                                     router: self.router,
                                                     deepLink: self.deepLink)
-        
-        self.addChildAndStart(imageCoordinator) { _ in }
-        
-        self.router.present(imageCoordinator, source: self.detailVC)
+        self.addChildAndStart(coordinator) { _ in }
+        self.router.present(coordinator, source: self.detailVC, cancelHandler: nil)
     }
 }

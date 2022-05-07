@@ -156,15 +156,6 @@ extension RoomCoordinator: MessageContentDelegate {
     }
     
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
-        switch message.kind {
-        case .photo(photo: let photo, let body):
-            guard let url = photo.url else { return }
-            let text = "\(message.author.givenName): \(body)"
-            self.presentImageFlow(for: [url], startingURL: url, body: text)
-        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
-            break
-        }
     }
 }

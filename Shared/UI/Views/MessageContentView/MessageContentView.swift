@@ -194,8 +194,9 @@ class MessageContentView: BaseView {
         self.addEmotionImageView.pin(.right, offset: .long)
         self.addEmotionImageView.pin(.bottom, offset: .long)
 
-        self.addEmotionButton.squaredSize = 50
-        self.addEmotionButton.center = self.addEmotionImageView.center
+        self.addEmotionButton.squaredSize = 44
+        self.addEmotionButton.pin(.bottom)
+        self.addEmotionButton.pin(.right)
 
         self.blurView.expandToSuperviewSize()
 
@@ -258,7 +259,7 @@ class MessageContentView: BaseView {
         self.message = message
 
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
-        self.imageView.isVisible = message.kind.isImage
+        self.imageView.isVisible = message.kind.hasImage
         self.linkView.isVisible = message.kind.isLink
 
         self.dateView.configure(with: message)
@@ -301,7 +302,7 @@ class MessageContentView: BaseView {
                         self.setNeedsLayout()
                     }
                 }
-            case .text, .attributedText, .video, .location, .emoji, .audio, .contact:
+            case .text, .attributedText, .location, .emoji, .audio, .contact:
                 self.imageView.isVisible = false
                 self.linkView.isVisible = false
                 break
