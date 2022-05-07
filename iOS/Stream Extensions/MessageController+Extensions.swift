@@ -175,10 +175,10 @@ extension MessageController {
             messageBody = text
         case .photo(let item, let body):
             if let url = item.url {
-                let attachement = try AnyAttachmentPayload(localFileURL: url,
+                let attachment = try AnyAttachmentPayload(localFileURL: url,
                                                            attachmentType: .image,
                                                            extraData: nil)
-                attachments.append(attachement)
+                attachments.append(attachment)
             }
             messageBody = body
         case .link(_, let stringURL):

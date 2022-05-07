@@ -277,6 +277,13 @@ class MessageContentView: BaseView {
                 if isDifferentMessage || self.imageView.imageView.image.isNil {
                     self.imageView.displayable = photoUrl
                 }
+            case .video(video: let video, _):
+                guard let image = video.image else { break }
+                
+                if isDifferentMessage || self.imageView.imageView.image.isNil {
+                    self.imageView.displayable = image
+                }
+                
             case .link(url: let url, _):
                 guard isDifferentMessage || url != self.linkView.metadata.originalURL else { break }
 

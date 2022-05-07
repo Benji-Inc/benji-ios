@@ -95,6 +95,11 @@ extension Message: Messageable {
                                              data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
+        } else if let videoAttachment = self.videoAttachments.first {
+            let attachment = VideoAttachment(url: videoAttachment.videoURL,
+                                             data: nil,
+                                             info: nil)
+            return .video(video: attachment, body: self.text)
         } else if self.text.isSingleLink, var url = self.text.getURLs().first {
             // If the backend generated link attachments, then use those.
             if self.linkAttachments.count == 1, let linkAttachment = self.linkAttachments.first {

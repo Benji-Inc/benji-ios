@@ -72,7 +72,7 @@ class AttachmentsManager {
                 do {
                     let image = info[.editedImage] as? UIImage
                     if let data = try? image?.heicData(compressionQuality: 1.0) {
-                        let url = try self.createTemporaryHeicURL(for: data)
+                        let url = try self.createTemporaryURL(for: data, fileExtension: ".heic")
                         let item = PhotoAttachment(url: url, data: data, info: info)
                         continuation.resume(returning: .photo(photo: item, body: body))
                     } else {
@@ -84,16 +84,14 @@ class AttachmentsManager {
                 }
             case "public.movie":
                 do {
-                    let mediaURL = info[.mediaURL] as? URL
-                    
-                    let item = VideoAttachment(url: mediaURL, data: nil, info: [:])
-//                    if let data = try? image?.heicData(compressionQuality: 1.0) {
-//                        let url = try self.createTemporaryHeicURL(for: data)
-//                        let item = PhotoAttachment(url: url, data: data, info: info)
-//                        continuation.resume(returning: .photo(photo: item, body: body))
-//                    } else {
-//                        continuation.resume(throwing: ClientError.message(detail: "Error preparing image for delivery"))
-//                    }
+                    if let mediaURL = info[.mediaURL] as? URL {
+                        let videoData = try Data(contentsOf: mediaURL, options: .mappedIfSafe)
+                        let tempURL = try self.createTemporaryURL(for: videoData, fileExtension: ".MOV")
+                        let item = VideoAttachment(url: tempURL, data: videoData, info: info)
+                        continuation.resume(returning: .video(video: item, body: body))
+                    } else {
+                        continuation.resume(throwing: ClientError.apiError(detail: "Error preparing video for delivery"))
+                    }
                 } catch  {
                     logError(error)
                     continuation.resume(throwing: error)
@@ -104,9 +102,9 @@ class AttachmentsManager {
         }
     }
 
-    func createTemporaryHeicURL(for data: Data) throws -> URL {
+    func createTemporaryURL(for data: Data, fileExtension: String) throws -> URL {
         let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                      isDirectory: true).appendingPathComponent(UUID().uuidString+".heic")
+                      isDirectory: true).appendingPathComponent(UUID().uuidString+".\(fileExtension)")
         try data.write(to: url, options: .atomic)
         return url
     }
@@ -228,8 +226,8 @@ class AttachmentsManager {
         for index in 0...result.count - 1 {
             let asset = result.object(at: index)
             assets.append(asset)
-            let attachement = Attachment(asset: asset)
-            attachments.append(attachement)
+            let attachment = Attachment(asset: asset)
+            attachments.append(attachment)
         }
         
         self.attachments = attachments

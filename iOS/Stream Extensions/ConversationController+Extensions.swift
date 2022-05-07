@@ -157,11 +157,17 @@ extension ConversationController {
                 attachments.append(attachment)
             }
             messageBody = body
+        case .video(video: let item, let body):
+            if let url = item.url {
+                let attachment = try AnyAttachmentPayload(localFileURL: url, attachmentType: .video)
+                attachments.append(attachment)
+            }
+            messageBody = body
         case .link(_, let stringURL):
             // The link URL is automatically detected by stream and added as an attachment.
             // Removing extra whitespace and make links lower case.
             messageBody = stringURL.trimWhitespace().lowercased()
-        case .attributedText, .video, .location, .emoji, .audio, .contact:
+        case .attributedText, .location, .emoji, .audio, .contact:
             throw(ClientError.apiError(detail: "Message type not supported."))
         }
         

@@ -1,5 +1,5 @@
 //
-//  AttachementCell.swift
+//  AttachmentCell.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 3/18/22.

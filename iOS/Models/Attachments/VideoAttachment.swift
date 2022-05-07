@@ -1,5 +1,5 @@
 //
-//  VideoAttachement.swift
+//  VideoAttachment.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 5/7/22.
@@ -46,11 +46,30 @@ struct VideoAttachment: MediaItem {
     }
 
     mutating private func convertDataIntoVideo() {
-        guard let data = self.data else {
-            self.image = nil
-            return
+        self.image = self.getVideoSnapshot()
+    }
+    
+    private func getVideoSnapshot() -> UIImage? {
+        guard let url = url else {
+            return nil
         }
 
-        self.image = UIImage(data: data)
+        
+        let asset = AVURLAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+
+        let timestamp = CMTime(seconds: 0.5, preferredTimescale: 60)
+
+        do {
+            let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+            return UIImage(cgImage: imageRef)
+        }
+        catch {
+            print("Image generation failed with error \(error)")
+            return nil
+        }
     }
 }
+
+
