@@ -210,7 +210,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func presentPhotoLibrary() {
-        let filter = PHPickerFilter.any(of: [.images])
+        let filter = PHPickerFilter.any(of: [.images, .videos])
         var config = PHPickerConfiguration(photoLibrary: .shared())
         config.filter = filter
         config.selectionLimit = 1
