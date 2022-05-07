@@ -66,7 +66,7 @@ class AttachmentsManager {
                 continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
                 return
             }
-
+            
             switch mediaType {
             case "public.image":
                 do {
@@ -82,6 +82,22 @@ class AttachmentsManager {
                     logError(error)
                     continuation.resume(throwing: error)
                 }
+            case "public.movie":
+                do {
+                    let mediaURL = info[.mediaURL] as? URL
+                    
+                    let item = VideoAttachment(url: mediaURL, data: nil, info: [:])
+//                    if let data = try? image?.heicData(compressionQuality: 1.0) {
+//                        let url = try self.createTemporaryHeicURL(for: data)
+//                        let item = PhotoAttachment(url: url, data: data, info: info)
+//                        continuation.resume(returning: .photo(photo: item, body: body))
+//                    } else {
+//                        continuation.resume(throwing: ClientError.message(detail: "Error preparing image for delivery"))
+//                    }
+                } catch  {
+                    logError(error)
+                    continuation.resume(throwing: error)
+                }
             default:
                 continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
             }
@@ -92,7 +108,6 @@ class AttachmentsManager {
         let url = URL(fileURLWithPath: NSTemporaryDirectory(),
                       isDirectory: true).appendingPathComponent(UUID().uuidString+".heic")
         try data.write(to: url, options: .atomic)
-
         return url
     }
     

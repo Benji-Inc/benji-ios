@@ -36,6 +36,9 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     lazy var captureVC: UIImagePickerController = {
         let vc = UIImagePickerController()
         vc.sourceType = .camera
+        vc.mediaTypes = ["public.image", "public.movie"]
+        vc.videoQuality = .typeHigh
+        vc.videoExportPreset = AVAssetExportPresetHEVC1920x1080
         vc.allowsEditing = true
         vc.delegate = self
         return vc
