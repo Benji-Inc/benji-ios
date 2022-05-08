@@ -72,6 +72,7 @@ class MessageContentView: BaseView {
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
+    let videoImageView = UIImageView(image: UIImage(systemName: "video.fill"))
     let linkView = LPLinkView()
 
     /// A view to blur out the emotions collection view.
@@ -128,6 +129,10 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
         self.imageView.roundCorners()
+        
+        self.mainContentArea.addSubview(self.videoImageView)
+        self.videoImageView.tintColor = ThemeColor.white.color
+        self.videoImageView.contentMode = .scaleAspectFit
 
         self.mainContentArea.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
@@ -248,6 +253,11 @@ class MessageContentView: BaseView {
         }
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
+        
+        self.videoImageView.squaredSize = 16
+        self.videoImageView.match(.bottom, to: .bottom, of: self.imageView, offset: .negative(.short))
+        self.videoImageView.match(.right, to: .right, of: self.imageView, offset: .negative(.short))
+        self.videoImageView.showShadow(withOffset: 2)
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -261,6 +271,7 @@ class MessageContentView: BaseView {
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
         self.imageView.isVisible = message.kind.hasImage
         self.linkView.isVisible = message.kind.isLink
+        self.videoImageView.isVisible = message.kind.hasVideo
 
         self.dateView.configure(with: message)
         self.deliveryView.image = message.deliveryType.image

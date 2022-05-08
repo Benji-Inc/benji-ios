@@ -104,6 +104,15 @@ extension MessageKind {
     var hasText: Bool {
         return !self.text.isEmpty
     }
+    
+    var hasVideo: Bool {
+        switch self {
+        case .video:
+            return true
+        default:
+            return false
+        }
+    }
 
     var hasImage: Bool {
         switch self {

@@ -14,7 +14,6 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
     enum OptionType: String, OptionDisplayable {
         case capture
         case audio
-        case video
         case giphy
         
         var image: UIImage? {
@@ -23,8 +22,6 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
                 return UIImage(systemName: "camera")
             case .audio:
                 return UIImage(systemName: "mic")
-            case .video:
-                return UIImage(systemName: "video")
             case .giphy:
                 return UIImage(systemName: "photo")
             }
@@ -36,8 +33,6 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
                 return ""
             case .audio:
                 return "Record an Audio Clip"
-            case .video:
-                return "Record a Video Clip"
             case .giphy:
                 return "Choose a GIF"
             }

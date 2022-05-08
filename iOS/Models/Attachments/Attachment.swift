@@ -31,6 +31,11 @@ struct Attachment: Hashable {
         guard let value = self.attributes["duration"] as? Int else { return 5 }
         return clamp(value, min: 5)
     }
+    
+    var isVideo: Bool {
+        guard let type = PHAssetMediaType.init(rawValue: self.mediaType), type == .video else { return false }
+        return true 
+    }
 
     var mediaType: Int {
         return self.attributes["mediaType"] as? Int ?? 0
