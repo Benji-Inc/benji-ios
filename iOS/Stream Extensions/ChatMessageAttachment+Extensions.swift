@@ -22,7 +22,7 @@ extension AnyChatMessageAttachment {
         return isExpression
     }
     
-    var isVideoPreview: Bool {
+    var isPreview: Bool {
         guard let imageAttachment = self.attachment(payloadType: ImageAttachmentPayload.self),
               let _ = imageAttachment.extraData?["previewID"] else {
             return false
@@ -38,7 +38,7 @@ extension ChatMessageAttachment where Payload: AttachmentPayload {
         return self.asAnyAttachment.isExpression
     }
     
-    var isVideoPreview: Bool {
-        return self.asAnyAttachment.isVideoPreview
+    var isPreview: Bool {
+        return self.asAnyAttachment.isPreview
     }
 }

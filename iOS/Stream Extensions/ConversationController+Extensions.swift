@@ -153,11 +153,9 @@ extension ConversationController {
             messageBody = text
         case .photo(let item, let body):
             if let url = item.url {
-                let imagePayload = ImageAttachmentPayload(title: "",
-                                                          imageRemoteURL: url,
-                                                          imagePreviewRemoteURL: item.previewURL,
+                let attachment = try AnyAttachmentPayload(localFileURL: url,
+                                                          attachmentType: .image,
                                                           extraData: nil)
-                let attachment = AnyAttachmentPayload(payload: imagePayload)
                 attachments.append(attachment)
             }
             messageBody = body
@@ -167,21 +165,13 @@ extension ConversationController {
                 let previewID = UUID().uuidString
                 var videoData: [String: RawJSON] = [:]
                 videoData["previewID"] = .string(previewID)
-                let file = try AttachmentFile(url: url)
-                let videoPayload = VideoAttachmentPayload(title: nil,
-                                                          videoRemoteURL: url,
-                                                          file: file,
-                                                          extraData: nil)
-                let attachment = AnyAttachmentPayload(payload: videoPayload)
+            
+                let attachment = try AnyAttachmentPayload(localFileURL: url, attachmentType: .video, extraData: videoData)
                 attachments.append(attachment)
                 
                 if let previewURL = item.previewURL {
-                    let imagePayload = ImageAttachmentPayload(title: "",
-                                                              imageRemoteURL: previewURL,
-                                                              imagePreviewRemoteURL: previewURL,
-                                                              extraData: videoData)
-                    let previewAttachement = AnyAttachmentPayload(payload: imagePayload)
-                    attachments.append(previewAttachement)
+                    let previewAttachment = try AnyAttachmentPayload(localFileURL: previewURL, attachmentType: .image, extraData: videoData)
+                    attachments.append(previewAttachment)
                 }
             }
             messageBody = body

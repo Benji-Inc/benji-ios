@@ -71,11 +71,11 @@ class AttachmentsManager {
             case "public.image":
                 do {
                     let image = info[.editedImage] as? UIImage
-                    if let data = try? image?.heicData(compressionQuality: 1.0),
-                       let previewData = try? image?.heicData(compressionQuality: 0.2) {
+                    if let data = image?.jpegData(compressionQuality: 1.0),
+                       let previewData = image?.jpegData(compressionQuality: 0.5) {
                         
-                        let url = try self.createTemporaryURL(for: data, fileExtension: ".heic")
-                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: ".preview.heic")
+                        let url = try self.createTemporaryURL(for: data, fileExtension: "")
+                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "preview")
                         let item = PhotoAttachment(url: url,
                                                    previewURL: previewURL,
                                                    data: data,
@@ -93,9 +93,9 @@ class AttachmentsManager {
                 do {
                     if let mediaURL = info[.mediaURL] as? URL {
                         let videoData = try Data(contentsOf: mediaURL, options: .mappedIfSafe)
-                        let url = try self.createTemporaryURL(for: videoData, fileExtension: ".MOV")
-                        let previewData = try self.createVideoSnapshotPreviewData(from: url)
-                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: ".preview.heic")
+                        let url = try self.createTemporaryURL(for: videoData, fileExtension: "mov")
+                        let previewData = try self.createVideoSnapshotPreviewData(from: mediaURL)
+                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "")
 
                         let item = VideoAttachment(url: url,
                                                    previewURL: previewURL,
@@ -134,7 +134,6 @@ class AttachmentsManager {
                 { (data, type, orientation, info) in
                     Task {
                         let url = try await self.getAssetURL(for: attachment.asset)
-                        #warning("Need to create previewURL")
                         let item = PhotoAttachment(url: url,
                                                    previewURL: nil,
                                                    data: data,
@@ -143,7 +142,17 @@ class AttachmentsManager {
                     }
                 }
             case .video:
-                continuation.resume(throwing: ClientError.message(detail: "Video not supported."))
+                Task {
+                    let url = try await self.getAssetURL(for: attachment.asset)
+                    let previewData = try self.createVideoSnapshotPreviewData(from: url)
+                    let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "")
+                    let item = VideoAttachment(url: url,
+                                               previewURL: previewURL,
+                                               previewData: previewData,
+                                               data: nil,
+                                               info: attachment.attributes)
+                    continuation.resume(returning: .video(video: item, body: body))
+                }
             case .audio:
                 continuation.resume(throwing: ClientError.message(detail: "Audio not supported"))
             @unknown default:
@@ -171,7 +180,7 @@ class AttachmentsManager {
             } else if asset.mediaType == .video {
                 let options: PHVideoRequestOptions = PHVideoRequestOptions()
                 options.version = .original
-                PHImageManager.default().requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset, audioMix, info) in
+                self.manager.requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset, audioMix, info) in
                     if let urlAsset = asset as? AVURLAsset {
                         let localVideoUrl = urlAsset.url
                         continuation.resume(returning: localVideoUrl)
@@ -238,16 +247,18 @@ class AttachmentsManager {
         let timestamp = CMTime(seconds: 0.5, preferredTimescale: 60)
 
         let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
-        return try UIImage(cgImage: imageRef).heicData(compressionQuality: 0.1)
+        return UIImage(cgImage: imageRef).jpegData(compressionQuality: 0.5) ?? Data()
     }
     
     private func fetchAttachments() {
-        let photosOptions = PHFetchOptions()
-        photosOptions.fetchLimit = 20
-        photosOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d",
-                                              PHAssetMediaType.image.rawValue)
-        photosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result = PHAsset.fetchAssets(with: photosOptions)
+        let options = PHFetchOptions()
+        options.fetchLimit = 20
+        let videoPredicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
+        let imagePredicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [videoPredicate, imagePredicate])
+        options.predicate = predicate
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let result = PHAsset.fetchAssets(with: options)
         
         var attachments: [Attachment] = []
         

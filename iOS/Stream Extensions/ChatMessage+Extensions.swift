@@ -92,7 +92,7 @@ extension Message: Messageable {
     var kind: MessageKind {
         if let imageAttachment = self.photoAttachments.first {
             let attachment = PhotoAttachment(url: imageAttachment.imageURL,
-                                             previewURL: imageAttachment.imagePreviewURL,
+                                             previewURL: nil,
                                              data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
@@ -203,7 +203,7 @@ extension Message {
         let imageAttachments = self.imageAttachments
 
         return imageAttachments.filter { imageAttachment in
-            return !imageAttachment.isExpression && !imageAttachment.isVideoPreview
+            return !imageAttachment.isExpression && !imageAttachment.isPreview
         }
     }
 
@@ -217,13 +217,12 @@ extension Message {
     
     func getPreviewURL(for previewID: RawJSON?) -> URL? {
         guard let first = self.imageAttachments.first(where: { attachment in
-            if attachment.isVideoPreview, let value = attachment.extraData?["previewID"] {
+            if attachment.isPreview, let value = attachment.extraData?["previewID"] {
                 return value == previewID
             }
             return false
-        }), let value = first.extraData?["previewID"],
-                case RawJSON.string(let urlString) = value else { return nil }
+        }) else { return nil }
         
-        return URL(string: urlString)
+        return first.imageURL
     }
 }

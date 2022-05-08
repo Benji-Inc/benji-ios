@@ -27,11 +27,10 @@ class MediaViewerCoordinator: PresentableCoordinator<Void> {
             case .photo:
                 return LightboxImage(imageURL: url, text: self.body)
             case .video:
-                guard let image = item.image else { return nil }
-                return LightboxImage(image: image, text: self.body, videoURL: url)
+                guard let imageURL = item.previewURL else { return nil }
+                return LightboxImage(imageURL: imageURL, text: self.body, videoURL: item.url)
             }
         })
-
 
         var startIndex: Int = 0
         if let start = self.startingItem {

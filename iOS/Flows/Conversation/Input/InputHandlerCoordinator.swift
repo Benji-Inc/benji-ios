@@ -294,7 +294,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             let text = "\(message.author.givenName): \(body)"
             self.presentMediaFlow(for: [photo], startingItem: photo, body: text)
         case .video(video: let video, body: let body):
-            //guard let url = video.url else { return }
             let text = "\(message.author.givenName): \(body)"
             self.presentMediaFlow(for: [video], startingItem: video, body: text)
         case .text, .attributedText, .location, .emoji, .audio, .contact, .link:

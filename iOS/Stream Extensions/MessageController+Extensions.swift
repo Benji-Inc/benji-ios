@@ -192,7 +192,7 @@ extension MessageController {
                 let videoPayload = VideoAttachmentPayload(title: nil,
                                                           videoRemoteURL: url,
                                                           file: file,
-                                                          extraData: nil)
+                                                          extraData: videoData)
                 let attachment = AnyAttachmentPayload(payload: videoPayload)
                 attachments.append(attachment)
                 

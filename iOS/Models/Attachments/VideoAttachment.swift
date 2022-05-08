@@ -47,7 +47,7 @@ struct VideoAttachment: MediaItem {
          info: [AnyHashable : Any]?) {
         
         self.url = url
-        self.previewURL = url
+        self.previewURL = previewURL
         self.previewData = previewData
         self.data = data
         self.info  = info
