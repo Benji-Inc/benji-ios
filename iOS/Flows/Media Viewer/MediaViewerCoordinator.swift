@@ -10,26 +10,37 @@ import Foundation
 import Lightbox
 import Lottie
 
-class ImageViewCoordinator: PresentableCoordinator<Void> {
+class MediaViewerCoordinator: PresentableCoordinator<Void> {
+    
+    let items: [MediaItem]
+    let startingItem: MediaItem?
 
-    let imageURLs: [URL]
-    let startURL: URL?
     let body: String
     
     let animationView = AnimationView.with(animation: .loading)
 
     lazy var imageViewController: ImageViewController = {
         let images: [LightboxImage]
-        images = self.imageURLs.map { imageURL in
-            return LightboxImage(imageURL: imageURL, text: self.body)
-        }
+        images = self.items.compactMap({ item in
+            guard let url = item.url else { return nil }
+            switch item.type {
+            case .photo:
+                return LightboxImage(imageURL: url, text: self.body)
+            case .video:
+                guard let imageURL = item.previewURL else { return nil }
+                return LightboxImage(imageURL: imageURL, text: self.body, videoURL: item.url)
+            }
+        })
 
         var startIndex: Int = 0
-        if let startURL = self.startURL,
-            let startURLIndex = self.imageURLs.firstIndex(of: startURL) {
-            startIndex = startURLIndex
+        if let start = self.startingItem {
+            for (index, item) in self.items.enumerated() {
+                if item.url == start.url {
+                    startIndex = index
+                    break
+                }
+            }
         }
-        
         
         LightboxConfig.PageIndicator.textAttributes = [.font: FontType.xtraSmall.font,
                                                        .foregroundColor: ThemeColor.white.color.withAlphaComponent(0.2)]
@@ -65,14 +76,14 @@ class ImageViewCoordinator: PresentableCoordinator<Void> {
         return self.imageViewController
     }
 
-    init(imageURLs: [URL],
-         startURL: URL?,
+    init(items: [MediaItem],
+         startingItem: MediaItem?,
          body: String,
          router: Router,
          deepLink: DeepLinkable?) {
 
-        self.imageURLs = imageURLs
-        self.startURL = startURL
+        self.items = items
+        self.startingItem = startingItem
         self.body = body
 
         super.init(router: router, deepLink: deepLink)

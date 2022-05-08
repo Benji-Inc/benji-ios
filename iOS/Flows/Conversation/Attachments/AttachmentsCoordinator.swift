@@ -36,8 +36,6 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
                     self.finishFlow(with: .capture)
                 case .audio:
                     self.presentAlert(for: option)
-                case .video:
-                    self.presentAlert(for: option)
                 case .giphy:
                     self.presentAlert(for: option)
                 }

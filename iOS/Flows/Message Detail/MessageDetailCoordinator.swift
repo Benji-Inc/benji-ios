@@ -164,10 +164,12 @@ extension MessageDetailCoordinator: MessageContentDelegate {
 
         switch message.kind {
         case .photo(photo: let photo, let body):
-            guard let url = photo.url else { return }
             let text = "\(message.author.givenName): \(body)"
-            self.presentImageFlow(for: [url], startingURL: url, body: text)
-        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            self.presentMediaFlow(for: [photo], startingItem: nil, body: text)
+        case .video(video: let video, body: let body):
+            let text = "\(message.author.givenName): \(body)"
+            self.presentMediaFlow(for: [video], startingItem: nil, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
             break
         }
     }
@@ -177,19 +179,16 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         self.presentExpressionCreation(for: message)
     }
     
-    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
+    func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
         self.removeChild()
-        
-        let coordinator = ImageViewCoordinator(imageURLs: imageURLs,
-                                               startURL: startingURL,
-                                               body: body,
-                                               router: self.router,
-                                               deepLink: self.deepLink)
-        
+        let coordinator = MediaViewerCoordinator(items: mediaItems,
+                                                 startingItem: startingItem,
+                                                 body: body,
+                                                 router: self.router,
+                                                 deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { _ in }
         self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
     }
-    
     
     func presentExpressionCreation(for message: Messageable) {
         let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)

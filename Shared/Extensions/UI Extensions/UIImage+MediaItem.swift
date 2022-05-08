@@ -17,7 +17,7 @@ extension UIImage: MediaItem {
         return nil
     }
 
-    var previewUrl: URL? {
+    var previewURL: URL? {
         return nil
     }
 

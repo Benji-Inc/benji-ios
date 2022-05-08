@@ -12,9 +12,9 @@ import StreamChat
 import Parse
 
 extension ChatMessage {
-    var inAttachements: [INSendMessageAttachment] {
-        return self.imageAttachments.compactMap { attachement in
-            let file = INFile(fileURL: attachement.imagePreviewURL, filename: attachement.title, typeIdentifier: "public.png")
+    var inAttachments: [INSendMessageAttachment] {
+        return self.imageAttachments.compactMap { attachment in
+            let file = INFile(fileURL: attachment.imagePreviewURL, filename: attachment.title, typeIdentifier: "public.png")
             return INSendMessageAttachment.init(audioMessageFile: file)
         }
     }
@@ -228,7 +228,7 @@ class NotificationService: UNNotificationServiceExtension {
                               conversationIdentifier: self.conversation?.cid.description,
                               serviceName: "Jibber",
                               sender: self.author,
-                              attachments: self.message?.inAttachements)
+                              attachments: self.message?.inAttachments)
 
         let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
         interaction.direction = .incoming

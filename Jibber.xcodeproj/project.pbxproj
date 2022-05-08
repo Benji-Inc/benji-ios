@@ -25,7 +25,7 @@
 		801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
 		8020DD93272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */; };
 		8023C69F27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */; };
-		8023C6A227EBCDEF00FD9DB6 /* ImageViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C6A127EBCDEF00FD9DB6 /* ImageViewCoordinator.swift */; };
+		8023C6A227EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C6A127EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift */; };
 		8024B95326F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */; };
 		80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80251FF726F3D362006D7873 /* MessageController+Extensions.swift */; };
 		8028C9E9273ECB1200520465 /* ConversationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8028C9E8273ECB1200520465 /* ConversationListViewController.swift */; };
@@ -833,6 +833,7 @@
 		D6C7EC272805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
 		D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
 		D6C7EC2A2805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
+		D6C8F1682826D7AC00226583 /* VideoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C8F1672826D7AC00226583 /* VideoAttachment.swift */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
 		D6CC1485276BEF5B005F617F /* Text+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1484276BEF5B005F617F /* Text+Extensions.swift */; };
 		D6CC1487276BF08F005F617F /* Spacer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1486276BF08F005F617F /* Spacer+Extensions.swift */; };
@@ -1009,7 +1010,7 @@
 		801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
 		8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwipeableInputAccessoryView.xib; sourceTree = "<group>"; };
 		8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentContextMenuDelegate.swift; sourceTree = "<group>"; };
-		8023C6A127EBCDEF00FD9DB6 /* ImageViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewCoordinator.swift; sourceTree = "<group>"; };
+		8023C6A127EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewerCoordinator.swift; sourceTree = "<group>"; };
 		8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		80251FF726F3D362006D7873 /* MessageController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageController+Extensions.swift"; sourceTree = "<group>"; };
 		8028C9E8273ECB1200520465 /* ConversationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListViewController.swift; sourceTree = "<group>"; };
@@ -1387,6 +1388,7 @@
 		D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeFooterView.swift; sourceTree = "<group>"; };
 		D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistCoordinator.swift; sourceTree = "<group>"; };
 		D6C7EC282805E64000A35808 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
+		D6C8F1672826D7AC00226583 /* VideoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoAttachment.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
 		D6CC1484276BEF5B005F617F /* Text+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Extensions.swift"; sourceTree = "<group>"; };
 		D6CC1486276BF08F005F617F /* Spacer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spacer+Extensions.swift"; sourceTree = "<group>"; };
@@ -1537,12 +1539,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8023C6A027EBCDC100FD9DB6 /* Image Viewer */ = {
+		8023C6A027EBCDC100FD9DB6 /* Media Viewer */ = {
 			isa = PBXGroup;
 			children = (
-				8023C6A127EBCDEF00FD9DB6 /* ImageViewCoordinator.swift */,
+				8023C6A127EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift */,
 			);
-			path = "Image Viewer";
+			path = "Media Viewer";
 			sourceTree = "<group>";
 		};
 		8028C9EA273ECB1900520465 /* Conversation List */ = {
@@ -2428,6 +2430,7 @@
 			children = (
 				D650C20F25B7D6F20037C59A /* Attachment.swift */,
 				D695B44225BA399600843780 /* PhotoAttachment.swift */,
+				D6C8F1672826D7AC00226583 /* VideoAttachment.swift */,
 			);
 			path = Attachments;
 			sourceTree = "<group>";
@@ -2572,7 +2575,7 @@
 			children = (
 				D6DEC3EB27A1D9370072D9D0 /* Room */,
 				D6432BF122D8282E0016001A /* Conversation */,
-				8023C6A027EBCDC100FD9DB6 /* Image Viewer */,
+				8023C6A027EBCDC100FD9DB6 /* Media Viewer */,
 				80E228DB27C80B0300AF37AC /* Message Detail */,
 				D687F3C426FE4BC6000E4734 /* People */,
 				D6D96EEB27C59DD000BDCD01 /* Profile */,
@@ -3386,6 +3389,7 @@
 				D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */,
 				D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */,
 				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
+				D6C8F1682826D7AC00226583 /* VideoAttachment.swift in Sources */,
 				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D69D268227FCFD70004B893B /* EmotionContentCell.swift in Sources */,
 				D61A33CB27D4F25F00056242 /* EmojiCell.swift in Sources */,
@@ -3494,7 +3498,7 @@
 				D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */,
 				D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */,
 				8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */,
-				8023C6A227EBCDEF00FD9DB6 /* ImageViewCoordinator.swift in Sources */,
+				8023C6A227EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift in Sources */,
 				D61EC0F721D316F100204BEE /* ThemeColor.swift in Sources */,
 				D61A33DF27D5703C00056242 /* ContextCueCell.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,

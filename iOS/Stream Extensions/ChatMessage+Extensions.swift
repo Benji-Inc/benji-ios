@@ -90,11 +90,20 @@ extension Message: Messageable {
     }
     
     var kind: MessageKind {
-        if let imageAttachment = self.nonExpressionImageAttachments.first {
+        if let imageAttachment = self.photoAttachments.first {
             let attachment = PhotoAttachment(url: imageAttachment.imageURL,
+                                             previewURL: nil,
                                              data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
+        } else if let videoAttachment = self.videoAttachments.first {
+            let previewURL = self.getPreviewURL(for: videoAttachment.extraData?["previewID"])
+            let attachment = VideoAttachment(url: videoAttachment.videoURL,
+                                             previewURL: previewURL,
+                                             previewData: nil,
+                                             data: nil,
+                                             info: nil)
+            return .video(video: attachment, body: self.text)
         } else if self.text.isSingleLink, var url = self.text.getURLs().first {
             // If the backend generated link attachments, then use those.
             if self.linkAttachments.count == 1, let linkAttachment = self.linkAttachments.first {
@@ -190,11 +199,11 @@ extension Message: MessageSequence {
 
 extension Message {
 
-    var nonExpressionImageAttachments: [ChatMessageImageAttachment] {
+    var photoAttachments: [ChatMessageImageAttachment] {
         let imageAttachments = self.imageAttachments
 
         return imageAttachments.filter { imageAttachment in
-            return !imageAttachment.isExpression
+            return !imageAttachment.isExpression && !imageAttachment.isPreview
         }
     }
 
@@ -204,5 +213,16 @@ extension Message {
         return imageAttachments.filter { imageAttachment in
             return imageAttachment.isExpression
         }
+    }
+    
+    func getPreviewURL(for previewID: RawJSON?) -> URL? {
+        guard let first = self.imageAttachments.first(where: { attachment in
+            if attachment.isPreview, let value = attachment.extraData?["previewID"] {
+                return value == previewID
+            }
+            return false
+        }) else { return nil }
+        
+        return first.imageURL
     }
 }

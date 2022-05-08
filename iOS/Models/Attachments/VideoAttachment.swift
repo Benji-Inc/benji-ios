@@ -1,16 +1,16 @@
 //
-//  PhotoAttachment.swift
+//  VideoAttachment.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 1/21/21.
-//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
+//  Created by Benji Dodgson on 5/7/22.
+//  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 import Photos
 
-struct PhotoAttachment: MediaItem {
-    
+struct VideoAttachment: MediaItem {
+
     var url: URL?
     var previewURL: URL?
 
@@ -27,10 +27,12 @@ struct PhotoAttachment: MediaItem {
     }
 
     var type: MediaType {
-        return .photo
+        return .video
     }
+    
+    var data: Data?
 
-    var data: Data? {
+    var previewData: Data? {
         didSet {
             self.convertDataIntoImage()
         }
@@ -40,19 +42,21 @@ struct PhotoAttachment: MediaItem {
 
     init(url: URL?,
          previewURL: URL?,
+         previewData: Data?,
          data: Data?,
          info: [AnyHashable : Any]?) {
         
         self.url = url
         self.previewURL = previewURL
+        self.previewData = previewData
         self.data = data
         self.info  = info
 
         self.convertDataIntoImage()
     }
-
+    
     mutating private func convertDataIntoImage() {
-        guard let data = self.data else {
+        guard let data = self.previewData else {
             self.image = nil
             return
         }
@@ -60,3 +64,5 @@ struct PhotoAttachment: MediaItem {
         self.image = UIImage(data: data)
     }
 }
+
+

@@ -72,6 +72,7 @@ class MessageContentView: BaseView {
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
+    let videoImageView = UIImageView(image: UIImage(systemName: "video.fill"))
     let linkView = LPLinkView()
 
     /// A view to blur out the emotions collection view.
@@ -128,6 +129,10 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
         self.imageView.roundCorners()
+        
+        self.mainContentArea.addSubview(self.videoImageView)
+        self.videoImageView.tintColor = ThemeColor.white.color
+        self.videoImageView.contentMode = .scaleAspectFit
 
         self.mainContentArea.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
@@ -194,8 +199,9 @@ class MessageContentView: BaseView {
         self.addEmotionImageView.pin(.right, offset: .long)
         self.addEmotionImageView.pin(.bottom, offset: .long)
 
-        self.addEmotionButton.squaredSize = 50
-        self.addEmotionButton.center = self.addEmotionImageView.center
+        self.addEmotionButton.squaredSize = 44
+        self.addEmotionButton.pin(.bottom)
+        self.addEmotionButton.pin(.right)
 
         self.blurView.expandToSuperviewSize()
 
@@ -247,6 +253,11 @@ class MessageContentView: BaseView {
         }
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
+        
+        self.videoImageView.squaredSize = 16
+        self.videoImageView.match(.bottom, to: .bottom, of: self.imageView, offset: .negative(.short))
+        self.videoImageView.match(.right, to: .right, of: self.imageView, offset: .negative(.short))
+        self.videoImageView.showShadow(withOffset: 2)
     }
 
     private var linkProvider: LPMetadataProvider?
@@ -258,8 +269,9 @@ class MessageContentView: BaseView {
         self.message = message
 
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
-        self.imageView.isVisible = message.kind.isImage
+        self.imageView.isVisible = message.kind.hasImage
         self.linkView.isVisible = message.kind.isLink
+        self.videoImageView.isVisible = message.kind.hasVideo
 
         self.dateView.configure(with: message)
         self.deliveryView.image = message.deliveryType.image
@@ -272,11 +284,24 @@ class MessageContentView: BaseView {
             switch message.kind {
             case .photo(photo: let photo, _):
                 // Only reload the picture if it's actually a new message.
-                guard let photoUrl = photo.url else { break }
 
                 if isDifferentMessage || self.imageView.imageView.image.isNil {
-                    self.imageView.displayable = photoUrl
+                    if let previewURL = photo.previewURL {
+                        self.imageView.displayable = previewURL
+                    } else {
+                        self.imageView.displayable = photo.url
+                    }
                 }
+            case .video(video: let video, _):
+                
+                if isDifferentMessage || self.imageView.imageView.image.isNil {
+                    if let previewURL = video.previewURL {
+                        self.imageView.displayable = previewURL
+                    } else {
+                        self.imageView.displayable = video.url
+                    }
+                }
+                
             case .link(url: let url, _):
                 guard isDifferentMessage || url != self.linkView.metadata.originalURL else { break }
 
@@ -294,7 +319,7 @@ class MessageContentView: BaseView {
                         self.setNeedsLayout()
                     }
                 }
-            case .text, .attributedText, .video, .location, .emoji, .audio, .contact:
+            case .text, .attributedText, .location, .emoji, .audio, .contact:
                 self.imageView.isVisible = false
                 self.linkView.isVisible = false
                 break

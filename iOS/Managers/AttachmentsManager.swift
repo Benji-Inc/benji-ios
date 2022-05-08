@@ -66,21 +66,46 @@ class AttachmentsManager {
                 continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
                 return
             }
-
+            
             switch mediaType {
             case "public.image":
                 do {
-                    /// https://nshipster.com/temporary-files/
-                    // Cache the image to get the urls for sending
-                    let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                                  isDirectory: true).appendingPathComponent(UUID().uuidString)
-
                     let image = info[.editedImage] as? UIImage
-                    let data = image?.jpegData(compressionQuality: 1.0)
-                    try data?.write(to: url, options: .atomic)
+                    if let data = image?.jpegData(compressionQuality: 1.0),
+                       let previewData = image?.jpegData(compressionQuality: 0.5) {
+                        
+                        let url = try self.createTemporaryURL(for: data, fileExtension: "")
+                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "preview")
+                        let item = PhotoAttachment(url: url,
+                                                   previewURL: previewURL,
+                                                   data: data,
+                                                   info: info)
+                        
+                        continuation.resume(returning: .photo(photo: item, body: body))
+                    } else {
+                        continuation.resume(throwing: ClientError.message(detail: "Error preparing image for delivery"))
+                    }
+                } catch  {
+                    logError(error)
+                    continuation.resume(throwing: error)
+                }
+            case "public.movie":
+                do {
+                    if let mediaURL = info[.mediaURL] as? URL {
+                        let videoData = try Data(contentsOf: mediaURL, options: .mappedIfSafe)
+                        let url = try self.createTemporaryURL(for: videoData, fileExtension: "mov")
+                        let previewData = try self.createVideoSnapshotPreviewData(from: mediaURL)
+                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "")
 
-                    let item = PhotoAttachment(url: url, data: data, info: info)
-                    continuation.resume(returning: .photo(photo: item, body: body))
+                        let item = VideoAttachment(url: url,
+                                                   previewURL: previewURL,
+                                                   previewData: previewData,
+                                                   data: videoData,
+                                                   info: info)
+                        continuation.resume(returning: .video(video: item, body: body))
+                    } else {
+                        continuation.resume(throwing: ClientError.apiError(detail: "Error preparing video for delivery"))
+                    }
                 } catch  {
                     logError(error)
                     continuation.resume(throwing: error)
@@ -91,11 +116,10 @@ class AttachmentsManager {
         }
     }
 
-    func createTemporaryHeicURL(for data: Data) throws -> URL {
+    func createTemporaryURL(for data: Data, fileExtension: String) throws -> URL {
         let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                      isDirectory: true).appendingPathComponent(UUID().uuidString+".heic")
+                      isDirectory: true).appendingPathComponent(UUID().uuidString+".\(fileExtension)")
         try data.write(to: url, options: .atomic)
-
         return url
     }
     
@@ -110,12 +134,25 @@ class AttachmentsManager {
                 { (data, type, orientation, info) in
                     Task {
                         let url = try await self.getAssetURL(for: attachment.asset)
-                        let item = PhotoAttachment(url: url, data: data, info: info)
+                        let item = PhotoAttachment(url: url,
+                                                   previewURL: nil,
+                                                   data: data,
+                                                   info: info)
                         continuation.resume(returning: .photo(photo: item, body: body))
                     }
                 }
             case .video:
-                continuation.resume(throwing: ClientError.message(detail: "Video not supported."))
+                Task {
+                    let url = try await self.getAssetURL(for: attachment.asset)
+                    let previewData = try self.createVideoSnapshotPreviewData(from: url)
+                    let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "")
+                    let item = VideoAttachment(url: url,
+                                               previewURL: previewURL,
+                                               previewData: previewData,
+                                               data: nil,
+                                               info: attachment.attributes)
+                    continuation.resume(returning: .video(video: item, body: body))
+                }
             case .audio:
                 continuation.resume(throwing: ClientError.message(detail: "Audio not supported"))
             @unknown default:
@@ -143,7 +180,7 @@ class AttachmentsManager {
             } else if asset.mediaType == .video {
                 let options: PHVideoRequestOptions = PHVideoRequestOptions()
                 options.version = .original
-                PHImageManager.default().requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset, audioMix, info) in
+                self.manager.requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset, audioMix, info) in
                     if let urlAsset = asset as? AVURLAsset {
                         let localVideoUrl = urlAsset.url
                         continuation.resume(returning: localVideoUrl)
@@ -201,13 +238,27 @@ class AttachmentsManager {
         }
     }
     
+    private func createVideoSnapshotPreviewData(from url: URL) throws -> Data {
+                
+        let asset = AVURLAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+
+        let timestamp = CMTime(seconds: 0.5, preferredTimescale: 60)
+
+        let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+        return UIImage(cgImage: imageRef).jpegData(compressionQuality: 0.5) ?? Data()
+    }
+    
     private func fetchAttachments() {
-        let photosOptions = PHFetchOptions()
-        photosOptions.fetchLimit = 20
-        photosOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d",
-                                              PHAssetMediaType.image.rawValue)
-        photosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result = PHAsset.fetchAssets(with: photosOptions)
+        let options = PHFetchOptions()
+        options.fetchLimit = 20
+        let videoPredicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
+        let imagePredicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [videoPredicate, imagePredicate])
+        options.predicate = predicate
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let result = PHAsset.fetchAssets(with: options)
         
         var attachments: [Attachment] = []
         
@@ -216,8 +267,8 @@ class AttachmentsManager {
         for index in 0...result.count - 1 {
             let asset = result.object(at: index)
             assets.append(asset)
-            let attachement = Attachment(asset: asset)
-            attachments.append(attachement)
+            let attachment = Attachment(asset: asset)
+            attachments.append(attachment)
         }
         
         self.attachments = attachments

@@ -36,6 +36,9 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     lazy var captureVC: UIImagePickerController = {
         let vc = UIImagePickerController()
         vc.sourceType = .camera
+        vc.mediaTypes = ["public.image", "public.movie"]
+        vc.videoQuality = .typeMedium
+        vc.videoExportPreset = AVAssetExportPresetHEVC1920x1080
         vc.allowsEditing = true
         vc.delegate = self
         return vc
@@ -210,7 +213,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func presentPhotoLibrary() {
-        let filter = PHPickerFilter.any(of: [.images])
+        let filter = PHPickerFilter.any(of: [.images, .videos])
         var config = PHPickerConfiguration(photoLibrary: .shared())
         config.filter = filter
         config.selectionLimit = 1
@@ -288,10 +291,12 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
         switch message.kind {
         case .photo(photo: let photo, let body):
-            guard let url = photo.url else { return }
             let text = "\(message.author.givenName): \(body)"
-            self.presentImageFlow(for: [url], startingURL: url, body: text)
-        case .text, .attributedText, .location, .emoji, .audio, .contact, .link, .video:
+            self.presentMediaFlow(for: [photo], startingItem: photo, body: text)
+        case .video(video: let video, body: let body):
+            let text = "\(message.author.givenName): \(body)"
+            self.presentMediaFlow(for: [video], startingItem: video, body: text)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
             break
         }
     }
@@ -318,12 +323,12 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
-        let imageCoordinator = ImageViewCoordinator(imageURLs: imageURLs,
-                                                    startURL: startingURL,
-                                                    body: body,
-                                                    router: self.router,
-                                                    deepLink: self.deepLink)
+    func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
+        let imageCoordinator = MediaViewerCoordinator(items: mediaItems,
+                                                      startingItem: startingItem,
+                                                      body: body,
+                                                      router: self.router,
+                                                      deepLink: self.deepLink)
         self.present(imageCoordinator)
     }
 }

@@ -75,19 +75,6 @@ extension RoomCoordinator {
         
         self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
     }
-    
-    func presentImageFlow(for imageURLs: [URL], startingURL: URL?, body: String) {
-        self.removeChild()
-        
-        let coordinator = ImageViewCoordinator(imageURLs: imageURLs,
-                                               startURL: startingURL,
-                                               body: body,
-                                               router: self.router,
-                                               deepLink: self.deepLink)
-        
-        self.addChildAndStart(coordinator) { _ in }
-        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
-    }
 }
 
 // MARK: - Permissions Flow

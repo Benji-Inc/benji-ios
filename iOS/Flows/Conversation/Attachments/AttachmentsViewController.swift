@@ -91,7 +91,7 @@ class AttachmentsViewController: DiffableCollectionViewController<AttachmentsCol
         
         data[.photoVideo]?.insert(.option(.capture), at: 0)
         
-        data[.other] = [.option(.audio), .option(.video), .option(.giphy)]
+        data[.other] = [.option(.audio), .option(.giphy)]
         
         return data
     }
