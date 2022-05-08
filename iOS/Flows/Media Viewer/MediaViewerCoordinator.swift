@@ -10,7 +10,7 @@ import Foundation
 import Lightbox
 import Lottie
 
-class ImageViewCoordinator: PresentableCoordinator<Void> {
+class MediaViewerCoordinator: PresentableCoordinator<Void> {
     
     let items: [MediaItem]
     let startingItem: MediaItem?

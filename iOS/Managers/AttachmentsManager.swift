@@ -71,9 +71,16 @@ class AttachmentsManager {
             case "public.image":
                 do {
                     let image = info[.editedImage] as? UIImage
-                    if let data = try? image?.heicData(compressionQuality: 1.0) {
+                    if let data = try? image?.heicData(compressionQuality: 1.0),
+                       let previewData = try? image?.heicData(compressionQuality: 0.2) {
+                        
                         let url = try self.createTemporaryURL(for: data, fileExtension: ".heic")
-                        let item = PhotoAttachment(url: url, data: data, info: info)
+                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: ".preview.heic")
+                        let item = PhotoAttachment(url: url,
+                                                   previewURL: previewURL,
+                                                   data: data,
+                                                   info: info)
+                        
                         continuation.resume(returning: .photo(photo: item, body: body))
                     } else {
                         continuation.resume(throwing: ClientError.message(detail: "Error preparing image for delivery"))
@@ -86,8 +93,15 @@ class AttachmentsManager {
                 do {
                     if let mediaURL = info[.mediaURL] as? URL {
                         let videoData = try Data(contentsOf: mediaURL, options: .mappedIfSafe)
-                        let tempURL = try self.createTemporaryURL(for: videoData, fileExtension: ".MOV")
-                        let item = VideoAttachment(url: tempURL, data: videoData, info: info)
+                        let url = try self.createTemporaryURL(for: videoData, fileExtension: ".MOV")
+                        let previewData = try self.createVideoSnapshotPreviewData(from: url)
+                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: ".preview.heic")
+
+                        let item = VideoAttachment(url: url,
+                                                   previewURL: previewURL,
+                                                   previewData: previewData,
+                                                   data: videoData,
+                                                   info: info)
                         continuation.resume(returning: .video(video: item, body: body))
                     } else {
                         continuation.resume(throwing: ClientError.apiError(detail: "Error preparing video for delivery"))
@@ -120,7 +134,11 @@ class AttachmentsManager {
                 { (data, type, orientation, info) in
                     Task {
                         let url = try await self.getAssetURL(for: attachment.asset)
-                        let item = PhotoAttachment(url: url, data: data, info: info)
+                        #warning("Need to create previewURL")
+                        let item = PhotoAttachment(url: url,
+                                                   previewURL: nil,
+                                                   data: data,
+                                                   info: info)
                         continuation.resume(returning: .photo(photo: item, body: body))
                     }
                 }
@@ -209,6 +227,18 @@ class AttachmentsManager {
                 }
             })
         }
+    }
+    
+    private func createVideoSnapshotPreviewData(from url: URL) throws -> Data {
+                
+        let asset = AVURLAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+
+        let timestamp = CMTime(seconds: 0.5, preferredTimescale: 60)
+
+        let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+        return try UIImage(cgImage: imageRef).heicData(compressionQuality: 0.1)
     }
     
     private func fetchAttachments() {

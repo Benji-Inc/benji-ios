@@ -10,8 +10,9 @@ import Foundation
 import Photos
 
 struct PhotoAttachment: MediaItem {
-
+    
     var url: URL?
+    var previewURL: URL?
 
     private(set) var image: UIImage?
 
@@ -37,8 +38,13 @@ struct PhotoAttachment: MediaItem {
 
     var info: [AnyHashable: Any]?
 
-    init(url: URL?, data: Data?, info: [AnyHashable : Any]?) {
+    init(url: URL?,
+         previewURL: URL?,
+         data: Data?,
+         info: [AnyHashable : Any]?) {
+        
         self.url = url
+        self.previewURL = previewURL
         self.data = data
         self.info  = info
 

@@ -175,17 +175,42 @@ extension MessageController {
             messageBody = text
         case .photo(let item, let body):
             if let url = item.url {
-                let attachment = try AnyAttachmentPayload(localFileURL: url,
-                                                           attachmentType: .image,
-                                                           extraData: nil)
+                let imagePayload = ImageAttachmentPayload(title: "",
+                                                          imageRemoteURL: url,
+                                                          imagePreviewRemoteURL: item.previewURL,
+                                                          extraData: nil)
+                let attachment = AnyAttachmentPayload(payload: imagePayload)
                 attachments.append(attachment)
+            }
+            messageBody = body
+        case .video(video: let video, body: let body):
+            if let url = video.url {
+                let previewID = UUID().uuidString
+                var videoData: [String: RawJSON] = [:]
+                videoData["previewID"] = .string(previewID)
+                let file = try AttachmentFile(url: url)
+                let videoPayload = VideoAttachmentPayload(title: nil,
+                                                          videoRemoteURL: url,
+                                                          file: file,
+                                                          extraData: nil)
+                let attachment = AnyAttachmentPayload(payload: videoPayload)
+                attachments.append(attachment)
+                
+                if let previewURL = video.previewURL {
+                    let imagePayload = ImageAttachmentPayload(title: "",
+                                                              imageRemoteURL: previewURL,
+                                                              imagePreviewRemoteURL: previewURL,
+                                                              extraData: videoData)
+                    let previewAttachement = AnyAttachmentPayload(payload: imagePayload)
+                    attachments.append(previewAttachement)
+                }
             }
             messageBody = body
         case .link(_, let stringURL):
             // The link URL is automatically detected by stream and added as an attachment.
             // Remove extra whitespace and make links lower case.
             messageBody = stringURL.trimWhitespace().lowercased()
-        case .attributedText, .video, .location, .emoji, .audio, .contact:
+        case .attributedText, .location, .emoji, .audio, .contact:
             throw(ClientError.apiError(detail: "Message type not supported."))
         }
         

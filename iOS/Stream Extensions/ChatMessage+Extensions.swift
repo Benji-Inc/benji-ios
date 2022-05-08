@@ -90,13 +90,17 @@ extension Message: Messageable {
     }
     
     var kind: MessageKind {
-        if let imageAttachment = self.nonExpressionImageAttachments.first {
+        if let imageAttachment = self.photoAttachments.first {
             let attachment = PhotoAttachment(url: imageAttachment.imageURL,
+                                             previewURL: imageAttachment.imagePreviewURL,
                                              data: nil,
                                              info: nil)
             return .photo(photo: attachment, body: self.text)
         } else if let videoAttachment = self.videoAttachments.first {
+            let previewURL = self.getPreviewURL(for: videoAttachment.extraData?["previewID"])
             let attachment = VideoAttachment(url: videoAttachment.videoURL,
+                                             previewURL: previewURL,
+                                             previewData: nil,
                                              data: nil,
                                              info: nil)
             return .video(video: attachment, body: self.text)
@@ -195,11 +199,11 @@ extension Message: MessageSequence {
 
 extension Message {
 
-    var nonExpressionImageAttachments: [ChatMessageImageAttachment] {
+    var photoAttachments: [ChatMessageImageAttachment] {
         let imageAttachments = self.imageAttachments
 
         return imageAttachments.filter { imageAttachment in
-            return !imageAttachment.isExpression
+            return !imageAttachment.isExpression && !imageAttachment.isVideoPreview
         }
     }
 
@@ -209,5 +213,17 @@ extension Message {
         return imageAttachments.filter { imageAttachment in
             return imageAttachment.isExpression
         }
+    }
+    
+    func getPreviewURL(for previewID: RawJSON?) -> URL? {
+        guard let first = self.imageAttachments.first(where: { attachment in
+            if attachment.isVideoPreview, let value = attachment.extraData?["previewID"] {
+                return value == previewID
+            }
+            return false
+        }), let value = first.extraData?["previewID"],
+                case RawJSON.string(let urlString) = value else { return nil }
+        
+        return URL(string: urlString)
     }
 }

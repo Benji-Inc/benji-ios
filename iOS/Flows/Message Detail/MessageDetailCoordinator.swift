@@ -181,11 +181,11 @@ extension MessageDetailCoordinator: MessageContentDelegate {
     
     func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
         self.removeChild()
-        let coordinator = ImageViewCoordinator(items: mediaItems,
-                                                    startingItem: startingItem,
-                                                    body: body,
-                                                    router: self.router,
-                                                    deepLink: self.deepLink)
+        let coordinator = MediaViewerCoordinator(items: mediaItems,
+                                                 startingItem: startingItem,
+                                                 body: body,
+                                                 router: self.router,
+                                                 deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { _ in }
         self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
     }

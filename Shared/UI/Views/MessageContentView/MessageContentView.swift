@@ -273,16 +273,22 @@ class MessageContentView: BaseView {
             switch message.kind {
             case .photo(photo: let photo, _):
                 // Only reload the picture if it's actually a new message.
-                guard let photoUrl = photo.url else { break }
 
                 if isDifferentMessage || self.imageView.imageView.image.isNil {
-                    self.imageView.displayable = photoUrl
+                    if let previewURL = photo.previewURL {
+                        self.imageView.displayable = previewURL
+                    } else {
+                        self.imageView.displayable = photo.url
+                    }
                 }
             case .video(video: let video, _):
-                guard let image = video.image else { break }
                 
                 if isDifferentMessage || self.imageView.imageView.image.isNil {
-                    self.imageView.displayable = image
+                    if let previewURL = video.previewURL {
+                        self.imageView.displayable = previewURL
+                    } else {
+                        self.imageView.displayable = video.url
+                    }
                 }
                 
             case .link(url: let url, _):

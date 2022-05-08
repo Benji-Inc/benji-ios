@@ -12,6 +12,7 @@ import Photos
 struct VideoAttachment: MediaItem {
 
     var url: URL?
+    var previewURL: URL?
 
     private(set) var image: UIImage?
 
@@ -28,46 +29,39 @@ struct VideoAttachment: MediaItem {
     var type: MediaType {
         return .video
     }
+    
+    var data: Data?
 
-    var data: Data? {
+    var previewData: Data? {
         didSet {
-            self.convertDataIntoVideo()
+            self.convertDataIntoImage()
         }
     }
 
     var info: [AnyHashable: Any]?
 
-    init(url: URL?, data: Data?, info: [AnyHashable : Any]?) {
+    init(url: URL?,
+         previewURL: URL?,
+         previewData: Data?,
+         data: Data?,
+         info: [AnyHashable : Any]?) {
+        
         self.url = url
+        self.previewURL = url
+        self.previewData = previewData
         self.data = data
         self.info  = info
 
-        self.convertDataIntoVideo()
-    }
-
-    mutating private func convertDataIntoVideo() {
-        self.image = self.getVideoSnapshot()
+        self.convertDataIntoImage()
     }
     
-    private func getVideoSnapshot() -> UIImage? {
-        guard self.image.isNil, let url = url else {
-            return nil
+    mutating private func convertDataIntoImage() {
+        guard let data = self.previewData else {
+            self.image = nil
+            return
         }
 
-        let asset = AVURLAsset(url: url)
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-
-        let timestamp = CMTime(seconds: 0.5, preferredTimescale: 60)
-
-        do {
-            let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
-            return UIImage(cgImage: imageRef)
-        }
-        catch {
-            print("Image generation failed with error \(error)")
-            return nil
-        }
+        self.image = UIImage(data: data)
     }
 }
 

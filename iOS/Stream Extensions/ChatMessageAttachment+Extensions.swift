@@ -21,11 +21,24 @@ extension AnyChatMessageAttachment {
 
         return isExpression
     }
+    
+    var isVideoPreview: Bool {
+        guard let imageAttachment = self.attachment(payloadType: ImageAttachmentPayload.self),
+              let _ = imageAttachment.extraData?["previewID"] else {
+            return false
+        }
+
+        return true
+    }
 }
 
 extension ChatMessageAttachment where Payload: AttachmentPayload {
 
     var isExpression: Bool {
         return self.asAnyAttachment.isExpression
+    }
+    
+    var isVideoPreview: Bool {
+        return self.asAnyAttachment.isVideoPreview
     }
 }
