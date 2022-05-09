@@ -209,7 +209,38 @@ extension MessageController {
             }
             messageBody = body
         case .media(items: let media, body: let body):
-            messageBody = body 
+            media.forEach { item in
+                switch item.type {
+                case .photo:
+                    if let url = item.url, let attachment = try? AnyAttachmentPayload(localFileURL: url,
+                                                                                      attachmentType: .image,
+                                                                                      extraData: nil) {
+                        
+                        attachments.append(attachment)
+                    }
+                case .video:
+                    if let url = item.url {
+                        let previewID = UUID().uuidString
+                        var videoData: [String: RawJSON] = [:]
+                        videoData["previewID"] = .string(previewID)
+                    
+                        if let attachment = try? AnyAttachmentPayload(localFileURL: url,
+                                                                      attachmentType: .video,
+                                                                      extraData: videoData) {
+                            attachments.append(attachment)
+                        }
+                        
+                        if let previewURL = item.previewURL,
+                            let previewAttachment = try? AnyAttachmentPayload(localFileURL: previewURL,
+                                                                              attachmentType: .image,
+                                                                              extraData: videoData) {
+                            
+                            attachments.append(previewAttachment)
+                        }
+                    }
+                }
+            }
+            messageBody = body
         case .link(_, let stringURL):
             // The link URL is automatically detected by stream and added as an attachment.
             // Remove extra whitespace and make links lower case.

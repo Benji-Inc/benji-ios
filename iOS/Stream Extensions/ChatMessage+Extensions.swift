@@ -90,7 +90,9 @@ extension Message: Messageable {
     }
     
     var kind: MessageKind {
-        if let imageAttachment = self.photoAttachments.first {
+        if self.mediaItems.count > 1 {
+            return .media(items: self.mediaItems, body: self.text)
+        } else if let imageAttachment = self.photoAttachments.first {
             let attachment = PhotoAttachment(url: imageAttachment.imageURL,
                                              previewURL: nil,
                                              data: nil,
@@ -198,6 +200,28 @@ extension Message: MessageSequence {
 // MARK: - Attachments
 
 extension Message {
+    
+    var mediaItems: [MediaItem] {
+        var all: [MediaItem] = self.imageAttachments.compactMap { attachment in
+            guard !attachment.isExpression && !attachment.isPreview else { return nil }
+            return PhotoAttachment(url: attachment.imageURL,
+                                   previewURL: nil,
+                                   data: nil,
+                                   info: nil)
+        }
+        
+        let videos: [MediaItem] = self.videoAttachments.compactMap { attachment in
+            let previewURL = self.getPreviewURL(for: attachment.extraData?["previewID"])
+            return VideoAttachment(url: attachment.videoURL,
+                                   previewURL: previewURL,
+                                   previewData: nil,
+                                   data: nil,
+                                   info: nil)
+        }
+        
+        all.append(contentsOf: videos)
+        return all
+    }
 
     var photoAttachments: [ChatMessageImageAttachment] {
         let imageAttachments = self.imageAttachments

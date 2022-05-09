@@ -8,6 +8,33 @@
 
 import Foundation
 
+class CircleCountView: BaseView {
+    
+    let countLabel = ThemeLabel(font: .smallBold, textColor: .B0)
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.countLabel)
+        self.countLabel.textAlignment = .center
+        self.set(backgroundColor: .white)
+    }
+    
+    func set(count: Int) {
+        self.countLabel.setText("\(count)")
+        self.setNeedsLayout()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.squaredSize = 16
+        self.makeRound()
+        
+        self.countLabel.expandToSuperviewSize()
+    }
+}
+
 class AddMediaView: ThemeButton {
     
     static let expandedHeight: CGFloat = 100
@@ -16,8 +43,7 @@ class AddMediaView: ThemeButton {
     let plusImageView = UIImageView()
     let displayableImageView = DisplayableImageView()
     
-    let countCircle = BaseView()
-    let countLabel = ThemeLabel(font: .smallBold, textColor: .B0)
+    let countCircle = CircleCountView()
     
     var didSelectRemove: CompletionOptional = nil
     
@@ -45,10 +71,6 @@ class AddMediaView: ThemeButton {
         self.showsMenuAsPrimaryAction = true
         
         self.addSubview(self.countCircle)
-        self.countCircle.addSubview(self.countLabel)
-        self.countLabel.textAlignment = .center
-        
-        self.countCircle.set(backgroundColor: .white)
         self.countCircle.isVisible = false
     }
     
@@ -60,19 +82,15 @@ class AddMediaView: ThemeButton {
         self.plusImageView.squaredSize = self.width * 0.7
         self.plusImageView.centerOnXAndY()
         
-        self.countCircle.squaredSize = 16
-        self.countCircle.makeRound()
         self.countCircle.pin(.bottom, offset: .custom(2))
-        self.countCircle.pin(.right, offset: .custom(2))
-        
-        self.countLabel.expandToSuperviewSize()
+        self.countCircle.pin(.right, offset: .custom(2))        
     }
     
     func configure(with items: [MediaItem]) {
         self.displayableImageView.isHidden = items.isEmpty
         self.displayableImageView.displayable = items.first
         self.countCircle.isVisible = items.count > 1
-        self.countLabel.setText("\(items.count)")
+        self.countCircle.set(count: items.count)
         self.setNeedsLayout()
         self.updateMenu(for: items)
     }

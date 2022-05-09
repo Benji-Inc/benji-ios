@@ -32,7 +32,7 @@ class PeopleFooterView: UICollectionReusableView {
         self.label.alpha = 0.6
         
         self.addSubview(self.button)
-        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Allow"))
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Next"))
         self.button.didSelect { [unowned self] in
             self.didSelectButton?()
         }

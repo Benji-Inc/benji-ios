@@ -114,6 +114,9 @@ extension MessageKind {
         switch self {
         case .video:
             return true
+        case .media(items: let items, _):
+            guard let first = items.first else { return false }
+            return first.type == .video
         default:
             return false
         }
@@ -121,9 +124,7 @@ extension MessageKind {
 
     var hasImage: Bool {
         switch self {
-        case .photo:
-            return true
-        case .video:
+        case .photo, .video, .media:
             return true
         default:
             return false
