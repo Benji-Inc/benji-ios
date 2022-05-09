@@ -61,7 +61,8 @@ class AddMediaView: ThemeButton {
         self.plusImageView.contentMode = .scaleAspectFit
         self.plusImageView.tintColor = ThemeColor.whiteWithAlpha.color
         self.displayableImageView.isVisible = false
-        
+        self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
+        self.layer.borderWidth = 2
         self.layer.cornerRadius = Theme.innerCornerRadius
                 
         self.addSubview(self.displayableImageView)
@@ -82,11 +83,12 @@ class AddMediaView: ThemeButton {
         self.plusImageView.squaredSize = self.width * 0.7
         self.plusImageView.centerOnXAndY()
         
-        self.countCircle.pin(.bottom, offset: .custom(2))
-        self.countCircle.pin(.right, offset: .custom(2))        
+        self.countCircle.pin(.bottom, offset: .short)
+        self.countCircle.pin(.right, offset: .short)        
     }
     
     func configure(with items: [MediaItem]) {
+        self.layer.borderColor = items.isEmpty ? ThemeColor.clear.color.cgColor : ThemeColor.whiteWithAlpha.color.cgColor
         self.displayableImageView.isHidden = items.isEmpty
         self.displayableImageView.displayable = items.first
         self.countCircle.isVisible = items.count > 1

@@ -215,7 +215,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         let filter = PHPickerFilter.any(of: [.images, .videos])
         var config = PHPickerConfiguration(photoLibrary: .shared())
         config.filter = filter
-        config.selectionLimit = 1
+        config.selectionLimit = 7
         let vc = PHPickerViewController(configuration: config)
         vc.delegate = self
         
@@ -234,9 +234,18 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             
-            guard let indentifier = results.first?.assetIdentifier,
-                  let asset = PHAsset.fetchAssets(withLocalIdentifiers: [indentifier], options: nil).firstObject,
-                  let kind = await AttachmentsManager.shared.getMessageKind(for: [Attachment(asset: asset)], body: text) else { return }
+            let indentifiers = results.compactMap({ asset in
+                return asset.assetIdentifier
+            })
+            
+            let result = PHAsset.fetchAssets(withLocalIdentifiers: indentifiers, options: nil)
+            var attachments: [Attachment] = []
+            for index in 0...result.count - 1 {
+                let asset = result.object(at: index)
+                attachments.append(Attachment(asset: asset))
+            }
+                        
+            guard let kind = await AttachmentsManager.shared.getMessageKind(for: attachments, body: text) else { return }
             
             self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
             self.inputHandlerViewController.swipeableVC.inputState = .collapsed

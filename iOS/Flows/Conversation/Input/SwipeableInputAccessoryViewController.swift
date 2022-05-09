@@ -242,6 +242,8 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             self.currentMessageKind = .photo(photo: photo, body: text)
         case .video(video: let video, _):
             self.currentMessageKind = .video(video: video, body: text)
+        case .media(items: let items, body: _):
+            self.currentMessageKind = .media(items: items, body: text)
         default:
             break
         }

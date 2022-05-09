@@ -67,44 +67,38 @@ class AttachmentsManager {
     }
     
     func getMessageKind(for info: [UIImagePickerController.InfoKey : Any],
-                        body: String) async throws -> MessageKind {
+                        body: String) async -> MessageKind? {
 
-        return try await withCheckedThrowingContinuation { continuation in
+        return await withCheckedContinuation { continuation in
             guard let mediaType = info[.mediaType] as? String else {
-                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
+                continuation.resume(returning: nil)
                 return
             }
             
             switch mediaType {
             case "public.image":
-                do {
-                    let image = info[.editedImage] as? UIImage
-                    if let data = image?.jpegData(compressionQuality: 1.0),
-                       let previewData = image?.jpegData(compressionQuality: 0.5) {
-                        
-                        let url = try self.createTemporaryURL(for: data, fileExtension: "")
-                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "preview")
-                        let item = PhotoAttachment(url: url,
-                                                   previewURL: previewURL,
-                                                   data: data,
-                                                   info: info)
-                        
-                        continuation.resume(returning: .photo(photo: item, body: body))
-                    } else {
-                        continuation.resume(throwing: ClientError.message(detail: "Error preparing image for delivery"))
-                    }
-                } catch  {
-                    logError(error)
-                    continuation.resume(throwing: error)
+                let image = info[.editedImage] as? UIImage
+                if let data = image?.jpegData(compressionQuality: 1.0),
+                   let previewData = image?.jpegData(compressionQuality: 0.5) {
+                    
+                    let url = try? self.createTemporaryURL(for: data, fileExtension: "")
+                    let previewURL = try? self.createTemporaryURL(for: previewData, fileExtension: "preview")
+                    let item = PhotoAttachment(url: url,
+                                               previewURL: previewURL,
+                                               data: data,
+                                               info: info)
+                    
+                    continuation.resume(returning: .photo(photo: item, body: body))
+                } else {
+                    continuation.resume(returning: nil)
                 }
             case "public.movie":
-                do {
-                    if let mediaURL = info[.mediaURL] as? URL {
-                        let videoData = try Data(contentsOf: mediaURL, options: .mappedIfSafe)
-                        let url = try self.createTemporaryURL(for: videoData, fileExtension: "mov")
-                        let previewData = try self.createVideoSnapshotPreviewData(from: mediaURL)
-                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "")
-
+                if let mediaURL = info[.mediaURL] as? URL,
+                   let videoData = try? Data(contentsOf: mediaURL, options: .mappedIfSafe) {
+                    
+                    let url = try? self.createTemporaryURL(for: videoData, fileExtension: "mov")
+                    if let previewData = try? self.createVideoSnapshotPreviewData(from: mediaURL) {
+                        let previewURL = try? self.createTemporaryURL(for: previewData, fileExtension: "")
                         let item = VideoAttachment(url: url,
                                                    previewURL: previewURL,
                                                    previewData: previewData,
@@ -112,14 +106,14 @@ class AttachmentsManager {
                                                    info: info)
                         continuation.resume(returning: .video(video: item, body: body))
                     } else {
-                        continuation.resume(throwing: ClientError.apiError(detail: "Error preparing video for delivery"))
+                        continuation.resume(returning: nil)
                     }
-                } catch  {
-                    logError(error)
-                    continuation.resume(throwing: error)
+                    
+                } else {
+                    continuation.resume(returning: nil)
                 }
             default:
-                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
+                continuation.resume(returning: nil)
             }
         }
     }
