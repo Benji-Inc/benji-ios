@@ -9,6 +9,14 @@
 import UIKit
 import Photos
 
+struct ImageRequestResult {
+    var data: Data?
+    var type: String?
+    var orientation: CGImagePropertyOrientation
+    var info: [AnyHashable: Any]?
+}
+
+
 class PhotoRequestOptions: PHImageRequestOptions {
     
     override init() {
@@ -59,44 +67,38 @@ class AttachmentsManager {
     }
     
     func getMessageKind(for info: [UIImagePickerController.InfoKey : Any],
-                        body: String) async throws -> MessageKind {
+                        body: String) async -> MessageKind? {
 
-        return try await withCheckedThrowingContinuation { continuation in
+        return await withCheckedContinuation { continuation in
             guard let mediaType = info[.mediaType] as? String else {
-                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
+                continuation.resume(returning: nil)
                 return
             }
             
             switch mediaType {
             case "public.image":
-                do {
-                    let image = info[.editedImage] as? UIImage
-                    if let data = image?.jpegData(compressionQuality: 1.0),
-                       let previewData = image?.jpegData(compressionQuality: 0.5) {
-                        
-                        let url = try self.createTemporaryURL(for: data, fileExtension: "")
-                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "preview")
-                        let item = PhotoAttachment(url: url,
-                                                   previewURL: previewURL,
-                                                   data: data,
-                                                   info: info)
-                        
-                        continuation.resume(returning: .photo(photo: item, body: body))
-                    } else {
-                        continuation.resume(throwing: ClientError.message(detail: "Error preparing image for delivery"))
-                    }
-                } catch  {
-                    logError(error)
-                    continuation.resume(throwing: error)
+                let image = info[.editedImage] as? UIImage
+                if let data = image?.jpegData(compressionQuality: 1.0),
+                   let previewData = image?.jpegData(compressionQuality: 0.5) {
+                    
+                    let url = try? self.createTemporaryURL(for: data, fileExtension: "")
+                    let previewURL = try? self.createTemporaryURL(for: previewData, fileExtension: "preview")
+                    let item = PhotoAttachment(url: url,
+                                               previewURL: previewURL,
+                                               data: data,
+                                               info: info)
+                    
+                    continuation.resume(returning: .photo(photo: item, body: body))
+                } else {
+                    continuation.resume(returning: nil)
                 }
             case "public.movie":
-                do {
-                    if let mediaURL = info[.mediaURL] as? URL {
-                        let videoData = try Data(contentsOf: mediaURL, options: .mappedIfSafe)
-                        let url = try self.createTemporaryURL(for: videoData, fileExtension: "mov")
-                        let previewData = try self.createVideoSnapshotPreviewData(from: mediaURL)
-                        let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "")
-
+                if let mediaURL = info[.mediaURL] as? URL,
+                   let videoData = try? Data(contentsOf: mediaURL, options: .mappedIfSafe) {
+                    
+                    let url = try? self.createTemporaryURL(for: videoData, fileExtension: "mov")
+                    if let previewData = try? self.createVideoSnapshotPreviewData(from: mediaURL) {
+                        let previewURL = try? self.createTemporaryURL(for: previewData, fileExtension: "")
                         let item = VideoAttachment(url: url,
                                                    previewURL: previewURL,
                                                    previewData: previewData,
@@ -104,14 +106,14 @@ class AttachmentsManager {
                                                    info: info)
                         continuation.resume(returning: .video(video: item, body: body))
                     } else {
-                        continuation.resume(throwing: ClientError.apiError(detail: "Error preparing video for delivery"))
+                        continuation.resume(returning: nil)
                     }
-                } catch  {
-                    logError(error)
-                    continuation.resume(throwing: error)
+                    
+                } else {
+                    continuation.resume(returning: nil)
                 }
             default:
-                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
+                continuation.resume(returning: nil)
             }
         }
     }
@@ -123,44 +125,72 @@ class AttachmentsManager {
         return url
     }
     
-    func getMessageKind(for attachment: Attachment, body: String) async throws -> MessageKind {
-        let messageKind: MessageKind = try await withCheckedThrowingContinuation { continuation in
-            switch attachment.asset.mediaType {
-            case .unknown:
-                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
-            case .image:
-                self.manager.requestImageDataAndOrientation(for: attachment.asset,
-                                                            options: PhotoRequestOptions())
-                { (data, type, orientation, info) in
-                    Task {
-                        let url = try await self.getAssetURL(for: attachment.asset)
-                        let item = PhotoAttachment(url: url,
-                                                   previewURL: nil,
-                                                   data: data,
-                                                   info: info)
+    func getMessageKind(for attachments: [Attachment], body: String) async -> MessageKind? {
+        return await withCheckedContinuation { continuation in
+            
+            // If there is only one attachment
+            if attachments.count == 1, let first = attachments.first {
+                Task { () -> MessageKind? in
+                    guard let item = await self.getMediaItem(for: first) else { return nil }
+                    
+                    switch first.asset.mediaType {
+                    case .image:
                         continuation.resume(returning: .photo(photo: item, body: body))
+                    case .video:
+                        continuation.resume(returning: .video(video: item, body: body))
+                    case .audio:
+                        continuation.resume(returning: nil)
+                    default:
+                        continuation.resume(returning: nil)
                     }
+                    
+                    return nil
                 }
-            case .video:
+
+            // Or map all of them
+            } else {
                 Task {
-                    let url = try await self.getAssetURL(for: attachment.asset)
-                    let previewData = try self.createVideoSnapshotPreviewData(from: url)
-                    let previewURL = try self.createTemporaryURL(for: previewData, fileExtension: "")
-                    let item = VideoAttachment(url: url,
-                                               previewURL: previewURL,
-                                               previewData: previewData,
-                                               data: nil,
-                                               info: attachment.attributes)
-                    continuation.resume(returning: .video(video: item, body: body))
+                    let items: [MediaItem] = await attachments.asyncMap { [unowned self] attachment in
+                        return await self.getMediaItem(for: attachment) ?? EmptyMediaItem(mediaType: .photo)
+                    }
+
+                    continuation.resume(returning: .media(items: items, body: body))
                 }
-            case .audio:
-                continuation.resume(throwing: ClientError.message(detail: "Audio not supported"))
-            @unknown default:
-                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
             }
         }
-        
-        return messageKind
+    }
+    
+    private func getMediaItem(for attachment: Attachment) async -> MediaItem? {
+        switch attachment.asset.mediaType {
+        case .image:
+            let result = await self.manager.requestImageData(for: attachment.asset, options: PhotoRequestOptions())
+            
+            let url = try? await self.getAssetURL(for: attachment.asset)
+            let item = PhotoAttachment(url: url,
+                                       previewURL: nil,
+                                       data: result.data,
+                                       info: result.info)
+            return item
+        case .video:
+            if let url = try? await self.getAssetURL(for: attachment.asset),
+               let previewData = try? self.createVideoSnapshotPreviewData(from: url) {
+                
+                let previewURL = try? self.createTemporaryURL(for: previewData, fileExtension: "")
+                let item = VideoAttachment(url: url,
+                                           previewURL: previewURL,
+                                           previewData: previewData,
+                                           data: nil,
+                                           info: attachment.attributes)
+                return item
+            } else {
+                return nil
+            }
+            
+        case .audio:
+            return nil
+        default:
+            return nil
+        }
     }
     
     private func getAssetURL(for asset: PHAsset) async throws -> URL {
@@ -272,5 +302,16 @@ class AttachmentsManager {
         }
         
         self.attachments = attachments
+    }
+}
+
+extension PHImageManager {
+    
+    func requestImageData(for asset: PHAsset, options: PHImageRequestOptions?) async -> ImageRequestResult {
+        return await withCheckedContinuation({ continuation in
+            self.requestImageDataAndOrientation(for: asset, options: options) { data, type, orientation, info in
+                continuation.resume(returning: ImageRequestResult(data: data, type: type, orientation: orientation, info: info))
+            }
+        })
     }
 }

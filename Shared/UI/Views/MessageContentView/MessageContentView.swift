@@ -72,6 +72,7 @@ class MessageContentView: BaseView {
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
+    let countCircle = CircleCountView()
     let videoImageView = UIImageView(image: UIImage(systemName: "video.fill"))
     let linkView = LPLinkView()
 
@@ -129,6 +130,8 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
         self.imageView.roundCorners()
+        
+        self.mainContentArea.addSubview(self.countCircle)
         
         self.mainContentArea.addSubview(self.videoImageView)
         self.videoImageView.tintColor = ThemeColor.white.color
@@ -254,6 +257,10 @@ class MessageContentView: BaseView {
         self.imageView.expand(.right)
         self.imageView.expand(.bottom)
         
+        self.countCircle.match(.top, to: .top, of: self.imageView, offset: .short)
+        self.countCircle.match(.right, to: .right, of: self.imageView, offset: .negative(.short))
+        self.countCircle.showShadow(withOffset: 2)
+        
         self.videoImageView.squaredSize = 16
         self.videoImageView.match(.bottom, to: .bottom, of: self.imageView, offset: .negative(.short))
         self.videoImageView.match(.right, to: .right, of: self.imageView, offset: .negative(.short))
@@ -272,6 +279,7 @@ class MessageContentView: BaseView {
         self.imageView.isVisible = message.kind.hasImage
         self.linkView.isVisible = message.kind.isLink
         self.videoImageView.isVisible = message.kind.hasVideo
+        self.countCircle.isVisible = false
 
         self.dateView.configure(with: message)
         self.deliveryView.image = message.deliveryType.image
@@ -300,6 +308,18 @@ class MessageContentView: BaseView {
                     } else {
                         self.imageView.displayable = video.url
                     }
+                }
+                
+            case .media(items: let media, _):
+                if isDifferentMessage || self.imageView.imageView.image.isNil {
+                    if let previewURL = media.first?.previewURL {
+                        self.imageView.displayable = previewURL
+                    } else {
+                        self.imageView.displayable = media.first?.url
+                    }
+                    
+                    self.countCircle.set(count: media.count)
+                    self.countCircle.isVisible = true
                 }
                 
             case .link(url: let url, _):

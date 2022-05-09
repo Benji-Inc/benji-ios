@@ -191,13 +191,15 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     private func updateLayout(for kind: MessageKind) {
         switch kind {
         case .text(_):
-            self.swipeInputView.addView.configure(with: nil)
+            self.swipeInputView.addView.configure(with: [])
         case .attributedText(_):
-            self.swipeInputView.addView.configure(with: nil)
+            self.swipeInputView.addView.configure(with: [])
         case .photo(photo: let item, _):
-            self.swipeInputView.addView.configure(with: item)
+            self.swipeInputView.addView.configure(with: [item])
         case .video(video: let item, _):
-            self.swipeInputView.addView.configure(with: item)
+            self.swipeInputView.addView.configure(with: [item])
+        case .media(items: let items, _):
+            self.swipeInputView.addView.configure(with: items)
         case .location(_):
             break
         case .emoji(_):
@@ -207,7 +209,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         case .contact(_):
             break
         case .link(_, _):
-            self.swipeInputView.addView.configure(with: nil)
+            self.swipeInputView.addView.configure(with: [])
         }
     }
 
@@ -240,6 +242,8 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             self.currentMessageKind = .photo(photo: photo, body: text)
         case .video(video: let video, _):
             self.currentMessageKind = .video(video: video, body: text)
+        case .media(items: let items, body: _):
+            self.currentMessageKind = .media(items: items, body: text)
         default:
             break
         }

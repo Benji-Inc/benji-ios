@@ -12,7 +12,12 @@ class AttachmentsViewController: DiffableCollectionViewController<AttachmentsCol
                                  AttachmentsCollectionViewDataSource.ItemType,
                                  AttachmentsCollectionViewDataSource> {
     
-    @Published var selectedAttachments: [Attachment] = []
+    var selectedAttachments: [Attachment] {
+        return self.selectedItems.compactMap { type in
+            guard case AttachmentsCollectionViewDataSource.ItemType.attachment(let attachment) = type else { return nil }
+            return attachment
+        }
+    }
     
     private let segmentGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
                                                           ThemeColor.B0.color.cgColor,
@@ -29,6 +34,8 @@ class AttachmentsViewController: DiffableCollectionViewController<AttachmentsCol
     private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
+    
+    let doneButton = ThemeButton()
     
     init() {
         super.init(with: AttachmentsCollectionView())
@@ -54,7 +61,12 @@ class AttachmentsViewController: DiffableCollectionViewController<AttachmentsCol
         self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.topGradientView)
         
-        self.collectionView.allowsMultipleSelection = false
+        self.view.addSubview(self.doneButton)
+        self.collectionView.allowsMultipleSelection = true
+        
+        self.$selectedItems.mainSink { [unowned self] _ in
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLoad() {
@@ -73,6 +85,29 @@ class AttachmentsViewController: DiffableCollectionViewController<AttachmentsCol
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
         self.bottomGradientView.pin(.bottom)
+        
+        self.doneButton.setSize(with: self.view.width)
+        self.doneButton.centerOnX()
+
+        if self.selectedAttachments.isEmpty {
+            self.doneButton.top = self.view.height
+        } else {
+            self.doneButton.pinToSafeAreaBottom()
+        }
+    }
+    
+    private func updateButton() {
+        let text: String
+        if self.selectedAttachments.count == 1 {
+            text = "Attach 1 item"
+        } else {
+            text = "Attach \(self.selectedAttachments.count) items"
+        }
+        self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: text))
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.view.layoutNow()
+        }
     }
     
     override func getAllSections() -> [AttachmentsCollectionViewDataSource.SectionType] {

@@ -165,11 +165,10 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     func handle(attachmentOption option: AttachmentOption) {
         switch option {
         case .attachments(let attachments):
-            guard let firstAttachment = attachments.first else { return }
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             Task.onMainActorAsync {
                 guard let kind
-                        = try? await AttachmentsManager.shared.getMessageKind(for: firstAttachment,
+                        = await AttachmentsManager.shared.getMessageKind(for: attachments,
                                                                               body: text) else { return }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
@@ -216,7 +215,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         let filter = PHPickerFilter.any(of: [.images, .videos])
         var config = PHPickerConfiguration(photoLibrary: .shared())
         config.filter = filter
-        config.selectionLimit = 1
+        config.selectionLimit = 7
         let vc = PHPickerViewController(configuration: config)
         vc.delegate = self
         
@@ -235,9 +234,18 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             
-            guard let indentifier = results.first?.assetIdentifier,
-                  let asset = PHAsset.fetchAssets(withLocalIdentifiers: [indentifier], options: nil).firstObject,
-                  let kind = try? await AttachmentsManager.shared.getMessageKind(for: Attachment(asset: asset), body: text) else { return }
+            let indentifiers = results.compactMap({ asset in
+                return asset.assetIdentifier
+            })
+            
+            let result = PHAsset.fetchAssets(withLocalIdentifiers: indentifiers, options: nil)
+            var attachments: [Attachment] = []
+            for index in 0...result.count - 1 {
+                let asset = result.object(at: index)
+                attachments.append(Attachment(asset: asset))
+            }
+                        
+            guard let kind = await AttachmentsManager.shared.getMessageKind(for: attachments, body: text) else { return }
             
             self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
             self.inputHandlerViewController.swipeableVC.inputState = .collapsed
@@ -296,6 +304,9 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         case .video(video: let video, body: let body):
             let text = "\(message.author.givenName): \(body)"
             self.presentMediaFlow(for: [video], startingItem: video, body: text)
+        case .media(items: let media, body: let body):
+            let text = "\(message.author.givenName): \(body)"
+            self.presentMediaFlow(for: media, startingItem: nil, body: text)
         case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
             break
         }

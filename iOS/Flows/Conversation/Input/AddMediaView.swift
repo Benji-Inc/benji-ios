@@ -8,6 +8,33 @@
 
 import Foundation
 
+class CircleCountView: BaseView {
+    
+    let countLabel = ThemeLabel(font: .smallBold, textColor: .B0)
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.countLabel)
+        self.countLabel.textAlignment = .center
+        self.set(backgroundColor: .white)
+    }
+    
+    func set(count: Int) {
+        self.countLabel.setText("\(count)")
+        self.setNeedsLayout()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.squaredSize = 16
+        self.makeRound()
+        
+        self.countLabel.expandToSuperviewSize()
+    }
+}
+
 class AddMediaView: ThemeButton {
     
     static let expandedHeight: CGFloat = 100
@@ -15,6 +42,8 @@ class AddMediaView: ThemeButton {
     
     let plusImageView = UIImageView()
     let displayableImageView = DisplayableImageView()
+    
+    let countCircle = CircleCountView()
     
     var didSelectRemove: CompletionOptional = nil
     
@@ -32,15 +61,18 @@ class AddMediaView: ThemeButton {
         self.plusImageView.contentMode = .scaleAspectFit
         self.plusImageView.tintColor = ThemeColor.whiteWithAlpha.color
         self.displayableImageView.isVisible = false
-    
-        
+        self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
+        self.layer.borderWidth = 2
         self.layer.cornerRadius = Theme.innerCornerRadius
                 
         self.addSubview(self.displayableImageView)
         // Don't allow user interaction on the image so it doesn't interfere with the UIMenu interaction.
         self.displayableImageView.isUserInteractionEnabled = false
 
-        self.showsMenuAsPrimaryAction = true 
+        self.showsMenuAsPrimaryAction = true
+        
+        self.addSubview(self.countCircle)
+        self.countCircle.isVisible = false
     }
     
     override func layoutSubviews() {
@@ -50,24 +82,32 @@ class AddMediaView: ThemeButton {
         
         self.plusImageView.squaredSize = self.width * 0.7
         self.plusImageView.centerOnXAndY()
+        
+        self.countCircle.pin(.bottom, offset: .short)
+        self.countCircle.pin(.right, offset: .short)        
     }
     
-    func configure(with item: MediaItem?) {
-        self.displayableImageView.isHidden = item.isNil
-        self.displayableImageView.displayable = item
-        self.updateMenu(for: item)
+    func configure(with items: [MediaItem]) {
+        self.layer.borderColor = items.isEmpty ? ThemeColor.clear.color.cgColor : ThemeColor.whiteWithAlpha.color.cgColor
+        self.displayableImageView.isHidden = items.isEmpty
+        self.displayableImageView.displayable = items.first
+        self.countCircle.isVisible = items.count > 1
+        self.countCircle.set(count: items.count)
+        self.setNeedsLayout()
+        self.updateMenu(for: items)
     }
 
-    private func updateMenu(for item: MediaItem?) {
-        if let item = item {
-            self.menu = self.createMenu(for: item)
-        } else {
+    private func updateMenu(for items: [MediaItem]) {
+        if items.isEmpty {
             self.menu = nil
+        } else {
+            self.menu = self.createMenu(for: items)
         }
     }
     
-    private func createMenu(for item: MediaItem) -> UIMenu {
-        let remove = UIAction(title: "Remove",
+    private func createMenu(for items: [MediaItem]) -> UIMenu {
+        let title = items.count > 1 ? "Remove \(items.count) items" : "Remove item"
+        let remove = UIAction(title: title,
                               image: UIImage(systemName: "trash"),
                               attributes: .destructive) { [unowned self] action in
             self.didSelectRemove?()

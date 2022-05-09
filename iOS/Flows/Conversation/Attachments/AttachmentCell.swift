@@ -20,11 +20,13 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
         
         self.contentView.addSubview(self.imageView)
+        self.imageView.layer.borderWidth = 2
+        self.imageView.roundCorners()
+
         self.contentView.addSubview(self.videoImageView)
         self.videoImageView.tintColor = ThemeColor.white.color
         self.videoImageView.contentMode = .scaleAspectFit
         self.videoImageView.showShadow(withOffset: 2)
-        self.imageView.roundCorners()
     }
     
     func configure(with item: Attachment) {
@@ -35,6 +37,10 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
             self.videoImageView.isVisible = item.isVideo
             self.imageView.displayable = result.0
         }
+    }
+    
+    override func update(isSelected: Bool) {
+        self.imageView.layer.borderColor = isSelected ? ThemeColor.D6.color.cgColor : ThemeColor.clear.color.cgColor
     }
     
     override func layoutSubviews() {

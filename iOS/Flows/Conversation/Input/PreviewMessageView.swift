@@ -15,6 +15,7 @@ class PreviewMessageView: SpeechBubbleView {
     private let personGradientView = PersonGradientView()
     let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
+    private let countCircle = CircleCountView() 
     private let deliveryTypeView = MessageDeliveryTypeBadgeView()
 
     var deliveryType: MessageDeliveryType? {
@@ -45,6 +46,8 @@ class PreviewMessageView: SpeechBubbleView {
         self.imageView.layer.borderWidth = 2
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.cornerRadius = Theme.innerCornerRadius
+        
+        self.imageView.addSubview(self.countCircle)
 
         self.addSubview(self.deliveryTypeView)
         // Start the delivery type invisible so it doesn't briefly flicker on screen.
@@ -53,6 +56,8 @@ class PreviewMessageView: SpeechBubbleView {
         self.$messageKind.mainSink { [unowned self] (kind) in
             guard let messageKind = kind else { return }
 
+            self.countCircle.isVisible = false
+            
             switch messageKind {
             case .text(let body):
                 self.textView.text = body
@@ -63,7 +68,24 @@ class PreviewMessageView: SpeechBubbleView {
                 self.imageView.displayable = photo.image
             case .video(video: let video, body: let body):
                 self.textView.text = body
-                self.imageView.displayable = video.image
+                self.imageView.displayable = video.previewURL
+            case .media(items: let media, body: let body):
+                self.textView.text = body
+                if let first = media.first {
+                    switch first.type {
+                    case .photo:
+                        if let data = first.data {
+                            self.imageView.displayable = UIImage(data: data)
+                        } else {
+                            self.imageView.displayable = first.url
+                        }
+                    case .video:
+                        self.imageView.displayable = media.first?.previewURL
+                    }
+                }
+                
+                self.countCircle.set(count: media.count)
+                self.countCircle.isVisible = true 
             case .location(_):
                 break
             case .emoji(_):
@@ -104,6 +126,9 @@ class PreviewMessageView: SpeechBubbleView {
 
         self.deliveryTypeView.centerOnX()
         self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height * 0.5))
+        
+        self.countCircle.pin(.bottom, offset: .short)
+        self.countCircle.pin(.right, offset: .short)
     }
 
     func set(expression: Expression?) {

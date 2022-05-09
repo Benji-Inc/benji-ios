@@ -24,6 +24,9 @@ enum MessageKind {
 
     /// A video message.
     case video(video: MediaItem, body: String)
+    
+    // A message with multiple media items.
+    case media(items: [MediaItem], body: String)
 
     /// A location message.
     case location(LocationItem)
@@ -91,6 +94,8 @@ extension MessageKind: Equatable {
             return lhsContact == rhsContact
         case (.link(let lhsURL, let lhsStringURL), .link(let rhsURL, let rhsStringURL)):
             return lhsURL == rhsURL && lhsStringURL == rhsStringURL
+        case (.media(let lhsMedia, _), .media(let rhsMedia, _)):
+            return lhsMedia.first?.url == rhsMedia.first?.url
         default:
             return false
         }
@@ -109,6 +114,9 @@ extension MessageKind {
         switch self {
         case .video:
             return true
+        case .media(items: let items, _):
+            guard let first = items.first else { return false }
+            return first.type == .video
         default:
             return false
         }
@@ -116,9 +124,7 @@ extension MessageKind {
 
     var hasImage: Bool {
         switch self {
-        case .photo:
-            return true
-        case .video:
+        case .photo, .video, .media:
             return true
         default:
             return false
