@@ -165,11 +165,10 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     func handle(attachmentOption option: AttachmentOption) {
         switch option {
         case .attachments(let attachments):
-            guard let firstAttachment = attachments.first else { return }
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
             Task.onMainActorAsync {
                 guard let kind
-                        = try? await AttachmentsManager.shared.getMessageKind(for: firstAttachment,
+                        = await AttachmentsManager.shared.getMessageKind(for: attachments,
                                                                               body: text) else { return }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
                 self.inputHandlerViewController.swipeableVC.inputState = .collapsed
@@ -237,7 +236,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             
             guard let indentifier = results.first?.assetIdentifier,
                   let asset = PHAsset.fetchAssets(withLocalIdentifiers: [indentifier], options: nil).firstObject,
-                  let kind = try? await AttachmentsManager.shared.getMessageKind(for: Attachment(asset: asset), body: text) else { return }
+                  let kind = await AttachmentsManager.shared.getMessageKind(for: [Attachment(asset: asset)], body: text) else { return }
             
             self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
             self.inputHandlerViewController.swipeableVC.inputState = .collapsed
