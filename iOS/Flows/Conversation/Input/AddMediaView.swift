@@ -52,21 +52,21 @@ class AddMediaView: ThemeButton {
         self.plusImageView.centerOnXAndY()
     }
     
-    func configure(with item: MediaItem?) {
-        self.displayableImageView.isHidden = item.isNil
-        self.displayableImageView.displayable = item
-        self.updateMenu(for: item)
+    func configure(with items: [MediaItem]) {
+        self.displayableImageView.isHidden = items.isEmpty
+        self.displayableImageView.displayable = items.first
+        self.updateMenu(for: items)
     }
 
-    private func updateMenu(for item: MediaItem?) {
-        if let item = item {
-            self.menu = self.createMenu(for: item)
-        } else {
+    private func updateMenu(for items: [MediaItem]) {
+        if items.isEmpty {
             self.menu = nil
+        } else {
+            self.menu = self.createMenu(for: items)
         }
     }
     
-    private func createMenu(for item: MediaItem) -> UIMenu {
+    private func createMenu(for items: [MediaItem]) -> UIMenu {
         let remove = UIAction(title: "Remove",
                               image: UIImage(systemName: "trash"),
                               attributes: .destructive) { [unowned self] action in

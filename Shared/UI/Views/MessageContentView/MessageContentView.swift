@@ -302,6 +302,17 @@ class MessageContentView: BaseView {
                     }
                 }
                 
+            case .media(items: let media, _):
+                if isDifferentMessage || self.imageView.imageView.image.isNil {
+                    if let previewURL = media.first?.previewURL {
+                        self.imageView.displayable = previewURL
+                    } else {
+                        self.imageView.displayable = media.first?.url
+                    }
+                    
+                    // Show count 
+                }
+                
             case .link(url: let url, _):
                 guard isDifferentMessage || url != self.linkView.metadata.originalURL else { break }
 

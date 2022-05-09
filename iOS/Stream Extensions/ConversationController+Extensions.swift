@@ -175,6 +175,8 @@ extension ConversationController {
                 }
             }
             messageBody = body
+        case .media(items: let media, body: let body):
+            messageBody = body
             
         case .link(_, let stringURL):
             // The link URL is automatically detected by stream and added as an attachment.
@@ -293,6 +295,8 @@ extension ConversationController {
             break
         case .link:
             break
+        case .media:
+            break 
         }
 
         throw(ClientError.apiError(detail: "Message type not supported."))

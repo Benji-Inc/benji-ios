@@ -267,6 +267,9 @@ extension ConversationDetailCoordinator: MessageContentDelegate {
         case .video(video: let video, body: let body):
             let text = "\(message.author.givenName): \(body)"
             self.presentMediaFlow(for: [video], startingItem: nil, body: text)
+        case .media(items: let media, body: let body):
+            let text = "\(message.author.givenName): \(body)"
+            self.presentMediaFlow(for: media, startingItem: nil, body: text)
         case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
             break
         }

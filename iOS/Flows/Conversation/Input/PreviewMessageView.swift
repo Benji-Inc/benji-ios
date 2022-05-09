@@ -63,7 +63,10 @@ class PreviewMessageView: SpeechBubbleView {
                 self.imageView.displayable = photo.image
             case .video(video: let video, body: let body):
                 self.textView.text = body
-                self.imageView.displayable = video.image
+                self.imageView.displayable = video.previewURL
+            case .media(items: let media, body: let body):
+                self.textView.text = body
+                self.imageView.displayable = media.first?.previewURL
             case .location(_):
                 break
             case .emoji(_):
