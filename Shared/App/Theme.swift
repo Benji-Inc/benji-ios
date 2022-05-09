@@ -76,7 +76,7 @@ struct Theme {
     static let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
 
     static func getPaddedWidth(with width: CGFloat) -> CGFloat {
-        return width - ContentOffset.screenPadding.value.doubled
+        return width - ContentOffset.xtraLong.value.doubled
     }
 
     private init() {}

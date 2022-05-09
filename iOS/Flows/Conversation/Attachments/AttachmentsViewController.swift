@@ -62,9 +62,11 @@ class AttachmentsViewController: DiffableCollectionViewController<AttachmentsCol
         self.view.addSubview(self.topGradientView)
         
         self.view.addSubview(self.doneButton)
-        self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-        
         self.collectionView.allowsMultipleSelection = true
+        
+        self.$selectedItems.mainSink { [unowned self] _ in
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLoad() {
@@ -87,11 +89,25 @@ class AttachmentsViewController: DiffableCollectionViewController<AttachmentsCol
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
 
-//        if self.state == .capture {
-//            self.doneButton.top = self.view.height
-//        } else {
+        if self.selectedAttachments.isEmpty {
+            self.doneButton.top = self.view.height
+        } else {
             self.doneButton.pinToSafeAreaBottom()
-  //      }
+        }
+    }
+    
+    private func updateButton() {
+        let text: String
+        if self.selectedAttachments.count == 1 {
+            text = "Attach 1 item"
+        } else {
+            text = "Attach \(self.selectedAttachments.count) items"
+        }
+        self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: text))
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.view.layoutNow()
+        }
     }
     
     override func getAllSections() -> [AttachmentsCollectionViewDataSource.SectionType] {
