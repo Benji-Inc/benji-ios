@@ -55,6 +55,7 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
     private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
     
     var didSelectLibrary: CompletionOptional = nil
+    var didSelectOption: ((OptionType) -> Void)? = nil
     
     // MARK: - Cell Dequeueing
 
@@ -71,9 +72,13 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
         case .option(let option):
             switch option {
             case .capture:
-                return collectionView.dequeueConfiguredReusableCell(using: self.captureConfig,
-                                                                    for: indexPath,
-                                                                    item: option)
+                let cell = collectionView.dequeueConfiguredReusableCell(using: self.captureConfig,
+                                                                        for: indexPath,
+                                                                        item: option)
+                cell.contentView.didSelect { [unowned self] in
+                    self.didSelectOption?(option)
+                }
+                return cell
             default:
                 let lastIndex = self.snapshot().numberOfItems(inSection: section) - 1
                 let shouldHideLine = lastIndex == indexPath.row
@@ -81,6 +86,9 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
                                                                         for: indexPath,
                                                                         item: option)
                 cell.lineView.isHidden = shouldHideLine
+                cell.contentView.didSelect { [unowned self] in
+                    self.didSelectOption?(option)
+                }
                 return cell 
             }
         }

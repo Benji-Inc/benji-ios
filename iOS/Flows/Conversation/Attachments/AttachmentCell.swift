@@ -37,6 +37,10 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
         }
     }
     
+    override func update(isSelected: Bool) {
+        self.imageView.alpha = isSelected ? 0.5 : 1.0
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         

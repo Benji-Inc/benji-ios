@@ -24,24 +24,21 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
     override init(router: Router, deepLink: DeepLinkable?) {
         super.init(router: router, deepLink: deepLink)
         
-        self.attachmentsVC.$selectedItems.mainSink { [unowned self] items in
-            guard let first = items.first else { return }
+        self.attachmentsVC.doneButton.didSelect { [unowned self] in
+            let attachments = self.attachmentsVC.selectedAttachments
+            self.finishFlow(with: .attachments(attachments))
+        }
         
-            switch first {
-            case .attachment(let attachment):
-                self.finishFlow(with: .attachments([attachment]))
-            case .option(let option):
-                switch option {
-                case .capture:
-                    self.finishFlow(with: .capture)
-                case .audio:
-                    self.presentAlert(for: option)
-                case .giphy:
-                    self.presentAlert(for: option)
-                }
+        self.attachmentsVC.dataSource.didSelectOption = { [unowned self] option in
+            switch option {
+            case .capture:
+                self.finishFlow(with: .capture)
+            case .audio:
+                self.presentAlert(for: option)
+            case .giphy:
+                self.presentAlert(for: option)
             }
-            
-        }.store(in: &self.cancellables)
+        }
         
         self.attachmentsVC.dataSource.didSelectLibrary = { [unowned self] in
             self.finishFlow(with: .library)
