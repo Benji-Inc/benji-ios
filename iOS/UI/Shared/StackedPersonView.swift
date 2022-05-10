@@ -12,6 +12,7 @@ class StackedPersonView: BaseView {
     
     private let label = ThemeLabel(font: .small)
     private var peopleIds: [String] = []
+    var max: Int = 3
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -30,7 +31,7 @@ class StackedPersonView: BaseView {
         self.removeAllSubviews()
         
         for (index, person) in people.enumerated() {
-            if index <= 2 {
+            if index <= self.max - 1 {
                 let view = BorderedPersonView()
                 view.set(person: person)
                 view.contextCueView.shouldStayHidden = true
@@ -38,8 +39,8 @@ class StackedPersonView: BaseView {
             }
         }
         
-        if people.count > 3 {
-            let remainder = people.count - 3
+        if people.count > self.max {
+            let remainder = people.count - self.max
             self.label.setText("+\(remainder)")
             self.addSubview(self.label)
         }
@@ -68,7 +69,7 @@ class StackedPersonView: BaseView {
         
         xOffset -= Theme.ContentOffset.short.value
          
-        if count == 3 {
+        if count == self.max {
             self.label.setSize(withWidth: 30)
             xOffset += self.label.width + Theme.ContentOffset.short.value
             self.label.centerOnY()

@@ -42,7 +42,7 @@ class MessageContentView: BaseView {
 
     // Sizing
     static let bubbleHeight: CGFloat = UIScreen.currentSize == .phoneMedium ? 148 : 188
-    static let collapsedHeight: CGFloat = 78 - MessageContentView.bubbleTailLength
+    static let collapsedHeight: CGFloat = 94 - MessageContentView.bubbleTailLength
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
     }

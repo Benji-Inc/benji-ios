@@ -25,7 +25,6 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     let titleLabel = ThemeLabel(font: .regular)
     let messageContent = MessageContentView()
     
-    let leftLabel = ThemeLabel(font: .small, textColor: .D1)
     let rightLabel = NumberScrollCounter(value: 0,
                                          scrollDuration: Theme.animationDurationSlow,
                                          decimalPlaces: 0,
@@ -33,7 +32,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
                                          suffix: nil,
                                          seperator: "",
                                          seperatorSpacing: 0,
-                                         font: FontType.small.font,
+                                         font: FontType.smallBold.font,
                                          textColor: ThemeColor.white.color,
                                          animateInitialValue: true,
                                          gradientColor: nil,
@@ -61,9 +60,6 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.messageContent)
         self.messageContent.layoutState = .collapsed
-        
-        self.contentView.addSubview(self.leftLabel)
-        self.leftLabel.textAlignment = .left
         
         self.contentView.addSubview(self.rightLabel)
         
@@ -120,13 +116,10 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     @MainActor
     private func update(for message: Messageable) {
         self.messageContent.configure(with: message)
-        self.leftLabel.setText(message.createdAt.getDaysAgoString())
         
         let title = self.conversationController?.conversation?.title ?? "Untitled"
-        let groupName = "Favorites  /"
         self.titleLabel.setTextColor(.white)
-        self.titleLabel.setText("\(groupName)  \(title)")
-        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.white.color.withAlphaComponent(0.35)], to: groupName)
+        self.titleLabel.setText(title)
         
         self.layoutNow()
     }
@@ -166,7 +159,6 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.setText("You have 0 unread urgent messages.")
         self.messageContent.isVisible = false
         self.rightLabel.isVisible = false
-        self.leftLabel.isVisible = false 
         self.setNeedsLayout()
     }
     
@@ -180,16 +172,12 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
         self.messageContent.centerOnXAndY()
         
         self.titleLabel.setSize(withWidth: self.width)
-        self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.long))
+        self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.standard))
         self.titleLabel.match(.left, to: .left, of: self.messageContent)
-        
-        self.leftLabel.setSize(withWidth: 120)
-        self.leftLabel.match(.left, to: .left, of: self.messageContent, offset: .long)
-        self.leftLabel.match(.top, to: .bottom, of: self.messageContent, offset: .long)
         
         self.rightLabel.sizeToFit()
         self.rightLabel.match(.right, to: .right, of: self.messageContent, offset: .negative(.long))
-        self.rightLabel.match(.top, to: .top, of: self.leftLabel)
+        self.rightLabel.match(.top, to: .top, of: self.messageContent, offset: .standard)
         
         self.lineView.height = 1
         self.lineView.expandToSuperviewWidth()
