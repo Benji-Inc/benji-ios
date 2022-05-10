@@ -70,6 +70,9 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             conversationCell.handleCollectionViewTapped = { [unowned self] in
                 self.handleCollectionViewTapped?()
             }
+            conversationCell.handleAddMembersTapped = { [unowned self] in
+                self.handleAddPeopleSelected?()
+            }
 
             return conversationCell
         case .loadMore:

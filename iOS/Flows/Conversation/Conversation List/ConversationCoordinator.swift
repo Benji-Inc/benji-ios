@@ -50,12 +50,7 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         }
         
         self.listVC.dataSource.handleAddPeopleSelected = { [unowned self] in
-            Task {
-                try await self.createNewConversation()
-                Task.onMainActor {
-                    self.presentPeoplePicker()
-                }
-            }
+            self.presentPeoplePicker()
         }
         
         self.listVC.dataSource.handleInvestmentSelected = { [unowned self] in

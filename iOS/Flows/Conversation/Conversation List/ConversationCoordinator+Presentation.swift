@@ -48,7 +48,9 @@ extension ConversationCoordinator {
                                    startingReplyId: replyId)
             case .conversation(let conversation):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: conversation, messageId: nil, animateScroll: false)
+                    await self.listVC.scrollToConversation(with: conversation,
+                                                           messageId: nil,
+                                                           animateScroll: false)
                 }
             case .none:
                 break

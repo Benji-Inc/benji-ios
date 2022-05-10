@@ -33,6 +33,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     // Input handling
     weak var messageContentDelegate: MessageContentDelegate?
     var handleLoadMoreMessages: ((ConversationId) -> Void)?
+    var handleAddMembers: CompletionOptional = nil
 
     /// If true, show the replies for each message
     var shouldShowReplies: Bool {
@@ -94,6 +95,9 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                                                                     for: indexPath,
                                                                     item: (self.messageSequenceController,
                                                                            collectionView))
+            cell.didTapAddMembers = { [unowned self] in
+                self.handleAddMembers?()
+            }
             return cell
         }
     }

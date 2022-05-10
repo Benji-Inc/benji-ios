@@ -307,8 +307,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         self.loadConversationsTask = Task { [weak self] in
             guard let user = User.current() else { return }
             
-            var userIds: [String] = []
-            userIds.append(user.objectId!)
+            let userIds: [String] = [user.objectId!]
             
             let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,

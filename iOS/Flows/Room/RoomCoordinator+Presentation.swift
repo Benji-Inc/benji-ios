@@ -40,7 +40,7 @@ extension RoomCoordinator {
         
         self.router.present(coordinator, source: self.roomVC)
     }
-    
+
     func presentWallet() {
         self.removeChild()
 
