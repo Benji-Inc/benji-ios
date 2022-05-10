@@ -14,27 +14,26 @@ import StreamChat
 import Localization
 import Intents
 
-class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
+/// A coordinator for displaying a single conversation.
+class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
-    var listVC: ConversationListViewController {
-        return self.inputHandlerViewController as! ConversationListViewController
+    var listVC: ConversationViewController {
+        return self.inputHandlerViewController as! ConversationViewController
     }
     
     init(router: Router,
          deepLink: DeepLinkable?,
-         conversationMembers: [ConversationMember],
-         startingConversationId: ConversationId?,
+         cid: ConversationId,
          startingMessageId: MessageId?,
          openReplies: Bool = false) {
         
-        let vc = ConversationListViewController(members: conversationMembers,
-                                                startingConversationID: startingConversationId,
-                                                startingMessageID: startingMessageId,
-                                                openReplies: openReplies)
-
+        let vc = ConversationViewController(cid: cid,
+                                            startingMessageID: startingMessageId,
+                                            openReplies: openReplies)
+        
         super.init(with: vc, router: router, deepLink: deepLink)
     }
-
+    
     override func start() {
         super.start()
         
@@ -63,12 +62,12 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
             self.presentEmailAlert() 
         }
     }
-
+    
     func handle(deepLink: DeepLinkable) {
         self.deepLink = deepLink
-
+        
         guard let target = deepLink.deepLinkTarget else { return }
-
+        
         switch target {
         case .conversation:
             let messageID = deepLink.messageId
@@ -133,9 +132,9 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
     
     override func messageContent(_ content: MessageContentView,
                                  didTapMessage messageInfo: (ConversationId, MessageId)) {
-
+        
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
-
+        
         if let parentId = message.parentMessageId {
             self.presentThread(for: messageInfo.0, messageId: parentId, startingReplyId: messageInfo.1)
         } else {
@@ -150,7 +149,7 @@ class ConversationListCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandle
     }
 }
 
-extension ConversationListCoordinator: LaunchActivityHandler {
+extension ConversationCoordinator: LaunchActivityHandler {
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):

@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A collection view that displays a single conversation.
 class ConversationCollectionView: CollectionView {
 
     var conversationLayout: MessagesTimeMachineCollectionViewLayout {

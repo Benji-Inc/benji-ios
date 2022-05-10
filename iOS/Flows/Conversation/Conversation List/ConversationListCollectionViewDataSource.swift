@@ -135,14 +135,6 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             updatedItems.append(.loadMore)
         }
         updatedItems.append(contentsOf: conversationListController.conversations.asConversationCollectionItems)
-        
-        if UserDefaultsManager.getBool(for: .shouldShowGroupsUpsell, defaultValue: true) {
-            updatedItems.append(.upsell)
-        }
-        
-        if UserDefaultsManager.getBool(for: .shouldShowInvestUpsell, defaultValue: true) {
-            updatedItems.append(.invest)
-        }
       
         snapshot.setItems(updatedItems, in: sectionID)
 

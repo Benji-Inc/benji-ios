@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-extension ConversationListViewController {
+extension ConversationViewController {
 
     func setupInputHandlers() {
         self.dataSource.handleDidTapClose = { [unowned self] item in
