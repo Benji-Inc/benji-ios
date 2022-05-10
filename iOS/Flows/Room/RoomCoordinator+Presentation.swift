@@ -12,16 +12,15 @@ import Intents
 
 extension RoomCoordinator {
     
-    func presentConversation(with cid: ConversationId?,
+    func presentConversation(with cid: ConversationId,
                              messageId: MessageId?,
                              openReplies: Bool = false) {
         
-        let coordinator = ConversationListCoordinator(router: self.router,
-                                                      deepLink: self.deepLink,
-                                                      conversationMembers: [],
-                                                      startingConversationId: cid,
-                                                      startingMessageId: messageId,
-                                                      openReplies: openReplies)
+        let coordinator = ConversationCoordinator(router: self.router,
+                                                  deepLink: self.deepLink,
+                                                  cid: cid,
+                                                  startingMessageId: messageId,
+                                                  openReplies: openReplies)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             self.router.popModule() 
         })
@@ -41,9 +40,8 @@ extension RoomCoordinator {
         
         self.router.present(coordinator, source: self.roomVC)
     }
-    
+
     func presentWallet() {
-        
         self.removeChild()
 
         let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)

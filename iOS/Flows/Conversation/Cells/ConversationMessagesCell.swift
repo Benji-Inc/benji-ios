@@ -27,6 +27,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         set { self.dataSource.messageContentDelegate = newValue }
     }
     var handleCollectionViewTapped: CompletionOptional = nil
+    var handleAddMembersTapped: CompletionOptional = nil
     
     // Collection View
 
@@ -73,6 +74,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
             self.conversationController?.loadPreviousMessages()
+        }
+
+        self.dataSource.handleAddMembers = { [unowned self] in
+            self.handleAddMembersTapped?()
         }
     }
 

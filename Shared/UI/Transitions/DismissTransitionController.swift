@@ -56,8 +56,8 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
             toView = vc.messageContent
         } else if let rootVC = transitionContext.viewController(forKey: .to) as? RootNavigationController,
                   let listVC = rootVC.viewControllers.first(where: { controller in
-                      return controller is ConversationListViewController
-                  }) as? ConversationListViewController {
+                      return controller is ConversationViewController
+                  }) as? ConversationViewController {
             toVC = listVC
             toView = listVC.messageContent
         }

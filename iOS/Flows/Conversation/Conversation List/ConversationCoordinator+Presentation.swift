@@ -1,5 +1,5 @@
 //
-//  ConversationListCoordinator+Presentation.swift
+//  ConversationCoordinator+Presentation.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 1/26/22.
@@ -11,7 +11,7 @@ import StreamChat
 import Localization
 import Photos
 
-extension ConversationListCoordinator {
+extension ConversationCoordinator {
         
     func presentThread(for cid: ConversationId,
                        messageId: MessageId,
@@ -48,7 +48,9 @@ extension ConversationListCoordinator {
                                    startingReplyId: replyId)
             case .conversation(let conversation):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: conversation, messageId: nil, animateScroll: false)
+                    await self.listVC.scrollToConversation(with: conversation,
+                                                           messageId: nil,
+                                                           animateScroll: false)
                 }
             case .none:
                 break

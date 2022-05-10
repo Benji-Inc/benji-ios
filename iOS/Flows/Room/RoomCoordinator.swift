@@ -55,7 +55,6 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     }
     
     private func setupHandlers() {
-        
         self.roomVC.dataSource.messageContentDelegate = self 
         
         self.roomVC.headerView.jibImageView.didSelect { [unowned self] in
@@ -91,7 +90,9 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             switch itemType {
             case .memberId(let personId):
                 Task {
-                    guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                    guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else {
+                        return
+                    }
                     self.presentProfile(for: person)
                 }
             case .conversation(let cid):
@@ -105,7 +106,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             }
         }.store(in: &self.cancellables)
     }
-    
+
     func createNewConversation() async throws -> Conversation? {
         let username = User.current()?.initials ?? ""
         let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
@@ -143,19 +144,24 @@ extension RoomCoordinator: LaunchActivityHandler {
 
 extension RoomCoordinator: MessageContentDelegate {
     
-    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView,
+                        didTapViewReplies messageInfo: (ConversationId, MessageId)) {
+
         self.presentConversation(with: messageInfo.0, messageId: messageInfo.1, openReplies: true)
     }
     
-    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView,
+                        didTapMessage messageInfo: (ConversationId, MessageId)) {
         
     }
     
-    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView,
+                        didTapEditMessage messageInfo: (ConversationId, MessageId)) {
         
     }
     
-    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView,
+                        didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
 
     }
 }

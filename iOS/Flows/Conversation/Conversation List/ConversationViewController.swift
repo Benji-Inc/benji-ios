@@ -20,7 +20,9 @@ enum ConversationUIState: String {
     }
 }
 
-class ConversationListViewController: InputHandlerViewContoller, ConversationListCollectionViewLayoutDelegate {
+/// A view controller for displaying a single conversation.
+class ConversationViewController: InputHandlerViewContoller,
+                                  ConversationListCollectionViewLayoutDelegate {
     
     override var analyticsIdentifier: String? {
         return "SCREEN_CONVERSATION_LIST"
@@ -66,33 +68,24 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
 
     @Published var state: ConversationUIState = .read
 
-    /// A list of conversation members used to filter conversations. We'll only show conversations with this exact set of members.
-    private let members: [ConversationMember]
-    /// The id of the conversation we should land on when this VC appears.
-    private let startingConversationID: ConversationId?
+    /// The id of the conversation this VC will display.
+    private let cid: ConversationId
     private let startingMessageID: MessageId?
     private let openReplies: Bool
 
-    init(members: [ConversationMember],
-         startingConversationID: ConversationId?,
+    init(cid: ConversationId,
          startingMessageID: MessageId?,
          openReplies: Bool) {
-        
-        self.openReplies = openReplies
-        self.members = members
-        self.startingConversationID = startingConversationID
+
+        self.cid = cid
         self.startingMessageID = startingMessageID
+        self.openReplies = openReplies
 
-        let filter: Filter<ChannelListFilterScope>
-        = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
+        let filter: Filter<ChannelListFilterScope> = .equal("cid", to: cid)
 
-        let query = ChannelListQuery(filter: .and([.equal("hidden", to: false), filter]),
-                                     sort: [Sorting(key: .createdAt, isAscending: true)],
-                                     pageSize: .channelsPageSize,
-                                     messagesLimit: .messagesPageSize)
+        let query = ChannelListQuery(filter: filter, messagesLimit: .messagesPageSize)
         
-        self.conversationListController
-        = ChatClient.shared.channelListController(query: query)
+        self.conversationListController = ChatClient.shared.channelListController(query: query)
 
         super.init()
     }
@@ -176,10 +169,9 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
 
         let snapshot = self.dataSource.updatedSnapshot(with: self.conversationListController)
 
-        // Automatically scroll to the latest conversation.
+        // Automatically scroll to the conversation.
         let startingIndexPath: IndexPath
-        if let startingConversationID = self.startingConversationID,
-           let conversationIndexPath = snapshot.indexPathOfItem(.conversation(startingConversationID)) {
+        if let conversationIndexPath = snapshot.indexPathOfItem(.conversation(cid)) {
             startingIndexPath = conversationIndexPath
         } else {
             startingIndexPath = IndexPath(item: clamp(conversations.count - 1, min: 0) , section: 0)
@@ -195,10 +187,9 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
                                     animationCycle: animationCycle)
 
         self.collectionView.animationView.stop()
-        guard let startingConversationID = self.startingConversationID else { return }
 
         Task {
-            await self.scrollToConversation(with: startingConversationID,
+            await self.scrollToConversation(with: self.cid,
                                             messageId: self.startingMessageID,
                                             viewReplies: self.openReplies)
         }.add(to: self.autocancelTaskPool)
@@ -354,7 +345,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
             }
         } else {
             ConversationsManager.shared.activeConversation = nil
-            ConversationsManager.shared.activeController = nil 
+            ConversationsManager.shared.activeController = nil
 
             self.messageInputController.updateSwipeHint(shouldPlay: true)
 
@@ -372,7 +363,7 @@ class ConversationListViewController: InputHandlerViewContoller, ConversationLis
 
 // MARK: - MessageSendingViewControllerType
 
-extension ConversationListViewController: MessageSendingViewControllerType {
+extension ConversationViewController: MessageSendingViewControllerType {
 
     func getCurrentMessageSequence() -> MessageSequence? {
         return self.getCurrentConversationController()?.conversation
@@ -393,7 +384,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
 
 // MARK: - TransitionableViewController
 
-extension ConversationListViewController: TransitionableViewController {
+extension ConversationViewController: TransitionableViewController {
 
     var presentationType: TransitionType {
         return .fadeOutIn
@@ -436,7 +427,7 @@ extension ConversationListViewController: TransitionableViewController {
     }
 }
 
-extension ConversationListViewController: MessageInteractableController {
+extension ConversationViewController: MessageInteractableController {
     
     var messageContent: MessageContentView {
         return self.getCentmostMessageCellContent()!

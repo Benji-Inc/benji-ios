@@ -12,6 +12,8 @@ import Combine
 
 class InitialMessageCell: UICollectionViewCell {
 
+    var didTapAddMembers: CompletionOptional = nil
+
     private(set) var label = ThemeLabel(font: .regular)
     private let borderView = BaseView()
     
@@ -29,7 +31,6 @@ class InitialMessageCell: UICollectionViewCell {
     }
 
     private func initializeViews() {
-        
         self.contentView.addSubview(self.borderView)
         self.borderView.addSubview(self.label)
         self.borderView.layer.cornerRadius = Theme.cornerRadius
@@ -54,15 +55,25 @@ class InitialMessageCell: UICollectionViewCell {
     func configure(with messageSequenceController: MessageSequenceController) {
         self.controller = messageSequenceController
         if let messageSequence = messageSequenceController.messageSequence {
-            self.update(with: messageSequence)
+            self.configure(with: messageSequence)
+
+            if messageSequence.messages.isEmpty {
+                self.contentView.didSelect { [unowned self] in
+                    self.didTapAddMembers?()
+                }
+            } else {
+                self.contentView.didSelect(nil)
+            }
         }
 
         self.subscribeToUpdates()
     }
     
-    private func update(with messageSequence: MessageSequence) {
+    private func configure(with messageSequence: MessageSequence) {
         let dateString = Date.monthDayYear.string(from: messageSequence.createdAt)
-        if let title = messageSequence.title {
+        if messageSequence.messages.isEmpty {
+            self.label.setText("Tap here to add people to this conversation.")
+        } else if let title = messageSequence.title {
             self.label.setText("\(title.capitalized) was created on:\n\(dateString)")
         } else {
             self.label.setText("This conversation was created on:\n\(dateString)")
@@ -77,7 +88,7 @@ class InitialMessageCell: UICollectionViewCell {
             .mainSink { [unowned self] event in
                 switch event {
                 case .update(let conversation):
-                    self.update(with: conversation)
+                    self.configure(with: conversation)
                 case .create, .remove:
                     break
                 }
