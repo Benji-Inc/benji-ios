@@ -20,12 +20,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     let titleLabel = ThemeLabel(font: .regular)
     let messageContent = MessageContentView()
     
-    let middleBubble = MessageBubbleView(orientation: .up, bubbleColor: .B6)
-    let middleBlur = BlurView()
-    let bottomBubble = MessageBubbleView(orientation: .up, bubbleColor: .B6)
-    let bottomBlur = BlurView()
-    
-    let leftLabel = ThemeLabel(font: .small, textColor: .D1)
     let rightLabel = NumberScrollCounter(value: 0,
                                          scrollDuration: Theme.animationDurationSlow,
                                          decimalPlaces: 0,
@@ -33,7 +27,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                                          suffix: nil,
                                          seperator: "",
                                          seperatorSpacing: 0,
-                                         font: FontType.small.font,
+                                         font: FontType.smallBold.font,
                                          textColor: ThemeColor.white.color,
                                          animateInitialValue: true,
                                          gradientColor: nil,
@@ -63,15 +57,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.titleLabel)
         self.titleLabel.textAlignment = .left
         
-        self.contentView.addSubview(self.bottomBubble)
-        self.bottomBubble.addSubview(self.bottomBlur)
-        self.contentView.addSubview(self.middleBubble)
-        self.middleBubble.addSubview(self.middleBlur)
         self.contentView.addSubview(self.messageContent)
         self.messageContent.layoutState = .collapsed
-        
-        self.contentView.addSubview(self.leftLabel)
-        self.leftLabel.textAlignment = .left
         
         self.contentView.addSubview(self.rightLabel)
         
@@ -82,17 +69,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                                                 showBubbleTail: false,
                                                 tailOrientation: .up)
         
-        self.middleBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.6), animated: false)
-        self.middleBubble.tailLength = 0
-        self.middleBubble.layer.masksToBounds = true
-        self.middleBubble.layer.cornerRadius = Theme.cornerRadius
-        
-        self.bottomBubble.setBubbleColor(bubbleColor.withAlphaComponent(0.2), animated: false)
-        self.bottomBubble.layer.masksToBounds = true
-        self.bottomBubble.layer.cornerRadius = Theme.cornerRadius
-        self.bottomBubble.tailLength = 0
-        
         self.contentView.addSubview(self.stackedAvatarView)
+        self.stackedAvatarView.max = 5
     }
     
     func configure(with item: ConversationId) {
@@ -139,13 +117,10 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     @MainActor
     private func update(for message: Message) {
         self.messageContent.configure(with: message)
-        self.leftLabel.setText(message.createdAt.getDaysAgoString())
         
         let title = self.conversationController?.conversation?.title ?? "Untitled"
-        let groupName = "Favorites  /"
-        self.titleLabel.setTextColor(.white)
-        self.titleLabel.setText("\(groupName)  \(title)")
-        self.titleLabel.add(attributes: [.foregroundColor: ThemeColor.whiteWithAlpha.color], to: groupName)
+        self.titleLabel.setTextColor(.whiteWithAlpha)
+        self.titleLabel.setText(title)
         
         self.layoutNow()
     }
@@ -206,34 +181,16 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.messageContent.height = MessageContentView.collapsedHeight
         self.messageContent.centerOnXAndY()
         
-        self.middleBubble.width = maxWidth * 0.8
-        self.middleBubble.height = self.messageContent.height
-        self.middleBubble.centerOnX()
-        self.middleBubble.match(.bottom, to: .bottom, of: self.messageContent, offset: .standard)
-        
-        self.middleBlur.expandToSuperviewSize()
-        
-        self.bottomBubble.width = maxWidth * 0.6
-        self.bottomBubble.height = self.messageContent.height
-        self.bottomBubble.centerOnX()
-        self.bottomBubble.match(.bottom, to: .bottom, of: self.middleBubble, offset: .standard)
-        
-        self.bottomBlur.expandToSuperviewSize()
-        
         self.titleLabel.setSize(withWidth: self.width)
-        self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.long))
+        self.titleLabel.match(.bottom, to: .top, of: self.messageContent, offset: .negative(.standard))
         self.titleLabel.match(.left, to: .left, of: self.messageContent)
         
         self.stackedAvatarView.match(.right, to: .right, of: self.messageContent)
         self.stackedAvatarView.centerY = self.titleLabel.centerY
         
-        self.leftLabel.setSize(withWidth: 120)
-        self.leftLabel.match(.left, to: .left, of: self.bottomBubble)
-        self.leftLabel.match(.top, to: .bottom, of: self.bottomBubble, offset: .long)
-        
         self.rightLabel.sizeToFit()
-        self.rightLabel.match(.right, to: .right, of: self.bottomBubble)
-        self.rightLabel.match(.top, to: .top, of: self.leftLabel)
+        self.rightLabel.match(.top, to: .bottom, of: self.messageContent, offset: .standard)
+        self.rightLabel.match(.right, to: .right, of: self.messageContent)
         
         self.lineView.height = 1
         self.lineView.expandToSuperviewWidth()
