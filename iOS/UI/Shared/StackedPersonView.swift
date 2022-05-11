@@ -33,6 +33,8 @@ class StackedPersonView: BaseView {
         for (index, person) in people.enumerated() {
             if index <= self.max - 1 {
                 let view = BorderedPersonView()
+                view.pulseLayer.lineWidth = 1
+                view.pulseLayer.borderWidth = 1
                 view.set(person: person)
                 view.contextCueView.shouldStayHidden = true
                 self.addSubview(view)

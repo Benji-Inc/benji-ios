@@ -321,8 +321,8 @@ class PeopleStore {
     func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundPerson: PersonType? = nil
 
-        if let user = self.usersDictionary[personId] {
-            foundPerson = user
+        if let user = self.usersDictionary[personId], let updated = try? await user.retrieveDataIfNeeded() {
+            foundPerson = updated
         } else if let contact = self.contactsDictionary[personId] {
             foundPerson = contact
         } else if let user = try? await User.getObject(with: personId).retrieveDataIfNeeded() {

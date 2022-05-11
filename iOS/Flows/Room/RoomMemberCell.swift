@@ -22,7 +22,7 @@ class RoomMemberCell: CollectionViewManagerCell, ManageableCell {
 
     func configure(with item: String) {
         Task {
-            guard let person = await PeopleStore.shared.getPerson(withPersonId: item) else { return }
+            guard let person = await PeopleStore.shared.getPerson(withPersonId: item) else { return }            
             self.personView.set(person: person)
         }
     }
