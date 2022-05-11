@@ -15,7 +15,7 @@ class PhotoCaptureSession {
 
     weak var avCaptureDelegate: (AVCaptureVideoDataOutputSampleBufferDelegate & AVCapturePhotoCaptureDelegate)?
 
-    let session = AVCaptureSession()
+    lazy var session = AVCaptureSession()
     private var capturePhotoOutput: AVCapturePhotoOutput!
 
     private let dataOutputQueue = DispatchQueue(label: "video data queue",
@@ -81,8 +81,10 @@ class PhotoCaptureSession {
         videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
 
         // Add the video output to the capture session
-        guard self.session.canAddOutput(videoOutput) else { return }
-        self.session.addOutput(self.videoOutput!)
+        guard self.session.canAddOutput(videoOutput), !self.session.outputs.contains(where: { output in
+            return output is AVCaptureVideoDataOutput
+        }) else { return }
+        self.session.addOutput(videoOutput)
 
         let videoConnection = videoOutput.connection(with: .video)
         videoConnection?.videoOrientation = .portrait
@@ -91,6 +93,12 @@ class PhotoCaptureSession {
         self.capturePhotoOutput = AVCapturePhotoOutput()
         self.capturePhotoOutput?.isHighResolutionCaptureEnabled = true
         // Set the output on the capture session
+        guard let photoOutput = self.capturePhotoOutput,
+              self.session.canAddOutput(photoOutput),
+              !self.session.outputs.contains(where: { output in
+                  return output is AVCapturePhotoOutput
+              }) else { return }
+        
         self.session.addOutput(self.capturePhotoOutput)
     }
 

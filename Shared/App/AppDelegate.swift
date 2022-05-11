@@ -54,8 +54,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = scene as? UIWindowScene else { return }
         
-        
-
 #if !NOTIFICATION
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController, for: windowScene)

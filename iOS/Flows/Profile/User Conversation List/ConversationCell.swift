@@ -27,7 +27,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
                                          suffix: nil,
                                          seperator: "",
                                          seperatorSpacing: 0,
-                                         font: FontType.smallBold.font,
+                                         font: FontType.small.font,
                                          textColor: ThemeColor.white.color,
                                          animateInitialValue: true,
                                          gradientColor: nil,
@@ -189,7 +189,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.stackedAvatarView.centerY = self.titleLabel.centerY
         
         self.rightLabel.sizeToFit()
-        self.rightLabel.match(.top, to: .bottom, of: self.messageContent, offset: .standard)
+        self.rightLabel.pin(.bottom, offset: .standard)
         self.rightLabel.match(.right, to: .right, of: self.messageContent)
         
         self.lineView.height = 1

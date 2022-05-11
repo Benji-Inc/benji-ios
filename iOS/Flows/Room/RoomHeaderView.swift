@@ -67,7 +67,7 @@ class RoomHeaderView: BaseView {
         self.jibImageView.centerOnY()
         
         self.personView.squaredSize = 30
-        self.personView.pin(.left, offset: .long)
+        self.personView.pin(.left, offset: .xtraLong)
         self.personView.centerY = self.jibImageView.centerY
         
         self.focusLabel.setSize(withWidth: self.width)
