@@ -58,10 +58,6 @@
 	<string>You can use FaceID to securely access your account</string>
 	<key>NSFocusStatusUsageDescription</key>
 	<string>To communicate your current status to connections. </string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>To help show the connection between your body mind when you are communicating.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>To help track the mindful mintues you make. </string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>You can use the microphone to send audio with your messages. </string>
 	<key>NSPhotoLibraryUsageDescription</key>
