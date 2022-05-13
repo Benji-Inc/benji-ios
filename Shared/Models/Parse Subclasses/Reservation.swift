@@ -126,7 +126,6 @@ extension Reservation: UIActivityItemSource {
 
             if let link = self.link, let url = URL(string: link) {
                 metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
-                    logDebug(error.debugDescription ?? "")
                     self.metadata = metadata
                     continuation.resume(returning: ())
                 }
