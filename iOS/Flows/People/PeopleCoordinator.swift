@@ -185,12 +185,14 @@ extension PeopleCoordinator {
         // If this reservation was already used to invite the contact, then just send an invite reminder text.
         if reservation.contactId == contact.identifier {
             _ = try? await reservation.saveLocalThenServer()
+            await reservation.prepareMetadata()
             await self.sendText(with: reservation.reminderMessage, phone: phone)
         } else {
             // If this contact hasn't been assigned to reservation yet, then update the contact id
             // and save it to the server.
             reservation.contactId = contact.identifier
             _ = try? await reservation.saveLocalThenServer()
+            await reservation.prepareMetadata()
             await self.sendText(with: reservation.message, phone: phone)
         }
     }
