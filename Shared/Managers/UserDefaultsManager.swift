@@ -13,8 +13,6 @@ class UserDefaultsManager {
     enum Key: String {
         case hasShownHomeSwipe
         case hasShownKeyboardInstructions
-        case shouldShowInvestUpsell
-        case shouldShowGroupsUpsell
         case numberOfSwipeHints
         case localAchievements
     }

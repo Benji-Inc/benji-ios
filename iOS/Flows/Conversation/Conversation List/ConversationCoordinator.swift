@@ -52,10 +52,6 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         self.listVC.dataSource.handleAddPeopleSelected = { [unowned self] in
             self.presentPeoplePicker()
         }
-        
-        self.listVC.dataSource.handleInvestmentSelected = { [unowned self] in
-            self.presentEmailAlert() 
-        }
     }
     
     func handle(deepLink: DeepLinkable) {
