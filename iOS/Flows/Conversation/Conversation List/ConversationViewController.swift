@@ -81,7 +81,7 @@ class ConversationViewController: InputHandlerViewContoller,
         self.startingMessageID = startingMessageID
         self.openReplies = openReplies
 
-        let filter: Filter<ChannelListFilterScope> = .equal("cid", to: cid)
+        let filter: Filter<ChannelListFilterScope> = .equal(.cid, to: cid)
 
         let query = ChannelListQuery(filter: filter, messagesLimit: .messagesPageSize)
         
