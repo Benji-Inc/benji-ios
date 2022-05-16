@@ -53,14 +53,13 @@ extension ConversationViewController {
     }
     
     func subscribeToConversationUpdates() {
-        #warning("restore")
-//        self.conversationListController
-//            .channelsChangesPublisher
-//            .mainSink { [unowned self] _ in
-//                Task {
-//                    await self.dataSource.update(with: self.conversationListController)
-//                }.add(to: self.autocancelTaskPool)
-//            }.store(in: &self.cancellables)
+        self.conversationController
+            .channelChangePublisher
+            .mainSink { [unowned self] _ in
+                Task {
+                    await self.dataSource.update(with: self.conversationController)
+                }.add(to: self.autocancelTaskPool)
+            }.store(in: &self.cancellables)
 
         self.messageInputController.swipeInputView.textView.$inputText.mainSink { [unowned self] text in
             guard let conversationController = self.getCurrentConversationController() else { return }
