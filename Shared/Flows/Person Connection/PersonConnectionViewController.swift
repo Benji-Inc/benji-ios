@@ -13,6 +13,7 @@ class PersonConnectionViewController: ViewController {
     private var person: PersonType?
     
     lazy var header = ProfileHeaderView()
+    let button = ThemeButton()
     
     override func initializeViews() {
         super.initializeViews()
@@ -20,7 +21,7 @@ class PersonConnectionViewController: ViewController {
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
@@ -28,6 +29,11 @@ class PersonConnectionViewController: ViewController {
         self.view.set(backgroundColor: .B0)
                 
         self.view.addSubview(self.header)
+        self.header.menuButton.isEnabled = false
+        self.header.menuImageView.isVisible = false
+        
+        self.view.addSubview(self.button)
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Connect"))
         
         PeopleStore.shared
             .$personUpdated
@@ -61,6 +67,10 @@ class PersonConnectionViewController: ViewController {
         self.header.expandToSuperviewWidth()
         self.header.height = ProfileHeaderView.height
         self.header.pinToSafeArea(.top, offset: .xtraLong)
+        
+        self.button.setSize(with: self.view.width)
+        self.button.centerOnX()
+        self.button.pinToSafeAreaBottom()
     }
 }
         
