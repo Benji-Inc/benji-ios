@@ -38,6 +38,7 @@ class ConversationsManager: EventsControllerDelegate {
 
     @Published var reactionEvent: Event?
     @Published var messageEvent: Event?
+    @Published var conversationEvent: ChannelUpdatedEvent?
 
     init() {
         self.initialize()
@@ -68,6 +69,8 @@ class ConversationsManager: EventsControllerDelegate {
             self.reactionEvent = event
         case let event as ReactionUpdatedEvent:
             self.reactionEvent = event
+        case let event as ChannelUpdatedEvent:
+            self.conversationEvent = event 
         default:
             break
         }

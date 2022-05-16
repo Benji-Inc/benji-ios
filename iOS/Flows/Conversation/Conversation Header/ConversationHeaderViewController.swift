@@ -14,11 +14,10 @@ import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
+    let stackedView = StackedPersonView()
     let button = ThemeButton()
-    let topicLabel = ThemeLabel(font: .regularBold)
-    let chevronImageView = UIImageView(image: UIImage(systemName: "chevron.down"))
+    let topicLabel = ThemeLabel(font: .small)
     let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
-    let membersLabel = ThemeLabel(font: .small)
     let roomsButton = RoomNavigationButton()
     
     private var state: ConversationUIState = .read
@@ -27,7 +26,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         super.initializeViews()
 
         self.view.clipsToBounds = false
-        self.view.addSubview(self.button)
+        
+        self.view.addSubview(self.stackedView)
+        self.stackedView.max = 7
         
         self.view.addSubview(self.jibImageView)
         self.jibImageView.contentMode = .scaleToFill
@@ -36,34 +37,26 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.topicLabel)
         self.topicLabel.textAlignment = .center
         
-        self.view.addSubview(self.chevronImageView)
-        self.chevronImageView.tintColor = ThemeColor.white.color
-        self.chevronImageView.contentMode = .scaleAspectFit
-        
-        self.view.addSubview(self.membersLabel)
-        self.membersLabel.textAlignment = .center
+        self.view.addSubview(self.button)
         
         self.view.addSubview(self.roomsButton)
         self.roomsButton.configure(for: .inner)
-                        
+        
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { [unowned self] conversation in
                 guard let convo = conversation else {
                     self.topicLabel.text = nil
-                    self.membersLabel.text = nil 
                     self.topicLabel.isVisible = false
-                    self.membersLabel.isVisible = false
-                    self.chevronImageView.isVisible = false
+                    self.stackedView.isVisible = false
                     return
                 }
                 
                 self.startLoadDataTask(with: conversation)
                 
                 self.setTopic(for: convo)
-                self.membersLabel.isVisible = true
+                self.stackedView.isVisible = true
                 self.topicLabel.isVisible = true
-                self.chevronImageView.isVisible = true
                 self.view.setNeedsLayout()
             }.store(in: &self.cancellables)
     }
@@ -77,15 +70,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()
-        self.topicLabel.bottom = self.jibImageView.centerY - 2
+        self.topicLabel.pin(.bottom)
         
-        self.membersLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.membersLabel.centerOnX()
-        self.membersLabel.top = self.jibImageView.centerY + 2
-        
-        self.chevronImageView.squaredSize = self.membersLabel.height * 0.8
-        self.chevronImageView.match(.left, to: .right, of: self.membersLabel, offset: .short)
-        self.chevronImageView.match(.bottom, to: .bottom, of: self.membersLabel)
+        self.stackedView.centerOnX()
+        self.stackedView.match(.bottom, to: .top, of: self.topicLabel, offset: .negative(.short))
         
         self.button.height = self.view.height
         self.button.width = 200
@@ -172,13 +160,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.loadPeopleTask = Task { [weak self] in
             let members = await PeopleStore.shared.getPeople(for: conversation)
-            if members.count == 0 {
-                self?.membersLabel.setText("Just You")
-            } else if members.count == 1 {
-                self?.membersLabel.setText("1 Member")
-            } else {
-                self?.membersLabel.setText("\(members.count) Members")
-            }
+            self?.stackedView.configure(with: members)
             self?.view.setNeedsLayout()
         }
     }
@@ -189,6 +171,13 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     private func subscribeToUpdates(for conversationController: ConversationController) {
         // Clear out previous subscriptions.
         self.conversationCancellables.removeAll()
+        
+        conversationController
+            .channelChangePublisher
+            .mainSink { [unowned self] _ in
+                guard let conversation = self.conversationController?.conversation else { return }
+                self.setTopic(for: conversation)
+            }.store(in: &self.cancellables)
 
         conversationController
             .memberEventPublisher
