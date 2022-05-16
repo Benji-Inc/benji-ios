@@ -240,6 +240,9 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             
             let result = PHAsset.fetchAssets(withLocalIdentifiers: indentifiers, options: nil)
             var attachments: [Attachment] = []
+            
+            guard result.count > 0 else { return }
+                
             for index in 0...result.count - 1 {
                 let asset = result.object(at: index)
                 attachments.append(Attachment(asset: asset))
