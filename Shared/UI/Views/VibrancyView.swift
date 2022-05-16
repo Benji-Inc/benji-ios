@@ -38,8 +38,8 @@ class DarkBlurView: UIVisualEffectView {
     let blurEffect: UIBlurEffect
 
     init() {
-        self.blurEffect = UIBlurEffect.init(style: .dark)
-        super.init(effect: UIBlurEffect.init(style: .dark))
+        self.blurEffect = Theme.darkBlurEffect
+        super.init(effect: Theme.darkBlurEffect)
     }
 
     required init?(coder: NSCoder) {
