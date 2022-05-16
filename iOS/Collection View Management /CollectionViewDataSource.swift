@@ -19,11 +19,12 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
     private var diffableDataSource: DiffableDataSourceType!
 
-    var didSelectItem: ((ItemType) -> Void)? 
+    var didSelectItem: ((ItemType) -> Void)?
 
     required init(collectionView: UICollectionView) {
         self.diffableDataSource = DiffableDataSourceType(collectionView: collectionView,
-                                                         cellProvider: { collectionView, indexPath, itemIdentifier in
+                                                         cellProvider: {
+            [unowned self] (collectionView, indexPath, itemIdentifier) in
             guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }
 
             return self.dequeueCell(with: collectionView,
@@ -32,8 +33,8 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
                                     item: itemIdentifier)
         })
         
-        self.diffableDataSource.supplementaryViewProvider =
-        { (collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+        self.diffableDataSource.supplementaryViewProvider = {
+            [unowned self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
             guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }
 
             return self.dequeueSupplementaryView(with: collectionView,
