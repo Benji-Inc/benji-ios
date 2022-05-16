@@ -83,7 +83,7 @@
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8098CC61270F8A2300636484 /* ConversationListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */; };
 		809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809EDC69273ECBC300597473 /* ConversationListController+Extensions.swift */; };
-		809EDC6C273ECEF000597473 /* ConversationListViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */; };
+		809EDC6C273ECEF000597473 /* ConversationViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809EDC6B273ECEF000597473 /* ConversationViewController+Extensions.swift */; };
 		80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */; };
 		80B046F32819FB180079AE47 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B046F22819FB180079AE47 /* MetalView.swift */; };
 		80B046F42819FB180079AE47 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B046F22819FB180079AE47 /* MetalView.swift */; };
@@ -1051,7 +1051,7 @@
 		8096144E2714CDB800BC948E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListCollectionView.swift; sourceTree = "<group>"; };
 		809EDC69273ECBC300597473 /* ConversationListController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListController+Extensions.swift"; sourceTree = "<group>"; };
-		809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListViewController+Extensions.swift"; sourceTree = "<group>"; };
+		809EDC6B273ECEF000597473 /* ConversationViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController+Extensions.swift"; sourceTree = "<group>"; };
 		80A36AF1278F7C2600C0F097 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
 		80B046F22819FB180079AE47 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
@@ -1557,7 +1557,7 @@
 				8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */,
 				80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */,
 				8028C9E8273ECB1200520465 /* ConversationViewController.swift */,
-				809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */,
+				809EDC6B273ECEF000597473 /* ConversationViewController+Extensions.swift */,
 				D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */,
 			);
 			path = "Conversation List";
@@ -3672,7 +3672,7 @@
 				D6079705279F574E000D0715 /* PersonCell.swift in Sources */,
 				D678EC2426F530850071DB0D /* Circle.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
-				809EDC6C273ECEF000597473 /* ConversationListViewController+Extensions.swift in Sources */,
+				809EDC6C273ECEF000597473 /* ConversationViewController+Extensions.swift in Sources */,
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
 				D6CC148D276C003E005F617F /* View+Extensions.swift in Sources */,
 				D6C31EAC281C66CB00FF6C56 /* ExpressionViewController.swift in Sources */,

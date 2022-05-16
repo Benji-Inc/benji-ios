@@ -18,9 +18,8 @@ class TaskPool {
         self.pool.append(task)
 
         Task { [weak self] in
-            guard let `self` = self else { return }
             _ = await task.result
-            self.pool.remove(object: task)
+            self?.pool.remove(object: task)
         }
     }
 
