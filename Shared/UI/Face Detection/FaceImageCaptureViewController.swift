@@ -81,7 +81,7 @@ class FaceImageCaptureViewController: ViewController {
 
     /// Returns true if the underlaying photo capture session is running.
     var isSessionRunning: Bool {
-        return self.faceCaptureSession.session.isRunning
+        return self.faceCaptureSession.isRunning
     }
 
     /// Starts the face capture session so that we can display the photo preview and capture a photo.

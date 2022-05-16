@@ -15,7 +15,12 @@ class PhotoCaptureSession {
 
     weak var avCaptureDelegate: (AVCaptureVideoDataOutputSampleBufferDelegate & AVCapturePhotoCaptureDelegate)?
 
-    lazy var session = AVCaptureSession()
+    private lazy var session = AVCaptureSession()
+    
+    var isRunning: Bool {
+        return self.session.isRunning
+    }
+    
     private var capturePhotoOutput: AVCapturePhotoOutput!
 
     private let dataOutputQueue = DispatchQueue(label: "video data queue",
@@ -34,7 +39,6 @@ class PhotoCaptureSession {
             let authorized = await AVCaptureDevice.requestAccess(for: AVMediaType.video)
 
             guard authorized else { return }
-
             self?.configureCaptureSession()
             self?.session.startRunning()
         }
@@ -81,9 +85,10 @@ class PhotoCaptureSession {
         videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
 
         // Add the video output to the capture session
-        guard self.session.canAddOutput(videoOutput), !self.session.outputs.contains(where: { output in
+        guard self.session.canAddOutput(videoOutput), self.session.outputs.first(where: { output in
             return output is AVCaptureVideoDataOutput
-        }) else { return }
+        }).isNil else { return }
+        
         self.session.addOutput(videoOutput)
 
         let videoConnection = videoOutput.connection(with: .video)
