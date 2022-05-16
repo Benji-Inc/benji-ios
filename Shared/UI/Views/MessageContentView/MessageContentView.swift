@@ -319,8 +319,9 @@ class MessageContentView: BaseView {
                     }
                     
                     self.countCircle.set(count: media.count)
-                    self.countCircle.isVisible = true
                 }
+                
+                self.countCircle.isVisible = true
                 
             case .link(url: let url, _):
                 guard isDifferentMessage || url != self.linkView.metadata.originalURL else { break }
