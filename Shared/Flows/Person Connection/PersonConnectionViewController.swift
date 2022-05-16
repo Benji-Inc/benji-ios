@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Localization
 
 class PersonConnectionViewController: ViewController {
     
@@ -14,6 +15,9 @@ class PersonConnectionViewController: ViewController {
     
     lazy var header = ProfileHeaderView()
     let button = ThemeButton()
+    
+    let titleLabel = ThemeLabel(font: .regularBold)
+    let descriptionLabel = ThemeLabel(font: .small)
     
     override func initializeViews() {
         super.initializeViews()
@@ -34,6 +38,13 @@ class PersonConnectionViewController: ViewController {
         
         self.view.addSubview(self.button)
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Connect"))
+        
+        self.view.addSubview(self.titleLabel)
+        self.titleLabel.textAlignment = .center
+        
+        self.view.addSubview(self.descriptionLabel)
+        self.descriptionLabel.textAlignment = .center
+        self.descriptionLabel.alpha = 0.25
         
         PeopleStore.shared
             .$personUpdated
@@ -57,6 +68,14 @@ class PersonConnectionViewController: ViewController {
             self.person = updatedPerson
 
             self.header.configure(with: updatedPerson)
+            
+            let title = LocalizedString(id: "", arguments: [updatedPerson.fullName], default: "Connect with @(name)?")
+
+            let body = LocalizedString(id: "", arguments: [], default: "This will NOT consume one of your reservations")
+            
+            self.titleLabel.setText(title)
+            self.descriptionLabel.setText(body)
+            
             self.view.setNeedsLayout()
         }.add(to: self.autocancelTaskPool)
     }
@@ -71,6 +90,14 @@ class PersonConnectionViewController: ViewController {
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
         self.button.pinToSafeAreaBottom()
+        
+        self.descriptionLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.descriptionLabel.centerOnX()
+        self.descriptionLabel.match(.bottom, to: .top, of: self.button, offset: .negative(.xtraLong))
+        
+        self.titleLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.titleLabel.centerOnX()
+        self.titleLabel.match(.bottom, to: .top, of: self.descriptionLabel, offset: .negative(.standard))
     }
 }
         

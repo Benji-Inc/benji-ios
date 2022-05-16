@@ -149,10 +149,8 @@ extension ConversationCoordinator: LaunchActivityHandler {
         switch launchActivity {
         case .onboarding(let phoneNumber):
             logDebug("Launched with: \(phoneNumber)")
-        case .reservation(let reservationId):
-            logDebug("Launched with: \(reservationId)")
-        case .pass(let passId):
-            logDebug("Launched with: \(passId)")
+        case .reservation(_), .pass(_):
+            self.presentPersonConnection(for: launchActivity)
         case .deepLink(let deepLinkable):
             logDebug("Launched with: \(deepLinkable)")
         }
