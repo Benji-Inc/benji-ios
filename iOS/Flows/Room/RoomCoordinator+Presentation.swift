@@ -73,6 +73,20 @@ extension RoomCoordinator {
         
         self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
     }
+    
+    func presentPersonConnection(for activity: LaunchActivity) {
+        self.removeChild()
+
+        let coordinator = PersonConnectionCoordinator(launchActivity: activity,
+                                                      router: self.router,
+                                                      deepLink: self.deepLink)
+
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+        }
+
+        self.router.present(coordinator, source: self.roomVC, cancelHandler: nil)
+    }
 }
 
 // MARK: - Permissions Flow

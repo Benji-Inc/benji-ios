@@ -9,18 +9,10 @@
 import Foundation
 
 class PersonConnectionViewController: ViewController {
-    private var person: PersonType
+    
+    private var person: PersonType?
     
     lazy var header = ProfileHeaderView()
-    
-    init(with person: PersonType) {
-        self.person = person
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func initializeViews() {
         super.initializeViews()
@@ -41,14 +33,16 @@ class PersonConnectionViewController: ViewController {
             .$personUpdated
             .filter { [unowned self] updatedPerson in
                 // Only handle person updates related to the currently assigned person.
-                self.person.personId ==  updatedPerson?.personId
+                self.person?.personId ==  updatedPerson?.personId
             }.mainSink { [unowned self] person in
                 guard let user = person as? User else { return }
                 self.header.configure(with: user)
             }.store(in: &self.cancellables)
-        
+    }
+    
+    func configure(for person: PersonType) {
         Task { [unowned self] in
-            guard let updatedPerson = await PeopleStore.shared.getPerson(withPersonId: self.person.personId) else {
+            guard let updatedPerson = await PeopleStore.shared.getPerson(withPersonId: person.personId) else {
                 return
             }
 
