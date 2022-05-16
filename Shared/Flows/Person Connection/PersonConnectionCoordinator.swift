@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PersonConnectionCoordinator: PresentableCoordinator<Void> {
+class PersonConnectionCoordinator: PresentableCoordinator<Connection?> {
     
     lazy var vc = PersonConnectionViewController()
     private let person: PersonType?
@@ -58,14 +58,14 @@ class PersonConnectionCoordinator: PresentableCoordinator<Void> {
                     self.vc.configure(for: owner)
                 }
             case .deepLink(_):
-                self.finishFlow(with: ())
+                self.finishFlow(with: nil)
             }
         } else {
-            self.finishFlow(with: ())
+            self.finishFlow(with: nil)
         }
     }
     
-    private func handleDidTapConnect() async throws {
+    private func handleDidTapConnect() async throws -> Connection? {
         await self.vc.button.handleEvent(status: .loading)
         var toUser: User?
         if let user = self.person as? User {
@@ -75,28 +75,32 @@ class PersonConnectionCoordinator: PresentableCoordinator<Void> {
             case .onboarding(_):
                 break
             case .reservation(let reservationId):
-                guard let reservation = try? await Reservation.getObject(with: reservationId).retrieveDataIfNeeded(), let owner = try? await reservation.createdBy?.retrieveDataIfNeeded() else { return }
+                guard let reservation = try? await Reservation.getObject(with: reservationId).retrieveDataIfNeeded(), let owner = try? await reservation.createdBy?.retrieveDataIfNeeded() else { return nil }
                 
                 toUser = owner
             case .pass(let passId):
                 guard let pass = try? await Pass.getObject(with: passId).retrieveDataIfNeeded(),
-                        let owner = try? await pass.owner?.retrieveDataIfNeeded() else { return }
+                        let owner = try? await pass.owner?.retrieveDataIfNeeded() else { return nil }
                 toUser = owner
             case .deepLink(_):
                 break
             }
         }
         
-        guard let toUser = toUser else { return }
+        guard let toUser = toUser else { return nil }
         
+        var connection: Connection?
         if let existing = PeopleStore.shared.allConnections.first(where: { connection in
             return connection.nonMeUser?.personId == toUser.personId
         }) {
+            connection = existing
             try await UpdateConnection(connectionId: existing.objectId!, status: .accepted).makeRequest(andUpdate: [], viewsToIgnore: [])
         } else {
-            try await CreateConnection(to: toUser).makeRequest(andUpdate: [], viewsToIgnore: [])
+            connection = try? await CreateConnection(to: toUser).makeRequest(andUpdate: [], viewsToIgnore: [])
         }
     
         await self.vc.button.handleEvent(status: .complete)
+        
+        return connection
     }
 }
