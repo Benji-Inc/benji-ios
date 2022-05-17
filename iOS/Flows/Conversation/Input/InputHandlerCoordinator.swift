@@ -269,8 +269,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
             Task.onMainActorAsync {
                 let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
-                guard let kind
-                        = try? await AttachmentsManager.shared.getMessageKind(for: info, body: text) else {
+                guard let kind = await AttachmentsManager.shared.getMessageKind(for: info, body: text) else {
                     return
                 }
                 self.inputHandlerViewController.swipeableVC.currentMessageKind = kind
@@ -301,15 +300,12 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
         switch message.kind {
-        case .photo(photo: let photo, let body):
-            let text = "\(message.author.givenName): \(body)"
-            self.presentMediaFlow(for: [photo], startingItem: photo, body: text)
-        case .video(video: let video, body: let body):
-            let text = "\(message.author.givenName): \(body)"
-            self.presentMediaFlow(for: [video], startingItem: video, body: text)
-        case .media(items: let media, body: let body):
-            let text = "\(message.author.givenName): \(body)"
-            self.presentMediaFlow(for: media, startingItem: nil, body: text)
+        case .photo(photo: let photo, _):
+            self.presentMediaFlow(for: [photo], startingItem: photo, message: message)
+        case .video(video: let video, _):
+            self.presentMediaFlow(for: [video], startingItem: video, message: message)
+        case .media(items: let media, _):
+            self.presentMediaFlow(for: media, startingItem: nil, message: message)
         case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
             break
         }
@@ -337,10 +333,12 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
-        let imageCoordinator = MediaViewerCoordinator(items: mediaItems,
+    func presentMediaFlow(for mediaItems: [MediaItem],
+                          startingItem: MediaItem?,
+                          message: Messageable) {
+        let imageCoordinator = MediaCoordinator(items: mediaItems,
                                                       startingItem: startingItem,
-                                                      body: body,
+                                                      message: message,
                                                       router: self.router,
                                                       deepLink: self.deepLink)
         self.present(imageCoordinator)

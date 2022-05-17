@@ -94,10 +94,12 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
         }
     }
     
-    override func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
-        let imageCoordinator = MediaViewerCoordinator(items: mediaItems,
+    override func presentMediaFlow(for mediaItems: [MediaItem],
+                                   startingItem: MediaItem?,
+                                   message: Messageable) {
+        let imageCoordinator = MediaCoordinator(items: mediaItems,
                                                       startingItem: startingItem,
-                                                      body: body,
+                                                      message: message,
                                                       router: self.router,
                                                       deepLink: self.deepLink)
         self.threadVC.isPresentingImage = true

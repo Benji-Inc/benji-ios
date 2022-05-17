@@ -114,14 +114,6 @@ final class User: PFUser {
             self.setObject(for: .focusStatus, with: newValue?.rawValue)
         }
     }
-    
-    #if IOS
-    var isConnection: Bool {
-        return PeopleStore.shared.connectedPeople.contains { type in
-            return type.personId == self.personId
-        }
-    }
-    #endif 
 
     var connectionPreferences: [ConnectionPreference] {
         return self.getObject(for: .connectionPreferences) ?? []
