@@ -14,7 +14,7 @@ import Lottie
 
 /// A private struct that represents a snapshot of an ImageDisplayable's state.
 /// This can be used to determine if the current image needs to be updated when a new displayable is assigned.
-private struct ImageDisplayableState: ImageDisplayable, Equatable {
+private struct ImageDisplayableState: ImageDisplayable {
     var image: UIImage?
     var url: URL?
     var imageFileObject: PFFileObject?
@@ -25,6 +25,7 @@ private struct ImageDisplayableState: ImageDisplayable, Equatable {
         && self.imageFileObject.isNil
     }
 
+    /// Returns true if the two states will result in the same image being displayed.
     func isEqual(to otherState: ImageDisplayableState) -> Bool {
         return self.image == otherState.image
         && self.url == otherState.url
