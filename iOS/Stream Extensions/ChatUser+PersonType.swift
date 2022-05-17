@@ -50,7 +50,7 @@ extension ChatUser: PersonType {
         return self.parseUser?.url
     }
 
-    var fileObject: PFFileObject? {
+    var imageFileObject: PFFileObject? {
         return self.parseUser?.smallImage
     }
     

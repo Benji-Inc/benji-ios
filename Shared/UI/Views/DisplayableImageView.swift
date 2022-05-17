@@ -12,18 +12,6 @@ import UIKit
 import Combine
 import Lottie
 
-struct DisplayableImage: ImageDisplayable {
-    var image: UIImage?
-    var url: URL?
-    var fileObject: PFFileObject?
-    
-    init?(with displayable: ImageDisplayable?) {
-        self.image = displayable?.image
-        self.url = displayable?.url
-        self.fileObject = displayable?.fileObject
-    }
-}
-
 class DisplayableImageView: BaseView {
 
     enum State {
@@ -43,17 +31,17 @@ class DisplayableImageView: BaseView {
 
     private var displayableTask: Task<Void, Never>?
     
-    private var displaybleImage: DisplayableImage? {
+    var displayable: ImageDisplayable? {
         didSet {
             // Don't load the displayable again if it hasn't changed.
-            if let displayable = self.displaybleImage, displayable.isEqual(to: oldValue) {
+            if let displayable = self.displayable, displayable.isEqual(to: oldValue) {
                 return
             }
 
             self.displayableTask?.cancel()
 
             // A nil displayable can be applied immediately without creating a task.
-            guard let displayableRef = self.displaybleImage else {
+            guard let displayableRef = self.displayable else {
                 self.imageView.image = nil
                 self.state = .initial
                 return
@@ -62,12 +50,6 @@ class DisplayableImageView: BaseView {
             self.displayableTask = Task {
                 await self.updateImageView(with: displayableRef)
             }
-        }
-    }
-    
-    var displayable: ImageDisplayable? {
-        didSet {
-            self.displaybleImage = DisplayableImage(with: self.displayable)
         }
     }
 
@@ -149,8 +131,8 @@ class DisplayableImageView: BaseView {
     private func updateImageView(with displayable: ImageDisplayable?) async {
         if let image = displayable?.image {
             await self.set(image: image, state: .success)
-        } else if let fileObject = displayable?.fileObject {
-            await self.downloadAndSetImage(for: fileObject)
+        } else if let imageFileObject = displayable?.imageFileObject {
+            await self.downloadAndSetImage(for: imageFileObject)
         } else if let url = displayable?.url  {
             await self.downloadAndSetImage(for: url)
         } else {

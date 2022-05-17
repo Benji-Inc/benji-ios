@@ -20,7 +20,7 @@ extension User: PersonType {
         return nil
     }
 
-    var fileObject: PFFileObject? {
+    var imageFileObject: PFFileObject? {
         return self.smallImage
     }
     
