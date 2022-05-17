@@ -24,10 +24,4 @@ extension ImageDisplayable {
     var imageFileObject: PFFileObject? {
         return nil
     }
-
-    func isEqual(to other: ImageDisplayable?) -> Bool {
-        return self.image == other?.image
-        && self.url == other?.url
-        && self.imageFileObject?.url == other?.imageFileObject?.url
-    }
 }
