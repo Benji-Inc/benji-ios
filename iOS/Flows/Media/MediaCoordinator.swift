@@ -15,7 +15,7 @@ class MediaCoordinator: PresentableCoordinator<Void> {
     let items: [MediaItem]
     let startingItem: MediaItem?
 
-    let body: String
+    let message: Messageable
     
     let animationView = AnimationView.with(animation: .loading)
 
@@ -25,10 +25,10 @@ class MediaCoordinator: PresentableCoordinator<Void> {
             guard let url = item.url else { return nil }
             switch item.type {
             case .photo:
-                return LightboxImage(imageURL: url, text: self.body)
+                return LightboxImage(imageURL: url, text: self.message.kind.text)
             case .video:
                 guard let imageURL = item.previewURL else { return nil }
-                return LightboxImage(imageURL: imageURL, text: self.body, videoURL: item.url)
+                return LightboxImage(imageURL: imageURL, text: self.message.kind.text, videoURL: item.url)
             }
         })
 
@@ -78,13 +78,13 @@ class MediaCoordinator: PresentableCoordinator<Void> {
 
     init(items: [MediaItem],
          startingItem: MediaItem?,
-         body: String,
+         message: Messageable,
          router: Router,
          deepLink: DeepLinkable?) {
 
         self.items = items
         self.startingItem = startingItem
-        self.body = body
+        self.message = message
 
         super.init(router: router, deepLink: deepLink)
     }
