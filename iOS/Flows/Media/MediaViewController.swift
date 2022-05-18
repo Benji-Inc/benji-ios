@@ -29,13 +29,27 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     }
 
     var dismissHandlers: [DismissHandler] = []
+    var didSelectShare: CompletionOptional = nil
     
-    var shareImageView = UIImageView(image: UIImage(systemName: "square.and.arrow.up"))
-    var shareButton = ThemeButton()
+    
+    private let messageFooterView = BaseView()
+    private let closeImageView = UIImageView(image: UIImage(systemName: "xmark"))
+    let closeButton = ThemeButton()
+    private let menuImageView = UIImageView(image: UIImage(systemName: "ellipsis"))
+    let menuButton = ThemeButton()
+    private let messageSummaryView = MessageSummaryView()
+    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
+                                                                    ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
+    
+    let message: Messageable
     
     init(with items: [MediaItem],
          startingItem: MediaItem?,
          message: Messageable) {
+        
+        self.message = message
         
         let images: [LightboxImage]
         images = items.compactMap({ item in
@@ -59,18 +73,9 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
             }
         }
         
-        LightboxConfig.PageIndicator.textAttributes = [.font: FontType.xtraSmall.font,
-                                                       .foregroundColor: ThemeColor.white.color.withAlphaComponent(0.2)]
-        
-        LightboxConfig.InfoLabel.textAttributes = [.font: FontType.small.font,
-                                                   .foregroundColor: ThemeColor.white.color]
-        
-        LightboxConfig.CloseButton.text = ""
-        LightboxConfig.CloseButton.image = UIImage(systemName: "xmark")
-        LightboxConfig.CloseButton.size = CGSize(width: 20, height: 18)
-        
         let animationView = AnimationView.with(animation: .loading)
 
+        LightboxConfig.CloseButton.text = ""
         LightboxConfig.makeLoadingIndicator = { 
             animationView
         }
@@ -80,12 +85,6 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
         animationView.squaredSize = 18
 
         super.init(images: images, startIndex: startIndex)
-        // Create an instance of LightboxController.
-        self.headerView.closeButton.tintColor = ThemeColor.white.color
-        self.headerView.closeButton.imageView?.contentMode = .scaleAspectFit
-
-        // Use dynamic background.
-        self.dynamicBackground = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -95,11 +94,37 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.headerView.addSubview(self.shareImageView)
-        self.shareImageView.tintColor = ThemeColor.white.color
-        self.shareImageView.contentMode = .scaleAspectFit
+        self.headerView.closeButton.isEnabled = false
         
-        self.headerView.addSubview(self.shareButton)
+        self.closeButton.didSelect { [unowned self] in
+            self.dismissalDelegate?.lightboxControllerWillDismiss(self)
+        }
+        
+        // Use dynamic background.
+        self.dynamicBackground = true
+        
+        self.footerView.isVisible = false
+        self.view.insertSubview(self.messageFooterView, aboveSubview: self.footerView)
+        
+        self.messageFooterView.addSubview(self.bottomGradientView)
+        
+        self.headerView.addSubview(self.menuImageView)
+        self.menuImageView.tintColor = ThemeColor.white.color
+        self.menuImageView.contentMode = .scaleAspectFit
+        
+        self.headerView.addSubview(self.closeImageView)
+        self.closeImageView.tintColor = ThemeColor.white.color
+        self.closeImageView.contentMode = .scaleAspectFit
+        
+        self.headerView.addSubview(self.closeButton)
+
+        self.headerView.addSubview(self.menuButton)
+        self.menuButton.showsMenuAsPrimaryAction = true
+        self.menuButton.menu = self.buildMenu()
+        
+        self.messageFooterView.addSubview(self.messageSummaryView)
+        self.messageSummaryView.configure(for: self.message)
+        self.messageSummaryView.lineDotView.isVisible = false
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -115,9 +140,45 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.shareImageView.size = self.headerView.deleteButton.size
-        self.shareImageView.left = 12
-        self.shareImageView.top = self.view.safeAreaInsets.top - 26
-        self.shareButton.frame = self.shareImageView.frame
+        self.messageFooterView.expandToSuperviewWidth()
+        self.messageFooterView.height = MessageFooterView.height + self.view.safeAreaInsets.bottom
+        self.messageFooterView.centerOnX()
+        self.messageFooterView.pin(.bottom)
+        
+        self.bottomGradientView.expandToSuperviewSize()
+        
+        self.menuImageView.squaredSize = 22
+        self.menuImageView.pin(.right, offset: .xtraLong)
+        self.menuImageView.pin(.top)
+        
+        self.menuButton.squaredSize = 22
+        self.menuButton.center = self.menuImageView.center
+        
+        self.closeImageView.squaredSize = 22
+        self.closeImageView.pin(.left, offset: .xtraLong)
+        self.closeImageView.pin(.top)
+        
+        self.closeButton.squaredSize = 44
+        self.closeButton.center = self.closeImageView.center
+        
+        self.messageSummaryView.width = Theme.getPaddedWidth(with: self.messageFooterView.width)
+        self.messageSummaryView.height = self.messageFooterView.height - self.view.safeAreaInsets.bottom
+        self.messageSummaryView.centerOnX()
+        self.messageSummaryView.pin(.top)
+    }
+    
+    private func buildMenu() -> UIMenu {
+        
+        let share = UIAction(title: "Share",
+                              image: UIImage(systemName: "square.and.arrow.up"),
+                              attributes: []) { [unowned self] action in
+            self.didSelectShare?()
+        }
+
+        return UIMenu.init(title: "Menu",
+                           image: nil,
+                           identifier: nil,
+                           options: [],
+                           children: [share])
     }
 }

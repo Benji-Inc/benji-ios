@@ -43,7 +43,7 @@ class MediaCoordinator: PresentableCoordinator<Void> {
         
         self.mediaViewController.transitioningDelegate = self.router.modalTransitionRouter
         
-        self.mediaViewController.shareButton.didSelect { [unowned self] in
+        self.mediaViewController.didSelectShare = { [unowned self] in
             
             Task {
 
@@ -75,8 +75,6 @@ class MediaCoordinator: PresentableCoordinator<Void> {
     private func didTapShare(items: [Any]) {
         
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        
-        activityViewController.
         
         // present the view controller
         self.router.topmostViewController.present(activityViewController, animated: true)
