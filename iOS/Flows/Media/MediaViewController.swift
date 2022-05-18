@@ -9,7 +9,7 @@
 import Foundation
 import Lightbox
 
-class ImageViewController: LightboxController, Dismissable, TransitionableViewController {
+class MediaViewController: LightboxController, Dismissable, TransitionableViewController {
 
     var dismissalType: TransitionType {
         return .crossDissolve

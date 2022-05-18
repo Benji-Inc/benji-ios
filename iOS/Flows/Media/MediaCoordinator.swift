@@ -19,7 +19,7 @@ class MediaCoordinator: PresentableCoordinator<Void> {
     
     let animationView = AnimationView.with(animation: .loading)
 
-    lazy var imageViewController: ImageViewController = {
+    lazy var imageViewController: MediaViewController = {
         let images: [LightboxImage]
         images = self.items.compactMap({ item in
             guard let url = item.url else { return nil }
@@ -61,7 +61,7 @@ class MediaCoordinator: PresentableCoordinator<Void> {
         self.animationView.squaredSize = 18
 
         // Create an instance of LightboxController.
-        let controller = ImageViewController(images: images, startIndex: startIndex)
+        let controller = MediaViewController(images: images, startIndex: startIndex)
         controller.headerView.closeButton.tintColor = ThemeColor.white.color
         controller.headerView.closeButton.imageView?.contentMode = .scaleAspectFit
 
