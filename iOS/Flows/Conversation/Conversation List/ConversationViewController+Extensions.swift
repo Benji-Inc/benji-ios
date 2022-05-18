@@ -12,22 +12,6 @@ import StreamChat
 extension ConversationViewController {
 
     func setupInputHandlers() {
-        self.dataSource.handleDidTapClose = { [unowned self] item in
-            self.dataSource.deleteItems([item])
-            switch item {
-            case .upsell:
-                UserDefaultsManager.update(key: .shouldShowGroupsUpsell, with: false)
-            case .invest:
-                UserDefaultsManager.update(key: .shouldShowInvestUpsell, with: false)
-            default:
-                break
-            }
-        }
-
-        self.dataSource.handleLoadMoreMessages = { [unowned self] in
-            self.loadMoreConversationsIfNeeded()
-        }
-        
         self.dataSource.handleCollectionViewTapped = { [unowned self] in
             if self.messageInputController.swipeInputView.textView.isFirstResponder {
                 self.messageInputController.swipeInputView.textView.resignFirstResponder()
@@ -69,11 +53,11 @@ extension ConversationViewController {
     }
     
     func subscribeToConversationUpdates() {
-        self.conversationListController
-            .channelsChangesPublisher
+        self.conversationController
+            .channelChangePublisher
             .mainSink { [unowned self] _ in
                 Task {
-                    await self.dataSource.update(with: self.conversationListController)
+                    await self.dataSource.update(with: self.conversationController)
                 }.add(to: self.autocancelTaskPool)
             }.store(in: &self.cancellables)
 

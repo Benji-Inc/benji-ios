@@ -16,7 +16,7 @@ extension PFFileObject: ImageDisplayable {
         return nil
     }
 
-    var fileObject: PFFileObject? {
+    var imageFileObject: PFFileObject? {
         return self
     }
 

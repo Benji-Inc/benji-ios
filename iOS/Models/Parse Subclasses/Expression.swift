@@ -86,11 +86,12 @@ extension Expression: Objectable {
 }
 
 extension Expression: ImageDisplayable {
+
     var image: UIImage? {
         return nil
     }
     
-    var fileObject: PFFileObject? {
+    var imageFileObject: PFFileObject? {
         return self.file 
     }
 }

@@ -26,7 +26,7 @@
 		8020DD93272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */; };
 		8023C69F27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */; };
 		8023C6A227EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8023C6A127EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift */; };
-		8024B95326F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */; };
+		8024B95326F278C8008ABF7F /* ConversationCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95026F278C8008ABF7F /* ConversationCollectionViewDataSource.swift */; };
 		80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80251FF726F3D362006D7873 /* MessageController+Extensions.swift */; };
 		8028C9E9273ECB1200520465 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8028C9E8273ECB1200520465 /* ConversationViewController.swift */; };
 		802C448A26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
@@ -1013,7 +1013,7 @@
 		8020DD92272C81FB00D5BA04 /* SwipeableInputAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwipeableInputAccessoryView.xib; sourceTree = "<group>"; };
 		8023C69E27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentContextMenuDelegate.swift; sourceTree = "<group>"; };
 		8023C6A127EBCDEF00FD9DB6 /* MediaViewerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewerCoordinator.swift; sourceTree = "<group>"; };
-		8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		8024B95026F278C8008ABF7F /* ConversationCollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		80251FF726F3D362006D7873 /* MessageController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageController+Extensions.swift"; sourceTree = "<group>"; };
 		8028C9E8273ECB1200520465 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		802C448926CC76CC00A333A4 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -1558,7 +1558,7 @@
 				D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */,
 				D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */,
 				8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */,
-				8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */,
+				8024B95026F278C8008ABF7F /* ConversationCollectionViewDataSource.swift */,
 				80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */,
 				8028C9E8273ECB1200520465 /* ConversationViewController.swift */,
 				809EDC6B273ECEF000597473 /* ConversationViewController+Extensions.swift */,
@@ -3770,7 +3770,7 @@
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
-				8024B95326F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift in Sources */,
+				8024B95326F278C8008ABF7F /* ConversationCollectionViewDataSource.swift in Sources */,
 				80D5C28B2817187D00182DB6 /* ExpressionDetailViewController.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */,

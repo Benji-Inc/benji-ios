@@ -12,15 +12,24 @@ import UIKit
 import Combine
 import Lottie
 
-struct DisplayableImage: ImageDisplayable {
+/// A private struct that represents a snapshot of an ImageDisplayable's state.
+/// This can be used to determine if the current image needs to be updated when a new displayable is assigned.
+private struct ImageDisplayableState: ImageDisplayable {
     var image: UIImage?
     var url: URL?
-    var fileObject: PFFileObject?
-    
-    init?(with displayable: ImageDisplayable?) {
-        self.image = displayable?.image
-        self.url = displayable?.url
-        self.fileObject = displayable?.fileObject
+    var imageFileObject: PFFileObject?
+
+    var isNil: Bool {
+        return self.image.isNil
+        && self.url.isNil
+        && self.imageFileObject.isNil
+    }
+
+    /// Returns true if the two states will result in the same image being displayed.
+    func isEqual(to otherState: ImageDisplayableState) -> Bool {
+        return self.image == otherState.image
+        && self.url == otherState.url
+        && self.imageFileObject?.url == otherState.imageFileObject?.url
     }
 }
 
@@ -41,37 +50,42 @@ class DisplayableImageView: BaseView {
 
     var cancellables = Set<AnyCancellable>()
 
+    /// The current task that is asynchronously setting the displayable.
     private var displayableTask: Task<Void, Never>?
-    
-    private var displaybleImage: DisplayableImage? {
+
+    private var displayableState: ImageDisplayableState = ImageDisplayableState() {
         didSet {
             // Don't load the displayable again if it hasn't changed.
-            if let displayable = self.displaybleImage, displayable.isEqual(to: oldValue) {
+            if self.displayableState.isEqual(to: oldValue) {
                 return
             }
 
             self.displayableTask?.cancel()
 
             // A nil displayable can be applied immediately without creating a task.
-            guard let displayableRef = self.displaybleImage else {
+            guard !self.displayableState.isNil else {
                 self.imageView.image = nil
                 self.state = .initial
                 return
             }
 
+            let displayableStateRef = self.displayableState
+
             self.displayableTask = Task {
-                await self.updateImageView(with: displayableRef)
+                await self.updateImageView(with: displayableStateRef)
             }
         }
     }
-    
+
     var displayable: ImageDisplayable? {
         didSet {
-            self.displaybleImage = DisplayableImage(with: self.displayable)
+            self.displayableState = ImageDisplayableState(image: self.displayable?.image,
+                                                          url: self.displayable?.url,
+                                                          imageFileObject: self.displayable?.imageFileObject)
         }
     }
 
-    /// A custom configured url session for retrieving displayables with a url.
+    /// A custom configured url session for retrieving displayables with a url and caching the data.
     private lazy var urlSession: URLSession = {
         let configuration = URLSessionConfiguration.default
         configuration.requestCachePolicy = .returnCacheDataElseLoad
@@ -149,8 +163,8 @@ class DisplayableImageView: BaseView {
     private func updateImageView(with displayable: ImageDisplayable?) async {
         if let image = displayable?.image {
             await self.set(image: image, state: .success)
-        } else if let fileObject = displayable?.fileObject {
-            await self.downloadAndSetImage(for: fileObject)
+        } else if let imageFileObject = displayable?.imageFileObject {
+            await self.downloadAndSetImage(for: imageFileObject)
         } else if let url = displayable?.url  {
             await self.downloadAndSetImage(for: url)
         } else {

@@ -37,12 +37,12 @@ class ConversationViewController: InputHandlerViewContoller,
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     // Collection View
-    lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
+    lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
 
     lazy var headerVC = ConversationHeaderViewController()
 
-    private(set) var conversationListController: ConversationListController
+    private(set) var conversationController: ConversationController
 
     var swipeableVC: SwipeableInputAccessoryViewController {
         return self.messageInputController
@@ -80,12 +80,8 @@ class ConversationViewController: InputHandlerViewContoller,
         self.cid = cid
         self.startingMessageID = startingMessageID
         self.openReplies = openReplies
-
-        let filter: Filter<ChannelListFilterScope> = .equal(.cid, to: cid)
-
-        let query = ChannelListQuery(filter: filter, messagesLimit: .messagesPageSize)
         
-        self.conversationListController = ChatClient.shared.channelListController(query: query)
+        self.conversationController = ChatClient.shared.channelController(for: cid)
 
         super.init()
     }
@@ -162,25 +158,13 @@ class ConversationViewController: InputHandlerViewContoller,
     func initializeDataSource() async {
         self.collectionView.animationView.play()
         
-        try? await self.conversationListController.synchronize()
-        try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
+        try? await self.conversationController.synchronize()
 
-        let conversations = self.conversationListController.conversations
-
-        let snapshot = self.dataSource.updatedSnapshot(with: self.conversationListController)
-
-        // Automatically scroll to the conversation.
-        let startingIndexPath: IndexPath
-        if let conversationIndexPath = snapshot.indexPathOfItem(.conversation(cid)) {
-            startingIndexPath = conversationIndexPath
-        } else {
-            startingIndexPath = IndexPath(item: clamp(conversations.count - 1, min: 0) , section: 0)
-        }
+        let snapshot = self.dataSource.updatedSnapshot(with: self.conversationController)
 
         let animationCycle = AnimationCycle(inFromPosition: .inward,
                                             outToPosition: .inward,
-                                            shouldConcatenate: false,
-                                            scrollToIndexPath: startingIndexPath)
+                                            shouldConcatenate: false)
 
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
@@ -260,29 +244,6 @@ class ConversationViewController: InputHandlerViewContoller,
         return centeredCell.conversationController
     }
 
-
-    // MARK: - UICollection Input Handlers
-
-    /// If true, the conversation controller is currently loading more conversations.
-    @Atomic private var isLoadingConversations = false
-    func loadMoreConversationsIfNeeded() {
-        // If all the conversations are loaded, there's no need to fetch more.
-        guard !self.conversationListController.hasLoadedAllPreviousChannels else { return }
-
-        Task {
-            guard !isLoadingConversations else { return }
-
-            self.isLoadingConversations = true
-            do {
-                try await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
-            } catch {
-                await ToastScheduler.shared.schedule(toastType: .error(error))
-                logError(error)
-            }
-            self.isLoadingConversations = false
-        }.add(to: self.autocancelTaskPool)
-    }
-
     // MARK: - ConversationListCollectionViewLayoutDelegate
 
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
@@ -292,7 +253,7 @@ class ConversationViewController: InputHandlerViewContoller,
         switch item {
         case .conversation(let cid):
             return cid
-        case .loadMore, .newConversation, .none, .upsell, .invest:
+        case .none:
             return nil
         }
     }

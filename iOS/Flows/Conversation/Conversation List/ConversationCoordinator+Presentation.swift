@@ -163,46 +163,6 @@ extension ConversationCoordinator {
         self.listVC.present(alertController, animated: true, completion: nil)
     }
     
-    func presentEmailAlert() {
-        let alertController = UIAlertController(title: "Invest in Jibber",
-                                                message: "We will follow up with you using the email provided.",
-                                                preferredStyle: .alert)
-        alertController.addTextField { (textField : UITextField!) -> Void in
-            textField.textContentType = .emailAddress
-            textField.placeholder = "Email"
-        }
-        let saveAction = UIAlertAction(title: "Confirm", style: .default, handler: { [unowned self] alert -> Void in
-            if let textField = alertController.textFields?.first,
-               let text = textField.text,
-               !text.isEmpty {
-                
-                Task {
-                    User.current()?.email = text
-                    try await User.current()?.saveToServer()
-                    
-                    Task.onMainActor {
-                        alertController.dismiss(animated: true, completion: {
-                            self.listVC.dataSource.reloadItems([.invest])
-                            self.listVC.becomeFirstResponder()
-                        })
-                    }
-                }
-            }
-        })
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            (action : UIAlertAction!) -> Void in
-            self.listVC.becomeFirstResponder()
-        })
-        
-        alertController.addAction(saveAction)
-        alertController.addAction(cancelAction)
-        
-        self.listVC.resignFirstResponder()
-        
-        self.listVC.present(alertController, animated: true, completion: nil)
-    }
-    
     func showWallet() {
         let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
         self.present(coordinator, finishedHandler: nil)
