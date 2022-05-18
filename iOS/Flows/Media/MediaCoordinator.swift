@@ -95,36 +95,3 @@ class MediaCoordinator: PresentableCoordinator<Void> {
         self.imageViewController.transitioningDelegate = self.router.modalTransitionRouter
     }
 }
-
-// MARK: - ImageViewController
-
-class ImageViewController: LightboxController, Dismissable, TransitionableViewController {
-
-    var dismissalType: TransitionType {
-        return .crossDissolve
-    }
-    
-    var presentationType: TransitionType {
-        return .crossDissolve
-    }
-
-    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
-        return toVCPresentationType
-    }
-
-    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
-        return fromVCDismissalType
-    }
-
-    var dismissHandlers: [DismissHandler] = []
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        if self.isBeingClosed {
-            self.dismissHandlers.forEach { (dismissHandler) in
-                dismissHandler.handler?()
-            }
-        }
-    }
-}
