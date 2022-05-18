@@ -31,13 +31,13 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     var dismissHandlers: [DismissHandler] = []
     
     let message: Messageable
-    
+
     init(items: [MediaItem],
          startingItem: MediaItem?,
          message: Messageable) {
         
         self.message = message
-        
+
         let images: [LightboxImage]
         images = items.compactMap({ item in
             guard let url = item.url else { return nil }
@@ -59,41 +59,37 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                 }
             }
         }
-        
+
         LightboxConfig.PageIndicator.textAttributes = [.font: FontType.xtraSmall.font,
                                                        .foregroundColor: ThemeColor.white.color.withAlphaComponent(0.2)]
-        
+
         LightboxConfig.InfoLabel.textAttributes = [.font: FontType.small.font,
                                                    .foregroundColor: ThemeColor.white.color]
-        
+
         LightboxConfig.CloseButton.text = ""
         LightboxConfig.CloseButton.image = UIImage(systemName: "xmark")
         LightboxConfig.CloseButton.size = CGSize(width: 20, height: 18)
-        
+
         let animationView = AnimationView.with(animation: .loading)
         animationView.loopMode = .loop
         animationView.play()
         animationView.squaredSize = 18
-        
+
         LightboxConfig.makeLoadingIndicator = {
             animationView
         }
 
         super.init(images: images, startIndex: startIndex)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         
         self.headerView.closeButton.tintColor = ThemeColor.white.color
         self.headerView.closeButton.imageView?.contentMode = .scaleAspectFit
 
         // Use dynamic background.
         self.dynamicBackground = true
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
