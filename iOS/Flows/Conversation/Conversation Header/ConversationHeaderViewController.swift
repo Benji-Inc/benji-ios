@@ -57,7 +57,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                 self.setTopic(for: convo)
                 self.stackedView.isVisible = true
                 self.topicLabel.isVisible = true
-                self.view.setNeedsLayout()
+                self.view.layoutNow()
             }.store(in: &self.cancellables)
     }
     

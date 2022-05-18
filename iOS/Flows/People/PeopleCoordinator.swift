@@ -131,31 +131,22 @@ extension PeopleCoordinator {
 
     /// Presents an alert that asks if the user wants to connect with the passed in user. Finishes once a connection is made or the user cancels.
     func presentConnectionFlow(for user: User) async -> Connection? {
+        
         return await withCheckedContinuation { continuation in
-            let title = LocalizedString(id: "", arguments: [user.fullName], default: "Connect with @(name)?")
-            let titleText = localized(title)
+            self.removeChild()
 
-            let body = LocalizedString(id: "", arguments: [user.fullName], default: "@(name) has an account. Tap OK to send the request. (This will NOT consume one of your reservations)")
-            let bodyText = localized(body)
-            let alert = UIAlertController(title: titleText,
-                                          message: bodyText,
-                                          preferredStyle: .alert)
+            let coordinator = PersonConnectionCoordinator(with: user,
+                                                          router: self.router,
+                                                          deepLink: self.deepLink)
 
-            let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+            self.addChildAndStart(coordinator) { [unowned self] result in
+                self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+                continuation.resume(returning: result)
+            }
+
+            self.router.present(coordinator, source: self.peopleNavController, cancelHandler: {
                 continuation.resume(returning: nil)
-            }
-
-            let ok = UIAlertAction(title: "Ok", style: .default) { [unowned self] (_) in
-                Task {
-                    let connection = await self.createConnection(with: user)
-                    continuation.resume(returning: connection)
-                }
-            }
-
-            alert.addAction(cancel)
-            alert.addAction(ok)
-
-            self.router.topmostViewController.present(alert, animated: true, completion: nil)
+            })
         }
     }
 

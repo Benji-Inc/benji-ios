@@ -30,6 +30,14 @@ extension ConversationCoordinator {
         }
     }
     
+    func presentPersonConnection(for activity: LaunchActivity) {
+        let coordinator = PersonConnectionCoordinator(launchActivity: activity,
+                                                      router: self.router,
+                                                      deepLink: self.deepLink)
+
+        self.present(coordinator)
+    }
+    
     func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
         let message = Message.message(with: channelId, messageId: messageId)
         let coordinator = MessageDetailCoordinator(with: message,

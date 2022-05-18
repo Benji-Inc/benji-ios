@@ -31,10 +31,6 @@ final class Reservation: PFObject, PFSubclassing {
         return self.getObject(for: .isClaimed) ?? false
     }
 
-    var user: User? {
-        return self.getObject(for: .user)
-    }
-
     var createdBy: User? {
         return self.getObject(for: .createdBy)
     }
