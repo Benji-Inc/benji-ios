@@ -184,7 +184,7 @@ extension MessageDetailCoordinator: MessageContentDelegate {
     
     func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
         self.removeChild()
-        let coordinator = MediaViewerCoordinator(items: mediaItems,
+        let coordinator = MediaCoordinator(items: mediaItems,
                                                  startingItem: startingItem,
                                                  body: body,
                                                  router: self.router,

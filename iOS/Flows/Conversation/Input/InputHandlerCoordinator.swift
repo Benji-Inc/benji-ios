@@ -338,7 +338,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
-        let imageCoordinator = MediaViewerCoordinator(items: mediaItems,
+        let imageCoordinator = MediaCoordinator(items: mediaItems,
                                                       startingItem: startingItem,
                                                       body: body,
                                                       router: self.router,
