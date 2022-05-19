@@ -138,6 +138,23 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         
         self.presentThread(for: messageInfo.0, messageId: messageInfo.1, startingReplyId: nil)
     }
+    
+    override func presentThread(for cid: ConversationId,
+                       messageId: MessageId,
+                       startingReplyId: MessageId?) {
+        
+        let coordinator = ThreadCoordinator(with: cid,
+                                            messageId: messageId,
+                                            startingReplyId: startingReplyId,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
+        
+        self.present(coordinator) { [unowned self] result in
+            Task.onMainActorAsync {
+                await self.listVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
+            }
+        }
+    }
 }
 
 extension ConversationCoordinator: LaunchActivityHandler {

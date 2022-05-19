@@ -10,7 +10,12 @@ import Foundation
 import Lightbox
 import Lottie
 
-class MediaCoordinator: PresentableCoordinator<Void> {
+enum MediaResult {
+    case reply(Messageable)
+    case none
+}
+
+class MediaCoordinator: PresentableCoordinator<MediaResult> {
     
     let items: [MediaItem]
     let startingItem: MediaItem?
@@ -42,5 +47,9 @@ class MediaCoordinator: PresentableCoordinator<Void> {
         super.start()
         
         self.mediaViewController.transitioningDelegate = self.router.modalTransitionRouter
+        
+        self.mediaViewController.messagePreview.didSelect { [unowned self] in
+            self.finishFlow(with: .reply(self.message))
+        }
     }
 }

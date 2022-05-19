@@ -36,7 +36,7 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
-    private let messagePreview = MessagePreview()
+    let messagePreview = MessagePreview()
 
     init(items: [MediaItem],
          startingItem: MediaItem?,
