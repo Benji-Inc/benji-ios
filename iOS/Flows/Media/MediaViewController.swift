@@ -160,7 +160,7 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     
     override func configureLayout(_ size: CGSize) {
         super.configureLayout(size)
-        
+                
         self.headerView.closeButton.pin(.left, offset: .xtraLong)
         
         self.menuImageView.size = self.headerView.closeButton.size

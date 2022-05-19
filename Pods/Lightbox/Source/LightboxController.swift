@@ -199,7 +199,7 @@ open class LightboxController: UIViewController {
     scrollView.frame = view.bounds
     footerView.frame.size = CGSize(
       width: view.bounds.width,
-      height: 100
+      height: 120
     )
 
     footerView.frame.origin = CGPoint(
