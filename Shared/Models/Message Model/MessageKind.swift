@@ -66,6 +66,8 @@ enum MessageKind {
             return emoji
         case .link(_, let stringURL):
             return stringURL
+        case .media(_, let body):
+            return body
         default:
             return String()
         }

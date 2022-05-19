@@ -49,10 +49,10 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
             guard let url = item.url else { return nil }
             switch item.type {
             case .photo:
-                return LightboxImage(imageURL: url, text: message.kind.text)
+                return LightboxImage(imageURL: url, text: "")
             case .video:
                 guard let imageURL = item.previewURL else { return nil }
-                return LightboxImage(imageURL: imageURL, text: message.kind.text, videoURL: item.url)
+                return LightboxImage(imageURL: imageURL, text: "", videoURL: item.url)
             }
         })
 
@@ -115,6 +115,11 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
         
         self.footerView.addSubview(self.messagePreview)
         self.messagePreview.configure(with: self.message)
+        
+        if self.message.kind.text.isEmpty {
+            self.messagePreview.label.setText("Tap to Reply")
+            self.messagePreview.label.alpha = 0.25
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
