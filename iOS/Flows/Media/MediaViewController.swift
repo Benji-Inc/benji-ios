@@ -31,6 +31,8 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     var dismissHandlers: [DismissHandler] = []
     
     let message: Messageable
+    
+    private let pageIndicator = UIPageControl()
 
     init(items: [MediaItem],
          startingItem: MediaItem?,
@@ -81,15 +83,29 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
 
         super.init(images: images, startIndex: startIndex)
         
-        self.headerView.closeButton.tintColor = ThemeColor.white.color
-        self.headerView.closeButton.imageView?.contentMode = .scaleAspectFit
-
-        // Use dynamic background.
+        // This needs to be here due to some internal setup
         self.dynamicBackground = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.pageDelegate = self
+        self.pageIndicator.numberOfPages = self.numberOfPages
+        
+        self.footerView.addSubview(self.pageIndicator)
+        self.pageIndicator.currentPageIndicatorTintColor = ThemeColor.white.color
+        self.pageIndicator.pageIndicatorTintColor = ThemeColor.B2.color
+        self.pageIndicator.hidesForSinglePage = true
+        
+        self.headerView.closeButton.tintColor = ThemeColor.white.color
+        self.headerView.closeButton.imageView?.contentMode = .scaleAspectFit
+        self.footerView.pageLabel.isVisible = false
+        self.footerView.separatorView.isVisible = false
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -100,5 +116,19 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                 dismissHandler.handler?()
             }
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.pageIndicator.sizeToFit()
+        self.pageIndicator.centerOnX()
+        self.pageIndicator.pin(.bottom, offset: .xtraLong)
+    }
+}
+
+extension MediaViewController: LightboxControllerPageDelegate {
+    func lightboxController(_ controller: LightboxController, didMoveToPage page: Int) {
+        self.pageIndicator.currentPage = page
     }
 }

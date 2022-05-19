@@ -17,12 +17,12 @@ class MediaCoordinator: PresentableCoordinator<Void> {
 
     let message: Messageable
     
-    lazy var imageViewController = MediaViewController(items: self.items,
+    lazy var mediaViewController = MediaViewController(items: self.items,
                                                        startingItem: self.startingItem,
                                                        message: self.message)
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
-        return self.imageViewController
+        return self.mediaViewController
     }
 
     init(items: [MediaItem],
@@ -41,6 +41,6 @@ class MediaCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
         
-        self.imageViewController.transitioningDelegate = self.router.modalTransitionRouter
+        self.mediaViewController.transitioningDelegate = self.router.modalTransitionRouter
     }
 }
