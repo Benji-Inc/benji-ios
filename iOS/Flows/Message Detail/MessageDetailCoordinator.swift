@@ -188,7 +188,16 @@ extension MessageDetailCoordinator: MessageContentDelegate {
                                                  message: message,
                                                  router: self.router,
                                                  deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { _ in }
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            switch result {
+            case .reply(let message):
+                coordinator.toPresentable().dismiss(animated: true) {
+                    self.finishFlow(with: .message(message))
+                }
+            case .none:
+                break
+            }
+        }
         self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
     }
     
