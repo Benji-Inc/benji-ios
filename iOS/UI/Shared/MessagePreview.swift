@@ -1,5 +1,5 @@
 //
-//  ReplyView.swift
+//  MessagePreview.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 4/26/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ReplyView: BaseView {
+class MessagePreview: BaseView {
 
     let personView = PersonGradientView()
     let dateLabel = MessageDateLabel(font: .xtraSmall)
@@ -38,7 +38,7 @@ class ReplyView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.personView.squaredSize = ReplyView.minimumHeight
+        self.personView.squaredSize = MessagePreview.minimumHeight
         self.personView.pin(.left)
         self.personView.pin(.top)
         
@@ -51,12 +51,12 @@ class ReplyView: BaseView {
         
         self.imageView.centerY = self.dateLabel.centerY
 
-        let maxLabelHeight = ReplyView.maxHeight - self.dateLabel.height - Theme.ContentOffset.short.value
+        let maxLabelHeight = MessagePreview.maxHeight - self.dateLabel.height - Theme.ContentOffset.short.value
         self.label.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value, height: maxLabelHeight)
         self.label.match(.top, to: .bottom, of: self.dateLabel, offset: .short)
         self.label.match(.left, to: .right, of: self.personView, offset: .standard)
         
-        self.height = clamp(self.label.bottom, ReplyView.minimumHeight, ReplyView.maxHeight)
+        self.height = clamp(self.label.bottom, MessagePreview.minimumHeight, MessagePreview.maxHeight)
     }
 
     func configure(with message: Messageable) {

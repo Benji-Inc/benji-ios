@@ -43,14 +43,14 @@ class LineDotView: BaseView {
     }
 }
 
-class ReplySummaryView: BaseView {
+class MessageSummaryView: BaseView {
     
     private var controller: MessageController?
         
     private let lineDotView = LineDotView()
     private let promptLabel = ThemeLabel(font: .smallBold, textColor: .D1)
     private let promptButton = ThemeButton()
-    private let replyView = ReplyView()
+    private let replyView = MessagePreview()
     
     var didTapViewReplies: CompletionOptional = nil
     var didSelectSuggestion: ((SuggestedReply) -> Void)? = nil

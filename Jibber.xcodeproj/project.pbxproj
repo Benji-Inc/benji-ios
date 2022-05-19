@@ -136,7 +136,7 @@
 		D60B886027F37BC800B3E1C2 /* MessageMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B885F27F37BC800B3E1C2 /* MessageMoreCell.swift */; };
 		D60B886227F4C2EC00B3E1C2 /* MessageFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */; };
 		D60B886527F4C37E00B3E1C2 /* StackedPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */; };
-		D60B886727F4F7C200B3E1C2 /* ReplySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886627F4F7C200B3E1C2 /* ReplySummaryView.swift */; };
+		D60B886727F4F7C200B3E1C2 /* MessageSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */; };
 		D60B886927F5026700B3E1C2 /* TypingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886827F5026700B3E1C2 /* TypingIndicatorView.swift */; };
 		D60B886B27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */; };
 		D60B886D27F6206C00B3E1C2 /* RoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B886C27F6206C00B3E1C2 /* RoomHeaderView.swift */; };
@@ -613,7 +613,7 @@
 		D650C1E125B5F1730037C59A /* PersonView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C1E025B5F1730037C59A /* PersonView+Extensions.swift */; };
 		D650C21025B7D6F20037C59A /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C20F25B7D6F20037C59A /* Attachment.swift */; };
 		D65519F32589591D00B901E4 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealias.swift */; };
-		D656BF0D28183C0900723068 /* ReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D656BF0C28183C0900723068 /* ReplyView.swift */; };
+		D656BF0D28183C0900723068 /* MessagePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D656BF0C28183C0900723068 /* MessagePreview.swift */; };
 		D656BF0F281845B800723068 /* MessageDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D656BF0E281845B800723068 /* MessageDateLabel.swift */; };
 		D656EF442765A11900FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF432765A11900FF6E2C /* Localization */; };
 		D656EF482765A12A00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF472765A12A00FF6E2C /* Localization */; };
@@ -1105,7 +1105,7 @@
 		D60B885F27F37BC800B3E1C2 /* MessageMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMoreCell.swift; sourceTree = "<group>"; };
 		D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFooterView.swift; sourceTree = "<group>"; };
 		D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedPersonView.swift; sourceTree = "<group>"; };
-		D60B886627F4F7C200B3E1C2 /* ReplySummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplySummaryView.swift; sourceTree = "<group>"; };
+		D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSummaryView.swift; sourceTree = "<group>"; };
 		D60B886827F5026700B3E1C2 /* TypingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingIndicatorView.swift; sourceTree = "<group>"; };
 		D60B886A27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSegmentControlHeaderView.swift; sourceTree = "<group>"; };
 		D60B886C27F6206C00B3E1C2 /* RoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomHeaderView.swift; sourceTree = "<group>"; };
@@ -1270,7 +1270,7 @@
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
-		D656BF0C28183C0900723068 /* ReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyView.swift; sourceTree = "<group>"; };
+		D656BF0C28183C0900723068 /* MessagePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreview.swift; sourceTree = "<group>"; };
 		D656BF0E281845B800723068 /* MessageDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDateLabel.swift; sourceTree = "<group>"; };
 		D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyUnreadMessageCell.swift; sourceTree = "<group>"; };
 		D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadMessagesCounter.swift; sourceTree = "<group>"; };
@@ -1693,8 +1693,8 @@
 			isa = PBXGroup;
 			children = (
 				D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */,
-				D60B886627F4F7C200B3E1C2 /* ReplySummaryView.swift */,
-				D656BF0C28183C0900723068 /* ReplyView.swift */,
+				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
+				D656BF0C28183C0900723068 /* MessagePreview.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -3477,7 +3477,7 @@
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D60CA48527EF639300F0871A /* MessageDeliveryTypeSelectionView.swift in Sources */,
 				D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */,
-				D656BF0D28183C0900723068 /* ReplyView.swift in Sources */,
+				D656BF0D28183C0900723068 /* MessagePreview.swift in Sources */,
 				D646D36A27E5055D0077D20B /* AttachmentsCollectionViewLayout.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				8056B324281B32A600358880 /* ExpressionPhotoCaptureViewController.swift in Sources */,
@@ -3509,7 +3509,7 @@
 				80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
-				D60B886727F4F7C200B3E1C2 /* ReplySummaryView.swift in Sources */,
+				D60B886727F4F7C200B3E1C2 /* MessageSummaryView.swift in Sources */,
 				D62ED579279CA2ED00F7C08A /* BorderedPersonView.swift in Sources */,
 				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,

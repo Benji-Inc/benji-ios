@@ -33,6 +33,10 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     let message: Messageable
     
     private let pageIndicator = UIPageControl()
+    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                  startPoint: .bottomCenter,
+                                                  endPoint: .topCenter)
+    private let messagePreview = MessagePreview()
 
     init(items: [MediaItem],
          startingItem: MediaItem?,
@@ -94,6 +98,8 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.footerView.addSubview(self.bottomGradientView)
+        
         self.pageDelegate = self
         self.pageIndicator.numberOfPages = self.numberOfPages
         
@@ -106,6 +112,9 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
         self.headerView.closeButton.imageView?.contentMode = .scaleAspectFit
         self.footerView.pageLabel.isVisible = false
         self.footerView.separatorView.isVisible = false
+        
+        self.footerView.addSubview(self.messagePreview)
+        self.messagePreview.configure(with: self.message)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -121,9 +130,16 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.bottomGradientView.expandToSuperviewSize()
+        
         self.pageIndicator.sizeToFit()
         self.pageIndicator.centerOnX()
         self.pageIndicator.pin(.bottom, offset: .xtraLong)
+        
+        self.messagePreview.width = Theme.getPaddedWidth(with: self.footerView.width)
+        self.messagePreview.height = self.footerView.height - self.pageIndicator.top
+        self.messagePreview.centerOnX()
+        self.messagePreview.pin(.top)
     }
 }
 
