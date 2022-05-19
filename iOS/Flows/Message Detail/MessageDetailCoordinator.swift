@@ -163,15 +163,12 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
 
         switch message.kind {
-        case .photo(photo: let photo, let body):
-            let text = "\(message.author.givenName): \(body)"
-            self.presentMediaFlow(for: [photo], startingItem: nil, body: text)
-        case .video(video: let video, body: let body):
-            let text = "\(message.author.givenName): \(body)"
-            self.presentMediaFlow(for: [video], startingItem: nil, body: text)
-        case .media(items: let media, body: let body):
-            let text = "\(message.author.givenName): \(body)"
-            self.presentMediaFlow(for: media, startingItem: nil, body: text)
+        case .photo(photo: let photo, _):
+            self.presentMediaFlow(for: [photo], startingItem: nil, message: message)
+        case .video(video: let video, _):
+            self.presentMediaFlow(for: [video], startingItem: nil, message: message)
+        case .media(items: let media, _):
+            self.presentMediaFlow(for: media, startingItem: nil, message: message)
         case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
             break
         }
@@ -182,14 +179,25 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         self.presentExpressionCreation(for: message)
     }
     
-    func presentMediaFlow(for mediaItems: [MediaItem], startingItem: MediaItem?, body: String) {
+    func presentMediaFlow(for mediaItems: [MediaItem],
+                          startingItem: MediaItem?,
+                          message: Messageable) {
         self.removeChild()
-        let coordinator = MediaViewerCoordinator(items: mediaItems,
+        let coordinator = MediaCoordinator(items: mediaItems,
                                                  startingItem: startingItem,
-                                                 body: body,
+                                                 message: message,
                                                  router: self.router,
                                                  deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { _ in }
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            switch result {
+            case .reply(let message):
+                coordinator.toPresentable().dismiss(animated: true) {
+                    self.finishFlow(with: .message(message))
+                }
+            case .none:
+                break
+            }
+        }
         self.router.present(coordinator, source: self.messageVC, cancelHandler: nil)
     }
     

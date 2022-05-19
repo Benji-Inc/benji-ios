@@ -12,23 +12,6 @@ import Localization
 import Photos
 
 extension ConversationCoordinator {
-        
-    func presentThread(for cid: ConversationId,
-                       messageId: MessageId,
-                       startingReplyId: MessageId?) {
-        
-        let coordinator = ThreadCoordinator(with: cid,
-                                            messageId: messageId,
-                                            startingReplyId: startingReplyId,
-                                            router: self.router,
-                                            deepLink: self.deepLink)
-        
-        self.present(coordinator) { [unowned self] result in
-            Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
-            }
-        }
-    }
     
     func presentPersonConnection(for activity: LaunchActivity) {
         let coordinator = PersonConnectionCoordinator(launchActivity: activity,

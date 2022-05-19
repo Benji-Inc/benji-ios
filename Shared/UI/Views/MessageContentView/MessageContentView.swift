@@ -311,6 +311,7 @@ class MessageContentView: BaseView {
                 }
                 
             case .media(items: let media, _):
+                
                 if isDifferentMessage || self.imageView.imageView.image.isNil {
                     if let previewURL = media.first?.previewURL {
                         self.imageView.displayable = previewURL

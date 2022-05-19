@@ -15,7 +15,7 @@ class MessageFooterView: BaseView {
     static let height: CGFloat = 86
     static let collapsedHeight: CGFloat = 30 
 
-    let replySummary = ReplySummaryView()
+    let replySummary = MessageSummaryView()
     let readView = ReadIndicatorView()
     let statusLabel = ThemeLabel(font: .small, textColor: .white)
 

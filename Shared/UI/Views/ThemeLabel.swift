@@ -111,9 +111,15 @@ class ThemeLabel: UILabel {
         let lowercased = existingText.string.lowercased()
         
         guard let range = lowercased.range(of: text.lowercased()) else { return }
+        
+        self.add(attributes: attributes, at: range.nsRange(text))
+    }
+    
+    func add(attributes: [NSAttributedString.Key : Any], at range: NSRange) {
+        guard let existingText = self.attributedText else { return }
 
         let attributedString = NSMutableAttributedString(existingText)
-        attributedString.addAttributes(attributes, range: range.nsRange(text))
+        attributedString.addAttributes(attributes, range: range)
         super.attributedText = attributedString
     }
 
