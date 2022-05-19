@@ -51,5 +51,40 @@ class MediaCoordinator: PresentableCoordinator<MediaResult> {
         self.mediaViewController.messagePreview.didSelect { [unowned self] in
             self.finishFlow(with: .reply(self.message))
         }
+        
+        self.mediaViewController.didSelectShare = { [unowned self] in
+            Task {
+                
+                var itemsToShare: [Any] = []
+                let configuration = URLSessionConfiguration.default
+                configuration.requestCachePolicy = .returnCacheDataElseLoad
+                let session = URLSession(configuration: configuration)
+                
+                await self.items.asyncForEach { item in
+                    switch item.type {
+                    case .photo:
+                        if let url = item.url,
+                           let data: Data = try? await session.dataTask(with: url).0,
+                           let image = UIImage(data: data) {
+                            itemsToShare.append(image)
+                        }
+                    case .video:
+                        if let url = item.url {
+                            itemsToShare.append(url)
+                        }
+                    }
+                }
+                
+                self.didTapShare(items: itemsToShare)
+            }
+        }
+    }
+    
+    private func didTapShare(items: [Any]) {
+        
+        let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        // present the view controller
+        self.router.topmostViewController.present(activityViewController, animated: true)
     }
 }

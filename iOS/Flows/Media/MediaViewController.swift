@@ -37,6 +37,9 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
     let messagePreview = MessagePreview()
+    private let menuImageView = UIImageView(image: UIImage(systemName: "ellipsis"))
+    let menuButton = ThemeButton()
+    var didSelectShare: CompletionOptional = nil 
 
     init(items: [MediaItem],
          startingItem: MediaItem?,
@@ -120,6 +123,14 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
             self.messagePreview.label.setText("Tap to Reply")
             self.messagePreview.label.alpha = 0.25
         }
+        
+        self.headerView.addSubview(self.menuImageView)
+        self.menuImageView.tintColor = ThemeColor.white.color
+        self.menuImageView.contentMode = .scaleAspectFit
+        
+        self.headerView.addSubview(self.menuButton)
+        self.menuButton.showsMenuAsPrimaryAction = true
+        self.menuButton.menu = self.buildMenu()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -145,6 +156,34 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
         self.messagePreview.height = self.footerView.height - self.pageIndicator.top
         self.messagePreview.centerOnX()
         self.messagePreview.pin(.top)
+    }
+    
+    override func configureLayout(_ size: CGSize) {
+        super.configureLayout(size)
+        
+        self.headerView.closeButton.pin(.left, offset: .xtraLong)
+        
+        self.menuImageView.size = self.headerView.closeButton.size
+        self.menuImageView.pin(.right, offset: .xtraLong)
+        self.menuImageView.centerY = self.headerView.closeButton.centerY
+
+        self.menuButton.size = self.menuImageView.size
+        self.menuButton.center = self.menuImageView.center
+    }
+    
+    private func buildMenu() -> UIMenu {
+        
+        let share = UIAction(title: "Share",
+                             image: UIImage(systemName: "square.and.arrow.up"),
+                             attributes: []) { [unowned self] action in
+            self.didSelectShare?()
+        }
+        
+        return UIMenu.init(title: "Menu",
+                           image: nil,
+                           identifier: nil,
+                           options: [],
+                           children: [share])
     }
 }
 
