@@ -45,15 +45,7 @@ class ExpressionPhotoCaptureViewController: ViewController {
         
         self.animate(text: "Tap to take picture")
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        if !self.faceCaptureVC.isSessionRunning {
-            self.faceCaptureVC.beginSession()
-        }
-    }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
