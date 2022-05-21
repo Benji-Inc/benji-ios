@@ -15,7 +15,7 @@ import StreamChat
 #endif
 
 enum LaunchActivity {
-    case onboarding(phoneNumber: String)
+    case onboarding(phoneNumber: String?)
     case reservation(reservationId: String)
     case pass(passId: String)
     case deepLink(DeepLinkable)
@@ -141,7 +141,7 @@ class LaunchManager {
                     self.delegate?.launchManager(self, didReceive: .pass(passId: passId))
                 }
             default:
-                break
+                self.delegate?.launchManager(self, didReceive: .onboarding(phoneNumber: nil))
             }
         }
     }

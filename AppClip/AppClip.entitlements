@@ -8,6 +8,10 @@
 		<string>appclips:joinjibber.com/reservation</string>
 		<string>appclips:joinjibber.com/onboarding</string>
 		<string>appclips:joinjibber.com</string>
+        <string>appclips:www.joinjibber.com</string>
+        <string>appclips:www.joinjibber.com/reservation</string>
+        <string>appclips:www.joinjibber.com/onboarding</string>
+        <string>appclips:www.joinjibber.com/pass</string>
 	</array>
 	<key>com.apple.developer.parent-application-identifiers</key>
 	<array>
