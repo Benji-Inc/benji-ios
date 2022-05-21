@@ -20,6 +20,10 @@ enum FontType {
     case smallBold
     case xtraSmall
     case contextCues
+    
+    var symbolConfiguration: UIImage.SymbolConfiguration {
+        return UIImage.SymbolConfiguration(font: self.font)
+    }
 
     var font: UIFont {
         switch self {
