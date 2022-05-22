@@ -17,8 +17,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let stackedView = StackedPersonView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .small)
-    let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
-    let roomsButton = RoomNavigationButton()
     
     private var state: ConversationUIState = .read
         
@@ -30,17 +28,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.stackedView)
         self.stackedView.max = 7
         
-//        self.view.addSubview(self.jibImageView)
-//        self.jibImageView.contentMode = .scaleToFill
-//        self.jibImageView.isUserInteractionEnabled = true 
-        
         self.view.addSubview(self.topicLabel)
         self.topicLabel.textAlignment = .center
         
         self.view.addSubview(self.button)
-        
-//        self.view.addSubview(self.roomsButton)
-//        self.roomsButton.configure(for: .inner)
         
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
@@ -64,10 +55,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.jibImageView.squaredSize = 44
-        self.jibImageView.pin(.right, offset: .custom(6))
-        self.jibImageView.centerOnY()
-        
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()
         self.topicLabel.pin(.bottom)
@@ -78,9 +65,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.button.height = self.view.height
         self.button.width = 200
         self.button.centerOnXAndY()
-        
-        self.roomsButton.pin(.left, offset: .custom(6))
-        self.roomsButton.centerY = self.jibImageView.centerY
     }
     
     private func setTopic(for conversation: Conversation) {

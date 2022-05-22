@@ -39,7 +39,7 @@ extension ConversationCoordinator {
                                    startingReplyId: replyId)
             case .conversation(let conversation):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: conversation,
+                    await self.conversationVC.scrollToConversation(with: conversation,
                                                            messageId: nil,
                                                            animateScroll: false)
                 }
@@ -131,19 +131,19 @@ extension ConversationCoordinator {
             Task {
                 try await controller.deleteChannel()
             }
-            self.listVC.becomeFirstResponder()
+            self.conversationVC.becomeFirstResponder()
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
-            self.listVC.becomeFirstResponder()
+            self.conversationVC.becomeFirstResponder()
         })
         
         alertController.addAction(deleteAction)
         alertController.addAction(cancelAction)
         
-        self.listVC.resignFirstResponder()
-        self.listVC.present(alertController, animated: true, completion: nil)
+        self.conversationVC.resignFirstResponder()
+        self.conversationVC.present(alertController, animated: true, completion: nil)
     }
     
     func showWallet() {
@@ -163,11 +163,11 @@ extension ConversationCoordinator {
             switch option {
             case .conversation(let cid):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
+                    await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
                 }
             case .message(let cid, let messageId):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: cid, messageId: messageId, animateScroll: true)
+                    await self.conversationVC.scrollToConversation(with: cid, messageId: messageId, animateScroll: true)
                 }
             }
         }
