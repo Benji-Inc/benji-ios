@@ -21,12 +21,10 @@ extension RoomCoordinator {
                                                   cid: cid,
                                                   startingMessageId: messageId,
                                                   openReplies: openReplies)
-        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-            //self.router.popModule()
+        self.addChildAndStart(coordinator, finishedHandler: { (_) in
         })
         
         self.router.present(coordinator, source: self.roomVC)
-        //self.router.push(coordinator, cancelHandler: nil, animated: true)
     }
     
     func presentPeoplePicker() {

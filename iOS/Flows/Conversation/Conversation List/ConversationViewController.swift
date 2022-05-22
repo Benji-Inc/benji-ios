@@ -104,9 +104,7 @@ class ConversationViewController: InputHandlerViewContoller,
         }
         
         self.view.insertSubview(self.darkBlur, belowSubview: self.collectionView)
-        
-        //self.view.set(backgroundColor: .B0)
-        
+                
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.conversationLayout.delegate = self
