@@ -26,7 +26,6 @@ class SwipeableInputAccessoryView: BaseView {
     /// An invisible button to handle taps and pan gestures.
     @IBOutlet var gestureButton: UIButton!
     @IBOutlet var characterCountView: CharacterCountView!
-    @IBOutlet var avatarView: BorderedPersonView!
 
     /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
@@ -45,8 +44,6 @@ class SwipeableInputAccessoryView: BaseView {
     // The input container and avatar height together determine the height of the whole view.
     // When either of these two constraints are changed, the superview will resize to fit the new height.
     @IBOutlet var inputContainerHeightConstraint: NSLayoutConstraint!
-    @IBOutlet var avatarHeightConstraint: NSLayoutConstraint!
-    @IBOutlet var avatarTopConstraint: NSLayoutConstraint!
     
     @IBOutlet var textViewCollapsedVerticalHeightContstraint: NSLayoutConstraint!
     @IBOutlet var textViewCollapsedVerticalCenterConstraint: NSLayoutConstraint!
@@ -54,6 +51,7 @@ class SwipeableInputAccessoryView: BaseView {
     @IBOutlet var textViewExpandedBottomPinConstraint: NSLayoutConstraint!
     @IBOutlet var textViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet var textViewTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet var inputBottomConstraint: NSLayoutConstraint!
     
     @IBOutlet var addViewHeightContstrain: NSLayoutConstraint!
     @IBOutlet var addViewWidthContstrain: NSLayoutConstraint!
@@ -74,9 +72,7 @@ class SwipeableInputAccessoryView: BaseView {
         self.inputContainerView.tailLength = 0
         self.inputContainerView.showShadow(withOffset: 8)
         self.inputContainerView.setBubbleColor(ThemeColor.B1.color, animated: false)
-                
-        self.avatarView.set(person: User.current()!)
-        
+                        
         self.addSubview(self.typingIndicatorView)
         self.addSubview(self.unreadMessagesCounter)
     }
@@ -85,7 +81,6 @@ class SwipeableInputAccessoryView: BaseView {
         super.awakeFromNib()
         
         self.expressionView.configure(with: nil)
-        self.avatarView.contextCueView.currentSize = .small
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
     }
 
@@ -107,7 +102,7 @@ class SwipeableInputAccessoryView: BaseView {
         let newInputHeight: CGFloat
         var textViewPadding: CGFloat = Theme.ContentOffset.short.value
         var newAddViewSize: CGFloat = 0
-        var avatarTop: CGFloat = Theme.ContentOffset.long.value
+        var bottomConstraint: CGFloat = 12
         switch inputState {
         case .collapsed:
             NSLayoutConstraint.deactivate([self.textViewExpandedTopPinConstraint,
@@ -158,7 +153,7 @@ class SwipeableInputAccessoryView: BaseView {
             newAddViewSize = self.addView.hasMedia ? AddMediaView.expandedHeight : AddMediaView.collapsedHeight
             newInputHeight = self.window!.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
             
-            avatarTop = 46
+            bottomConstraint = 46
         }
 
         self.unreadMessagesCounter.updateVisibility(for: inputState)
@@ -169,7 +164,7 @@ class SwipeableInputAccessoryView: BaseView {
             self.inputContainerHeightConstraint.constant = newInputHeight
             self.textViewLeadingConstraint.constant = textViewPadding
             self.textViewTrailingConstraint.constant = textViewPadding
-            self.avatarTopConstraint.constant = avatarTop
+            self.inputBottomConstraint.constant = bottomConstraint
             // Layout the window so that our container view also animates
             self.window?.layoutNow()
         }
@@ -178,8 +173,6 @@ class SwipeableInputAccessoryView: BaseView {
     func setShowMessageDetailOptions(shouldShowDetail: Bool, showAvatar: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.expressionView.alpha = shouldShowDetail ? 1.0 : 0.0
-            self.avatarView.alpha = showAvatar ? 1.0 : 0.0
-            self.avatarHeightConstraint.constant = showAvatar ? 44 : 0
                                     
             if shouldShowDetail {
                 self.characterCountView.update(with: self.textView.text.count, max: self.textView.maxLength)

@@ -75,15 +75,15 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                                     for: indexPath,
                                                                     item: cid)
-            cell.messageContent.delegate = self.messageContentDelegate
-            cell.lineView.isHidden = self.snapshot().numberOfItems(inSection: section) - 1 == indexPath.row
+            cell.content.messageContent.delegate = self.messageContentDelegate
+            cell.content.lineView.isHidden = self.snapshot().numberOfItems(inSection: section) - 1 == indexPath.row
             return cell
         case .unreadMessages(let cid):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.unreadConfig,
                                                                     for: indexPath,
                                                                     item: cid)
-            cell.messageContent.delegate = self.messageContentDelegate
-            cell.lineView.isHidden = self.snapshot().numberOfItems(inSection: section) - 1 == indexPath.row
+            cell.content.messageContent.delegate = self.messageContentDelegate
+            cell.content.lineView.isHidden = self.snapshot().numberOfItems(inSection: section) - 1 == indexPath.row
             return cell
         case .add(let reservationId):
             return collectionView.dequeueConfiguredReusableCell(using: self.addConfig,

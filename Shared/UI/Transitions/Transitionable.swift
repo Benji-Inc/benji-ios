@@ -42,6 +42,7 @@ enum TransitionType: Equatable {
     case crossDissolve
     case fill(UIView)
     case blur
+    case modal
 
     #if IOS
     case message(MessageContentView)
@@ -63,6 +64,8 @@ enum TransitionType: Equatable {
         case .message(_):
             return Theme.animationDurationSlow
             #endif
+        case .modal:
+            return Theme.animationDurationSlow
         }
     }
 }

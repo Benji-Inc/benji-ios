@@ -17,7 +17,7 @@ import Intents
 /// A coordinator for displaying a single conversation.
 class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
-    var listVC: ConversationViewController {
+    var conversationVC: ConversationViewController {
         return self.inputHandlerViewController as! ConversationViewController
     }
     
@@ -37,19 +37,11 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     override func start() {
         super.start()
         
-        self.listVC.headerVC.roomsButton.didSelect { [unowned self] in
-            self.finishFlow(with: ())
-        }
-        
-        self.listVC.headerVC.jibImageView.didSelect { [unowned self] in
-            self.showWallet()
-        }
-        
-        self.listVC.headerVC.button.didSelect { [unowned self] in
+        self.conversationVC.headerVC.button.didSelect { [unowned self] in
             self.presentConversationDetail()
         }
         
-        self.listVC.dataSource.handleAddPeopleSelected = { [unowned self] in
+        self.conversationVC.dataSource.handleAddPeopleSelected = { [unowned self] in
             self.presentPeoplePicker()
         }
     }
@@ -64,7 +56,7 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
             let messageID = deepLink.messageId
             guard let cid = deepLink.conversationId else { break }
             Task {
-                await self.listVC.scrollToConversation(with: cid,
+                await self.conversationVC.scrollToConversation(with: cid,
                                                        messageId: messageID,
                                                        animateScroll: false,
                                                        animateSelection: true)
@@ -88,11 +80,11 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
             switch result {
             case .conversation(let cid):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
+                    await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
                 }
             case .openReplies(let cid, let messageId):
                 Task.onMainActorAsync {
-                    await self.listVC.scrollToConversation(with: cid,
+                    await self.conversationVC.scrollToConversation(with: cid,
                                                            messageId: messageId,
                                                            viewReplies: true,
                                                            animateScroll: false)
@@ -151,7 +143,7 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
-                await self.listVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
+                await self.conversationVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
             }
         }
     }

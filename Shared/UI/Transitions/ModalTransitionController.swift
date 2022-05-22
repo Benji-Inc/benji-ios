@@ -11,7 +11,7 @@ import UIKit
 
 #if IOS
 protocol DismissInteractableController where Self: ViewController {
-    var dismissInteractionController: PanDismissInteractionController { get }
+    var dismissInteractionController: PanDismissInteractionController? { get }
 }
 #endif 
 
@@ -23,7 +23,7 @@ class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate
                              source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 
         if let from = source as? TransitionableViewController,
-            let toVC = presented as? TransitionableViewController {
+           let toVC = presented as? TransitionableViewController, toVC.presentationType != .modal {
             toVC.fromTransitionController = from
             return TransitionRouter(fromVC: from, toVC: toVC, operation: .push)
         } else {
@@ -35,12 +35,9 @@ class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate
 
         // Reverse the vc's to go back
         #if IOS
-        if let fromVC = dismissed as? DismissInteractableController {
-
-            var interactionController: PanDismissInteractionController?
-            if fromVC.dismissInteractionController.interactionInProgress {
-                interactionController = fromVC.dismissInteractionController
-            }
+        if let fromVC = dismissed as? DismissInteractableController,
+            let interactionController = fromVC.dismissInteractionController,
+            interactionController.interactionInProgress {
 
             return DismissTransitionController(interactionController: interactionController)
         }

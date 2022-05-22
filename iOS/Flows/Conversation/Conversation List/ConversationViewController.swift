@@ -34,13 +34,14 @@ class ConversationViewController: InputHandlerViewContoller,
     }
     
     var blurView = DarkBlurView()
-    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
+    lazy var dismissInteractionController: PanDismissInteractionController? = nil 
 
     // Collection View
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
 
     lazy var headerVC = ConversationHeaderViewController()
+    private let darkBlur = DarkBlurView()
 
     private(set) var conversationController: ConversationController
 
@@ -62,6 +63,7 @@ class ConversationViewController: InputHandlerViewContoller,
     override var inputAccessoryViewController: UIInputViewController? {
         return self.presentedViewController.isNil ? self.messageInputController : nil
     }
+    
     override var canBecomeFirstResponder: Bool {
         return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
     }
@@ -93,8 +95,16 @@ class ConversationViewController: InputHandlerViewContoller,
     override func initializeViews() {
         super.initializeViews()
         
-        self.view.set(backgroundColor: .B0)
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = false
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
         
+        self.view.insertSubview(self.darkBlur, belowSubview: self.collectionView)
+                
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.conversationLayout.delegate = self
@@ -106,10 +116,12 @@ class ConversationViewController: InputHandlerViewContoller,
         super.viewDidLayoutSubviews()
         
         guard self.presentedViewController.isNil else { return }
+        
+        self.darkBlur.expandToSuperviewSize()
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
-        self.headerVC.view.pinToSafeArea(.top, offset: .noOffset)
+        self.headerVC.view.pinToSafeArea(.top, offset: .standard)
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .xtraLong)
@@ -348,7 +360,7 @@ extension ConversationViewController: MessageSendingViewControllerType {
 extension ConversationViewController: TransitionableViewController {
 
     var presentationType: TransitionType {
-        return .fadeOutIn
+        return .modal
     }
 
     var dismissalType: TransitionType {
@@ -390,8 +402,8 @@ extension ConversationViewController: TransitionableViewController {
 
 extension ConversationViewController: MessageInteractableController {
     
-    var messageContent: MessageContentView {
-        return self.getCentmostMessageCellContent()!
+    var messageContent: MessageContentView? {
+        return self.getCentmostMessageCellContent()
     }
     
     func handleDismissal() {}

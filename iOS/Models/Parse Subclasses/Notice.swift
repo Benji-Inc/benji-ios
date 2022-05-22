@@ -22,7 +22,6 @@ final class Notice: PFObject, PFSubclassing {
         case timeSensitiveMessage = "ALERT_MESSAGE"
         case connectionRequest = "CONNECTION_REQUEST"
         case connectionConfirmed = "CONNECTION_CONFIRMED"
-        case messageRead = "MESSAGE_READ"
         case unreadMessages = "UNREAD_MESSAGES"
         case system
         
@@ -34,8 +33,6 @@ final class Notice: PFObject, PFSubclassing {
                 return "Connection Request"
             case .connectionConfirmed:
                 return "Connection Confirmed"
-            case .messageRead:
-                return "Message Read"
             case .unreadMessages:
                 return "Unread Messages"
             case .system:

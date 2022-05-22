@@ -14,15 +14,15 @@ extension RoomCoordinator {
     // The primary action
     func handleRightOption(with notice: SystemNotice) {
         switch notice.type {
-        case .timeSensitiveMessage, .messageRead:
+        case .timeSensitiveMessage:
             guard let cidValue = notice.attributes?["cid"] as? String,
                   let cid = try? ChannelId(cid: cidValue),
                   let messageId = notice.attributes?["messageId"] as? String else { return }
             if let n = notice.notice {
-                try? n.delete()
+                NoticeStore.shared.delete(notice: n)
                 self.roomVC.reloadNotices()
+                self.presentConversation(with: cid, messageId: messageId)
             }
-            self.presentConversation(with: cid, messageId: messageId)
         case .connectionRequest:
             Task {
                 guard let connectionId = notice.attributes?["connectionId"] as? String,

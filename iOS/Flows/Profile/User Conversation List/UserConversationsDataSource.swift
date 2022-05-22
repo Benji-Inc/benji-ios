@@ -33,13 +33,13 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                     for: indexPath,
                                                                     item: cid)
-            cell.messageContent.delegate = self.messageContentDelegate
+            cell.content.messageContent.delegate = self.messageContentDelegate
             return cell
         case .unreadMessages(let model):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.unreadConfig,
                                                                     for: indexPath,
                                                                     item: model)
-            cell.messageContent.delegate = self.messageContentDelegate
+            cell.content.messageContent.delegate = self.messageContentDelegate
             return cell
         case .empty:
             return collectionView.dequeueConfiguredReusableCell(using: self.emptyConfig,
