@@ -41,6 +41,7 @@ class ConversationViewController: InputHandlerViewContoller,
     lazy var collectionView = ConversationListCollectionView()
 
     lazy var headerVC = ConversationHeaderViewController()
+    private let darkBlur = DarkBlurView()
 
     private(set) var conversationController: ConversationController
 
@@ -62,6 +63,7 @@ class ConversationViewController: InputHandlerViewContoller,
     override var inputAccessoryViewController: UIInputViewController? {
         return self.presentedViewController.isNil ? self.messageInputController : nil
     }
+    
     override var canBecomeFirstResponder: Bool {
         return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
     }
@@ -101,7 +103,9 @@ class ConversationViewController: InputHandlerViewContoller,
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.view.set(backgroundColor: .B0)
+        self.view.insertSubview(self.darkBlur, belowSubview: self.collectionView)
+        
+        //self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
@@ -114,6 +118,8 @@ class ConversationViewController: InputHandlerViewContoller,
         super.viewDidLayoutSubviews()
         
         guard self.presentedViewController.isNil else { return }
+        
+        self.darkBlur.expandToSuperviewSize()
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
