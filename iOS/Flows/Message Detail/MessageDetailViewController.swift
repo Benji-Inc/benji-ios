@@ -15,12 +15,12 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                                    MessageInteractableController {
     var blurView = DarkBlurView()
     
-    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
+    lazy var dismissInteractionController: PanDismissInteractionController? = PanDismissInteractionController(viewController: self)
 
     private(set) var message: Messageable
     var messageController: MessageController?
     
-    var messageContent: MessageContentView {
+    var messageContent: MessageContentView? {
         return self.messageContentView
     }
     
@@ -51,9 +51,9 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.modalPresentationStyle = .overCurrentContext
         
-        self.dismissInteractionController.handlePan(for: self.messageContentView)
-        self.dismissInteractionController.handleCollectionViewPan(for: self.collectionView)
-        self.dismissInteractionController.handlePan(for: self.pullView)
+        self.dismissInteractionController?.handlePan(for: self.messageContentView)
+        self.dismissInteractionController?.handleCollectionViewPan(for: self.collectionView)
+        self.dismissInteractionController?.handlePan(for: self.pullView)
         
         self.view.addSubview(self.blurView)
         
@@ -80,7 +80,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         self.messageContentView.centerOnX()
         self.messageContentView.bottom = self.view.height * 0.5
         
-        self.pullView.match(.bottom, to: .top, of: self.messageContent)
+        self.pullView.match(.bottom, to: .top, of: self.messageContentView)
         self.pullView.centerOnX()
         
         super.viewDidLayoutSubviews()
@@ -95,7 +95,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     
     override func layoutCollectionView(_ collectionView: UICollectionView) {
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.height = self.view.height - self.messageContent.bottom - Theme.ContentOffset.xtraLong.value
+        self.collectionView.height = self.view.height - self.messageContentView.bottom - Theme.ContentOffset.xtraLong.value
     }
     
     override func collectionViewDataWasLoaded() {
@@ -153,7 +153,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                 case .remove(let msg):
                     self.message = msg
                 }
-                self.messageContent.configure(with: self.message)
+                self.messageContentView.configure(with: self.message)
                 self.reloadDetailData()
             }).store(in: &self.cancellables)
     }
@@ -252,7 +252,7 @@ extension MessageDetailViewController: TransitionableViewController {
     func handleInitialDismissal() {}
     
     func handleDismissal() {
-        self.pullView.match(.bottom, to: .top, of: self.messageContent)
+        self.pullView.match(.bottom, to: .top, of: self.messageContentView)
         self.collectionView.top = self.view.height
         self.topGradientView.match(.top, to: .top, of: self.collectionView)
     }

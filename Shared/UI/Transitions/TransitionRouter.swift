@@ -80,6 +80,8 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
             self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
         case .blur:
             self.blur(transitionContext: transitionContext)
+        case .modal:
+            break 
 #if IOS
         case .message(let presentedView):
             // Message transitions require that both VCs support the message transition style.

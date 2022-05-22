@@ -30,17 +30,17 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.stackedView)
         self.stackedView.max = 7
         
-        self.view.addSubview(self.jibImageView)
-        self.jibImageView.contentMode = .scaleToFill
-        self.jibImageView.isUserInteractionEnabled = true 
+//        self.view.addSubview(self.jibImageView)
+//        self.jibImageView.contentMode = .scaleToFill
+//        self.jibImageView.isUserInteractionEnabled = true 
         
         self.view.addSubview(self.topicLabel)
         self.topicLabel.textAlignment = .center
         
         self.view.addSubview(self.button)
         
-        self.view.addSubview(self.roomsButton)
-        self.roomsButton.configure(for: .inner)
+//        self.view.addSubview(self.roomsButton)
+//        self.roomsButton.configure(for: .inner)
         
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()

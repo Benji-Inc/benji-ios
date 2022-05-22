@@ -51,6 +51,15 @@ class NoticeStore {
         return existing
     }
     
+    func delete(notice: Notice) {
+        self.allNotices.remove(object: notice)
+        do {
+            try notice.delete()
+        } catch {
+            logError(error)
+        }
+    }
+    
     private func subscribeToUpdates() {
         Client.shared.shouldPrintWebSocketLog = false
 

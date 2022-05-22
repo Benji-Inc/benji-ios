@@ -34,7 +34,7 @@ class ConversationViewController: InputHandlerViewContoller,
     }
     
     var blurView = DarkBlurView()
-    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
+    lazy var dismissInteractionController: PanDismissInteractionController? = nil 
 
     // Collection View
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
@@ -93,6 +93,14 @@ class ConversationViewController: InputHandlerViewContoller,
     override func initializeViews() {
         super.initializeViews()
         
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = false
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
+        
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.collectionView)
@@ -109,7 +117,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
-        self.headerVC.view.pinToSafeArea(.top, offset: .noOffset)
+        self.headerVC.view.pinToSafeArea(.top, offset: .standard)
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .xtraLong)
@@ -348,7 +356,7 @@ extension ConversationViewController: MessageSendingViewControllerType {
 extension ConversationViewController: TransitionableViewController {
 
     var presentationType: TransitionType {
-        return .fadeOutIn
+        return .modal
     }
 
     var dismissalType: TransitionType {
@@ -390,8 +398,8 @@ extension ConversationViewController: TransitionableViewController {
 
 extension ConversationViewController: MessageInteractableController {
     
-    var messageContent: MessageContentView {
-        return self.getCentmostMessageCellContent()!
+    var messageContent: MessageContentView? {
+        return self.getCentmostMessageCellContent()
     }
     
     func handleDismissal() {}

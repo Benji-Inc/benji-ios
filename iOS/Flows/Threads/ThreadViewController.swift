@@ -28,7 +28,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     
     var isPresentingImage: Bool = false
     
-    var messageContent: MessageContentView {
+    var messageContent: MessageContentView? {
         if let first = self.collectionView.indexPathsForSelectedItems?.first,
            let cell = self.collectionView.cellForItem(at: first) as? MessageCell {
             return cell.content
@@ -82,7 +82,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return self.presentedViewController.isNil
     }
 
-    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
+    lazy var dismissInteractionController: PanDismissInteractionController? = PanDismissInteractionController(viewController: self)
 
     @Published var state: ConversationUIState = .read
 
@@ -123,9 +123,9 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.collectionView.clipsToBounds = false
         self.configureCollectionLayout(for: .read)
 
-        self.dismissInteractionController.handleCollectionViewPan(for: self.collectionView)
-        self.dismissInteractionController.handlePan(for: self.parentMessageView)
-        self.dismissInteractionController.handlePan(for: self.pullView)
+        self.dismissInteractionController?.handleCollectionViewPan(for: self.collectionView)
+        self.dismissInteractionController?.handlePan(for: self.parentMessageView)
+        self.dismissInteractionController?.handlePan(for: self.pullView)
         
         KeyboardManager.shared.$currentEvent
             .mainSink { [weak self] currentEvent in
@@ -154,7 +154,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.blurView.expandToSuperviewSize()
         
-        self.pullView.pinToSafeAreaTop()
+        self.pullView.pin(.top, offset: .standard)
         self.pullView.centerOnX()
 
         self.parentMessageView.match(.top, to: .bottom, of: self.pullView)
@@ -396,7 +396,7 @@ extension ThreadViewController: TransitionableViewController {
     }
     
     func handleDismissal() {
-        self.pullView.bottom = self.messageContent.top
+        self.pullView.bottom = self.parentMessageView.top
     }
     
     func handleCompletedDismissal() {

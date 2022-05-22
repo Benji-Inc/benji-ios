@@ -103,32 +103,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             self.imageView.set(person: connection.nonMeUser)
             self.rightButtonLabel.setText("Ok")
             self.leftButtonLabel.setText("")
-        case .messageRead:
-            guard let cidValue = notice.attributes?["cid"] as? String,
-                  let cid = try? ChannelId(cid: cidValue),
-                  let messageId = notice.attributes?["messageId"] as? String,
-                    let userIds = notice.attributes?["userIds"] as? [String] else {
-                self.showError()
-                return
-            }
-            
-            let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
-            try? await controller.synchronize()
-            
-            guard let message = controller.message else {
-                self.showError()
-                return
-            }
-            
-            guard let readers = await userIds.asyncMap({ userId in
-                return await PeopleStore.shared.getPerson(withPersonId: userId)
-            }).first else { return }
-            
-            self.titleLabel.setText("\(readers!.givenName.firstCapitalized) read:")
-            self.descriptionLabel.setText(message.text)
-            self.rightButtonLabel.setText("View")
-            self.leftButtonLabel.setText("")
-            self.imageView.set(person: readers)
+
         case .unreadMessages:
             let count = notice.notice?.unreadMessages.count ?? 0
             

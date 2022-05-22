@@ -34,7 +34,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     override func start() {
         super.start()
         
-        self.messageVC.messageContent.delegate = self
+        self.messageVC.messageContent?.delegate = self
         
         self.messageVC.$selectedItems
             .removeDuplicates()

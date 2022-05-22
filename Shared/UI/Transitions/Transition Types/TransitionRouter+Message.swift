@@ -11,7 +11,7 @@ import UIKit
 
 protocol MessageInteractableController where Self: DismissInteractableController {
     var blurView: DarkBlurView { get set }
-    var messageContent: MessageContentView { get }
+    var messageContent: MessageContentView? { get }
     func handleDismissal()
     func handleInitialDismissal()
     func handleCompletedDismissal()
