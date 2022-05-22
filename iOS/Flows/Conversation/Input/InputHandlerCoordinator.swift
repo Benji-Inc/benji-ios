@@ -69,10 +69,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             self.presentAttachments()
         }
         
-        self.inputHandlerViewController.swipeableVC.swipeInputView.avatarView.didSelect { [unowned self] in
-            self.presentProfile(for: User.current()!)
-        }
-        
         self.inputHandlerViewController.swipeableVC.swipeInputView.unreadMessagesCounter
             .didSelect { [unowned self] in
                 self.scrollToUnreadMessage()
