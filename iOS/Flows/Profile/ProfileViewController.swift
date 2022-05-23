@@ -33,6 +33,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
+    
+    private let darkBlurView = DarkBlurView()
         
     init(with person: PersonType) {
         self.person = person
@@ -54,8 +56,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.view.set(backgroundColor: .B0)
-                
+        self.view.insertSubview(self.darkBlurView, belowSubview: self.collectionView)
+                        
         self.view.addSubview(self.header)
         
         self.addChild(viewController: self.contextCuesVC, toView: self.view)
@@ -139,6 +141,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.contextCueHeaderLabel.pin(.left, offset: .xtraLong)
         
         super.viewDidLayoutSubviews()
+        
+        self.darkBlurView.expandToSuperviewSize()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
         self.contextCuesVC.view.height = 44

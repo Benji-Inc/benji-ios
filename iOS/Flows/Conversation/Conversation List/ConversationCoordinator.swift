@@ -37,6 +37,10 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     override func start() {
         super.start()
         
+        self.conversationVC.headerVC.closeButton.didSelect { [unowned self] in
+            self.finishFlow(with: ())
+        }
+        
         self.conversationVC.headerVC.button.didSelect { [unowned self] in
             self.presentConversationDetail()
         }

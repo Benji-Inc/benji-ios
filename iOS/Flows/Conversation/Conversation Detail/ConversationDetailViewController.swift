@@ -28,6 +28,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         
     let conversationController: ConversationController
     
+    let darkBlurView = DarkBlurView()
+    
     init(with cid: ConversationId) {
         self.conversationController = ConversationController.controller(cid)
         let cv = CollectionView(layout: ConversationDetailCollectionViewLayout())
@@ -54,32 +56,12 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.view.set(backgroundColor: .B0)
+        self.view.insertSubview(self.darkBlurView, belowSubview: self.collectionView)
         
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         
         self.collectionView.allowsMultipleSelection = false
-        
-        Client.shared.shouldPrintWebSocketLog = false
-        let reservationQuery = Reservation.allUnclaimedWithContactQuery()
-        let reservationSubscription = Client.shared.subscribe(reservationQuery)
-        reservationSubscription.handleEvent { [unowned self] query, event in
-            
-            // If a reservation related to this conversation is updated, then reload the data.
-            switch event {
-            case .entered(let object), .created(let object),
-                    .updated(let object), .left(let object), .deleted(let object):
-                
-                guard let reservation = object as? Reservation,
-                      let cid = reservation.conversationCid else { return }
-                
-                let conversation = conversationController.conversation
-                
-                guard cid == self.conversationController.cid?.description else { return }
-                self.startLoadDataTask(with: conversation)
-            }
-        }
     }
     
     override func viewDidLoad() {
@@ -90,6 +72,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.darkBlurView.expandToSuperviewSize()
         
         self.topGradientView.expandToSuperviewWidth()
         self.topGradientView.height = Theme.ContentOffset.screenPadding.value
@@ -129,18 +113,12 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         self.conversationCancellables.removeAll()
         
         conversationController
-            .typingUsersPublisher
-            .mainSink(receiveValue: { [unowned self] typingUsers in
-                self.dataSource.reconfigureAllItems()
-            }).store(in: &self.conversationCancellables)
-        
-        conversationController
             .memberEventPublisher
             .mainSink(receiveValue: { [unowned self] event in
                 switch event as MemberEvent {
-                case let event as MemberAddedEvent:
+                case _ as MemberAddedEvent:
                     Task {
-                        await self.add(member: event.member)
+                        await self.reloadPeople()
                     }
                 case let event as MemberRemovedEvent:
                     let member = Member(personId: event.user.personId,
@@ -154,25 +132,31 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
                     break
                 }
             }).store(in: &self.conversationCancellables)
+        
+        Client.shared.shouldPrintWebSocketLog = false
+        let reservationQuery = Reservation.allUnclaimedWithContactQuery()
+        let reservationSubscription = Client.shared.subscribe(reservationQuery)
+        reservationSubscription.handleEvent { [unowned self] query, event in
+            
+            // If a reservation related to this conversation is updated, then reload the data.
+            switch event {
+            case .entered(let object), .created(let object),
+                    .updated(let object), .left(let object), .deleted(let object):
+                
+                guard let reservation = object as? Reservation,
+                      let cid = reservation.conversationCid else { return }
+                
+                let conversation = conversationController.conversation
+                
+                guard cid == self.conversationController.cid?.description else { return }
+                self.startLoadDataTask(with: conversation)
+            }
+        }
     }
     
-    func reloadPeople(with people: [Person]) async {
-        let items: [ConversationDetailItemType] = people.compactMap({ member in
-            let member = Member(personId: member.personId,
-                                conversationController: self.conversationController)
-            return .member(member)
-        })
-        var snapshot = self.dataSource.snapshot()
-        snapshot.setItems([], in: .people)
-        snapshot.setItems(items, in: .people)
-        await self.dataSource.apply(snapshot)
-    }
-    
-    private func add(member: ChatChannelMember) async {
+    func reloadPeople() async {
         guard let conversation = self.conversationController.conversation else { return }
-        
-        let newItem = Member(personId: member.personId, conversationController: self.conversationController)
-        
+                
         let members = await PeopleStore.shared.getPeople(for: conversation)
         
         var items: [ConversationDetailCollectionViewDataSource.ItemType] = members.compactMap({ value in
@@ -181,10 +165,11 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             return .member(item)
         })
         
-        items.append(.member(newItem))
-        
+        if conversation.isOwnedByMe {
+            items.append(.detail(.add))
+        }
+                
         var snapshot = self.dataSource.snapshot()
-        snapshot.setItems([], in: .people)
         snapshot.setItems(items, in: .people)
         await self.dataSource.apply(snapshot)
     }

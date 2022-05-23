@@ -19,8 +19,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     typealias PeopleSection = PeopleCollectionViewDataSource.SectionType
     typealias PersonItem = PeopleCollectionViewDataSource.ItemType
 
-    let leftItem = UIBarButtonItem(title: "Invites Left", image: nil, primaryAction: nil, menu: nil)
-
     private(set) var reservations: [Reservation] = []
     
     let button = ThemeButton()
@@ -72,8 +70,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     
     private func setupNavigationBar() {
         self.navigationItem.title = "Contacts"
-
-        self.leftItem.tintColor = ThemeColor.D1.color
         
         let cancel = UIAction { _ in
             self.dismiss(animated: true, completion: nil)
@@ -85,9 +81,14 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         search.searchBar.tintColor = ThemeColor.D1.color
         self.navigationItem.searchController = search
         
-        self.leftItem.title = ""
+        let reset = UIAction { _ in
+            // reset all selected items
+            self.selectedPeople = []
+        }
+        let leftItem = UIBarButtonItem(title: "Reset", image: nil, primaryAction: reset, menu: nil)
+        leftItem.tintColor = ThemeColor.D1.color
         
-        self.navigationItem.leftBarButtonItem = self.leftItem
+        self.navigationItem.leftBarButtonItem = leftItem
         self.navigationItem.rightBarButtonItem = rightItem
     }
     
@@ -253,7 +254,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private func loadContacts() {
         Task {
             self.reservations = await Reservation.getAllUnclaimed()
-            self.updateNavLeftItem()
             
             let contacts: [Person] = await ContactsManager.shared.fetchContacts().compactMap({ contact in
                 // Make sure we're not already showing a user related to this contact.
@@ -272,16 +272,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
             await self.dataSource.appendItems(contactItems, toSection: .people)
         }.add(to: self.autocancelTaskPool)
-    }
-    
-    private func updateNavLeftItem() {
-        if self.reservations.count == 0 {
-            self.leftItem.title = "0 Invites"
-        } else if self.reservations.count == 1 {
-            self.leftItem.title = "1 Invite"
-        } else {
-            self.leftItem.title = "\(self.reservations.count) Invites"
-        }
     }
 
     // MARK: - UICollectionViewDelegate

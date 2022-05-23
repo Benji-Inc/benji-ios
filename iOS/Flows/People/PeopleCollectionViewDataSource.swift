@@ -25,7 +25,7 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
     private let footerConfig = ManageableFooterRegistration<PeopleFooterView>().provider
     
     var didSelectAddContacts: CompletionOptional = nil
-    
+        
     // MARK: - Cell Dequeueing
 
     override func dequeueCell(with collectionView: UICollectionView,

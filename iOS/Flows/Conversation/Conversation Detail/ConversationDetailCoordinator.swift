@@ -24,10 +24,10 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     init(with cid: ConversationId,
          router: Router,
          deepLink: DeepLinkable?) {
-        self.cid = cid 
+        self.cid = cid
         super.init(router: router, deepLink: deepLink)
     }
-
+    
     override func toPresentable() -> DismissableVC {
         return self.detailVC
     }
@@ -48,7 +48,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 guard let person = PeopleStore.shared.people.first(where: { person in
                     return person.personId == member.personId
                 }) else { return }
-
+                
                 self.presentProfile(for: person)
             case .info(_):
                 break
@@ -66,7 +66,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     
     func presentProfile(for person: PersonType) {
         self.removeChild()
-
+        
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] result in
@@ -85,7 +85,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     
     func presentConversationTitleAlert(for cid: ConversationId) {
         let controller = ChatClient.shared.channelController(for: cid)
-
+        
         let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Name"
@@ -95,7 +95,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             if let textField = alertController.textFields?.first,
                let text = textField.text,
                !text.isEmpty {
-
+                
                 controller.updateChannel(name: text, imageURL: nil, team: nil) { _ in
                     alertController.dismiss(animated: true, completion: {
                         Task {
@@ -105,9 +105,9 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 }
             }
         })
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-
+        
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
         
@@ -140,37 +140,32 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         
         let primaryAction = UIAlertAction(title: title, style: style, handler: {
             (action : UIAlertAction!) -> Void in
-            
-            switch option {
-            case .hide:
-                Task {
+            Task {
+                switch option {
+                case .hide:
                     try? await controller.hideChannel(clearHistory: false)
                     Task.onMainActor {
                         self.finishFlow(with: nil)
                     }
-                }.add(to: self.taskPool)
-            case .leave:
-                Task {
+                case .leave:
                     let user = User.current()!.objectId!
                     try? await controller.removeMembers(userIds: Set.init([user]))
                     Task.onMainActor {
                         self.finishFlow(with: nil)
                     }
-                }.add(to: self.taskPool)
-            case .delete:
-                Task {
+                case .delete:
                     try? await controller.deleteChannel()
                     Task.onMainActor {
                         self.finishFlow(with: nil)
                     }
-                }.add(to: self.taskPool)
-            case .add:
-                return 
-            }
+                case .add:
+                    return
+                }
+            }.add(to: self.taskPool)
         })
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-
+        
         alertController.addAction(primaryAction)
         alertController.addAction(cancelAction)
         
@@ -179,9 +174,9 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     
     func presentPeoplePicker() {
         guard let conversation = ConversationController.controller(self.cid).conversation else { return }
-
+        
         self.removeChild()
-
+        
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.selectedConversationCID = self.cid
         
@@ -199,36 +194,37 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     }
     
     private func handleInviteFlowEnded(givenInvitedPeople invitedPeople: [Person],
-                                                       activeConversation: Conversation) {
-
+                                       activeConversation: Conversation) {
+        
         if !invitedPeople.isEmpty {
-            self.add(people: invitedPeople, to: activeConversation)
             Task {
-                await self.detailVC.reloadPeople(with: invitedPeople)
+                let controller = ChatClient.shared.channelController(for: activeConversation.cid)
+                await self.add(people: invitedPeople, to: controller)
+                try? await controller.synchronize()
+                await self.detailVC.reloadPeople()
             }
-        } 
+        }
     }
     
-    func add(people: [Person], to conversation: Conversation) {
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
-
-        let acceptedConnections = people.compactMap { person in
-            return person.connection
-        }.filter { connection in
-            return connection.status == .accepted
-        }
-
-        guard !acceptedConnections.isEmpty else { return }
-
-        let members = acceptedConnections.compactMap { connection in
-            return connection.nonMeUser?.objectId
-        }
-        controller.addMembers(userIds: Set(members)) { error in
-            guard error.isNil else { return }
-
-            self.showPeopleAddedToast(for: acceptedConnections)
-            Task {
-                try await controller.synchronize()
+    func add(people: [Person], to controller: ConversationController) async {
+        return await withCheckedContinuation { continuation in
+            let acceptedConnections = people.compactMap { person in
+                return person.connection
+            }.filter { connection in
+                return connection.status == .accepted
+            }
+            
+            guard !acceptedConnections.isEmpty else {
+                continuation.resume(returning: ())
+                return
+            }
+            
+            let members = acceptedConnections.compactMap { connection in
+                return connection.nonMeUser?.objectId
+            }
+            controller.addMembers(userIds: Set(members)) { _ in
+                self.showPeopleAddedToast(for: acceptedConnections)
+                continuation.resume(returning: ())
             }
         }
     }
@@ -262,7 +258,7 @@ extension ConversationDetailCoordinator: MessageContentDelegate {
     
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
         let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
-
+        
         switch message.kind {
         case .photo(photo: let photo, _):
             self.presentMediaFlow(for: [photo], startingItem: nil, message: message)

@@ -82,7 +82,6 @@ class ConversationViewController: InputHandlerViewContoller,
         self.cid = cid
         self.startingMessageID = startingMessageID
         self.openReplies = openReplies
-        
         self.conversationController = ChatClient.shared.channelController(for: cid)
 
         super.init()
