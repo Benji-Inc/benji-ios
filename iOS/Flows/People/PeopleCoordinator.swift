@@ -87,6 +87,7 @@ extension PeopleCoordinator {
     }
 
     func invite(person: Person) async -> Connection? {
+        
         await self.peopleNavController.peopleVC.showLoading(for: person)
 
         // You can't invite a person without a phone number.
@@ -96,6 +97,7 @@ extension PeopleCoordinator {
         if let user = await self.findUser(withPhoneNumber: phoneNumber) {
             return await self.presentConnectionFlow(for: user)
         } else if let contact = person.cnContact, let reservation = self.getReservation(for: contact) {
+            
             // Get a valid reservation object that we can use to invite this person. Then prompt the user
             // to send them a text
             await self.sendText(to: contact, with: reservation)

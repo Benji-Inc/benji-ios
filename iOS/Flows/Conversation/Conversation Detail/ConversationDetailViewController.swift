@@ -113,18 +113,12 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         self.conversationCancellables.removeAll()
         
         conversationController
-            .typingUsersPublisher
-            .mainSink(receiveValue: { [unowned self] typingUsers in
-                self.dataSource.reconfigureAllItems()
-            }).store(in: &self.conversationCancellables)
-        
-        conversationController
             .memberEventPublisher
             .mainSink(receiveValue: { [unowned self] event in
                 switch event as MemberEvent {
-                case let event as MemberAddedEvent:
+                case _ as MemberAddedEvent:
                     Task {
-                        await self.add(member: event.member)
+                        await self.reloadPeople()
                     }
                 case let event as MemberRemovedEvent:
                     let member = Member(personId: event.user.personId,
@@ -160,23 +154,9 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         }
     }
     
-    func reloadPeople(with people: [Person]) async {
-        let items: [ConversationDetailItemType] = people.compactMap({ member in
-            let member = Member(personId: member.personId,
-                                conversationController: self.conversationController)
-            return .member(member)
-        })
-        var snapshot = self.dataSource.snapshot()
-        snapshot.setItems([], in: .people)
-        snapshot.setItems(items, in: .people)
-        await self.dataSource.apply(snapshot)
-    }
-    
-    private func add(member: PersonType) async {
+    func reloadPeople() async {
         guard let conversation = self.conversationController.conversation else { return }
-        
-        let newItem = Member(personId: member.personId, conversationController: self.conversationController)
-        
+                
         let members = await PeopleStore.shared.getPeople(for: conversation)
         
         var items: [ConversationDetailCollectionViewDataSource.ItemType] = members.compactMap({ value in
@@ -185,8 +165,10 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             return .member(item)
         })
         
-        items.append(.member(newItem))
-        
+        if conversation.isOwnedByMe {
+            items.append(.detail(.add))
+        }
+                
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .people)
         await self.dataSource.apply(snapshot)

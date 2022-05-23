@@ -197,33 +197,34 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                                        activeConversation: Conversation) {
         
         if !invitedPeople.isEmpty {
-            self.add(people: invitedPeople, to: activeConversation)
             Task {
-                await self.detailVC.reloadPeople(with: invitedPeople)
+                let controller = ChatClient.shared.channelController(for: activeConversation.cid)
+                await self.add(people: invitedPeople, to: controller)
+                try? await controller.synchronize()
+                await self.detailVC.reloadPeople()
             }
         }
     }
     
-    func add(people: [Person], to conversation: Conversation) {
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
-        
-        let acceptedConnections = people.compactMap { person in
-            return person.connection
-        }.filter { connection in
-            return connection.status == .accepted
-        }
-        
-        guard !acceptedConnections.isEmpty else { return }
-        
-        let members = acceptedConnections.compactMap { connection in
-            return connection.nonMeUser?.objectId
-        }
-        controller.addMembers(userIds: Set(members)) { error in
-            guard error.isNil else { return }
+    func add(people: [Person], to controller: ConversationController) async {
+        return await withCheckedContinuation { continuation in
+            let acceptedConnections = people.compactMap { person in
+                return person.connection
+            }.filter { connection in
+                return connection.status == .accepted
+            }
             
-            self.showPeopleAddedToast(for: acceptedConnections)
-            Task {
-                try await controller.synchronize()
+            guard !acceptedConnections.isEmpty else {
+                continuation.resume(returning: ())
+                return
+            }
+            
+            let members = acceptedConnections.compactMap { connection in
+                return connection.nonMeUser?.objectId
+            }
+            controller.addMembers(userIds: Set(members)) { _ in
+                self.showPeopleAddedToast(for: acceptedConnections)
+                continuation.resume(returning: ())
             }
         }
     }
