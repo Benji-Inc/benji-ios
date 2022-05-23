@@ -28,6 +28,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         
     let conversationController: ConversationController
     
+    let darkBlurView = DarkBlurView()
+    
     init(with cid: ConversationId) {
         self.conversationController = ConversationController.controller(cid)
         let cv = CollectionView(layout: ConversationDetailCollectionViewLayout())
@@ -54,32 +56,12 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.view.set(backgroundColor: .B0)
+        self.view.insertSubview(self.darkBlurView, belowSubview: self.collectionView)
         
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         
         self.collectionView.allowsMultipleSelection = false
-        
-        Client.shared.shouldPrintWebSocketLog = false
-        let reservationQuery = Reservation.allUnclaimedWithContactQuery()
-        let reservationSubscription = Client.shared.subscribe(reservationQuery)
-        reservationSubscription.handleEvent { [unowned self] query, event in
-            
-            // If a reservation related to this conversation is updated, then reload the data.
-            switch event {
-            case .entered(let object), .created(let object),
-                    .updated(let object), .left(let object), .deleted(let object):
-                
-                guard let reservation = object as? Reservation,
-                      let cid = reservation.conversationCid else { return }
-                
-                let conversation = conversationController.conversation
-                
-                guard cid == self.conversationController.cid?.description else { return }
-                self.startLoadDataTask(with: conversation)
-            }
-        }
     }
     
     override func viewDidLoad() {
@@ -90,6 +72,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.darkBlurView.expandToSuperviewSize()
         
         self.topGradientView.expandToSuperviewWidth()
         self.topGradientView.height = Theme.ContentOffset.screenPadding.value
@@ -154,6 +138,26 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
                     break
                 }
             }).store(in: &self.conversationCancellables)
+        
+        Client.shared.shouldPrintWebSocketLog = false
+        let reservationQuery = Reservation.allUnclaimedWithContactQuery()
+        let reservationSubscription = Client.shared.subscribe(reservationQuery)
+        reservationSubscription.handleEvent { [unowned self] query, event in
+            
+            // If a reservation related to this conversation is updated, then reload the data.
+            switch event {
+            case .entered(let object), .created(let object),
+                    .updated(let object), .left(let object), .deleted(let object):
+                
+                guard let reservation = object as? Reservation,
+                      let cid = reservation.conversationCid else { return }
+                
+                let conversation = conversationController.conversation
+                
+                guard cid == self.conversationController.cid?.description else { return }
+                self.startLoadDataTask(with: conversation)
+            }
+        }
     }
     
     func reloadPeople(with people: [Person]) async {

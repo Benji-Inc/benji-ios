@@ -99,7 +99,7 @@ class ConversationViewController: InputHandlerViewContoller,
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = false
+            sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
@@ -121,7 +121,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
-        self.headerVC.view.pinToSafeArea(.top, offset: .standard)
+        self.headerVC.view.pinToSafeArea(.top, offset: .long)
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .xtraLong)

@@ -34,6 +34,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     lazy var header = WalletHeaderView()
     lazy var segmentControl = WalletSegmentControl()
     
+    let darkBlurView = DarkBlurView()
+    
     init() {
         super.init(with: WalletCollectionView())
     }
@@ -59,6 +61,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
+        self.view.insertSubview(self.darkBlurView, belowSubview: self.collectionView)
+        
         self.view.addSubview(self.header)
         self.backgroundView.set(backgroundColor: .B6)
         self.view.addSubview(self.topGradientView)
@@ -83,6 +87,8 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         self.header.centerOnX()
         
         super.viewDidLayoutSubviews()
+        
+        self.darkBlurView.expandToSuperviewSize()
         
         self.topGradientView.expandToSuperviewWidth()
         self.topGradientView.height = 34
@@ -134,7 +140,6 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             }
         }
                         
-        self.view.set(backgroundColor: .B0)
         self.loadInitialData()
     }
 

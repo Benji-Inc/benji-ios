@@ -819,9 +819,6 @@
 		D6B2B64C2839570B007D507B /* ImageSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B6482839570B007D507B /* ImageSymbol.swift */; };
 		D6B2B64E2839570B007D507B /* ImageSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B6482839570B007D507B /* ImageSymbol.swift */; };
 		D6B2B650283A9150007D507B /* ConversationContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B64F283A9150007D507B /* ConversationContentView.swift */; };
-		D6B2B652283BF0F4007D507B /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B651283BF0F4007D507B /* ModalViewController.swift */; };
-		D6B2B653283BF0F4007D507B /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B651283BF0F4007D507B /* ModalViewController.swift */; };
-		D6B2B654283BF0F4007D507B /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B651283BF0F4007D507B /* ModalViewController.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PeopleStore.swift */; };
@@ -1393,7 +1390,6 @@
 		D6B2B646283596C9007D507B /* MediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewController.swift; sourceTree = "<group>"; };
 		D6B2B6482839570B007D507B /* ImageSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSymbol.swift; sourceTree = "<group>"; };
 		D6B2B64F283A9150007D507B /* ConversationContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationContentView.swift; sourceTree = "<group>"; };
-		D6B2B651283BF0F4007D507B /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6B95AF2272324BD00FBE66A /* PeopleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleStore.swift; sourceTree = "<group>"; };
@@ -2341,7 +2337,6 @@
 				D61EC0DF21D30E3F00204BEE /* FullScreenViewController.swift */,
 				D6D1461221D583E500CD8CE4 /* NavigationController.swift */,
 				D61EC0C121D3071400204BEE /* ViewController.swift */,
-				D6B2B651283BF0F4007D507B /* ModalViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -3253,7 +3248,6 @@
 				D611281C2804DBC600574B96 /* Character+Extensions.swift in Sources */,
 				D611289B2804E10300574B96 /* Transitionable.swift in Sources */,
 				D61128A82804E5D200574B96 /* TransitionRouter.swift in Sources */,
-				D6B2B654283BF0F4007D507B /* ModalViewController.swift in Sources */,
 				D611282F2804DBDF00574B96 /* Sequence+Extensions.swift in Sources */,
 				D611288F2804DE1A00574B96 /* ThemeLabel.swift in Sources */,
 				D61128302804DBDF00574B96 /* Publisher+Extensions.swift in Sources */,
@@ -3704,7 +3698,6 @@
 				802EDDAB27ECD496005ECA9C /* String+DataTypes.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
-				D6B2B652283BF0F4007D507B /* ModalViewController.swift in Sources */,
 				D6079705279F574E000D0715 /* PersonCell.swift in Sources */,
 				D678EC2426F530850071DB0D /* Circle.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
@@ -3926,7 +3919,6 @@
 				D63DB23E25E9992900F6B323 /* UNNotification+Extensions.swift in Sources */,
 				D6AE0FAD267D037900C6B048 /* User+INPerson.swift in Sources */,
 				D63DB1FE25E968C300F6B323 /* NotificationViewController.swift in Sources */,
-				D6B2B653283BF0F4007D507B /* ModalViewController.swift in Sources */,
 				D63DB27125E9997F00F6B323 /* ImageDisplayable.swift in Sources */,
 				D63DB25225E9995100F6B323 /* SessionManager.swift in Sources */,
 				D6BF814B2721EE84006D7760 /* ToastScheduler.swift in Sources */,
