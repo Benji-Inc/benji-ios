@@ -72,7 +72,7 @@ class UserOnboardingViewController: ViewController {
         self.personView.centerOnX()
         self.personView.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)
 
-        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
+        let maxWidth = self.view.width - Theme.ContentOffset.screenPadding.value.doubled
         self.textView.setSize(withMaxWidth: maxWidth)
         self.textView.centerOnX()
         

@@ -32,13 +32,14 @@ class TextEntryField: BaseView, Sizeable {
         super.initializeSubviews()
         
         self.addSubview(self.speechBubble)
-        self.speechBubble.setBubbleColor(ThemeColor.B1.color, animated: false)
+        self.speechBubble.tailLength = 0 
+        self.speechBubble.setBubbleColor(ThemeColor.B1.color,
+                                         animated: false)
 
         self.showShadow(withOffset: 8)
         
         self.set(backgroundColor: .clear)
         
-
         self.addSubview(self.textField)
 
         self.textField.returnKeyType = .done
@@ -63,7 +64,7 @@ class TextEntryField: BaseView, Sizeable {
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {
-        return 40 + self.speechBubble.tailLength + Theme.ContentOffset.long.value.doubled
+        return 64
     }
     
     override func layoutSubviews() {

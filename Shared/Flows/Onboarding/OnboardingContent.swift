@@ -44,7 +44,7 @@ enum OnboardingContent: Switchable {
             if let user = user, user.objectId != PFConfig.current().adminUserId {
                 return LocalizedString(id: "",
                                        arguments: [],
-                                       default: "Confirm your number, to claim your reservation")
+                                       default: "Confirm your number, to claim your spot")
             } else {
                 return LocalizedString(id: "",
                                        arguments: [],
