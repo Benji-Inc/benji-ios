@@ -22,6 +22,7 @@ extension RoomCoordinator {
                                                   startingMessageId: messageId,
                                                   openReplies: openReplies)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
+            coordinator.toPresentable().dismiss(animated: true)
         })
         
         self.router.present(coordinator, source: self.roomVC)

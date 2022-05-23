@@ -18,6 +18,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .small)
     
+    let imageView = UIImageView(image: UIImage(systemName: "chevron.down.circle"))
+    let closeButton = ThemeButton()
+    
     private var state: ConversationUIState = .read
         
     override func initializeViews() {
@@ -32,6 +35,13 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.topicLabel.textAlignment = .center
         
         self.view.addSubview(self.button)
+        
+        self.view.addSubview(self.imageView)
+        self.imageView.tintColor = ThemeColor.white.color
+        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.alpha = 0.25
+        
+        self.view.addSubview(self.closeButton)
         
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
@@ -54,6 +64,13 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.imageView.squaredSize = 24
+        self.imageView.pinToSafeAreaRight()
+        self.imageView.pin(.top, offset: .custom(6))
+        
+        self.closeButton.squaredSize = 44
+        self.closeButton.center = self.imageView.center
         
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()

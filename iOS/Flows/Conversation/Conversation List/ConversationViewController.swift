@@ -82,7 +82,6 @@ class ConversationViewController: InputHandlerViewContoller,
         self.cid = cid
         self.startingMessageID = startingMessageID
         self.openReplies = openReplies
-        
         self.conversationController = ChatClient.shared.channelController(for: cid)
 
         super.init()
@@ -99,7 +98,7 @@ class ConversationViewController: InputHandlerViewContoller,
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
+            sheet.prefersGrabberVisible = false
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
@@ -121,7 +120,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
-        self.headerVC.view.pinToSafeArea(.top, offset: .long)
+        self.headerVC.view.pinToSafeArea(.top, offset: .standard)
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .xtraLong)
