@@ -168,7 +168,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         await self.dataSource.apply(snapshot)
     }
     
-    private func add(member: ChatChannelMember) async {
+    private func add(member: PersonType) async {
         guard let conversation = self.conversationController.conversation else { return }
         
         let newItem = Member(personId: member.personId, conversationController: self.conversationController)
@@ -184,7 +184,6 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         items.append(.member(newItem))
         
         var snapshot = self.dataSource.snapshot()
-        snapshot.setItems([], in: .people)
         snapshot.setItems(items, in: .people)
         await self.dataSource.apply(snapshot)
     }
