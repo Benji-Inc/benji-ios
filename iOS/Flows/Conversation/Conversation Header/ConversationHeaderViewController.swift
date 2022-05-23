@@ -14,6 +14,7 @@ import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
+    let addImageView = UIImageView(image: UIImage(systemName: "person.badge.plus"))
     let stackedView = StackedPersonView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .small)
@@ -27,6 +28,11 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         super.initializeViews()
 
         self.view.clipsToBounds = false
+        
+        self.view.addSubview(self.addImageView)
+        self.addImageView.tintColor = ThemeColor.white.color
+        self.addImageView.contentMode = .scaleAspectFit
+        self.addImageView.isVisible = false
         
         self.view.addSubview(self.stackedView)
         self.stackedView.max = 7
@@ -78,6 +84,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.stackedView.centerOnX()
         self.stackedView.match(.bottom, to: .top, of: self.topicLabel, offset: .negative(.short))
+        
+        self.addImageView.squaredSize = 24
+        self.addImageView.centerY = self.imageView.centerY
+        self.addImageView.centerOnX()
         
         self.button.height = self.view.height
         self.button.width = 200
@@ -160,9 +170,11 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.loadPeopleTask?.cancel()
         
         self.loadPeopleTask = Task { [weak self] in
+            guard let `self` = self else { return }
             let members = await PeopleStore.shared.getPeople(for: conversation)
-            self?.stackedView.configure(with: members)
-            self?.view.setNeedsLayout()
+            self.addImageView.isVisible = members.count == 0
+            self.stackedView.configure(with: members)
+            self.view.setNeedsLayout()
         }
     }
 

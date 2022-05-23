@@ -16,14 +16,20 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     
     typealias ItemType = Person
 
+    let personView = BorderedPersonView()
     let titleLabel = ThemeLabel(font: .regular)
-    let buttonTitleLabel = ThemeLabel(font: .regularBold, textColor: .D1)
     let lineView = BaseView()
+    
+    private let imageView = UIImageView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.addSubview(self.buttonTitleLabel)
+        self.contentView.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.tintColor = ThemeColor.white.color
+        
+        self.contentView.addSubview(self.personView)
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.lineView)
         
@@ -34,18 +40,18 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: Person) {
         self.currentItem = item
         
+        self.personView.isVisible = !item.user.isNil
+        
         if let user = item.user {
+            self.personView.set(person: user)
             self.updateName(for: user, highlightText: item.highlightText)
-            self.buttonTitleLabel.setText("Add")
-            self.titleLabel.setTextColor(.D1)
-            self.buttonTitleLabel.setTextColor(.D1)
+            self.titleLabel.setTextColor(.white)
         } else {
             self.titleLabel.setTextColor(.white)
-            self.buttonTitleLabel.setText("Invite")
-            self.buttonTitleLabel.setTextColor(.white)
             self.updateName(for: item, highlightText: item.highlightText)
         }
         
+        self.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
         self.handle(isSelected: item.isSelected)
     }
     
@@ -54,7 +60,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         
         if let highlightText = highlightText {
             let attributes: [NSAttributedString.Key : Any] = [.font: FontType.regularBold.font,
-                                                              .foregroundColor: ThemeColor.D6.color]
+                                                              .foregroundColor: ThemeColor.white.color]
             self.titleLabel.add(attributes: attributes, to: highlightText)
         }
 
@@ -62,27 +68,26 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     }
     
     private func handle(isSelected: Bool) {
-        var color: ThemeColor = isSelected ? .D1 : .white
         
         if let person = self.currentItem {
             if let _ = person.user {
                 if isSelected {
-                    self.buttonTitleLabel.setText("Added")
+                    self.imageView.image = UIImage(systemName: "person.crop.circle.fill.badge.checkmark")
                 } else {
-                    self.buttonTitleLabel.setText("Add")
+                    self.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
                 }
-                color = .D1
             } else {
                 if isSelected {
-                    self.buttonTitleLabel.setText("Added")
+                    self.imageView.image = UIImage(systemName: "person.crop.circle.fill.badge.checkmark")
                 } else {
-                    self.buttonTitleLabel.setText("Invite")
+                    self.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
                 }
             }
         }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.buttonTitleLabel.setTextColor(color)
+            self.titleLabel.alpha = isSelected ? 1.0 : 0.5
+            self.imageView.alpha = isSelected ? 1.0 : 0.5
             self.setNeedsLayout()
         }
     }
@@ -92,11 +97,19 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         
         self.titleLabel.setSize(withWidth: self.contentView.width)
         self.titleLabel.centerOnY()
-        self.titleLabel.pin(.left, offset: .xtraLong)
         
-        self.buttonTitleLabel.setSize(withWidth: self.contentView.width)
-        self.buttonTitleLabel.centerOnY()
-        self.buttonTitleLabel.pin(.right, offset: .xtraLong)
+        if self.personView.isVisible {
+            self.personView.squaredSize = 30
+            self.personView.pinToSafeAreaLeft()
+            self.personView.centerOnY()
+            self.titleLabel.match(.left, to: .right, of: self.personView, offset: .long)
+        } else {
+            self.titleLabel.pinToSafeAreaLeft()
+        }
+        
+        self.imageView.squaredSize = 24
+        self.imageView.pinToSafeAreaRight()
+        self.imageView.centerOnY()
         
         self.lineView.height = 1
         self.lineView.expandToSuperviewWidth()
@@ -106,7 +119,6 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.buttonTitleLabel.text = nil
         self.titleLabel.text = nil
     }
 }
