@@ -57,10 +57,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
     
     @MainActor
     private func handle(notice: SystemNotice) async {
-        
-        self.titleLabel.setText(notice.type.title)
-        self.descriptionLabel.setText(notice.body ?? "")
-        
+                
         switch notice.type {
         case .timeSensitiveMessage:
             guard let cidValue = notice.attributes?["cid"] as? String,
@@ -78,7 +75,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
                 return
             }
             
-            self.titleLabel.setText("\(author.givenName.firstCapitalized) said:")
+            self.titleLabel.setText("Urgent Message")
             self.descriptionLabel.setText(message.text)
             self.rightButtonLabel.setText("View")
             self.leftButtonLabel.setText("")
@@ -121,6 +118,12 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             
         case .system:
             self.descriptionLabel.alpha = 0.25
+        case .tip:
+            break
+        case .invitePrompt:
+            break
+        case .jibberIntro:
+            break
         }
         
         self.imageView.isVisible = !self.imageView.displayable.isNil

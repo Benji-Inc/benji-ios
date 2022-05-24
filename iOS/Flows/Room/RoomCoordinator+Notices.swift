@@ -63,6 +63,12 @@ extension RoomCoordinator {
             break // Scroll to unread tab
         case .system:
             break // Delete notice
+        case .tip:
+            break
+        case .invitePrompt:
+            break
+        case .jibberIntro:
+            break 
         }
     }
     

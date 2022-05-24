@@ -138,7 +138,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                                      notice: nil,
                                      type: .system,
                                      priority: 0,
-                                     body: "Nothing to see here... yet.",
                                      attributes: [:])
             notices = [empty]
         }
@@ -204,7 +203,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                                          notice: nil,
                                          type: .system,
                                          priority: 0,
-                                         body: "Nothing to see here... yet.",
                                          attributes: [:])
                 notices = [empty]
             }
