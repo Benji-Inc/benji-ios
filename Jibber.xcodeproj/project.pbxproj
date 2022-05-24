@@ -826,6 +826,7 @@
 		D6B2B65F283D3D98007D507B /* NoticeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B65E283D3D98007D507B /* NoticeContentView.swift */; };
 		D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */; };
 		D6B2B663283D410A007D507B /* ConnectionConfirmedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */; };
+		D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B664283D737E007D507B /* NoticeDetailContentView.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PeopleStore.swift */; };
@@ -1404,6 +1405,7 @@
 		D6B2B65E283D3D98007D507B /* NoticeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeContentView.swift; sourceTree = "<group>"; };
 		D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgentMessageContentView.swift; sourceTree = "<group>"; };
 		D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionConfirmedContentView.swift; sourceTree = "<group>"; };
+		D6B2B664283D737E007D507B /* NoticeDetailContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDetailContentView.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6B95AF2272324BD00FBE66A /* PeopleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleStore.swift; sourceTree = "<group>"; };
@@ -2586,6 +2588,7 @@
 				D6B2B65E283D3D98007D507B /* NoticeContentView.swift */,
 				D6B2B658283D3A3E007D507B /* TipContentView.swift */,
 				D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */,
+				D6B2B664283D737E007D507B /* NoticeDetailContentView.swift */,
 			);
 			path = "Notice Cell Content";
 			sourceTree = "<group>";
@@ -3694,6 +3697,7 @@
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
+				D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */,
 				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,
 				804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */,
 				80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */,
