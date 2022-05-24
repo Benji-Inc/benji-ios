@@ -8,6 +8,10 @@
 
 import Foundation
 
-class ConnectionRequestContentView: BaseView {
+class ConnectionRequestContentView: NoticeContentView {
     
+    override func configure(for notice: SystemNotice) {
+        super.configure(for: notice)
+        
+    }
 }

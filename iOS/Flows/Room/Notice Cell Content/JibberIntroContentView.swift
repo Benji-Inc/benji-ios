@@ -8,6 +8,11 @@
 
 import Foundation
 
-class JibberIntroContentView: BaseView {
+class JibberIntroContentView: NoticeContentView {
+    
+    override func configure(for notice: SystemNotice) {
+        super.configure(for: notice)
+        
+    }
     
 }

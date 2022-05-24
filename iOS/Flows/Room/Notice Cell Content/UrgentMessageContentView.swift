@@ -1,5 +1,5 @@
 //
-//  InvitePromptContentView.swift
+//  UrgentMessageContentView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 5/24/22.
@@ -8,11 +8,10 @@
 
 import Foundation
 
-class InvitePromptContentView: NoticeContentView {
+class UrgentMessageContentView: NoticeContentView {
     
     override func configure(for notice: SystemNotice) {
         super.configure(for: notice)
         
     }
-    
 }

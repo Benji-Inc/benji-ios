@@ -823,6 +823,9 @@
 		D6B2B659283D3A3E007D507B /* TipContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B658283D3A3E007D507B /* TipContentView.swift */; };
 		D6B2B65B283D3A9C007D507B /* InvitePromptContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B65A283D3A9C007D507B /* InvitePromptContentView.swift */; };
 		D6B2B65D283D3B23007D507B /* JibberIntroContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B65C283D3B23007D507B /* JibberIntroContentView.swift */; };
+		D6B2B65F283D3D98007D507B /* NoticeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B65E283D3D98007D507B /* NoticeContentView.swift */; };
+		D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */; };
+		D6B2B663283D410A007D507B /* ConnectionConfirmedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PeopleStore.swift */; };
@@ -1398,6 +1401,9 @@
 		D6B2B658283D3A3E007D507B /* TipContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipContentView.swift; sourceTree = "<group>"; };
 		D6B2B65A283D3A9C007D507B /* InvitePromptContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitePromptContentView.swift; sourceTree = "<group>"; };
 		D6B2B65C283D3B23007D507B /* JibberIntroContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JibberIntroContentView.swift; sourceTree = "<group>"; };
+		D6B2B65E283D3D98007D507B /* NoticeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeContentView.swift; sourceTree = "<group>"; };
+		D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgentMessageContentView.swift; sourceTree = "<group>"; };
+		D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionConfirmedContentView.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6B95AF2272324BD00FBE66A /* PeopleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleStore.swift; sourceTree = "<group>"; };
@@ -2573,10 +2579,13 @@
 		D6B2B655283D39EA007D507B /* Notice Cell Content */ = {
 			isa = PBXGroup;
 			children = (
+				D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */,
 				D6B2B656283D3A1A007D507B /* ConnectionRequestContentView.swift */,
-				D6B2B658283D3A3E007D507B /* TipContentView.swift */,
 				D6B2B65A283D3A9C007D507B /* InvitePromptContentView.swift */,
 				D6B2B65C283D3B23007D507B /* JibberIntroContentView.swift */,
+				D6B2B65E283D3D98007D507B /* NoticeContentView.swift */,
+				D6B2B658283D3A3E007D507B /* TipContentView.swift */,
+				D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */,
 			);
 			path = "Notice Cell Content";
 			sourceTree = "<group>";
@@ -3536,6 +3545,7 @@
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,
+				D6B2B663283D410A007D507B /* ConnectionConfirmedContentView.swift in Sources */,
 				80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
@@ -3552,6 +3562,7 @@
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				8057B59F27E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift in Sources */,
+				D6B2B65F283D3D98007D507B /* NoticeContentView.swift in Sources */,
 				D646D36C27E53B880077D20B /* CaptureCell.swift in Sources */,
 				D61A33C627D4F21700056242 /* ContextCueCreatorViewController.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
@@ -3734,6 +3745,7 @@
 				D605AC9C27877F890015D800 /* MessageBubbleView.swift in Sources */,
 				D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */,
+				D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */,
 				D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,

@@ -60,10 +60,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.noticeCell,
                                                                     for: indexPath,
                                                                     item: notice)
-            cell.didTapLeftButton = { [unowned self] in
+            cell.didSelectSecondaryOption = { [unowned self] in
                 self.didSelectLeftOption?(notice)
             }
-            cell.didTapRightButton = { [unowned self] in
+            cell.didSelectPrimaryOption = { [unowned self] in
                 self.didSelectRightOption?(notice)
             }
             return cell

@@ -8,6 +8,10 @@
 
 import Foundation
 
-class TipContentView: BaseView {
+class TipContentView: NoticeContentView {
     
+    override func configure(for notice: SystemNotice) {
+        super.configure(for: notice)
+        
+    }
 }
