@@ -46,11 +46,15 @@ extension RoomCoordinator {
                 }
             }
         case .connectionConfirmed:
-            Task {
-                if let n = notice.notice {
-                    try n.delete()
-                    self.roomVC.reloadNotices()
-                }
+            guard let connectionId = notice.attributes?["connectionId"] as? String,
+                  let connection = PeopleStore.shared.allConnections.first(where: { existing in
+                      return existing.objectId == connectionId
+                  }), let nonMeUser = connection.nonMeUser else { return }
+            self.presentProfile(for: nonMeUser)
+            
+            if let n = notice.notice {
+                try? n.delete()
+                self.roomVC.reloadNotices()
             }
         case .unreadMessages:
             break // Scroll to unread tab

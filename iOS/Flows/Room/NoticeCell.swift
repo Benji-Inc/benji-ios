@@ -56,6 +56,14 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         await content.configure(for: notice)
         self.contentView.addSubview(content)
         
+        content.didSelectPrimaryOption = { [unowned self] in
+            self.didSelectPrimaryOption?()
+        }
+        
+        content.didSelectSecondaryOption = { [unowned self] in
+            self.didSelectSecondaryOption?() 
+        }
+        
         self.setNeedsLayout()
     }
     
