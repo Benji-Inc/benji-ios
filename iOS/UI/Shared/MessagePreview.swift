@@ -71,6 +71,8 @@ class MessagePreview: BaseView {
         }
         
         self.imageView.image = message.deliveryType.image
+        self.imageView.preferredSymbolConfiguration = message.deliveryType.getConfiguration()
+        
         self.personView.set(info: message.authorExpression,
                             author: message.authorId,
                             defaultColors: [.B0, .B1])
