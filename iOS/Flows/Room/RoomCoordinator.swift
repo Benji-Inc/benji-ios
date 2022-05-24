@@ -145,7 +145,7 @@ extension RoomCoordinator: LaunchActivityHandler {
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            logDebug("Launched with: \(phoneNumber)")
+            logDebug("Launched with: \(phoneNumber ?? "")")
         case .reservation(_), .pass(_):
             self.presentPersonConnection(for: launchActivity)
         case .deepLink(let deepLinkable):
@@ -175,5 +175,17 @@ extension RoomCoordinator: MessageContentDelegate {
     func messageContent(_ content: MessageContentView,
                         didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
 
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, _):
+            self.presentMediaFlow(for: [photo], startingItem: nil, message: message)
+        case .video(video: let video, _):
+            self.presentMediaFlow(for: [video], startingItem: nil, message: message)
+        case .media(items: let media, _):
+            self.presentMediaFlow(for: media, startingItem: nil, message: message)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
+            break
+        }
     }
 }
