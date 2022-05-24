@@ -44,11 +44,32 @@ enum MessageDeliveryType: String, CaseIterable {
     var image: UIImage? {
         switch self {
         case .timeSensitive:
-            return UIImage(systemName: "bell.badge")
+            return ImageSymbol.bellBadge.image
         case .conversational:
-            return UIImage(systemName: "bell")
+            return ImageSymbol.bell.image
         case .respectful:
-            return UIImage(systemName: "bell.slash")
+            return ImageSymbol.bellSlash.image
         }
+    }
+    
+    func getConfiguration() -> UIImage.SymbolConfiguration {
+        let colors: [ThemeColor]
+        
+        switch self {
+        case .timeSensitive:
+            colors = [.red, .white]
+        case .conversational:
+            colors = [.white]
+        case .respectful:
+            colors = [.whiteWithAlpha, .white]
+        }
+        
+        let uicolors = colors.compactMap { color in
+            return color.color
+        }
+        let config = UIImage.SymbolConfiguration.init(paletteColors: uicolors)
+        let multi = UIImage.SymbolConfiguration.preferringMulticolor()
+        let combined = config.applying(multi)
+        return combined
     }
 }

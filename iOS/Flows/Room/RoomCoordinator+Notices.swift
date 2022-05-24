@@ -15,14 +15,7 @@ extension RoomCoordinator {
     func handleRightOption(with notice: SystemNotice) {
         switch notice.type {
         case .timeSensitiveMessage:
-            guard let cidValue = notice.attributes?["cid"] as? String,
-                  let cid = try? ChannelId(cid: cidValue),
-                  let messageId = notice.attributes?["messageId"] as? String else { return }
-            if let n = notice.notice {
-                NoticeStore.shared.delete(notice: n)
-                self.roomVC.reloadNotices()
-                self.presentConversation(with: cid, messageId: messageId)
-            }
+            break 
         case .connectionRequest:
             Task {
                 guard let connectionId = notice.attributes?["connectionId"] as? String,
@@ -53,16 +46,26 @@ extension RoomCoordinator {
                 }
             }
         case .connectionConfirmed:
-            Task {
-                if let n = notice.notice {
-                    try n.delete()
-                    self.roomVC.reloadNotices()
-                }
+            guard let connectionId = notice.attributes?["connectionId"] as? String,
+                  let connection = PeopleStore.shared.allConnections.first(where: { existing in
+                      return existing.objectId == connectionId
+                  }), let nonMeUser = connection.nonMeUser else { return }
+            self.presentProfile(for: nonMeUser)
+            
+            if let n = notice.notice {
+                try? n.delete()
+                self.roomVC.reloadNotices()
             }
         case .unreadMessages:
             break // Scroll to unread tab
         case .system:
             break // Delete notice
+        case .tip:
+            break
+        case .invitePrompt:
+            break
+        case .jibberIntro:
+            break 
         }
     }
     

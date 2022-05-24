@@ -23,22 +23,10 @@ final class Notice: PFObject, PFSubclassing {
         case connectionRequest = "CONNECTION_REQUEST"
         case connectionConfirmed = "CONNECTION_CONFIRMED"
         case unreadMessages = "UNREAD_MESSAGES"
+        case tip = "TIP"
+        case invitePrompt = "INVITE_PROMPT"
+        case jibberIntro = "JIBBER_INTRO"
         case system
-        
-        var title: String {
-            switch self {
-            case .timeSensitiveMessage:
-                return "Time-Sensitive Message"
-            case .connectionRequest:
-                return "Connection Request"
-            case .connectionConfirmed:
-                return "Connection Confirmed"
-            case .unreadMessages:
-                return "Unread Messages"
-            case .system:
-                return ""
-            }
-        }
     }
 
     static func parseClassName() -> String {

@@ -819,6 +819,14 @@
 		D6B2B64C2839570B007D507B /* ImageSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B6482839570B007D507B /* ImageSymbol.swift */; };
 		D6B2B64E2839570B007D507B /* ImageSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B6482839570B007D507B /* ImageSymbol.swift */; };
 		D6B2B650283A9150007D507B /* ConversationContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B64F283A9150007D507B /* ConversationContentView.swift */; };
+		D6B2B657283D3A1A007D507B /* ConnectionRequestContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B656283D3A1A007D507B /* ConnectionRequestContentView.swift */; };
+		D6B2B659283D3A3E007D507B /* TipContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B658283D3A3E007D507B /* TipContentView.swift */; };
+		D6B2B65B283D3A9C007D507B /* InvitePromptContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B65A283D3A9C007D507B /* InvitePromptContentView.swift */; };
+		D6B2B65D283D3B23007D507B /* JibberIntroContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B65C283D3B23007D507B /* JibberIntroContentView.swift */; };
+		D6B2B65F283D3D98007D507B /* NoticeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B65E283D3D98007D507B /* NoticeContentView.swift */; };
+		D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */; };
+		D6B2B663283D410A007D507B /* ConnectionConfirmedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */; };
+		D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2B664283D737E007D507B /* NoticeDetailContentView.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PeopleStore.swift */; };
@@ -1390,6 +1398,14 @@
 		D6B2B646283596C9007D507B /* MediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewController.swift; sourceTree = "<group>"; };
 		D6B2B6482839570B007D507B /* ImageSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSymbol.swift; sourceTree = "<group>"; };
 		D6B2B64F283A9150007D507B /* ConversationContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationContentView.swift; sourceTree = "<group>"; };
+		D6B2B656283D3A1A007D507B /* ConnectionRequestContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestContentView.swift; sourceTree = "<group>"; };
+		D6B2B658283D3A3E007D507B /* TipContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipContentView.swift; sourceTree = "<group>"; };
+		D6B2B65A283D3A9C007D507B /* InvitePromptContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitePromptContentView.swift; sourceTree = "<group>"; };
+		D6B2B65C283D3B23007D507B /* JibberIntroContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JibberIntroContentView.swift; sourceTree = "<group>"; };
+		D6B2B65E283D3D98007D507B /* NoticeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeContentView.swift; sourceTree = "<group>"; };
+		D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgentMessageContentView.swift; sourceTree = "<group>"; };
+		D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionConfirmedContentView.swift; sourceTree = "<group>"; };
+		D6B2B664283D737E007D507B /* NoticeDetailContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDetailContentView.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6B95AF2272324BD00FBE66A /* PeopleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleStore.swift; sourceTree = "<group>"; };
@@ -2562,6 +2578,21 @@
 			path = Input;
 			sourceTree = "<group>";
 		};
+		D6B2B655283D39EA007D507B /* Notice Cell Content */ = {
+			isa = PBXGroup;
+			children = (
+				D6B2B662283D410A007D507B /* ConnectionConfirmedContentView.swift */,
+				D6B2B656283D3A1A007D507B /* ConnectionRequestContentView.swift */,
+				D6B2B65A283D3A9C007D507B /* InvitePromptContentView.swift */,
+				D6B2B65C283D3B23007D507B /* JibberIntroContentView.swift */,
+				D6B2B65E283D3D98007D507B /* NoticeContentView.swift */,
+				D6B2B658283D3A3E007D507B /* TipContentView.swift */,
+				D6B2B660283D3E4D007D507B /* UrgentMessageContentView.swift */,
+				D6B2B664283D737E007D507B /* NoticeDetailContentView.swift */,
+			);
+			path = "Notice Cell Content";
+			sourceTree = "<group>";
+		};
 		D6B95AED2723248F00FBE66A /* Stores */ = {
 			isa = PBXGroup;
 			children = (
@@ -2692,6 +2723,7 @@
 		D6DEC3EB27A1D9370072D9D0 /* Room */ = {
 			isa = PBXGroup;
 			children = (
+				D6B2B655283D39EA007D507B /* Notice Cell Content */,
 				D60B887227F7732100B3E1C2 /* NoticeCell.swift */,
 				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
 				D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */,
@@ -3438,6 +3470,7 @@
 				D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				D60B887927F7E05500B3E1C2 /* NoticeStore.swift in Sources */,
+				D6B2B65B283D3A9C007D507B /* InvitePromptContentView.swift in Sources */,
 				80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */,
 				8004EE5427E8FE970086E010 /* URLSession+Extension.swift in Sources */,
 				D642735122C857760088256B /* MessageDeliveryType.swift in Sources */,
@@ -3515,6 +3548,7 @@
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,
+				D6B2B663283D410A007D507B /* ConnectionConfirmedContentView.swift in Sources */,
 				80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
@@ -3531,6 +3565,7 @@
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				8057B59F27E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift in Sources */,
+				D6B2B65F283D3D98007D507B /* NoticeContentView.swift in Sources */,
 				D646D36C27E53B880077D20B /* CaptureCell.swift in Sources */,
 				D61A33C627D4F21700056242 /* ContextCueCreatorViewController.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
@@ -3566,8 +3601,10 @@
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D619C58927F129B70082AD19 /* EmotionsViewController.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
+				D6B2B65D283D3B23007D507B /* JibberIntroContentView.swift in Sources */,
 				D6265ECE279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
+				D6B2B657283D3A1A007D507B /* ConnectionRequestContentView.swift in Sources */,
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
@@ -3575,6 +3612,7 @@
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
+				D6B2B659283D3A3E007D507B /* TipContentView.swift in Sources */,
 				D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */,
 				D6619E582808BFA3004151CE /* PinnedMessageCell.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
@@ -3659,6 +3697,7 @@
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
+				D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */,
 				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,
 				804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */,
 				80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */,
@@ -3710,6 +3749,7 @@
 				D605AC9C27877F890015D800 /* MessageBubbleView.swift in Sources */,
 				D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */,
+				D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */,
 				D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,

@@ -30,7 +30,9 @@ class NoticeStore {
         // Otherwise start a new initialization task and wait for it to finish.
         self.initializeTask = Task {
             // Get all of the notices.
-            self.allNotices = try await Notice.fetchAll()
+            self.allNotices = try await Notice.fetchAll().filter({ notice in
+                return notice.type != .system
+            })
             self.subscribeToUpdates()
         }
 

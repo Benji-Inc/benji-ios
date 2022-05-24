@@ -101,6 +101,20 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                 self.presentConversation(with: model.cid, messageId: model.messageIds.first)
             case .add(_):
                 self.presentPeoplePicker()
+            case .notice(let notice):
+                switch notice.type {
+                case .timeSensitiveMessage:
+                    guard let cidValue = notice.attributes?["cid"] as? String,
+                          let cid = try? ChannelId(cid: cidValue),
+                          let messageId = notice.attributes?["messageId"] as? String else { return }
+                    
+                    self.presentConversation(with: cid, messageId: messageId)
+                    guard let n = notice.notice else { return }
+                    NoticeStore.shared.delete(notice: n)
+                    self.roomVC.reloadNotices()
+                default:
+                    break
+                }
             default:
                 break
             }
@@ -131,7 +145,7 @@ extension RoomCoordinator: LaunchActivityHandler {
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            logDebug("Launched with: \(phoneNumber)")
+            logDebug("Launched with: \(phoneNumber ?? "")")
         case .reservation(_), .pass(_):
             self.presentPersonConnection(for: launchActivity)
         case .deepLink(let deepLinkable):
@@ -161,5 +175,17 @@ extension RoomCoordinator: MessageContentDelegate {
     func messageContent(_ content: MessageContentView,
                         didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
 
+        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+
+        switch message.kind {
+        case .photo(photo: let photo, _):
+            self.presentMediaFlow(for: [photo], startingItem: nil, message: message)
+        case .video(video: let video, _):
+            self.presentMediaFlow(for: [video], startingItem: nil, message: message)
+        case .media(items: let media, _):
+            self.presentMediaFlow(for: media, startingItem: nil, message: message)
+        case .text, .attributedText, .location, .emoji, .audio, .contact, .link:
+            break
+        }
     }
 }

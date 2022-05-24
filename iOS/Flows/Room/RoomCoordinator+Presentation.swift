@@ -28,6 +28,31 @@ extension RoomCoordinator {
         self.router.present(coordinator, source: self.roomVC)
     }
     
+    func presentMediaFlow(for mediaItems: [MediaItem],
+                          startingItem: MediaItem?,
+                          message: Messageable) {
+        
+        let coordinator = MediaCoordinator(items: mediaItems,
+                                           startingItem: startingItem,
+                                           message: message,
+                                           router: self.router,
+                                           deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] result in
+            switch result {
+            case .reply(let message):
+                guard let cid = message.streamCid else { return }
+                coordinator.toPresentable().dismiss(animated: true) {
+                    self.presentConversation(with: cid, messageId: message.id)
+                }
+            case .none:
+                coordinator.toPresentable().dismiss(animated: true)
+            }
+        })
+        
+        self.router.present(coordinator, source: self.roomVC)
+    }
+    
     func presentPeoplePicker() {
         self.removeChild()
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
