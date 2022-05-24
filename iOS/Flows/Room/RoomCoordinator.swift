@@ -101,6 +101,20 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                 self.presentConversation(with: model.cid, messageId: model.messageIds.first)
             case .add(_):
                 self.presentPeoplePicker()
+            case .notice(let notice):
+                switch notice.type {
+                case .timeSensitiveMessage:
+                    guard let cidValue = notice.attributes?["cid"] as? String,
+                          let cid = try? ChannelId(cid: cidValue),
+                          let messageId = notice.attributes?["messageId"] as? String else { return }
+                    
+                    self.presentConversation(with: cid, messageId: messageId)
+                    guard let n = notice.notice else { return }
+                    NoticeStore.shared.delete(notice: n)
+                    self.roomVC.reloadNotices()
+                default:
+                    break
+                }
             default:
                 break
             }
