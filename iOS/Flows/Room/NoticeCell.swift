@@ -55,74 +55,8 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         
         await content.configure(for: notice)
         self.contentView.addSubview(content)
-                
-//        switch notice.type {
-//        case .timeSensitiveMessage:
-
-//
-//            self.titleLabel.setText("Urgent Message")
-//            self.descriptionLabel.setText(message.text)
-//            self.rightButtonLabel.setText("View")
-//            self.leftButtonLabel.setText("")
-//            self.imageView.set(person: author)
-//        case .connectionRequest:
-//            guard let connectionId = notice.attributes?["connectionId"] as? String,
-//                  let connection = PeopleStore.shared.allConnections.first(where: { existing in
-//                      return existing.objectId == connectionId
-//                  }) else {
-//                self.showError()
-//                return }
-//            self.imageView.set(person: connection.nonMeUser)
-//            self.rightButtonLabel.setText("Accept")
-//            self.leftButtonLabel.setText("Decline")
-//        case .connectionConfirmed:
-//            guard let connectionId = notice.attributes?["connectionId"] as? String,
-//                  let connection = PeopleStore.shared.allConnections.first(where: { existing in
-//                      return existing.objectId == connectionId
-//                  }) else { self.showError()
-//                return }
-//
-//            self.imageView.set(person: connection.nonMeUser)
-//            self.rightButtonLabel.setText("Ok")
-//            self.leftButtonLabel.setText("")
-//
-//        case .unreadMessages:
-//            let count = notice.notice?.unreadMessages.count ?? 0
-//
-//            if count == 0 {
-//                let text = "You are all caught up! 🥳"
-//                self.descriptionLabel.setText(text)
-//                self.rightButtonLabel.setText("")
-//                self.leftButtonLabel.setText("")
-//            } else {
-//                let text = "You have \(notice.notice?.unreadMessages.count ?? 0) unread messages."
-//                self.descriptionLabel.setText(text)
-//                self.rightButtonLabel.setText("")
-//                self.leftButtonLabel.setText("")
-//            }
-//
-//        case .system:
-//            self.descriptionLabel.alpha = 0.25
-//        case .tip:
-//            break
-//        case .invitePrompt:
-//            break
-//        case .jibberIntro:
-//            break
-//        }
-//
-//        self.imageView.isVisible = !self.imageView.displayable.isNil
         
         self.setNeedsLayout()
-    }
-    
-    func showError() {
-//        self.imageView.isVisible = false
-//        self.titleLabel.setText("Error")
-//        self.descriptionLabel.setText("There was an error displaying this content.")
-//        self.rightButtonLabel.setText("")
-//        self.leftButtonLabel.setText("")
-//        self.setNeedsLayout()
     }
     
     override func layoutSubviews() {
@@ -133,36 +67,5 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         }) {
             first.expandToSuperviewSize()
         }
-        
-//        let padding = Theme.ContentOffset.xtraLong
-//
-//        self.imageView.setSize(forHeight: 38)
-//        self.imageView.pin(.left, offset: padding)
-//        self.imageView.pin(.top, offset: padding)
-//
-//        var maxTitleWidth = self.width - (self.imageView.right + padding.value.doubled)
-//        if self.imageView.displayable.isNil {
-//            maxTitleWidth = self.width - padding.value.doubled
-//        }
-//
-//        self.titleLabel.setSize(withWidth: maxTitleWidth)
-//        if self.imageView.displayable.isNil {
-//            self.titleLabel.pin(.left, offset: padding)
-//        } else {
-//            self.titleLabel.match(.left, to: .right, of: self.imageView, offset: padding)
-//        }
-//        self.titleLabel.match(.top, to: .top, of: self.imageView)
-//
-//        self.descriptionLabel.setSize(withWidth: maxTitleWidth)
-//        self.descriptionLabel.match(.left, to: .left, of: self.titleLabel)
-//        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .short)
-//
-//        self.rightButtonLabel.setSize(withWidth: self.width)
-//        self.rightButtonLabel.pin(.right, offset: padding)
-//        self.rightButtonLabel.pin(.bottom, offset: padding)
-//
-//        self.leftButtonLabel.setSize(withWidth: self.width)
-//        self.leftButtonLabel.match(.right, to: .left, of: self.rightButtonLabel, offset: .negative(.xtraLong))
-//        self.leftButtonLabel.pin(.bottom, offset: padding)
     }
 }
