@@ -151,7 +151,6 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.deliveryView)
         self.deliveryView.contentMode = .scaleAspectFit
         self.deliveryView.alpha = 0.6
-        self.deliveryView.tintColor = ThemeColor.white.color
         
         self.mainContentArea.addSubview(self.dateView)
         self.dateView.alpha = 0.6
@@ -283,6 +282,7 @@ class MessageContentView: BaseView {
 
         self.dateView.configure(with: message)
         self.deliveryView.image = message.deliveryType.image
+        self.deliveryView.preferredSymbolConfiguration = message.deliveryType.getConfiguration()
 
         if message.isDeleted {
             self.textView.text = "DELETED"

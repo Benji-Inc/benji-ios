@@ -24,11 +24,7 @@ class MessageDeliveryTypeBadgeView: BaseView {
         self.addSubview(self.label)
 
         self.set(backgroundColor: .badgeHighlightTop)
-
-        let configuration = UIImage.SymbolConfiguration(pointSize: 12.5)
-        self.imageView.preferredSymbolConfiguration = configuration
-        self.imageView.tintColor = ThemeColor.white.color
-        self.imageView.contentMode = .center
+        self.imageView.contentMode = .scaleAspectFit
 
         self.$deliveryType
             .removeDuplicates()
@@ -59,6 +55,7 @@ class MessageDeliveryTypeBadgeView: BaseView {
             guard !Task.isCancelled else { return }
 
             self.imageView.image = type.image
+            self.imageView.preferredSymbolConfiguration = type.getConfiguration()
             self.label.setText(type.description)
             self.label.alpha = 1
             self.imageView.alpha = 1
@@ -77,9 +74,9 @@ class MessageDeliveryTypeBadgeView: BaseView {
         self.label.setSize(withWidth: 200)
         self.height = 24
         self.width = 24 + Theme.ContentOffset.short.value.doubled + self.label.width + Theme.ContentOffset.short.value
-        self.imageView.squaredSize = self.height
-        self.imageView.pin(.left, offset: .short)
-        self.label.match(.left, to: .right, of: self.imageView)
+        self.imageView.squaredSize = 12.5
+        self.imageView.pin(.left, offset: .standard)
+        self.label.match(.left, to: .right, of: self.imageView, offset: .short)
         
         self.imageView.centerOnY()
         self.label.centerY = self.imageView.centerY

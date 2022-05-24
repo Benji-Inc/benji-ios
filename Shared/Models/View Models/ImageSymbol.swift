@@ -10,9 +10,11 @@ import Foundation
 import UIKit
 
 enum ImageSymbol: String {
-    case foo
+    case bellSlash = "bell.slash"
+    case bell = "bell"
+    case bellBadge = "bell.badge"
     
-    func getImage(for font: FontType) -> UIImage? {
-        return UIImage(systemName: self.rawValue, withConfiguration: font.symbolConfiguration)
+    var image: UIImage {
+        return UIImage(systemName: self.rawValue)!.withRenderingMode(.alwaysTemplate)
     }
 }
