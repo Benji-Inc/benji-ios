@@ -60,6 +60,9 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.noticeCell,
                                                                     for: indexPath,
                                                                     item: notice)
+            if notice.type == .timeSensitiveMessage {
+                cell.urgentMessageContentView.messageConentView.delegate = self.messageContentDelegate
+            }
             cell.didSelectSecondaryOption = { [unowned self] in
                 self.didSelectLeftOption?(notice)
             }

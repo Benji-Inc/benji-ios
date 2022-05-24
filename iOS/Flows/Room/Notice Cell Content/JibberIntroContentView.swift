@@ -10,9 +10,8 @@ import Foundation
 
 class JibberIntroContentView: NoticeContentView {
     
-    override func configure(for notice: SystemNotice) {
-        super.configure(for: notice)
-        
+    override func configure(for notice: SystemNotice) async {
+        await super.configure(for: notice)
     }
     
 }

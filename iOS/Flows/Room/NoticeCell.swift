@@ -53,25 +53,12 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             content = NoticeContentView()
         }
         
-        content.configure(for: notice)
+        await content.configure(for: notice)
         self.contentView.addSubview(content)
                 
 //        switch notice.type {
 //        case .timeSensitiveMessage:
-//            guard let cidValue = notice.attributes?["cid"] as? String,
-//                  let cid = try? ChannelId(cid: cidValue),
-//                  let messageId = notice.attributes?["messageId"] as? String else {
-//                self.showError()
-//                return }
-//
-//            let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
-//            try? await controller.synchronize()
-//
-//            guard let message = controller.message,
-//                  let author = await PeopleStore.shared.getPerson(withPersonId: message.author.personId) else {
-//                self.showError()
-//                return
-//            }
+
 //
 //            self.titleLabel.setText("Urgent Message")
 //            self.descriptionLabel.setText(message.text)

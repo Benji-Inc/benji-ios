@@ -10,4 +10,8 @@ import Foundation
 
 class ConnectionConfirmedContentView: NoticeContentView {
     
+    override func configure(for notice: SystemNotice) async {
+        await super.configure(for: notice)
+        
+    }
 }

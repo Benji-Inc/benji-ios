@@ -20,5 +20,7 @@ class NoticeContentView: BaseView {
         self.layer.cornerRadius = Theme.cornerRadius
     }
     
-    func configure(for notice: SystemNotice) {}
+    func configure(for notice: SystemNotice) async {}
+    
+    func showError() {} 
 }

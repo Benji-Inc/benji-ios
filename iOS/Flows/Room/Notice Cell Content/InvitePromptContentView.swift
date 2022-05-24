@@ -10,8 +10,8 @@ import Foundation
 
 class InvitePromptContentView: NoticeContentView {
     
-    override func configure(for notice: SystemNotice) {
-        super.configure(for: notice)
+    override func configure(for notice: SystemNotice) async {
+        await super.configure(for: notice)
         
     }
     
