@@ -37,8 +37,8 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
     let messagePreview = MessagePreview()
-    private let menuImageView = UIImageView(image: UIImage(systemName: "ellipsis"))
-    let menuButton = ThemeButton()
+    let menuButton = SymbolButton(symbol: .ellipsis)
+
     var didSelectShare: CompletionOptional = nil 
 
     init(items: [MediaItem],
@@ -76,7 +76,7 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                                                    .foregroundColor: ThemeColor.white.color]
 
         LightboxConfig.CloseButton.text = ""
-        LightboxConfig.CloseButton.image = UIImage(systemName: "xmark")
+        LightboxConfig.CloseButton.image = ImageSymbol.xMark.image 
         LightboxConfig.CloseButton.size = CGSize(width: 20, height: 18)
 
         let animationView = AnimationView.with(animation: .loading)
@@ -124,11 +124,8 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
             self.messagePreview.label.alpha = 0.25
         }
         
-        self.headerView.addSubview(self.menuImageView)
-        self.menuImageView.tintColor = ThemeColor.white.color
-        self.menuImageView.contentMode = .scaleAspectFit
-        
         self.headerView.addSubview(self.menuButton)
+        self.menuButton.set(tintColor: .white)
         self.menuButton.showsMenuAsPrimaryAction = true
         self.menuButton.menu = self.buildMenu()
     }
@@ -163,18 +160,16 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                 
         self.headerView.closeButton.pin(.left, offset: .xtraLong)
         
-        self.menuImageView.size = self.headerView.closeButton.size
-        self.menuImageView.pin(.right, offset: .xtraLong)
-        self.menuImageView.centerY = self.headerView.closeButton.centerY
-
-        self.menuButton.size = self.menuImageView.size
-        self.menuButton.center = self.menuImageView.center
+        self.menuButton.pointSize = self.headerView.closeButton.height
+        self.menuButton.squaredSize = 44
+        self.menuButton.pin(.right, offset: .standard)
+        self.menuButton.centerY = self.headerView.closeButton.centerY
     }
     
     private func buildMenu() -> UIMenu {
         
         let share = UIAction(title: "Share",
-                             image: UIImage(systemName: "square.and.arrow.up"),
+                             image: ImageSymbol.squareAndUp.image,
                              attributes: []) { [unowned self] action in
             self.didSelectShare?()
         }

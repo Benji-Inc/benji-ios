@@ -14,7 +14,7 @@ class WalletHeaderDetailView: BaseView {
     let subtitleLabel = ThemeLabel(font: .small, textColor: .D1)
 
     private let shouldPinLeft: Bool
-    private let detailDisclosure = UIImageView(image: UIImage(systemName: "info.circle"))
+    private let detailDisclosure = SymbolImageView(symbol: .infoCircle)
     private let showDetail: Bool
 
     init(shouldPinLeft: Bool, showDetail: Bool) {

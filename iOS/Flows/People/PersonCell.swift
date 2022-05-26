@@ -20,13 +20,12 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     let titleLabel = ThemeLabel(font: .regular)
     let lineView = BaseView()
     
-    private let imageView = UIImageView()
+    private let imageView = SymbolImageView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.imageView)
-        self.imageView.contentMode = .scaleAspectFit
         self.imageView.tintColor = ThemeColor.white.color
         
         self.contentView.addSubview(self.personView)
@@ -51,7 +50,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
             self.updateName(for: item, highlightText: item.highlightText)
         }
         
-        self.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
+        self.imageView.set(symbol: .personCropCircleBadgePlus)
         self.handle(isSelected: item.isSelected)
     }
     
@@ -69,20 +68,10 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
     
     private func handle(isSelected: Bool) {
         
-        if let person = self.currentItem {
-            if let _ = person.user {
-                if isSelected {
-                    self.imageView.image = UIImage(systemName: "person.crop.circle.fill.badge.checkmark")
-                } else {
-                    self.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
-                }
-            } else {
-                if isSelected {
-                    self.imageView.image = UIImage(systemName: "person.crop.circle.fill.badge.checkmark")
-                } else {
-                    self.imageView.image = UIImage(systemName: "person.crop.circle.badge.plus")
-                }
-            }
+        if isSelected {
+            self.imageView.set(symbol: .personCropCircleBadgeCheckmark)
+        } else {
+            self.imageView.set(symbol: .personCropCircleBadgePlus)
         }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {

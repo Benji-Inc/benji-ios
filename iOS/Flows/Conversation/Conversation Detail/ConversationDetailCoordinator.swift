@@ -99,7 +99,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 controller.updateChannel(name: text, imageURL: nil, team: nil) { _ in
                     alertController.dismiss(animated: true, completion: {
                         Task {
-                            await ToastScheduler.shared.schedule(toastType: .success(UIImage(systemName: "hand.thumbsup")!, "Name updated"))
+                            await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.thumbsUp.image, "Name updated"))
                         }
                     })
                 }

@@ -68,31 +68,31 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
     
     private func makeContextMenu(for message: Message) -> UIMenu {
 
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
+        let neverMind = UIAction(title: "Never Mind", image: ImageSymbol.noSign.image) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
-                                     image: UIImage(systemName: "trash"),
+                                     image: ImageSymbol.trash.image,
                                      attributes: .destructive) { action in
             self.didTapDelete?()
         }
 
         let deleteMenu = UIMenu(title: "Delete Message",
-                                image: UIImage(systemName: "trash"),
+                                image: ImageSymbol.trash.image,
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
 
         let edit = UIAction(title: "Edit",
-                            image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
+                            image: ImageSymbol.pencil.image) { [unowned self] action in
             self.didTapEdit?()
         }
 
         let read = UIAction(title: "Set to read",
-                            image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
+                            image: ImageSymbol.eyeglasses.image) { [unowned self] action in
             self.setToRead(with: message)
         }
 
         let unread = UIAction(title: "Set to unread",
-                            image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
+                              image: ImageSymbol.eyeglasses.image) { [unowned self] action in
             self.setToUnread(with: message)
         }
 

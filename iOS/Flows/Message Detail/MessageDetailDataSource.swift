@@ -29,17 +29,17 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         var image: UIImage? {
             switch self {
             case .viewThread:
-                return UIImage(systemName: "arrowshape.turn.up.left")
+                return ImageSymbol.arrowTurnUpLeft.image
             case .edit:
-                return UIImage(systemName: "pencil")
+                return ImageSymbol.pencil.image
             case .pin:
-                return UIImage(systemName: "bookmark")
+                return ImageSymbol.bookmark.image
             case .unpin:
-                return UIImage(systemName: "bookmark.slash")
+                return ImageSymbol.bookmarkSlash.image
             case .more:
-                return UIImage(systemName: "ellipsis")
+                return ImageSymbol.ellipsis.image
             case .quote:
-                return UIImage(systemName: "quote.opening")
+                return ImageSymbol.quoteOpening.image
             }
         }
         

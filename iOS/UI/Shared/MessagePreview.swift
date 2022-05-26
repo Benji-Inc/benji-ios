@@ -13,7 +13,7 @@ class MessagePreview: BaseView {
     let personView = PersonGradientView()
     let dateLabel = MessageDateLabel(font: .xtraSmall)
     let label = ThemeLabel(font: .small)
-    let imageView = UIImageView()
+    let imageView = SymbolImageView()
     
     static let minimumHeight: CGFloat = 26
     static let maxHeight: CGFloat = 58
@@ -70,8 +70,7 @@ class MessagePreview: BaseView {
             self.label.setText("View reply")
         }
         
-        self.imageView.image = message.deliveryType.image
-        self.imageView.preferredSymbolConfiguration = message.deliveryType.getConfiguration()
+        self.imageView.set(symbol: message.deliveryType.symbol)
         
         self.personView.set(info: message.authorExpression,
                             author: message.authorId,

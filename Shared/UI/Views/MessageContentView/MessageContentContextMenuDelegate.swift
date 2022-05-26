@@ -31,10 +31,10 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
     private func makeContextMenu() -> UIMenu {
         guard let message = self.content.message as? Message, let cid = message.cid else { return UIMenu() }
 
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
+        let neverMind = UIAction(title: "Never Mind", image: ImageSymbol.noSign.image) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
-                                     image: UIImage(systemName: "trash"),
+                                     image: ImageSymbol.trash.image,
                                      attributes: .destructive) { action in
             Task {
                 let controller = ChatClient.shared.messageController(cid: cid, messageId: message.id)
@@ -47,7 +47,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
         }
 
         let deleteMenu = UIMenu(title: "Delete Message",
-                                image: UIImage(systemName: "trash"),
+                                image: ImageSymbol.trash.image,
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
 
@@ -56,17 +56,17 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
         }
 
         let edit = UIAction(title: "Edit",
-                            image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
+                            image: ImageSymbol.pencil.image) { [unowned self] action in
             self.content.delegate?.messageContent(self.content, didTapEditMessage: (cid, message.id))
         }
 
         let read = UIAction(title: "Set to read",
-                            image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
+                            image: ImageSymbol.eyeglasses.image) { [unowned self] action in
             self.setToRead()
         }
 
         let unread = UIAction(title: "Set to unread",
-                            image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
+                              image: ImageSymbol.eyeglasses.image) { [unowned self] action in
             self.setToUnread()
         }
 

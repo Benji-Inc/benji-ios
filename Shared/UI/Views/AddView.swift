@@ -10,14 +10,14 @@ import Foundation
 
 class AddView: BaseView {
     
-    let imageView = UIImageView()
+    let imageView = SymbolImageView()
         
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.set(backgroundColor: .B6)
         self.addSubview(self.imageView)
-        self.imageView.image = UIImage(systemName: "plus")
+        self.imageView.set(symbol: .plus)
         self.imageView.tintColor = UIColor.white.withAlphaComponent(0.8)
         
         self.layer.borderColor = ThemeColor.white.color.withAlphaComponent(0.3).cgColor

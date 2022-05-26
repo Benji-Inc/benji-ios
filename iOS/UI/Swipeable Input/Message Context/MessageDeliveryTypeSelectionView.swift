@@ -10,7 +10,7 @@ import Foundation
 
 class MessageDeliveryTypeSelectionView: BaseView {
     
-    let imageView = UIImageView()
+    let imageView = SymbolImageView()
     let context: MessageDeliveryType
     
     enum State {
@@ -37,8 +37,7 @@ class MessageDeliveryTypeSelectionView: BaseView {
         self.alpha = 0.5
         
         self.addSubview(self.imageView)
-        self.imageView.image = self.context.image
-        self.imageView.contentMode = .scaleAspectFit
+        self.imageView.set(symbol: self.context.symbol)
     }
     
     override func layoutSubviews() {
@@ -49,7 +48,6 @@ class MessageDeliveryTypeSelectionView: BaseView {
         
         self.imageView.squaredSize = self.height * 0.6
         self.imageView.centerOnXAndY()
-        self.imageView.tintColor = ThemeColor.B6.color
     }
     
     private var animationTask: Task<Void, Never>?

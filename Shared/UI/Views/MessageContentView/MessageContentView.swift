@@ -68,12 +68,12 @@ class MessageContentView: BaseView {
     /// Date view that shows when the message was last updated.
     let dateView = MessageDateLabel(font: .small)
     /// Delivery view that shows how the message was sent
-    let deliveryView = UIImageView()
+    let deliveryView = SymbolImageView()
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
     let countCircle = CircleCountView()
-    let videoImageView = UIImageView(image: UIImage(systemName: "video.fill"))
+    let videoImageView = SymbolImageView(symbol: .videoFill)
     let linkView = LPLinkView()
 
     /// A view to blur out the emotions collection view.
@@ -82,7 +82,7 @@ class MessageContentView: BaseView {
     
     let emotionLabel = ThemeLabel(font: .regular)
     let addEmotionButton = ThemeButton()
-    let addEmotionImageView = UIImageView(image: UIImage(systemName: "plus"))
+    let addEmotionImageView = SymbolImageView(symbol: .plus)
 
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil
@@ -149,7 +149,6 @@ class MessageContentView: BaseView {
         self.authorView.layer.cornerRadius = Theme.innerCornerRadius
         
         self.mainContentArea.addSubview(self.deliveryView)
-        self.deliveryView.contentMode = .scaleAspectFit
         self.deliveryView.alpha = 0.6
         
         self.mainContentArea.addSubview(self.dateView)
@@ -281,8 +280,7 @@ class MessageContentView: BaseView {
         self.countCircle.isVisible = false
 
         self.dateView.configure(with: message)
-        self.deliveryView.image = message.deliveryType.image
-        self.deliveryView.preferredSymbolConfiguration = message.deliveryType.getConfiguration()
+        self.deliveryView.set(symbol: message.deliveryType.symbol)
 
         if message.isDeleted {
             self.textView.text = "DELETED"

@@ -33,8 +33,7 @@ class PersonConnectionViewController: ViewController {
         self.view.set(backgroundColor: .B0)
                 
         self.view.addSubview(self.header)
-        self.header.menuButton.isEnabled = false
-        self.header.menuImageView.isVisible = false
+        self.header.menuButton.isVisible = false
         
         self.view.addSubview(self.button)
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Connect"))

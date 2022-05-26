@@ -11,7 +11,7 @@ import Foundation
 class SectionDividerView: UICollectionReusableView {
     
     let leftLabel = ThemeLabel(font: .regular)
-    let imageView = UIImageView()
+    let imageView = SymbolImageView(symbol: .plus)
     let button = ThemeButton()
     
     var didSelectButton: CompletionOptional = nil
@@ -39,8 +39,6 @@ class SectionDividerView: UICollectionReusableView {
         
         self.addSubview(self.imageView)
         self.imageView.tintColor = ThemeColor.white.color
-        self.imageView.contentMode = .scaleAspectFit
-        self.imageView.image = UIImage(systemName: "plus")
     }
     
     override func layoutSubviews() {

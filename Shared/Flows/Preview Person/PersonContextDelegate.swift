@@ -28,7 +28,7 @@ extension PersonContextDelegate where Self: NSObject {
     func getMenu(for person: PersonType) -> UIMenu {
         
         let action = UIAction(title: "View Profile",
-                              image: UIImage(systemName: "person.circle")) { [unowned self] _ in
+                              image: ImageSymbol.personCircle.image) { [unowned self] _ in
             self.didTapViewProfile?()
         }
         return UIMenu(title: "", children: [action])

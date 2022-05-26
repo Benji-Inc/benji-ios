@@ -13,7 +13,7 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: Attachment?
     
-    private let videoImageView = UIImageView(image: UIImage(systemName: "video.fill"))
+    private let videoImageView = SymbolImageView(symbol: .videoFill)
     private let imageView = DisplayableImageView()
         
     override func initializeSubviews() {

@@ -29,7 +29,6 @@ class PersonPreviewViewController: ViewController {
 
         self.view.set(backgroundColor: .B0)
         self.view.addSubview(self.content)
-        self.content.menuImageView.isVisible = false
         self.content.menuButton.isVisible = false 
 
         let objectId = self.person.personId

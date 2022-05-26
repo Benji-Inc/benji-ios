@@ -23,6 +23,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
     
     var didSelectPrimaryOption: CompletionOptional = nil
     var didSelectSecondaryOption: CompletionOptional = nil
+    var didSelectRemove: CompletionOptional = nil
 
     func configure(with item: SystemNotice) {
         Task {
@@ -59,9 +60,11 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         content.didSelectPrimaryOption = { [unowned self] in
             self.didSelectPrimaryOption?()
         }
-        
         content.didSelectSecondaryOption = { [unowned self] in
             self.didSelectSecondaryOption?() 
+        }
+        content.didSelectRemove = { [unowned self] in
+            self.didSelectRemove?() 
         }
         
         self.setNeedsLayout()

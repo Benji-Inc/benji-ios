@@ -165,6 +165,7 @@ extension Message: Messageable {
         let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
         await controller.addReaction(with: .read)
         UserNotificationManager.shared.handleRead(message: self)
+        NoticeStore.shared.removeNoticeIfNeccessary(for: self)
     }
     
     func setToUnconsumed() async throws {
