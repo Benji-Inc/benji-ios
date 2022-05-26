@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Coordinator
 #if IOS
 import StreamChat
 #endif

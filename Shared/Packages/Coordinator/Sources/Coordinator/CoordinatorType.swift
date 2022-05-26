@@ -8,12 +8,13 @@
 import Foundation
 
 @MainActor
-protocol CoordinatorType: AnyObject {
+public protocol CoordinatorType: AnyObject {
 
-    var router: Router { get }
+    var router: CoordinatorRouter { get }
     var parentCoordinator: CoordinatorType? { set get }
     var childCoordinator: CoordinatorType? { get }
-
+    var furthestChild: CoordinatorType { get }
+    
     func addChildAndStart<ChildResult>(_ coordinator: Coordinator<ChildResult>,
                                        finishedHandler: @escaping (ChildResult) -> Void)
     func removeChild()
@@ -21,7 +22,7 @@ protocol CoordinatorType: AnyObject {
 
 extension CoordinatorType {
 
-    var furthestChild: CoordinatorType {
+    public var furthestChild: CoordinatorType {
         if let child = self.childCoordinator {
             return child.furthestChild
         }

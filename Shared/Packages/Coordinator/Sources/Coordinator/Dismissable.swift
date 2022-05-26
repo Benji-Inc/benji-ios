@@ -18,7 +18,7 @@ public protocol Dismissable: AnyObject {
 /// Wrapping the closure allows you to find the closure in an array and remove it.
 public final class DismissHandler: Equatable {
 
-    var handler: (() -> Void)?
+    public var handler: (() -> Void)?
 
     init() {
         self.handler = nil

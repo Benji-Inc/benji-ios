@@ -9,6 +9,7 @@
 import Foundation
 import Lightbox
 import Lottie
+import Coordinator
 
 enum MediaResult {
     case reply(Messageable)
@@ -33,7 +34,7 @@ class MediaCoordinator: PresentableCoordinator<MediaResult> {
     init(items: [MediaItem],
          startingItem: MediaItem?,
          message: Messageable,
-         router: Router,
+         router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
 
         self.items = items

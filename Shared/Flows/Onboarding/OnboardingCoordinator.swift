@@ -11,6 +11,7 @@ import PhoneNumberKit
 import Parse
 import Combine
 import Intents
+import Coordinator
 
 class OnboardingCoordinator: PresentableCoordinator<DeepLinkable?> {
 

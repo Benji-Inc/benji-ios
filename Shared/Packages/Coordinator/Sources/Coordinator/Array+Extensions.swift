@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Array where Element: Equatable {
+public extension Array where Element: Equatable {
 
     // Remove first collection element that is equal to the given object
     mutating func remove(object: Element) {
@@ -17,7 +17,7 @@ extension Array where Element: Equatable {
     }
 }
 
-extension Array where Element == DismissHandler {
+public extension Array where Element == DismissHandler {
 
     /// A convenience function for adding a dismiss closure to an array without having to create the wrapper object.
     /// Use this if you'll never need to remove the closure from the array.

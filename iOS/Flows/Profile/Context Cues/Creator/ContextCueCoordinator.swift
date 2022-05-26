@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import Coordinator
 
 class ContextCueCoordinator: PresentableCoordinator<Void> {
     
     lazy var creatorVC = ContextCueCreatorViewController()
     lazy var emojiNav = EmojiNavigationViewController(with: self.creatorVC)
     
-    override init(router: Router, deepLink: DeepLinkable?) {
+    override init(router: CoordinatorRouter, deepLink: DeepLinkable?) {
         super.init(router: router, deepLink: deepLink)
         
         self.creatorVC.didCreateContextCue = { [unowned self] in

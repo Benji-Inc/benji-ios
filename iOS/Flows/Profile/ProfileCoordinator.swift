@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import StreamChat
+import Coordinator
 
 enum ProfileResult {
     case conversation(ConversationId)
@@ -21,7 +22,7 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
     private let person: PersonType
     
     init(with person: PersonType,
-         router: Router,
+         router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
         
         self.person = person

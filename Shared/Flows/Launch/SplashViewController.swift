@@ -11,7 +11,7 @@ import Lottie
 import StoreKit
 import Localization
 
-class SplashViewController: FullScreenViewController, TransitionableViewController {
+class SplashViewController: ViewController, TransitionableViewController {
 
     // MARK: - Transitionable
     

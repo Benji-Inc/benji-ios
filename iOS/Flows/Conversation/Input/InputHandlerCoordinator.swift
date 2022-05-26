@@ -12,6 +12,7 @@ import Photos
 import Localization
 import Lightbox
 import StreamChat
+import Coordinator
 
 protocol SwipeableInputControllerHandler where Self: ViewController {
     var messageContentDelegate: MessageContentDelegate? { get set }
@@ -47,7 +48,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     let inputHandlerViewController: InputHandlerViewContoller
     
     init(with viewContoller: InputHandlerViewContoller,
-         router: Router,
+         router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
         
         self.inputHandlerViewController = viewContoller

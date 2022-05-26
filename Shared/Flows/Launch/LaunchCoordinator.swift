@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Coordinator
 
 class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
 

@@ -9,31 +9,23 @@ import Foundation
 import Combine
 
 @MainActor
-public class Coordinator<Result>: NSObject, CoordinatorType {
+open class Coordinator<Result>: NSObject, CoordinatorType {
 
-    public let router: Router
-    public var deepLink: DeepLinkable?
+    public let router: CoordinatorRouter
 
     private var onFinishedFlow: ((Result) -> Void)?
 
-    weak var parentCoordinator: CoordinatorType?
-    private(set) var childCoordinator: CoordinatorType?
+    public weak var parentCoordinator: CoordinatorType?
+    public var childCoordinator: CoordinatorType?
 
-    init(router: Router, deepLink: DeepLinkable?) {
+    public init(router: CoordinatorRouter) {
         self.router = router
-        self.deepLink = deepLink
     }
 
     /// Called by the addChildAndStart method. Override this method to check state requirements for coordinator flow.
-    func start() { }
+    open func start() { }
 
-    /// Can be used to change a coordinators deepLink and restart its flow
-    final func start(with deepLink: DeepLinkable?) {
-        self.deepLink = deepLink
-        self.start()
-    }
-
-    func addChildAndStart<ChildResult>(_ coordinator: Coordinator<ChildResult>,
+    public func addChildAndStart<ChildResult>(_ coordinator: Coordinator<ChildResult>,
                                        finishedHandler: @escaping (ChildResult) -> Void) {
         // If we already have a child coordinator, log a warning. While this isn't ideal, it helps
         // prevent apps from getting locked up due to a coordinator not finishing or being presented
@@ -57,17 +49,17 @@ public class Coordinator<Result>: NSObject, CoordinatorType {
         coordinator.start()
     }
 
-    func removeChild() {
+    public func removeChild() {
         self.childCoordinator = nil
     }
 
-    func removeFromParent() {
+    public func removeFromParent() {
         if self.parentCoordinator?.childCoordinator === self {
             self.parentCoordinator?.removeChild()
         }
     }
 
-    func finishFlow(with result: Result) {
+    public func finishFlow(with result: Result) {
         self.removeFromParent()
         self.onFinishedFlow?(result)
     }

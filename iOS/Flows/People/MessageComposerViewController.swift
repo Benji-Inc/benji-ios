@@ -8,6 +8,7 @@
 
 import Foundation
 import MessageUI
+import Coordinator
 
 class MessageComposerViewController: MFMessageComposeViewController, Dismissable {
     var dismissHandlers: [DismissHandler] = []
