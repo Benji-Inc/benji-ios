@@ -42,7 +42,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.button)
         
         self.view.addSubview(self.closeButton)
-        self.closeButton.poinSize = 24
+        self.closeButton.pointSize = 24
         self.closeButton.set(tintColor: .whiteWithAlpha)
         
         ConversationsManager.shared.$activeConversation

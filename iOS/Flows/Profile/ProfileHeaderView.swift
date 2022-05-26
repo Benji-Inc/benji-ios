@@ -58,7 +58,7 @@ class ProfileHeaderView: BaseView {
         
         self.addSubview(self.menuButton)
         self.menuButton.set(tintColor: .whiteWithAlpha)
-        self.menuButton.poinSize = 24
+        self.menuButton.pointSize = 24
         self.menuButton.showsMenuAsPrimaryAction = true
     }
     

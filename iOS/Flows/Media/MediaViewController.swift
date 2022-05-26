@@ -160,7 +160,7 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                 
         self.headerView.closeButton.pin(.left, offset: .xtraLong)
         
-        self.menuButton.poinSize = self.headerView.closeButton.height
+        self.menuButton.pointSize = self.headerView.closeButton.height
         self.menuButton.squaredSize = 44
         self.menuButton.pin(.right, offset: .standard)
         self.menuButton.centerY = self.headerView.closeButton.centerY

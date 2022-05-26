@@ -11,7 +11,7 @@ import UIKit
 
 class SymbolButton: UIButton {
     
-    var poinSize: CGFloat?
+    var pointSize: CGFloat?
     private lazy var symbolImageView = SymbolImageView(symbol: self.symbol)
     private var symbol: ImageSymbol?
     
@@ -27,7 +27,7 @@ class SymbolButton: UIButton {
     }
     
     func set(symbol: ImageSymbol, pointSize: CGFloat?) {
-        self.poinSize = pointSize
+        self.pointSize = pointSize
         self.symbolImageView.set(symbol: symbol)
         self.setNeedsLayout()
     }
@@ -45,7 +45,7 @@ class SymbolButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if let pointSize = self.poinSize {
+        if let pointSize = self.pointSize {
             self.symbolImageView.squaredSize = pointSize
             self.symbolImageView.centerOnXAndY()
         } else {
