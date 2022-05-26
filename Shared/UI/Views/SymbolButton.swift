@@ -9,11 +9,10 @@
 import Foundation
 import UIKit
 
-class ThemeSymbolButton: BaseView {
+class SymbolButton: BaseView {
     
     var poinSize: CGFloat?
-    var symbol: ImageSymbol?
-    private let imageView = UIImageView()
+    private let imageView = SymbolImageView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -23,13 +22,8 @@ class ThemeSymbolButton: BaseView {
     }
     
     func set(symbol: ImageSymbol, pointSize: CGFloat?) {
-        self.symbol = symbol
         self.poinSize = pointSize
-        self.imageView.image = self.symbol?.image
-        if let config = symbol.defaultConfig {
-            self.imageView.preferredSymbolConfiguration = config
-        }
-        
+        self.imageView.set(symbol: symbol)
         self.setNeedsLayout()
     }
     

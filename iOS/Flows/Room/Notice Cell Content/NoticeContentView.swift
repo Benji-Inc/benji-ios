@@ -14,7 +14,7 @@ class NoticeContentView: BaseView {
     var didSelectPrimaryOption: CompletionOptional = nil
     var didSelectSecondaryOption: CompletionOptional = nil
     
-    private let removeButton = ThemeSymbolButton()
+    private let removeButton = SymbolButton()
     
     override func initializeSubviews() {
         super.initializeSubviews()
