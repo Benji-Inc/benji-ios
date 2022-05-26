@@ -112,13 +112,12 @@ class ToastScheduler {
     private func createErrorToast(for error: Error,
                                   position: Toast.Position,
                                   duration: TimeInterval) -> Toast? {
-        guard let image = UIImage(systemName: "exclamationmark.triangle") else { return nil }
 
         let toast = Toast(id: UUID().uuidString,
                           priority: 1,
                           title: "",
                           description: error.localizedDescription,
-                          displayable: image,
+                          displayable: ImageSymbol.exclamationmarkTriangle.image,
                           deeplink: nil,
                           type: .error,
                           position: position,

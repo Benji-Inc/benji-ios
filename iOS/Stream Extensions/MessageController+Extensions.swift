@@ -122,7 +122,7 @@ extension MessageController {
                     logError(e)
                 } else {
                     Task {
-                        let image = UIImage(systemName: "face.smiling")!
+                        let image = ImageSymbol.faceSmiling.image
                         await ToastScheduler.shared.schedule(toastType: .success(image, "Expression added"))
                     }
                 }

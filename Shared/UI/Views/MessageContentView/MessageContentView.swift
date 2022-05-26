@@ -73,7 +73,7 @@ class MessageContentView: BaseView {
     let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
     let countCircle = CircleCountView()
-    let videoImageView = UIImageView(image: UIImage(systemName: "video.fill"))
+    let videoImageView = SymbolImageView(symbol: .videoFill)
     let linkView = LPLinkView()
 
     /// A view to blur out the emotions collection view.
@@ -82,7 +82,7 @@ class MessageContentView: BaseView {
     
     let emotionLabel = ThemeLabel(font: .regular)
     let addEmotionButton = ThemeButton()
-    let addEmotionImageView = UIImageView(image: UIImage(systemName: "plus"))
+    let addEmotionImageView = SymbolImageView(symbol: .plus)
 
     var areEmotionsShown: Bool {
         return self.blurView.effect == nil

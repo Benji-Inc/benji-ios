@@ -52,7 +52,7 @@ class AddMediaView: ThemeButton {
     static let expandedHeight: CGFloat = 100
     static let collapsedHeight: CGFloat = 40 
     
-    let plusImageView = UIImageView()
+    let plusImageView = SymbolImageView(symbol: .plus)
     let displayableImageView = DisplayableImageView()
     
     let countCircle = CircleCountView()
@@ -69,8 +69,6 @@ class AddMediaView: ThemeButton {
         self.set(backgroundColor: .clear)
         
         self.addSubview(self.plusImageView)
-        self.plusImageView.image = UIImage(systemName: "plus")
-        self.plusImageView.contentMode = .scaleAspectFit
         self.plusImageView.tintColor = ThemeColor.whiteWithAlpha.color
         self.displayableImageView.isVisible = false
         self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
@@ -120,7 +118,7 @@ class AddMediaView: ThemeButton {
     private func createMenu(for items: [MediaItem]) -> UIMenu {
         let title = items.count > 1 ? "Remove \(items.count) items" : "Remove item"
         let remove = UIAction(title: title,
-                              image: UIImage(systemName: "trash"),
+                              image: ImageSymbol.trash.image,
                               attributes: .destructive) { [unowned self] action in
             self.didSelectRemove?()
         }

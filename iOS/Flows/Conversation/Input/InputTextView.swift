@@ -9,21 +9,7 @@
 import Foundation
 
 enum InputType {
-
     case keyboard
-    case calendar
-    case jibs
-
-    var image: UIImage? {
-        switch self {
-        case .keyboard:
-            return UIImage(systemName: "abc")
-        case .calendar:
-            return UIImage(systemName: "calendar")
-        case .jibs:
-            return UIImage(systemName: "bitcoinsign.circle")
-        }
-    }
 }
 
 class InputTextView: ExpandingTextView {
@@ -42,8 +28,6 @@ class InputTextView: ExpandingTextView {
 
         switch type {
         case .keyboard:
-            self.inputView = nil
-        case .calendar, .jibs:
             self.inputView = nil
         }
 

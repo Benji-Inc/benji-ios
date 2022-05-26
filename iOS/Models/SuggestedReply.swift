@@ -47,9 +47,9 @@ enum SuggestedReply: String, CaseIterable {
     
     var image: UIImage? {
         if self == .other {
-            return UIImage(systemName: "arrowshape.turn.up.left")
+            return ImageSymbol.arrowTurnUpLeft.image
         } else if self == .emoji {
-            return UIImage(systemName: "face.smiling")
+            return ImageSymbol.faceSmiling.image
         }
         return nil
     }

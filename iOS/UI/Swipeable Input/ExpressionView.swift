@@ -12,7 +12,7 @@ import StreamChat
 
 class AddExpressionView: BaseView {
         
-    let imageView = UIImageView(image: UIImage(systemName: "face.smiling"))
+    let imageView = SymbolImageView(symbol: .faceSmiling)
     let personGradientView = PersonGradientView()
         
     override func initializeSubviews() {
@@ -22,7 +22,6 @@ class AddExpressionView: BaseView {
         
         self.addSubview(self.imageView)
         self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
-        self.imageView.contentMode = .scaleAspectFit
 
         self.addSubview(self.personGradientView)
         

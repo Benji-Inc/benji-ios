@@ -25,8 +25,7 @@ class ProfileHeaderView: BaseView {
         
     let personView = BorderedPersonView()
     
-    let menuImageView = UIImageView(image: UIImage(systemName: "ellipsis"))
-    let menuButton = ThemeButton()
+    let menuButton = SymbolButton(symbol: .ellipsis)
     
     var didSelectUpdateProfilePicture: CompletionOptional = nil
     
@@ -57,11 +56,9 @@ class ProfileHeaderView: BaseView {
         self.addSubview(self.focusCircle)
         self.addSubview(self.personView)
         
-        self.addSubview(self.menuImageView)
-        self.menuImageView.contentMode = .scaleAspectFit
-        self.menuImageView.tintColor = ThemeColor.white.color.withAlphaComponent(0.25)
-        
         self.addSubview(self.menuButton)
+        self.menuButton.set(tintColor: .whiteWithAlpha)
+        self.menuButton.poinSize = 24
         self.menuButton.showsMenuAsPrimaryAction = true
     }
     
@@ -81,8 +78,6 @@ class ProfileHeaderView: BaseView {
             } else {
                 self.timeLabel.setText(user.getLocalTime())
             }
-        } else {
-            
         }
 
         if let status = person.focusStatus {
@@ -136,20 +131,16 @@ class ProfileHeaderView: BaseView {
         self.memberLabel.match(.left, to: .right, of: self.nameLabel, offset: .short)
         self.memberLabel.bottom = self.nameLabel.bottom - 2
         
-        self.menuImageView.squaredSize = 26
-        self.menuImageView.pin(.top, offset: .negative(.custom(10)))
-        self.menuImageView.pin(.right, offset: .xtraLong)
-        
         self.menuButton.squaredSize = 44
-        self.menuButton.center = self.menuImageView.center
-        self.menuButton.pin(.top)
+        self.menuButton.pin(.right)
+        self.menuButton.pin(.top, offset: .negative(.xtraLong))
     }
     
     private func createMenu(for person: PersonType) -> UIMenu? {
         guard person.isCurrentUser else { return nil }
         
         let remove = UIAction(title: "Update Picture",
-                              image: UIImage(systemName: "camera"),
+                              image: ImageSymbol.camera.image,
                               attributes: []) { [unowned self] action in
             self.didSelectUpdateProfilePicture?()
         }

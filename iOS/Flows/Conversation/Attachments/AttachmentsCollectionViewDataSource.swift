@@ -19,11 +19,11 @@ class AttachmentsCollectionViewDataSource: CollectionViewDataSource<AttachmentsC
         var image: UIImage? {
             switch self {
             case .capture:
-                return UIImage(systemName: "camera")
+                return ImageSymbol.camera.image
             case .audio:
-                return UIImage(systemName: "mic")
+                return ImageSymbol.mic.image
             case .giphy:
-                return UIImage(systemName: "photo")
+                return ImageSymbol.photo.image
             }
         }
         

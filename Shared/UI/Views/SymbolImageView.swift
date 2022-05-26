@@ -13,6 +13,16 @@ class SymbolImageView: UIImageView {
     
     var symbol: ImageSymbol?
     
+    init(symbol: ImageSymbol? = nil) {
+        self.symbol = symbol
+        super.init(image: symbol?.image)
+        self.contentMode = .scaleAspectFit
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     func set(symbol: ImageSymbol) {
         self.contentMode = .scaleAspectFit
 

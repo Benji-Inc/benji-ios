@@ -13,7 +13,7 @@ import StreamChat
 
 class UnreadMessagesCounter: BaseView {
     
-    let imageView = UIImageView(image: UIImage(systemName: "eyeglasses"))
+    let imageView = SymbolImageView(symbol: .eyeglasses)
     let circle = BaseView()
     
     let countCircle = BaseView()

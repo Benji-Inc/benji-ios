@@ -14,13 +14,12 @@ import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
-    let addImageView = UIImageView(image: UIImage(systemName: "person.badge.plus"))
+    let addImageView = SymbolImageView(symbol: .personBadgePlus)
     let stackedView = StackedPersonView()
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .small)
     
-    let imageView = UIImageView(image: UIImage(systemName: "chevron.down.circle"))
-    let closeButton = ThemeButton()
+    let closeButton = SymbolButton(symbol: .chevronDownCircle)
     
     private var state: ConversationUIState = .read
         
@@ -35,19 +34,16 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.addImageView.isVisible = false
         
         self.view.addSubview(self.stackedView)
-        self.stackedView.max = 7
+        self.stackedView.max = 9
         
         self.view.addSubview(self.topicLabel)
         self.topicLabel.textAlignment = .center
         
         self.view.addSubview(self.button)
         
-        self.view.addSubview(self.imageView)
-        self.imageView.tintColor = ThemeColor.white.color
-        self.imageView.contentMode = .scaleAspectFit
-        self.imageView.alpha = 0.25
-        
         self.view.addSubview(self.closeButton)
+        self.closeButton.poinSize = 24
+        self.closeButton.set(tintColor: .whiteWithAlpha)
         
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
@@ -71,13 +67,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.imageView.squaredSize = 24
-        self.imageView.pinToSafeAreaRight()
-        self.imageView.pin(.top, offset: .custom(6))
-        
-        self.closeButton.squaredSize = 44
-        self.closeButton.center = self.imageView.center
-        
         self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.topicLabel.centerOnX()
         self.topicLabel.pin(.bottom)
@@ -85,8 +74,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.stackedView.centerOnX()
         self.stackedView.match(.bottom, to: .top, of: self.topicLabel, offset: .negative(.short))
         
+        self.closeButton.squaredSize = 44
+        self.closeButton.pin(.right)
+        self.closeButton.centerY = self.stackedView.centerY
+        
         self.addImageView.squaredSize = 24
-        self.addImageView.centerY = self.imageView.centerY
+        self.addImageView.centerY = self.closeButton.centerY
         self.addImageView.centerOnX()
         
         self.button.height = self.view.height

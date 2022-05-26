@@ -9,26 +9,36 @@
 import Foundation
 import UIKit
 
-class SymbolButton: BaseView {
+class SymbolButton: UIButton {
     
     var poinSize: CGFloat?
-    private let imageView = SymbolImageView()
+    private lazy var symbolImageView = SymbolImageView(symbol: self.symbol)
+    private var symbol: ImageSymbol?
     
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.addSubview(self.imageView)
-        self.imageView.contentMode = .scaleAspectFit
+    init(symbol: ImageSymbol? = nil) {
+        self.symbol = symbol
+        super.init(frame: .zero)
+        self.addSubview(self.symbolImageView)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.addSubview(self.symbolImageView)
     }
     
     func set(symbol: ImageSymbol, pointSize: CGFloat?) {
         self.poinSize = pointSize
-        self.imageView.set(symbol: symbol)
+        self.symbolImageView.set(symbol: symbol)
         self.setNeedsLayout()
     }
     
     func set(config: UIImage.SymbolConfiguration) {
-        self.imageView.preferredSymbolConfiguration = config
+        self.symbolImageView.preferredSymbolConfiguration = config
+        self.setNeedsLayout()
+    }
+    
+    func set(tintColor: ThemeColor) {
+        self.symbolImageView.tintColor = tintColor.color
         self.setNeedsLayout()
     }
     
@@ -36,10 +46,10 @@ class SymbolButton: BaseView {
         super.layoutSubviews()
         
         if let pointSize = self.poinSize {
-            self.imageView.squaredSize = pointSize
-            self.imageView.centerOnXAndY()
+            self.symbolImageView.squaredSize = pointSize
+            self.symbolImageView.centerOnXAndY()
         } else {
-            self.imageView.expandToSuperviewSize()
+            self.symbolImageView.expandToSuperviewSize()
         }
     }
 }

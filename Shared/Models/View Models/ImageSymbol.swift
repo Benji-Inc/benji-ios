@@ -15,6 +15,35 @@ enum ImageSymbol: String {
     case bell = "bell"
     case bellBadge = "bell.badge"
     case xMarkCircleFill = "xmark.circle.fill"
+    case personCircle = "person.circle"
+    case personCropCircle = "person.crop.circle"
+    case exclamationmarkTriangle = "exclamationmark.triangle"
+    case plus = "plus"
+    case trash = "trash"
+    case eyeglasses = "eyeglasses"
+    case videoFill = "video.fill"
+    case faceSmiling = "face.smiling"
+    case camera = "camera"
+    case mic = "mic"
+    case photo = "photo"
+    case xMark = "xmark"
+    case personBadgePlus = "person.badge.plus"
+    case eyeSlash = "eye.slash"
+    case handWave = "hand.wave"
+    case thumbsUp = "hand.thumbsup"
+    case chevronDownCircle = "chevron.down.circle"
+    case ellipsis = "ellipsis"
+    case arrowTurnUpLeft = "arrowshape.turn.up.left"
+    case pencil = "pencil"
+    case bookmark = "bookmark"
+    case bookmarkSlash = "bookmark.slash"
+    case quoteOpening = "quote.opening"
+    case personCropCircleBadgePlus = "person.crop.circle.badge.plus"
+    case personCropCircleBadgeCheckmark = "person.crop.circle.fill.badge.checkmark"
+    case noSign = "nosign"
+    case squareAndUp = "square.and.arrow.up"
+    case infoCircle = "info.circle"
+    
     
     var image: UIImage {
         return UIImage(systemName: self.rawValue)!.withRenderingMode(.alwaysTemplate)
@@ -32,6 +61,8 @@ enum ImageSymbol: String {
             colors = [.red, .white]
         case .xMarkCircleFill:
             colors = [.whiteWithAlpha, .whiteWithAlpha]
+        default:
+            return nil 
         }
         
         let uicolors = colors.compactMap { color in

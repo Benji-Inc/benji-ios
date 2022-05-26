@@ -11,7 +11,7 @@ import ScrollCounter
 
 class ReadIndicatorView: BaseView {
     
-    private let imageView = UIImageView(image: UIImage(systemName: "eyeglasses"))
+    private let imageView = SymbolImageView(symbol: .eyeglasses)
     private let counter = NumberScrollCounter(value: 0,
                                               scrollDuration: Theme.animationDurationSlow,
                                               decimalPlaces: 0,
@@ -38,7 +38,6 @@ class ReadIndicatorView: BaseView {
         self.layer.borderWidth = 0.5
         
         self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
-        self.imageView.contentMode = .scaleAspectFit
     }
     
     func configure(with message: Messageable) {

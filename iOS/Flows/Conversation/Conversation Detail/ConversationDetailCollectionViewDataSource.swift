@@ -31,13 +31,13 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         var image: UIImage? {
             switch self {
             case .add:
-                return UIImage(systemName: "person.badge.plus")
+                return ImageSymbol.personBadgePlus.image
             case .hide:
-                return UIImage(systemName: "eye.slash")
+                return ImageSymbol.eyeSlash.image
             case .leave:
-                return UIImage(systemName: "hand.wave")
+                return ImageSymbol.handWave.image
             case .delete:
-                return UIImage(systemName: "trash")
+                return ImageSymbol.trash.image
             }
         }
         

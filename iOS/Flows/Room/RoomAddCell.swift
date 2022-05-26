@@ -29,7 +29,7 @@ class RoomAddCell: CollectionViewManagerCell, ManageableCell {
     }
     
     func configure(with item: String) {
-        self.imageView.image = UIImage(systemName: "plus")
+        self.imageView.image = ImageSymbol.plus.image
     }
     
     override func layoutSubviews() {
