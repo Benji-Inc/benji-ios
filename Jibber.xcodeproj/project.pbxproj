@@ -1184,6 +1184,7 @@
 		D61A33E827D5C4CD00056242 /* ContextCueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCueView.swift; sourceTree = "<group>"; };
 		D61C1D13283FE1BE00F58F84 /* SymbolButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolButton.swift; sourceTree = "<group>"; };
 		D61C1D17283FF0B900F58F84 /* SymbolImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolImageView.swift; sourceTree = "<group>"; };
+		D61C1D1F28402EB300F58F84 /* Coordinator */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Coordinator; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Jibber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jibber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -2765,6 +2766,7 @@
 		D6FA273B2767A65600315528 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				D61C1D1F28402EB300F58F84 /* Coordinator */,
 				D6FA273C2767A67300315528 /* Localization */,
 			);
 			path = Packages;
