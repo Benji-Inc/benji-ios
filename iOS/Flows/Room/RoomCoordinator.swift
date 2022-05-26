@@ -70,6 +70,11 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             self.handleRightOption(with: notice)
         }
         
+        self.roomVC.dataSource.didSelectRemoveOption = { [unowned self] notice in
+            NoticeStore.shared.delete(notice: notice)
+            self.roomVC.reloadNotices()
+        }
+        
         self.roomVC.dataSource.didSelectLeftOption = { [unowned self] notice in
             self.handleLeftOption(with: notice)
         }
@@ -109,8 +114,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                           let messageId = notice.attributes?["messageId"] as? String else { return }
                     
                     self.presentConversation(with: cid, messageId: messageId)
-                    guard let n = notice.notice else { return }
-                    NoticeStore.shared.delete(notice: n)
+                    NoticeStore.shared.delete(notice: notice)
                     self.roomVC.reloadNotices()
                 default:
                     break

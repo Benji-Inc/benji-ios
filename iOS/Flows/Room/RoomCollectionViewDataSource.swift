@@ -46,6 +46,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     
     var didSelectRightOption: ((SystemNotice) -> Void)? = nil
     var didSelectLeftOption: ((SystemNotice) -> Void)? = nil
+    var didSelectRemoveOption: ((SystemNotice) -> Void)? = nil
     
     weak var messageContentDelegate: MessageContentDelegate?
     
@@ -68,6 +69,9 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             }
             cell.didSelectPrimaryOption = { [unowned self] in
                 self.didSelectRightOption?(notice)
+            }
+            cell.didSelectRemove = { [unowned self] in
+                self.didSelectRemoveOption?(notice)
             }
             return cell
         case .memberId(let member):
