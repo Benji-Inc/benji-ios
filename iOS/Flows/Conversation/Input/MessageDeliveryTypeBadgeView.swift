@@ -14,7 +14,7 @@ class MessageDeliveryTypeBadgeView: BaseView {
     @Published var deliveryType: MessageDeliveryType?
     private var cancellables = Set<AnyCancellable>()
 
-    private let imageView = UIImageView()
+    private let imageView = SymbolImageView()
     private let label = ThemeLabel(font: .small)
 
     override func initializeSubviews() {
@@ -24,7 +24,6 @@ class MessageDeliveryTypeBadgeView: BaseView {
         self.addSubview(self.label)
 
         self.set(backgroundColor: .badgeHighlightTop)
-        self.imageView.contentMode = .scaleAspectFit
 
         self.$deliveryType
             .removeDuplicates()
@@ -54,8 +53,7 @@ class MessageDeliveryTypeBadgeView: BaseView {
 
             guard !Task.isCancelled else { return }
 
-            self.imageView.image = type.image
-            self.imageView.preferredSymbolConfiguration = type.getConfiguration()
+            self.imageView.set(symbol: type.symbol)
             self.label.setText(type.description)
             self.label.alpha = 1
             self.imageView.alpha = 1

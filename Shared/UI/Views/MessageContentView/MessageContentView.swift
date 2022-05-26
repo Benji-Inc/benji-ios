@@ -68,7 +68,7 @@ class MessageContentView: BaseView {
     /// Date view that shows when the message was last updated.
     let dateView = MessageDateLabel(font: .small)
     /// Delivery view that shows how the message was sent
-    let deliveryView = UIImageView()
+    let deliveryView = SymbolImageView()
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regular, textColor: .white)
     let imageView = DisplayableImageView()
@@ -149,7 +149,6 @@ class MessageContentView: BaseView {
         self.authorView.layer.cornerRadius = Theme.innerCornerRadius
         
         self.mainContentArea.addSubview(self.deliveryView)
-        self.deliveryView.contentMode = .scaleAspectFit
         self.deliveryView.alpha = 0.6
         
         self.mainContentArea.addSubview(self.dateView)
@@ -281,8 +280,7 @@ class MessageContentView: BaseView {
         self.countCircle.isVisible = false
 
         self.dateView.configure(with: message)
-        self.deliveryView.image = message.deliveryType.image
-        self.deliveryView.preferredSymbolConfiguration = message.deliveryType.getConfiguration()
+        self.deliveryView.set(symbol: message.deliveryType.symbol)
 
         if message.isDeleted {
             self.textView.text = "DELETED"

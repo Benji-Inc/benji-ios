@@ -41,14 +41,14 @@ enum MessageDeliveryType: String, CaseIterable {
         }
     }
     
-    var image: UIImage? {
+    var symbol: ImageSymbol {
         switch self {
         case .timeSensitive:
-            return ImageSymbol.bellBadge.image
+            return ImageSymbol.bellBadge
         case .conversational:
-            return ImageSymbol.bell.image
+            return ImageSymbol.bell
         case .respectful:
-            return ImageSymbol.bellSlash.image
+            return ImageSymbol.bellSlash
         }
     }
     
