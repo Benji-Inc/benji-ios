@@ -165,12 +165,10 @@
 		D611280E2804DB5E00574B96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */; };
 		D611280F2804DB6200574B96 /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D61128102804DB6A00574B96 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
-		D61128112804DB9C00574B96 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
 		D61128132804DB9C00574B96 /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
 		D61128142804DB9C00574B96 /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
 		D61128152804DB9C00574B96 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D61128162804DB9C00574B96 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD922BF297F00BA277D /* MainCoordinator.swift */; };
-		D61128172804DB9C00574B96 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD722BF295A00BA277D /* Coordinator.swift */; };
 		D61128182804DBC600574B96 /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D61128192804DBC600574B96 /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
 		D611281A2804DBC600574B96 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
@@ -485,7 +483,6 @@
 		D63DB21425E998D700F6B323 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D63DB21525E998D700F6B323 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D63DB21825E998E900F6B323 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
-		D63DB21B25E998F000F6B323 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
 		D63DB21E25E998FC00F6B323 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D63DB21F25E998FC00F6B323 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
 		D63DB22025E998FC00F6B323 /* Character+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */; };
@@ -666,7 +663,6 @@
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
 		D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
 		D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */; };
-		D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD722BF295A00BA277D /* Coordinator.swift */; };
 		D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD922BF297F00BA277D /* MainCoordinator.swift */; };
 		D66F0FE222C041AF00BA277D /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* PersonView.swift */; };
 		D66F0FE622C0640E00BA277D /* PersonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* PersonType.swift */; };
@@ -685,7 +681,6 @@
 		D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */; };
 		D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */; };
 		D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
-		D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
 		D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896A822FF51170059BA75 /* PhoneViewController.swift */; };
 		D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AC22FF60190059BA75 /* TextInputViewController.swift */; };
 		D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AE22FF62630059BA75 /* PhoneKit.swift */; };
@@ -1309,7 +1304,6 @@
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
 		D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkTarget.swift; sourceTree = "<group>"; };
 		D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkObject.swift; sourceTree = "<group>"; };
-		D66F0FD722BF295A00BA277D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		D66F0FD922BF297F00BA277D /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		D66F0FE122C041AF00BA277D /* PersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
 		D66F0FE522C0640E00BA277D /* PersonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonType.swift; sourceTree = "<group>"; };
@@ -1328,7 +1322,6 @@
 		D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Fill.swift"; sourceTree = "<group>"; };
 		D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Move.swift"; sourceTree = "<group>"; };
 		D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
-		D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Presentable.swift"; sourceTree = "<group>"; };
 		D67896A822FF51170059BA75 /* PhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewController.swift; sourceTree = "<group>"; };
 		D67896AC22FF60190059BA75 /* TextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputViewController.swift; sourceTree = "<group>"; };
 		D67896AE22FF62630059BA75 /* PhoneKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneKit.swift; sourceTree = "<group>"; };
@@ -1973,13 +1966,11 @@
 		D6356D8F25A36BD90015104F /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				D66F0FD722BF295A00BA277D /* Coordinator.swift */,
 				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
 				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
 				D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */,
 				D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */,
 				D691794122F6418700340AA3 /* Router.swift */,
-				D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */,
 				D61C1D242840409900F58F84 /* BaseCoordinator.swift */,
 				D61C1D27284041DE00F58F84 /* PresentableCoordinator.swift */,
 			);
@@ -3283,7 +3274,6 @@
 				D611286D2804DC6000574B96 /* MicroAnimation.swift in Sources */,
 				D61128892804DCCA00574B96 /* Statusable.swift in Sources */,
 				D61128722804DC6D00574B96 /* Reservation.swift in Sources */,
-				D61128172804DB9C00574B96 /* Coordinator.swift in Sources */,
 				D61C1D262840409900F58F84 /* BaseCoordinator.swift in Sources */,
 				D611286B2804DC5400574B96 /* AnimationDuration.swift in Sources */,
 				D61128852804DCCA00574B96 /* Deeplinkable.swift in Sources */,
@@ -3343,7 +3333,6 @@
 				D61128592804DC3E00574B96 /* ToastBannerView.swift in Sources */,
 				D61128BA2804EAD100574B96 /* CollectionViewDataSource.swift in Sources */,
 				D61128AE2804E76400574B96 /* TransitionRouter+Fade.swift in Sources */,
-				D61128112804DB9C00574B96 /* UIViewController+Presentable.swift in Sources */,
 				D61128692804DC5400574B96 /* DeeplinkTarget.swift in Sources */,
 				D61128902804DE2C00574B96 /* Button+Extensions.swift in Sources */,
 				D6B2B64E2839570B007D507B /* ImageSymbol.swift in Sources */,
@@ -3642,7 +3631,6 @@
 				D646D36E27E53D750077D20B /* AttachmentOptionCell.swift in Sources */,
 				D60CA47A27EE2C6500F0871A /* EmojiNavigationViewController.swift in Sources */,
 				D60B886227F4C2EC00B3E1C2 /* MessageFooterView.swift in Sources */,
-				D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */,
 				D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */,
 				D637651827E92B5900CCDA7F /* ConversationDetailCoordinator.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
@@ -3818,7 +3806,6 @@
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
-				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				8024B95326F278C8008ABF7F /* ConversationCollectionViewDataSource.swift in Sources */,
 				D61C1D28284041DE00F58F84 /* PresentableCoordinator.swift in Sources */,
@@ -3859,7 +3846,6 @@
 				D63DB23825E9992600F6B323 /* UIImage+Extensions.swift in Sources */,
 				D63DB22D25E9991F00F6B323 /* Selectable.swift in Sources */,
 				D63DB28425E9999C00F6B323 /* Transitionable.swift in Sources */,
-				D63DB21B25E998F000F6B323 /* UIViewController+Presentable.swift in Sources */,
 				D63DB26B25E9997800F6B323 /* UserNotificationCategory.swift in Sources */,
 				D63DB23D25E9992900F6B323 /* UNNotificationContent+Extensions.swift in Sources */,
 				D63DB22F25E9991F00F6B323 /* Publisher+Extensions.swift in Sources */,
