@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Transitions
 
 class MessageDetailViewController: DiffableCollectionViewController<MessageDetailDataSource.SectionType,
                                    MessageDetailDataSource.ItemType,
@@ -210,31 +211,31 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
 
 extension MessageDetailViewController: TransitionableViewController {
 
-    var presentationType: TransitionType {
-        return .message(self.messageContentView)
-    }
-    
-    var dismissalType: TransitionType {
-        return .message(self.messageContentView)
-    }
+//    var presentationType: TransitionType {
+//        return .message(self.messageContentView)
+//    }
+//
+//    var dismissalType: TransitionType {
+//        return .message(self.messageContentView)
+//    }
 
-    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
-        switch toVCPresentationType {
-        case .message:
-            return .message(self.messageContentView)
-        default:
-            return toVCPresentationType
-        }
-    }
-
-    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
-        switch fromVCDismissalType {
-        case .message:
-            return .message(self.messageContentView)
-        default:
-            return fromVCDismissalType
-        }
-    }
+//    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+//        switch toVCPresentationType {
+//        case .message:
+//            return .message(self.messageContentView)
+//        default:
+//            return toVCPresentationType
+//        }
+//    }
+//
+//    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+//        switch fromVCDismissalType {
+//        case .message:
+//            return .message(self.messageContentView)
+//        default:
+//            return fromVCDismissalType
+//        }
+//    }
     
     func prepareForPresentation() {
         self.collectionView.top = self.view.height

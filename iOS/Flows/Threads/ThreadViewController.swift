@@ -11,6 +11,7 @@ import Parse
 import Combine
 import StreamChat
 import KeyboardManager
+import Transitions
 
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,
@@ -342,23 +343,26 @@ extension ThreadViewController: MessageSendingViewControllerType {
 extension ThreadViewController: TransitionableViewController {
 
     var presentationType: TransitionType {
-        return .message(self.parentMessageView)
+        return .fadeOutIn
+       // return .message(self.parentMessageView)
     }
 
     var dismissalType: TransitionType {
-        return .message(self.parentMessageView)
+        return .fadeOutIn
+        //return .message(self.parentMessageView)
     }
 
     func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
         switch toVCPresentationType {
-        case .message:
-            guard !self.isPresentingImage,
-                  let first = self.collectionView.indexPathsForSelectedItems?.first,
-                  let cell = self.collectionView.cellForItem(at: first) as? MessageCell else {
-                break
-            }
-
-            return .message(cell.content)
+//        case .message:
+//            guard !self.isPresentingImage,
+//                  let first = self.collectionView.indexPathsForSelectedItems?.first,
+//                  let cell = self.collectionView.cellForItem(at: first) as? MessageCell else {
+//                break
+//            }
+//
+//            return .message(cell.content)
+//            break
         default:
             break
         }
@@ -368,14 +372,14 @@ extension ThreadViewController: TransitionableViewController {
 
     func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
         switch fromVCDismissalType {
-        case .message:
-            guard !self.isPresentingImage,
-                  let first = self.collectionView.indexPathsForSelectedItems?.first,
-                  let cell = self.collectionView.cellForItem(at: first) as? MessageCell else {
-                break
-            }
-
-            return .message(cell.content)
+//        case .message:
+//            guard !self.isPresentingImage,
+//                  let first = self.collectionView.indexPathsForSelectedItems?.first,
+//                  let cell = self.collectionView.cellForItem(at: first) as? MessageCell else {
+//                break
+//            }
+//
+//            return .message(cell.content)
         default:
             break
         }

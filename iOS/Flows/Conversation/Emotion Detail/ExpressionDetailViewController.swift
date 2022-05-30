@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Transitions
 
 protocol ExpressionDetailViewControllerDelegate: AnyObject {
     func emotionDetailViewControllerDidFinish(_ controller: ExpressionDetailViewController)
@@ -80,19 +81,11 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
 
 extension ExpressionDetailViewController: TransitionableViewController {
 
-    var dismissalType: TransitionType {
-        return .blur
-    }
-
-    var presentationType: TransitionType {
-        return .blur
-    }
-
-    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
-        return toVCPresentationType
-    }
-
-    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
-        return fromVCDismissalType
-    }
+//    var dismissalType: TransitionType {
+//        return .blur
+//    }
+//
+//    var presentationType: TransitionType {
+//        return .blur
+//    }
 }

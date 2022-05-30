@@ -10,6 +10,7 @@ import Foundation
 import Lightbox
 import Lottie
 import Coordinator
+import Transitions
 
 class MediaViewController: LightboxController, Dismissable, TransitionableViewController {
 
@@ -19,14 +20,6 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
     
     var presentationType: TransitionType {
         return .crossDissolve
-    }
-
-    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
-        return toVCPresentationType
-    }
-
-    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
-        return fromVCDismissalType
     }
 
     var dismissHandlers: [DismissHandler] = []

@@ -696,6 +696,8 @@
 		D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
+		D680F02028458298007F9025 /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D680F01F28458298007F9025 /* Transitions */; };
+		D680F022284582A3007F9025 /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D680F021284582A3007F9025 /* Transitions */; };
 		D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
 		D682B4162792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
 		D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
@@ -1320,6 +1322,7 @@
 		D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFInstallation+Extensions.swift"; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
+		D680F01E284581FF007F9025 /* Transitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transitions; path = ../../Transitions; sourceTree = "<group>"; };
 		D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
 		D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsMessagesCellAttributes.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientPassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientPassThroughView.swift; sourceTree = "<group>"; };
@@ -1466,6 +1469,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D680F02028458298007F9025 /* Transitions in Frameworks */,
 				D611280B2804D8A400574B96 /* PhoneNumberKit in Frameworks */,
 				D61C1D23284035ED00F58F84 /* Coordinator in Frameworks */,
 				D61128072804D88600574B96 /* Localization in Frameworks */,
@@ -1481,6 +1485,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D680F022284582A3007F9025 /* Transitions in Frameworks */,
 				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
 				D61C1D212840324000F58F84 /* Coordinator in Frameworks */,
 				D6C3893627287307004D29D5 /* StreamChat in Frameworks */,
@@ -2735,6 +2740,7 @@
 				D669FA7B28452EDF00F4A9B5 /* KeyboardManager */,
 				D61C1D1F28402EB300F58F84 /* Coordinator */,
 				D6FA273C2767A67300315528 /* Localization */,
+				D680F01E284581FF007F9025 /* Transitions */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -2764,6 +2770,7 @@
 				D6DD0C3A2822F3DE004999F2 /* Sentry */,
 				D61C1D22284035ED00F58F84 /* Coordinator */,
 				D669FA7E28452F8000F4A9B5 /* KeyboardManager */,
+				D680F01F28458298007F9025 /* Transitions */,
 			);
 			productName = AppClip;
 			productReference = D61127EE2804D72C00574B96 /* AppClip.app */;
@@ -2799,6 +2806,7 @@
 				D6DD0C302822F370004999F2 /* Sentry */,
 				D61C1D202840324000F58F84 /* Coordinator */,
 				D669FA7C28452F7A00F4A9B5 /* KeyboardManager */,
+				D680F021284582A3007F9025 /* Transitions */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -4826,6 +4834,14 @@
 		D669FA7E28452F8000F4A9B5 /* KeyboardManager */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KeyboardManager;
+		};
+		D680F01F28458298007F9025 /* Transitions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Transitions;
+		};
+		D680F021284582A3007F9025 /* Transitions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Transitions;
 		};
 		D6977D6427D1780900A65330 /* StreamChat */ = {
 			isa = XCSwiftPackageProductDependency;

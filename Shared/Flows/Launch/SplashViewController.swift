@@ -10,8 +10,9 @@ import Foundation
 import Lottie
 import StoreKit
 import Localization
+import Transitions
 
-class SplashViewController: ViewController, TransitionableViewController {
+class SplashViewController: ViewController, TransitionableViewController {    
 
     // MARK: - Transitionable
     

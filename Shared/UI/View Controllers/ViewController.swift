@@ -11,7 +11,7 @@ import Combine
 import Coordinator
 
 class ViewController: CoordinatorViewController {
-
+    
     var cancellables = Set<AnyCancellable>()
     /// A pool of Tasks that are automatically cancelled when our view disappears
     var autocancelTaskPool = TaskPool()
