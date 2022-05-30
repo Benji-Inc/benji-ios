@@ -9,6 +9,7 @@
 import Foundation
 import Lottie
 import Combine
+import KeyboardManager
 
 protocol SwipeableInputAccessoryViewControllerDelegate: AnyObject {
     /// The accessory has begun a swipe interaction.

@@ -10,7 +10,7 @@ import Foundation
 import Parse
 import Combine
 import StreamChat
-import SwiftUI
+import KeyboardManager
 
 class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
                             MessageSequenceItem,

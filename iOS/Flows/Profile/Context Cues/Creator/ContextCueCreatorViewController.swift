@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import Localization
+import KeyboardManager
 
 class ContextCueCreatorViewController: EmojiPickerViewController {
             
