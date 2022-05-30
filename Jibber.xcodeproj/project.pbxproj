@@ -1802,14 +1802,15 @@
 			children = (
 				D6356D7E25A369F80015104F /* Shared */,
 				D6356D8425A36AC00015104F /* iOS */,
-				D63DB1FC25E968C300F6B323 /* Notification Content */,
-				D6AE0F6E267CF9CA00C6B048 /* Notification Service */,
+				D61127EF2804D72D00574B96 /* AppClip */,
 				D6AE0F7F267CFA6C00C6B048 /* Intents Extension */,
 				D6AE0F8A267CFA6D00C6B048 /* Intents ExtensionUI */,
-				D61127EF2804D72D00574B96 /* AppClip */,
-				D61EC0BD21D3071400204BEE /* Products */,
-				856FD9BFAD8BA46208226C85 /* Pods */,
+				D63DB1FC25E968C300F6B323 /* Notification Content */,
+				D6AE0F6E267CF9CA00C6B048 /* Notification Service */,
+				D6FA273B2767A65600315528 /* Packages */,
 				AB1A79B62F263B1E788E3AB0 /* Frameworks */,
+				856FD9BFAD8BA46208226C85 /* Pods */,
+				D61EC0BD21D3071400204BEE /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1899,7 +1900,6 @@
 				D66379DB25A39BB000A4A3B7 /* Managers */,
 				D6637A0825A39DA500A4A3B7 /* Models */,
 				D6A4A1F425E954CB007F3E15 /* Notifications */,
-				D6FA273B2767A65600315528 /* Packages */,
 				D6637A0425A39D0900A4A3B7 /* Protocols */,
 				D61EC0FA21D3180200204BEE /* Resources */,
 				D6B95AED2723248F00FBE66A /* Stores */,
