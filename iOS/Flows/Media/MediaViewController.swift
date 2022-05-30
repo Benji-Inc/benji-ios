@@ -9,6 +9,7 @@
 import Foundation
 import Lightbox
 import Lottie
+import Coordinator
 
 class MediaViewController: LightboxController, Dismissable, TransitionableViewController {
 

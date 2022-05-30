@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Coordinator
 
 class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandler {
     
@@ -18,7 +19,7 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
     init(with channelId: ChannelId,
          messageId: MessageId,
          startingReplyId: MessageId?,
-         router: Router,
+         router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
         
         let vc = ThreadViewController(channelID: channelId,

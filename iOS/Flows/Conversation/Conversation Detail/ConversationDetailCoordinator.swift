@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import StreamChat
 import Localization
+import Coordinator
 
 enum DetailCoordinatorResult {
     case conversation(ConversationId)
@@ -22,7 +23,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     let cid: ConversationId
     
     init(with cid: ConversationId,
-         router: Router,
+         router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
         self.cid = cid
         super.init(router: router, deepLink: deepLink)

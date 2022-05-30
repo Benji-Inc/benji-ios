@@ -13,6 +13,7 @@ import Combine
 import StreamChat
 import Localization
 import Intents
+import Coordinator
 
 /// A coordinator for displaying a single conversation.
 class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
@@ -21,7 +22,7 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         return self.inputHandlerViewController as! ConversationViewController
     }
     
-    init(router: Router,
+    init(router: CoordinatorRouter,
          deepLink: DeepLinkable?,
          cid: ConversationId,
          startingMessageId: MessageId?,

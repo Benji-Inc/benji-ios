@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Coordinator
 
 class ExpressionDetailCoordinator: PresentableCoordinator<Void> {
 
@@ -22,7 +23,7 @@ class ExpressionDetailCoordinator: PresentableCoordinator<Void> {
         return self.emotionDetailVC
     }
 
-    init(router: Router,
+    init(router: CoordinatorRouter,
          deepLink: DeepLinkable?,
          expression: Expression,
          startingEmotion: Emotion?) {

@@ -9,8 +9,9 @@
 import Foundation
 import UIKit
 import Parse
+import Coordinator
 
-class MainCoordinator: Coordinator<Void> {
+class MainCoordinator: BaseCoordinator<Void> {
     
     var launchActivity: LaunchActivity? 
 

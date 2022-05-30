@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Coordinator
 
 class PersonConnectionCoordinator: PresentableCoordinator<Connection?> {
     
@@ -16,7 +17,7 @@ class PersonConnectionCoordinator: PresentableCoordinator<Connection?> {
     
     init(with person: PersonType? = nil ,
          launchActivity: LaunchActivity? = nil,
-         router: Router,
+         router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
         
         self.person = person

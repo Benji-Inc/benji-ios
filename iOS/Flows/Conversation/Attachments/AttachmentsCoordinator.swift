@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Coordinator
 
 enum AttachmentOption {
     case attachments([Attachment])
@@ -21,7 +22,7 @@ class AttachmentsCoordinator: PresentableCoordinator<AttachmentOption> {
     
     lazy var attachmentsVC = AttachmentsViewController()
     
-    override init(router: Router, deepLink: DeepLinkable?) {
+    override init(router: CoordinatorRouter, deepLink: DeepLinkable?) {
         super.init(router: router, deepLink: deepLink)
         
         self.attachmentsVC.doneButton.didSelect { [unowned self] in

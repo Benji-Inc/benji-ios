@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Coordinator
 
 enum MessageDetailResult {
     case message(Messageable)
@@ -23,7 +24,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     private let message: Messageable
 
     init(with message: Messageable,
-         router: Router,
+         router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
 
         self.message = message
