@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import Combine
 
-internal extension UIResponder {
+public extension UIResponder {
 
     private weak static var currentFirstResponder: UIResponder?
 
@@ -60,5 +60,13 @@ internal extension CGRect {
     var y: CGFloat {
         get { return self.origin.y }
         set { self.origin.y = newValue }
+    }
+}
+
+internal extension NotificationCenter.Publisher.Output {
+
+    var keyboardEndFrame: CGRect {
+        let rect = self.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
+        return rect
     }
 }
