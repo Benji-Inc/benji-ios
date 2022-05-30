@@ -9,6 +9,7 @@
 import Foundation
 import Lottie
 import Combine
+import KeyboardManager
 
 class SwipeableInputAccessoryView: BaseView {
 

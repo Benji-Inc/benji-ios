@@ -9,6 +9,7 @@
 import Foundation
 import Localization
 import UIKit
+import KeyboardManager
  
 class TextFieldToolBar: UIToolbar {
 

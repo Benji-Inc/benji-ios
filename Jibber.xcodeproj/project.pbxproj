@@ -36,7 +36,6 @@
 		802EDDAD27ECD49F005ECA9C /* String+DataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802EDDAA27ECD496005ECA9C /* String+DataTypes.swift */; };
 		802EDDAE27ECD4A0005ECA9C /* String+DataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802EDDAA27ECD496005ECA9C /* String+DataTypes.swift */; };
 		80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */; };
-		803DECCA27BDBCA40029A734 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803DECC927BDBCA40029A734 /* UIResponder+Extensions.swift */; };
 		8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8041FB0C27A0C2BB00FEBD78 /* CGVector+Extensions.swift */; };
 		8041FB0E27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8041FB0C27A0C2BB00FEBD78 /* CGVector+Extensions.swift */; };
 		8043F53F276BC05D0036FAC8 /* PlaceholderConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */; };
@@ -239,7 +238,6 @@
 		D611285C2804DC3E00574B96 /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
 		D611285E2804DC4700574B96 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealias.swift */; };
 		D61128602804DC4700574B96 /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
-		D61128622804DC4E00574B96 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
 		D61128632804DC4E00574B96 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D61128642804DC4E00574B96 /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
 		D61128652804DC4E00574B96 /* LaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C725A3704300A4A3B7 /* LaunchManager.swift */; };
@@ -298,7 +296,6 @@
 		D611289D2804E11900574B96 /* ProfilePhotoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BE2302683C0059BA75 /* ProfilePhotoCaptureViewController.swift */; };
 		D611289E2804E18500574B96 /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
 		D611289F2804E1C000574B96 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
-		D61128A02804E21100574B96 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803DECC927BDBCA40029A734 /* UIResponder+Extensions.swift */; };
 		D61128A12804E22F00574B96 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Person.swift */; };
 		D61128A22804E23600574B96 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D61128A32804E24600574B96 /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
@@ -635,8 +632,9 @@
 		D666127127E2BB13006CDF3D /* AchievementType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D666126C27E29AED006CDF3D /* AchievementType.swift */; };
 		D666127427E2EA38006CDF3D /* AchievementsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D666127327E2EA38006CDF3D /* AchievementsManager.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
-		D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
 		D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */; };
+		D669FA7D28452F7A00F4A9B5 /* KeyboardManager in Frameworks */ = {isa = PBXBuildFile; productRef = D669FA7C28452F7A00F4A9B5 /* KeyboardManager */; };
+		D669FA7F28452F8000F4A9B5 /* KeyboardManager in Frameworks */ = {isa = PBXBuildFile; productRef = D669FA7E28452F8000F4A9B5 /* KeyboardManager */; };
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
 		D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D66A580525DD68F9001B3F64 /* PeopleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */; };
@@ -1014,7 +1012,6 @@
 		802C448926CC76CC00A333A4 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		802EDDAA27ECD496005ECA9C /* String+DataTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+DataTypes.swift"; sourceTree = "<group>"; };
 		80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTimeMachineCollectionViewLayout.swift; sourceTree = "<group>"; };
-		803DECC927BDBCA40029A734 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
 		8041FB0C27A0C2BB00FEBD78 /* CGVector+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extensions.swift"; sourceTree = "<group>"; };
 		8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderConversationCell.swift; sourceTree = "<group>"; };
 		80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequenceCollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -1281,8 +1278,8 @@
 		D666126C27E29AED006CDF3D /* AchievementType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementType.swift; sourceTree = "<group>"; };
 		D666127327E2EA38006CDF3D /* AchievementsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsManager.swift; sourceTree = "<group>"; };
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
-		D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
+		D669FA7B28452EDF00F4A9B5 /* KeyboardManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KeyboardManager; sourceTree = "<group>"; };
 		D66A0B932351821200A0FFEA /* Completeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completeable.swift; sourceTree = "<group>"; };
 		D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleCoordinator.swift; sourceTree = "<group>"; };
@@ -1472,6 +1469,7 @@
 				D611280B2804D8A400574B96 /* PhoneNumberKit in Frameworks */,
 				D61C1D23284035ED00F58F84 /* Coordinator in Frameworks */,
 				D61128072804D88600574B96 /* Localization in Frameworks */,
+				D669FA7F28452F8000F4A9B5 /* KeyboardManager in Frameworks */,
 				D61128092804D89100574B96 /* Lottie in Frameworks */,
 				91C4F105D5CDD409D028D428 /* Pods_AppClip.framework in Frameworks */,
 				D61128922804DF4300574B96 /* UIKit.framework in Frameworks */,
@@ -1486,6 +1484,7 @@
 				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
 				D61C1D212840324000F58F84 /* Coordinator in Frameworks */,
 				D6C3893627287307004D29D5 /* StreamChat in Frameworks */,
+				D669FA7D28452F7A00F4A9B5 /* KeyboardManager in Frameworks */,
 				D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */,
 				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
 				D656EF442765A11900FF6E2C /* Localization in Frameworks */,
@@ -1800,14 +1799,15 @@
 			children = (
 				D6356D7E25A369F80015104F /* Shared */,
 				D6356D8425A36AC00015104F /* iOS */,
-				D63DB1FC25E968C300F6B323 /* Notification Content */,
-				D6AE0F6E267CF9CA00C6B048 /* Notification Service */,
+				D61127EF2804D72D00574B96 /* AppClip */,
 				D6AE0F7F267CFA6C00C6B048 /* Intents Extension */,
 				D6AE0F8A267CFA6D00C6B048 /* Intents ExtensionUI */,
-				D61127EF2804D72D00574B96 /* AppClip */,
-				D61EC0BD21D3071400204BEE /* Products */,
-				856FD9BFAD8BA46208226C85 /* Pods */,
+				D63DB1FC25E968C300F6B323 /* Notification Content */,
+				D6AE0F6E267CF9CA00C6B048 /* Notification Service */,
+				D6FA273B2767A65600315528 /* Packages */,
 				AB1A79B62F263B1E788E3AB0 /* Frameworks */,
+				856FD9BFAD8BA46208226C85 /* Pods */,
+				D61EC0BD21D3071400204BEE /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1838,7 +1838,6 @@
 				D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */,
 				D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */,
 				D6CC1483276BEF41005F617F /* SwiftUI */,
-				803DECC927BDBCA40029A734 /* UIResponder+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1897,7 +1896,6 @@
 				D66379DB25A39BB000A4A3B7 /* Managers */,
 				D6637A0825A39DA500A4A3B7 /* Models */,
 				D6A4A1F425E954CB007F3E15 /* Notifications */,
-				D6FA273B2767A65600315528 /* Packages */,
 				D6637A0425A39D0900A4A3B7 /* Protocols */,
 				D61EC0FA21D3180200204BEE /* Resources */,
 				D6B95AED2723248F00FBE66A /* Stores */,
@@ -2139,7 +2137,6 @@
 			children = (
 				D68B723227D3D8FA00F04AB1 /* AnalyticsManager.swift */,
 				80632D92278534E600D3A65B /* EventLogger.swift */,
-				D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */,
 				D66379C725A3704300A4A3B7 /* LaunchManager.swift */,
 				D66379CD25A3704300A4A3B7 /* SessionManager.swift */,
 				D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */,
@@ -2735,6 +2732,7 @@
 		D6FA273B2767A65600315528 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				D669FA7B28452EDF00F4A9B5 /* KeyboardManager */,
 				D61C1D1F28402EB300F58F84 /* Coordinator */,
 				D6FA273C2767A67300315528 /* Localization */,
 			);
@@ -2765,6 +2763,7 @@
 				D611280A2804D8A400574B96 /* PhoneNumberKit */,
 				D6DD0C3A2822F3DE004999F2 /* Sentry */,
 				D61C1D22284035ED00F58F84 /* Coordinator */,
+				D669FA7E28452F8000F4A9B5 /* KeyboardManager */,
 			);
 			productName = AppClip;
 			productReference = D61127EE2804D72C00574B96 /* AppClip.app */;
@@ -2799,6 +2798,7 @@
 				D656EF432765A11900FF6E2C /* Localization */,
 				D6DD0C302822F370004999F2 /* Sentry */,
 				D61C1D202840324000F58F84 /* Coordinator */,
+				D669FA7C28452F7A00F4A9B5 /* KeyboardManager */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -3341,7 +3341,6 @@
 				D61128772804DC7200574B96 /* User+Objectable.swift in Sources */,
 				80B046F52819FB180079AE47 /* MetalView.swift in Sources */,
 				D61128702804DC6D00574B96 /* Connection.swift in Sources */,
-				D61128A02804E21100574B96 /* UIResponder+Extensions.swift in Sources */,
 				D61128942804DF6100574B96 /* DisplayableImageView.swift in Sources */,
 				D61128602804DC4700574B96 /* Completeable.swift in Sources */,
 				D611281F2804DBCD00574B96 /* Logger.swift in Sources */,
@@ -3361,7 +3360,6 @@
 				D611288C2804DDD600574B96 /* ViewController.swift in Sources */,
 				D61128272804DBD600574B96 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D61128B62804E94B00574B96 /* CollectionView.swift in Sources */,
-				D61128622804DC4E00574B96 /* KeyboardManager.swift in Sources */,
 				D611282A2804DBD600574B96 /* NSAttributedString+Extensions.swift in Sources */,
 				D611287E2804DCB000574B96 /* StringCasing.swift in Sources */,
 				D611288B2804DD4600574B96 /* PeopleStore.swift in Sources */,
@@ -3650,7 +3648,6 @@
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
 				D61C1D18283FF0B900F58F84 /* SymbolImageView.swift in Sources */,
-				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				80E970FE28204E8F003A5AC2 /* TransitionRouter+CrossDissolve.swift in Sources */,
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
@@ -3717,7 +3714,6 @@
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D67896BF2302683C0059BA75 /* ProfilePhotoCaptureViewController.swift in Sources */,
-				803DECCA27BDBCA40029A734 /* UIResponder+Extensions.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D60B886927F5026700B3E1C2 /* TypingIndicatorView.swift in Sources */,
@@ -4822,6 +4818,14 @@
 		D656EF4D2765A13B00FF6E2C /* Localization */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Localization;
+		};
+		D669FA7C28452F7A00F4A9B5 /* KeyboardManager */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardManager;
+		};
+		D669FA7E28452F8000F4A9B5 /* KeyboardManager */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyboardManager;
 		};
 		D6977D6427D1780900A65330 /* StreamChat */ = {
 			isa = XCSwiftPackageProductDependency;
