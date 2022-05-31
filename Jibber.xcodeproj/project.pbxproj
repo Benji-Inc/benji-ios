@@ -99,7 +99,6 @@
 		80D5C290281719BF00182DB6 /* EmotionDetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D5C28F281719BF00182DB6 /* EmotionDetailCollectionViewDataSource.swift */; };
 		80D5C292281719EB00182DB6 /* ExpressionDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D5C291281719EB00182DB6 /* ExpressionDetailCoordinator.swift */; };
 		80D5C2B428174DC300182DB6 /* TransitionRouter+Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D5C2B328174DC300182DB6 /* TransitionRouter+Blur.swift */; };
-		80D5C2B528174DCB00182DB6 /* TransitionRouter+Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D5C2B328174DC300182DB6 /* TransitionRouter+Blur.swift */; };
 		80D5C2B628174DCC00182DB6 /* TransitionRouter+Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D5C2B328174DC300182DB6 /* TransitionRouter+Blur.swift */; };
 		80D7721B26F93B17009F0344 /* ConversationListCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* ConversationListCollectionViewLayout.swift */; };
 		80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
@@ -544,7 +543,6 @@
 		D63DB27B25E9998D00F6B323 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D63DB27F25E9999C00F6B323 /* TransitionRouter+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */; };
 		D63DB28025E9999C00F6B323 /* TransitionRouter+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */; };
-		D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
 		D63DB28325E9999C00F6B323 /* TransitionRouter+Fade.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */; };
 		D63DB28425E9999C00F6B323 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
 		D63DB28925E999A600F6B323 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
@@ -3883,7 +3881,6 @@
 				D6850D5B2798967E001327D3 /* PullView.swift in Sources */,
 				D6C3892F2724B8E5004D29D5 /* MessageDeliveryType.swift in Sources */,
 				D62D16342736F60400C542CE /* ToastStatusView.swift in Sources */,
-				D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */,
 				D63DB22625E9990900F6B323 /* CGPoint+Extensions.swift in Sources */,
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
@@ -3892,7 +3889,6 @@
 				D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */,
 				80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D63DB25425E9995700F6B323 /* AnimationDuration.swift in Sources */,
-				80D5C2B528174DCB00182DB6 /* TransitionRouter+Blur.swift in Sources */,
 				D63DB25025E9995100F6B323 /* LaunchManager.swift in Sources */,
 				D63DB23525E9992600F6B323 /* UIView+Layout.swift in Sources */,
 				802EDDAE27ECD4A0005ECA9C /* String+DataTypes.swift in Sources */,
