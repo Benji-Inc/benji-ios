@@ -12,8 +12,8 @@ import Coordinator
 
 enum MessageDetailResult {
     case message(Messageable)
-    case reply(MessageId)
-    case conversation(ConversationId)
+    case reply(String)
+    case conversation(String)
     case none
 }
 
@@ -102,7 +102,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     
     private func handleDelete() {
         Task {
-            guard let cid = self.message.streamCid else { return }
+            guard let cid = try? ChannelId(cid: self.message.conversationId) else { return }
             let controller = ChatClient.shared.messageController(cid: cid, messageId: self.message.id)
             try? await controller.deleteMessage()
             
@@ -134,9 +134,9 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 switch result {
-                case .conversation(let cid):
-                    self.finishFlow(with: .conversation(cid))
-                case .openReplies(_, _):
+                case .conversation(let conversationId):
+                    self.finishFlow(with: .conversation(conversationId))
+                case .openReplies(_):
                     break 
                 }
             }
@@ -148,20 +148,15 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
 
 extension MessageDetailCoordinator: MessageContentDelegate {
     
-    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-        self.finishFlow(with: .reply(messageInfo.1))
+    func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {
+        self.finishFlow(with: .reply(message.id))
     }
     
-    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {
         self.finishFlow(with: .message(self.message))
     }
     
-    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {
 
         switch message.kind {
         case .photo(photo: let photo, _):
@@ -175,8 +170,7 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         }
     }
     
-    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {
-        guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {
         self.presentExpressionCreation(for: message)
     }
     

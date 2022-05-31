@@ -13,8 +13,8 @@ import Localization
 import Coordinator
 
 enum DetailCoordinatorResult {
-    case conversation(ConversationId)
-    case message(ConversationId, MessageId)
+    case conversation(String)
+    case message(Messageable)
 }
 
 class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorResult?> {
@@ -43,8 +43,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             
             switch first {
             case .pinnedMessage(let model):
-                guard let cid = model.cid, let messageId = model.messageId else { return }
-                self.finishFlow(with: .message(cid, messageId))
+                guard let message = ConversationsClient.shared.message(conversationId: model.cid!.description, id: model.messageId!) else { return }
+                self.finishFlow(with: .message(message))
             case .member(let member):
                 guard let person = PeopleStore.shared.people.first(where: { person in
                     return person.personId == member.personId
@@ -74,8 +74,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 switch result {
                 case .conversation(let cid):
-                    self.finishFlow(with: .conversation(cid))
-                case .openReplies(_, _):
+                    self.finishFlow(with: .conversation(cid.description))
+                case .openReplies(_):
                     break
                 }
             }
@@ -245,20 +245,11 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
 
 extension ConversationDetailCoordinator: MessageContentDelegate {
     
-    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-        
+    func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {
+        self.finishFlow(with: .message(message))
     }
     
-    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
-        self.finishFlow(with: .message(messageInfo.0, messageInfo.1))
-    }
-    
-    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {
         
         switch message.kind {
         case .photo(photo: let photo, _):

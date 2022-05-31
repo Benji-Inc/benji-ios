@@ -12,8 +12,8 @@ import StreamChat
 import Coordinator
 
 enum ProfileResult {
-    case conversation(ConversationId)
-    case openReplies(ConversationId, MessageId)
+    case conversation(String)
+    case openReplies(Messageable)
 }
 
 class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
@@ -53,9 +53,9 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
             guard let first = items.first else { return }
             switch first {
             case .conversation(let cid):
-                self.finishFlow(with: .conversation(cid))
+                self.finishFlow(with: .conversation(cid.description))
             case .unreadMessages(let model):
-                self.finishFlow(with: .conversation(model.cid))
+                self.finishFlow(with: .conversation(model.cid.description))
             default:
                 break 
             }
@@ -94,20 +94,11 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
 
 extension ProfileCoordinator: MessageContentDelegate {
     
-    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-        self.finishFlow(with: .openReplies(messageInfo.0, messageInfo.1))
+    func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {
+        self.finishFlow(with: .openReplies(message))
     }
     
-    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {
 
         switch message.kind {
         case .photo(photo: let photo, _):

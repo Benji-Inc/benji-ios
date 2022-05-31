@@ -21,8 +21,7 @@ extension ConversationCoordinator {
         self.present(coordinator)
     }
     
-    func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
-        let message = Message.message(with: channelId, messageId: messageId)
+    func presentMessageDetail(for message: Messageable) {
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)
@@ -30,18 +29,15 @@ extension ConversationCoordinator {
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .message(_):
-                self.presentThread(for: channelId,
-                                   messageId: messageId,
-                                   startingReplyId: nil)
+                self.presentThread(for: message, startingReplyId: nil)
             case .reply(let replyId):
-                self.presentThread(for: channelId,
-                                   messageId: messageId,
-                                   startingReplyId: replyId)
-            case .conversation(let conversation):
+                self.presentThread(for: message, startingReplyId: replyId)
+            case .conversation(let conversationId):
+                guard let cid = try? ChannelId(cid: conversationId) else { return }
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: conversation,
-                                                           messageId: nil,
-                                                           animateScroll: false)
+                    await self.conversationVC.scrollToConversation(with: cid,
+                                                                   messageId: nil,
+                                                                   animateScroll: false)
                 }
             case .none:
                 break
@@ -161,13 +157,17 @@ extension ConversationCoordinator {
             guard let option = result else { return }
             
             switch option {
-            case .conversation(let cid):
+            case .conversation(let conversationId):
+                guard let cid = try? ChannelId(cid: conversationId) else { return }
+
                 Task.onMainActorAsync {
                     await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
                 }
-            case .message(let cid, let messageId):
+            case .message(let message):
+                guard let cid = try? ChannelId(cid: message.conversationId) else { return }
+
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid, messageId: messageId, animateScroll: true)
+                    await self.conversationVC.scrollToConversation(with: cid, messageId: message.id, animateScroll: true)
                 }
             }
         }

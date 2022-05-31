@@ -83,16 +83,19 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             switch result {
-            case .conversation(let cid):
+            case .conversation(let conversationId):
+                guard let cid = try? ChannelId(cid: conversationId) else { return }
                 Task.onMainActorAsync {
                     await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
                 }
-            case .openReplies(let cid, let messageId):
+            case .openReplies(let message):
+                guard let cid = try? ChannelId(cid: message.conversationId) else { return }
+
                 Task.onMainActorAsync {
                     await self.conversationVC.scrollToConversation(with: cid,
-                                                           messageId: messageId,
-                                                           viewReplies: true,
-                                                           animateScroll: false)
+                                                                   messageId: message.id,
+                                                                   viewReplies: true,
+                                                                   animateScroll: false)
                 }
             }
         }
@@ -118,37 +121,31 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         ConversationsManager.shared.activeController = controller
     }
     
-    override func messageContent(_ content: MessageContentView,
-                                 didTapMessage messageInfo: (ConversationId, MessageId)) {
-        
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
-        
-        if let parentId = message.parentMessageId {
-            self.presentThread(for: messageInfo.0, messageId: parentId, startingReplyId: messageInfo.1)
+    override func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {
+                
+        if let parentId = message.parentMessageId,
+            let parentMessage = ConversationsClient.shared.message(conversationId: message.conversationId, id: parentId) {
+            self.presentThread(for: parentMessage, startingReplyId: message.id)
         } else {
-            self.presentMessageDetail(for: messageInfo.0, messageId: messageInfo.1)
+            self.presentMessageDetail(for: message)
         }
     }
     
-    override func messageContent(_ content: MessageContentView,
-                                 didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-        
-        self.presentThread(for: messageInfo.0, messageId: messageInfo.1, startingReplyId: nil)
+    override func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {
+        self.presentThread(for: message, startingReplyId: nil)
     }
     
-    override func presentThread(for cid: ConversationId,
-                       messageId: MessageId,
-                       startingReplyId: MessageId?) {
+    override func presentThread(for message: Messageable, startingReplyId: String?) {
         
-        let coordinator = ThreadCoordinator(with: cid,
-                                            messageId: messageId,
+        let coordinator = ThreadCoordinator(with: message,
                                             startingReplyId: startingReplyId,
                                             router: self.router,
                                             deepLink: self.deepLink)
         
         self.present(coordinator) { [unowned self] result in
+            guard let cid = try? ChannelId(cid: result) else { return }
             Task.onMainActorAsync {
-                await self.conversationVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
+                await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
             }
         }
     }
@@ -158,7 +155,7 @@ extension ConversationCoordinator: LaunchActivityHandler {
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            logDebug("Launched with: \(phoneNumber)")
+            logDebug("Launched with: \(String(describing: phoneNumber))")
         case .reservation(_), .pass(_):
             self.presentPersonConnection(for: launchActivity)
         case .deepLink(let deepLinkable):

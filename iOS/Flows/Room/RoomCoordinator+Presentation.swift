@@ -87,9 +87,9 @@ extension RoomCoordinator {
                 switch result {
                 case .conversation(let cid):
                     self.presentConversation(with: cid.description, messageId: nil)
-                case .openReplies(let cid, let messageId):
-                    self.presentConversation(with: cid.description,
-                                             messageId: messageId,
+                case .openReplies(let message):
+                    self.presentConversation(with: message.conversationId,
+                                             messageId: message.id,
                                              openReplies: false)
                 }
             }

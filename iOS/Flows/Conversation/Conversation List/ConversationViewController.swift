@@ -229,7 +229,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
             if let messageCell = messagesCell.getFrontmostCell() {
                 self.messageContentDelegate?.messageContent(messageCell.content,
-                                                            didTapMessage: (cid, messageId))
+                                                            didTapMessage: message)
             }
         } else if viewReplies {
             // It's not a parent message, but we still want to see the replies.
@@ -239,7 +239,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
             if let messageCell = messagesCell.getFrontmostCell() {
                 self.messageContentDelegate?.messageContent(messageCell.content,
-                                                            didTapViewReplies: (cid, messageId))
+                                                            didTapViewReplies: message)
             }
         } else {
             await messagesCell.scrollToMessage(with: messageId,

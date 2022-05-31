@@ -160,26 +160,12 @@ extension RoomCoordinator: LaunchActivityHandler {
 
 extension RoomCoordinator: MessageContentDelegate {
     
-    func messageContent(_ content: MessageContentView,
-                        didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-
-        self.presentConversation(with: messageInfo.0.description, messageId: messageInfo.1, openReplies: true)
+    func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {
+        self.presentConversation(with: message.conversationId, messageId: message.id, openReplies: true)
     }
     
     func messageContent(_ content: MessageContentView,
-                        didTapMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView,
-                        didTapEditMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView,
-                        didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+                        didTapAttachmentForMessage message: Messageable) {
 
         switch message.kind {
         case .photo(photo: let photo, _):

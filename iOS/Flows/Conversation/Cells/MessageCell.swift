@@ -69,18 +69,18 @@ class MessageCell: UICollectionViewCell {
         }
         
         self.footerView.replySummary.didSelectSuggestion = { [unowned self] suggestion in
-            guard let cid = self.message?.streamCid, let messageId = self.message?.id else { return }
+            guard let message = self.message else { return }
             switch suggestion {
             case .other:
-                self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, messageId))
+                self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
             default:
                 self.addReply(with: suggestion.text)
             }
         }
         
         self.footerView.replySummary.didTapViewReplies = { [unowned self] in
-            guard let cid = self.message?.streamCid, let messageId = self.message?.id else { return }
-            self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, messageId))
+            guard let message = self.message else { return }
+            self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }
 
         self.conversationsManagerSubscription = ConversationsManager.shared.$activeConversation
