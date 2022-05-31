@@ -18,7 +18,6 @@ class TransitionRouter: TransitionableRouter {
                                presenting presentingTransition: TransitionType,
                                context: UIViewControllerContextTransitioning) {
         
-        logDebug("subclass called for type: \(type)")
         if type == "message" {
 #if IOS
             guard let presentedView = model as? MessageContentView else { return }
