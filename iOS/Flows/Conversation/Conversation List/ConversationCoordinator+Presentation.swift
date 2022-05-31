@@ -67,7 +67,7 @@ extension ConversationCoordinator {
             // If the user didn't invite anyone to the conversation and the conversation doesn't have
             // any existing members, ask them if they'd like to delete it.
             Task {
-                let peopleInConversation = await PeopleStore.shared.getPeople(for: activeConversation)
+                let peopleInConversation = await ConversationsClient.shared.getPeople(for: activeConversation)
                 guard peopleInConversation.isEmpty else { return }
                 
                 self.presentDeleteConversationAlert(cid: activeConversation.cid)

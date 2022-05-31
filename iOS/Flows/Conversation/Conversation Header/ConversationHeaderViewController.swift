@@ -164,7 +164,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         
         self.loadPeopleTask = Task { [weak self] in
             guard let `self` = self else { return }
-            let members = await PeopleStore.shared.getPeople(for: conversation)
+            let members = await ConversationsClient.shared.getPeople(for: conversation)
             self.addImageView.isVisible = members.count == 0
             self.stackedView.configure(with: members)
             self.view.setNeedsLayout()

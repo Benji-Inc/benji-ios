@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftUI
-import StreamChat
 import Combine
 
 struct MessageDetailState: Equatable {
@@ -185,7 +184,7 @@ class MessageCell: UICollectionViewCell {
         // If we're already subscribed to message updates, don't do it again.
         guard messageable.id != self.messageController?.messageId else { return }
 
-        self.messageController = ChatClient.shared.messageController(for: messageable)
+        self.messageController = ConversationsClient.shared.messageController(for: messageable)
 
         self.messageController?.reactionsPublisher
             .mainSink(receiveValue: { [unowned self] _ in
@@ -237,8 +236,7 @@ class MessageCell: UICollectionViewCell {
         guard let messageable = self.message,
               let cid = try? ConversationId(cid: messageable.conversationId) else { return }
 
-        // If this item is showing its details, we may want to start the consumption process for it.
-        guard areDetailsFullyVisible, ChatUser.currentUserRole != .anonymous else { return }
+        guard areDetailsFullyVisible else { return }
 
         // Don't consume messages unless they're a part of the active conversation.
         if ConversationsManager.shared.activeConversation?.cid == cid {
@@ -267,7 +265,7 @@ class MessageCell: UICollectionViewCell {
     
     private func addReply(with text: String) {
         guard let msg = self.message,
-                let controller = ChatClient.shared.messageController(for: msg) else { return }
+                let controller = ConversationsClient.shared.messageController(for: msg) else { return }
         
         Task {
             let object = SendableObject(kind: .text(text),

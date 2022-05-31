@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Coordinator
 
 class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
@@ -40,7 +39,7 @@ class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
                   case MessageSequenceItem.message(let messageID, _) = first,
                   let cid = self.threadVC.conversationController?.cid else { return }
             
-            self.presentMessageDetail(for: cid, messageId: messageID)
+            self.presentMessageDetail(for: cid.description, messageId: messageID)
         }.store(in: &self.cancellables)
     }
     
@@ -56,8 +55,8 @@ class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
         }
     }
     
-    func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
-        let message = Message.message(with: channelId, messageId: messageId)
+    func presentMessageDetail(for conversationId: String, messageId: String) {
+        guard let message = ConversationsClient.shared.message(conversationId: conversationId, id: messageId) else { return }
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 typealias ConversationDetailSectionType = ConversationDetailCollectionViewDataSource.SectionType
 typealias ConversationDetailItemType = ConversationDetailCollectionViewDataSource.ItemType
@@ -70,8 +69,8 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
 
     enum ItemType: Hashable {
         case member(Member)
-        case info(ChannelId)
-        case editTopic(ChannelId)
+        case info(String)
+        case editTopic(String)
         case detail(OptionType)
         case pinnedMessage(PinModel)
     }
@@ -97,15 +96,15 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         let shouldHideLine = lastIndex == indexPath.row
         
         switch item {
-        case .info(let cid):
+        case .info(let conversationId):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.infoConfig,
                                                                     for: indexPath,
-                                                                    item: cid)
+                                                                    item: conversationId)
             return cell
-        case .editTopic(let cid):
+        case .editTopic(let conversationId):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.editConfig,
                                                                     for: indexPath,
-                                                                    item: cid)
+                                                                    item: conversationId)
             return cell
         case .member(let member):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.memberConfig,

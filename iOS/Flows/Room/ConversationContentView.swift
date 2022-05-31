@@ -83,7 +83,7 @@ class ConversationContentView: BaseView {
                 }
                 
                 let members = conversation.lastActiveMembers.filter { member in
-                    return member.personId != ChatClient.shared.currentUserId
+                    return member.personId != User.current()?.objectId
                 }
                 
                 self.stackedAvatarView.configure(with: members)
@@ -133,7 +133,7 @@ class ConversationContentView: BaseView {
                 switch event {
                 case _ as MemberAddedEvent, _ as MemberRemovedEvent:
                     let members = conversationController.conversation?.lastActiveMembers.filter { member in
-                        return member.personId != ChatClient.shared.currentUserId
+                        return member.personId != User.current()?.objectId
                     } ?? []
                     
                     self.stackedAvatarView.configure(with: members)

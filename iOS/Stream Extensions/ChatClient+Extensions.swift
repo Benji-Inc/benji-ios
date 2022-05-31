@@ -13,7 +13,7 @@ class ConversationsClient {
     
     static var shared = ConversationsClient()
     private var client: ChatClient?
-    
+        
     /// Returns true if the shared client is connected to the chat service.
     var isConnected: Bool {
         return self.client?.connectionStatus == .connected
@@ -118,6 +118,28 @@ class ConversationsClient {
 
     func message(conversationId: String, id: String) -> Messageable? {
         return self.messageController(for: conversationId, id: id)?.message
+    }
+    
+    func getPeople(for conversation: Conversation) async -> [PersonType] {
+        var people: [PersonType] = []
+        let nonMeMembers = conversation.lastActiveMembers.filter { member in
+            return member.id != User.current()?.objectId
+        }
+        
+        await nonMeMembers.userIDs.asyncForEach { userId in
+            guard let person = await PeopleStore.shared.getPerson(withPersonId: userId) else { return }
+            people.append(person)
+        }
+        
+        await PeopleStore.shared.unclaimedReservations.asyncForEach { (reservationId, reservation) in
+            guard reservation.conversationCid == conversation.cid.description,
+                    let contactId = reservation.contactId else { return }
+
+            guard let person = await PeopleStore.shared.getPerson(withPersonId: contactId) else { return }
+            people.append(person)
+        }
+        
+        return people
     }
     
     func createNewConversation() async throws -> Conversation? {

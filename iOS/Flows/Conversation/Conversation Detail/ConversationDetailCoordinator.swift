@@ -43,7 +43,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             
             switch first {
             case .pinnedMessage(let model):
-                guard let message = ConversationsClient.shared.message(conversationId: model.cid!.description, id: model.messageId!) else { return }
+                guard let message = ConversationsClient.shared.message(conversationId: model.conversationId!, id: model.messageId!) else { return }
                 self.finishFlow(with: .message(message))
             case .member(let member):
                 guard let person = PeopleStore.shared.people.first(where: { person in
@@ -53,8 +53,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 self.presentProfile(for: person)
             case .info(_):
                 break
-            case .editTopic(let cid):
-                self.presentConversationTitleAlert(for: cid)
+            case .editTopic(let conversationId):
+                self.presentConversationTitleAlert(for: conversationId)
             case .detail(let option):
                 if option == .add {
                     self.presentPeoplePicker()
@@ -84,8 +84,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         self.router.present(coordinator, source: self.detailVC, cancelHandler: nil)
     }
     
-    func presentConversationTitleAlert(for cid: ConversationId) {
-        let controller = ChatClient.shared.channelController(for: cid)
+    func presentConversationTitleAlert(for conversationId: String) {
+        let controller = ConversationsClient.shared.conversationController(for: conversationId)
         
         let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
@@ -97,7 +97,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                let text = textField.text,
                !text.isEmpty {
                 
-                controller.updateChannel(name: text, imageURL: nil, team: nil) { _ in
+                controller?.updateChannel(name: text, imageURL: nil, team: nil) { _ in
                     alertController.dismiss(animated: true, completion: {
                         Task {
                             await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.thumbsUp.image, "Name updated"))
