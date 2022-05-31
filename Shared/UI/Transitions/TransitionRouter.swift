@@ -11,37 +11,37 @@ import UIKit
 import Transitions
 
 class TransitionRouter: TransitionableRouter {
-    
+
     override func handleCustom(type: String,
                                model: Any?,
                                presented presentedTransition: TransitionType,
                                presenting presentingTransition: TransitionType,
                                context: UIViewControllerContextTransitioning) {
         
-        switch type {
-        #if iOS
-        case "message":
+        logDebug("subclass called for type: \(type)")
+        if type == "message" {
+#if IOS
             guard let presentedView = model as? MessageContentView else { return }
             switch presentingTransition {
-            case .custom(let type, let other, _):
+            case .custom(_, let other, _):
                 guard let presentingView = other as? MessageContentView else { return }
                 if self.isPresenting {
                     self.messageTranstion(fromView: presentingView,
                                           toView: presentedView,
-                                          transitionContext: transitionContext)
+                                          transitionContext: context)
                 } else {
                     self.messageTranstion(fromView: presentedView,
                                           toView: presentingView,
-                                          transitionContext: transitionContext)
+                                          transitionContext: context)
                 }
             default:
                 self.crossDissolveTransition(transitionContext: context)
             }
-        #endif
-        case "blur":
+            #endif
+        } else if type == "blur" {
             self.blur(transitionContext: context)
-        default:
-            break 
+        } else {
+            super.handleCustom(type: type, model: model, presented: presentedTransition, presenting: presentingTransition, context: context)
         }
     }
 }

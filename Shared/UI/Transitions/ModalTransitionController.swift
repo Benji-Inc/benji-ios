@@ -26,6 +26,10 @@ class ModalTransitionController: TransitioningController {
         
         return super.animationController(forDismissed: dismissed)
     }
+    
+    override func getRouter(fromVC: TransitionableViewController, toVC: TransitionableViewController, operation: UINavigationController.Operation) -> TransitionableRouter {
+        return TransitionRouter(fromVC: fromVC, toVC: toVC, operation: operation)
+    }
 
     override func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
