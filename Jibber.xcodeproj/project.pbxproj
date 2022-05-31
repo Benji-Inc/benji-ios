@@ -303,7 +303,6 @@
 		D61128AB2804E73600574B96 /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D61128AF2804E81600574B96 /* PhotoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */; };
 		D61128B02804E88700574B96 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461221D583E500CD8CE4 /* NavigationController.swift */; };
-		D61128B12804E89B00574B96 /* BoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66AB0F1277A46F2007A35D1 /* BoxView.swift */; };
 		D61128B22804E8A400574B96 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
 		D61128B42804E8CA00574B96 /* EmotionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* EmotionCategory.swift */; };
 		D61128B62804E94B00574B96 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501921D5F5D100CD8CE4 /* CollectionView.swift */; };
@@ -626,9 +625,7 @@
 		D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D66A580525DD68F9001B3F64 /* PeopleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */; };
 		D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580625DD691A001B3F64 /* PeopleViewController.swift */; };
-		D66AB0F2277A46F2007A35D1 /* BoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66AB0F1277A46F2007A35D1 /* BoxView.swift */; };
 		D66AB0F3277A498D007A35D1 /* PhotoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */; };
-		D66AB0F4277A4991007A35D1 /* BoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66AB0F1277A46F2007A35D1 /* BoxView.swift */; };
 		D66ED456267D35E100332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D66ED457267D35E100332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D66ED458267D35E200332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
@@ -1268,7 +1265,6 @@
 		D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleCoordinator.swift; sourceTree = "<group>"; };
 		D66A580625DD691A001B3F64 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
-		D66AB0F1277A46F2007A35D1 /* BoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxView.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
 		D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkTarget.swift; sourceTree = "<group>"; };
 		D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkObject.swift; sourceTree = "<group>"; };
@@ -2013,7 +2009,6 @@
 		D63C67DA23D4147C00EA373A /* Face Detection */ = {
 			isa = PBXGroup;
 			children = (
-				D66AB0F1277A46F2007A35D1 /* BoxView.swift */,
 				D6EB4DEF23540E48005BF3B4 /* FaceImageCaptureViewController.swift */,
 				80B046F22819FB180079AE47 /* MetalView.swift */,
 				D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */,
@@ -3200,7 +3195,6 @@
 				D611289F2804E1C000574B96 /* Toast.swift in Sources */,
 				D61128532804DC3200574B96 /* OnboardingViewController.swift in Sources */,
 				D61128152804DB9C00574B96 /* Router.swift in Sources */,
-				D61128B12804E89B00574B96 /* BoxView.swift in Sources */,
 				D61128882804DCCA00574B96 /* ImageDisplayable.swift in Sources */,
 				D61128982804E0E000574B96 /* SwitchableContentViewController.swift in Sources */,
 				D611282D2804DBDA00574B96 /* PFUser+Extensions.swift in Sources */,
@@ -3400,7 +3394,6 @@
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
 				D61128C52804EF2E00574B96 /* ReactionType.swift in Sources */,
 				D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */,
-				D66AB0F2277A46F2007A35D1 /* BoxView.swift in Sources */,
 				D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D6850D5A2798967E001327D3 /* PullView.swift in Sources */,
@@ -3829,7 +3822,6 @@
 				D63DB24E25E9994B00F6B323 /* Typealias.swift in Sources */,
 				D63DB23A25E9992600F6B323 /* UIScrollView+Extensions.swift in Sources */,
 				D63DB23025E9991F00F6B323 /* String+Extensions.swift in Sources */,
-				D66AB0F4277A4991007A35D1 /* BoxView.swift in Sources */,
 				D666127027E2BB06006CDF3D /* Achievement.swift in Sources */,
 				807C63F127CD7F4F0017112E /* Person.swift in Sources */,
 				D63DB23725E9992600F6B323 /* UIView+Animations.swift in Sources */,

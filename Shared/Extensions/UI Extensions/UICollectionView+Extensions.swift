@@ -11,15 +11,6 @@ import UIKit
 
 extension UICollectionView {
 
-    /// Returns the indexpath of the item whose cell is closest to the center of this collectionview. If there are no cells visible, then nil is returned.
-    func getCentermostVisibleIndex() -> IndexPath? {
-        if let closestCell = self.getCentermostVisibleCell() {
-            return self.indexPath(for: closestCell)
-        }
-
-        return nil
-    }
-
     /// Gets the index of the visible cell that is closest to the center of this collection view.
     func getCentermostVisibleCell() -> UICollectionViewCell? {
         let visibleCells = self.visibleCells
