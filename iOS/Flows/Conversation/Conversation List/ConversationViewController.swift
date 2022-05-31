@@ -10,6 +10,7 @@ import Foundation
 import StreamChat
 import Combine
 import PhotosUI
+import Transitions
 
 enum ConversationUIState: String {
     case read // Keyboard is NOT shown
@@ -362,15 +363,11 @@ extension ConversationViewController: TransitionableViewController {
         return .modal
     }
 
-    var dismissalType: TransitionType {
-        return self.presentationType
-    }
-
     func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
         switch toVCPresentationType {
-        case .message:
-            guard let messageContent = self.getCentmostMessageCellContent() else { break }
-            return .message(messageContent)
+        case .custom(type: let type, _, _):
+            guard type == "message", let messageContent = self.getCentmostMessageCellContent() else { return toVCPresentationType }
+            return .custom(type: "message", model: messageContent, duration: Theme.animationDurationSlow)
         default:
             break
         }
@@ -380,9 +377,9 @@ extension ConversationViewController: TransitionableViewController {
 
     func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
         switch fromVCDismissalType {
-        case .message:
-            guard let messageContent = self.getCentmostMessageCellContent() else { break }
-            return .message(messageContent)
+        case .custom(type: let type, _, _):
+            guard type == "message", let messageContent = self.getCentmostMessageCellContent() else { return fromVCDismissalType }
+            return .custom(type: "message", model: messageContent, duration: Theme.animationDurationSlow)
         default:
             break
         }

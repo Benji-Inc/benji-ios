@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import ParseLiveQuery
+import Transitions
 
 class WaitlistViewController: ViewController {
     

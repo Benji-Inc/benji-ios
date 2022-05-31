@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Transitions
 
 class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                           RoomItemType,

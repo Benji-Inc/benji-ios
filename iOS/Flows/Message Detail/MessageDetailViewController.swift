@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Transitions
 
 class MessageDetailViewController: DiffableCollectionViewController<MessageDetailDataSource.SectionType,
                                    MessageDetailDataSource.ItemType,
@@ -211,17 +212,18 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
 extension MessageDetailViewController: TransitionableViewController {
 
     var presentationType: TransitionType {
-        return .message(self.messageContentView)
+        return .custom(type: "message", model: self.messageContentView, duration: Theme.animationDurationSlow)
     }
-    
+
     var dismissalType: TransitionType {
-        return .message(self.messageContentView)
+        return .custom(type: "message", model: self.messageContentView, duration: Theme.animationDurationSlow)
     }
 
     func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
         switch toVCPresentationType {
-        case .message:
-            return .message(self.messageContentView)
+        case .custom(type: let type, _, _):
+            guard type == "message" else { return toVCPresentationType }
+            return .custom(type: "message", model: self.messageContentView, duration: Theme.animationDurationSlow)
         default:
             return toVCPresentationType
         }
@@ -229,8 +231,9 @@ extension MessageDetailViewController: TransitionableViewController {
 
     func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
         switch fromVCDismissalType {
-        case .message:
-            return .message(self.messageContentView)
+        case .custom(type: let type, _, _):
+            guard type == "message" else { return fromVCDismissalType }
+            return .custom(type: "message", model: self.messageContentView, duration: Theme.animationDurationSlow)
         default:
             return fromVCDismissalType
         }

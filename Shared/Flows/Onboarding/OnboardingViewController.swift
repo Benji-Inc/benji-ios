@@ -12,6 +12,7 @@ import Lottie
 import Intents
 import Localization
 import PhoneNumberKit
+import Transitions
 
 @MainActor
 protocol OnboardingViewControllerDelegate: AnyObject {

@@ -8,6 +8,12 @@
 
 import Foundation
 
+#if IOS
+protocol DismissInteractableController where Self: ViewController {
+    var dismissInteractionController: PanDismissInteractionController? { get }
+}
+#endif
+
 /// This class is used to handle custom dismiss transitions for DismissTransitionController that are presented modally
 class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioning {
 

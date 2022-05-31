@@ -8,103 +8,39 @@
 
 import Foundation
 import UIKit
+import Transitions
 
-/// A custom transitions that simultaneously slides the current VC vertically off the screen
-/// and the destination one onto it.
-class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
+class TransitionRouter: TransitionableRouter {
 
-    // The fromVC sets the stage for how it wants to get to the toVC
-    private(set) var fromVC: TransitionableViewController
-    private(set) var toVC: TransitionableViewController
-    let operation: UINavigationController.Operation
-
-    let taskPool = TaskPool()
-
-    init(fromVC: TransitionableViewController,
-         toVC: TransitionableViewController,
-         operation: UINavigationController.Operation) {
-
-        self.fromVC = fromVC
-        self.toVC = toVC
-        self.operation = operation
-
-        super.init()
-    }
-
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        let isPresenting = self.operation == .push
-        if isPresenting {
-            return self.toVC.presentationType.duration
-        } else {
-            return self.fromVC.dismissalType.duration
-        }
-    }
-
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let isPresenting = self.operation == .push
-
-        let presentedVCTransition: TransitionType
-        let presentingVCTransition: TransitionType
-        if isPresenting {
-            presentedVCTransition = self.toVC.presentationType
-            presentingVCTransition = self.fromVC.getFromVCPresentationType(for: presentedVCTransition)
-        } else {
-            presentedVCTransition = self.fromVC.dismissalType
-            presentingVCTransition = self.toVC.getToVCDismissalType(for: presentedVCTransition)
-        }
-
-
-        switch presentedVCTransition {
-        case .move(let presentedView):
-            // A move transition required that both VCs support the move style.
-            // If one does not, fall back to a cross dissolve animation.
-            switch presentingVCTransition {
-            case .move(let presentingView):
-                if isPresenting {
-                    self.moveTranstion(fromView: presentingView,
-                                       toView: presentedView,
-                                       transitionContext: transitionContext)
-                } else {
-                    self.moveTranstion(fromView: presentedView,
-                                       toView: presentingView,
-                                       transitionContext: transitionContext)
-                }
-            default:
-                self.crossDissolveTransition(transitionContext: transitionContext)
-            }
-        case .fadeOutIn:
-            self.fadeTransition(transitionContext: transitionContext)
-        case .crossDissolve:
-            self.crossDissolveTransition(transitionContext: transitionContext)
-        case .fill(let expandingView):
-            self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
-        case .blur:
-            self.blur(transitionContext: transitionContext)
-        case .modal:
-            break 
+    override func handleCustom(type: String,
+                               model: Any?,
+                               presented presentedTransition: TransitionType,
+                               presenting presentingTransition: TransitionType,
+                               context: UIViewControllerContextTransitioning) {
+        
+        if type == "message" {
 #if IOS
-        case .message(let presentedView):
-            // Message transitions require that both VCs support the message transition style.
-            // If one doesn't, then fallback to cross dissolve.
-            switch presentingVCTransition {
-            case .message(let presentingView):
-                if isPresenting {
+            guard let presentedView = model as? MessageContentView else { return }
+            switch presentingTransition {
+            case .custom(_, let other, _):
+                guard let presentingView = other as? MessageContentView else { return }
+                if self.isPresenting {
                     self.messageTranstion(fromView: presentingView,
                                           toView: presentedView,
-                                          transitionContext: transitionContext)
+                                          transitionContext: context)
                 } else {
                     self.messageTranstion(fromView: presentedView,
                                           toView: presentingView,
-                                          transitionContext: transitionContext)
+                                          transitionContext: context)
                 }
             default:
-                self.crossDissolveTransition(transitionContext: transitionContext)
+                self.crossDissolveTransition(transitionContext: context)
             }
-#endif
+            #endif
+        } else if type == "blur" {
+            self.blur(transitionContext: context)
+        } else {
+            super.handleCustom(type: type, model: model, presented: presentedTransition, presenting: presentingTransition, context: context)
         }
-    }
-
-    func animationEnded(_ transitionCompleted: Bool) {
-        self.taskPool.cancelAndRemoveAll()
     }
 }

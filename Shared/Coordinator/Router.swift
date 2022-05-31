@@ -8,6 +8,7 @@
 
 import UIKit
 import Coordinator
+import Transitions
 
 /// An object that can present Presentable objects via a navigation controller push, or modally.
 /// Optionally, a cancel handler can be provided to execute code when the Presentable is dismissed
