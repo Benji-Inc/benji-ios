@@ -81,11 +81,11 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
 
 extension ExpressionDetailViewController: TransitionableViewController {
 
-//    var dismissalType: TransitionType {
-//        return .blur
-//    }
-//
-//    var presentationType: TransitionType {
-//        return .blur
-//    }
+    var dismissalType: TransitionType {
+        return .custom(type: "blur", model: nil, duration: Theme.animationDurationSlow)
+    }
+
+    var presentationType: TransitionType {
+        return .custom(type: "blur", model: nil, duration: Theme.animationDurationSlow)
+    }
 }

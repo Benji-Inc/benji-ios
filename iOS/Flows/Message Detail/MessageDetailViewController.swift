@@ -211,31 +211,33 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
 
 extension MessageDetailViewController: TransitionableViewController {
 
-//    var presentationType: TransitionType {
-//        return .message(self.messageContentView)
-//    }
-//
-//    var dismissalType: TransitionType {
-//        return .message(self.messageContentView)
-//    }
+    var presentationType: TransitionType {
+        return .custom(type: "message", model: self.messageContent, duration: Theme.animationDurationSlow)
+    }
 
-//    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
-//        switch toVCPresentationType {
-//        case .message:
-//            return .message(self.messageContentView)
-//        default:
-//            return toVCPresentationType
-//        }
-//    }
-//
-//    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
-//        switch fromVCDismissalType {
-//        case .message:
-//            return .message(self.messageContentView)
-//        default:
-//            return fromVCDismissalType
-//        }
-//    }
+    var dismissalType: TransitionType {
+        return .custom(type: "message", model: self.messageContent, duration: Theme.animationDurationSlow)
+    }
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        switch toVCPresentationType {
+        case .custom(type: let type, _, _):
+            guard type == "message", let messageContent = self.messageContent else { return toVCPresentationType }
+            return .custom(type: "message", model: messageContent, duration: Theme.animationDurationSlow)
+        default:
+            return toVCPresentationType
+        }
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        switch fromVCDismissalType {
+        case .custom(type: let type, _, _):
+            guard type == "message", let messageContent = self.messageContent else { return fromVCDismissalType }
+            return .custom(type: "message", model: messageContent, duration: Theme.animationDurationSlow)
+        default:
+            return fromVCDismissalType
+        }
+    }
     
     func prepareForPresentation() {
         self.collectionView.top = self.view.height
