@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Contacts
 import ContactsUI
 import MessageUI
@@ -15,7 +14,7 @@ import Localization
 
 class PeopleCoordinator: PresentableCoordinator<[Person]> {
 
-    private lazy var peopleNavController = PeopleNavigationController(showConnections: self.selectedConversationCID.exists)
+    private lazy var peopleNavController = PeopleNavigationController(showConnections: self.selectedConversationId.exists)
     private var messageController: MessageComposerViewController?
     var selectedReservation: Reservation?
 
@@ -31,7 +30,7 @@ class PeopleCoordinator: PresentableCoordinator<[Person]> {
     /// People who were selected for invitation/connection during this flow.
     private(set) var invitedPeople: [Person] = []
     
-    var selectedConversationCID: ConversationId?
+    var selectedConversationId: String?
 
     override func toPresentable() -> DismissableVC {
         return self.peopleNavController
@@ -170,7 +169,7 @@ extension PeopleCoordinator {
 
         // This user doesn't exist yet so they'll need the reservation to store the cid
         // in order to access the conversation.
-        reservation.conversationCid = self.selectedConversationCID?.description
+        reservation.conversationCid = self.selectedConversationId
         
         // Used to track invites
         self.selectedReservation = reservation

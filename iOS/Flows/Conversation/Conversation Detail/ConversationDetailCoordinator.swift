@@ -8,7 +8,6 @@
 
 import Foundation
 import Combine
-import StreamChat
 import Localization
 import Coordinator
 
@@ -19,13 +18,13 @@ enum DetailCoordinatorResult {
 
 class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorResult?> {
     
-    lazy var detailVC = ConversationDetailViewController(with: self.cid)
-    let cid: ConversationId
+    lazy var detailVC = ConversationDetailViewController(with: self.conversationId)
+    let conversationId: String
     
-    init(with cid: ConversationId,
+    init(with conversationId: String,
          router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
-        self.cid = cid
+        self.conversationId = conversationId
         super.init(router: router, deepLink: deepLink)
     }
     
@@ -116,7 +115,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     }
     
     func presentDetail(option: ConversationDetailCollectionViewDataSource.OptionType) {
-        let controller = ChatClient.shared.channelController(for: self.cid)
+        guard let controller = ConversationsClient.shared.conversationController(for: self.conversationId) else { return }
         
         var title: String = ""
         var message: String = ""
@@ -174,12 +173,12 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     }
     
     func presentPeoplePicker() {
-        guard let conversation = ConversationController.controller(self.cid).conversation else { return }
+        guard let conversation = ConversationsClient.shared.conversation(for: self.conversationId) else { return }
         
         self.removeChild()
         
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        coordinator.selectedConversationCID = self.cid
+        coordinator.selectedConversationId = self.conversationId
         
         // Because of how the People are presented, we need to properly reset the KeyboardManager.
         coordinator.toPresentable().dismissHandlers.append { [unowned self, unowned cor = coordinator] in
@@ -199,7 +198,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         
         if !invitedPeople.isEmpty {
             Task {
-                let controller = ChatClient.shared.channelController(for: activeConversation.cid)
+                guard let controller = ConversationsClient.shared.conversationController(for: activeConversation.id) else { return }
                 await self.add(people: invitedPeople, to: controller)
                 try? await controller.synchronize()
                 await self.detailVC.reloadPeople()

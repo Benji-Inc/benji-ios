@@ -30,8 +30,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     
     let darkBlurView = DarkBlurView()
     
-    init(with cid: ConversationId) {
-        self.conversationController = ConversationController.controller(cid)
+    init(with conversationId: String) {
+        self.conversationController = ConversationsClient.shared.conversationController(for: conversationId)!
         let cv = CollectionView(layout: ConversationDetailCollectionViewLayout())
         cv.showsHorizontalScrollIndicator = false
         cv.contentInset = UIEdgeInsets(top: 30,

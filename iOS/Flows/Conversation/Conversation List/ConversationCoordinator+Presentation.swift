@@ -50,7 +50,7 @@ extension ConversationCoordinator {
         guard let conversation = self.activeConversation else { return }
         
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        coordinator.selectedConversationCID = self.activeConversation?.cid
+        coordinator.selectedConversationId = self.activeConversation?.id
         
         self.present(coordinator, finishedHandler: { [unowned self] invitedPeople in
             self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
@@ -148,9 +148,9 @@ extension ConversationCoordinator {
     }
     
     func presentConversationDetail() {
-        guard let cid = self.activeConversation?.cid else { return }
+        guard let conversationId = self.activeConversation?.id else { return }
         
-        let coordinator = ConversationDetailCoordinator(with: cid,
+        let coordinator = ConversationDetailCoordinator(with: conversationId,
                                                         router: self.router,
                                                         deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
