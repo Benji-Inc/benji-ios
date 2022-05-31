@@ -39,8 +39,8 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         switch target {
         case .conversation, .thread:
             let messageID = deepLink.messageId
-            guard let cid = deepLink.conversationId else { break }
-            self.presentConversation(with: cid, messageId: messageID, openReplies: target == .thread)
+            guard let conversationId = deepLink.conversationId else { break }
+            self.presentConversation(with: conversationId, messageId: messageID, openReplies: target == .thread)
         case .wallet:
             self.presentWallet()
         case .profile:
@@ -82,7 +82,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
             Task {
                 guard let conversation = try? await self.createNewConversation() else { return }
-                self.presentConversation(with: conversation.cid, messageId: nil)
+                self.presentConversation(with: conversation.cid.description, messageId: nil)
             }
         }
         
@@ -101,9 +101,9 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                     self.presentProfile(for: person)
                 }
             case .conversation(let cid):
-                self.presentConversation(with: cid, messageId: nil)
+                self.presentConversation(with: cid.description, messageId: nil)
             case .unreadMessages(let model):
-                self.presentConversation(with: model.cid, messageId: model.messageIds.first)
+                self.presentConversation(with: model.cid.description, messageId: model.messageIds.first)
             case .add(_):
                 self.presentPeoplePicker()
             case .notice(let notice):
@@ -113,7 +113,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                           let cid = try? ChannelId(cid: cidValue),
                           let messageId = notice.attributes?["messageId"] as? String else { return }
                     
-                    self.presentConversation(with: cid, messageId: messageId)
+                    self.presentConversation(with: cid.description, messageId: messageId)
                     NoticeStore.shared.delete(notice: notice)
                     self.roomVC.reloadNotices()
                 default:
@@ -163,7 +163,7 @@ extension RoomCoordinator: MessageContentDelegate {
     func messageContent(_ content: MessageContentView,
                         didTapViewReplies messageInfo: (ConversationId, MessageId)) {
 
-        self.presentConversation(with: messageInfo.0, messageId: messageInfo.1, openReplies: true)
+        self.presentConversation(with: messageInfo.0.description, messageId: messageInfo.1, openReplies: true)
     }
     
     func messageContent(_ content: MessageContentView,

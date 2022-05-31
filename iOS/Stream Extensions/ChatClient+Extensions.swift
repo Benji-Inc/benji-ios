@@ -9,6 +9,114 @@
 import Foundation
 import StreamChat
 
+class ConversationsClient {
+    
+    static var shared = ConversationsClient()
+    private var client: ChatClient?
+    
+    /// Returns true if the shared client is connected to the chat service.
+    var isConnected: Bool {
+        return self.client?.connectionStatus == .connected
+    }
+    
+    /// Returns true if the shared client is connected to the chat service.
+    var isConnectedToCurrentUser: Bool {
+        return self.client?.currentUserId == User.current()?.objectId
+    }
+    
+    func disconnect() {
+        self.client?.disconnect()
+    }
+    
+    func connectAnonymousUser() async throws {
+        var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
+        config.applicationGroupIdentifier = Config.shared.environment.groupId
+        self.client = ChatClient.init(config: config, tokenProvider: nil)
+                
+        return try await withCheckedThrowingContinuation({ continuation in
+            ChatClient.shared.connectAnonymousUser { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        })
+    }
+    
+    /// Initializes the shared chat client singleton.
+    func initialize(for user: User) async throws {
+        if self.client.isNil {
+            return try await self.initializeChatClient(with: user)
+        } else if let token = try? await self.getChatToken() {
+            return try await self.connectUser(with: token)
+        } else {
+            logDebug("Failed to initialize chat")
+        }
+    }
+    
+    /// Initializes the ChatClient with a configuration, retrieves and sets token, and connects the user
+    private func initializeChatClient(with user: User) async throws {
+        var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
+        config.applicationGroupIdentifier = Config.shared.environment.groupId
+
+        self.client = ChatClient.init(config: config, tokenProvider: nil)
+        let token = try await self.getChatToken()
+        ChatClient.shared.setToken(token: token)
+        try await self.connectUser(with: token)
+        _ = ConversationsManager.shared
+    }
+    
+    /// Retrieves the token
+    private func getChatToken() async throws -> Token {
+        let string = try await GetChatToken().makeRequest()
+        return try Token(rawValue: string)
+    }
+    
+    private func connectUser(with token: Token) async throws {
+        let userId = User.current()?.objectId ?? String() as UserId
+        var userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
+        userInfo = UserInfo(id: userId,
+                            name: User.current()?.fullName,
+                            imageURL: User.current()?.smallImage?.url,
+                            extraData: [:])
+
+        /// connect to chat
+        return try await withCheckedThrowingContinuation { continuation in
+            ChatClient.shared.connectUser(
+                userInfo: userInfo,
+                token: token,
+                completion: { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: ())
+                    }
+                }
+            )
+        }
+    }
+    
+    func conversationController(for conversationId: String) -> ConversationController? {
+        guard let cid = try? ChannelId(cid: conversationId) else { return nil }
+        return self.client?.channelController(for: cid)
+    }
+    
+    func messageController(for conversationId: String, id: String) -> MessageController? {
+        guard let cid = try? ChannelId(cid: conversationId) else { return nil }
+        return self.client?.messageController(cid: cid, messageId: id)
+    }
+    
+    func messageController(for messageable: Messageable) -> MessageController? {
+        guard let cid = try? ChannelId(cid: messageable.conversationId) else { return nil }
+        return self.client?.messageController(cid: cid, messageId: messageable.id)
+    }
+
+    func message(conversationId: String, id: String) -> Messageable? {
+        return self.messageController(for: conversationId, id: id)?.message
+    }
+}
+
 extension ChatClient {
 
     /// A shared chat client singleton.
@@ -86,34 +194,6 @@ extension ChatClient {
                 }
             )
         }
-    }
-
-    /// Returns a ChatChannelListController synchronized using the provided query.
-    func queryChannels(query: ChannelListQuery) async throws -> ChatChannelListController {
-        let controller = self.channelListController(query: query)
-        return try await withCheckedThrowingContinuation({ continuation in
-            controller.synchronize { error in
-                if let e = error {
-                    continuation.resume(throwing: e)
-                } else {
-                    continuation.resume(returning: controller)
-                }
-            }
-        })
-    }
-
-    /// Returns a ChatChannelMemberListController synchronized with the members requested with the query.
-    func queryMembers(query: ChannelMemberListQuery) async throws -> ChatChannelMemberListController {
-        let controller = self.memberListController(query: query)
-        return try await withCheckedThrowingContinuation({ continuation in
-            controller.synchronize { error in
-                if let e = error {
-                    continuation.resume(throwing: e)
-                } else {
-                    continuation.resume(returning: controller)
-                }
-            }
-        })
     }
 
     func messageController(for messageable: Messageable) -> MessageController? {

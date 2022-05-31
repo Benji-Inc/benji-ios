@@ -72,18 +72,18 @@ class ConversationViewController: InputHandlerViewContoller,
     @Published var state: ConversationUIState = .read
 
     /// The id of the conversation this VC will display.
-    private let cid: ConversationId
-    private let startingMessageID: MessageId?
+    private let conversationId: String
+    private let startingMessageId: String?
     private let openReplies: Bool
 
-    init(cid: ConversationId,
-         startingMessageID: MessageId?,
+    init(conversationId: String,
+         startingMessageId: String?,
          openReplies: Bool) {
 
-        self.cid = cid
-        self.startingMessageID = startingMessageID
+        self.conversationId = conversationId
+        self.startingMessageId = startingMessageId
         self.openReplies = openReplies
-        self.conversationController = ChatClient.shared.channelController(for: cid)
+        self.conversationController = ConversationsClient.shared.conversationController(for: conversationId)!
 
         super.init()
     }
@@ -185,15 +185,16 @@ class ConversationViewController: InputHandlerViewContoller,
         self.collectionView.animationView.stop()
 
         Task {
-            await self.scrollToConversation(with: self.cid,
-                                            messageId: self.startingMessageID,
+            guard let cid = try? ChannelId(cid: self.conversationId) else { return }
+            await self.scrollToConversation(with: cid,
+                                            messageId: self.startingMessageId,
                                             viewReplies: self.openReplies)
         }.add(to: self.autocancelTaskPool)
     }
 
     @MainActor
     func scrollToConversation(with cid: ConversationId,
-                              messageId: MessageId?,
+                              messageId: String?,
                               viewReplies: Bool = false,
                               animateScroll: Bool = true,
                               animateSelection: Bool = true) async {

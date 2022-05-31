@@ -39,16 +39,12 @@ extension DeepLinkable {
 extension DeepLinkable {
 
 #if IOS
-    var conversationId: ConversationId? {
+    var conversationId: String? {
         get {
-            guard let stringCID = self.customMetadata.value(forKey: "conversationId") as? String else {
-                return nil
-            }
-            return try? ConversationId(cid: stringCID)
+            return self.customMetadata.value(forKey: "conversationId") as? String
         }
         set {
-            let stringCID = newValue?.description
-            self.customMetadata.setValue(stringCID, forKey: "conversationId")
+            self.customMetadata.setValue(newValue, forKey: "conversationId")
         }
     }
     
@@ -61,7 +57,7 @@ extension DeepLinkable {
         }
     }
 
-    var messageId: MessageId? {
+    var messageId: String? {
         get {
             return self.customMetadata.value(forKey: "messageId") as? String
         }

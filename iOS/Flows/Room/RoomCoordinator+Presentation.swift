@@ -12,13 +12,13 @@ import Intents
 
 extension RoomCoordinator {
     
-    func presentConversation(with cid: ConversationId,
-                             messageId: MessageId?,
+    func presentConversation(with conversationId: String,
+                             messageId: String?,
                              openReplies: Bool = false) {
         
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
-                                                  cid: cid,
+                                                  conversationId: conversationId,
                                                   startingMessageId: messageId,
                                                   openReplies: openReplies)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
@@ -41,9 +41,8 @@ extension RoomCoordinator {
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] result in
             switch result {
             case .reply(let message):
-                guard let cid = message.streamCid else { return }
                 coordinator.toPresentable().dismiss(animated: true) {
-                    self.presentConversation(with: cid, messageId: message.id)
+                    self.presentConversation(with: message.conversationId, messageId: message.id)
                 }
             case .none:
                 coordinator.toPresentable().dismiss(animated: true)
@@ -87,9 +86,9 @@ extension RoomCoordinator {
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 switch result {
                 case .conversation(let cid):
-                    self.presentConversation(with: cid, messageId: nil)
+                    self.presentConversation(with: cid.description, messageId: nil)
                 case .openReplies(let cid, let messageId):
-                    self.presentConversation(with: cid,
+                    self.presentConversation(with: cid.description,
                                              messageId: messageId,
                                              openReplies: false)
                 }

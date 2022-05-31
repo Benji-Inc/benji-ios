@@ -10,9 +10,6 @@ import Foundation
 import UserNotifications
 import Parse
 import Combine
-#if IOS
-import StreamChat
-#endif
 
 protocol UserNotificationManagerDelegate: AnyObject {
     func userNotificationManager(willHandle: DeepLinkable)
@@ -219,14 +216,13 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
             completion()
         default:
             guard let messageId = response.notification.messageId,
-                  let conversationId = response.notification.conversationId,
-                  let cid = try? ChannelId(cid: conversationId) else {
+                  let conversationId = response.notification.conversationId else {
                 completion()
                 return
             }
             
             Task {
-                let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
+                guard let controller = ConversationsClient.shared.messageController(for: conversationId, id: messageId) else { return }
                 
                 if controller.message.isNil {
                     try await controller.synchronize()

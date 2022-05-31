@@ -10,9 +10,6 @@ import Foundation
 import Parse
 import PostHog
 import Sentry
-#if IOS
-import StreamChat
-#endif
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String?)
@@ -54,10 +51,6 @@ class LaunchManager {
         SentrySDK.start { options in
             options.dsn = "https://674f5b98c542435fadeffd8828582b32@o1232170.ingest.sentry.io/6380104"
             options.debug = Config.shared.environment == .staging // Enabled debug when first installing is always helpful
-            options.onCrashedLastRun = { [unowned self] event in
-                // present crash feedback report.
-            }
-            
             // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
             options.tracesSampleRate = 1.0
@@ -108,7 +101,7 @@ class LaunchManager {
 
 #if !APPCLIP && !NOTIFICATION
         do {
-            try await ChatClient.initialize(for: user)
+            try await ConversationsClient.shared.initialize(for: user)
         } catch {
             return .failed(error: ClientError.apiError(detail: error.localizedDescription))
         }

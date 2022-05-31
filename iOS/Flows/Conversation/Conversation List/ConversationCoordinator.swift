@@ -24,12 +24,12 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
     init(router: CoordinatorRouter,
          deepLink: DeepLinkable?,
-         cid: ConversationId,
-         startingMessageId: MessageId?,
+         conversationId: String,
+         startingMessageId: String?,
          openReplies: Bool = false) {
         
-        let vc = ConversationViewController(cid: cid,
-                                            startingMessageID: startingMessageId,
+        let vc = ConversationViewController(conversationId: conversationId,
+                                            startingMessageId: startingMessageId,
                                             openReplies: openReplies)
         
         super.init(with: vc, router: router, deepLink: deepLink)
@@ -59,12 +59,12 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         switch target {
         case .conversation:
             let messageID = deepLink.messageId
-            guard let cid = deepLink.conversationId else { break }
+            guard let value = deepLink.conversationId, let cid = try? ChannelId(cid: value) else { break }
             Task {
                 await self.conversationVC.scrollToConversation(with: cid,
-                                                       messageId: messageID,
-                                                       animateScroll: false,
-                                                       animateSelection: true)
+                                                               messageId: messageID,
+                                                               animateScroll: false,
+                                                               animateSelection: true)
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()

@@ -7,15 +7,14 @@
 //
 
 import Foundation
-import StreamChat
 
 extension MainCoordinator {
 
     @MainActor
     func runRoomFlow(with deepLink: DeepLinkable?) async {
         // Ensure that the chat client is initialized for the logged in user.
-        if !ChatClient.isConnected || ChatClient.shared.currentUserId != User.current()?.objectId {
-            try? await ChatClient.initialize(for: User.current()!)
+        if !ConversationsClient.shared.isConnected || ConversationsClient.shared.isConnectedToCurrentUser {
+            try? await ConversationsClient.shared.initialize(for: User.current()!)
         }
         
         if let coordinator = self.furthestChild as? LaunchActivityHandler,
@@ -37,6 +36,6 @@ extension MainCoordinator {
     }
 
     func logOutChat() {
-        ChatClient.shared?.disconnect()
+        ConversationsClient.shared.disconnect()
     }
 }
