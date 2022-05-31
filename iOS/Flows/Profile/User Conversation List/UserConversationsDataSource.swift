@@ -15,7 +15,7 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
     }
     
     enum ItemType: Hashable {
-        case conversation(ConversationId)
+        case conversation(String)
         case unreadMessages(UnreadMessagesModel)
         case empty
     }
@@ -29,10 +29,10 @@ class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDat
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
         
         switch item {
-        case .conversation(let cid):
+        case .conversation(let conversationId):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                     for: indexPath,
-                                                                    item: cid)
+                                                                    item: conversationId)
             cell.content.messageContent.delegate = self.messageContentDelegate
             return cell
         case .unreadMessages(let model):

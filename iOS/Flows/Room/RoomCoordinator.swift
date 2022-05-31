@@ -102,7 +102,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             case .conversation(let cid):
                 self.presentConversation(with: cid.description, messageId: nil)
             case .unreadMessages(let model):
-                self.presentConversation(with: model.cid.description, messageId: model.messageIds.first)
+                self.presentConversation(with: model.conversationId, messageId: model.messageIds.first)
             case .add(_):
                 self.presentPeoplePicker()
             case .notice(let notice):

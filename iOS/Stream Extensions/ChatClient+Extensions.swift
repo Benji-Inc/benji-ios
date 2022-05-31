@@ -97,6 +97,10 @@ class ConversationsClient {
         }
     }
     
+    func conversation(for conversationId: String) -> Conversation? {
+        return self.conversationController(for: conversationId)?.conversation
+    }
+    
     func conversationController(for conversationId: String) -> ConversationController? {
         guard let cid = try? ChannelId(cid: conversationId) else { return nil }
         return self.client?.channelController(for: cid)

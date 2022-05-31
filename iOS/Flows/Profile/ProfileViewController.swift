@@ -208,10 +208,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             }) {
                 
                 let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
-                    if let cid = try? ConversationId(cid: dict.key) {
-                        return UnreadMessagesModel(cid: cid, messageIds: dict.value)
-                    }
-                    return nil
+                    return UnreadMessagesModel(conversationId: dict.key, messageIds: dict.value)
                 }) ?? []
                 
                 // Only show unread message models for messages that the person is the author of UNLESS currentUser.
@@ -220,9 +217,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 if person.isCurrentUser {
                     await models.asyncForEach({ model in
                         await model.messageIds.asyncForEach { messageId in
-                            let controller = ChatClient.shared.messageController(cid: model.cid, messageId: messageId)
-                            try? await controller.synchronize()
-                            if let msg = controller.message, msg.author.personId == self.person.personId {
+                            let controller = ConversationsClient.shared.messageController(for: model.conversationId, id: messageId)
+                            try? await controller?.synchronize()
+                            if let msg = controller?.message, msg.author.personId == self.person.personId {
                                 items.insert(.unreadMessages(model))
                             }
                         }
@@ -312,7 +309,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             }
             return messages.count > 0
         }).map { convo in
-            return UserConversationsDataSource.ItemType.conversation(convo.cid)
+            return UserConversationsDataSource.ItemType.conversation(convo.cid.description)
         }
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .conversations)

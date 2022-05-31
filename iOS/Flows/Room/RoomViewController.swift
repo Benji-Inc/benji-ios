@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import StreamChat
 import Transitions
+import StreamChat
 
 class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                           RoomItemType,
@@ -269,10 +269,8 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
                 return system.notice?.type == .unreadMessages
             }), let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
-                if let cid = try? ConversationId(cid: dict.key),
-                    let conversation = ChatClient.shared.channelController(for: cid).conversation,
-                   conversation.totalUnread > 0 {
-                    return UnreadMessagesModel(cid: cid, messageIds: dict.value)
+                if let conversation = ConversationsClient.shared.conversation(for: dict.key), conversation.totalUnread > 0 {
+                    return UnreadMessagesModel(conversationId: dict.key, messageIds: dict.value)
                 }
                 return nil
             }) {
@@ -284,11 +282,11 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                     return
                 }
                                 
-                let conversationIds = models.compactMap { model in
-                    return model.cid
+                let cids = models.compactMap { model in
+                    return try? ChannelId(cid: model.conversationId)
                 }
                 
-                let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(conversationIds: conversationIds)
+                let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(conversationIds: cids)
                 let query = ChannelListQuery(filter: filter,
                                              sort: [Sorting(key: .lastMessageAt, isAscending: false)])
                 
@@ -373,7 +371,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             }
             return messages.count > 0
         }).map { convo in
-            return RoomCollectionViewDataSource.ItemType.conversation(convo.cid)
+            return RoomCollectionViewDataSource.ItemType.conversation(convo.cid.description)
         }
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .conversations)

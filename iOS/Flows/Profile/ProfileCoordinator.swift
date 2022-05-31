@@ -55,7 +55,7 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
             case .conversation(let cid):
                 self.finishFlow(with: .conversation(cid.description))
             case .unreadMessages(let model):
-                self.finishFlow(with: .conversation(model.cid.description))
+                self.finishFlow(with: .conversation(model.conversationId))
             default:
                 break 
             }

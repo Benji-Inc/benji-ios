@@ -69,13 +69,13 @@ class ConversationContentView: BaseView {
         self.stackedAvatarView.max = 5
     }
     
-    func configure(with item: ConversationId) {
+    func configure(with item: String) {
         
         Task.onMainActorAsync {
-            let controller = ChatClient.shared.channelController(for: item)
+            let controller = ConversationsClient.shared.conversationController(for: item)
             
-            if self.conversationController?.cid != item,
-               let conversation = controller.conversation {
+            if self.conversationController?.cid?.description != item,
+               let conversation = controller?.conversation {
                 self.conversationController = controller
                 
                 if conversation.latestMessages.isEmpty  {

@@ -8,14 +8,13 @@
 
 import Foundation
 import ScrollCounter
-import StreamChat
 import Combine
 
 class ConversationCell: CollectionViewManagerCell, ManageableCell {
     
-    typealias ItemType = ConversationId
+    typealias ItemType = String
     
-    var currentItem: ConversationId?
+    var currentItem: String?
             
     let content = ConversationContentView()
     
@@ -25,7 +24,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.content)
     }
     
-    func configure(with item: ConversationId) {
+    func configure(with item: String) {
         self.content.configure(with: item)
     }
     

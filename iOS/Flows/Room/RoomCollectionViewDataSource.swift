@@ -23,7 +23,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     enum ItemType: Hashable {
         case notice(SystemNotice)
         case memberId(String)
-        case conversation(ConversationId)
+        case conversation(String)
         case unreadMessages(UnreadMessagesModel)
         case add(String)
         case empty
@@ -78,10 +78,10 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
                                                                 item: member)
-        case .conversation(let cid):
+        case .conversation(let conversationId):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                                     for: indexPath,
-                                                                    item: cid)
+                                                                    item: conversationId)
             cell.content.messageContent.delegate = self.messageContentDelegate
             cell.content.lineView.isHidden = self.snapshot().numberOfItems(inSection: section) - 1 == indexPath.row
             return cell
