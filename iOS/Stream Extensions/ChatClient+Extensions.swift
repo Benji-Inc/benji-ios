@@ -115,6 +115,25 @@ class ConversationsClient {
     func message(conversationId: String, id: String) -> Messageable? {
         return self.messageController(for: conversationId, id: id)?.message
     }
+    
+    func createNewConversation() async throws -> Conversation? {
+        let username = User.current()?.initials ?? ""
+        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
+        let userIDs = Set([User.current()!.objectId!])
+        let controller = try self.client?.channelController(createChannelWithId: channelId,
+                                                            name: nil,
+                                                            imageURL: nil,
+                                                            team: nil,
+                                                            members: userIDs,
+                                                            isCurrentUserMember: true,
+                                                            messageOrdering: .bottomToTop,
+                                                            invites: [],
+                                                            extraData: [:])
+        
+        try await controller?.synchronize()
+        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
+        return controller?.conversation
+    }
 }
 
 extension ChatClient {

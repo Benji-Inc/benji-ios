@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     
@@ -81,7 +80,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         
         self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
             Task {
-                guard let conversation = try? await self.createNewConversation() else { return }
+                guard let conversation = try? await ConversationsClient.shared.createNewConversation() else { return }
                 self.presentConversation(with: conversation.cid.description, messageId: nil)
             }
         }
@@ -109,11 +108,10 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             case .notice(let notice):
                 switch notice.type {
                 case .timeSensitiveMessage:
-                    guard let cidValue = notice.attributes?["cid"] as? String,
-                          let cid = try? ChannelId(cid: cidValue),
+                    guard let conversationId = notice.attributes?["cid"] as? String,
                           let messageId = notice.attributes?["messageId"] as? String else { return }
                     
-                    self.presentConversation(with: cid.description, messageId: messageId)
+                    self.presentConversation(with: conversationId, messageId: messageId)
                     NoticeStore.shared.delete(notice: notice)
                     self.roomVC.reloadNotices()
                 default:
@@ -123,25 +121,6 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                 break
             }
         }.store(in: &self.cancellables)
-    }
-
-    func createNewConversation() async throws -> Conversation? {
-        let username = User.current()?.initials ?? ""
-        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
-        let userIDs = Set([User.current()!.objectId!])
-        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
-                                                                 name: nil,
-                                                                 imageURL: nil,
-                                                                 team: nil,
-                                                                 members: userIDs,
-                                                                 isCurrentUserMember: true,
-                                                                 messageOrdering: .bottomToTop,
-                                                                 invites: [],
-                                                                 extraData: [:])
-        
-        try await controller.synchronize()
-        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
-        return controller.conversation
     }
 }
 

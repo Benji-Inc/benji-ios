@@ -16,13 +16,13 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     let headerView = RoomHeaderView()
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
-                                                      ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                               startPoint: .topCenter,
-                                               endPoint: .bottomCenter)
+                                                                 ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                          startPoint: .topCenter,
+                                                          endPoint: .bottomCenter)
     
     private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .bottomCenter,
-                                                  endPoint: .topCenter)
+                                                             startPoint: .bottomCenter,
+                                                             endPoint: .topCenter)
     
     private(set) var conversationListController: ConversationListController?
     private lazy var refreshControl: UIRefreshControl = {

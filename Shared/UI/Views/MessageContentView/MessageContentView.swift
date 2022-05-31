@@ -9,7 +9,6 @@
 import Foundation
 import Combine
 import LinkPresentation
-import StreamChat
 
 @MainActor
 protocol MessageContentDelegate: AnyObject {

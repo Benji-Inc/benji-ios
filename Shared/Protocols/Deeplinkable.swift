@@ -8,9 +8,6 @@
 
 import Foundation
 import Coordinator
-#if IOS
-import StreamChat
-#endif
 
 protocol DeepLinkHandler {
     func handle(deepLink: DeepLinkable)
@@ -38,7 +35,6 @@ extension DeepLinkable {
 
 extension DeepLinkable {
 
-#if IOS
     var conversationId: String? {
         get {
             return self.customMetadata.value(forKey: "conversationId") as? String
@@ -65,7 +61,6 @@ extension DeepLinkable {
             self.customMetadata.setValue(newValue, forKey: "messageId")
         }
     }
-#endif
 
     var reservationId: String? {
         get {

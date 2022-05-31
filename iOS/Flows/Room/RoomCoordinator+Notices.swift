@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 extension RoomCoordinator {
     

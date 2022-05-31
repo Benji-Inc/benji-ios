@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 class UrgentMessageContentView: NoticeContentView {
     
@@ -33,15 +32,14 @@ class UrgentMessageContentView: NoticeContentView {
         await super.configure(for: notice)
         
         guard let cidValue = notice.attributes?["cid"] as? String,
-              let cid = try? ChannelId(cid: cidValue),
               let messageId = notice.attributes?["messageId"] as? String else {
             self.showError()
             return }
 
-        let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
-        try? await controller.synchronize()
+        let controller = ConversationsClient.shared.messageController(for: cidValue, id: messageId)
+        try? await controller?.synchronize()
 
-        guard let message = controller.message else {
+        guard let message = controller?.message else {
             self.showError()
             return
         }
