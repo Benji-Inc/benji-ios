@@ -31,7 +31,7 @@ class ConversationsManager: EventsControllerDelegate {
 
     static let shared = ConversationsManager()
 
-    private let controller = ConversationsClient.shared.eventsController
+    lazy var controller = ConversationsClient.shared.eventsController
 
     @Published var activeController: MessageSequenceController? 
     @Published var activeConversation: Conversation?
@@ -45,7 +45,7 @@ class ConversationsManager: EventsControllerDelegate {
     }
 
     private func initialize() {
-        self.controller.delegate = self
+        self.controller?.delegate = self
     }
 
     func eventsController(_ controller: EventsController, didReceiveEvent event: Event) {

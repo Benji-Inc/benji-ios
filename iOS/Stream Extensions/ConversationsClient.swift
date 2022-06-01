@@ -28,8 +28,8 @@ class ConversationsClient {
         return self.client!.currentUserController()
     }
     
-    var eventsController: ChannelEventsController {
-        return self.client!.eventsController() as! ChannelEventsController
+    var eventsController: ChannelEventsController? {
+        return self.client?.eventsController() as? ChannelEventsController
     }
     
     func disconnect() {

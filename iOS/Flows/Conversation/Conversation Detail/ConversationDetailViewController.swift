@@ -111,7 +111,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     private func subscribeToUpdates(for conversationController: ConversationController) {
         // Clear out previous subscriptions.
         self.conversationCancellables.removeAll()
-        
+                
         conversationController
             .memberEventPublisher
             .mainSink(receiveValue: { [unowned self] event in
