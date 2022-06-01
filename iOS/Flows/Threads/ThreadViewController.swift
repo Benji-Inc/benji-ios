@@ -177,8 +177,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
     
     @MainActor
-    func scrollToConversation(with cid: ConversationId,
-                              messageId: MessageId?,
+    func scrollToConversation(with conversationId: String,
+                              messageId: String?,
                               viewReplies: Bool = false,
                               animateScroll: Bool,
                               animateSelection: Bool) async {
@@ -289,7 +289,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         
         if let replyId = self.startingReplyId {
             Task {
-                await self.scrollToConversation(with: self.messageController.cid,
+                await self.scrollToConversation(with: self.messageController.conversation!.id,
                                                 messageId: replyId,
                                                 animateScroll: false,
                                                 animateSelection: false)

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Lottie
 
 struct Member: Hashable {

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 /// A collection view for displaying conversations.
 /// It automatically creates its own custom layout object.

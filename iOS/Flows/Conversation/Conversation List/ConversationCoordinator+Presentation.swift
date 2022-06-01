@@ -33,9 +33,8 @@ extension ConversationCoordinator {
             case .reply(let replyId):
                 self.presentThread(for: message, startingReplyId: replyId)
             case .conversation(let conversationId):
-                guard let cid = try? ChannelId(cid: conversationId) else { return }
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid,
+                    await self.conversationVC.scrollToConversation(with: conversationId,
                                                                    messageId: nil,
                                                                    animateScroll: false)
                 }
@@ -156,20 +155,15 @@ extension ConversationCoordinator {
         self.present(coordinator) { [unowned self] result in
             guard let option = result else { return }
             
-            switch option {
-            case .conversation(let conversationId):
-                guard let cid = try? ChannelId(cid: conversationId) else { return }
-
-                Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
-                }
-            case .message(let message):
-                guard let cid = try? ChannelId(cid: message.conversationId) else { return }
-
-                Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid, messageId: message.id, animateScroll: true)
+            Task.onMainActorAsync {
+                switch option {
+                case .conversation(let conversationId):
+                    await self.conversationVC.scrollToConversation(with: conversationId, messageId: nil, animateScroll: false)
+                case .message(let message):
+                    await self.conversationVC.scrollToConversation(with: conversationId, messageId: message.id, animateScroll: true)
                 }
             }
+            
         }
     }
 }

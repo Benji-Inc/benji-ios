@@ -59,9 +59,9 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         switch target {
         case .conversation:
             let messageID = deepLink.messageId
-            guard let value = deepLink.conversationId, let cid = try? ChannelId(cid: value) else { break }
+            guard let conversationId = deepLink.conversationId else { break }
             Task {
-                await self.conversationVC.scrollToConversation(with: cid,
+                await self.conversationVC.scrollToConversation(with: conversationId,
                                                                messageId: messageID,
                                                                animateScroll: false,
                                                                animateSelection: true)
@@ -84,15 +84,12 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .conversation(let conversationId):
-                guard let cid = try? ChannelId(cid: conversationId) else { return }
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
+                    await self.conversationVC.scrollToConversation(with: conversationId, messageId: nil, animateScroll: false)
                 }
             case .openReplies(let message):
-                guard let cid = try? ChannelId(cid: message.conversationId) else { return }
-
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid,
+                    await self.conversationVC.scrollToConversation(with: message.conversationId,
                                                                    messageId: message.id,
                                                                    viewReplies: true,
                                                                    animateScroll: false)
@@ -143,9 +140,8 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
                                             deepLink: self.deepLink)
         
         self.present(coordinator) { [unowned self] result in
-            guard let cid = try? ChannelId(cid: result) else { return }
             Task.onMainActorAsync {
-                await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
+                await self.conversationVC.scrollToConversation(with: message.conversationId, messageId: nil, animateScroll: false)
             }
         }
     }

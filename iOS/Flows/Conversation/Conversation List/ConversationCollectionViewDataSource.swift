@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 typealias ConversationSection = ConversationCollectionViewDataSource.SectionType
 typealias ConversationItem = ConversationCollectionViewDataSource.ItemType
@@ -19,7 +18,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     struct SectionType: Hashable { }
 
     enum ItemType: Hashable {
-        case conversation(ConversationId)
+        case conversation(String)
     }
 
     // Input handling
@@ -28,7 +27,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     var handleAddPeopleSelected: CompletionOptional = nil
 
     /// The conversation ID of the conversation that is preparing to send, if any.
-    private var conversationPreparingToSend: ConversationId?
+    private var conversationPreparingToSend: String?
 
     // Cell registration
     private let conversationCellRegistration
@@ -75,7 +74,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         var updatedItems: [ConversationItem] = []
         if let conversation = conversationController.conversation {
-            updatedItems.append(ConversationItem.conversation(conversation.cid))
+            updatedItems.append(ConversationItem.conversation(conversation.id))
         }
 
         snapshot.setItems(updatedItems, in: sectionID)
@@ -83,7 +82,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         return snapshot
     }
 
-    func set(conversationPreparingToSend: ConversationId?) {
+    func set(conversationPreparingToSend: String?) {
         self.conversationPreparingToSend = conversationPreparingToSend
 
         self.reconfigureAllItems()
@@ -96,16 +95,16 @@ extension ConversationCollectionViewDataSource {
 
     typealias ConversationCellRegistration
     = UICollectionView.CellRegistration<ConversationMessagesCell,
-                                        (channelID: ChannelId,
+                                        (conversationId: String,
                                          uiState: ConversationUIState,
                                          dataSource: ConversationCollectionViewDataSource)>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
-            let conversationController = ChatClient.shared.channelController(for: item.channelID)
+            let conversationController = ConversationsClient.shared.conversationController(for: item.conversationId)
 
-            let isPreparedToSend = conversationController.cid == item.dataSource.conversationPreparingToSend
-            if let conversation = conversationController.conversation {
+            let isPreparedToSend = conversationController?.conversation?.id == item.dataSource.conversationPreparingToSend
+            if let conversation = conversationController?.conversation {
                 cell.set(conversation: conversation, shouldPrepareToSend: isPreparedToSend)
             }
             

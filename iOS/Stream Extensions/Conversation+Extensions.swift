@@ -109,8 +109,4 @@ extension Conversation: MessageSequence {
         let messageArray = Array(ChatClient.shared.channelController(for: self.cid).messages)
         return messageArray
     }
-
-    var streamCID: ConversationId? {
-        return self.cid
-    }
 }

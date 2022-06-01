@@ -18,8 +18,8 @@ protocol SwipeableInputControllerHandler where Self: ViewController {
     var messageContentDelegate: MessageContentDelegate? { get set }
     var swipeableVC: SwipeableInputAccessoryViewController { get }
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
-    func scrollToConversation(with cid: ConversationId,
-                              messageId: MessageId?,
+    func scrollToConversation(with conversationId: String,
+                              messageId: String?,
                               viewReplies: Bool,
                               animateScroll: Bool,
                               animateSelection: Bool) async
@@ -92,7 +92,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
-            await self.inputHandlerViewController.scrollToConversation(with: conversation.cid,
+            await self.inputHandlerViewController.scrollToConversation(with: conversation.id,
                                                                        messageId: unreadMessage.id,
                                                                        viewReplies: false,
                                                                        animateScroll: true,

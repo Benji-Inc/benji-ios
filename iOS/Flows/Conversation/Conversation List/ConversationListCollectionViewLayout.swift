@@ -12,16 +12,16 @@ import Foundation
 
 protocol ConversationListCollectionViewLayoutDelegate: AnyObject {
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
-                                              cidFor indexPath: IndexPath) -> ConversationId?
+                                              conversationIdFor indexPath: IndexPath) -> String?
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
-                                              didUpdateCentered cid: ConversationId?)
+                                              didUpdateCentered conversationId: String?)
 }
 
 /// A custom layout class for conversation collection views. It lays out its contents in a single horizontal row.
 class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
     weak var delegate: ConversationListCollectionViewLayoutDelegate?
-    private var previousCenteredCID: ConversationId?
+    private var previousCenteredId: String?
     
     var sideItemAlpha: CGFloat = 0.3
     
@@ -92,16 +92,16 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
     }
 
     private func sendCenterUpdateEventIfNeeded(withContentOffset contentOffset: CGPoint) {
-        var cid: ConversationId?
+        var conversationId: String?
 
         if let centeredItem = self.getCenteredItem(forContentOffset: contentOffset) {
-            cid = self.delegate?.conversationListCollectionViewLayout(self,
-                                                                      cidFor: centeredItem.indexPath)
+            conversationId = self.delegate?.conversationListCollectionViewLayout(self,
+                                                                      conversationIdFor: centeredItem.indexPath)
         }
 
-        if self.previousCenteredCID != cid {
-            self.previousCenteredCID = cid
-            self.delegate?.conversationListCollectionViewLayout(self, didUpdateCentered: cid)
+        if self.previousCenteredId != conversationId {
+            self.previousCenteredId = conversationId
+            self.delegate?.conversationListCollectionViewLayout(self, didUpdateCentered: conversationId)
         }
     }
 
