@@ -56,9 +56,11 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                 case .more:
                     break
                 }
-            case .read(let reaction):
-                guard let author = reaction.readReaction?.author else { return }
-                self.presentProfile(for: author)
+            case .read(let model):
+                Task {
+                    guard let authorId = model.authorId, let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else { return }
+                    self.presentProfile(for: author)
+                }
             case .metadata(_):
                 break
             case .more(_):

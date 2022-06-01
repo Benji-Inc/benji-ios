@@ -130,11 +130,13 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
             return !reaction.author.isCurrentUser
         }).compactMap({ read in
-            return .read(ReadViewModel(readReaction: read))
+            let model = ReadViewModel(authorId: read.author.id, createdAt: read.createdAt)
+            return .read(model)
         })
         
         if reads.isEmpty {
-            data[.reads] = [.read(ReadViewModel(readReaction: nil))]
+            let model = ReadViewModel(authorId: nil, createdAt: nil)
+            data[.reads] = [.read(model)]
         } else {
             data[.reads] = reads
         }
@@ -199,11 +201,13 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             let reads: [MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
                 return !reaction.author.isCurrentUser
             }).compactMap({ read in
-                return .read(ReadViewModel(readReaction: read))
+                let model = ReadViewModel(authorId: read.author.id, createdAt: read.createdAt)
+                return .read(model)
             })
             
             if reads.isEmpty {
-                snapshot.setItems([.read(ReadViewModel(readReaction: nil))], in: .reads)
+                let model = ReadViewModel(authorId: nil, createdAt: nil)
+                snapshot.setItems([.read(model)], in: .reads)
             } else {
                 snapshot.setItems(reads, in: .reads)
             }
