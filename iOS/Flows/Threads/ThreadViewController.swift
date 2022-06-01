@@ -9,7 +9,6 @@
 import Foundation
 import Parse
 import Combine
-import StreamChat
 import KeyboardManager
 import Transitions
 
@@ -49,12 +48,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private let threadCollectionView = ThreadCollectionView()
 
     /// A controller for the message that all the replies in this thread are responding to.
-    let messageController: ChatMessageController
+    let messageController: MessageController
     var parentMessage: Message? {
         return self.messageController.message
     }
     /// The reply to show when this view controller initially loads its data.
-    private let startingReplyId: MessageId?
+    private let startingReplyId: String?
 
     private(set) var conversationController: ConversationController?
     let pullView = PullView()

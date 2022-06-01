@@ -118,10 +118,14 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.messageController = controller
         
+        let moreOption = MoreOptionModel(conversationId: msg.conversationId,
+                                         messageId: msg.id,
+                                         option: .more)
+        
         if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
-            data[.options] = [.option(.viewThread), .option(.unpin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            data[.options] = [.option(.viewThread), .option(.unpin), .option(.quote), .more(moreOption)].reversed()
         } else {
-            data[.options] = [.option(.viewThread), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            data[.options] = [.option(.viewThread), .option(.pin), .option(.quote), .more(moreOption)].reversed()
         }
             
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
@@ -174,18 +178,21 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                         
             var snapshot = self.dataSource.snapshot()
             
+            let moreOption = MoreOptionModel(conversationId: msg.conversationId,
+                                             messageId: msg.id,
+                                             option: .more)
+            
             let optionItems: [MessageDetailDataSource.ItemType]
             if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
                 optionItems = [.option(.viewThread),
                                .option(.unpin),
                                .option(.quote),
-                               .more(MoreOptionModel(message: msg, option: .more))].reversed()
+                               .more(moreOption)].reversed()
             } else {
                 optionItems = [.option(.viewThread),
                                .option(.pin),
                                .option(.quote),
-                               .more(MoreOptionModel(message: msg, option: .more))]
-                    .reversed()
+                               .more(moreOption)].reversed()
             }
             
             snapshot.setItems(optionItems, in: .options)

@@ -8,7 +8,6 @@
 
 import Foundation
 import ScrollCounter
-import StreamChat
 import Combine
 
 struct UnreadMessagesModel: Hashable {

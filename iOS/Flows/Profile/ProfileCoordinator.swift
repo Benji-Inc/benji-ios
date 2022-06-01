@@ -8,7 +8,6 @@
 
 import Foundation
 import Combine
-import StreamChat
 import Coordinator
 
 enum ProfileResult {
