@@ -55,7 +55,7 @@ extension MessageController: ConversationControllerType {
     }
 
     var conversation: Conversation? {
-        return ChatClient.shared.channelController(for: self.cid).conversation
+        return ConversationController.controller(for: self.cid.description).conversation
     }
     
     var hasLoadedAllPreviousMessages: Bool {

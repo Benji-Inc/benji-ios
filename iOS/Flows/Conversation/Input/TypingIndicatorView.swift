@@ -8,7 +8,6 @@
 
 import Foundation
 import Combine
-import StreamChat
 
 class TypingIndicatorView: BaseView {
     
@@ -33,7 +32,7 @@ class TypingIndicatorView: BaseView {
         self.label.transform = CGAffineTransform.init(translationX: -5, y: 0)
         
         ConversationsManager.shared.$activeConversation.mainSink { conversation in
-            if let cid = conversation?.cid {
+            if let cid = conversation?.id {
                 self.subscribeToUpdates(for: cid)
             } else {
                 self.hideText()
@@ -41,14 +40,14 @@ class TypingIndicatorView: BaseView {
         }.store(in: &self.cancellables)
     }
     
-    private func subscribeToUpdates(for cid: ConversationId) {
-        guard self.controller?.cid != cid else { return }
+    private func subscribeToUpdates(for conversationId: String) {
+        guard self.controller?.conversation?.id != conversationId else { return }
         
         self.subscriptions.forEach { cancellable in
             cancellable.cancel()
         }
         
-        self.controller = ConversationController.controller(cid)
+        self.controller = ConversationController.controller(for: conversationId)
         
         self.controller?.typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in

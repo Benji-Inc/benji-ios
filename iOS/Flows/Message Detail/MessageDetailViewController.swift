@@ -113,7 +113,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
         var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
     
-        guard let controller = ChatClient.shared.messageController(for: self.message),
+        guard let controller = ConversationsClient.shared.messageController(for: self.message),
                 let msg = controller.message else { return data }
         
         self.messageController = controller

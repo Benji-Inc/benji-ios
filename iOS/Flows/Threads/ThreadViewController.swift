@@ -93,9 +93,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         ConversationsManager.shared.activeController = controller
         self.messageController = controller
         
-        let cid = try! ChannelId(cid: message.conversationId)
-        self.conversationController = ChatClient.shared.channelController(for: cid,
-                                                                          messageOrdering: .topToBottom)
+        self.conversationController = ConversationController.controller(for: message.conversationId)
+
         self.startingReplyId = startingReplyId
         
         super.init(with: self.threadCollectionView)
@@ -445,7 +444,7 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in
-            return member.personId != ChatClient.shared.currentUserId
+            return member.personId != User.current()?.objectId
         } ?? []
 
         self.messageInputController.swipeInputView.textView.setPlaceholder(for: members, isReply: true)

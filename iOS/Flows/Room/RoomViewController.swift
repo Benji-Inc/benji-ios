@@ -338,8 +338,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     @MainActor
     private func loadUnreadConversations(with query: ChannelListQuery, models: [UnreadMessagesModel]) async {
-        self.conversationListController
-        = ChatClient.shared.channelListController(query: query)
+        self.conversationListController = ConversationController.controller(query: query)
         
         try? await self.conversationListController?.synchronize()
         
@@ -356,8 +355,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     @MainActor
     private func loadConversations(with query: ChannelListQuery) async {
-        self.conversationListController
-        = ChatClient.shared.channelListController(query: query)
+        self.conversationListController = ConversationController.controller(query: query)
         
         try? await self.conversationListController?.synchronize()
         

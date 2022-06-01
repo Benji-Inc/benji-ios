@@ -12,6 +12,6 @@ import StreamChat
 extension ChatUser {
 
     static var currentUserRole: UserRole {
-        return ChatClient.shared.currentUserController().currentUser?.userRole ?? .anonymous
+        return ConversationsClient.shared.currentUserController.currentUser?.userRole ?? .anonymous
     }
 }

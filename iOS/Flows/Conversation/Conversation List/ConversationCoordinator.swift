@@ -98,25 +98,25 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         }
     }
     
-    func createNewConversation() async throws {
-        let username = User.current()?.initials ?? ""
-        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
-        let userIDs = Set([User.current()!.objectId!])
-        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
-                                                                 name: nil,
-                                                                 imageURL: nil,
-                                                                 team: nil,
-                                                                 members: userIDs,
-                                                                 isCurrentUserMember: true,
-                                                                 messageOrdering: .bottomToTop,
-                                                                 invites: [],
-                                                                 extraData: [:])
-        
-        try await controller.synchronize()
-        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
-        ConversationsManager.shared.activeConversation = controller.conversation
-        ConversationsManager.shared.activeController = controller
-    }
+//    func createNewConversation() async throws {
+//        let username = User.current()?.initials ?? ""
+//        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
+//        let userIDs = Set([User.current()!.objectId!])
+//        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+//                                                                 name: nil,
+//                                                                 imageURL: nil,
+//                                                                 team: nil,
+//                                                                 members: userIDs,
+//                                                                 isCurrentUserMember: true,
+//                                                                 messageOrdering: .bottomToTop,
+//                                                                 invites: [],
+//                                                                 extraData: [:])
+//        
+//        try await controller.synchronize()
+//        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
+//        ConversationsManager.shared.activeConversation = controller.conversation
+//        ConversationsManager.shared.activeController = controller
+//    }
     
     override func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {
                 

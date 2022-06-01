@@ -107,7 +107,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         var updatedController = false
         if conversation.cid != self.conversation?.cid {
             updatedController = true
-            let conversationController = ChatClient.shared.channelController(for: conversation.cid)
+            let conversationController = ConversationController.controller(for: conversation)
             self.conversationController = conversationController
             self.subscribeToUpdates()
 

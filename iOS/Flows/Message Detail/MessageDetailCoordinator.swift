@@ -102,8 +102,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     
     private func handleDelete() {
         Task {
-            guard let cid = try? ChannelId(cid: self.message.conversationId) else { return }
-            let controller = ChatClient.shared.messageController(cid: cid, messageId: self.message.id)
+            let controller = MessageController.controller(for: self.message)
             try? await controller.deleteMessage()
             
             await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.trash.image, "Message Deleted"))
@@ -206,8 +205,8 @@ extension MessageDetailCoordinator: MessageContentDelegate {
                                                    properties: ["value": emotion.rawValue])
             }
             
-            guard let controller = ChatClient.shared.messageController(for: message) else { return }
-
+            let controller = MessageController.controller(for: message)
+            
             Task {
                 try await controller.add(expression: expression)
             }

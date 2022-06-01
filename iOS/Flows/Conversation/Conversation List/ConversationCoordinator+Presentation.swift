@@ -69,7 +69,7 @@ extension ConversationCoordinator {
                 let peopleInConversation = await ConversationsClient.shared.getPeople(for: activeConversation)
                 guard peopleInConversation.isEmpty else { return }
                 
-                self.presentDeleteConversationAlert(cid: activeConversation.cid)
+                self.presentDeleteConversationAlert(conversationId: activeConversation.id)
             }
         } else {
             // Add all of the invited people to the conversation.
@@ -78,7 +78,7 @@ extension ConversationCoordinator {
     }
     
     func add(people: [Person], to conversation: Conversation) {
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
+        let controller = ConversationController.controller(for: conversation)
         
         let acceptedConnections = people.compactMap { person in
             return person.connection
@@ -113,10 +113,11 @@ extension ConversationCoordinator {
         }.add(to: self.taskPool)
     }
     
-    func presentDeleteConversationAlert(cid: ConversationId?) {
-        guard let cid = cid else { return }
-                
-        let controller = ChatClient.shared.channelController(for: cid)
+    func presentDeleteConversationAlert(conversationId: String?) {
+        guard let conversationId = conversationId else {
+            return
+        }
+        let controller = ConversationController.controller(for: conversationId)
         guard let conversation = controller.conversation, conversation.memberCount <= 1 else { return }
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)

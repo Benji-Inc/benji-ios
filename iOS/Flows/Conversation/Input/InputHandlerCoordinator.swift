@@ -110,8 +110,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                                    properties: ["value": emotion.rawValue])
             }
             
-            guard let controller = ChatClient.shared.messageController(for: message) else { return }
-
+            let controller = MessageController.controller(for: message)
+            
             Task {
                 try await controller.add(expression: expression)
             }

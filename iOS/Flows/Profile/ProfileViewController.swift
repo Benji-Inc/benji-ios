@@ -294,8 +294,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     
     @MainActor
     private func loadConversations(with query: ChannelListQuery) async {
-        self.conversationListController
-        = ChatClient.shared.channelListController(query: query)
+        self.conversationListController = ConversationController.controller(query: query)
 
         try? await self.conversationListController?.synchronize()
 

@@ -133,8 +133,8 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     private func startLoadDataTask(with conversation: Conversation?) {
         self.loadDataTask?.cancel()
 
-        if let cid = conversation?.cid {
-            self.conversationController = ConversationController.controller(cid)
+        if let cid = conversation?.id {
+            self.conversationController = ConversationController.controller(for: cid)
         } else {
             self.conversationController = nil
         }
