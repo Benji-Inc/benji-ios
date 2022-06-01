@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.SectionType, MessageDetailDataSource.ItemType> {
 
@@ -72,7 +71,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
         case more(MoreOptionModel)
         case option(OptionType)
         case read(ReadViewModel)
-        case info(Message)
+        case metadata(MetadataModel)
     }
     
     private let topOptionConfig = ManageableCellRegistration<MessageTopOptionCell>().provider
@@ -103,10 +102,10 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
                                                                     for: indexPath,
                                                                     item: read)
             return cell
-        case .info(let message):
+        case .metadata(let model):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.metadatConfig,
                                                                     for: indexPath,
-                                                                    item: message)
+                                                                    item: model)
             return cell
         case .more(let model):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.moreConfige,

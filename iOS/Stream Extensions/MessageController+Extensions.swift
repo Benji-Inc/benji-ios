@@ -431,8 +431,8 @@ extension MessageController {
 
 extension MessageController: MessageSequenceController {
 
-    var streamCid: ConversationId? {
-        return self.cid
+    var conversationId: String? {
+        return self.cid.description
     }
 
     var messageSequence: MessageSequence? {

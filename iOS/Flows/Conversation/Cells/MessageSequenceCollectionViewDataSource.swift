@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 typealias MessageSequenceSection = MessageSequenceCollectionViewDataSource.SectionType
 typealias MessageSequenceItem = MessageSequenceCollectionViewDataSource.ItemType
@@ -20,7 +19,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 
     enum ItemType: Hashable {
-        case message(messageID: MessageId,
+        case message(messageId: String,
                      showDetail: Bool = true)
         case loadMore
         case placeholder
@@ -32,7 +31,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
     // Input handling
     weak var messageContentDelegate: MessageContentDelegate?
-    var handleLoadMoreMessages: ((ConversationId) -> Void)?
+    var handleLoadMoreMessages: ((String) -> Void)?
     var handleAddMembers: CompletionOptional = nil
 
     /// If true, show the replies for each message
@@ -62,12 +61,12 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                               item: ItemType) -> UICollectionViewCell? {
 
         switch item {
-        case .message(messageID: let messageID, let showDetail):
+        case .message(messageId: let messageId, let showDetail):
             let messageCell
             = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                            for: indexPath,
                                                            item: (self.messageSequenceController,
-                                                                  messageID,
+                                                                  messageId,
                                                                   showDetail,
                                                                   collectionView))
 
@@ -80,9 +79,9 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             let loadMoreCell = collectionView.dequeueConfiguredReusableCell(using: self.loadMoreRegistration,
                                                                             for: indexPath,
                                                                             item: collectionView)
-            if let cid = self.messageSequenceController.streamCid {
+            if let conversationId = self.messageSequenceController.conversationId {
                 loadMoreCell.handleLoadMoreMessages = { [unowned self] in
-                    self.handleLoadMoreMessages?(cid)
+                    self.handleLoadMoreMessages?(conversationId)
                 }
             }
             return loadMoreCell
@@ -117,7 +116,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
         // The newest message is at the bottom, so reverse the order.
         var messageItems = messages.map { message in
-            return ItemType.message(messageID: message.id)
+            return ItemType.message(messageId: message.id)
         }
         messageItems = messageItems.reversed()
 
@@ -157,7 +156,7 @@ extension MessageSequenceCollectionViewDataSource {
     typealias MessageCellRegistration
     = UICollectionView.CellRegistration<MessageCell,
                                         (messagesController: MessageSequenceController,
-                                         messageID: MessageId,
+                                         messageId: String,
                                          showDetail: Bool,
                                          collectionView: UICollectionView)>
     typealias LoadMoreCellRegistration
@@ -171,7 +170,7 @@ extension MessageSequenceCollectionViewDataSource {
         return MessageCellRegistration { cell, indexPath, item in
             let messagesController = item.messagesController
             guard let message = messagesController.messageArray.first(where: { message in
-                message.id == item.messageID
+                message.id == item.messageId
             }) else {
                 logDebug("WARNING: Message not found in the controller. Make sure that a sequence controller was assigned.")
                 return }

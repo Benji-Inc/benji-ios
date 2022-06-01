@@ -9,7 +9,6 @@
 import Foundation
 import ScrollCounter
 import Combine
-import StreamChat
 
 class UnreadMessagesCounter: BaseView {
     

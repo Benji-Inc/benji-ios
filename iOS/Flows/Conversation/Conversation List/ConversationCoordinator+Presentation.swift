@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Localization
 import Photos
 

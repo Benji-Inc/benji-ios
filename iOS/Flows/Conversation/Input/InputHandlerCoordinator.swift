@@ -11,7 +11,6 @@ import PhotosUI
 import Photos
 import Localization
 import Lightbox
-import StreamChat
 import Coordinator
 
 protocol SwipeableInputControllerHandler where Self: ViewController {
@@ -340,5 +339,5 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentThread(for message: Messageable, startingReplyId: MessageId?) {}
+    func presentThread(for message: Messageable, startingReplyId: String?) {}
 }

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Combine
 import PhotosUI
 import Transitions

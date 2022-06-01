@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import UIKit
 import Combine
 
@@ -204,7 +203,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
                         isUserMessageInserted = true
                     case .update(let message, _):
                         guard !message.isDeleted else { break }
-                        itemsToReconfigure.append(.message(messageID: message.id))
+                        itemsToReconfigure.append(.message(messageId: message.id))
                     default:
                         break
                     }
@@ -221,7 +220,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
             }.store(in: &self.subscriptions)
     }
 
-    func scrollToMessage(with messageId: MessageId, animateScroll: Bool, animateSelection: Bool) async {
+    func scrollToMessage(with messageId: String, animateScroll: Bool, animateSelection: Bool) async {
         let task = Task {
             guard let conversationController = self.conversationController else { return }
 
@@ -234,7 +233,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
 
             guard !Task.isCancelled else { return }
 
-            let messageItem: MessageSequenceItem = .message(messageID: messageId)
+            let messageItem: MessageSequenceItem = .message(messageId: messageId)
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
@@ -281,7 +280,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
               cell.content.isUserInteractionEnabled else { return }
 
         switch item {
-        case .message(messageID: let messageID, _):
+        case .message(messageId: let messageID, _):
             guard let cid = self.conversation?.cid,
                   let message = ConversationsClient.shared.message(conversationId: cid.description, id: messageID) else { break }
             

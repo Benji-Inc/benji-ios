@@ -12,7 +12,7 @@ import StreamChat
 
 protocol MessageSequenceController {
 
-    var streamCid: ConversationId? { get }
+    var conversationId: String? { get }
     var messageSequence: MessageSequence? { get }
     var messageArray: [Messageable] { get }
 
@@ -20,7 +20,7 @@ protocol MessageSequenceController {
     var messageSequenceChangePublisher: AnyPublisher<EntityChange<MessageSequence>, Never> { get }
 
     /// A publisher emitting a new value every time the list of the messages matching the query changes.
-    var messagesChangesPublisher: AnyPublisher<[ListChange<ChatMessage>], Never> { get }
+    var messagesChangesPublisher: AnyPublisher<[ListChange<Message>], Never> { get }
 }
 
 extension MessageSequenceController {
@@ -35,7 +35,7 @@ extension MessageSequenceController {
 /// An object representing a controller for a null message sequence. It will have no cid and an empty array of messages.
 struct EmptyMessageSequenceController: MessageSequenceController {
 
-    var streamCid: ConversationId? = nil
+    var conversationId: String? = nil
     var messageSequence: MessageSequence? = nil
     var messageArray: [Messageable] = []
 

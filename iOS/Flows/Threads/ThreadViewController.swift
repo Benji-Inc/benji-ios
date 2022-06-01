@@ -185,7 +185,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         Task {
             try? await self.messageController.loadNextReplies(including: messageId)
 
-            let messageItem = MessageSequenceItem.message(messageID: messageId)
+            let messageItem = MessageSequenceItem.message(messageId: messageId)
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
@@ -269,7 +269,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             }
 
             let messages = self.messageController.replies.map { message in
-                return MessageSequenceItem.message(messageID: message.id)
+                return MessageSequenceItem.message(messageId: message.id)
             }
             data[.messages] = Array(messages)
         } catch {
@@ -304,7 +304,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         let startMessageIndex: Int
         if let startingReplyId = self.startingReplyId {
             startMessageIndex
-            = snapshot.indexOfItem(.message(messageID: startingReplyId)) ?? 0
+            = snapshot.indexOfItem(.message(messageId: startingReplyId)) ?? 0
         } else {
             startMessageIndex = self.messageController.replies.count - 1
         }
@@ -432,7 +432,7 @@ extension ThreadViewController {
                 switch change {
                 case .update(let message, _):
                     guard !message.isDeleted else { break }
-                    itemsToReconfigure.append(.message(messageID: message.id))
+                    itemsToReconfigure.append(.message(messageId: message.id))
                 default:
                     break
                 }

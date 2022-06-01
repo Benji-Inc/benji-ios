@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Transitions
 
 class MessageDetailViewController: DiffableCollectionViewController<MessageDetailDataSource.SectionType,
@@ -140,7 +139,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             data[.reads] = reads
         }
         
-        data[.metadata] = [.info(msg)]
+        data[.metadata] = [.metadata(MetadataModel(conversationId: msg.conversationId, messageId: msg.id))]
         
         return data
     }
@@ -209,7 +208,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                 snapshot.setItems(reads, in: .reads)
             }
             
-            snapshot.setItems([.info(msg)], in: .metadata)
+            snapshot.setItems([.metadata(MetadataModel(conversationId: msg.conversationId, messageId: msg.id))], in: .metadata)
             
             await self.dataSource.apply(snapshot)
         }

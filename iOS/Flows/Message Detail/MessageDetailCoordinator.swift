@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Coordinator
 
 enum MessageDetailResult {
@@ -60,7 +59,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
             case .read(let reaction):
                 guard let author = reaction.readReaction?.author else { return }
                 self.presentProfile(for: author)
-            case .info(_):
+            case .metadata(_):
                 break
             case .more(_):
                 break
