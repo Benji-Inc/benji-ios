@@ -180,9 +180,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             self.personView.isVisible = false
             self.messageBubble.isVisible = false
         default:
-            self.personView.isVisible = true
             self.messageBubble.isVisible = true
             self.personView.isHidden = self.invitor.isNil
+            self.nameLabel.isHidden = self.invitor.isNil
         }
     }
 
