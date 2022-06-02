@@ -40,7 +40,7 @@ class PermissionSwitchView: BaseView {
     }
 
     let type: PermissionType
-    private let label = ThemeLabel(font: .small)
+    private let label = ThemeLabel(font: .smallBold)
     private(set) var  switchView = UISwitch()
     @Published var state: State = .hidden
 
@@ -87,7 +87,7 @@ class PermissionSwitchView: BaseView {
         self.roundCorners()
 
         self.label.setSize(withWidth: self.width)
-        self.label.pin(.left, offset: .long)
+        self.label.pin(.left, offset: .xtraLong)
         self.label.centerOnY()
 
         self.switchView.centerOnY()

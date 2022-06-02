@@ -74,7 +74,6 @@ class UserOnboardingViewController: ViewController {
 
         let maxWidth = self.view.width - Theme.ContentOffset.screenPadding.value.doubled
         self.textView.setSize(withMaxWidth: maxWidth)
-        self.textView.centerOnX()
         
         self.messageBubble.size = self.textView.size
         self.messageBubble.size.width += Theme.ContentOffset.long.value.doubled
@@ -83,6 +82,7 @@ class UserOnboardingViewController: ViewController {
         self.messageBubble.match(.top, to: .bottom, of: self.personView, offset: .standard)
         self.messageBubble.centerOnX()
         
+        self.textView.centerOnX()
         self.textView.pin(.bottom, offset: .custom(6))
     }
 

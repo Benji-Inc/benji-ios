@@ -141,14 +141,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.updateUI()
             }.store(in: &self.cancellables)
 
-        self.photoVC.$currentState
-            .filter({ state in
-                return state != .error
-            })
-            .mainSink { [unowned self] _ in
-                self.updateUI()
-            }.store(in: &self.cancellables)
-
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
@@ -184,14 +176,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         
         switch self.currentContent {
         case .photo:
+            self.nameLabel.isVisible = false 
             self.personView.isVisible = false
             self.messageBubble.isVisible = false
         default:
             self.personView.isVisible = true
             self.messageBubble.isVisible = true
+            self.personView.isHidden = self.invitor.isNil
         }
-
-        self.personView.isHidden = self.invitor.isNil
     }
 
     override func didSelectBackButton() {

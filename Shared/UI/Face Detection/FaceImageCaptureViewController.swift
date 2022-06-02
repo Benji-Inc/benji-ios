@@ -19,6 +19,7 @@ class FaceImageCaptureViewController: ViewController {
 
     var didCapturePhoto: ((UIImage) -> Void)?
 
+    @Published private(set) var hasRenderedFaceImage = false
     @Published private(set) var faceDetected = false
     @Published private(set) var eyesAreClosed = false
     @Published private(set) var isSmiling = false
@@ -259,6 +260,13 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         // register drawwable to command buffer
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
+        
+        if !self.hasRenderedFaceImage {
+            Task {
+                await Task.sleep(seconds: 2)
+                self.hasRenderedFaceImage = true
+            }
+        }
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

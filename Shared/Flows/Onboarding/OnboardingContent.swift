@@ -70,25 +70,8 @@ enum OnboardingContent: Switchable {
                                        default: "\(vc.textEntry.textField.text!) is it? Tap next to continue.")
             }
             
-        case .photo(let vc):
-            switch vc.currentState {
-            case .initial:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Tap the screen")
-            case .scanEyesOpen:
-                return "Now smile and tap the screen."
-            case .didCaptureEyesOpen:
-                return "Good one!"
-            case .captureEyesOpen:
-                return "Try again"
-            case .review:
-                return "Looking good! 😄"
-            case .error:
-                return ""
-            case .finish:
-                return "Now turn these on."
-            }
+        case .photo(_):
+            return nil
         }
     }
 }

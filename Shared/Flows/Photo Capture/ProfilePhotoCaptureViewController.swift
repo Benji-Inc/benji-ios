@@ -12,6 +12,7 @@ import Lottie
 import UIKit
 import Combine
 import AVFoundation
+import Localization
 
 enum PhotoState {
     case initial
@@ -58,10 +59,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     override func initializeViews() {
         super.initializeViews()
 
-        self.animationView.loopMode = .loop
-
-        self.view.addSubview(self.animationView)
-        self.animationView.alpha = 0
         self.addChild(viewController: self.faceCaptureVC)
         
         self.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.D6.color.cgColor
@@ -75,8 +72,12 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.view.addSubview(self.button)
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
         
-        self.view.insertSubview(self.label, belowSubview: self.errorView)
-        self.label.setText("Smile then tap")
+        self.faceCaptureVC.view.addSubview(self.label)
+        
+        self.animationView.loopMode = .loop
+
+        self.view.addSubview(self.animationView)
+        self.animationView.alpha = 0
 
         self.setupHandlers()
     }
@@ -95,8 +96,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.faceCaptureVC.cameraViewContainer.roundCorners()
 
         self.animationView.size = CGSize(width: 140, height: 140)
-        self.animationView.centerOnX()
-        self.animationView.centerY = self.faceCaptureVC.cameraViewContainer.centerY
+        self.animationView.center = self.faceCaptureVC.cameraViewContainer.center
 
         self.errorView.bottom = self.view.height - self.errorOffset
         
@@ -112,7 +112,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         }
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.label.centerOnXAndY()
+        self.label.centerOnX()
+        self.label.top = self.faceCaptureVC.view.height * 0.4 + 20 + Theme.ContentOffset.long.value
     }
     
     private func setupHandlers() {
@@ -197,14 +198,41 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
                 await self.handleFinishState()
             }.add(to: self.autocancelTaskPool)
         }
+        
+        self.updateText(for: state)
 
         self.view.layoutNow()
     }
-
+    
+    private func updateText(for state: PhotoState) {
+        let text: Localized
+        switch state {
+        case .initial:
+            text = LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Scanning...")
+        case .scanEyesOpen:
+            text = "Smile and tap the screen."
+        case .didCaptureEyesOpen:
+            text = "Good one!"
+        case .captureEyesOpen:
+            text = "Try again"
+        case .review:
+            text = "Looking good! 😄"
+        case .error:
+            text = ""
+        case .finish:
+            text = ""
+        }
+        
+        self.label.setText(text)
+    }
+    
     private func handleInitialState() {
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDurationStandard, animations: {
                 self.animationView.alpha = 1
+                self.view.setNeedsLayout()
             }) { (completed) in
                 self.animationView.play()
             }
