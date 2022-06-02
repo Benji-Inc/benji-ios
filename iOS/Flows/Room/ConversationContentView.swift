@@ -72,7 +72,7 @@ class ConversationContentView: BaseView {
     func configure(with item: String) {
         
         Task.onMainActorAsync {
-            let controller = ConversationsClient.shared.conversationController(for: item)
+            let controller = JibberChatClient.shared.conversationController(for: item)
             
             if self.conversationController?.cid?.description != item,
                let conversation = controller?.conversation {

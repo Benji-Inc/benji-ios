@@ -269,7 +269,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
                 return system.notice?.type == .unreadMessages
             }), let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
-                if let conversation = ConversationsClient.shared.conversation(for: dict.key), conversation.totalUnread > 0 {
+                if let conversation = JibberChatClient.shared.conversation(for: dict.key), conversation.totalUnread > 0 {
                     return UnreadMessagesModel(conversationId: dict.key, messageIds: dict.value)
                 }
                 return nil

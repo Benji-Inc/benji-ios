@@ -9,9 +9,9 @@
 import Foundation
 import StreamChat
 
-class ConversationsClient {
+class JibberChatClient {
     
-    static var shared = ConversationsClient()
+    static var shared = JibberChatClient()
     private var client: ChatClient?
         
     /// Returns true if the shared client is connected to the chat service.

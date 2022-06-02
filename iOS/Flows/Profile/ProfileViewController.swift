@@ -217,7 +217,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                 if person.isCurrentUser {
                     await models.asyncForEach({ model in
                         await model.messageIds.asyncForEach { messageId in
-                            let controller = ConversationsClient.shared.messageController(for: model.conversationId, id: messageId)
+                            let controller = JibberChatClient.shared.messageController(for: model.conversationId, id: messageId)
                             try? await controller?.synchronize()
                             if let msg = controller?.message, msg.author.personId == self.person.personId {
                                 items.insert(.unreadMessages(model))

@@ -36,7 +36,7 @@ class UrgentMessageContentView: NoticeContentView {
             self.showError()
             return }
 
-        let controller = ConversationsClient.shared.messageController(for: cidValue, id: messageId)
+        let controller = JibberChatClient.shared.messageController(for: cidValue, id: messageId)
         try? await controller?.synchronize()
 
         guard let message = controller?.message else {

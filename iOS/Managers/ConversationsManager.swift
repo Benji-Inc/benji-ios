@@ -31,7 +31,7 @@ class ConversationsManager: EventsControllerDelegate {
 
     static let shared = ConversationsManager()
 
-    lazy var controller = ConversationsClient.shared.eventsController
+    lazy var controller = JibberChatClient.shared.eventsController
 
     @Published var activeController: MessageSequenceController? 
     @Published var activeConversation: Conversation?

@@ -39,7 +39,7 @@ class ConversationInfoCell: CollectionViewManagerCell, ManageableCell {
     }
     
     func configure(with item: String) {
-        self.controller = ConversationsClient.shared.conversationController(for: item)
+        self.controller = JibberChatClient.shared.conversationController(for: item)
         
         guard let conversation = self.controller?.conversation else { return }
         Task {

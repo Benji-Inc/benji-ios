@@ -184,7 +184,7 @@ class MessageCell: UICollectionViewCell {
         // If we're already subscribed to message updates, don't do it again.
         guard messageable.id != self.messageController?.messageId else { return }
 
-        self.messageController = ConversationsClient.shared.messageController(for: messageable)
+        self.messageController = JibberChatClient.shared.messageController(for: messageable)
 
         self.messageController?.reactionsPublisher
             .mainSink(receiveValue: { [unowned self] _ in
@@ -265,7 +265,7 @@ class MessageCell: UICollectionViewCell {
     
     private func addReply(with text: String) {
         guard let msg = self.message,
-                let controller = ConversationsClient.shared.messageController(for: msg) else { return }
+                let controller = JibberChatClient.shared.messageController(for: msg) else { return }
         
         Task {
             let object = SendableObject(kind: .text(text),

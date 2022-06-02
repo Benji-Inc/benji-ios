@@ -21,7 +21,7 @@ extension MessageController {
 
     /// Creates a message controller using the shared ChatClient.
     static func controller(for conversationId: String, messageId: String) -> MessageController {
-        return ConversationsClient.shared.messageController(for: conversationId, id: messageId)!
+        return JibberChatClient.shared.messageController(for: conversationId, id: messageId)!
     }
 
     func editMessage(with sendable: Sendable) async throws {

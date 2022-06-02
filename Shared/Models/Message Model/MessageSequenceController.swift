@@ -42,7 +42,7 @@ struct EmptyMessageSequenceController: MessageSequenceController {
     var messageSequenceChangePublisher: AnyPublisher<EntityChange<MessageSequence>, Never>
     = PassthroughSubject<EntityChange<MessageSequence>, Never>().eraseToAnyPublisher()
 
-    var messagesChangesPublisher: AnyPublisher<[ListChange<ChatMessage>], Never>
-    = PassthroughSubject<[ListChange<ChatMessage>], Never>().eraseToAnyPublisher()
+    var messagesChangesPublisher: AnyPublisher<[ListChange<Message>], Never>
+    = PassthroughSubject<[ListChange<Message>], Never>().eraseToAnyPublisher()
 
 }

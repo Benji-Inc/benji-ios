@@ -31,7 +31,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     let darkBlurView = DarkBlurView()
     
     init(with conversationId: String) {
-        self.conversationController = ConversationsClient.shared.conversationController(for: conversationId)!
+        self.conversationController = JibberChatClient.shared.conversationController(for: conversationId)!
         let cv = CollectionView(layout: ConversationDetailCollectionViewLayout())
         cv.showsHorizontalScrollIndicator = false
         cv.contentInset = UIEdgeInsets(top: 30,
@@ -157,7 +157,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     func reloadPeople() async {
         guard let conversation = self.conversationController.conversation else { return }
                 
-        let members = await ConversationsClient.shared.getPeople(for: conversation)
+        let members = await JibberChatClient.shared.getPeople(for: conversation)
         
         var items: [ConversationDetailCollectionViewDataSource.ItemType] = members.compactMap({ value in
             let item = Member(personId: value.personId,
@@ -186,7 +186,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         
         data[.info] = [.info(conversation.cid.description), .editTopic(conversation.cid.description)]
         
-        let members = await ConversationsClient.shared.getPeople(for: conversation)
+        let members = await JibberChatClient.shared.getPeople(for: conversation)
         
         data[.people] = members.compactMap({ member in
             let member = Member(personId: member.personId,

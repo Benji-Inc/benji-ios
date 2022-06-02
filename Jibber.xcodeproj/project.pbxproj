@@ -59,7 +59,7 @@
 		80580E1F2805F85900B7264C /* EmotionCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1C2805F1F900B7264C /* EmotionCircleView.swift */; };
 		805881562743008D0004F2EA /* ConversationMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805881552743008D0004F2EA /* ConversationMember+Extensions.swift */; };
 		8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8059AD4B27851162004330DC /* ChatUser+Extensions.swift */; };
-		80616E2E26EA9E1900C077BA /* ConversationsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ConversationsClient.swift */; };
+		80616E2E26EA9E1900C077BA /* JibberChatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* JibberChatClient.swift */; };
 		80616E3526EAD2F300C077BA /* DataController+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E3426EAD2F300C077BA /* DataController+Async.swift */; };
 		80632D93278534E600D3A65B /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
 		80632D9427853D2600D3A65B /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
@@ -1012,7 +1012,7 @@
 		80580E1C2805F1F900B7264C /* EmotionCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCircleView.swift; sourceTree = "<group>"; };
 		805881552743008D0004F2EA /* ConversationMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationMember+Extensions.swift"; sourceTree = "<group>"; };
 		8059AD4B27851162004330DC /* ChatUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatUser+Extensions.swift"; sourceTree = "<group>"; };
-		80616E2D26EA9E1900C077BA /* ConversationsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsClient.swift; sourceTree = "<group>"; };
+		80616E2D26EA9E1900C077BA /* JibberChatClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JibberChatClient.swift; sourceTree = "<group>"; };
 		80616E3426EAD2F300C077BA /* DataController+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataController+Async.swift"; sourceTree = "<group>"; };
 		80632D92278534E600D3A65B /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		80665BA527B2F2F3002A8F69 /* MockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMessage.swift; sourceTree = "<group>"; };
@@ -1564,7 +1564,7 @@
 			isa = PBXGroup;
 			children = (
 				8056B321281B0DC100358880 /* ChatMessageAttachment+Extensions.swift */,
-				80616E2D26EA9E1900C077BA /* ConversationsClient.swift */,
+				80616E2D26EA9E1900C077BA /* JibberChatClient.swift */,
 				80FA868B26F111830053101B /* ChatMessage+Extensions.swift */,
 				8059AD4B27851162004330DC /* ChatUser+Extensions.swift */,
 				80FA869126F117C20053101B /* ChatUser+PersonType.swift */,
@@ -3633,7 +3633,7 @@
 				D637651A27E936CB00CCDA7F /* SectionBackgroundView.swift in Sources */,
 				80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */,
 				D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */,
-				80616E2E26EA9E1900C077BA /* ConversationsClient.swift in Sources */,
+				80616E2E26EA9E1900C077BA /* JibberChatClient.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,

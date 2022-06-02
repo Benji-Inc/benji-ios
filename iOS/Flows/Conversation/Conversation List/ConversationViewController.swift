@@ -82,7 +82,7 @@ class ConversationViewController: InputHandlerViewContoller,
         self.conversationId = conversationId
         self.startingMessageId = startingMessageId
         self.openReplies = openReplies
-        self.conversationController = ConversationsClient.shared.conversationController(for: conversationId)!
+        self.conversationController = JibberChatClient.shared.conversationController(for: conversationId)!
 
         super.init()
     }
@@ -214,7 +214,7 @@ class ConversationViewController: InputHandlerViewContoller,
             return
         }
 
-        let messageController = ConversationsClient.shared.messageController(for: conversationId, id: messageId)
+        let messageController = JibberChatClient.shared.messageController(for: conversationId, id: messageId)
         try? await messageController?.synchronize()
         guard let message = messageController?.message else { return }
 
@@ -287,14 +287,14 @@ class ConversationViewController: InputHandlerViewContoller,
         // Reset the input accessory view.
         self.messageInputController.updateSwipeHint(shouldPlay: false)
 
-        if let conversationId = conversationId, let controller = ConversationsClient.shared.conversationController(for: conversationId) {
+        if let conversationId = conversationId, let controller = JibberChatClient.shared.conversationController(for: conversationId) {
             
             // Sets the active conversation
             ConversationsManager.shared.activeConversation = controller.conversation
             ConversationsManager.shared.activeController = controller
 
             self.messageInputTask = Task { [weak self] in
-                let people = await ConversationsClient.shared.getPeople(for: controller.conversation!)
+                let people = await JibberChatClient.shared.getPeople(for: controller.conversation!)
 
                 guard !Task.isCancelled else { return }
 
@@ -348,7 +348,7 @@ extension ConversationViewController: MessageSendingViewControllerType {
     func sendMessage(_ message: Sendable) async throws {
         guard let conversationId = self.getCurrentMessageSequence()?.id else { return }
 
-        let conversationController = ConversationsClient.shared.conversationController(for: conversationId)
+        let conversationController = JibberChatClient.shared.conversationController(for: conversationId)
 
         try await conversationController?.createNewMessage(with: message)
     }

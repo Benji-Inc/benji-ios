@@ -101,7 +101,7 @@ extension ConversationCollectionViewDataSource {
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
-            let conversationController = ConversationsClient.shared.conversationController(for: item.conversationId)
+            let conversationController = JibberChatClient.shared.conversationController(for: item.conversationId)
 
             let isPreparedToSend = conversationController?.conversation?.id == item.dataSource.conversationPreparingToSend
             if let conversation = conversationController?.conversation {
