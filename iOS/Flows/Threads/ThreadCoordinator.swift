@@ -7,24 +7,20 @@
 //
 
 import Foundation
-import StreamChat
 import Coordinator
 
-class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandler {
+class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
     
     var threadVC: ThreadViewController {
         return self.inputHandlerViewController as! ThreadViewController
     }
 
-    init(with channelId: ChannelId,
-         messageId: MessageId,
-         startingReplyId: MessageId?,
+    init(with message: Messageable,
+         startingReplyId: String?,
          router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
         
-        let vc = ThreadViewController(channelID: channelId,
-                                      messageID: messageId,
-                                      startingReplyId: startingReplyId)
+        let vc = ThreadViewController(message: message, startingReplyId: startingReplyId)
 
         super.init(with: vc, router: router, deepLink: deepLink)
     }
@@ -43,7 +39,7 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
                   case MessageSequenceItem.message(let messageID, _) = first,
                   let cid = self.threadVC.conversationController?.cid else { return }
             
-            self.presentMessageDetail(for: cid, messageId: messageID)
+            self.presentMessageDetail(for: cid.description, messageId: messageID)
         }.store(in: &self.cancellables)
     }
     
@@ -51,16 +47,16 @@ class ThreadCoordinator: InputHandlerCoordinator<ConversationId>, DeepLinkHandle
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             switch result {
-            case .conversation(let cid):
-                self.finishFlow(with: cid)
-            case .openReplies(_, _):
+            case .conversation(let conversationId):
+                self.finishFlow(with: conversationId)
+            case .openReplies(_):
                 break
             }
         }
     }
     
-    func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
-        let message = Message.message(with: channelId, messageId: messageId)
+    func presentMessageDetail(for conversationId: String, messageId: String) {
+        guard let message = ConversationsClient.shared.message(conversationId: conversationId, id: messageId) else { return }
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)

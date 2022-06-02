@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Transitions
 
 class MessageDetailViewController: DiffableCollectionViewController<MessageDetailDataSource.SectionType,
@@ -113,30 +112,36 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
     override func retrieveDataForSnapshot() async -> [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] {
         var data: [MessageDetailDataSource.SectionType : [MessageDetailDataSource.ItemType]] = [:]
     
-        guard let controller = ChatClient.shared.messageController(for: self.message),
+        guard let controller = ConversationsClient.shared.messageController(for: self.message),
                 let msg = controller.message else { return data }
         
         self.messageController = controller
         
+        let moreOption = MoreOptionModel(conversationId: msg.conversationId,
+                                         messageId: msg.id,
+                                         option: .more)
+        
         if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
-            data[.options] = [.option(.viewThread), .option(.unpin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            data[.options] = [.option(.viewThread), .option(.unpin), .option(.quote), .more(moreOption)].reversed()
         } else {
-            data[.options] = [.option(.viewThread), .option(.pin), .option(.quote), .more(MoreOptionModel(message: msg, option: .more))].reversed()
+            data[.options] = [.option(.viewThread), .option(.pin), .option(.quote), .more(moreOption)].reversed()
         }
             
         let reads:[MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
             return !reaction.author.isCurrentUser
         }).compactMap({ read in
-            return .read(ReadViewModel(readReaction: read))
+            let model = ReadViewModel(authorId: read.author.id, createdAt: read.createdAt)
+            return .read(model)
         })
         
         if reads.isEmpty {
-            data[.reads] = [.read(ReadViewModel(readReaction: nil))]
+            let model = ReadViewModel(authorId: nil, createdAt: nil)
+            data[.reads] = [.read(model)]
         } else {
             data[.reads] = reads
         }
         
-        data[.metadata] = [.info(msg)]
+        data[.metadata] = [.metadata(MetadataModel(conversationId: msg.conversationId, messageId: msg.id))]
         
         return data
     }
@@ -174,18 +179,21 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                         
             var snapshot = self.dataSource.snapshot()
             
+            let moreOption = MoreOptionModel(conversationId: msg.conversationId,
+                                             messageId: msg.id,
+                                             option: .more)
+            
             let optionItems: [MessageDetailDataSource.ItemType]
             if let details = msg.pinDetails, details.pinnedBy.isCurrentUser {
                 optionItems = [.option(.viewThread),
                                .option(.unpin),
                                .option(.quote),
-                               .more(MoreOptionModel(message: msg, option: .more))].reversed()
+                               .more(moreOption)].reversed()
             } else {
                 optionItems = [.option(.viewThread),
                                .option(.pin),
                                .option(.quote),
-                               .more(MoreOptionModel(message: msg, option: .more))]
-                    .reversed()
+                               .more(moreOption)].reversed()
             }
             
             snapshot.setItems(optionItems, in: .options)
@@ -193,16 +201,18 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             let reads: [MessageDetailDataSource.ItemType] = msg.readReactions.filter({ reaction in
                 return !reaction.author.isCurrentUser
             }).compactMap({ read in
-                return .read(ReadViewModel(readReaction: read))
+                let model = ReadViewModel(authorId: read.author.id, createdAt: read.createdAt)
+                return .read(model)
             })
             
             if reads.isEmpty {
-                snapshot.setItems([.read(ReadViewModel(readReaction: nil))], in: .reads)
+                let model = ReadViewModel(authorId: nil, createdAt: nil)
+                snapshot.setItems([.read(model)], in: .reads)
             } else {
                 snapshot.setItems(reads, in: .reads)
             }
             
-            snapshot.setItems([.info(msg)], in: .metadata)
+            snapshot.setItems([.metadata(MetadataModel(conversationId: msg.conversationId, messageId: msg.id))], in: .metadata)
             
             await self.dataSource.apply(snapshot)
         }

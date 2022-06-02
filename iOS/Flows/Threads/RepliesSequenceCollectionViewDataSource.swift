@@ -26,7 +26,7 @@ class RepliesSequenceCollectionViewDataSource: MessageSequenceCollectionViewData
 
         // The newest message is at the bottom, so reverse the order.
         var allMessageItems = allMessages.map { message in
-            return ItemType.message(messageID: message.id)
+            return ItemType.message(messageId: message.id)
         }
 
         if self.shouldPrepareToSend {

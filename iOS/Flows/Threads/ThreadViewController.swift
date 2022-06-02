@@ -9,7 +9,6 @@
 import Foundation
 import Parse
 import Combine
-import StreamChat
 import KeyboardManager
 import Transitions
 
@@ -49,12 +48,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     private let threadCollectionView = ThreadCollectionView()
 
     /// A controller for the message that all the replies in this thread are responding to.
-    let messageController: ChatMessageController
+    let messageController: MessageController
     var parentMessage: Message? {
         return self.messageController.message
     }
     /// The reply to show when this view controller initially loads its data.
-    private let startingReplyId: MessageId?
+    private let startingReplyId: String?
 
     private(set) var conversationController: ConversationController?
     let pullView = PullView()
@@ -87,15 +86,14 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     @Published var state: ConversationUIState = .read
 
-    init(channelID: ChannelId,
-         messageID: MessageId,
-         startingReplyId: MessageId?) {
-        
-        let controller = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
+    init(message: Messageable, startingReplyId: String?) {
+       
+        let controller = ConversationsClient.shared.messageController(for: message)!
         ConversationsManager.shared.activeController = controller
         self.messageController = controller
-        self.conversationController = ChatClient.shared.channelController(for: channelID,
-                                                                          messageOrdering: .topToBottom)
+        
+        self.conversationController = ConversationController.controller(for: message.conversationId)
+
         self.startingReplyId = startingReplyId
         
         super.init(with: self.threadCollectionView)
@@ -177,8 +175,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
     
     @MainActor
-    func scrollToConversation(with cid: ConversationId,
-                              messageId: MessageId?,
+    func scrollToConversation(with conversationId: String,
+                              messageId: String?,
                               viewReplies: Bool = false,
                               animateScroll: Bool,
                               animateSelection: Bool) async {
@@ -187,7 +185,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         Task {
             try? await self.messageController.loadNextReplies(including: messageId)
 
-            let messageItem = MessageSequenceItem.message(messageID: messageId)
+            let messageItem = MessageSequenceItem.message(messageId: messageId)
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
@@ -271,7 +269,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             }
 
             let messages = self.messageController.replies.map { message in
-                return MessageSequenceItem.message(messageID: message.id)
+                return MessageSequenceItem.message(messageId: message.id)
             }
             data[.messages] = Array(messages)
         } catch {
@@ -289,7 +287,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         
         if let replyId = self.startingReplyId {
             Task {
-                await self.scrollToConversation(with: self.messageController.cid,
+                await self.scrollToConversation(with: self.messageController.conversation!.id,
                                                 messageId: replyId,
                                                 animateScroll: false,
                                                 animateSelection: false)
@@ -306,7 +304,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         let startMessageIndex: Int
         if let startingReplyId = self.startingReplyId {
             startMessageIndex
-            = snapshot.indexOfItem(.message(messageID: startingReplyId)) ?? 0
+            = snapshot.indexOfItem(.message(messageId: startingReplyId)) ?? 0
         } else {
             startMessageIndex = self.messageController.replies.count - 1
         }
@@ -434,7 +432,7 @@ extension ThreadViewController {
                 switch change {
                 case .update(let message, _):
                     guard !message.isDeleted else { break }
-                    itemsToReconfigure.append(.message(messageID: message.id))
+                    itemsToReconfigure.append(.message(messageId: message.id))
                 default:
                     break
                 }
@@ -445,7 +443,7 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in
-            return member.personId != ChatClient.shared.currentUserId
+            return member.personId != User.current()?.objectId
         } ?? []
 
         self.messageInputController.swipeInputView.textView.setPlaceholder(for: members, isReply: true)

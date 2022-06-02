@@ -8,24 +8,23 @@
 
 import Foundation
 import Combine
-import StreamChat
 import Localization
 import Coordinator
 
 enum DetailCoordinatorResult {
-    case conversation(ConversationId)
-    case message(ConversationId, MessageId)
+    case conversation(String)
+    case message(Messageable)
 }
 
 class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorResult?> {
     
-    lazy var detailVC = ConversationDetailViewController(with: self.cid)
-    let cid: ConversationId
+    lazy var detailVC = ConversationDetailViewController(with: self.conversationId)
+    let conversationId: String
     
-    init(with cid: ConversationId,
+    init(with conversationId: String,
          router: CoordinatorRouter,
          deepLink: DeepLinkable?) {
-        self.cid = cid
+        self.conversationId = conversationId
         super.init(router: router, deepLink: deepLink)
     }
     
@@ -43,8 +42,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             
             switch first {
             case .pinnedMessage(let model):
-                guard let cid = model.cid, let messageId = model.messageId else { return }
-                self.finishFlow(with: .message(cid, messageId))
+                guard let message = ConversationsClient.shared.message(conversationId: model.conversationId!, id: model.messageId!) else { return }
+                self.finishFlow(with: .message(message))
             case .member(let member):
                 guard let person = PeopleStore.shared.people.first(where: { person in
                     return person.personId == member.personId
@@ -53,8 +52,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 self.presentProfile(for: person)
             case .info(_):
                 break
-            case .editTopic(let cid):
-                self.presentConversationTitleAlert(for: cid)
+            case .editTopic(let conversationId):
+                self.presentConversationTitleAlert(for: conversationId)
             case .detail(let option):
                 if option == .add {
                     self.presentPeoplePicker()
@@ -74,8 +73,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
                 switch result {
                 case .conversation(let cid):
-                    self.finishFlow(with: .conversation(cid))
-                case .openReplies(_, _):
+                    self.finishFlow(with: .conversation(cid.description))
+                case .openReplies(_):
                     break
                 }
             }
@@ -84,8 +83,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         self.router.present(coordinator, source: self.detailVC, cancelHandler: nil)
     }
     
-    func presentConversationTitleAlert(for cid: ConversationId) {
-        let controller = ChatClient.shared.channelController(for: cid)
+    func presentConversationTitleAlert(for conversationId: String) {
+        let controller = ConversationsClient.shared.conversationController(for: conversationId)
         
         let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
@@ -97,7 +96,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                let text = textField.text,
                !text.isEmpty {
                 
-                controller.updateChannel(name: text, imageURL: nil, team: nil) { _ in
+                controller?.updateChannel(name: text, imageURL: nil, team: nil) { _ in
                     alertController.dismiss(animated: true, completion: {
                         Task {
                             await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.thumbsUp.image, "Name updated"))
@@ -116,7 +115,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     }
     
     func presentDetail(option: ConversationDetailCollectionViewDataSource.OptionType) {
-        let controller = ChatClient.shared.channelController(for: self.cid)
+        guard let controller = ConversationsClient.shared.conversationController(for: self.conversationId) else { return }
         
         var title: String = ""
         var message: String = ""
@@ -174,12 +173,12 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
     }
     
     func presentPeoplePicker() {
-        guard let conversation = ConversationController.controller(self.cid).conversation else { return }
+        guard let conversation = ConversationsClient.shared.conversation(for: self.conversationId) else { return }
         
         self.removeChild()
         
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        coordinator.selectedConversationCID = self.cid
+        coordinator.selectedConversationId = self.conversationId
         
         // Because of how the People are presented, we need to properly reset the KeyboardManager.
         coordinator.toPresentable().dismissHandlers.append { [unowned self, unowned cor = coordinator] in
@@ -199,7 +198,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         
         if !invitedPeople.isEmpty {
             Task {
-                let controller = ChatClient.shared.channelController(for: activeConversation.cid)
+                guard let controller = ConversationsClient.shared.conversationController(for: activeConversation.id) else { return }
                 await self.add(people: invitedPeople, to: controller)
                 try? await controller.synchronize()
                 await self.detailVC.reloadPeople()
@@ -245,20 +244,11 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
 
 extension ConversationDetailCoordinator: MessageContentDelegate {
     
-    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-        
+    func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {
+        self.finishFlow(with: .message(message))
     }
     
-    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId)) {
-        self.finishFlow(with: .message(messageInfo.0, messageInfo.1))
-    }
-    
-    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {
         
         switch message.kind {
         case .photo(photo: let photo, _):

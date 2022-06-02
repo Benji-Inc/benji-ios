@@ -17,7 +17,7 @@ protocol ConversationControllerType {
     /// The original message if this is controller for message  thread.
     var rootMessage: Message? { get }
     /// The messages currenlty loaded on this controller. In a thread, these would be reply messages.
-    var messages: LazyCachedMapCollection<ChatMessage> { get }
+    var messages: LazyCachedMapCollection<Message> { get }
     /// True if all messages (or replies) have been loaded.
     var hasLoadedAllPreviousMessages: Bool { get }
 }
@@ -55,7 +55,7 @@ extension MessageController: ConversationControllerType {
     }
 
     var conversation: Conversation? {
-        return ChatClient.shared.channelController(for: self.cid).conversation
+        return ConversationController.controller(for: self.cid.description).conversation
     }
     
     var hasLoadedAllPreviousMessages: Bool {

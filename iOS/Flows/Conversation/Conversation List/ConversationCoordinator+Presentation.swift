@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Localization
 import Photos
 
@@ -21,8 +20,7 @@ extension ConversationCoordinator {
         self.present(coordinator)
     }
     
-    func presentMessageDetail(for channelId: ChannelId, messageId: MessageId) {
-        let message = Message.message(with: channelId, messageId: messageId)
+    func presentMessageDetail(for message: Messageable) {
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)
@@ -30,18 +28,14 @@ extension ConversationCoordinator {
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .message(_):
-                self.presentThread(for: channelId,
-                                   messageId: messageId,
-                                   startingReplyId: nil)
+                self.presentThread(for: message, startingReplyId: nil)
             case .reply(let replyId):
-                self.presentThread(for: channelId,
-                                   messageId: messageId,
-                                   startingReplyId: replyId)
-            case .conversation(let conversation):
+                self.presentThread(for: message, startingReplyId: replyId)
+            case .conversation(let conversationId):
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: conversation,
-                                                           messageId: nil,
-                                                           animateScroll: false)
+                    await self.conversationVC.scrollToConversation(with: conversationId,
+                                                                   messageId: nil,
+                                                                   animateScroll: false)
                 }
             case .none:
                 break
@@ -54,7 +48,7 @@ extension ConversationCoordinator {
         guard let conversation = self.activeConversation else { return }
         
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        coordinator.selectedConversationCID = self.activeConversation?.cid
+        coordinator.selectedConversationId = self.activeConversation?.id
         
         self.present(coordinator, finishedHandler: { [unowned self] invitedPeople in
             self.handleInviteFlowEnded(givenInvitedPeople: invitedPeople, activeConversation: conversation)
@@ -71,10 +65,10 @@ extension ConversationCoordinator {
             // If the user didn't invite anyone to the conversation and the conversation doesn't have
             // any existing members, ask them if they'd like to delete it.
             Task {
-                let peopleInConversation = await PeopleStore.shared.getPeople(for: activeConversation)
+                let peopleInConversation = await ConversationsClient.shared.getPeople(for: activeConversation)
                 guard peopleInConversation.isEmpty else { return }
                 
-                self.presentDeleteConversationAlert(cid: activeConversation.cid)
+                self.presentDeleteConversationAlert(conversationId: activeConversation.id)
             }
         } else {
             // Add all of the invited people to the conversation.
@@ -83,7 +77,7 @@ extension ConversationCoordinator {
     }
     
     func add(people: [Person], to conversation: Conversation) {
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
+        let controller = ConversationController.controller(for: conversation)
         
         let acceptedConnections = people.compactMap { person in
             return person.connection
@@ -118,10 +112,11 @@ extension ConversationCoordinator {
         }.add(to: self.taskPool)
     }
     
-    func presentDeleteConversationAlert(cid: ConversationId?) {
-        guard let cid = cid else { return }
-                
-        let controller = ChatClient.shared.channelController(for: cid)
+    func presentDeleteConversationAlert(conversationId: String?) {
+        guard let conversationId = conversationId else {
+            return
+        }
+        let controller = ConversationController.controller(for: conversationId)
         guard let conversation = controller.conversation, conversation.memberCount <= 1 else { return }
         
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -152,24 +147,23 @@ extension ConversationCoordinator {
     }
     
     func presentConversationDetail() {
-        guard let cid = self.activeConversation?.cid else { return }
+        guard let conversationId = self.activeConversation?.id else { return }
         
-        let coordinator = ConversationDetailCoordinator(with: cid,
+        let coordinator = ConversationDetailCoordinator(with: conversationId,
                                                         router: self.router,
                                                         deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             guard let option = result else { return }
             
-            switch option {
-            case .conversation(let cid):
-                Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
-                }
-            case .message(let cid, let messageId):
-                Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid, messageId: messageId, animateScroll: true)
+            Task.onMainActorAsync {
+                switch option {
+                case .conversation(let conversationId):
+                    await self.conversationVC.scrollToConversation(with: conversationId, messageId: nil, animateScroll: false)
+                case .message(let message):
+                    await self.conversationVC.scrollToConversation(with: conversationId, messageId: message.id, animateScroll: true)
                 }
             }
+            
         }
     }
 }

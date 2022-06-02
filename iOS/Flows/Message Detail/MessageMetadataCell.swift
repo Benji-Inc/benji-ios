@@ -8,25 +8,27 @@
 
 import Foundation
 
+struct MetadataModel: Hashable {
+    var conversationId: String
+    var messageId: String
+}
+
 class MessageMetadataCell: CollectionViewManagerCell, ManageableCell {
     
-    typealias ItemType = Message
+    typealias ItemType = MetadataModel
     
-    var currentItem: Message?
+    var currentItem: MetadataModel?
 
-    
     override func initializeSubviews() {
         super.initializeSubviews()
-        
     }
     
-    func configure(with item: Message) {
+    func configure(with item: MetadataModel) {
 
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-
     }
 }

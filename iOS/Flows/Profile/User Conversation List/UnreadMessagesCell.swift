@@ -8,12 +8,11 @@
 
 import Foundation
 import ScrollCounter
-import StreamChat
 import Combine
 
 struct UnreadMessagesModel: Hashable {
-    var cid: ConversationId
-    var messageIds: [MessageId]
+    var conversationId: String
+    var messageIds: [String]
 }
 
 class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
@@ -33,7 +32,7 @@ class UnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     private var loadConversationTask: Task<Void, Never>?
     
     func configure(with item: UnreadMessagesModel) {
-        self.content.configure(with: item.cid)
+        self.content.configure(with: item.conversationId)
         
         if let _ = self.content.conversationController?.conversation?.messages.first(where: { message in
             return !message.isDeleted && message.canBeConsumed

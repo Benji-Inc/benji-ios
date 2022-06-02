@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Combine
 import PhotosUI
 import Transitions
@@ -72,18 +71,18 @@ class ConversationViewController: InputHandlerViewContoller,
     @Published var state: ConversationUIState = .read
 
     /// The id of the conversation this VC will display.
-    private let cid: ConversationId
-    private let startingMessageID: MessageId?
+    private let conversationId: String
+    private let startingMessageId: String?
     private let openReplies: Bool
 
-    init(cid: ConversationId,
-         startingMessageID: MessageId?,
+    init(conversationId: String,
+         startingMessageId: String?,
          openReplies: Bool) {
 
-        self.cid = cid
-        self.startingMessageID = startingMessageID
+        self.conversationId = conversationId
+        self.startingMessageId = startingMessageId
         self.openReplies = openReplies
-        self.conversationController = ChatClient.shared.channelController(for: cid)
+        self.conversationController = ConversationsClient.shared.conversationController(for: conversationId)!
 
         super.init()
     }
@@ -185,20 +184,20 @@ class ConversationViewController: InputHandlerViewContoller,
         self.collectionView.animationView.stop()
 
         Task {
-            await self.scrollToConversation(with: self.cid,
-                                            messageId: self.startingMessageID,
+            await self.scrollToConversation(with: self.conversationId,
+                                            messageId: self.startingMessageId,
                                             viewReplies: self.openReplies)
         }.add(to: self.autocancelTaskPool)
     }
 
     @MainActor
-    func scrollToConversation(with cid: ConversationId,
-                              messageId: MessageId?,
+    func scrollToConversation(with conversationId: String,
+                              messageId: String?,
                               viewReplies: Bool = false,
                               animateScroll: Bool = true,
                               animateSelection: Bool = true) async {
         
-        guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(cid)) else { return }
+        guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(conversationId)) else { return }
         self.collectionView.scrollToItem(at: conversationIndexPath,
                                          at: .centeredHorizontally,
                                          animated: true)
@@ -215,9 +214,9 @@ class ConversationViewController: InputHandlerViewContoller,
             return
         }
 
-        let messageController = ChatClient.shared.messageController(cid: cid, messageId: messageId)
-        try? await messageController.synchronize()
-        guard let message = messageController.message else { return }
+        let messageController = ConversationsClient.shared.messageController(for: conversationId, id: messageId)
+        try? await messageController?.synchronize()
+        guard let message = messageController?.message else { return }
 
         // Determine if this is a reply message or regular message.
         if let parentMessageId = message.parentMessageId {
@@ -228,7 +227,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
             if let messageCell = messagesCell.getFrontmostCell() {
                 self.messageContentDelegate?.messageContent(messageCell.content,
-                                                            didTapMessage: (cid, messageId))
+                                                            didTapMessage: message)
             }
         } else if viewReplies {
             // It's not a parent message, but we still want to see the replies.
@@ -238,7 +237,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
             if let messageCell = messagesCell.getFrontmostCell() {
                 self.messageContentDelegate?.messageContent(messageCell.content,
-                                                            didTapViewReplies: (cid, messageId))
+                                                            didTapViewReplies: message)
             }
         } else {
             await messagesCell.scrollToMessage(with: messageId,
@@ -259,21 +258,21 @@ class ConversationViewController: InputHandlerViewContoller,
     // MARK: - ConversationListCollectionViewLayoutDelegate
 
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
-                                              cidFor indexPath: IndexPath) -> ConversationId? {
+                                              conversationIdFor indexPath: IndexPath) -> String? {
 
         let item = self.dataSource.itemIdentifier(for: indexPath)
         switch item {
-        case .conversation(let cid):
-            return cid
+        case .conversation(let conversationId):
+            return conversationId
         case .none:
             return nil
         }
     }
 
     func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
-                                              didUpdateCentered cid: ConversationId?) {
+                                              didUpdateCentered conversationId: String?) {
 
-        self.updateUI(withCenteredCid: cid)
+        self.updateUI(withCenteredConversationId: conversationId)
     }
 
     /// A task for updating the message input accessory.
@@ -281,21 +280,21 @@ class ConversationViewController: InputHandlerViewContoller,
     /// A task to become or resign first responder status.
     private var firstResponderTask: Task<Void, Never>?
 
-    private func updateUI(withCenteredCid cid: ConversationId?) {
+    private func updateUI(withCenteredConversationId conversationId: String?) {
         self.messageInputTask?.cancel()
         self.firstResponderTask?.cancel()
 
         // Reset the input accessory view.
         self.messageInputController.updateSwipeHint(shouldPlay: false)
 
-        if let cid = cid, let conversation = Conversation.conversation(cid) {
+        if let conversationId = conversationId, let controller = ConversationsClient.shared.conversationController(for: conversationId) {
             
             // Sets the active conversation
-            ConversationsManager.shared.activeConversation = conversation
-            ConversationsManager.shared.activeController = ConversationController.controller(cid)
+            ConversationsManager.shared.activeConversation = controller.conversation
+            ConversationsManager.shared.activeController = controller
 
             self.messageInputTask = Task { [weak self] in
-                let people = await PeopleStore.shared.getPeople(for: conversation)
+                let people = await ConversationsClient.shared.getPeople(for: controller.conversation!)
 
                 guard !Task.isCancelled else { return }
 
@@ -343,15 +342,15 @@ extension ConversationViewController: MessageSendingViewControllerType {
     }
 
     func set(messageSequencePreparingToSend: MessageSequence?) {
-        self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID)
+        self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.id)
     }
 
     func sendMessage(_ message: Sendable) async throws {
-        guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
+        guard let conversationId = self.getCurrentMessageSequence()?.id else { return }
 
-        let conversationController = ChatClient.shared.channelController(for: cid)
+        let conversationController = ConversationsClient.shared.conversationController(for: conversationId)
 
-        try await conversationController.createNewMessage(with: message)
+        try await conversationController?.createNewMessage(with: message)
     }
 }
 

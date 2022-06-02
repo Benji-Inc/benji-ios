@@ -30,8 +30,8 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     
     let darkBlurView = DarkBlurView()
     
-    init(with cid: ConversationId) {
-        self.conversationController = ConversationController.controller(cid)
+    init(with conversationId: String) {
+        self.conversationController = ConversationsClient.shared.conversationController(for: conversationId)!
         let cv = CollectionView(layout: ConversationDetailCollectionViewLayout())
         cv.showsHorizontalScrollIndicator = false
         cv.contentInset = UIEdgeInsets(top: 30,
@@ -111,7 +111,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     private func subscribeToUpdates(for conversationController: ConversationController) {
         // Clear out previous subscriptions.
         self.conversationCancellables.removeAll()
-        
+                
         conversationController
             .memberEventPublisher
             .mainSink(receiveValue: { [unowned self] event in
@@ -157,7 +157,7 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
     func reloadPeople() async {
         guard let conversation = self.conversationController.conversation else { return }
                 
-        let members = await PeopleStore.shared.getPeople(for: conversation)
+        let members = await ConversationsClient.shared.getPeople(for: conversation)
         
         var items: [ConversationDetailCollectionViewDataSource.ItemType] = members.compactMap({ value in
             let item = Member(personId: value.personId,
@@ -184,9 +184,9 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         
         guard let conversation = self.conversationController.conversation else { return data }
         
-        data[.info] = [.info(conversation.cid), .editTopic(conversation.cid)]
+        data[.info] = [.info(conversation.cid.description), .editTopic(conversation.cid.description)]
         
-        let members = await PeopleStore.shared.getPeople(for: conversation)
+        let members = await ConversationsClient.shared.getPeople(for: conversation)
         
         data[.people] = members.compactMap({ member in
             let member = Member(personId: member.personId,
@@ -195,11 +195,11 @@ class ConversationDetailViewController: DiffableCollectionViewController<Convers
         })
         
         var pinnedItems: [ConversationDetailItemType] = conversation.pinnedMessages.compactMap({ message in
-            return .pinnedMessage(PinModel(cid: message.cid, messageId: message.id))
+            return .pinnedMessage(PinModel(conversationId: message.conversationId, messageId: message.id))
         })
         
         if pinnedItems.isEmpty {
-            pinnedItems = [.pinnedMessage(PinModel(cid: nil, messageId: nil))]
+            pinnedItems = [.pinnedMessage(PinModel(conversationId: nil, messageId: nil))]
         }
         
         data[.pins] = pinnedItems

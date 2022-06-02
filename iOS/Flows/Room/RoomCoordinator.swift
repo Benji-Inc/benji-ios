@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     
@@ -39,8 +38,8 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         switch target {
         case .conversation, .thread:
             let messageID = deepLink.messageId
-            guard let cid = deepLink.conversationId else { break }
-            self.presentConversation(with: cid, messageId: messageID, openReplies: target == .thread)
+            guard let conversationId = deepLink.conversationId else { break }
+            self.presentConversation(with: conversationId, messageId: messageID, openReplies: target == .thread)
         case .wallet:
             self.presentWallet()
         case .profile:
@@ -81,8 +80,8 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         
         self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
             Task {
-                guard let conversation = try? await self.createNewConversation() else { return }
-                self.presentConversation(with: conversation.cid, messageId: nil)
+                guard let conversation = try? await ConversationsClient.shared.createNewConversation() else { return }
+                self.presentConversation(with: conversation.cid.description, messageId: nil)
             }
         }
         
@@ -101,19 +100,18 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                     self.presentProfile(for: person)
                 }
             case .conversation(let cid):
-                self.presentConversation(with: cid, messageId: nil)
+                self.presentConversation(with: cid.description, messageId: nil)
             case .unreadMessages(let model):
-                self.presentConversation(with: model.cid, messageId: model.messageIds.first)
+                self.presentConversation(with: model.conversationId, messageId: model.messageIds.first)
             case .add(_):
                 self.presentPeoplePicker()
             case .notice(let notice):
                 switch notice.type {
                 case .timeSensitiveMessage:
-                    guard let cidValue = notice.attributes?["cid"] as? String,
-                          let cid = try? ChannelId(cid: cidValue),
+                    guard let conversationId = notice.attributes?["cid"] as? String,
                           let messageId = notice.attributes?["messageId"] as? String else { return }
                     
-                    self.presentConversation(with: cid, messageId: messageId)
+                    self.presentConversation(with: conversationId, messageId: messageId)
                     NoticeStore.shared.delete(notice: notice)
                     self.roomVC.reloadNotices()
                 default:
@@ -123,25 +121,6 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                 break
             }
         }.store(in: &self.cancellables)
-    }
-
-    func createNewConversation() async throws -> Conversation? {
-        let username = User.current()?.initials ?? ""
-        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
-        let userIDs = Set([User.current()!.objectId!])
-        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
-                                                                 name: nil,
-                                                                 imageURL: nil,
-                                                                 team: nil,
-                                                                 members: userIDs,
-                                                                 isCurrentUserMember: true,
-                                                                 messageOrdering: .bottomToTop,
-                                                                 invites: [],
-                                                                 extraData: [:])
-        
-        try await controller.synchronize()
-        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
-        return controller.conversation
     }
 }
 
@@ -160,26 +139,12 @@ extension RoomCoordinator: LaunchActivityHandler {
 
 extension RoomCoordinator: MessageContentDelegate {
     
-    func messageContent(_ content: MessageContentView,
-                        didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-
-        self.presentConversation(with: messageInfo.0, messageId: messageInfo.1, openReplies: true)
+    func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {
+        self.presentConversation(with: message.conversationId, messageId: message.id, openReplies: true)
     }
     
     func messageContent(_ content: MessageContentView,
-                        didTapMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView,
-                        didTapEditMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
-    
-    func messageContent(_ content: MessageContentView,
-                        didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+                        didTapAttachmentForMessage message: Messageable) {
 
         switch message.kind {
         case .photo(photo: let photo, _):

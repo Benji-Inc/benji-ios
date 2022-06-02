@@ -157,19 +157,19 @@ extension Message: Messageable {
         return values 
     }
     
-    static func message(with cid: ConversationId, messageId: MessageId) -> Message {
-        return MessageController.controller(cid, messageId: messageId).message!
+    static func message(with conversationId: String, messageId: MessageId) -> Messageable? {
+        return MessageController.controller(for: conversationId, messageId: messageId).message
     }
     
     func setToConsumed() async {
-        let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
-        await controller.addReaction(with: .read)
+        let controller = ConversationsClient.shared.messageController(for: self.conversationId, id: self.id)
+        await controller?.addReaction(with: .read)
         UserNotificationManager.shared.handleRead(message: self)
         NoticeStore.shared.removeNoticeIfNeccessary(for: self)
     }
     
     func setToUnconsumed() async throws {
-        let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
+        let controller = ConversationsClient.shared.messageController(for: self.conversationId, id: self.id)
         if let readReaction = self.latestReactions.first(where: { reaction in
             if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read,
                reaction.author.personId == User.current()?.objectId {
@@ -177,7 +177,7 @@ extension Message: Messageable {
             }
             return false
         }) {
-            try await controller.removeReaction(with: readReaction.type)
+            try await controller?.removeReaction(with: readReaction.type)
         }
     }
 }
@@ -189,7 +189,7 @@ extension Message: MessageSequence {
     }
     
     var messages: [Messageable] {
-        let messageArray = Array(ChatClient.shared.messageController(for: self)?.replies ?? [])
+        let messageArray = Array(ConversationsClient.shared.messageController(for: self)?.replies ?? [])
         return messageArray
     }
 

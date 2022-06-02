@@ -69,13 +69,13 @@ class ConversationContentView: BaseView {
         self.stackedAvatarView.max = 5
     }
     
-    func configure(with item: ConversationId) {
+    func configure(with item: String) {
         
         Task.onMainActorAsync {
-            let controller = ChatClient.shared.channelController(for: item)
+            let controller = ConversationsClient.shared.conversationController(for: item)
             
-            if self.conversationController?.cid != item,
-               let conversation = controller.conversation {
+            if self.conversationController?.cid?.description != item,
+               let conversation = controller?.conversation {
                 self.conversationController = controller
                 
                 if conversation.latestMessages.isEmpty  {
@@ -83,7 +83,7 @@ class ConversationContentView: BaseView {
                 }
                 
                 let members = conversation.lastActiveMembers.filter { member in
-                    return member.personId != ChatClient.shared.currentUserId
+                    return member.personId != User.current()?.objectId
                 }
                 
                 self.stackedAvatarView.configure(with: members)
@@ -133,7 +133,7 @@ class ConversationContentView: BaseView {
                 switch event {
                 case _ as MemberAddedEvent, _ as MemberRemovedEvent:
                     let members = conversationController.conversation?.lastActiveMembers.filter { member in
-                        return member.personId != ChatClient.shared.currentUserId
+                        return member.personId != User.current()?.objectId
                     } ?? []
                     
                     self.stackedAvatarView.configure(with: members)

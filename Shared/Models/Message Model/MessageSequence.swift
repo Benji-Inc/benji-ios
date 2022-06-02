@@ -19,9 +19,6 @@ protocol MessageSequence {
     var messages: [Messageable] { get }
     var title: String? { get }
     var totalUnread: Int { get }
-
-    // Stream variables
-    var streamCID: ConversationId? { get }
 }
 
 func ==(lhs: MessageSequence, rhs: MessageSequence) -> Bool {

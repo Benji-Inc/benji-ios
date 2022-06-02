@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 class MessageTopOptionCell: CollectionViewManagerCell, ManageableCell {
     

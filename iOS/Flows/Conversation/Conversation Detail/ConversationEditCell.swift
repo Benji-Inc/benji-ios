@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import StreamChat
 
 class ConversationEditCell: CollectionViewManagerCell, ManageableCell {
     
-    typealias ItemType = ChannelId
+    typealias ItemType = String
     
-    var currentItem: ChannelId?
+    var currentItem: String?
     
     private let label = ThemeLabel(font: .regular, textColor: .D6)
     private let lineView = BaseView()
@@ -29,7 +28,7 @@ class ConversationEditCell: CollectionViewManagerCell, ManageableCell {
         self.lineView.alpha = 0.1
     }
     
-    func configure(with item: ChannelId) {}
+    func configure(with item: String) {}
 
     override func layoutSubviews() {
         super.layoutSubviews()

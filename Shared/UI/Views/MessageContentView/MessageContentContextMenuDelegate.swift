@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
 
@@ -29,7 +28,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
     }
 
     private func makeContextMenu() -> UIMenu {
-        guard let message = self.content.message as? Message, let cid = message.cid else { return UIMenu() }
+        guard let message = self.content.message else { return UIMenu() }
 
         let neverMind = UIAction(title: "Never Mind", image: ImageSymbol.noSign.image) { action in }
 
@@ -37,7 +36,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
                                      image: ImageSymbol.trash.image,
                                      attributes: .destructive) { action in
             Task {
-                let controller = ChatClient.shared.messageController(cid: cid, messageId: message.id)
+                guard let controller = ConversationsClient.shared.messageController(for: message) else { return }
                 do {
                     try await controller.deleteMessage()
                 } catch {
@@ -52,12 +51,12 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
                                 children: [confirmDelete, neverMind])
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            self.content.delegate?.messageContent(self.content, didTapViewReplies: (cid, message.id))
+            self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }
 
         let edit = UIAction(title: "Edit",
                             image: ImageSymbol.pencil.image) { [unowned self] action in
-            self.content.delegate?.messageContent(self.content, didTapEditMessage: (cid, message.id))
+            self.content.delegate?.messageContent(self.content, didTapEditMessage: message)
         }
 
         let read = UIAction(title: "Set to read",
@@ -90,7 +89,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
             menuElements.append(viewReplies)
         }
 
-        return UIMenu.init(title: "From: \(message.author.parseUser?.fullName ?? "Unkown")",
+        return UIMenu.init(title: "From: \(message.person?.fullName ?? "Unkown")",
                            image: nil,
                            identifier: nil,
                            options: [],

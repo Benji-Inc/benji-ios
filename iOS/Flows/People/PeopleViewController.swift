@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 import Contacts
 import UIKit
 import Localization

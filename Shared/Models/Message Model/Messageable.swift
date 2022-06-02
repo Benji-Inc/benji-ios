@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import StreamChat
 
 enum DeliveryStatus {
     case sending
@@ -20,6 +19,7 @@ enum DeliveryStatus {
 protocol Messageable {
 
     var id: String { get }
+    var parentMessageId: String? { get }
     var conversationId: String { get }
     var createdAt: Date { get }
     var isFromCurrentUser: Bool { get }
@@ -54,13 +54,14 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
         && lhs.kind == rhs.kind
         && lhs.authorId == rhs.authorId
         && lhs.id == rhs.id
+        && lhs.parentMessageId == rhs.parentMessageId
         && lhs.conversationId == rhs.conversationId
 }
 
 extension Messageable {
-
-    var streamCid: ChannelId? {
-        return try? ChannelId(cid: self.conversationId)
+    
+    var parentMessageId: String? {
+        return nil 
     }
 
     var canBeConsumed: Bool {

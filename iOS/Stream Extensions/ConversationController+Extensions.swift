@@ -18,15 +18,31 @@ extension ConversationController {
     var conversation: Conversation? {
         return self.channel
     }
+    
+    static func controller(query: ChannelListQuery) -> ChatChannelListController {
+        return ConversationsClient.shared.conversationController(query: query)!
+    }
+    
+    static func controller(for conversation: Conversation) -> ConversationController {
+        return ConversationsClient.shared.conversationController(for: conversation.id)!
+    }
+    
+    static func controller(for conversationId: String) -> ConversationController {
+        return ConversationsClient.shared.conversationController(for: conversationId)!
+    }
 
-    /// Creates a conversation controller using the shared ChatClient.
-    static func controller(_ cid: ConversationId,
-                           channelListQuery: ChannelListQuery? = nil,
+    static func controller(for conversationId: String,
+                           query: ChannelListQuery? = nil,
                            messageOrdering: MessageOrdering = .topToBottom) -> ConversationController {
-        
-        return ChatClient.shared.channelController(for: cid,
-                                                      channelListQuery: channelListQuery,
-                                                      messageOrdering: messageOrdering)
+        return ConversationsClient.shared.conversationController(for: conversationId,
+                                                                 query: query,
+                                                                 messageOrdering: messageOrdering)!
+    }
+    
+    static func controller(for query: ChannelQuery,
+                           messageOrdering: MessageOrdering = .topToBottom) -> ConversationController {
+        return ConversationsClient.shared.conversationController(for: query,
+                                                                 messageOrdering: messageOrdering)!
     }
 
     func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
@@ -40,7 +56,7 @@ extension ConversationController {
     func loadPreviousMessages(including messageId: MessageId, limit: Int = 25) async throws {
         guard let cid = self.cid else { return }
         try await self.loadPreviousMessages(before: messageId, limit: limit)
-        let controller = ChatClient.shared.messageController(cid: cid, messageId: messageId)
+        let controller = MessageController.controller(for: cid.description, messageId: messageId)  
         if let messageBefore = self.messages.first(where: { message in
             return message.createdAt < controller.message!.createdAt
         }) {
@@ -523,8 +539,8 @@ extension ConversationController {
 
 extension ConversationController: MessageSequenceController {
 
-    var streamCid: ConversationId? {
-        return self.cid
+    var conversationId: String? {
+        return self.cid?.description
     }
 
     var messageSequence: MessageSequence? {

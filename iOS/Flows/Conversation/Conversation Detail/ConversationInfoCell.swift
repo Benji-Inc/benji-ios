@@ -7,12 +7,11 @@
 //
 
 import Foundation
-import StreamChat
 import Combine
 
 class ConversationInfoCell: CollectionViewManagerCell, ManageableCell {
     
-    var currentItem: ConversationId?
+    var currentItem: String?
 
     private let topicLabel = ThemeLabel(font: .mediumBold)
     private let dateLabel = ThemeLabel(font: .small)
@@ -39,8 +38,8 @@ class ConversationInfoCell: CollectionViewManagerCell, ManageableCell {
         self.dateLabel.pin(.bottom, offset: .short)
     }
     
-    func configure(with item: ConversationId) {
-        self.controller = ChatClient.shared.channelController(for: item)
+    func configure(with item: String) {
+        self.controller = ConversationsClient.shared.conversationController(for: item)
         
         guard let conversation = self.controller?.conversation else { return }
         Task {

@@ -9,28 +9,30 @@
 import Foundation
 import Combine
 import LinkPresentation
-import StreamChat
 
 @MainActor
 protocol MessageContentDelegate: AnyObject {
-    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId))
-    func messageContent(_ content: MessageContentView, didTapMessage messageInfo: (ConversationId, MessageId))
-    func messageContent(_ content: MessageContentView, didTapEditMessage messageInfo: (ConversationId, MessageId))
-    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage messageInfo: (ConversationId, MessageId))
-    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId))
+    func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable)
+    func messageContent(_ content: MessageContentView, didTapMessage message: Messageable)
+    func messageContent(_ content: MessageContentView, didTapEditMessage message: Messageable)
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable)
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable)
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
                         for expression: ExpressionInfo,
-                        forMessage messageInfo: (ConversationId, MessageId))
+                        forMessage message: Messageable)
 }
 
 extension MessageContentDelegate {
-    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {}
-    
+    func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {}
+    func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {}
+    func messageContent(_ content: MessageContentView, didTapEditMessage message: Messageable) {}
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {}
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
                         for expression: ExpressionInfo,
-                        forMessage messageInfo: (ConversationId, MessageId)) {}
+                        forMessage message: Messageable) {}
 }
 
 class MessageContentView: BaseView {
@@ -167,22 +169,21 @@ class MessageContentView: BaseView {
         }
 
         self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            guard let message = self.message, let cid = message.streamCid,
-                  let expression = self.message?.authorExpression  else { return }
+            guard let message = self.message, let expression = self.message?.authorExpression  else { return }
             self.delegate?.messageContent(self,
                                           didTapEmotion: emotion,
                                           for: expression,
-                                          forMessage: (cid, message.id))
+                                          forMessage: message)
         }
         
         self.imageView.didSelect { [unowned self] in
-            guard let message = self.message, let cid = message.streamCid else { return }
-            self.delegate?.messageContent(self, didTapAttachmentForMessage: (cid, message.id))
+            guard let message = self.message else { return }
+            self.delegate?.messageContent(self, didTapAttachmentForMessage: message)
         }
         
         self.addEmotionButton.didSelect { [unowned self] in
-            guard let message = self.message, let cid = message.streamCid else { return }
-            self.delegate?.messageContent(self, didTapAddExpressionForMessage: (cid, message.id))
+            guard let message = self.message else { return }
+            self.delegate?.messageContent(self, didTapAddExpressionForMessage: message)
         }
     }
 

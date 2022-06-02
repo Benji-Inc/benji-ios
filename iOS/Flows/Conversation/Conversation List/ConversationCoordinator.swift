@@ -10,7 +10,6 @@ import Foundation
 import Photos
 import PhotosUI
 import Combine
-import StreamChat
 import Localization
 import Intents
 import Coordinator
@@ -24,12 +23,12 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
     init(router: CoordinatorRouter,
          deepLink: DeepLinkable?,
-         cid: ConversationId,
-         startingMessageId: MessageId?,
+         conversationId: String,
+         startingMessageId: String?,
          openReplies: Bool = false) {
         
-        let vc = ConversationViewController(cid: cid,
-                                            startingMessageID: startingMessageId,
+        let vc = ConversationViewController(conversationId: conversationId,
+                                            startingMessageId: startingMessageId,
                                             openReplies: openReplies)
         
         super.init(with: vc, router: router, deepLink: deepLink)
@@ -59,12 +58,12 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         switch target {
         case .conversation:
             let messageID = deepLink.messageId
-            guard let cid = deepLink.conversationId else { break }
+            guard let conversationId = deepLink.conversationId else { break }
             Task {
-                await self.conversationVC.scrollToConversation(with: cid,
-                                                       messageId: messageID,
-                                                       animateScroll: false,
-                                                       animateSelection: true)
+                await self.conversationVC.scrollToConversation(with: conversationId,
+                                                               messageId: messageID,
+                                                               animateScroll: false,
+                                                               animateSelection: true)
             }.add(to: self.taskPool)
         case .wallet:
             self.showWallet()
@@ -83,72 +82,45 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in
             switch result {
-            case .conversation(let cid):
+            case .conversation(let conversationId):
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid, messageId: nil, animateScroll: false)
+                    await self.conversationVC.scrollToConversation(with: conversationId, messageId: nil, animateScroll: false)
                 }
-            case .openReplies(let cid, let messageId):
+            case .openReplies(let message):
                 Task.onMainActorAsync {
-                    await self.conversationVC.scrollToConversation(with: cid,
-                                                           messageId: messageId,
-                                                           viewReplies: true,
-                                                           animateScroll: false)
+                    await self.conversationVC.scrollToConversation(with: message.conversationId,
+                                                                   messageId: message.id,
+                                                                   viewReplies: true,
+                                                                   animateScroll: false)
                 }
             }
         }
     }
     
-    func createNewConversation() async throws {
-        let username = User.current()?.initials ?? ""
-        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
-        let userIDs = Set([User.current()!.objectId!])
-        let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
-                                                                 name: nil,
-                                                                 imageURL: nil,
-                                                                 team: nil,
-                                                                 members: userIDs,
-                                                                 isCurrentUserMember: true,
-                                                                 messageOrdering: .bottomToTop,
-                                                                 invites: [],
-                                                                 extraData: [:])
-        
-        try await controller.synchronize()
-        AnalyticsManager.shared.trackEvent(type: .conversationCreated, properties: nil)
-        ConversationsManager.shared.activeConversation = controller.conversation
-        ConversationsManager.shared.activeController = controller
-    }
-    
-    override func messageContent(_ content: MessageContentView,
-                                 didTapMessage messageInfo: (ConversationId, MessageId)) {
-        
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
-        
-        if let parentId = message.parentMessageId {
-            self.presentThread(for: messageInfo.0, messageId: parentId, startingReplyId: messageInfo.1)
+    override func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {
+                
+        if let parentId = message.parentMessageId,
+            let parentMessage = ConversationsClient.shared.message(conversationId: message.conversationId, id: parentId) {
+            self.presentThread(for: parentMessage, startingReplyId: message.id)
         } else {
-            self.presentMessageDetail(for: messageInfo.0, messageId: messageInfo.1)
+            self.presentMessageDetail(for: message)
         }
     }
     
-    override func messageContent(_ content: MessageContentView,
-                                 didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-        
-        self.presentThread(for: messageInfo.0, messageId: messageInfo.1, startingReplyId: nil)
+    override func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {
+        self.presentThread(for: message, startingReplyId: nil)
     }
     
-    override func presentThread(for cid: ConversationId,
-                       messageId: MessageId,
-                       startingReplyId: MessageId?) {
+    override func presentThread(for message: Messageable, startingReplyId: String?) {
         
-        let coordinator = ThreadCoordinator(with: cid,
-                                            messageId: messageId,
+        let coordinator = ThreadCoordinator(with: message,
                                             startingReplyId: startingReplyId,
                                             router: self.router,
                                             deepLink: self.deepLink)
         
         self.present(coordinator) { [unowned self] result in
             Task.onMainActorAsync {
-                await self.conversationVC.scrollToConversation(with: result, messageId: nil, animateScroll: false)
+                await self.conversationVC.scrollToConversation(with: message.conversationId, messageId: nil, animateScroll: false)
             }
         }
     }
@@ -158,7 +130,7 @@ extension ConversationCoordinator: LaunchActivityHandler {
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            logDebug("Launched with: \(phoneNumber)")
+            logDebug("Launched with: \(String(describing: phoneNumber))")
         case .reservation(_), .pass(_):
             self.presentPersonConnection(for: launchActivity)
         case .deepLink(let deepLinkable):

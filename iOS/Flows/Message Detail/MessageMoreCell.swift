@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import StreamChat
 
 struct MoreOptionModel: Hashable {
-    var message: Message
+    var conversationId: String
+    var messageId: String
     var option: MessageDetailDataSource.OptionType
 }
 
@@ -48,7 +48,8 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: MoreOptionModel) {
         self.imageView.image = item.option.image
         self.label.setText(item.option.title)
-        self.button.menu = self.makeContextMenu(for: item.message)
+        guard let message = MessageController.controller(for: item.conversationId, messageId: item.messageId).message else { return }
+        self.button.menu = self.makeContextMenu(for: message)
         self.setNeedsLayout()
     }
     
@@ -66,7 +67,7 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
         self.button.expandToSuperviewSize()
     }
     
-    private func makeContextMenu(for message: Message) -> UIMenu {
+    private func makeContextMenu(for message: Messageable) -> UIMenu {
 
         let neverMind = UIAction(title: "Never Mind", image: ImageSymbol.noSign.image) { action in }
 
@@ -121,14 +122,14 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
     
     // MARK: - Message Consumption
 
-    func setToRead(with message: Message) {
+    func setToRead(with message: Messageable) {
         guard message.canBeConsumed else { return }
         Task {
             await message.setToConsumed()
         }
     }
 
-    func setToUnread(with message: Message) {
+    func setToUnread(with message: Messageable) {
         guard message.isConsumedByMe else { return }
         Task {
             try await message.setToUnconsumed()

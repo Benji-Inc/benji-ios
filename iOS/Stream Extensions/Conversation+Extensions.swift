@@ -18,8 +18,8 @@ extension Conversation {
     }
 
     /// Returns the conversation with the specified cid using the shared ChatClient.
-    static func conversation(_ cid: ConversationId) -> Conversation? {
-        return ConversationController.controller(cid).conversation
+    static func conversation(_ conversationId: String) -> Conversation? {
+        return ConversationController.controller(for: conversationId).conversation
     }
 
     var currentRole: Role? {
@@ -27,7 +27,7 @@ extension Conversation {
     }
 
     var isOwnedByMe: Bool {
-        return self.createdBy?.personId == ChatClient.shared.currentUserId
+        return self.createdBy?.personId == User.current()?.objectId
     }
 
     var title: String? {
@@ -40,7 +40,7 @@ extension Conversation {
 
     var description: Localized {
         let members = self.lastActiveMembers.filter { member in
-            return member.personId != ChatClient.shared.currentUserId
+            return member.personId != User.current()?.objectId
         }
 
         if members.count == 0 {
@@ -106,11 +106,7 @@ extension Conversation: MessageSequence {
     }
 
     var messages: [Messageable] {
-        let messageArray = Array(ChatClient.shared.channelController(for: self.cid).messages)
+        let messageArray = Array(ConversationController.controller(for: self).messages)
         return messageArray
-    }
-
-    var streamCID: ConversationId? {
-        return self.cid
     }
 }

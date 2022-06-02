@@ -11,9 +11,6 @@ import Combine
 import ParseLiveQuery
 import Parse
 import Contacts
-#if IOS
-import StreamChat
-#endif
 
 /// A store that contains all people that the user has some relationship with. This could take the form of a directly connected Jibber chat user
 /// or it could just be another person that has been invited but not yet joined Jibber.
@@ -293,30 +290,6 @@ class PeopleStore {
     }
 
     // MARK: - Helper functions
-
-    #if IOS
-    func getPeople(for conversation: ChatChannel) async -> [PersonType] {
-        var people: [PersonType] = []
-        let nonMeMembers = conversation.lastActiveMembers.filter { member in
-            return member.id != User.current()?.objectId
-        }
-        
-        await nonMeMembers.userIDs.asyncForEach { userId in
-            guard let person = await self.getPerson(withPersonId: userId) else { return }
-            people.append(person)
-        }
-        
-        await self.unclaimedReservations.asyncForEach { (reservationId, reservation) in
-            guard reservation.conversationCid == conversation.cid.description,
-                    let contactId = reservation.contactId else { return }
-
-            guard let person = await self.getPerson(withPersonId: contactId) else { return }
-            people.append(person)
-        }
-        
-        return people
-    }
-    #endif 
 
     func getPerson(withPersonId personId: String) async -> PersonType? {
         var foundPerson: PersonType? = nil

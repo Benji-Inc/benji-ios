@@ -13,10 +13,15 @@ import Combine
 typealias MessageController = ChatMessageController
 
 extension MessageController {
+    
+    /// Creates a message controller using the shared ChatClient.
+    static func controller(for message: Messageable) -> MessageController {
+        return self.controller(for: message.conversationId, messageId: message.id)
+    }
 
     /// Creates a message controller using the shared ChatClient.
-    static func controller(_ cid: ConversationId, messageId: MessageId) -> MessageController {
-        return ChatClient.shared.messageController(cid: cid, messageId: messageId)
+    static func controller(for conversationId: String, messageId: String) -> MessageController {
+        return ConversationsClient.shared.messageController(for: conversationId, id: messageId)!
     }
 
     func editMessage(with sendable: Sendable) async throws {
@@ -328,9 +333,9 @@ extension MessageController {
         }
     }
 
-    func loadPreviousReplies(including messageId: MessageId, limit: Int = 25) async throws {
+    func loadPreviousReplies(including messageId: String, limit: Int = 25) async throws {
         try await self.loadPreviousReplies(before: messageId, limit: limit)
-        let controller = ChatClient.shared.messageController(cid: self.cid, messageId: messageId)
+        let controller = MessageController.controller(for: self.cid.description, messageId: messageId)
         if let replyBefore = self.replies.first(where: { message in
             return message.createdAt < controller.message!.createdAt
         }) {
@@ -426,8 +431,8 @@ extension MessageController {
 
 extension MessageController: MessageSequenceController {
 
-    var streamCid: ConversationId? {
-        return self.cid
+    var conversationId: String? {
+        return self.cid.description
     }
 
     var messageSequence: MessageSequence? {

@@ -7,11 +7,10 @@
 //
 
 import Foundation
-import StreamChat
 
 struct PinModel: Hashable {
-    var cid: ConversationId?
-    var messageId: MessageId?
+    var conversationId: String?
+    var messageId: String?
 }
 
 class PinnedMessageCell: CollectionViewManagerCell, ManageableCell {
@@ -41,8 +40,8 @@ class PinnedMessageCell: CollectionViewManagerCell, ManageableCell {
     
     func configure(with item: PinModel) {
         
-        if let cid = item.cid, let messageId = item.messageId,
-           let msg = ChatClient.shared.message(cid: cid, id: messageId) {
+        if let conversationId = item.conversationId, let messageId = item.messageId,
+           let msg = ConversationsClient.shared.message(conversationId: conversationId, id: messageId) {
             self.content.configure(with: msg)
             self.content.isVisible = true
         } else {

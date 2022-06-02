@@ -11,15 +11,14 @@ import PhotosUI
 import Photos
 import Localization
 import Lightbox
-import StreamChat
 import Coordinator
 
 protocol SwipeableInputControllerHandler where Self: ViewController {
     var messageContentDelegate: MessageContentDelegate? { get set }
     var swipeableVC: SwipeableInputAccessoryViewController { get }
     func updateUI(for state: ConversationUIState, forceLayout: Bool)
-    func scrollToConversation(with cid: ConversationId,
-                              messageId: MessageId?,
+    func scrollToConversation(with conversationId: String,
+                              messageId: String?,
                               viewReplies: Bool,
                               animateScroll: Bool,
                               animateSelection: Bool) async
@@ -92,7 +91,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
-            await self.inputHandlerViewController.scrollToConversation(with: conversation.cid,
+            await self.inputHandlerViewController.scrollToConversation(with: conversation.id,
                                                                        messageId: unreadMessage.id,
                                                                        viewReplies: false,
                                                                        animateScroll: true,
@@ -110,8 +109,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                                                    properties: ["value": emotion.rawValue])
             }
             
-            guard let controller = ChatClient.shared.messageController(for: message) else { return }
-
+            let controller = MessageController.controller(for: message)
+            
             Task {
                 try await controller.add(expression: expression)
             }
@@ -278,24 +277,13 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     
     // MARK: - MessageCellDelegate
     
-    func messageContent(_ content: MessageContentView, didTapViewReplies messageInfo: (ConversationId, MessageId)) {
-        
-    }
+    func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {}
 
-    func messageContent(_ content: MessageContentView,
-                        didTapMessage messageInfo: (ConversationId, MessageId)) {
-        
-    }
+    func messageContent(_ content: MessageContentView, didTapMessage message: Messageable) {}
 
-    func messageContent(_ content: MessageContentView,
-                        didTapEditMessage messageInfo: (ConversationId, MessageId)) {
+    func messageContent(_ content: MessageContentView, didTapEditMessage message: Messageable) {}
 
-    }
-
-    func messageContent(_ content: MessageContentView,
-                     didTapAttachmentForMessage messageInfo: (ConversationId, MessageId)) {
-
-        let message = Message.message(with: messageInfo.0, messageId: messageInfo.1)
+    func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {
 
         switch message.kind {
         case .photo(photo: let photo, _):
@@ -309,16 +297,14 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
 
-    func messageContent(_ content: MessageContentView,
-                        didTapAddExpressionForMessage messageInfo: (ConversationId, MessageId)) {
-        guard let message = ChatClient.shared.messageController(cid: messageInfo.0, messageId: messageInfo.1).message else { return }
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {
         self.presentExpressionCreation(for: message)
     }
 
     func messageContent(_ content: MessageContentView,
                         didTapEmotion emotion: Emotion,
                         for expression: ExpressionInfo,
-                        forMessage messageInfo: (ConversationId, MessageId)) {
+                        forMessage message: Messageable) {
         
         Task.onMainActorAsync {
             guard let object = try? await Expression.getObject(with: expression.expressionId) else { return }
@@ -344,9 +330,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .reply(let message):
-                guard let cid = message.streamCid else { return }
-                coordinator.toPresentable().dismiss(animated: true) {
-                    self.presentThread(for: cid, messageId: message.id , startingReplyId: nil)
+                coordinator.toPresentable().dismiss(animated: true) { [unowned self] in
+                    self.presentThread(for: message, startingReplyId: nil)
                 }
             case .none:
                 break
@@ -354,8 +339,5 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentThread(for cid: ConversationId,
-                       messageId: MessageId,
-                       startingReplyId: MessageId?) {
-    }
+    func presentThread(for message: Messageable, startingReplyId: String?) {}
 }

@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import StreamChat
 
 struct ReadViewModel: Hashable {
-    var readReaction: ChatMessageReaction?
+    var authorId: String?
+    var createdAt: Date?
 }
 
 class MessageReadCell: CollectionViewManagerCell, ManageableCell {
@@ -42,7 +42,7 @@ class MessageReadCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: ReadViewModel) {
         self.configurationTask?.cancel()
         
-        guard let item = item.readReaction else {
+        guard let authorId = item.authorId else {
             self.personView.isVisible = false
             return
         }
@@ -50,12 +50,12 @@ class MessageReadCell: CollectionViewManagerCell, ManageableCell {
         self.personView.isVisible = true 
 
         self.configurationTask = Task {
-            guard let person = await PeopleStore.shared.getPerson(withPersonId: item.author.id) else { return }
+            guard let person = await PeopleStore.shared.getPerson(withPersonId: authorId) else { return }
 
             guard !Task.isCancelled else { return }
 
             self.personView.set(person: person)
-            let dateString = item.createdAt.getTimeAgoString()
+            let dateString = item.createdAt?.getTimeAgoString()
             self.label.setText(dateString)
             
             self.setNeedsLayout()
@@ -79,7 +79,7 @@ class MessageReadCell: CollectionViewManagerCell, ManageableCell {
     private func subscribeToUpdates() {
         // Make sure that the person's focus status up to date.
         PeopleStore.shared.$personUpdated.filter { [unowned self] updatedPerson in
-            self.currentItem?.readReaction?.author.id == updatedPerson?.personId
+            self.currentItem?.authorId == updatedPerson?.personId
         }.mainSink { [unowned self] updatedPerson in
             self.personView.set(person: updatedPerson)
         }.store(in: &self.cancellables)
