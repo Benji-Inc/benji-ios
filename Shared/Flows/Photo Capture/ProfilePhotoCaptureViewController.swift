@@ -12,9 +12,11 @@ import Lottie
 import UIKit
 import Combine
 import AVFoundation
+import Localization
 
 enum PhotoState {
     case initial
+    case renderFaceImage
     case scanEyesOpen
     case captureEyesOpen
     case didCaptureEyesOpen
@@ -58,10 +60,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     override func initializeViews() {
         super.initializeViews()
 
-        self.animationView.loopMode = .loop
-
-        self.view.addSubview(self.animationView)
-        self.animationView.alpha = 0
         self.addChild(viewController: self.faceCaptureVC)
         
         self.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.D6.color.cgColor
@@ -73,10 +71,14 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.imageView.alpha = 0.0
 
         self.view.addSubview(self.button)
-        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Looks good! 😁"))
         
-        self.view.insertSubview(self.label, belowSubview: self.errorView)
-        self.label.setText("Smile then tap")
+        self.faceCaptureVC.view.addSubview(self.label)
+        
+        self.animationView.loopMode = .loop
+
+        self.view.addSubview(self.animationView)
+        self.animationView.alpha = 0
 
         self.setupHandlers()
     }
@@ -95,8 +97,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.faceCaptureVC.cameraViewContainer.roundCorners()
 
         self.animationView.size = CGSize(width: 140, height: 140)
-        self.animationView.centerOnX()
-        self.animationView.centerY = self.faceCaptureVC.cameraViewContainer.centerY
+        self.animationView.center = self.faceCaptureVC.cameraViewContainer.center
 
         self.errorView.bottom = self.view.height - self.errorOffset
         
@@ -112,7 +113,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         }
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.label.centerOnXAndY()
+        self.label.centerOnX()
+        self.label.top = self.faceCaptureVC.view.height * 0.4 + 20 + Theme.ContentOffset.long.value
     }
     
     private func setupHandlers() {
@@ -124,17 +126,27 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             }
         }
         
+        self.faceCaptureVC.$hasRenderedFaceImage
+            .removeDuplicates()
+            .mainSink { [unowned self] hasRendered in
+                if hasRendered {
+                    self.currentState = .scanEyesOpen
+                }
+            }.store(in: &self.cancellables)
+        
         self.tapView.didSelect { [unowned self] in
             switch self.currentState {
             case .initial:
-                self.currentState = .scanEyesOpen
+                self.currentState = .renderFaceImage
+            case .renderFaceImage:
+                break
             case .scanEyesOpen:
                 guard self.faceCaptureVC.faceDetected else { return }
                 self.currentState = .captureEyesOpen
             case .captureEyesOpen, .didCaptureEyesOpen:
                 break
             case .review:
-                self.currentState = .scanEyesOpen
+                self.currentState = .renderFaceImage
             case .finish:
                 break
             case .error:
@@ -183,6 +195,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             delay(0.5) {
                 self.handleInitialState()
             }
+        case .renderFaceImage:
+            self.handleRenderImage()
         case .scanEyesOpen:
             self.previousScanState = state
             self.handleScanState()
@@ -197,14 +211,45 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
                 await self.handleFinishState()
             }.add(to: self.autocancelTaskPool)
         }
+        
+        self.updateText(for: state)
 
         self.view.layoutNow()
     }
-
+    
+    private func updateText(for state: PhotoState) {
+        let text: Localized
+        switch state {
+        case .initial:
+            text = LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Tap to begin")
+        case .renderFaceImage:
+            text = LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Scanning...")
+        case .scanEyesOpen:
+            text = "Smile and tap the screen."
+        case .didCaptureEyesOpen:
+            text = "Good one!"
+        case .captureEyesOpen:
+            text = "Try again"
+        case .review:
+            text = "Tap again to retake"
+        case .error:
+            text = ""
+        case .finish:
+            text = ""
+        }
+        
+        self.label.setText(text)
+    }
+    
     private func handleInitialState() {
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDurationStandard, animations: {
                 self.animationView.alpha = 1
+                self.view.setNeedsLayout()
             }) { (completed) in
                 self.animationView.play()
             }
@@ -246,12 +291,19 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             }
         }
     }
-
-    private func handleScanState() {
+    
+    private func handleRenderImage() {
         if !self.faceCaptureVC.isSessionRunning {
             self.faceCaptureVC.beginSession()
         }
+        
+        if self.faceCaptureVC.hasRenderedFaceImage {
+            self.currentState = .scanEyesOpen
+        }
+    }
 
+    private func handleScanState() {
+    
         UIView.animate(withDuration: 0.2, animations: {
             self.imageView.alpha = 0
             self.animationView.alpha = 0
@@ -268,9 +320,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         if self.faceCaptureVC.isSessionRunning {
             self.faceCaptureVC.stopSession()
         }
-        
-        self.label.setText("Tap again to retake")
-        
+                
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.imageView.alpha = 1.0
             self.view.layoutNow()

@@ -57,8 +57,11 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
             self.view.layoutNow()
             
             await UIView.awaitAnimation(with: .standard, animations: {
-                self.messageBubble.alpha = 1
-                self.textView.alpha = 1
+                if self.textView.text.exists {
+                    self.messageBubble.alpha = 1
+                    self.textView.alpha = 1
+                }
+                
                 self.currentCenterVC?.view.alpha = 1
             })
         }

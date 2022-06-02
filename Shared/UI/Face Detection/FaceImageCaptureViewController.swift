@@ -19,6 +19,7 @@ class FaceImageCaptureViewController: ViewController {
 
     var didCapturePhoto: ((UIImage) -> Void)?
 
+    @Published private(set) var hasRenderedFaceImage = false
     @Published private(set) var faceDetected = false
     @Published private(set) var eyesAreClosed = false
     @Published private(set) var isSmiling = false
@@ -35,6 +36,7 @@ class FaceImageCaptureViewController: ViewController {
     lazy var cameraView: MetalView = {
         let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
         metalView.delegate = self
+        metalView.alpha = 0 
         return metalView
     }()
 
@@ -259,6 +261,14 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         // register drawwable to command buffer
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
+
+        if !self.hasRenderedFaceImage {
+            Task.onMainActorAsync {
+                await Task.sleep(seconds: 1.5)
+                self.hasRenderedFaceImage = true
+                view.alpha = 1.0
+            }
+        }
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
