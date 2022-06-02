@@ -221,7 +221,6 @@ class NotificationService: UNNotificationServiceExtension {
         
         content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
          
-        
         var inAttachments: [INSendMessageAttachment] = []
         if let photoAttachment = self.message?.photoAttachments.first,
            let attachment = await self.getAttachment(url: photoAttachment.imageURL) {
