@@ -36,6 +36,7 @@ class FaceImageCaptureViewController: ViewController {
     lazy var cameraView: MetalView = {
         let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
         metalView.delegate = self
+        metalView.alpha = 0 
         return metalView
     }()
 
@@ -260,11 +261,12 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         // register drawwable to command buffer
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
-        
+
         if !self.hasRenderedFaceImage {
-            Task {
-                await Task.sleep(seconds: 2)
+            Task.onMainActorAsync {
+                await Task.sleep(seconds: 1.5)
                 self.hasRenderedFaceImage = true
+                view.alpha = 1.0
             }
         }
     }

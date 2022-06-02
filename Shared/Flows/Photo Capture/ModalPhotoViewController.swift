@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 
 /// A profile photo view controller with a popopver presentation style.
 class ModalPhotoViewController: ProfilePhotoCaptureViewController {
@@ -28,14 +29,13 @@ class ModalPhotoViewController: ProfilePhotoCaptureViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        self.faceCaptureVC.$hasRenderedFaceImage
-            .mainSink { [unowned self] hasRendered in
-                logDebug(hasRendered)
-                if hasRendered {
-                    self.currentState = .scanEyesOpen
-                }
-            }.store(in: &self.cancellables)
+        
+        Task {
+            let authorized = await AVCaptureDevice.requestAccess(for: AVMediaType.video)
+            if authorized {
+                self.currentState = .renderFaceImage
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {

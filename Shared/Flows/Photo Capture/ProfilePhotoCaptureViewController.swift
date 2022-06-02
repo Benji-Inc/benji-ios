@@ -16,6 +16,7 @@ import Localization
 
 enum PhotoState {
     case initial
+    case renderFaceImage
     case scanEyesOpen
     case captureEyesOpen
     case didCaptureEyesOpen
@@ -125,10 +126,20 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             }
         }
         
+        self.faceCaptureVC.$hasRenderedFaceImage
+            .removeDuplicates()
+            .mainSink { [unowned self] hasRendered in
+                if hasRendered {
+                    self.currentState = .scanEyesOpen
+                }
+            }.store(in: &self.cancellables)
+        
         self.tapView.didSelect { [unowned self] in
             switch self.currentState {
             case .initial:
-                self.currentState = .scanEyesOpen
+                self.currentState = .renderFaceImage
+            case .renderFaceImage:
+                break
             case .scanEyesOpen:
                 guard self.faceCaptureVC.faceDetected else { return }
                 self.currentState = .captureEyesOpen
@@ -184,6 +195,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             delay(0.5) {
                 self.handleInitialState()
             }
+        case .renderFaceImage:
+            self.handleRenderImage()
         case .scanEyesOpen:
             self.previousScanState = state
             self.handleScanState()
@@ -208,6 +221,10 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         let text: Localized
         switch state {
         case .initial:
+            text = LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Tap to begin")
+        case .renderFaceImage:
             text = LocalizedString(id: "",
                                    arguments: [],
                                    default: "Scanning...")
@@ -274,12 +291,15 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             }
         }
     }
-
-    private func handleScanState() {
+    
+    private func handleRenderImage() {
         if !self.faceCaptureVC.isSessionRunning {
             self.faceCaptureVC.beginSession()
         }
+    }
 
+    private func handleScanState() {
+    
         UIView.animate(withDuration: 0.2, animations: {
             self.imageView.alpha = 0
             self.animationView.alpha = 0
