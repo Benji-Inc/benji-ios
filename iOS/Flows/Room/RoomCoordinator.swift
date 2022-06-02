@@ -80,7 +80,7 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         
         self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
             Task {
-                guard let conversation = try? await ConversationsClient.shared.createNewConversation() else { return }
+                guard let conversation = try? await JibberChatClient.shared.createNewConversation() else { return }
                 self.presentConversation(with: conversation.cid.description, messageId: nil)
             }
         }

@@ -56,7 +56,7 @@ class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
     }
     
     func presentMessageDetail(for conversationId: String, messageId: String) {
-        guard let message = ConversationsClient.shared.message(conversationId: conversationId, id: messageId) else { return }
+        guard let message = JibberChatClient.shared.message(conversationId: conversationId, id: messageId) else { return }
         let coordinator = MessageDetailCoordinator(with: message,
                                                    router: self.router,
                                                    deepLink: self.deepLink)

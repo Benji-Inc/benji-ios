@@ -162,14 +162,14 @@ extension Message: Messageable {
     }
     
     func setToConsumed() async {
-        let controller = ConversationsClient.shared.messageController(for: self.conversationId, id: self.id)
+        let controller = JibberChatClient.shared.messageController(for: self.conversationId, id: self.id)
         await controller?.addReaction(with: .read)
         UserNotificationManager.shared.handleRead(message: self)
         NoticeStore.shared.removeNoticeIfNeccessary(for: self)
     }
     
     func setToUnconsumed() async throws {
-        let controller = ConversationsClient.shared.messageController(for: self.conversationId, id: self.id)
+        let controller = JibberChatClient.shared.messageController(for: self.conversationId, id: self.id)
         if let readReaction = self.latestReactions.first(where: { reaction in
             if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read,
                reaction.author.personId == User.current()?.objectId {
@@ -189,7 +189,7 @@ extension Message: MessageSequence {
     }
     
     var messages: [Messageable] {
-        let messageArray = Array(ConversationsClient.shared.messageController(for: self)?.replies ?? [])
+        let messageArray = Array(JibberChatClient.shared.messageController(for: self)?.replies ?? [])
         return messageArray
     }
 

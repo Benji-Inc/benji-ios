@@ -88,7 +88,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     init(message: Messageable, startingReplyId: String?) {
        
-        let controller = ConversationsClient.shared.messageController(for: message)!
+        let controller = JibberChatClient.shared.messageController(for: message)!
         ConversationsManager.shared.activeController = controller
         self.messageController = controller
         

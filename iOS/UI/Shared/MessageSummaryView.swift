@@ -76,7 +76,7 @@ class MessageSummaryView: BaseView {
     private var loadTask: Task<Void, Never>?
     
     func configure(for message: Messageable) {
-        guard let controller = ConversationsClient.shared.messageController(for: message) else { return }
+        guard let controller = JibberChatClient.shared.messageController(for: message) else { return }
 
         if let existing = self.controller,
             existing.messageId == controller.messageId,

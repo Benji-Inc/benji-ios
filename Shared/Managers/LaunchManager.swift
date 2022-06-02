@@ -101,7 +101,7 @@ class LaunchManager {
 
 #if !APPCLIP && !NOTIFICATION
         do {
-            try await ConversationsClient.shared.initialize(for: user)
+            try await JibberChatClient.shared.initialize(for: user)
         } catch {
             return .failed(error: ClientError.apiError(detail: error.localizedDescription))
         }

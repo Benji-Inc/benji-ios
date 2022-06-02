@@ -36,7 +36,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
                                      image: ImageSymbol.trash.image,
                                      attributes: .destructive) { action in
             Task {
-                guard let controller = ConversationsClient.shared.messageController(for: message) else { return }
+                guard let controller = JibberChatClient.shared.messageController(for: message) else { return }
                 do {
                     try await controller.deleteMessage()
                 } catch {

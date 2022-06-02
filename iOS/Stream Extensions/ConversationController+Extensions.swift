@@ -20,28 +20,28 @@ extension ConversationController {
     }
     
     static func controller(query: ChannelListQuery) -> ChatChannelListController {
-        return ConversationsClient.shared.conversationController(query: query)!
+        return JibberChatClient.shared.conversationController(query: query)!
     }
     
     static func controller(for conversation: Conversation) -> ConversationController {
-        return ConversationsClient.shared.conversationController(for: conversation.id)!
+        return JibberChatClient.shared.conversationController(for: conversation.id)!
     }
     
     static func controller(for conversationId: String) -> ConversationController {
-        return ConversationsClient.shared.conversationController(for: conversationId)!
+        return JibberChatClient.shared.conversationController(for: conversationId)!
     }
 
     static func controller(for conversationId: String,
                            query: ChannelListQuery? = nil,
                            messageOrdering: MessageOrdering = .topToBottom) -> ConversationController {
-        return ConversationsClient.shared.conversationController(for: conversationId,
+        return JibberChatClient.shared.conversationController(for: conversationId,
                                                                  query: query,
                                                                  messageOrdering: messageOrdering)!
     }
     
     static func controller(for query: ChannelQuery,
                            messageOrdering: MessageOrdering = .topToBottom) -> ConversationController {
-        return ConversationsClient.shared.conversationController(for: query,
+        return JibberChatClient.shared.conversationController(for: query,
                                                                  messageOrdering: messageOrdering)!
     }
 

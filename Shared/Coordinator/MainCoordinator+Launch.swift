@@ -13,8 +13,8 @@ extension MainCoordinator {
     @MainActor
     func runRoomFlow(with deepLink: DeepLinkable?) async {
         // Ensure that the chat client is initialized for the logged in user.
-        if !ConversationsClient.shared.isConnected || ConversationsClient.shared.isConnectedToCurrentUser {
-            try? await ConversationsClient.shared.initialize(for: User.current()!)
+        if !JibberChatClient.shared.isConnected || JibberChatClient.shared.isConnectedToCurrentUser {
+            try? await JibberChatClient.shared.initialize(for: User.current()!)
         }
         
         if let coordinator = self.furthestChild as? LaunchActivityHandler,
@@ -36,6 +36,6 @@ extension MainCoordinator {
     }
 
     func logOutChat() {
-        ConversationsClient.shared.disconnect()
+        JibberChatClient.shared.disconnect()
     }
 }

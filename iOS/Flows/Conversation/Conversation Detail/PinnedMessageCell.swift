@@ -41,7 +41,7 @@ class PinnedMessageCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: PinModel) {
         
         if let conversationId = item.conversationId, let messageId = item.messageId,
-           let msg = ConversationsClient.shared.message(conversationId: conversationId, id: messageId) {
+           let msg = JibberChatClient.shared.message(conversationId: conversationId, id: messageId) {
             self.content.configure(with: msg)
             self.content.isVisible = true
         } else {

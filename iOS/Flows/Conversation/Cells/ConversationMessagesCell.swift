@@ -282,7 +282,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationUIStateSettabl
         switch item {
         case .message(messageId: let messageID, _):
             guard let cid = self.conversation?.cid,
-                  let message = ConversationsClient.shared.message(conversationId: cid.description, id: messageID) else { break }
+                  let message = JibberChatClient.shared.message(conversationId: cid.description, id: messageID) else { break }
             
             self.messageContentDelegate?.messageContent(cell.content, didTapMessage: message)
         case .loadMore, .placeholder, .initial:

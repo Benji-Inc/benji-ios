@@ -222,7 +222,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
             }
             
             Task {
-                guard let controller = ConversationsClient.shared.messageController(for: conversationId, id: messageId) else { return }
+                guard let controller = JibberChatClient.shared.messageController(for: conversationId, id: messageId) else { return }
                 
                 if controller.message.isNil {
                     try await controller.synchronize()
