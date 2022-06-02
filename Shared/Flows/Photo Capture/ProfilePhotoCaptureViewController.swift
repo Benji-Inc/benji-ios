@@ -71,7 +71,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.imageView.alpha = 0.0
 
         self.view.addSubview(self.button)
-        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Looks good! 😁"))
         
         self.faceCaptureVC.view.addSubview(self.label)
         
@@ -146,7 +146,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             case .captureEyesOpen, .didCaptureEyesOpen:
                 break
             case .review:
-                self.currentState = .scanEyesOpen
+                self.currentState = .renderFaceImage
             case .finish:
                 break
             case .error:
@@ -235,7 +235,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         case .captureEyesOpen:
             text = "Try again"
         case .review:
-            text = "Looking good! 😄"
+            text = "Tap again to retake"
         case .error:
             text = ""
         case .finish:
@@ -296,6 +296,10 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         if !self.faceCaptureVC.isSessionRunning {
             self.faceCaptureVC.beginSession()
         }
+        
+        if self.faceCaptureVC.hasRenderedFaceImage {
+            self.currentState = .scanEyesOpen
+        }
     }
 
     private func handleScanState() {
@@ -316,9 +320,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         if self.faceCaptureVC.isSessionRunning {
             self.faceCaptureVC.stopSession()
         }
-        
-        self.label.setText("Tap again to retake")
-        
+                
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.imageView.alpha = 1.0
             self.view.layoutNow()
