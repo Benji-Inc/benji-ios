@@ -11,14 +11,6 @@ import Intents
 import StreamChat
 import Parse
 
-extension ChatMessage {
-    var inAttachments: [INSendMessageAttachment] {
-        return self.imageAttachments.compactMap { attachment in
-            let file = INFile(fileURL: attachment.imagePreviewURL, filename: attachment.title, typeIdentifier: "public.png")
-            return INSendMessageAttachment.init(audioMessageFile: file)
-        }
-    }
-}
 
 class NotificationService: UNNotificationServiceExtension {
 
@@ -220,6 +212,7 @@ class NotificationService: UNNotificationServiceExtension {
     private func finalizeContent(_ content: UNMutableNotificationContent) async -> UNNotificationContent {
         
         if let conversation = self.conversation {
+            content.threadIdentifier = conversation.cid.description
             content.setData(value: conversation.cid.description, for: .conversationId)
         }
         if let messageId = self.message?.id {
@@ -227,6 +220,13 @@ class NotificationService: UNNotificationServiceExtension {
         }
         
         content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
+         
+        
+        var inAttachments: [INSendMessageAttachment] = []
+        if let photoAttachment = self.message?.photoAttachments.first,
+           let attachment = await self.getAttachment(url: photoAttachment.imageURL) {
+            inAttachments.append(attachment)
+        }
         
         // Create the intent
         let incomingMessageIntent
@@ -237,7 +237,7 @@ class NotificationService: UNNotificationServiceExtension {
                               conversationIdentifier: self.conversation?.cid.description,
                               serviceName: "Jibber",
                               sender: self.author,
-                              attachments: self.message?.inAttachments)
+                              attachments: inAttachments)
 
         let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
         interaction.direction = .incoming
@@ -254,6 +254,38 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     // MARK: - Helper Functions
+    
+    private func getAttachment(url: URL, identifier: String = "image") async -> INSendMessageAttachment? {
+        return await withCheckedContinuation { continuation in
+            let task = URLSession.shared.downloadTask(with: url) { (downloadedUrl, _, _) in
+
+                guard let downloadedUrl = downloadedUrl else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+              
+                guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+              
+                let localURL = URL(fileURLWithPath: path).appendingPathComponent(url.lastPathComponent)
+              
+                do {
+                    try FileManager.default.moveItem(at: downloadedUrl, to: localURL)
+                } catch {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                
+                let file = INFile(fileURL: localURL, filename: identifier, typeIdentifier: "public.png")
+                let attachment = INSendMessageAttachment.init(audioMessageFile: file)
+
+                continuation.resume(returning: attachment)
+            }
+            task.resume()
+        }
+     }
 
     /// Gets the app badge number stored in user defaults.
     private func getUserDefaultsBadgeNumber() -> Int {
@@ -284,5 +316,49 @@ extension ChatRemoteNotificationHandler {
         }
 
         return content
+    }
+}
+
+extension ChatMessage {
+    var photoAttachments: [ChatMessageImageAttachment] {
+        let imageAttachments = self.imageAttachments
+
+        return imageAttachments.filter { imageAttachment in
+            return !imageAttachment.isExpression && !imageAttachment.isPreview
+        }
+    }
+}
+
+extension ChatMessageAttachment where Payload: AttachmentPayload {
+
+    var isExpression: Bool {
+        return self.asAnyAttachment.isExpression
+    }
+    
+    var isPreview: Bool {
+        return self.asAnyAttachment.isPreview
+    }
+}
+
+extension AnyChatMessageAttachment {
+
+    var isExpression: Bool {
+        guard let imageAttachment = self.attachment(payloadType: ImageAttachmentPayload.self) else {
+            return false
+        }
+
+        guard let isExpressionData = imageAttachment.extraData?["isExpression"],
+              case RawJSON.bool(let isExpression) = isExpressionData else { return false }
+
+        return isExpression
+    }
+    
+    var isPreview: Bool {
+        guard let imageAttachment = self.attachment(payloadType: ImageAttachmentPayload.self),
+              let _ = imageAttachment.extraData?["previewID"] else {
+            return false
+        }
+
+        return true
     }
 }
