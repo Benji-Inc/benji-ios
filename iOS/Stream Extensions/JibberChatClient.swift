@@ -36,6 +36,14 @@ class JibberChatClient {
         self.client?.disconnect()
     }
     
+    func registerPush(for token: Data) async {
+        return await withCheckedContinuation { continuation in
+            self.client?.currentUserController().addDevice(token: token, completion: { error in
+                continuation.resume(returning: ())
+            })
+        }
+    }
+    
     func connectAnonymousUser() async throws {
         var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
         config.applicationGroupIdentifier = Config.shared.environment.groupId
