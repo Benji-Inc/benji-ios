@@ -521,7 +521,6 @@
 		D63DB26525E9997200F6B323 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* ThemeColor.swift */; };
 		D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460421D5524C00CD8CE4 /* StringCasing.swift */; };
 		D63DB26725E9997200F6B323 /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F021D313F500204BEE /* ScreenSize.swift */; };
-		D63DB26925E9997800F6B323 /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */; };
 		D63DB26B25E9997800F6B323 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
 		D63DB26D25E9997F00F6B323 /* PersonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* PersonType.swift */; };
 		D63DB26E25E9997F00F6B323 /* Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE3B236F913F004FA89A /* Objectable.swift */; };
@@ -3797,7 +3796,6 @@
 				D63DB22025E998FC00F6B323 /* Character+Extensions.swift in Sources */,
 				80632D9427853D2600D3A65B /* EventLogger.swift in Sources */,
 				D61C1D15283FE1BE00F58F84 /* SymbolButton.swift in Sources */,
-				D63DB26925E9997800F6B323 /* UserNotificationManager.swift in Sources */,
 				D63DB29A25E999B200F6B323 /* TextView.swift in Sources */,
 				D63DB22425E9990500F6B323 /* DispatchQue+Extensions.swift in Sources */,
 				D63DB23B25E9992600F6B323 /* UIView+Extensions.swift in Sources */,
