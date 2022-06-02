@@ -62,7 +62,6 @@ class NotificationService: UNNotificationServiceExtension {
                       return
                   }
 
-
             await self.initializeNotificationService(with: mutableContent, client: chatClient)
             await self.updateInterruptionLevel(of: mutableContent)
             await self.updateBadgeCount(of: mutableContent)
@@ -219,6 +218,16 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     private func finalizeContent(_ content: UNMutableNotificationContent) async -> UNNotificationContent {
+        
+        if let conversation = self.conversation {
+            content.setData(value: conversation.cid.description, for: .conversationId)
+        }
+        if let messageId = self.message?.id {
+            content.setData(value: messageId, for: .messageId)
+        }
+        
+        content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
+        
         // Create the intent
         let incomingMessageIntent
         = INSendMessageIntent(recipients: self.recipients,
