@@ -169,7 +169,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
         // If the app is in the foreground, and is a new message, then check the interruption level to determine whether or not to show a banner. Don't show banners for non time-sensitive messages.
         if let app = self.application,
            await app.applicationState == .active,
-           notification.request.content.categoryIdentifier == "MESSAGE_NEW" {
+           notification.request.content.categoryIdentifier == "stream.chat" {
             
             if notification.request.content.interruptionLevel == .timeSensitive {
                 return [.banner, .list, .sound, .badge]
