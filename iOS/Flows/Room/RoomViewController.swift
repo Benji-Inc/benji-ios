@@ -216,7 +216,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             snapshot.setItems(items, in: .notices)
             
             await self.dataSource.apply(snapshot)
-            await self.dataSource.reloadSections([.notices])
         }
     }
     
