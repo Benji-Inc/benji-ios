@@ -32,15 +32,58 @@ class JibberChatClient {
         return self.client?.eventsController() as? ChannelEventsController
     }
     
+    private var initializeTask: Task<Void, Error>?
+    
     func disconnect() {
         self.client?.disconnect()
     }
     
+    /// Initializes the shared chat client singleton.
+    func initialize(for user: User) async throws {
+        // If we already have an initialization task, wait for it to finish.
+        if let initializeTask = self.initializeTask {
+            try await initializeTask.value
+            return
+        }
+        
+        // Otherwise start a new initialization task and wait for it to finish.
+        self.initializeTask = Task {
+            if self.client.isNil {
+                return try await self.initializeChatClient(with: user)
+            } else if let token = try? await self.getChatToken() {
+                return try await self.connectUser(with: token)
+            } else {
+                logDebug("Failed to initialize chat")
+            }
+        }
+        
+        do {
+            try await self.initializeTask?.value
+        } catch {
+            // Dispose of the task because it failed, then pass the error along.
+            self.initializeTask = nil
+            throw error
+        }
+    }
+    
     func registerPush(for token: Data) async {
+
+        if self.client.isNil {
+            do {
+                try await self.initializeTask?.value
+            } catch {
+                logError(error)
+            }
+        }
+        
         return await withCheckedContinuation { continuation in
-            self.client?.currentUserController().addDevice(token: token, completion: { error in
+            if let client = self.client {
+                client.currentUserController().addDevice(token: token, completion: { error in
+                    continuation.resume(returning: ())
+                })
+            } else {
                 continuation.resume(returning: ())
-            })
+            }
         }
     }
     
@@ -58,17 +101,6 @@ class JibberChatClient {
                 }
             }
         })
-    }
-    
-    /// Initializes the shared chat client singleton.
-    func initialize(for user: User) async throws {
-        if self.client.isNil {
-            return try await self.initializeChatClient(with: user)
-        } else if let token = try? await self.getChatToken() {
-            return try await self.connectUser(with: token)
-        } else {
-            logDebug("Failed to initialize chat")
-        }
     }
     
     /// Initializes the ChatClient with a configuration, retrieves and sets token, and connects the user
