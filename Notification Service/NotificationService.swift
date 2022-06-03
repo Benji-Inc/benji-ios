@@ -33,7 +33,7 @@ class NotificationService: UNNotificationServiceExtension {
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-
+        
         // Save the request and content handler in case we need to finish early.
         self.request = request
         self.contentHandler = contentHandler
@@ -133,13 +133,7 @@ class NotificationService: UNNotificationServiceExtension {
     /// Initializes all of the member variables on the notification service that are needed to update the notification content.
     private func initializeNotificationService(with content: UNNotificationContent,
                                                client: ChatClient) async {
-        // Ensure we have the data we need
-        guard let authorId = content.author,
-              let author = try? await User.getObject(with: authorId).iNPerson else {
-                  return
-              }
-
-        self.author = author
+        
         // Creat a notification handler so we can retrieve the relevant message data.
         // (This is needed because the ChatClient can't be put in the connected state from an extension).
         // See: https://getstream.io/chat/docs/sdk/ios/guides/push-notifications/
@@ -161,6 +155,12 @@ class NotificationService: UNNotificationServiceExtension {
         case .unknown(_):
             logDebug("unknown notification content received")
             break
+        }
+        
+        // Fetch the author
+        if let authorId = self.message?.author.id,
+              let author = try? await User.getObject(with: authorId).iNPerson {
+            self.author = author
         }
 
         let memberIds = self.conversation?.lastActiveMembers.compactMap { member in
@@ -221,10 +221,9 @@ class NotificationService: UNNotificationServiceExtension {
         
         content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
          
-        var inAttachments: [INSendMessageAttachment] = []
-        if let photoAttachment = self.message?.photoAttachments.first,
-           let attachment = await self.getAttachment(url: photoAttachment.imageURL) {
-            inAttachments.append(attachment)
+        if let payload = self.message?.photoAttachments.first,
+           let attachment = await self.getAttachment(url: payload.imageURL) {
+            content.attachments = [attachment]
         }
         
         // Create the intent
@@ -236,7 +235,7 @@ class NotificationService: UNNotificationServiceExtension {
                               conversationIdentifier: self.conversation?.cid.description,
                               serviceName: "Jibber",
                               sender: self.author,
-                              attachments: inAttachments)
+                              attachments: [])
 
         let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
         interaction.direction = .incoming
@@ -254,7 +253,7 @@ class NotificationService: UNNotificationServiceExtension {
 
     // MARK: - Helper Functions
     
-    private func getAttachment(url: URL, identifier: String = "image") async -> INSendMessageAttachment? {
+    private func getAttachment(url: URL, identifier: String = "image") async -> UNNotificationAttachment? {
         return await withCheckedContinuation { continuation in
             let task = URLSession.shared.downloadTask(with: url) { (downloadedUrl, _, _) in
 
@@ -277,10 +276,11 @@ class NotificationService: UNNotificationServiceExtension {
                     return
                 }
                 
-                let file = INFile(fileURL: localURL, filename: identifier, typeIdentifier: "public.png")
-                let attachment = INSendMessageAttachment.init(audioMessageFile: file)
-
-                continuation.resume(returning: attachment)
+                if let attachment = try? UNNotificationAttachment(identifier: identifier, url: localURL, options: nil) {
+                    continuation.resume(returning: attachment)
+                } else {
+                    continuation.resume(returning: nil)
+                }
             }
             task.resume()
         }
@@ -359,5 +359,14 @@ extension AnyChatMessageAttachment {
         }
 
         return true
+    }
+}
+
+extension Sequence {
+    
+    func asyncForEach(_ operation: (Element) async throws -> Void) async rethrows {
+        for element in self {
+            try await operation(element)
+        }
     }
 }
