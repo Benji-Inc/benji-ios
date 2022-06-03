@@ -11,7 +11,6 @@ import Intents
 import StreamChat
 import Parse
 
-
 class NotificationService: UNNotificationServiceExtension {
 
     /// The current notification request that we're processing.
@@ -359,14 +358,5 @@ extension AnyChatMessageAttachment {
         }
 
         return true
-    }
-}
-
-extension Sequence {
-    
-    func asyncForEach(_ operation: (Element) async throws -> Void) async rethrows {
-        for element in self {
-            try await operation(element)
-        }
     }
 }
