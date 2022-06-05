@@ -198,10 +198,10 @@ class AttachmentsManager {
             if asset.mediaType == .image {
                 let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
                 options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
-                    return true
+                    return false
                 }
                 asset.requestContentEditingInput(with: options, completionHandler: { (contentEditingInput, info) in
-                    if let url = contentEditingInput?.fullSizeImageURL {
+                    if let input = contentEditingInput, let url = input.fullSizeImageURL {
                         continuation.resume(returning: url)
                     } else {
                         continuation.resume(throwing: ClientError.message(detail: "No URL for image"))
