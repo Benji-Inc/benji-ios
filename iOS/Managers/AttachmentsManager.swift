@@ -198,6 +198,7 @@ class AttachmentsManager {
             if asset.mediaType == .image {
                 let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
                 options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
+                    // Returns the URL with the edited asset
                     return false
                 }
                 asset.requestContentEditingInput(with: options, completionHandler: { (contentEditingInput, info) in
