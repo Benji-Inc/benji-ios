@@ -13,13 +13,13 @@ class CommonExpressionsCollectionViewLayout: UICollectionViewCompositionalLayout
 
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.scrollDirection = .vertical
+        config.scrollDirection = .horizontal
 
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = EmojiCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = CommonExpressionsDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
             switch sectionType {
-            case .emojis:
+            case .expressions:
                 
                 let inset = Theme.ContentOffset.short.value
                 let fraction: CGFloat = 0.2
@@ -32,7 +32,7 @@ class CommonExpressionsCollectionViewLayout: UICollectionViewCompositionalLayout
                                                              trailing: inset)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(fraction))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
                 let sectionInset = Theme.ContentOffset.long.value

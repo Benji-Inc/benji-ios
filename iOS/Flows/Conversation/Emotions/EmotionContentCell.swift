@@ -23,7 +23,6 @@ class EmotionContentCell: CollectionViewManagerCell, ManageableCell {
     let emotionLabel = ThemeLabel(font: .regularBold)
     let definitionLabel = ThemeLabel(font: .regular)
 
-    
     override func initializeSubviews() {
         super.initializeSubviews()
 

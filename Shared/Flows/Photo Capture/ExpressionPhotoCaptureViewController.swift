@@ -43,7 +43,7 @@ class ExpressionPhotoCaptureViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.animate(text: "Tap to take picture")
+        self.animate(text: "Tap to capture")
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,7 +55,8 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.tapView.expandToSuperviewSize()
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.label.centerOnXAndY()
+        self.label.pinToSafeAreaBottom()
+        self.label.centerOnX()
     }
     
     private var animateTask: Task<Void, Never>?

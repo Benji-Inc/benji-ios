@@ -13,6 +13,7 @@ class CommonExpressionsCollectionView: CollectionView {
     init() {
         super.init(layout: CommonExpressionsCollectionViewLayout())
         self.allowsMultipleSelection = false
+        self.showsHorizontalScrollIndicator = false 
     }
     
     required init?(coder aDecoder: NSCoder) {

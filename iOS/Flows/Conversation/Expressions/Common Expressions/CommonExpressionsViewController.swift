@@ -28,7 +28,15 @@ class CommonExpressionsViewController: DiffableCollectionViewController<CommonEx
         
         // Grab expressions
         // Filter by emotion
-        // Add to section 
-        return [:]
+        // Add to section
+        
+        let model1 = ExpressionModel(existingExpression: nil, coreEmotion: .happy)
+        let model2 = ExpressionModel(existingExpression: nil, coreEmotion: .sad)
+        let model3 = ExpressionModel(existingExpression: nil, coreEmotion: .afraid)
+        let model4 = ExpressionModel(existingExpression: nil, coreEmotion: .angry)
+        let model5 = ExpressionModel(existingExpression: nil, coreEmotion: .surprised)
+        let model6 = ExpressionModel(existingExpression: nil, coreEmotion: .disgust)
+        
+        return [.expressions: [.expression(model1), .expression(model2), .expression(model3), .expression(model4), .expression(model5), .expression(model6)]]
     }
 }

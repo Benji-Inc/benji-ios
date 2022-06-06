@@ -16,14 +16,11 @@ class ExpressionViewController: ViewController {
         return "SCREEN_EXPRESSION"
     }
     
-    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .bottomCenter,
-                                                  endPoint: .topCenter)
-    
     let blurView = DarkBlurView()
 
+    private lazy var commonExpressionsVC = CommonExpressionsViewController()
     private lazy var expressionPhotoVC = ExpressionPhotoCaptureViewController()
-    let personGradientView = PersonGradientView()
+    private let personGradientView = PersonGradientView()
         
     var didCompleteExpression: ((Expression) -> Void)? = nil
             
@@ -43,9 +40,8 @@ class ExpressionViewController: ViewController {
         self.view.addSubview(self.blurView)
                 
         self.addChild(viewController: self.expressionPhotoVC)
-        
-        self.view.set(backgroundColor: .B0)
-        self.view.addSubview(self.bottomGradientView)
+                
+        self.addChild(viewController: self.commonExpressionsVC)
         
         self.view.addSubview(self.personGradientView)
         self.personGradientView.alpha = 0.0
@@ -53,7 +49,18 @@ class ExpressionViewController: ViewController {
         self.setupHandlers()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.commonExpressionsVC.loadInitialData()
+    }
+    
     private func setupHandlers() {
+        
+        self.commonExpressionsVC.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first, case CommonExpressionsDataSource.ItemType.expression(let model) = first else { return }
+            self.handleSelected(item: model)
+        }.store(in: &self.cancellables)
         
         self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
             guard let data = image.previewData else { return }
@@ -96,11 +103,19 @@ class ExpressionViewController: ViewController {
         
         self.expressionPhotoVC.view.expandToSuperviewSize()
         
-        self.bottomGradientView.expandToSuperviewWidth()
-        self.bottomGradientView.height = 94
-        self.bottomGradientView.pin(.bottom)
-        
         self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.cameraViewContainer.frame
+        
+        self.commonExpressionsVC.view.expandToSuperviewWidth()
+        self.commonExpressionsVC.view.height = 100
+        self.commonExpressionsVC.view.centerOnY()
+    }
+    
+    func handleSelected(item: ExpressionModel) {
+        if let existing = item.existingExpression {
+            // Show
+        } else {
+            // Capture
+        }
     }
     
     private func createExpression() async {
