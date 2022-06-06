@@ -23,7 +23,7 @@ class CommonExpressionsViewController: DiffableCollectionViewController<CommonEx
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView.allowsMultipleSelection = false 
+        self.collectionView.allowsMultipleSelection = false
     }
     
     override func getAllSections() -> [CommonExpressionsDataSource.SectionType] {

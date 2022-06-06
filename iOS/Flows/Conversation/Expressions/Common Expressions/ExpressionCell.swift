@@ -46,7 +46,7 @@ class ExpressionCell: CollectionViewManagerCell, ManageableCell {
     
     override func update(isSelected: Bool) {
         guard let item = self.currentItem else { return }
-        
+                
         if let expression = item.existingExpression {
             self.personView.set(expression: expression)
             self.personView.alpha = isSelected ? 1.0 : 0.2

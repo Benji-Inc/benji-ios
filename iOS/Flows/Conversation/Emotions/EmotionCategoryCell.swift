@@ -33,7 +33,7 @@ class EmotionSelectionView: BaseView {
         self.label.setText(item.description)
         self.label.textColor = color
         
-        self.borderView.layer.borderColor = isSelected ? color.cgColor : color.withAlphaComponent(0.2).cgColor
+        self.borderView.layer.borderColor = isSelected ? color.cgColor : color.withAlphaComponent(0.8).cgColor
         self.borderView.layer.borderWidth = 2
         self.borderView.layer.masksToBounds = false
         

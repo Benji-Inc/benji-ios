@@ -140,7 +140,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
-            cell.update(isSelected: true )
+            cell.update(isSelected: true)
         }
 
         self.selectedItems = __selectedItems
