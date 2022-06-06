@@ -15,8 +15,8 @@ struct EmotionCategoryModel: Hashable {
 }
 
 class EmotionSelectionView: BaseView {
-    private let label = ThemeLabel(font: .regular)
-    private let borderView = BaseView()
+    private let label = ThemeLabel(font: .small)
+    let borderView = BaseView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -35,7 +35,6 @@ class EmotionSelectionView: BaseView {
         
         self.borderView.layer.borderColor = isSelected ? color.cgColor : color.withAlphaComponent(0.2).cgColor
         self.borderView.layer.borderWidth = 2
-        self.borderView.layer.cornerRadius = Theme.innerCornerRadius
         self.borderView.layer.masksToBounds = false
         
         self.borderView.backgroundColor = isSelected ? color.withAlphaComponent(0.2) : .clear
@@ -44,13 +43,10 @@ class EmotionSelectionView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        let inset = Theme.ContentOffset.long.value
-        
+                
         self.label.setSize(withWidth: 200)
         
-        self.height = self.label.height + inset.doubled
-        self.width = self.label.width + inset.doubled
+        self.borderView.makeRound()
         
         self.label.centerOnXAndY()
         

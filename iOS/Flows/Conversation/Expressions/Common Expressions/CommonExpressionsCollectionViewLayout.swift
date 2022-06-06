@@ -39,9 +39,9 @@ class CommonExpressionsCollectionViewLayout: UICollectionViewCompositionalLayout
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                leading: sectionInset,
+                                                                leading: 0,
                                                                 bottom: 0,
-                                                                trailing: sectionInset)
+                                                                trailing: 0)
                 return section
             }
 

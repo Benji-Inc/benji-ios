@@ -493,7 +493,7 @@ enum Emotion: String, CaseIterable, Identifiable {
         case .interested:
             return #colorLiteral(red: 0.4039215686, green: 0.2274509804, blue: 0.7176470588, alpha: 1)
         case .surprised:
-            return #colorLiteral(red: 0.368627451, green: 0.2078431373, blue: 0.6941176471, alpha: 1)
+            return #colorLiteral(red: 0.6117647059, green: 0.1529411765, blue: 0.6901960784, alpha: 1)
             
         case .amused:
             return #colorLiteral(red: 0.6235294118, green: 0.6588235294, blue: 0.8549019608, alpha: 1)
@@ -584,7 +584,7 @@ enum Emotion: String, CaseIterable, Identifiable {
         case .joy:
             return #colorLiteral(red: 0.862745098, green: 0.9294117647, blue: 0.7843137255, alpha: 1)
         case .happy:
-            return #colorLiteral(red: 0.7725490196, green: 0.8823529412, blue: 0.6470588235, alpha: 1)
+            return #colorLiteral(red: 1, green: 0.9450980392, blue: 0.462745098, alpha: 1)
         case .calm:
             return #colorLiteral(red: 0.6823529412, green: 0.8352941176, blue: 0.5058823529, alpha: 1)
         case .contentment:
@@ -599,11 +599,11 @@ enum Emotion: String, CaseIterable, Identifiable {
             return #colorLiteral(red: 0.3333333333, green: 0.5450980392, blue: 0.1843137255, alpha: 1)
             
         case .angry:
-            return #colorLiteral(red: 0.9411764706, green: 0.9568627451, blue: 0.7647058824, alpha: 1)
+            return #colorLiteral(red: 0.9137254902, green: 0.1176470588, blue: 0.3882352941, alpha: 1)
         case .contempt:
             return #colorLiteral(red: 0.9019607843, green: 0.9333333333, blue: 0.6117647059, alpha: 1)
         case .disgust:
-            return #colorLiteral(red: 1, green: 0.9450980392, blue: 0.462745098, alpha: 1)
+            return #colorLiteral(red: 0.4862745098, green: 0.7019607843, blue: 0.2588235294, alpha: 1)
         case .dehumanized:
             return #colorLiteral(red: 0.831372549, green: 0.8823529412, blue: 0.3411764706, alpha: 1)
         case .hated:
