@@ -25,8 +25,6 @@ class ExpressionViewController: ViewController {
 
     private lazy var expressionPhotoVC = ExpressionPhotoCaptureViewController()
     let personGradientView = PersonGradientView()
-
-    let doneButton = ThemeButton()
         
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
@@ -48,9 +46,6 @@ class ExpressionViewController: ViewController {
         self.view.addSubview(self.blurView)
                 
         self.addChild(viewController: self.expressionPhotoVC)
-                
-        self.view.addSubview(self.doneButton)
-        self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
         
         self.view.addSubview(self.personGradientView)
         self.personGradientView.alpha = 0.0
@@ -71,6 +66,9 @@ class ExpressionViewController: ViewController {
             self.expressionPhotoVC.faceCaptureVC.stopSession()
                         
             self.state = .emotionSelection
+            Task {
+                await self.createExpression()
+            }
         }
         
         self.personGradientView.didSelect { [unowned self] in
@@ -78,26 +76,11 @@ class ExpressionViewController: ViewController {
             self.state = .capture
         }
         
-        self.doneButton.didSelect { [unowned self] in
-            Task {
-                await self.createExpression()
-            }
-        }
-        
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
                 self.update(for: state)
             }.store(in: &self.cancellables)
-        
-//        self.emotionsVC.$selectedEmotions.mainSink { [unowned self] emotions in
-//            var emotionsCounts: [Emotion: Int] = [:]
-//            emotions.forEach { emotion in
-//                emotionsCounts[emotion] = 1
-//            }
-//            self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
-//            self.personGradientView.set(emotionCounts: emotionsCounts)
-//        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -105,24 +88,9 @@ class ExpressionViewController: ViewController {
         
         self.blurView.expandToSuperviewSize()
         
-        self.doneButton.setSize(with: self.view.width)
-        self.doneButton.centerOnX()
-
-        if self.state == .capture {
-            self.doneButton.top = self.view.height
-        } else {
-            self.doneButton.pinToSafeAreaBottom()
-        }
-        
         self.expressionPhotoVC.view.expandToSuperviewSize()
         
-        if self.state == .emotionSelection {
-            self.personGradientView.squaredSize = 75
-            self.personGradientView.pinToSafeAreaLeft()
-            self.personGradientView.pinToSafeAreaTop()
-        } else {
-            self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.cameraViewContainer.frame
-        }
+        self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.cameraViewContainer.frame
     }
     
     private func createExpression() async {
@@ -152,10 +120,6 @@ class ExpressionViewController: ViewController {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
                     self.view.layoutNow()
                 }
-
-                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                   // self.emotionsVC.view.alpha = 0.0
-                }
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
                     self.expressionPhotoVC.view.alpha = 1.0
@@ -180,10 +144,6 @@ class ExpressionViewController: ViewController {
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
                     self.expressionPhotoVC.view.alpha = 0.0
-                }
-                
-                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                   // self.emotionsVC.view.alpha = 1.0
                 }
             })
         }
