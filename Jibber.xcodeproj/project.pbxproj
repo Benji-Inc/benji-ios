@@ -432,6 +432,11 @@
 		D62C9CC3266C3CAC00BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D62D16322736F60400C542CE /* ToastStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D16312736F60400C542CE /* ToastStatusView.swift */; };
 		D62D16342736F60400C542CE /* ToastStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D16312736F60400C542CE /* ToastStatusView.swift */; };
+		D62E89D6284E726000765897 /* CommonExpressionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62E89D5284E726000765897 /* CommonExpressionsViewController.swift */; };
+		D62E89D8284E727C00765897 /* CommonExpressionsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62E89D7284E727C00765897 /* CommonExpressionsDataSource.swift */; };
+		D62E89DA284E728E00765897 /* ExpressionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62E89D9284E728E00765897 /* ExpressionCell.swift */; };
+		D62E89DC284E72B300765897 /* CommonExpressionsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62E89DB284E72B300765897 /* CommonExpressionsCollectionView.swift */; };
+		D62E89DE284E72C700765897 /* CommonExpressionsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62E89DD284E72C700765897 /* CommonExpressionsCollectionViewLayout.swift */; };
 		D62ED579279CA2ED00F7C08A /* BorderedPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedPersonView.swift */; };
 		D62ED57A279CB4A400F7C08A /* BorderedPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED578279CA2ED00F7C08A /* BorderedPersonView.swift */; };
 		D62ED57C279CB96E00F7C08A /* ModalPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62ED57B279CB96E00F7C08A /* ModalPhotoViewController.swift */; };
@@ -1173,6 +1178,11 @@
 		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
 		D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		D62D16312736F60400C542CE /* ToastStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastStatusView.swift; sourceTree = "<group>"; };
+		D62E89D5284E726000765897 /* CommonExpressionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonExpressionsViewController.swift; sourceTree = "<group>"; };
+		D62E89D7284E727C00765897 /* CommonExpressionsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonExpressionsDataSource.swift; sourceTree = "<group>"; };
+		D62E89D9284E728E00765897 /* ExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCell.swift; sourceTree = "<group>"; };
+		D62E89DB284E72B300765897 /* CommonExpressionsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonExpressionsCollectionView.swift; sourceTree = "<group>"; };
+		D62E89DD284E72C700765897 /* CommonExpressionsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonExpressionsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D62ED578279CA2ED00F7C08A /* BorderedPersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedPersonView.swift; sourceTree = "<group>"; };
 		D62ED57B279CB96E00F7C08A /* ModalPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalPhotoViewController.swift; sourceTree = "<group>"; };
 		D630F25D2832F8BE00737977 /* PersonPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonPreviewViewController.swift; sourceTree = "<group>"; };
@@ -1694,6 +1704,7 @@
 		D60CA47D27EE747D00F0871A /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				D62E89D4284E722400765897 /* Common Expressions */,
 				D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */,
 				D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */,
 			);
@@ -1838,6 +1849,18 @@
 				D61EC0C621D3071500204BEE /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		D62E89D4284E722400765897 /* Common Expressions */ = {
+			isa = PBXGroup;
+			children = (
+				D62E89DB284E72B300765897 /* CommonExpressionsCollectionView.swift */,
+				D62E89DD284E72C700765897 /* CommonExpressionsCollectionViewLayout.swift */,
+				D62E89D7284E727C00765897 /* CommonExpressionsDataSource.swift */,
+				D62E89D5284E726000765897 /* CommonExpressionsViewController.swift */,
+				D62E89D9284E728E00765897 /* ExpressionCell.swift */,
+			);
+			path = "Common Expressions";
 			sourceTree = "<group>";
 		};
 		D630F2612832F8CB00737977 /* Preview Person */ = {
@@ -3440,6 +3463,7 @@
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
 				D630F2682832F99F00737977 /* PersonConnectionCoordinator.swift in Sources */,
 				80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */,
+				D62E89DC284E72B300765897 /* CommonExpressionsCollectionView.swift in Sources */,
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
 				D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
@@ -3455,6 +3479,7 @@
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D6B2B6492839570B007D507B /* ImageSymbol.swift in Sources */,
 				D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */,
+				D62E89DA284E728E00765897 /* ExpressionCell.swift in Sources */,
 				D6D96EF427C5B11900BDCD01 /* ContextCuesViewController.swift in Sources */,
 				D60B886B27F61AF000B3E1C2 /* RoomSegmentControlHeaderView.swift in Sources */,
 				D615534A2745737300B08459 /* ThreadCoordinator.swift in Sources */,
@@ -3490,6 +3515,7 @@
 				8023C6A227EBCDEF00FD9DB6 /* MediaCoordinator.swift in Sources */,
 				D61EC0F721D316F100204BEE /* ThemeColor.swift in Sources */,
 				D61A33DF27D5703C00056242 /* ContextCueCell.swift in Sources */,
+				D62E89D8284E727C00765897 /* CommonExpressionsDataSource.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				8057B59F27E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift in Sources */,
@@ -3595,6 +3621,7 @@
 				D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */,
 				D6DEC40627A22F790072D9D0 /* RoomCollectionViewLayout.swift in Sources */,
 				809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */,
+				D62E89D6284E726000765897 /* CommonExpressionsViewController.swift in Sources */,
 				80D5C28E281719B200182DB6 /* EmotionDetailCollectionViewLayout.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
@@ -3642,6 +3669,7 @@
 				D61EC0E621D30EB300204BEE /* BaseView.swift in Sources */,
 				D660C4C92793626700221F76 /* AddView.swift in Sources */,
 				80FA868C26F111830053101B /* ChatMessage+Extensions.swift in Sources */,
+				D62E89DE284E72C700765897 /* CommonExpressionsCollectionViewLayout.swift in Sources */,
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
