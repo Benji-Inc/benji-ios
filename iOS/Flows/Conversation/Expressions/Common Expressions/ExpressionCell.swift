@@ -28,10 +28,10 @@ class ExpressionCell: CollectionViewManagerCell, ManageableCell {
     
     func configure(with item: ExpressionModel) {
         if let expression = item.existingExpression {
-            self.personView.set
+            self.personView.displayable = expression
             self.personView.set(emotionCounts: expression.emotionCounts)
         } else {
-            
+            // Show add
         }
     }
     

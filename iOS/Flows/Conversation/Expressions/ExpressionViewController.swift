@@ -64,6 +64,8 @@ class ExpressionViewController: ViewController {
             self.personGradientView.set(displayable: UIImage(data: data))
             self.expressionPhotoVC.animate(text: "Tap again to retake")
             self.expressionPhotoVC.faceCaptureVC.stopSession()
+            
+            self.personGradientView.displayable = UIImage(data: data)
         }
         
         self.personGradientView.didSelect { [unowned self] in
@@ -118,16 +120,16 @@ class ExpressionViewController: ViewController {
 //        switch state {
 //        case .capture:
 //            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
-//                
+//
 //                UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
 //                    self.view.layoutNow()
 //                }
-//                
+//
 //                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
 //                    self.expressionPhotoVC.view.alpha = 1.0
 //                }
 //            })
-//            
+//
 //            UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
 //                self.expressionPhotoVC.faceCaptureVC.view.alpha = 1.0
 //                self.personGradientView.alpha = 0.0
@@ -136,10 +138,10 @@ class ExpressionViewController: ViewController {
 //                    self.expressionPhotoVC.faceCaptureVC.beginSession()
 //                }
 //            }
-//            
+//
 //        case .emotionSelection:
 //            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
-//                
+//
 //                UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
 //                    self.view.layoutNow()
 //                }
