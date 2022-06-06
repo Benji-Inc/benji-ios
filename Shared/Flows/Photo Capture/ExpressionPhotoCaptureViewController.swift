@@ -55,7 +55,8 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.tapView.expandToSuperviewSize()
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.label.centerOnXAndY()
+        self.label.pinToSafeAreaBottom()
+        self.label.centerOnX()
     }
     
     private var animateTask: Task<Void, Never>?

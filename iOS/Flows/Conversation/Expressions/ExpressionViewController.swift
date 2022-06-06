@@ -21,15 +21,9 @@ class ExpressionViewController: ViewController {
         return "SCREEN_EXPRESSION"
     }
     
-    private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                  startPoint: .bottomCenter,
-                                                  endPoint: .topCenter)
-    
     let blurView = DarkBlurView()
-    private lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: 100)
 
     private lazy var expressionPhotoVC = ExpressionPhotoCaptureViewController()
-    private lazy var emotionsVC = EmotionsViewController()
     let personGradientView = PersonGradientView()
 
     let doneButton = ThemeButton()
@@ -51,16 +45,10 @@ class ExpressionViewController: ViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.view.addSubview(self.emotionCollectionView)
         self.view.addSubview(self.blurView)
                 
         self.addChild(viewController: self.expressionPhotoVC)
-        self.addChild(viewController: self.emotionsVC)
-        self.emotionsVC.view.alpha = 0
-        
-        self.view.set(backgroundColor: .B0)
-        self.view.addSubview(self.bottomGradientView)
-        
+                
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
         
@@ -102,20 +90,19 @@ class ExpressionViewController: ViewController {
                 self.update(for: state)
             }.store(in: &self.cancellables)
         
-        self.emotionsVC.$selectedEmotions.mainSink { [unowned self] emotions in
-            var emotionsCounts: [Emotion: Int] = [:]
-            emotions.forEach { emotion in
-                emotionsCounts[emotion] = 1
-            }
-            self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
-            self.personGradientView.set(emotionCounts: emotionsCounts)
-        }.store(in: &self.cancellables)
+//        self.emotionsVC.$selectedEmotions.mainSink { [unowned self] emotions in
+//            var emotionsCounts: [Emotion: Int] = [:]
+//            emotions.forEach { emotion in
+//                emotionsCounts[emotion] = 1
+//            }
+//            self.emotionCollectionView.setEmotionsCounts(emotionsCounts, animated: true)
+//            self.personGradientView.set(emotionCounts: emotionsCounts)
+//        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.emotionCollectionView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
         
         self.doneButton.setSize(with: self.view.width)
@@ -128,11 +115,6 @@ class ExpressionViewController: ViewController {
         }
         
         self.expressionPhotoVC.view.expandToSuperviewSize()
-        self.emotionsVC.view.expandToSuperviewSize()
-        
-        self.bottomGradientView.expandToSuperviewWidth()
-        self.bottomGradientView.height = 94
-        self.bottomGradientView.pin(.bottom)
         
         if self.state == .emotionSelection {
             self.personGradientView.squaredSize = 75
@@ -145,16 +127,16 @@ class ExpressionViewController: ViewController {
     
     private func createExpression() async {
         guard let data = self.data else { return }
-        var emotionCounts: [Emotion: Int] = [:]
-        self.emotionsVC.selectedEmotions.forEach { emotion in
-            emotionCounts[emotion] = 1
-        }
+//        var emotionCounts: [Emotion: Int] = [:]
+//        self.emotionsVC.selectedEmotions.forEach { emotion in
+//            emotionCounts[emotion] = 1
+//        }
         
         let expression = Expression()
         
         expression.author = User.current()
         expression.file = PFFileObject(name: "expression.heic", data: data)
-        expression.emotionCounts = emotionCounts
+        //expression.emotionCounts = emotionCounts
         expression.emojiString = nil
         
         guard let saved = try? await expression.saveToServer() else { return }
@@ -172,7 +154,7 @@ class ExpressionViewController: ViewController {
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                    self.emotionsVC.view.alpha = 0.0
+                   // self.emotionsVC.view.alpha = 0.0
                 }
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
@@ -201,7 +183,7 @@ class ExpressionViewController: ViewController {
                 }
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                    self.emotionsVC.view.alpha = 1.0
+                   // self.emotionsVC.view.alpha = 1.0
                 }
             })
         }

@@ -67,16 +67,16 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.topicLabel.centerOnX()
-        self.topicLabel.pin(.bottom)
-        
-        self.stackedView.centerOnX()
-        self.stackedView.match(.bottom, to: .top, of: self.topicLabel, offset: .negative(.short))
-        
         self.closeButton.squaredSize = 44
         self.closeButton.pin(.right)
-        self.closeButton.centerY = self.stackedView.centerY
+        self.closeButton.pin(.top)
+        
+        self.stackedView.centerY = self.closeButton.centerY
+        self.stackedView.centerOnX()
+        
+        self.topicLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.topicLabel.centerOnX()
+        self.topicLabel.match(.top, to: .bottom, of: self.stackedView, offset: .short)
         
         self.addImageView.squaredSize = 24
         self.addImageView.centerY = self.closeButton.centerY
