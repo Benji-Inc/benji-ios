@@ -41,7 +41,7 @@ enum SuggestedReply: String, CaseIterable {
         case .emoji:
             return "Emoji"
         case .other:
-            return "Other"
+            return "Add Reply"
         }
     }
     
