@@ -29,7 +29,7 @@ extension TransitionRouter {
             self.toVC.view.layoutIfNeeded()
         }
 
-        let blurView = containerView.subviews(type: BlurView.self).first ?? BlurView()
+        let blurView = containerView.subviews(type: DarkBlurView.self).first ?? DarkBlurView()
         if isPresenting {
             blurView.showBlur(false)
             containerView.insertSubview(blurView, at: 0)
