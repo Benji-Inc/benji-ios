@@ -140,7 +140,7 @@ class UserNotificationManager: NSObject {
                 }
                 
                 // Must be called on Main thread or will crash
-                self.application?.applicationIconBadgeNumber = badgeCount
+                self.application?.applicationIconBadgeNumber = clamp(badgeCount - identifiers, min: 0)
                 self.removeNotifications(with: identifiers)
             }
         }
