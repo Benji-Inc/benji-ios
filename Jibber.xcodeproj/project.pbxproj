@@ -865,6 +865,7 @@
 		D6DBC0E72851295E007312FC /* Transitions in Resources */ = {isa = PBXBuildFile; fileRef = D6DBC0E52851295E007312FC /* Transitions */; };
 		D6DBC0E92851296F007312FC /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D6DBC0E82851296F007312FC /* Transitions */; };
 		D6DBC0EB28512978007312FC /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D6DBC0EA28512978007312FC /* Transitions */; };
+		D6DBC0EC285152E4007312FC /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
 		D6DD0C312822F370004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C302822F370004999F2 /* Sentry */; };
 		D6DD0C332822F3B7004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C322822F3B7004999F2 /* Sentry */; };
 		D6DD0C352822F3C3004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C342822F3C3004999F2 /* Sentry */; };
@@ -4029,6 +4030,7 @@
 				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
 				D611F7BC2815B0FE006D09D3 /* EmojiCategory.swift in Sources */,
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
+				D6DBC0EC285152E4007312FC /* ImageDisplayable.swift in Sources */,
 				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,
 				D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */,
 				D611F7B82815A136006D09D3 /* SuggestedReply.swift in Sources */,

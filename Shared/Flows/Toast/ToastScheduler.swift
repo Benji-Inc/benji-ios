@@ -18,7 +18,7 @@ enum ToastType {
     case transaction(Transaction)
     case achievement(Achievement)
     #endif
-    case success(UIImage, String)
+    case success(ImageSymbol, String)
     case error(Error)
     case basic(identifier: String,
                displayable: ImageDisplayable,
@@ -89,7 +89,7 @@ class ToastScheduler {
     }
     
     private func createSuccessToast(for text: String,
-                                    image: UIImage,
+                                    image: ImageSymbol,
                                     position: Toast.Position,
                                     duration: TimeInterval) -> Toast? {
 
@@ -117,7 +117,7 @@ class ToastScheduler {
                           priority: 1,
                           title: "",
                           description: error.localizedDescription,
-                          displayable: ImageSymbol.exclamationmarkTriangle.image,
+                          displayable: ImageSymbol.exclamationmarkTriangle,
                           deeplink: nil,
                           type: .error,
                           position: position,

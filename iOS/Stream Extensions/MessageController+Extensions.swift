@@ -127,8 +127,7 @@ extension MessageController {
                     logError(e)
                 } else {
                     Task {
-                        let image = ImageSymbol.faceSmiling.image
-                        await ToastScheduler.shared.schedule(toastType: .success(image, "Expression added"))
+                        await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.faceSmiling, "Expression added"))
                     }
                 }
                 continuation.resume(returning: ())
@@ -324,10 +323,10 @@ extension MessageController {
         
         switch sendable.deliveryType {
         case .timeSensitive:
-            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.symbol.image, "Reply delivered. Will notify all members of this conversation."))
+            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.symbol, "Will notify all members of this conversation."))
             
         case .conversational:
-            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.symbol.image, "Reply delivered. Will attempt to notify all members of this conversation."))
+            await ToastScheduler.shared.schedule(toastType: .success(sendable.deliveryType.symbol, "Will attempt to notify all members of this conversation."))
         case .respectful:
             break
         }

@@ -305,13 +305,13 @@ extension ConversationController {
         switch sendable.deliveryType {
         case .timeSensitive:
             await ToastScheduler.shared
-                .schedule(toastType: .success(sendable.deliveryType.symbol.image,
-                                              "Message delivered. Will notify all members of this conversation."))
+                .schedule(toastType: .success(sendable.deliveryType.symbol,
+                                              "Will notify all members of this conversation."))
             
         case .conversational:
             await ToastScheduler.shared
-                .schedule(toastType: .success(sendable.deliveryType.symbol.image,
-                                              "Message delivered. Will attempt to notify all members of this conversation."))
+                .schedule(toastType: .success(sendable.deliveryType.symbol,
+                                              "Will attempt to notify all members of this conversation."))
         
         case .respectful:
             break

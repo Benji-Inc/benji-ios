@@ -11,7 +11,7 @@ import UIKit
 
 class ToastStatusView: ToastView {
 
-    private let imageView = UIImageView()
+    private let imageView = SymbolImageView()
     private let label = ThemeLabel(font: .regular)
     private let blurView = BlurView()
 
@@ -21,12 +21,16 @@ class ToastStatusView: ToastView {
         self.addSubview(self.blurView)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
-        self.imageView.image = self.toast.displayable.image
+        
+        if let symbol = self.toast.displayable as? ImageSymbol {
+            self.imageView.set(symbol: symbol)
+        } else {
+            self.imageView.image = self.toast.displayable.image
+        }
         
         self.addSubview(self.label)
         
         if self.toast.type == .success {
-            self.imageView.tintColor = ThemeColor.white.color
             self.backgroundColor = ThemeColor.D6.color.withAlphaComponent(0.2)
             self.label.setTextColor(.white)
         } else {
