@@ -57,6 +57,8 @@ class WaitlistViewController: ViewController {
             
             guard let user = try? await User.current()?.retrieveDataIfNeeded() else { return }
             
+            logDebug(user.objectId ?? "")
+            
             switch user.status {
             case .active:
                 self.titleLabel.setText("Congrats! 🥳")
@@ -67,7 +69,6 @@ class WaitlistViewController: ViewController {
                     self.titleLabel.setText("You're #\(position) on the list!")
                     self.descriptionLabel.setText("We will notify you when you are available to join.")
                 }
-                
             default:
                 break
             }

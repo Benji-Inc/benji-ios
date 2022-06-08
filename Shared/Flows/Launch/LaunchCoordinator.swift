@@ -55,6 +55,8 @@ class LaunchCoordinator: PresentableCoordinator<LaunchResult> {
             if self.retryCount == 1 {
                 self.finishFlow(with: .failed)
             } else {
+                logDebug(error.debugDescription)
+                logDebug(error?.code ?? "")
                 // Show an error and let the user retry launching the app.
                 self.presentErrorAlert(with: error)
             }
