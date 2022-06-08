@@ -13,7 +13,7 @@ class MessagePreviewViewController: ViewController {
     let message: Messageable
 
     private let content = MessageContentView()
-
+    
     init(with message: Messageable) {
         self.message = message
         super.init()

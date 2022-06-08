@@ -862,6 +862,7 @@
 		D6D9ECBD281AFA0C000C5C46 /* PersonGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */; };
 		D6D9ECBE281B0C6D000C5C46 /* GradientPassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientPassThroughView.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
+		D6DBC0DA284ECA05007312FC /* ExpressionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */; };
 		D6DD0C312822F370004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C302822F370004999F2 /* Sentry */; };
 		D6DD0C332822F3B7004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C322822F3B7004999F2 /* Sentry */; };
 		D6DD0C352822F3C3004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C342822F3C3004999F2 /* Sentry */; };
@@ -1407,6 +1408,7 @@
 		D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsSegmentControl.swift; sourceTree = "<group>"; };
 		D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonGradientView.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCell.swift; sourceTree = "<group>"; };
 		D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewController.swift; sourceTree = "<group>"; };
 		D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCoordinator.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
@@ -1608,6 +1610,7 @@
 				80D5C28D281719B200182DB6 /* EmotionDetailCollectionViewLayout.swift */,
 				80D5C291281719EB00182DB6 /* ExpressionDetailCoordinator.swift */,
 				80D5C28A2817187D00182DB6 /* ExpressionDetailViewController.swift */,
+				D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */,
 			);
 			path = "Emotion Detail";
 			sourceTree = "<group>";
@@ -3519,6 +3522,7 @@
 				D619C58E27F129EB0082AD19 /* EmotionCategoryCell.swift in Sources */,
 				D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
+				D6DBC0DA284ECA05007312FC /* ExpressionCell.swift in Sources */,
 				D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */,
 				8023C69F27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift in Sources */,
 				D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */,

@@ -302,8 +302,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
 
     func messageContent(_ content: MessageContentView,
-                        didTapEmotion emotion: Emotion,
-                        for expression: ExpressionInfo,
+                        didTapExpression expression: ExpressionInfo,
                         forMessage message: Messageable) {
         
         Task.onMainActorAsync {
@@ -312,7 +311,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             let coordinator = ExpressionDetailCoordinator(router: self.router,
                                                        deepLink: self.deepLink,
                                                        expression: object,
-                                                       startingEmotion: emotion)
+                                                       startingEmotion: nil)
             self.present(coordinator)
         }
     }

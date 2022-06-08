@@ -18,8 +18,7 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable)
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable)
     func messageContent(_ content: MessageContentView,
-                        didTapEmotion emotion: Emotion,
-                        for expression: ExpressionInfo,
+                        didTapExpression expression: ExpressionInfo,
                         forMessage message: Messageable)
 }
 
@@ -30,8 +29,7 @@ extension MessageContentDelegate {
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView,
-                        didTapEmotion emotion: Emotion,
-                        for expression: ExpressionInfo,
+                        didTapExpression expression: ExpressionInfo,
                         forMessage message: Messageable) {}
 }
 
@@ -161,19 +159,12 @@ class MessageContentView: BaseView {
     
     private func setupHandlers() {
         self.authorView.didSelect { [unowned self] in
-            self.setEmotions(areShown: !self.areEmotionsShown, animated: true)
+            guard let message = self.message, let expression = self.message?.authorExpression  else { return }
+            self.delegate?.messageContent(self, didTapExpression: expression, forMessage: message)
         }
 
         self.emotionCollectionView.onTappedBackground = { [unowned self] in
             self.setEmotions(areShown: false, animated: true)
-        }
-
-        self.emotionCollectionView.onTappedEmotion = { [unowned self] emotion in
-            guard let message = self.message, let expression = self.message?.authorExpression  else { return }
-            self.delegate?.messageContent(self,
-                                          didTapEmotion: emotion,
-                                          for: expression,
-                                          forMessage: message)
         }
         
         self.imageView.didSelect { [unowned self] in

@@ -77,7 +77,7 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
             self.didTapDelete?()
         }
 
-        let deleteMenu = UIMenu(title: "Delete Message",
+        let deleteMenu = UIMenu(title: "Delete",
                                 image: ImageSymbol.trash.image,
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])

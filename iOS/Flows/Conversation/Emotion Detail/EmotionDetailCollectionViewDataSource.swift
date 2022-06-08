@@ -15,14 +15,16 @@ class EmotionDetailCollectionViewDataSource: CollectionViewDataSource<EmotionDet
                                              EmotionDetailItem> {
 
     enum SectionType: Int, Hashable, CaseIterable {
-        case emotions
+        case info
     }
-
-    struct ItemType: Hashable {
-        let emotion: Emotion
+    
+    enum ItemType: Hashable {
+        case emotion(Emotion)
+        case expression(Expression)
     }
 
     private let emotionCellRegistration = ManageableCellRegistration<EmotionContentCell>().provider
+    private let expressionCellRegistration = ManageableCellRegistration<ExpressionCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -31,11 +33,15 @@ class EmotionDetailCollectionViewDataSource: CollectionViewDataSource<EmotionDet
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
 
-        switch section {
-        case .emotions:
+        switch item {
+        case .expression(let expression):
+            return collectionView.dequeueConfiguredReusableCell(using: self.expressionCellRegistration,
+                                                                for: indexPath,
+                                                                item: expression)
+        case .emotion(let emotion):
             return collectionView.dequeueConfiguredReusableCell(using: self.emotionCellRegistration,
                                                                 for: indexPath,
-                                                                item: EmotionContentModel(emotion: item.emotion))
+                                                                item: EmotionContentModel(emotion: emotion))
         }
     }
 }

@@ -57,7 +57,8 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.didSelect { [unowned self] in
+        self.view.didSelect { [weak self] in
+            guard let `self` = self else { return }
             self.delegate.emotionDetailViewControllerDidFinish(self)
         }
     }
@@ -69,12 +70,13 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
     override func retrieveDataForSnapshot() async
     -> [EmotionDetailCollectionViewDataSource.SectionType : [EmotionDetailCollectionViewDataSource.ItemType]] {
 
-        let emotionsItems = self.emotions.map { emotion in
-            return EmotionDetailItem(emotion: emotion)
-        }
         var data: [EmotionDetailSection : [EmotionDetailItem]] = [:]
-        data[.emotions] = emotionsItems
-
+        var items: [EmotionDetailItem] = [.expression(self.expression)]
+        let emotionItems: [EmotionDetailItem] = self.emotions.compactMap({ emotion in
+            return .emotion(emotion)
+        })
+        items.append(contentsOf: emotionItems)
+        data[.info] = items
         return data
     }
 }

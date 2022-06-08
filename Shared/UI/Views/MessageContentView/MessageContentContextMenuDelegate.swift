@@ -45,12 +45,12 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
             }
         }
 
-        let deleteMenu = UIMenu(title: "Delete Message",
+        let deleteMenu = UIMenu(title: "Delete",
                                 image: ImageSymbol.trash.image,
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
 
-        let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
+        let viewReplies = UIAction(title: "View Thread") { [unowned self] action in
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }
 
@@ -86,6 +86,7 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
         }
 
         if message.parentMessageId.isNil {
+            menuElements.append(self.addReplyMenu())
             menuElements.append(viewReplies)
         }
 
@@ -95,18 +96,38 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
                            options: [],
                            children: menuElements)
     }
+    
+    private func addReplyMenu() -> UIMenu {
+        
+        var elements: [UIMenuElement] = []
+        
+        SuggestedReply.allCases.reversed().forEach { suggestion in
+            
+            if suggestion == .emoji {
+                let reactionElements: [UIMenuElement] = suggestion.emojiReactions.compactMap { emoji in
+                    return UIAction(title: emoji, image: User.current()?.image) { [unowned self] _ in
+                        self.addReply(with: emoji)
+                    }
+                }
+                let reactionMenu = UIMenu(title: suggestion.text,
+                                          image: suggestion.image,
+                                          children: reactionElements)
+                elements.append(reactionMenu)
+                
+            } else {
+                let action = UIAction(title: suggestion.text, image: suggestion.image) { [unowned self] _ in
+                    self.addReply(with: suggestion.text)
+                }
+                elements.append(action)
+            }
+        }
+
+        return UIMenu(title: "Reply", image: ImageSymbol.arrowTurnUpLeft.image, children: elements)
+    }
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-
-        let params = UIPreviewParameters()
-        params.backgroundColor = ThemeColor.clear.color
-        params.shadowPath = UIBezierPath(rect: .zero)
-        if let bubble = interaction.view as? SpeechBubbleView, let path = bubble.bubbleLayer.path {
-            params.visiblePath = UIBezierPath(cgPath: path)
-        }
-        let preview = UITargetedPreview(view: interaction.view!, parameters: params)
-        return preview
+        return nil
     }
 
     private weak var firstResponderBeforeDisplay: UIResponder?
@@ -119,10 +140,10 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
         self.firstResponderBeforeDisplay = UIResponder.firstResponder
         self.inputHandlerBeforeDisplay = self.firstResponderBeforeDisplay?.inputHandlerViewController
     }
+        
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 willEndFor configuration: UIContextMenuConfiguration,
                                 animator: UIContextMenuInteractionAnimating?) {
-
 
         // HACK: The input handler has problems becoming first responder again after the context menu
         // disappears. The text view also becomes unresponsive. To get around this, reset the responder
@@ -146,6 +167,20 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
         guard let msg = self.content.message, msg.isConsumedByMe else { return }
         Task {
             try await msg.setToUnconsumed()
+        }
+    }
+    
+    private func addReply(with text: String) {
+        guard let msg = self.content.message,
+                let controller = JibberChatClient.shared.messageController(for: msg) else { return }
+        
+        Task {
+            let object = SendableObject(kind: .text(text),
+                                        deliveryType: msg.deliveryType,
+                                        expression: nil)
+            try await controller.createNewReply(with: object)
+            
+            AnalyticsManager.shared.trackEvent(type: .suggestionSelected, properties: ["value": text])
         }
     }
 }
