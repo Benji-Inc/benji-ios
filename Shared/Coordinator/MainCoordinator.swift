@@ -40,12 +40,20 @@ class MainCoordinator: BaseCoordinator<Void> {
     private func runLaunchFlow() {
         self.launchAndDeepLinkTask?.cancel()
 
-        self.launchAndDeepLinkTask = Task {
+        self.launchAndDeepLinkTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
             let deepLink: DeepLinkable? = await withCheckedContinuation { continuation in
                 let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
                 self.router.setRootModule(launchCoordinator)
-                self.addChildAndStart(launchCoordinator) { deepLink in
-                    continuation.resume(returning: deepLink)
+                self.addChildAndStart(launchCoordinator) { result in
+                    switch result {
+                    case .success(let deepLink):
+                        continuation.resume(returning: deepLink)
+                    case .failed:
+                        self.logOut()
+                        continuation.resume(returning: nil)
+                    }
                 }
             }
 

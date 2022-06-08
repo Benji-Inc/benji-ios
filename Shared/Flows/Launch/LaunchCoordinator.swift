@@ -10,7 +10,12 @@ import Foundation
 import UIKit
 import Coordinator
 
-class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
+enum LaunchResult {
+    case success(DeepLinkable?)
+    case failed
+}
+
+class LaunchCoordinator: PresentableCoordinator<LaunchResult> {
 
     lazy var splashVC = SplashViewController()
 
@@ -25,6 +30,7 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
     }
 
     private var launchTask: Task<Void, Never>?
+    private var retryCount: Int = 0
 
     private func startLaunchTask() {
         self.splashVC.startLoadAnimation()
@@ -43,11 +49,15 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
     private func handle(launchStatus: LaunchStatus) {
         switch launchStatus {
         case .success(let deepLink):
-            self.finishFlow(with: deepLink)
+            self.finishFlow(with: .success(deepLink))
         case .failed(let error):
             self.splashVC.stopLoadAnimation()
-            // Show an error and let the user retry launching the app.
-            self.presentErrorAlert(with: error)
+            if self.retryCount == 1 {
+                self.finishFlow(with: .failed)
+            } else {
+                // Show an error and let the user retry launching the app.
+                self.presentErrorAlert(with: error)
+            }
         }
     }
 
@@ -56,6 +66,7 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
                                       message: "Check your connection and please try again.",
                                       preferredStyle: .alert)
         let ok = UIAlertAction(title: "Retry", style: .default) { [unowned self] (_) in
+            self.retryCount += 1
             self.startLaunchTask()
         }
 
