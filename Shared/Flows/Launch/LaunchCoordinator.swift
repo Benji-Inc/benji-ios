@@ -9,8 +9,14 @@
 import Foundation
 import UIKit
 import Coordinator
+import Parse
 
-class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
+enum LaunchResult {
+    case success(DeepLinkable?)
+    case failed
+}
+
+class LaunchCoordinator: PresentableCoordinator<LaunchResult> {
 
     lazy var splashVC = SplashViewController()
 
@@ -25,6 +31,7 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
     }
 
     private var launchTask: Task<Void, Never>?
+    private var retryCount: Int = 0
 
     private func startLaunchTask() {
         self.splashVC.startLoadAnimation()
@@ -43,11 +50,35 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
     private func handle(launchStatus: LaunchStatus) {
         switch launchStatus {
         case .success(let deepLink):
-            self.finishFlow(with: deepLink)
-        case .failed(let error):
+            self.finishFlow(with: .success(deepLink))
+        case .failed(let error, let deepLink):
             self.splashVC.stopLoadAnimation()
-            // Show an error and let the user retry launching the app.
-            self.presentErrorAlert(with: error)
+            if self.retryCount == 1 {
+                self.finishFlow(with: .failed)
+            } else if let e = error {
+                switch e.code {
+                case 141:
+                    self.handleInvalidSessionError(with: deepLink)
+                default:
+                    self.presentErrorAlert(with: error)
+                }
+            } else {
+                self.presentErrorAlert(with: error)
+            }
+        }
+    }
+    
+    private func handleInvalidSessionError(with deepLink: DeepLinkable?) {
+        Task {
+            guard let token = User.getStoredSessionToken() else { return }
+            
+            do {
+                try await User.become(withSessionToken: token)
+                self.finishFlow(with: .success(deepLink))
+            }
+            catch {
+                self.finishFlow(with: .failed)
+            }
         }
     }
 
@@ -56,6 +87,7 @@ class LaunchCoordinator: PresentableCoordinator<DeepLinkable?> {
                                       message: "Check your connection and please try again.",
                                       preferredStyle: .alert)
         let ok = UIAlertAction(title: "Retry", style: .default) { [unowned self] (_) in
+            self.retryCount += 1
             self.startLaunchTask()
         }
 
