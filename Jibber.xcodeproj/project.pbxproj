@@ -861,10 +861,10 @@
 		D6D9ECBE281B0C6D000C5C46 /* GradientPassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientPassThroughView.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D6DBC0DA284ECA05007312FC /* ExpressionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */; };
-		D6DBC0DF28511AD7007312FC /* Transitions in Resources */ = {isa = PBXBuildFile; fileRef = D6DBC0DE28511AD7007312FC /* Transitions */; };
-		D6DBC0E028511AD7007312FC /* Transitions in Resources */ = {isa = PBXBuildFile; fileRef = D6DBC0DE28511AD7007312FC /* Transitions */; };
-		D6DBC0E228511B08007312FC /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D6DBC0E128511B08007312FC /* Transitions */; };
-		D6DBC0E428511B15007312FC /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D6DBC0E328511B15007312FC /* Transitions */; };
+		D6DBC0E62851295E007312FC /* Transitions in Resources */ = {isa = PBXBuildFile; fileRef = D6DBC0E52851295E007312FC /* Transitions */; };
+		D6DBC0E72851295E007312FC /* Transitions in Resources */ = {isa = PBXBuildFile; fileRef = D6DBC0E52851295E007312FC /* Transitions */; };
+		D6DBC0E92851296F007312FC /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D6DBC0E82851296F007312FC /* Transitions */; };
+		D6DBC0EB28512978007312FC /* Transitions in Frameworks */ = {isa = PBXBuildFile; productRef = D6DBC0EA28512978007312FC /* Transitions */; };
 		D6DD0C312822F370004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C302822F370004999F2 /* Sentry */; };
 		D6DD0C332822F3B7004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C322822F3B7004999F2 /* Sentry */; };
 		D6DD0C352822F3C3004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C342822F3C3004999F2 /* Sentry */; };
@@ -1410,7 +1410,7 @@
 		D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonGradientView.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCell.swift; sourceTree = "<group>"; };
-		D6DBC0DE28511AD7007312FC /* Transitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transitions; path = ../../Transitions; sourceTree = "<group>"; };
+		D6DBC0E52851295E007312FC /* Transitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transitions; sourceTree = "<group>"; };
 		D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewController.swift; sourceTree = "<group>"; };
 		D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCoordinator.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
@@ -1446,7 +1446,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6DBC0E228511B08007312FC /* Transitions in Frameworks */,
+				D6DBC0E92851296F007312FC /* Transitions in Frameworks */,
 				D611280B2804D8A400574B96 /* PhoneNumberKit in Frameworks */,
 				D61C1D23284035ED00F58F84 /* Coordinator in Frameworks */,
 				D61128072804D88600574B96 /* Localization in Frameworks */,
@@ -1462,7 +1462,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6DBC0E428511B15007312FC /* Transitions in Frameworks */,
+				D6DBC0EB28512978007312FC /* Transitions in Frameworks */,
 				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
 				D61C1D212840324000F58F84 /* Coordinator in Frameworks */,
 				D6C3893627287307004D29D5 /* StreamChat in Frameworks */,
@@ -2709,7 +2709,7 @@
 		D6FA273B2767A65600315528 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				D6DBC0DE28511AD7007312FC /* Transitions */,
+				D6DBC0E52851295E007312FC /* Transitions */,
 				D669FA7B28452EDF00F4A9B5 /* KeyboardManager */,
 				D61C1D1F28402EB300F58F84 /* Coordinator */,
 				D6FA273C2767A67300315528 /* Localization */,
@@ -2742,7 +2742,7 @@
 				D6DD0C3A2822F3DE004999F2 /* Sentry */,
 				D61C1D22284035ED00F58F84 /* Coordinator */,
 				D669FA7E28452F8000F4A9B5 /* KeyboardManager */,
-				D6DBC0E128511B08007312FC /* Transitions */,
+				D6DBC0E82851296F007312FC /* Transitions */,
 			);
 			productName = AppClip;
 			productReference = D61127EE2804D72C00574B96 /* AppClip.app */;
@@ -2778,7 +2778,7 @@
 				D6DD0C302822F370004999F2 /* Sentry */,
 				D61C1D202840324000F58F84 /* Coordinator */,
 				D669FA7C28452F7A00F4A9B5 /* KeyboardManager */,
-				D6DBC0E328511B15007312FC /* Transitions */,
+				D6DBC0EA28512978007312FC /* Transitions */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -2950,7 +2950,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6DBC0E028511AD7007312FC /* Transitions in Resources */,
+				D6DBC0E72851295E007312FC /* Transitions in Resources */,
 				D611288A2804DD3400574B96 /* Assets.xcassets in Resources */,
 				D611280E2804DB5E00574B96 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -2961,7 +2961,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D640329425AF3CA500139396 /* error.json in Resources */,
-				D6DBC0DF28511AD7007312FC /* Transitions in Resources */,
+				D6DBC0E62851295E007312FC /* Transitions in Resources */,
 				D640329025AF3CA500139396 /* face_scan.json in Resources */,
 				D6B00D3C2796480D00DF07B1 /* loading.json in Resources */,
 				D628B00927B47EEF00949154 /* TransactionContentView.xib in Resources */,
@@ -4829,11 +4829,11 @@
 			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
 			productName = StreamChat;
 		};
-		D6DBC0E128511B08007312FC /* Transitions */ = {
+		D6DBC0E82851296F007312FC /* Transitions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Transitions;
 		};
-		D6DBC0E328511B15007312FC /* Transitions */ = {
+		D6DBC0EA28512978007312FC /* Transitions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Transitions;
 		};
