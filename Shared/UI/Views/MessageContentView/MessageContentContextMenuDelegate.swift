@@ -136,9 +136,6 @@ class MessageContentContextMenuDelegate: NSObject, UIContextMenuInteractionDeleg
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 willDisplayMenuFor configuration: UIContextMenuConfiguration,
                                 animator: UIContextMenuInteractionAnimating?) {
-        
-        logDebug("LOCATION: \(interaction.location(in: self.content.superview))")
-
 
         self.firstResponderBeforeDisplay = UIResponder.firstResponder
         self.inputHandlerBeforeDisplay = self.firstResponderBeforeDisplay?.inputHandlerViewController

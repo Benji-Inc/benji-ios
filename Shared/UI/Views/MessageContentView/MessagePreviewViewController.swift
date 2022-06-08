@@ -14,8 +14,6 @@ class MessagePreviewViewController: ViewController {
 
     private let content = MessageContentView()
     
-    let redview = BaseView()
-
     init(with message: Messageable) {
         self.message = message
         super.init()
@@ -29,12 +27,6 @@ class MessagePreviewViewController: ViewController {
         super.initializeViews()
 
         guard let window = UIWindow.topWindow() else { return }
-        
-        window.addSubview(self.redview)
-        self.redview.set(backgroundColor: .red)
-        self.redview.didSelect { [unowned self] in
-            logDebug("Did tap")
-        }
         
         self.content.layoutState = .expanded
         self.view.addSubview(self.content)
@@ -60,24 +52,11 @@ class MessagePreviewViewController: ViewController {
         super.viewDidAppear(animated)
         
         self.view.layoutNow()
-        
-        guard let window = UIWindow.topWindow() else { return }
-        window.bringSubviewToFront(self.redview)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         self.content.expandToSuperviewSize()
-        
-        if let superview = self.content.superview?.superview {
-            logDebug("SUPERVIEW: \(superview.bounds.debugDescription)")
-            logDebug("CONTENT: \(self.content.bounds.debugDescription)")
-
-        }
-        
-        self.redview.squaredSize = 100
-        self.redview.match(.bottom, to: .top, of: self.content)
-        self.redview.centerOnX()
     }
 }

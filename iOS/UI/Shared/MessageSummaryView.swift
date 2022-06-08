@@ -178,7 +178,7 @@ class MessageSummaryView: BaseView {
             
             if suggestion == .emoji {
                 let reactionElements: [UIMenuElement] = suggestion.emojiReactions.compactMap { emoji in
-                    return UIAction(title: emoji, image: User.current()?.image) { [unowned self] _ in
+                    return UIAction(title: emoji, image: nil) { [unowned self] _ in
                         self.didSelectEmoji?(emoji)
                     }
                 }
