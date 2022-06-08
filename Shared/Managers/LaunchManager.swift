@@ -24,7 +24,7 @@ protocol LaunchActivityHandler {
 
 enum LaunchStatus {
     case success(deepLink: DeepLinkable?)
-    case failed(error: ClientError?)
+    case failed(error: ClientError?, deepLink: DeepLinkable?)
 }
 
 protocol LaunchManagerDelegate: AnyObject {
@@ -76,8 +76,10 @@ class LaunchManager {
                 user.timeZone = TimeZone.current.identifier
                 user.saveEventually()
             } catch {
-                await ToastScheduler.shared.schedule(toastType: .error(error))
-                return LaunchStatus.failed(error: ClientError.apiError(detail: error.localizedDescription))
+                if error.code != 141 {
+                    await ToastScheduler.shared.schedule(toastType: .error(error))
+                }
+                return LaunchStatus.failed(error: ClientError.error(error: error), deepLink: deepLink)
             }
         }
 #endif
@@ -103,7 +105,7 @@ class LaunchManager {
         do {
             try await JibberChatClient.shared.initialize(for: user)
         } catch {
-            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
+            return .failed(error: ClientError.error(error: error), deepLink: deeplink)
         }
 
         return await self.getChatToken(for: user, deepLink: deeplink)

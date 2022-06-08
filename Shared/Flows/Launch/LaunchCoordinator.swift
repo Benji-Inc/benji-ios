@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Coordinator
+import Parse
 
 enum LaunchResult {
     case success(DeepLinkable?)
@@ -50,15 +51,33 @@ class LaunchCoordinator: PresentableCoordinator<LaunchResult> {
         switch launchStatus {
         case .success(let deepLink):
             self.finishFlow(with: .success(deepLink))
-        case .failed(let error):
+        case .failed(let error, let deepLink):
             self.splashVC.stopLoadAnimation()
             if self.retryCount == 1 {
                 self.finishFlow(with: .failed)
+            } else if let e = error {
+                switch e.code {
+                case 141:
+                    self.handleInvalidSessionError(with: deepLink)
+                default:
+                    self.presentErrorAlert(with: error)
+                }
             } else {
-                logDebug(error.debugDescription)
-                logDebug(error?.code ?? "")
-                // Show an error and let the user retry launching the app.
                 self.presentErrorAlert(with: error)
+            }
+        }
+    }
+    
+    private func handleInvalidSessionError(with deepLink: DeepLinkable?) {
+        Task {
+            guard let token = User.getStoredSessionToken() else { return }
+            
+            do {
+                try await User.become(withSessionToken: token)
+                self.finishFlow(with: .success(deepLink))
+            }
+            catch {
+                self.finishFlow(with: .failed)
             }
         }
     }

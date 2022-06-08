@@ -73,7 +73,6 @@ class MainCoordinator: BaseCoordinator<Void> {
             } else if let user = User.current(), user.isOnboarded {
                 self.handle(deeplink: DeepLinkObject(target: .waitlist))
             } else {
-                logDebug(User.current()?.objectId ?? "")
                 self.handleAppClip(deepLink: DeepLinkObject(target: .login))
             }
         #endif
