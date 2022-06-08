@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum ImageSymbol: String {
+enum ImageSymbol: String, ImageDisplayable {
     
     case bellSlash = "bell.slash"
     case bell = "bell"
@@ -45,8 +45,8 @@ enum ImageSymbol: String {
     case infoCircle = "info.circle"
     
     
-    var image: UIImage {
-        return UIImage(systemName: self.rawValue)!.withRenderingMode(.alwaysTemplate)
+    var image: UIImage? {
+        return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
     }
         
     var defaultConfig: UIImage.SymbolConfiguration? {

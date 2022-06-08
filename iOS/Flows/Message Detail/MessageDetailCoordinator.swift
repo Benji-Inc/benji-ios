@@ -106,7 +106,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
             let controller = MessageController.controller(for: self.message)
             try? await controller.deleteMessage()
             
-            await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.trash.image, "Message Deleted"))
+            await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.trash, "Message Deleted"))
             
             self.finishFlow(with: .none)
         }

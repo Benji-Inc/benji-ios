@@ -359,7 +359,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         do {
             await self.button.handleEvent(status: .loading)
             try await currentUser.saveToServer()
-            await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.personCropCircle.image, "Profile picture updated"))
+            await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.personCropCircle, "Profile picture updated"))
             await self.button.handleEvent(status: .complete)
             
             self.currentState = .finish
