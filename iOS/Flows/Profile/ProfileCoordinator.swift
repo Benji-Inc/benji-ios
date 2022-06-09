@@ -35,7 +35,11 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
     override func start() {
         super.start()
         
-        self.profileVC.dataSource.messageContentDelegate = self 
+        self.profileVC.dataSource.messageContentDelegate = self
+        
+        self.profileVC.header.didSelectWallet = { [unowned self] in
+            self.presentWallet()
+        }
                 
         if let user = self.person as? User, user.isCurrentUser {
             
@@ -88,6 +92,18 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
         }
 
         self.router.present(coordinator, source: self.profileVC)
+    }
+    
+    func presentWallet() {
+        self.removeChild()
+
+        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
+
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+        }
+
+        self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
     }
 }
 

@@ -28,6 +28,7 @@ class ProfileHeaderView: BaseView {
     let menuButton = SymbolButton(symbol: .ellipsis)
     
     var didSelectUpdateProfilePicture: CompletionOptional = nil
+    var didSelectWallet: CompletionOptional = nil
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -139,16 +140,22 @@ class ProfileHeaderView: BaseView {
     private func createMenu(for person: PersonType) -> UIMenu? {
         guard person.isCurrentUser else { return nil }
         
-        let remove = UIAction(title: "Update Picture",
+        let update = UIAction(title: "Update Picture",
                               image: ImageSymbol.camera.image,
                               attributes: []) { [unowned self] action in
             self.didSelectUpdateProfilePicture?()
+        }
+        
+        let wallet = UIAction(title: "View Wallet",
+                              image: UIImage(named: "jiblogo"),
+                              attributes: []) { [unowned self] action in
+            self.didSelectWallet?()
         }
 
         return UIMenu.init(title: "Menu",
                            image: nil,
                            identifier: nil,
                            options: [],
-                           children: [remove])
+                           children: [update, wallet])
     }
 }

@@ -10,9 +10,7 @@ import Foundation
 import Combine
 
 class HomeHeaderView: BaseView {
-    
-    let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
-    
+        
     let button = ThemeButton()
     let focusLabel = ThemeLabel(font: .regularBold)
     let focusCircle = BaseView()
@@ -28,11 +26,7 @@ class HomeHeaderView: BaseView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-        
-        self.addSubview(self.jibImageView)
-        self.jibImageView.contentMode = .scaleToFill
-        self.jibImageView.isUserInteractionEnabled = true 
-        
+
         self.addSubview(self.focusLabel)
         self.addSubview(self.focusCircle)
         
@@ -62,13 +56,9 @@ class HomeHeaderView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.jibImageView.squaredSize = 44
-        self.jibImageView.pin(.right, offset: .long)
-        self.jibImageView.centerOnY()
-        
         self.personView.squaredSize = 30
         self.personView.pin(.left, offset: .xtraLong)
-        self.personView.centerY = self.jibImageView.centerY
+        self.personView.centerOnY()
         
         self.focusLabel.setSize(withWidth: self.width)
         self.focusLabel.centerOnY()

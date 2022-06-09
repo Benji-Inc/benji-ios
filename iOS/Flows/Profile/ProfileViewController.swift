@@ -35,7 +35,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                                                   endPoint: .topCenter)
     
     private let darkBlurView = DarkBlurView()
-        
+            
     init(with person: PersonType) {
         self.person = person
         super.init(with: UserConversationsCollectionView())

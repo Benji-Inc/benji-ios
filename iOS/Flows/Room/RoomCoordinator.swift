@@ -56,10 +56,6 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     private func setupHandlers() {
         self.roomVC.dataSource.messageContentDelegate = self 
         
-        self.roomVC.headerView.jibImageView.didSelect { [unowned self] in
-            self.presentWallet()
-        }
-        
         self.roomVC.headerView.button.didSelect { [unowned self] in
             guard let user = User.current() else { return }
             self.presentProfile(for: user)
