@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class RoomHeaderView: BaseView {
+class HomeHeaderView: BaseView {
     
     let jibImageView = UIImageView(image: UIImage(named: "jiblogo"))
     

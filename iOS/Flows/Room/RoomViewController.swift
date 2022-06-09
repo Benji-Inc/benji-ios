@@ -14,7 +14,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                           RoomItemType,
                           RoomCollectionViewDataSource> {
     
-    let headerView = RoomHeaderView()
+    let headerView = HomeHeaderView()
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
                                                                  ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                           startPoint: .topCenter,
