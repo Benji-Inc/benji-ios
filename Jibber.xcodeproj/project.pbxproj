@@ -735,6 +735,8 @@
 		D6AA61F8285255DC00FA4D02 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA61F7285255DC00FA4D02 /* ConversationsViewController.swift */; };
 		D6AA61FA285255ED00FA4D02 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA61F9285255ED00FA4D02 /* TabView.swift */; };
 		D6AA61FC2852593500FA4D02 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */; };
+		D6AA62012852616D00FA4D02 /* HomeCoordinator+Notices.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA62002852616D00FA4D02 /* HomeCoordinator+Notices.swift */; };
+		D6AA62032852617E00FA4D02 /* HomeCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA62022852617E00FA4D02 /* HomeCoordinator+Presentation.swift */; };
 		D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5C267CF80C00C6B048 /* Lottie */; };
 		D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F60267CF82C00C6B048 /* Lottie */; };
 		D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */; };
@@ -1338,6 +1340,8 @@
 		D6AA61F7285255DC00FA4D02 /* ConversationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsViewController.swift; sourceTree = "<group>"; };
 		D6AA61F9285255ED00FA4D02 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		D6AA62002852616D00FA4D02 /* HomeCoordinator+Notices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Notices.swift"; sourceTree = "<group>"; };
+		D6AA62022852617E00FA4D02 /* HomeCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6AE0F6D267CF9CA00C6B048 /* Notification Service.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Notification Service.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AE0F6F267CF9CA00C6B048 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D6AE0F71267CF9CA00C6B048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2460,8 +2464,11 @@
 				D6AA61FE2852604400FA4D02 /* Connections */,
 				D6AA61FD2852603A00FA4D02 /* Conversations */,
 				D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */,
+				D6AA62002852616D00FA4D02 /* HomeCoordinator+Notices.swift */,
+				D6AA62022852617E00FA4D02 /* HomeCoordinator+Presentation.swift */,
 				D60B886C27F6206C00B3E1C2 /* HomeHeaderView.swift */,
 				D6AA61F32852542A00FA4D02 /* HomeViewController.swift */,
+				D6AA61FF2852612500FA4D02 /* Notices */,
 				D6AA61F9285255ED00FA4D02 /* TabView.swift */,
 			);
 			path = Home;
@@ -2481,6 +2488,16 @@
 				D6AA61F5285255C900FA4D02 /* ConnectionsViewController.swift */,
 			);
 			path = Connections;
+			sourceTree = "<group>";
+		};
+		D6AA61FF2852612500FA4D02 /* Notices */ = {
+			isa = PBXGroup;
+			children = (
+				D6B2B655283D39EA007D507B /* Notice Cell Content */,
+				D60B887227F7732100B3E1C2 /* NoticeCell.swift */,
+				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
+			);
+			path = Notices;
 			sourceTree = "<group>";
 		};
 		D6AE0F6E267CF9CA00C6B048 /* Notification Service */ = {
@@ -2702,9 +2719,6 @@
 		D6DEC3EB27A1D9370072D9D0 /* Room */ = {
 			isa = PBXGroup;
 			children = (
-				D6B2B655283D39EA007D507B /* Notice Cell Content */,
-				D60B887227F7732100B3E1C2 /* NoticeCell.swift */,
-				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
 				D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */,
 				D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */,
 				D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */,
@@ -3621,6 +3635,7 @@
 				D646D36E27E53D750077D20B /* AttachmentOptionCell.swift in Sources */,
 				D60CA47A27EE2C6500F0871A /* EmojiNavigationViewController.swift in Sources */,
 				D60B886227F4C2EC00B3E1C2 /* MessageFooterView.swift in Sources */,
+				D6AA62032852617E00FA4D02 /* HomeCoordinator+Presentation.swift in Sources */,
 				D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */,
 				D637651827E92B5900CCDA7F /* ConversationDetailCoordinator.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
@@ -3773,6 +3788,7 @@
 				D646D36227E505030077D20B /* AttachmentsViewController.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
+				D6AA62012852616D00FA4D02 /* HomeCoordinator+Notices.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
