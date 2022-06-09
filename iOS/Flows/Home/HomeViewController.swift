@@ -41,4 +41,20 @@ class HomeViewController: ViewController {
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.headerView)
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.headerView.height = 46
+        self.headerView.expandToSuperviewWidth()
+        self.headerView.pinToSafeArea(.top, offset: .noOffset)
+        
+        self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = self.headerView.bottom
+        self.topGradientView.pin(.top)
+        
+        self.bottomGradientView.expandToSuperviewWidth()
+        self.bottomGradientView.height = 94
+        self.bottomGradientView.pin(.bottom)
+    }
 }

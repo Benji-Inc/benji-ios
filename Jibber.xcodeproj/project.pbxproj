@@ -2457,14 +2457,30 @@
 		D6AA61F22852541100FA4D02 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D6AA61F5285255C900FA4D02 /* ConnectionsViewController.swift */,
-				D6AA61F7285255DC00FA4D02 /* ConversationsViewController.swift */,
+				D6AA61FE2852604400FA4D02 /* Connections */,
+				D6AA61FD2852603A00FA4D02 /* Conversations */,
 				D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */,
 				D60B886C27F6206C00B3E1C2 /* HomeHeaderView.swift */,
 				D6AA61F32852542A00FA4D02 /* HomeViewController.swift */,
 				D6AA61F9285255ED00FA4D02 /* TabView.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		D6AA61FD2852603A00FA4D02 /* Conversations */ = {
+			isa = PBXGroup;
+			children = (
+				D6AA61F7285255DC00FA4D02 /* ConversationsViewController.swift */,
+			);
+			path = Conversations;
+			sourceTree = "<group>";
+		};
+		D6AA61FE2852604400FA4D02 /* Connections */ = {
+			isa = PBXGroup;
+			children = (
+				D6AA61F5285255C900FA4D02 /* ConnectionsViewController.swift */,
+			);
+			path = Connections;
 			sourceTree = "<group>";
 		};
 		D6AE0F6E267CF9CA00C6B048 /* Notification Service */ = {

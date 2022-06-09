@@ -11,7 +11,7 @@ import Foundation
 extension MainCoordinator {
 
     @MainActor
-    func runRoomFlow(with deepLink: DeepLinkable?) async {
+    func runHomeFlow(with deepLink: DeepLinkable?) async {
         // Ensure that the chat client is initialized for the logged in user.
         if !JibberChatClient.shared.isConnected || JibberChatClient.shared.isConnectedToCurrentUser {
             try? await JibberChatClient.shared.initialize(for: User.current()!)

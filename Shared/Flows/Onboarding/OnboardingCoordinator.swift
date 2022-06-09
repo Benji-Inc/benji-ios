@@ -174,7 +174,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             AnalyticsManager.shared.trackEvent(type: .finalizedOnboarding, properties: ["status": user.status?.rawValue ?? ""])
             await self.onboardingVC.hideLoading()
             
-            var deepLink = DeepLinkObject(target: .room)
+            var deepLink = DeepLinkObject(target: .home)
             deepLink.reservationId = self.onboardingVC.reservationId
             deepLink.passId = self.onboardingVC.passId
             self.finishFlow(with: deepLink)

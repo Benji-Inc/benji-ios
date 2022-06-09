@@ -10,7 +10,7 @@ import Foundation
 
 enum DeepLinkTarget: String, CaseIterable {
     
-    case room
+    case home
     case login
     case conversation
     case thread
