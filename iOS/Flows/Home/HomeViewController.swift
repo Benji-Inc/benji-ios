@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Transitions
 
 class HomeViewController: ViewController {
     
@@ -56,5 +57,24 @@ class HomeViewController: ViewController {
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = 94
         self.bottomGradientView.pin(.bottom)
+    }
+}
+
+extension HomeViewController: TransitionableViewController {
+
+    var presentationType: TransitionType {
+        return .fadeOutIn
+    }
+
+    var dismissalType: TransitionType {
+        return self.presentationType
+    }
+
+    func getFromVCPresentationType(for toVCPresentationType: TransitionType) -> TransitionType {
+        return toVCPresentationType
+    }
+
+    func getToVCDismissalType(for fromVCDismissalType: TransitionType) -> TransitionType {
+        return fromVCDismissalType
     }
 }
