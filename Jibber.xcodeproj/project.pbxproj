@@ -740,6 +740,10 @@
 		D6AA6205285263EF00FA4D02 /* ConversationsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA6204285263EF00FA4D02 /* ConversationsCollectionView.swift */; };
 		D6AA62072852640100FA4D02 /* ConversationsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA62062852640100FA4D02 /* ConversationsCollectionViewLayout.swift */; };
 		D6AA62092852641800FA4D02 /* ConversationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA62082852641800FA4D02 /* ConversationsDataSource.swift */; };
+		D6AA620B28526ED700FA4D02 /* NoticesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA620A28526ED700FA4D02 /* NoticesDataSource.swift */; };
+		D6AA620D28526FC200FA4D02 /* NoticesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA620C28526FC200FA4D02 /* NoticesViewController.swift */; };
+		D6AA620F2852701D00FA4D02 /* NoticesCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA620E2852701C00FA4D02 /* NoticesCollectionViewLayout.swift */; };
+		D6AA6211285270E200FA4D02 /* NoticesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AA6210285270E200FA4D02 /* NoticesCollectionView.swift */; };
 		D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5C267CF80C00C6B048 /* Lottie */; };
 		D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F60267CF82C00C6B048 /* Lottie */; };
 		D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */; };
@@ -1348,6 +1352,10 @@
 		D6AA6204285263EF00FA4D02 /* ConversationsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsCollectionView.swift; sourceTree = "<group>"; };
 		D6AA62062852640100FA4D02 /* ConversationsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6AA62082852641800FA4D02 /* ConversationsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsDataSource.swift; sourceTree = "<group>"; };
+		D6AA620A28526ED700FA4D02 /* NoticesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticesDataSource.swift; sourceTree = "<group>"; };
+		D6AA620C28526FC200FA4D02 /* NoticesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticesViewController.swift; sourceTree = "<group>"; };
+		D6AA620E2852701C00FA4D02 /* NoticesCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticesCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D6AA6210285270E200FA4D02 /* NoticesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticesCollectionView.swift; sourceTree = "<group>"; };
 		D6AE0F6D267CF9CA00C6B048 /* Notification Service.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Notification Service.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6AE0F6F267CF9CA00C6B048 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D6AE0F71267CF9CA00C6B048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2505,6 +2513,10 @@
 				D6B2B655283D39EA007D507B /* Notice Cell Content */,
 				D60B887227F7732100B3E1C2 /* NoticeCell.swift */,
 				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
+				D6AA6210285270E200FA4D02 /* NoticesCollectionView.swift */,
+				D6AA620E2852701C00FA4D02 /* NoticesCollectionViewLayout.swift */,
+				D6AA620A28526ED700FA4D02 /* NoticesDataSource.swift */,
+				D6AA620C28526FC200FA4D02 /* NoticesViewController.swift */,
 			);
 			path = Notices;
 			sourceTree = "<group>";
@@ -3459,6 +3471,7 @@
 				D6AA61FA285255ED00FA4D02 /* TabView.swift in Sources */,
 				D60B887527F7AF9F00B3E1C2 /* RoomCoordinator+Notices.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
+				D6AA6211285270E200FA4D02 /* NoticesCollectionView.swift in Sources */,
 				D630F2652832F98E00737977 /* PersonConnectionViewController.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
@@ -3511,6 +3524,7 @@
 				D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
+				D6AA620D28526FC200FA4D02 /* NoticesViewController.swift in Sources */,
 				D630F2682832F99F00737977 /* PersonConnectionCoordinator.swift in Sources */,
 				80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */,
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
@@ -3561,6 +3575,7 @@
 				D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */,
 				D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */,
 				8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */,
+				D6AA620B28526ED700FA4D02 /* NoticesDataSource.swift in Sources */,
 				8023C6A227EBCDEF00FD9DB6 /* MediaCoordinator.swift in Sources */,
 				D61EC0F721D316F100204BEE /* ThemeColor.swift in Sources */,
 				D61A33DF27D5703C00056242 /* ContextCueCell.swift in Sources */,
@@ -3757,6 +3772,7 @@
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
+				D6AA620F2852701D00FA4D02 /* NoticesCollectionViewLayout.swift in Sources */,
 				D67896BF2302683C0059BA75 /* ProfilePhotoCaptureViewController.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
