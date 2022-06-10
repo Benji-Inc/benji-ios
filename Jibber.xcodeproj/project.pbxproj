@@ -2481,7 +2481,7 @@
 		D6AA61F22852541100FA4D02 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D6AA61FE2852604400FA4D02 /* Connections */,
+				D6AA61FE2852604400FA4D02 /* Members */,
 				D6AA61FD2852603A00FA4D02 /* Conversations */,
 				D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */,
 				D6AA62002852616D00FA4D02 /* HomeCoordinator+Notices.swift */,
@@ -2505,7 +2505,7 @@
 			path = Conversations;
 			sourceTree = "<group>";
 		};
-		D6AA61FE2852604400FA4D02 /* Connections */ = {
+		D6AA61FE2852604400FA4D02 /* Members */ = {
 			isa = PBXGroup;
 			children = (
 				D6AA61F5285255C900FA4D02 /* ConnectionsViewController.swift */,
@@ -2515,7 +2515,7 @@
 				D60B887027F75F6D00B3E1C2 /* RoomAddCell.swift */,
 				D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */,
 			);
-			path = Connections;
+			path = Members;
 			sourceTree = "<group>";
 		};
 		D6AA61FF2852612500FA4D02 /* Notices */ = {
