@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RoomMemberCell: CollectionViewManagerCell, ManageableCell {
+class MemberCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = String
     var currentItem: String?
     

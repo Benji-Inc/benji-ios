@@ -50,7 +50,7 @@
 		8056B327281B484900358880 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8056B325281B448A00358880 /* Expression.swift */; };
 		8056B328281B488B00358880 /* MockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80665BA527B2F2F3002A8F69 /* MockMessage.swift */; };
 		8057B59B27E2A10600B23D0D /* ConversationDetailCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59527E2A10500B23D0D /* ConversationDetailCollectionViewLayout.swift */; };
-		8057B59C27E2A10600B23D0D /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59627E2A10600B23D0D /* MemberCell.swift */; };
+		8057B59C27E2A10600B23D0D /* ConversationMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59627E2A10600B23D0D /* ConversationMemberCell.swift */; };
 		8057B59D27E2A10600B23D0D /* ConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */; };
 		8057B59F27E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */; };
 		80580E1B2805E17600B7264C /* EmotionCircleCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */; };
@@ -892,7 +892,7 @@
 		D6DEC3ED27A1D9520072D9D0 /* RoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */; };
 		D6DEC3EF27A1DA5D0072D9D0 /* RoomCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */; };
-		D6DEC40227A22F540072D9D0 /* RoomMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */; };
+		D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* MemberCell.swift */; };
 		D6DEC40427A22F660072D9D0 /* RoomCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */; };
 		D6DEC40627A22F790072D9D0 /* RoomCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
@@ -1025,7 +1025,7 @@
 		8056B323281B32A600358880 /* ExpressionPhotoCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionPhotoCaptureViewController.swift; sourceTree = "<group>"; };
 		8056B325281B448A00358880 /* Expression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expression.swift; sourceTree = "<group>"; };
 		8057B59527E2A10500B23D0D /* ConversationDetailCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailCollectionViewLayout.swift; sourceTree = "<group>"; };
-		8057B59627E2A10600B23D0D /* MemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
+		8057B59627E2A10600B23D0D /* ConversationMemberCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationMemberCell.swift; sourceTree = "<group>"; };
 		8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailViewController.swift; sourceTree = "<group>"; };
 		8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationDetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionCircleCollectionView.swift; sourceTree = "<group>"; };
@@ -1449,7 +1449,7 @@
 		D6DEC3EC27A1D9520072D9D0 /* RoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewController.swift; sourceTree = "<group>"; };
 		D6DEC3EE27A1DA5D0072D9D0 /* RoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCoordinator.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
-		D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberCell.swift; sourceTree = "<group>"; };
+		D6DEC40127A22F540072D9D0 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6DEC40327A22F660072D9D0 /* RoomCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6DEC40527A22F790072D9D0 /* RoomCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
@@ -2038,7 +2038,7 @@
 				8057B59727E2A10600B23D0D /* ConversationDetailViewController.swift */,
 				D637651F27E98CB400CCDA7F /* ConversationEditCell.swift */,
 				D637651D27E983FC00CCDA7F /* ConversationInfoCell.swift */,
-				8057B59627E2A10600B23D0D /* MemberCell.swift */,
+				8057B59627E2A10600B23D0D /* ConversationMemberCell.swift */,
 				D6619E572808BFA3004151CE /* PinnedMessageCell.swift */,
 				D637651927E936CB00CCDA7F /* SectionBackgroundView.swift */,
 			);
@@ -2513,7 +2513,7 @@
 				D6AA621428528EE600FA4D02 /* ConnectionsCollectionViewLayout.swift */,
 				D6AA621628528F0D00FA4D02 /* ConnectionsCollectionView.swift */,
 				D60B887027F75F6D00B3E1C2 /* MemberAddCell.swift */,
-				D6DEC40127A22F540072D9D0 /* RoomMemberCell.swift */,
+				D6DEC40127A22F540072D9D0 /* MemberCell.swift */,
 			);
 			path = Members;
 			sourceTree = "<group>";
@@ -3473,7 +3473,7 @@
 				D69D268227FCFD70004B893B /* EmotionContentCell.swift in Sources */,
 				D61A33CB27D4F25F00056242 /* EmojiCell.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
-				8057B59C27E2A10600B23D0D /* MemberCell.swift in Sources */,
+				8057B59C27E2A10600B23D0D /* ConversationMemberCell.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* PhotoCaptureSession.swift in Sources */,
 				D687595C2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */,
@@ -3665,7 +3665,7 @@
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
 				80F88BAE26F11F02006C7677 /* ConversationController+Extensions.swift in Sources */,
 				D60B886527F4C37E00B3E1C2 /* StackedPersonView.swift in Sources */,
-				D6DEC40227A22F540072D9D0 /* RoomMemberCell.swift in Sources */,
+				D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */,
 				D646D36E27E53D750077D20B /* AttachmentOptionCell.swift in Sources */,
 				D60CA47A27EE2C6500F0871A /* EmojiNavigationViewController.swift in Sources */,
 				D60B886227F4C2EC00B3E1C2 /* MessageFooterView.swift in Sources */,

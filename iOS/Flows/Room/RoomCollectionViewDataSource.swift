@@ -29,7 +29,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
         case empty
     }
     
-    private let config = ManageableCellRegistration<RoomMemberCell>().provider
+    private let config = ManageableCellRegistration<MemberCell>().provider
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
     private let unreadConfig = ManageableCellRegistration<UnreadMessagesCell>().provider
     private let emptyConfig = ManageableCellRegistration<EmptyUnreadMessagesCell>().provider

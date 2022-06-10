@@ -19,7 +19,7 @@ class ConnectionsDataSource: CollectionViewDataSource<ConnectionsDataSource.Sect
         case add(String)
     }
     
-    private let config = ManageableCellRegistration<RoomMemberCell>().provider
+    private let config = ManageableCellRegistration<MemberCell>().provider
     private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
     
     // MARK: - Cell Dequeueing

@@ -23,7 +23,7 @@ struct Member: Hashable {
     }
 }
 
-class MemberCell: CollectionViewManagerCell, ManageableCell {
+class ConversationMemberCell: CollectionViewManagerCell, ManageableCell {
 
     typealias ItemType = Member
 
