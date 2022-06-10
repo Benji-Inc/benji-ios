@@ -1,5 +1,5 @@
 //
-//  ConnectionsCollectionView.swift
+//  MembersCollectionView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 6/9/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConnectionsCollectionView: CollectionView {
+class MembersCollectionView: CollectionView {
     
     init() {
         super.init(layout: ConnectionsCollectionViewLayout())

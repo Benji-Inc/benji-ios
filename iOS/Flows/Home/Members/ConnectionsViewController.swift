@@ -13,7 +13,7 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
                                  ConnectionsDataSource> {
     
     init() {
-        super.init(with: ConnectionsCollectionView())
+        super.init(with: MembersCollectionView())
     }
     
     required init?(coder aDecoder: NSCoder) {
