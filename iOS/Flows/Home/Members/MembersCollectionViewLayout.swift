@@ -1,5 +1,5 @@
 //
-//  ConnectionsCollectionViewLayout.swift
+//  MembersCollectionViewLayout.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 6/9/22.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-class ConnectionsCollectionViewLayout: UICollectionViewCompositionalLayout {
+class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
 
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = ConnectionsDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = MembersDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
             switch sectionType {
             case .connections:

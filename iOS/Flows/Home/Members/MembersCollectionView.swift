@@ -11,7 +11,7 @@ import Foundation
 class MembersCollectionView: CollectionView {
     
     init() {
-        super.init(layout: ConnectionsCollectionViewLayout())
+        super.init(layout: MembersCollectionViewLayout())
         self.contentInset = UIEdgeInsets(top: 100,
                                          left: 0,
                                          bottom: 100,

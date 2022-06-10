@@ -8,9 +8,9 @@
 
 import Foundation
 
-class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDataSource.SectionType,
-                                    ConnectionsDataSource.ItemType,
-                                 ConnectionsDataSource> {
+class MembersViewController: DiffableCollectionViewController<MembersDataSource.SectionType,
+                                    MembersDataSource.ItemType,
+                                 MembersDataSource> {
     
     init() {
         super.init(with: MembersCollectionView())
@@ -33,12 +33,12 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
         self.subscribeToUpdates()
     }
     
-    override func getAllSections() -> [ConnectionsDataSource.SectionType] {
-        return ConnectionsDataSource.SectionType.allCases
+    override func getAllSections() -> [MembersDataSource.SectionType] {
+        return MembersDataSource.SectionType.allCases
     }
     
-    override func retrieveDataForSnapshot() async -> [ConnectionsDataSource.SectionType : [ConnectionsDataSource.ItemType]] {
-        var data: [ConnectionsDataSource.SectionType: [ConnectionsDataSource.ItemType]] = [:]
+    override func retrieveDataForSnapshot() async -> [MembersDataSource.SectionType : [MembersDataSource.ItemType]] {
+        var data: [MembersDataSource.SectionType: [MembersDataSource.ItemType]] = [:]
         
         try? await PeopleStore.shared.initializeIfNeeded()
         
@@ -52,7 +52,7 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
             return .memberId(type.personId)
         })
         
-        let addItems: [ConnectionsDataSource.ItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
+        let addItems: [MembersDataSource.ItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
             guard let id = reservation.objectId else { return nil }
             return .add(id)
         }
@@ -82,7 +82,7 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
         self.loadPeopleTask = Task { [weak self] in
             guard let `self` = self else { return }
                         
-            var items: [ConnectionsDataSource.ItemType] = PeopleStore.shared.connectedPeople.filter({ type in
+            var items: [MembersDataSource.ItemType] = PeopleStore.shared.connectedPeople.filter({ type in
                 return !type.isCurrentUser
             }).sorted(by: { lhs, rhs in
                 guard let lhsUpdated = lhs.updatedAt,
@@ -92,7 +92,7 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
                 return .memberId(type.personId)
             })
             
-            let addItems: [ConnectionsDataSource.ItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
+            let addItems: [MembersDataSource.ItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
                 guard let id = reservation.objectId else { return nil }
                 return .add(id)
             }

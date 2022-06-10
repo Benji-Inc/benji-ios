@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConnectionsDataSource: CollectionViewDataSource<ConnectionsDataSource.SectionType, ConnectionsDataSource.ItemType> {
+class MembersDataSource: CollectionViewDataSource<MembersDataSource.SectionType, MembersDataSource.ItemType> {
     
     enum SectionType: Int, CaseIterable {
         case connections

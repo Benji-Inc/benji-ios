@@ -23,7 +23,7 @@ class HomeViewController: ViewController {
                                                              endPoint: .topCenter)
     
     lazy var conversationsVC = ConversationsViewController()
-    lazy var connectionsVC = ConnectionsViewController()
+    lazy var connectionsVC = MembersViewController()
     lazy var noticesVC = NoticesViewController()
     
     private var currentVC: UIViewController?
