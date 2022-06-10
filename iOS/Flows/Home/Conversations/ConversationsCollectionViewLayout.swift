@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConverssationsCollectionViewLayout: UICollectionViewCompositionalLayout {
+class ConversationsCollectionViewLayout: UICollectionViewCompositionalLayout {
         
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
@@ -55,7 +55,7 @@ class ConverssationsCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                    bottom: 0,
                                                                    trailing: sectionInset.doubled)
                 section.boundarySupplementaryItems = [headerItem]
-                
+
                 return section
             }
         }, configuration: config)

@@ -11,12 +11,11 @@ import Foundation
 class ConversationsCollectionView: CollectionView {
     
     init() {
-        super.init(layout: ConverssationsCollectionViewLayout())
+        super.init(layout: ConversationsCollectionViewLayout())
         
-        let top = UIWindow.topWindow()?.safeAreaInsets.top ?? 0 + 46
-        self.contentInset = UIEdgeInsets(top: top,
+        self.contentInset = UIEdgeInsets(top: 100,
                                          left: 0,
-                                         bottom: 100,
+                                         bottom: 120,
                                          right: 0)
     }
     

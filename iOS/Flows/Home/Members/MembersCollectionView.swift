@@ -14,7 +14,7 @@ class MembersCollectionView: CollectionView {
         super.init(layout: MembersCollectionViewLayout())
         self.contentInset = UIEdgeInsets(top: 100,
                                          left: 0,
-                                         bottom: 100,
+                                         bottom: 120,
                                          right: 0)
         self.showsVerticalScrollIndicator = false 
     }

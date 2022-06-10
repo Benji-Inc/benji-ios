@@ -16,7 +16,7 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
     private(set) var conversationListController: ConversationListController?
     
     init() {
-        super.init(with: ConversationCollectionView())
+        super.init(with: ConversationsCollectionView())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -202,5 +202,4 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
         
         await self.dataSource.apply(snapshot)
     }
-    
 }
