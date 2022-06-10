@@ -34,7 +34,7 @@ class RoomCollectionViewDataSource: CollectionViewDataSource<RoomSectionType, Ro
     private let unreadConfig = ManageableCellRegistration<UnreadMessagesCell>().provider
     private let emptyConfig = ManageableCellRegistration<EmptyUnreadMessagesCell>().provider
     private let headerConfig = ManageableHeaderRegistration<RoomSegmentControlHeaderView>().provider
-    private let addConfig = ManageableCellRegistration<RoomAddCell>().provider
+    private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
     private let memberHeaderConfig = ManageableHeaderRegistration<SectionDividerView>().provider
     private let memberFooterConfig = ManageableFooterRegistration<SectionDividerView>().provider
     private let noticeCell = ManageableCellRegistration<NoticeCell>().provider

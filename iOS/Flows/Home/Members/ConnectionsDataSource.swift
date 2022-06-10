@@ -20,7 +20,7 @@ class ConnectionsDataSource: CollectionViewDataSource<ConnectionsDataSource.Sect
     }
     
     private let config = ManageableCellRegistration<RoomMemberCell>().provider
-    private let addConfig = ManageableCellRegistration<RoomAddCell>().provider
+    private let addConfig = ManageableCellRegistration<MemberAddCell>().provider
     
     // MARK: - Cell Dequeueing
     

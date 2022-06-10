@@ -1,5 +1,5 @@
 //
-//  RoomAddCell.swift
+//  MemberAddCell.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 4/1/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RoomAddCell: CollectionViewManagerCell, ManageableCell {
+class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = String
     
     var currentItem: String?
