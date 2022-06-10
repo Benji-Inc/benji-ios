@@ -57,7 +57,7 @@ extension RoomCoordinator {
         
         self.addChildAndStart(coordinator) { [unowned self] people in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
-                self.roomVC.reloadPeople()
+               // self.roomVC.reloadPeople()
             }
         }
         

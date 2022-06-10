@@ -24,7 +24,13 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
         super.viewDidLoad()
         
         self.loadInitialData()
-        self.collectionView.allowsMultipleSelection = false 
+        self.collectionView.allowsMultipleSelection = false
+    }
+    
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        self.subscribeToUpdates()
     }
     
     override func getAllSections() -> [ConnectionsDataSource.SectionType] {
@@ -54,5 +60,49 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
         data[.connections]?.append(contentsOf: addItems)
         
         return data
+    }
+    
+    private func subscribeToUpdates() {
+        
+        PeopleStore.shared.$personDeleted.mainSink { [unowned self] _ in
+            self.reloadPeople()
+        }.store(in: &self.cancellables)
+        
+        PeopleStore.shared.$personAdded.mainSink { [unowned self] _ in
+            self.reloadPeople()
+        }.store(in: &self.cancellables)
+    }
+    
+    private var loadPeopleTask: Task<Void, Never>?
+    
+    func reloadPeople() {
+        
+        self.loadPeopleTask?.cancel()
+        
+        self.loadPeopleTask = Task { [weak self] in
+            guard let `self` = self else { return }
+                        
+            var items: [ConnectionsDataSource.ItemType] = PeopleStore.shared.connectedPeople.filter({ type in
+                return !type.isCurrentUser
+            }).sorted(by: { lhs, rhs in
+                guard let lhsUpdated = lhs.updatedAt,
+                      let rhsUpdated = rhs.updatedAt else { return false }
+                return lhsUpdated > rhsUpdated
+            }).compactMap({ type in
+                return .memberId(type.personId)
+            })
+            
+            let addItems: [ConnectionsDataSource.ItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
+                guard let id = reservation.objectId else { return nil }
+                return .add(id)
+            }
+            
+            items.append(contentsOf: addItems)
+            
+            var snapshot = self.dataSource.snapshot()
+            snapshot.setItems(items, in: .connections)
+            
+            await self.dataSource.apply(snapshot)
+        }
     }
 }

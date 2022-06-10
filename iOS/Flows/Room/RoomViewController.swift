@@ -80,30 +80,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
-        self.headerView.update(person: User.current()!)
         self.startLoadRecentTask()
-        self.subscribeToUpdates()
-    }
-    
-    private func subscribeToUpdates() {
-        
-        PeopleStore.shared.$personUpdated
-            .filter({ type in
-                guard let t = type else { return false }
-                return t.isCurrentUser
-            })
-            .mainSink { [unowned self] person in
-                guard let person = person else { return }
-                self.headerView.update(person: person)
-        }.store(in: &self.cancellables)
-        
-        PeopleStore.shared.$personDeleted.mainSink { [unowned self] _ in
-            self.reloadPeople()
-        }.store(in: &self.cancellables)
-        
-        PeopleStore.shared.$personAdded.mainSink { [unowned self] _ in
-            self.reloadPeople()
-        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -179,8 +156,8 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             
             self.reloadNotices()
             let _ = await self.loadNoticeTask?.value
-            self.reloadPeople()
-            let _ = await self.loadPeopleTask?.value
+            //self.reloadPeople()
+            //let _ = await self.loadPeopleTask?.value
             
             self.refreshControl.endRefreshing()
         }
@@ -214,39 +191,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             
             var snapshot = self.dataSource.snapshot()
             snapshot.setItems(items, in: .notices)
-            
-            await self.dataSource.apply(snapshot)
-        }
-    }
-    
-    private var loadPeopleTask: Task<Void, Never>?
-    
-    func reloadPeople() {
-        
-        self.loadPeopleTask?.cancel()
-        
-        self.loadPeopleTask = Task { [weak self] in
-            guard let `self` = self else { return }
-                        
-            var items: [RoomItemType] = PeopleStore.shared.connectedPeople.filter({ type in
-                return !type.isCurrentUser
-            }).sorted(by: { lhs, rhs in
-                guard let lhsUpdated = lhs.updatedAt,
-                      let rhsUpdated = rhs.updatedAt else { return false }
-                return lhsUpdated > rhsUpdated
-            }).compactMap({ type in
-                return .memberId(type.personId)
-            })
-            
-            let addItems: [RoomItemType] = PeopleStore.shared.sortedUnclaimedReservationWithoutContact.compactMap { reservation in
-                guard let id = reservation.objectId else { return nil }
-                return .add(id)
-            }
-            
-            items.append(contentsOf: addItems)
-            
-            var snapshot = self.dataSource.snapshot()
-            snapshot.setItems(items, in: .members)
             
             await self.dataSource.apply(snapshot)
         }

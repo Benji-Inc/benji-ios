@@ -34,9 +34,21 @@ class HomeHeaderView: BaseView {
         self.personView.contextCueView.currentSize = .small
         
         self.addSubview(self.button)
+        
+        PeopleStore.shared.$personUpdated
+            .filter({ type in
+                guard let t = type else { return false }
+                return t.isCurrentUser
+            })
+            .mainSink { [unowned self] person in
+                guard let person = person else { return }
+                self.update(person: person)
+        }.store(in: &self.cancellables)
+        
+        self.update(person: User.current()!)
     }
     
-    func update(person: PersonType) {
+    private func update(person: PersonType) {
         
         if let status = person.focusStatus {
             self.focusLabel.setText(status.displayName)

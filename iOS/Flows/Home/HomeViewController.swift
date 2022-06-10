@@ -43,7 +43,7 @@ class HomeViewController: ViewController {
             .removeDuplicates()
             .mainSink { [unowned self] state in
                 self.handle(state: state)
-        }.store(in: &self.cancellables)
+        }.store(in: &self.cancellables)        
     }
     
     override func viewDidLayoutSubviews() {
