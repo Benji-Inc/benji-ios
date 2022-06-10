@@ -38,6 +38,8 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
         }
         
         self.loadInitialData()
+        
+        self.collectionView.allowsMultipleSelection = false 
     }
     
     override func getAllSections() -> [ConversationsDataSource.SectionType] {

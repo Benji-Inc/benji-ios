@@ -11,7 +11,7 @@ import Transitions
 
 class HomeViewController: ViewController {
     
-    private let headerView = HomeHeaderView()
+    let headerView = HomeHeaderView()
     
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
                                                                  ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],

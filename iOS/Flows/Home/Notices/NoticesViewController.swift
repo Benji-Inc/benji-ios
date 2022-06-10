@@ -20,6 +20,12 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.collectionView.allowsMultipleSelection = false 
+    }
+    
     override func getAllSections() -> [NoticesDataSource.SectionType] {
         return NoticesDataSource.SectionType.allCases
     }
@@ -47,4 +53,38 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
         
         return data
     }
+    
+    private var loadNoticeTask: Task<Void, Never>?
+    
+    func reloadNotices() {
+        
+        self.loadNoticeTask?.cancel()
+        
+        self.loadNoticeTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            try? await NoticeStore.shared.initializeIfNeeded()
+            var notices = NoticeStore.shared.getAllNotices().filter({ notice in
+                return notice.type != .unreadMessages
+            })
+            if notices.isEmpty {
+                let empty = SystemNotice(createdAt: Date(),
+                                         notice: nil,
+                                         type: .system,
+                                         priority: 0,
+                                         attributes: [:])
+                notices = [empty]
+            }
+            
+            let items: [NoticesDataSource.ItemType] = notices.compactMap({ notice in
+                return .notice(notice)
+            })
+            
+            var snapshot = self.dataSource.snapshot()
+            snapshot.setItems(items, in: .notices)
+            
+            await self.dataSource.apply(snapshot)
+        }
+    }
+    
 }

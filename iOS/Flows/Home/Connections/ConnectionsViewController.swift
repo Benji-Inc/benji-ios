@@ -24,6 +24,7 @@ class ConnectionsViewController: DiffableCollectionViewController<ConnectionsDat
         super.viewDidLoad()
         
         self.loadInitialData()
+        self.collectionView.allowsMultipleSelection = false 
     }
     
     override func getAllSections() -> [ConnectionsDataSource.SectionType] {

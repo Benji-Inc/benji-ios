@@ -40,86 +40,100 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         case .conversation, .thread:
             let messageID = deepLink.messageId
             guard let conversationId = deepLink.conversationId else { break }
-            //self.presentConversation(with: conversationId, messageId: messageID, openReplies: target == .thread)
+            self.presentConversation(with: conversationId, messageId: messageID, openReplies: target == .thread)
         case .wallet:
-            break
-           // self.presentWallet()
+            self.presentWallet()
         case .profile:
-            break
-//            Task {
-//                guard let personId = self.deepLink?.personId,
-//                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
-//                self.presentProfile(for: person)
-//            }
+            Task {
+                guard let personId = self.deepLink?.personId,
+                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                self.presentProfile(for: person)
+            }
         default:
             break
         }
     }
     
     private func setupHandlers() {
-//        self.roomVC.dataSource.messageContentDelegate = self
-//        
-//        self.roomVC.headerView.button.didSelect { [unowned self] in
-//            guard let user = User.current() else { return }
-//            self.presentProfile(for: user)
-//        }
-//        
-//        self.roomVC.dataSource.didSelectRightOption = { [unowned self] notice in
-//            self.handleRightOption(with: notice)
-//        }
-//        
-//        self.roomVC.dataSource.didSelectRemoveOption = { [unowned self] notice in
-//            NoticeStore.shared.delete(notice: notice)
-//            self.roomVC.reloadNotices()
-//        }
-//        
-//        self.roomVC.dataSource.didSelectLeftOption = { [unowned self] notice in
-//            self.handleLeftOption(with: notice)
-//        }
-//        
-//        self.roomVC.dataSource.didSelectAddConversation = { [unowned self] in
+        self.homeVC.conversationsVC.dataSource.messageContentDelegate = self
+        self.homeVC.noticesVC.dataSource.messageContentDelegate = self
+        
+        self.homeVC.headerView.button.didSelect { [unowned self] in
+            guard let user = User.current() else { return }
+            self.presentProfile(for: user)
+        }
+        
+        self.homeVC.noticesVC.dataSource.didSelectRightOption = { [unowned self] notice in
+            self.handleRightOption(with: notice)
+        }
+        
+        self.homeVC.noticesVC.dataSource.didSelectRemoveOption = { [unowned self] notice in
+            NoticeStore.shared.delete(notice: notice)
+            self.homeVC.noticesVC.reloadNotices()
+        }
+        
+        self.homeVC.noticesVC.dataSource.didSelectLeftOption = { [unowned self] notice in
+            self.handleLeftOption(with: notice)
+        }
+        
+//        self.homeVC.conversationsVC.dataSource.didSelectAddConversation = { [unowned self] in
 //            Task {
 //                guard let conversation = try? await JibberChatClient.shared.createNewConversation() else { return }
 //                self.presentConversation(with: conversation.cid.description, messageId: nil)
 //            }
 //        }
-//        
+        
 //        self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in
 //            self.presentPeoplePicker()
 //        }
-//    
-//        self.roomVC.$selectedItems.mainSink { [unowned self] items in
-//            guard let itemType = items.first else { return }
-//            switch itemType {
-//            case .memberId(let personId):
-//                Task {
-//                    guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else {
-//                        return
-//                    }
-//                    self.presentProfile(for: person)
-//                }
-//            case .conversation(let cid):
-//                self.presentConversation(with: cid.description, messageId: nil)
-//            case .unreadMessages(let model):
-//                self.presentConversation(with: model.conversationId, messageId: model.messageIds.first)
-//            case .add(_):
-//                self.presentPeoplePicker()
-//            case .notice(let notice):
-//                switch notice.type {
-//                case .timeSensitiveMessage:
-//                    guard let conversationId = notice.attributes?["cid"] as? String,
-//                          let messageId = notice.attributes?["messageId"] as? String else { return }
-//                    
-//                    self.presentConversation(with: conversationId, messageId: messageId)
-//                    NoticeStore.shared.delete(notice: notice)
-//                    self.roomVC.reloadNotices()
-//                default:
-//                    break
-//                }
-//            default:
-//                break
-//            }
-//        }.store(in: &self.cancellables)
+        
+        self.homeVC.connectionsVC.$selectedItems.mainSink { [unowned self] items in
+            guard let itemType = items.first else { return }
+            switch itemType {
+            case .memberId(let personId):
+                logDebug(personId)
+                Task {
+                    guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else {
+                        return
+                    }
+                    self.presentProfile(for: person)
+                }
+            case .add(_):
+                self.presentPeoplePicker()
+            }
+        }.store(in: &self.cancellables)
+        
+        self.homeVC.conversationsVC.$selectedItems.mainSink { [unowned self] items in
+            guard let itemType = items.first else { return }
+            
+            switch itemType {
+            case .conversation(let conversationId):
+                self.presentConversation(with: conversationId, messageId: nil)
+            case .unreadMessages(let model):
+                self.presentConversation(with: model.conversationId, messageId: model.messageIds.first)
+            case .empty:
+                break
+            }
+            
+        }.store(in: &self.cancellables)
+        
+        self.homeVC.noticesVC.$selectedItems.mainSink { [unowned self] items in
+            guard let itemType = items.first else { return }
+            switch itemType {
+            case .notice(let notice):
+                switch notice.type {
+                case .timeSensitiveMessage:
+                    guard let conversationId = notice.attributes?["cid"] as? String,
+                          let messageId = notice.attributes?["messageId"] as? String else { return }
+                    
+                    self.presentConversation(with: conversationId, messageId: messageId)
+                    NoticeStore.shared.delete(notice: notice)
+                    self.homeVC.noticesVC.reloadNotices()
+                default:
+                    break
+                }
+            }
+        }.store(in: &self.cancellables)
     }
 }
 

@@ -78,4 +78,15 @@ enum ImageSymbol: String, ImageDisplayable {
         let combined = config.applying(multi)
         return combined
     }
+    
+    var highlightSymbol: ImageSymbol? {
+        switch self {
+        case .bolt:
+            return .boltFill
+        case .rectangleStack:
+            return .rectangleStackFill
+        default:
+            return nil 
+        }
+    }
 }
