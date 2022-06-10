@@ -14,7 +14,7 @@ class NoticeContentView: BaseView {
     var didSelectPrimaryOption: CompletionOptional = nil
     var didSelectSecondaryOption: CompletionOptional = nil
     
-    private let removeButton = SymbolButton()
+    private let removeButton = ThemeButton()
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -22,7 +22,14 @@ class NoticeContentView: BaseView {
         self.set(backgroundColor: .B6)
         self.layer.cornerRadius = Theme.cornerRadius
         
-        self.removeButton.set(symbol: .xMarkCircleFill, pointSize: 26)
+        var config = ImageSymbol.xMarkCircleFill.defaultConfig
+        config = config?.applying(UIImage.SymbolConfiguration.init(pointSize: 26))
+        
+        self.removeButton.set(style: .image(symbol: .xMarkCircleFill,
+                                            palletteColors: [.whiteWithAlpha],
+                                            pointSize: 26,
+                                            backgroundColor: .clear))
+
         self.removeButton.didSelect { [unowned self] in
             self.didSelectRemove?()
         }

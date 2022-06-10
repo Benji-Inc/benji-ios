@@ -14,8 +14,8 @@ import UIKit
 
 enum ButtonStyle {
     case image(symbol: ImageSymbol,
-               config: UIImage.SymbolConfiguration?,
-               hightlightConfig: UIImage.SymbolConfiguration?,
+               palletteColors: [ThemeColor],
+               pointSize: CGFloat,
                backgroundColor: ThemeColor)
     
     case normal(color: ThemeColor, text: Localized)
@@ -69,7 +69,16 @@ class ThemeButton: UIButton, Statusable {
         self.style = style
 
         switch style {
-        case .image(let symbol, let config, let highlightConfig, let backgroundColor):
+        case .image(let symbol, let symbolColors, let pointSize, let backgroundColor):
+            
+            var config = UIImage.SymbolConfiguration(pointSize: pointSize)
+            var highlightConfig = UIImage.SymbolConfiguration(pointSize: pointSize * 0.9)
+            
+            let colors = symbolColors.map { color in
+                return color.color
+            }
+            config = config.applying(UIImage.SymbolConfiguration.init(paletteColors: colors))
+            highlightConfig = highlightConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: colors))
             
             self.setImage(symbol.image, for: .normal)
             

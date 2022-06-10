@@ -28,15 +28,11 @@ class TabView: BaseView {
         self.addSubview(self.darkblur)
         self.addSubview(self.membersButton)
         
-        var config = UIImage.SymbolConfiguration(pointSize: 25)
-        var highlightConfig = UIImage.SymbolConfiguration(pointSize: 23)
-                                        
-        config = config.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
-        highlightConfig = highlightConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
+        let pointSize: CGFloat = 25
         
         self.membersButton.set(style: .image(symbol: .person3,
-                                             config: config,
-                                             hightlightConfig: highlightConfig,
+                                             palletteColors: [.white],
+                                             pointSize: pointSize,
                                              backgroundColor: .clear))
         
         self.addSubview(self.shortcutButton)
@@ -46,14 +42,14 @@ class TabView: BaseView {
         shortcutHightlightConfig = shortcutHightlightConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
         
         self.shortcutButton.set(style: .image(symbol: .bolt,
-                                              config: shortcutConfig,
-                                              hightlightConfig: shortcutHightlightConfig,
+                                              palletteColors: [.white],
+                                              pointSize: 30,
                                               backgroundColor: .D6))
         
         self.addSubview(self.conversationsButton)
         self.conversationsButton.set(style: .image(symbol: .rectangleStack,
-                                                   config: config,
-                                                   hightlightConfig: highlightConfig,
+                                                   palletteColors: [.white],
+                                                   pointSize: pointSize,
                                                    backgroundColor: .clear))
         
         self.setupHandlers()
