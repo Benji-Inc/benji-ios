@@ -87,7 +87,7 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
 //            self.presentPeoplePicker()
 //        }
         
-        self.homeVC.connectionsVC.$selectedItems.mainSink { [unowned self] items in
+        self.homeVC.membersVC.$selectedItems.mainSink { [unowned self] items in
             guard let itemType = items.first else { return }
             switch itemType {
             case .memberId(let personId):

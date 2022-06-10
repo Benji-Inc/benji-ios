@@ -23,7 +23,7 @@ class HomeViewController: ViewController {
                                                              endPoint: .topCenter)
     
     lazy var conversationsVC = ConversationsViewController()
-    lazy var connectionsVC = MembersViewController()
+    lazy var membersVC = MembersViewController()
     lazy var noticesVC = NoticesViewController()
     
     private var currentVC: UIViewController?
@@ -94,7 +94,7 @@ class HomeViewController: ViewController {
             
             switch state {
             case .connections:
-                self.currentVC = self.connectionsVC
+                self.currentVC = self.membersVC
             case .shortcut:
                 // show shortcuts
                 break
