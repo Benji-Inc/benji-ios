@@ -13,6 +13,10 @@ import Localization
 import UIKit
 
 enum ButtonStyle {
+    case image(symbol: ImageSymbol,
+               config: UIImage.SymbolConfiguration?,
+               backgroundColor: ThemeColor)
+    
     case normal(color: ThemeColor, text: Localized)
     case custom(color: ThemeColor, textColor: ThemeColor, text: Localized)
 }
@@ -64,6 +68,21 @@ class ThemeButton: UIButton, Statusable {
         self.style = style
 
         switch style {
+        case .image(let symbol, let config, let backgroundColor):
+            
+            self.setImage(symbol.image, for: .normal)
+            self.setImage(symbol.highlightSymbol?.image, for: .highlighted)
+            
+            self.setPreferredSymbolConfiguration(config, forImageIn: .normal)
+            self.setPreferredSymbolConfiguration(config, forImageIn: .highlighted)
+            
+            if backgroundColor != .clear {
+                self.setBackground(color: backgroundColor.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
+            }
+
+            self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+            self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
+            
         case .custom(let color, let textColor, let text):
             self.setImage(nil, for: .normal)
             self.defaultColor = color
@@ -81,13 +100,12 @@ class ThemeButton: UIButton, Statusable {
             normalString.addAttribute(.foregroundColor, value: textColor.color.resolvedColor(with: self.traitCollection))
             highlightedString.addAttribute(.foregroundColor, value: textColor.color.resolvedColor(with: self.traitCollection))
     
-            
             if color != .clear {
                 self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
             }
 
-            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
-            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
+            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
 
             self.setAttributedTitle(normalString, for: .normal)
             self.setAttributedTitle(highlightedString, for: .highlighted)
@@ -108,14 +126,13 @@ class ThemeButton: UIButton, Statusable {
 
             normalString.addAttribute(.foregroundColor, value: ThemeColor.white.color.resolvedColor(with: self.traitCollection))
             highlightedString.addAttribute(.foregroundColor, value: ThemeColor.white.color.resolvedColor(with: self.traitCollection))
-    
             
             if color != .clear {
                 self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
             }
 
-            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
-            self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
+            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
 
             self.setAttributedTitle(normalString, for: .normal)
             self.setAttributedTitle(highlightedString, for: .highlighted)

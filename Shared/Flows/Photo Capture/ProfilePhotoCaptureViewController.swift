@@ -388,9 +388,9 @@ class PhotoErrorView: BaseView {
 
         #if !NOTIFICATION
         guard let superview = UIWindow.topWindow() else { return }
-        self.label.setSize(withWidth: superview.width - Theme.contentOffset.doubled)
+        self.label.setSize(withWidth: superview.width - Theme.ContentOffset.long.value.doubled)
 
-        self.size = CGSize(width: self.label.width + Theme.contentOffset, height: self.label.height + Theme.contentOffset)
+        self.size = CGSize(width: self.label.width + Theme.ContentOffset.long.value, height: self.label.height + Theme.ContentOffset.long.value)
 
         self.label.centerOnXAndY()
         self.centerOnX()
