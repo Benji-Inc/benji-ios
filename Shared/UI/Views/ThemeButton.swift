@@ -15,6 +15,7 @@ import UIKit
 enum ButtonStyle {
     case image(symbol: ImageSymbol,
                config: UIImage.SymbolConfiguration?,
+               hightlightConfig: UIImage.SymbolConfiguration?,
                backgroundColor: ThemeColor)
     
     case normal(color: ThemeColor, text: Localized)
@@ -68,20 +69,22 @@ class ThemeButton: UIButton, Statusable {
         self.style = style
 
         switch style {
-        case .image(let symbol, let config, let backgroundColor):
+        case .image(let symbol, let config, let highlightConfig, let backgroundColor):
             
             self.setImage(symbol.image, for: .normal)
+            
             self.setImage(symbol.highlightSymbol?.image, for: .highlighted)
+            self.setImage(symbol.highlightSymbol?.image, for: .selected)
             
             self.setPreferredSymbolConfiguration(config, forImageIn: .normal)
-            self.setPreferredSymbolConfiguration(config, forImageIn: .highlighted)
+            
+            self.setPreferredSymbolConfiguration(highlightConfig, forImageIn: .highlighted)
             
             if backgroundColor != .clear {
                 self.setBackground(color: backgroundColor.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
+                self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+                self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
             }
-
-            self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
-            self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
             
         case .custom(let color, let textColor, let text):
             self.setImage(nil, for: .normal)

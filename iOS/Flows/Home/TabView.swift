@@ -11,78 +11,106 @@ import Foundation
 class TabView: BaseView {
     
     let darkblur = DarkBlurView()
-    let connectionsButton = SymbolButton(symbol: .person3)
-    let conversationsButton = SymbolButton(symbol: .rectangleStack)
+    let membersButton = ThemeButton()
+    let conversationsButton = ThemeButton()
     let shortcutButton = ThemeButton()
     
     enum State {
-        case connections
-        case shortcut
+        case members
         case conversations
     }
     
-    @Published var state: State = .connections
+    @Published var state: State = .members
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.darkblur)
-        self.addSubview(self.connectionsButton)
-        self.connectionsButton.set(symbol: .person3, pointSize: 38)
+        self.addSubview(self.membersButton)
+        
+        var config = UIImage.SymbolConfiguration(pointSize: 25)
+        var highlightConfig = UIImage.SymbolConfiguration(pointSize: 23)
+                                        
+        config = config.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
+        highlightConfig = highlightConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
+        
+        self.membersButton.set(style: .image(symbol: .person3,
+                                             config: config,
+                                             hightlightConfig: highlightConfig,
+                                             backgroundColor: .clear))
         
         self.addSubview(self.shortcutButton)
-        let config = UIImage.SymbolConfiguration(pointSize: 40)
+        var shortcutConfig = UIImage.SymbolConfiguration(pointSize: 30)
+        var shortcutHightlightConfig = UIImage.SymbolConfiguration(pointSize: 28)
+        shortcutConfig = shortcutConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
+        shortcutHightlightConfig = shortcutHightlightConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
         
-        self.shortcutButton.set(style: .image(symbol: .bolt, config: config, backgroundColor: .D6))
-        //self.shortcutButton.set(symbol: .bolt, pointSize: 40)
-        //self.shortcutButton.setb
+        self.shortcutButton.set(style: .image(symbol: .bolt,
+                                              config: shortcutConfig,
+                                              hightlightConfig: shortcutHightlightConfig,
+                                              backgroundColor: .D6))
         
         self.addSubview(self.conversationsButton)
-        self.conversationsButton.set(symbol: .rectangleStack, pointSize: 30)
+        self.conversationsButton.set(style: .image(symbol: .rectangleStack,
+                                                   config: config,
+                                                   hightlightConfig: highlightConfig,
+                                                   backgroundColor: .clear))
         
-        self.connectionsButton.didSelect { [unowned self] in
-            self.state = .connections
+        self.setupHandlers()
+    }
+    
+    private func setupHandlers() {
+        self.membersButton.didSelect { [unowned self] in
+            self.state = .members
         }
         
-//        self.shortcutButton.didSelect { [unowned self] in
-//            self.state = .shortcut
-//        }
-//
+        self.shortcutButton.didSelect { [unowned self] in
+            //self.state = .shortcut
+        }
+
         self.conversationsButton.didSelect { [unowned self] in
             self.state = .conversations
         }
+        
+        self.$state
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+            self.handle(state: state)
+        }.store(in: &self.cancellables)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.roundCorners()
+        self.makeRound()
         
         self.darkblur.expandToSuperviewSize()
         
-        self.shortcutButton.squaredSize = self.height - Theme.ContentOffset.standard.value.doubled
+        self.shortcutButton.squaredSize = self.height - Theme.ContentOffset.long.value.doubled
         self.shortcutButton.centerOnXAndY()
         self.shortcutButton.makeRound()
         
-        self.connectionsButton.squaredSize = self.height
-        self.connectionsButton.centerX = self.halfWidth.half
-        self.connectionsButton.centerOnY()
+        let buttonWidth = (self.width - self.shortcutButton.width) * 0.4
         
+        self.membersButton.height = self.height
+        self.membersButton.width = buttonWidth
+        self.membersButton.pin(.left)
+        self.membersButton.centerOnY()
         
-        
-        self.conversationsButton.squaredSize = self.height
-        self.conversationsButton.centerX = self.width - self.halfWidth.half
+        self.conversationsButton.height = self.height
+        self.conversationsButton.width = buttonWidth
+        self.conversationsButton.pin(.right)
         self.conversationsButton.centerOnY()
     }
     
     private func handle(state: State) {
         switch state {
-        case .connections:
-            break
-        case .shortcut:
-            break
+        case .members:
+            self.membersButton.isSelected = true
+            self.conversationsButton.isSelected = false
         case .conversations:
-            break
+            self.membersButton.isSelected = false
+            self.conversationsButton.isSelected = true
         }
     }
 }

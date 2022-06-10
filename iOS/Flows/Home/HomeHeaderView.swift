@@ -16,13 +16,6 @@ class HomeHeaderView: BaseView {
     let focusCircle = BaseView()
     
     let personView = BorderedPersonView()
-    var cancellables = Set<AnyCancellable>()
-    
-    deinit {
-        self.cancellables.forEach { (cancellable) in
-            cancellable.cancel()
-        }
-    }
     
     override func initializeSubviews() {
         super.initializeSubviews()

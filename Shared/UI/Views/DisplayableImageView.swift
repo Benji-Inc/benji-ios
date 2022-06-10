@@ -48,8 +48,6 @@ class DisplayableImageView: BaseView {
     private let blurView = BlurView()
     private let animationView = AnimationView()
 
-    var cancellables = Set<AnyCancellable>()
-
     /// The current task that is asynchronously setting the displayable.
     private var displayableTask: Task<Void, Never>?
 

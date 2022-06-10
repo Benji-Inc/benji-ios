@@ -12,7 +12,6 @@ import Combine
 class MessageDeliveryTypeBadgeView: BaseView {
 
     @Published var deliveryType: MessageDeliveryType?
-    private var cancellables = Set<AnyCancellable>()
 
     private let imageView = SymbolImageView()
     private let label = ThemeLabel(font: .small)

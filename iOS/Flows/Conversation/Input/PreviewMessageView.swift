@@ -28,7 +28,6 @@ class PreviewMessageView: SpeechBubbleView {
         }
     }
     @Published var messageKind: MessageKind?
-    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()

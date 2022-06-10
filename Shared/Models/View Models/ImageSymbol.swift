@@ -85,6 +85,8 @@ enum ImageSymbol: String, ImageDisplayable {
             return .boltFill
         case .rectangleStack:
             return .rectangleStackFill
+        case .person3:
+            return .person3Fill
         default:
             return nil 
         }

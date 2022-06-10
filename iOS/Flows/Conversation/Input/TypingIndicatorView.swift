@@ -13,16 +13,9 @@ class TypingIndicatorView: BaseView {
     
     private let label = ThemeLabel(font: .small)
     
-    var cancellables = Set<AnyCancellable>()
     var subscriptions = Set<AnyCancellable>()
     
     var controller: ConversationController?
-    
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-    }
     
     override func initializeSubviews() {
         super.initializeSubviews()

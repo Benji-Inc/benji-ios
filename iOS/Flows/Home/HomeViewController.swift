@@ -58,7 +58,7 @@ class HomeViewController: ViewController {
         self.topGradientView.pin(.top)
         
         self.tabView.height = 80
-        self.tabView.width = Theme.getPaddedWidth(with: self.view.width)
+        self.tabView.width = self.view.width - Theme.ContentOffset.screenPadding.value.doubled
         self.tabView.pinToSafeAreaBottom()
         self.tabView.centerOnX()
         
@@ -93,11 +93,8 @@ class HomeViewController: ViewController {
             }
             
             switch state {
-            case .connections:
+            case .members:
                 self.currentVC = self.membersVC
-            case .shortcut:
-                // show shortcuts
-                break
             case .conversations:
                 self.currentVC = self.conversationsVC
             }

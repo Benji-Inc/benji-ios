@@ -37,8 +37,6 @@ class ToastView: BaseView, ToastViewable {
     var maxHeight: CGFloat?
     var screenOffset: CGFloat = 50
 
-    var cancellables = Set<AnyCancellable>()
-
     var state: ToastState = .hidden {
         didSet {
             if self.state != oldValue {

@@ -8,15 +8,24 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class BaseView: UIView {
 
     /// A collection of tasks that this view might run. Tasks added to the pool will automatically be cancelled if this view is removed from a window.
     var taskPool = TaskPool()
+    
+    var cancellables = Set<AnyCancellable>()
 
     init() {
         super.init(frame: .zero)
         self.initializeSubviews()
+    }
+    
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
