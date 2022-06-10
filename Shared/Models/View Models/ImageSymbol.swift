@@ -43,7 +43,12 @@ enum ImageSymbol: String, ImageDisplayable {
     case noSign = "nosign"
     case squareAndUp = "square.and.arrow.up"
     case infoCircle = "info.circle"
-    
+    case person3 = "person.3"
+    case person3Fill = "person.3.fill"
+    case rectangleStack = "rectangle.stack"
+    case rectangleStackFill = "rectangle.stack.fill"
+    case bolt = "bolt"
+    case boltFill = "bolt.fill"
     
     var image: UIImage? {
         return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
@@ -55,7 +60,7 @@ enum ImageSymbol: String, ImageDisplayable {
         switch self {
         case .bellSlash:
             colors = [.whiteWithAlpha, .white]
-        case .bell:
+        case .bell, .person3, .person3Fill, .bolt, .boltFill, .rectangleStack, .rectangleStackFill:
             colors = [.white]
         case .bellBadge:
             colors = [.red, .white]
