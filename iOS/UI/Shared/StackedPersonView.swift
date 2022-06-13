@@ -10,6 +10,8 @@ import Foundation
 
 class StackedPersonView: BaseView {
     
+    static let itemHeight: CGFloat = 22
+    
     private let label = ThemeLabel(font: .small)
     private var peopleIds: [String] = []
     var max: Int = 3
@@ -53,7 +55,7 @@ class StackedPersonView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.height = 22
+        self.height = StackedPersonView.itemHeight
         
         var xOffset: CGFloat = 0
         var count: Int = 0

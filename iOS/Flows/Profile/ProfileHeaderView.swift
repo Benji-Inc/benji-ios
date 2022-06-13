@@ -25,7 +25,7 @@ class ProfileHeaderView: BaseView {
         
     let personView = BorderedPersonView()
     
-    let menuButton = SymbolButton(symbol: .ellipsis)
+    let menuButton = ThemeButton()
     
     var didSelectUpdateProfilePicture: CompletionOptional = nil
     var didSelectWallet: CompletionOptional = nil
@@ -58,8 +58,7 @@ class ProfileHeaderView: BaseView {
         self.addSubview(self.personView)
         
         self.addSubview(self.menuButton)
-        self.menuButton.set(tintColor: .whiteWithAlpha)
-        self.menuButton.pointSize = 24
+        self.menuButton.set(style: .image(symbol: .ellipsis, palletteColors: [.whiteWithAlpha], pointSize: 22, backgroundColor: .clear))
         self.menuButton.showsMenuAsPrimaryAction = true
     }
     

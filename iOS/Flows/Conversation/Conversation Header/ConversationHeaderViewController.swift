@@ -19,7 +19,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     let button = ThemeButton()
     let topicLabel = ThemeLabel(font: .small)
     
-    let closeButton = SymbolButton(symbol: .chevronDownCircle)
+    let closeButton = ThemeButton()
     
     private var state: ConversationUIState = .read
         
@@ -42,8 +42,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.view.addSubview(self.button)
         
         self.view.addSubview(self.closeButton)
-        self.closeButton.pointSize = 24
-        self.closeButton.set(tintColor: .whiteWithAlpha)
+        self.closeButton.set(style: .image(symbol: .chevronDownCircle,
+                                           palletteColors: [.whiteWithAlpha],
+                                           pointSize: 22,
+                                           backgroundColor: .clear))
         
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()

@@ -11,7 +11,7 @@ import UIKit
 
 class VibrancyView: BaseView {
 
-    let blurView = BlurView()
+    let blurView = DarkBlurView()
     let effectView = VisualEffectView()
 
     override func initializeSubviews() {
@@ -72,7 +72,7 @@ class BlurView: UIVisualEffectView {
 class VisualEffectView: UIVisualEffectView {
 
     init() {
-        super.init(effect: Theme.blurEffect)
+        super.init(effect: Theme.darkBlurEffect)
     }
 
     required init?(coder: NSCoder) {

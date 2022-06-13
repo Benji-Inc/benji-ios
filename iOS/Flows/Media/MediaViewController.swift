@@ -31,8 +31,8 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                                                   startPoint: .bottomCenter,
                                                   endPoint: .topCenter)
     let messagePreview = MessagePreview()
-    let menuButton = SymbolButton(symbol: .ellipsis)
-
+    
+    let menuButton = ThemeButton()
     var didSelectShare: CompletionOptional = nil 
 
     init(items: [MediaItem],
@@ -119,7 +119,7 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
         }
         
         self.headerView.addSubview(self.menuButton)
-        self.menuButton.set(tintColor: .white)
+        self.menuButton.set(style: .image(symbol: .ellipsis, palletteColors: [.white], pointSize: 22, backgroundColor: .clear))
         self.menuButton.showsMenuAsPrimaryAction = true
         self.menuButton.menu = self.buildMenu()
     }
@@ -154,7 +154,6 @@ class MediaViewController: LightboxController, Dismissable, TransitionableViewCo
                 
         self.headerView.closeButton.pin(.left, offset: .xtraLong)
         
-        self.menuButton.pointSize = self.headerView.closeButton.height
         self.menuButton.squaredSize = 44
         self.menuButton.pin(.right, offset: .standard)
         self.menuButton.centerY = self.headerView.closeButton.centerY
