@@ -52,10 +52,12 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        let cornerRadius = self.contentView.height * 0.25
+        
         self.imageView.squaredSize = self.contentView.height * 0.32
         self.imageView.centerOnXAndY()
         
-        self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.halfHeight).cgPath
-        self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.halfHeight).cgPath
+        self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
+        self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
     }
 }

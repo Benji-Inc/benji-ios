@@ -48,12 +48,13 @@ class BorderedPersonView: PersonView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        let cornerRadius = self.height * 0.25
         
         self.pulseLayer.frame = self.bounds
-        self.pulseLayer.cornerRadius = self.halfHeight
-        self.imageView.makeRound()
-        self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.halfHeight).cgPath
-        self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.halfHeight).cgPath
+        self.pulseLayer.cornerRadius = cornerRadius
+        self.imageView.layer.cornerRadius = cornerRadius
+        self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
+        self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
         #if IOS
         self.contextCueView.pin(.right, offset: .negative(.short))
         self.contextCueView.pin(.bottom, offset: .negative(.short))
