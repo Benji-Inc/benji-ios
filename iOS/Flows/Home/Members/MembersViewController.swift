@@ -12,6 +12,10 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
                                     MembersDataSource.ItemType,
                                  MembersDataSource> {
     
+    var membersCollectionView: MembersCollectionView {
+        return self.collectionView as! MembersCollectionView
+    }
+    
     init() {
         super.init(with: MembersCollectionView())
     }
@@ -22,14 +26,26 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.loadInitialData()
+        self.membersCollectionView.prepareForReveal()
         self.collectionView.allowsMultipleSelection = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        once(caller: self, token: "loadMembers") {
+            self.loadInitialData()
+        }
+    }
+    
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersDataSource.SectionType, MembersDataSource.ItemType>) -> AnimationCycle? {
+        return nil 
     }
     
     override func collectionViewDataWasLoaded() {
         super.collectionViewDataWasLoaded()
         
+        self.membersCollectionView.reveal()
         self.subscribeToUpdates()
     }
     
@@ -42,7 +58,9 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
         
         try? await PeopleStore.shared.initializeIfNeeded()
         
-        data[.connections] = PeopleStore.shared.connectedPeople.filter({ type in
+        var items: [MembersDataSource.ItemType] = [.memberId(User.current()!.objectId!)]
+        
+        let connections: [MembersDataSource.ItemType] = PeopleStore.shared.connectedPeople.filter({ type in
             return !type.isCurrentUser
         }).sorted(by: { lhs, rhs in
             guard let lhsUpdated = lhs.updatedAt,
@@ -57,7 +75,10 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
             return .add(id)
         }
         
-        data[.connections]?.append(contentsOf: addItems)
+        items.append(contentsOf: connections)
+        items.append(contentsOf: addItems)
+        
+        data[.members] = items
         
         return data
     }
@@ -82,7 +103,9 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
         self.loadPeopleTask = Task { [weak self] in
             guard let `self` = self else { return }
                         
-            var items: [MembersDataSource.ItemType] = PeopleStore.shared.connectedPeople.filter({ type in
+            var items: [MembersDataSource.ItemType] = [.memberId(User.current()!.objectId!)]
+            
+            let connections: [MembersDataSource.ItemType] = PeopleStore.shared.connectedPeople.filter({ type in
                 return !type.isCurrentUser
             }).sorted(by: { lhs, rhs in
                 guard let lhsUpdated = lhs.updatedAt,
@@ -97,10 +120,17 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
                 return .add(id)
             }
             
-            items.append(contentsOf: addItems)
+            items.append(contentsOf: connections)
+            
+            let add1: MembersDataSource.ItemType = .add("1")
+            let add2: MembersDataSource.ItemType = .add("2")
+            let add3: MembersDataSource.ItemType = .add("3")
+            let add4: MembersDataSource.ItemType = .add("4")
+            let add5: MembersDataSource.ItemType = .add("5")
+            items.append(contentsOf: [add1, add2, add3, add4, add5])
             
             var snapshot = self.dataSource.snapshot()
-            snapshot.setItems(items, in: .connections)
+            snapshot.setItems(items, in: .members)
             
             await self.dataSource.apply(snapshot)
         }

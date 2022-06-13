@@ -11,7 +11,7 @@ import Foundation
 class MembersDataSource: CollectionViewDataSource<MembersDataSource.SectionType, MembersDataSource.ItemType> {
     
     enum SectionType: Int, CaseIterable {
-        case connections
+        case members
     }
     
     enum ItemType: Hashable {

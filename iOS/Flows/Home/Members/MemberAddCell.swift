@@ -13,29 +13,49 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
     
     var currentItem: String?
     
-    private let imageView = UIImageView()
+    private let imageView = SymbolImageView(symbol: .personBadgePlus)
+    
+    lazy var shadowLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.shadowColor = ThemeColor.D6.color.cgColor
+        layer.shadowOpacity = 0.35
+        layer.shadowOffset = .zero
+        layer.shadowRadius = 6
+        return layer
+    }()
+
+    lazy var pulseLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.lineWidth = 2
+        layer.lineCap = .round
+        layer.fillColor = ThemeColor.B6.color.cgColor
+        layer.strokeColor = ThemeColor.D6.color.cgColor
+        layer.lineWidth = 2
+        layer.lineDashPattern = [4, 8]
+        return layer
+    }()
     
     override func initializeSubviews() {
         super.initializeSubviews()
+            
+        self.contentView.layer.addSublayer(self.shadowLayer)
+        self.contentView.layer.addSublayer(self.pulseLayer)
         
-        self.contentView.set(backgroundColor: .B6)
         self.contentView.addSubview(self.imageView)
-        self.imageView.contentMode = .scaleAspectFit
-        self.imageView.tintColor = ThemeColor.white.color.withAlphaComponent(0.8)
-        
-        self.contentView.layer.borderColor = ThemeColor.BORDER.color.cgColor
-        self.contentView.layer.borderWidth = 0.5
-        self.contentView.layer.cornerRadius = Theme.cornerRadius
+        self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
     }
     
     func configure(with item: String) {
-        self.imageView.image = ImageSymbol.plus.image
+        self.layoutNow()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.imageView.squaredSize = self.height * 0.32
+        self.imageView.squaredSize = self.contentView.height * 0.32
         self.imageView.centerOnXAndY()
+        
+        self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.halfHeight).cgPath
+        self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.contentView.halfHeight).cgPath
     }
 }

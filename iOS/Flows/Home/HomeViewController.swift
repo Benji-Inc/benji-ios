@@ -10,9 +10,7 @@ import Foundation
 import Transitions
 
 class HomeViewController: ViewController {
-    
-    let headerView = HomeHeaderView()
-    
+        
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
                                                                  ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                           startPoint: .topCenter,
@@ -36,7 +34,6 @@ class HomeViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
-        self.view.addSubview(self.headerView)
         self.view.addSubview(self.tabView)
         
         self.tabView.$state
@@ -49,12 +46,8 @@ class HomeViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.headerView.height = 46
-        self.headerView.expandToSuperviewWidth()
-        self.headerView.pinToSafeArea(.top, offset: .noOffset)
-        
         self.topGradientView.expandToSuperviewWidth()
-        self.topGradientView.height = self.headerView.bottom
+        self.topGradientView.height = 80
         self.topGradientView.pin(.top)
         
         self.tabView.height = 80

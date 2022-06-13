@@ -37,8 +37,8 @@ class BorderedPersonView: PersonView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.clipsToBounds = false 
-        
+        self.clipsToBounds = false
+        self.imageView.clipsToBounds = true
         self.layer.insertSublayer(self.shadowLayer, at: 0)
         self.layer.insertSublayer(self.pulseLayer, at: 2)
         #if IOS
@@ -50,9 +50,10 @@ class BorderedPersonView: PersonView {
         super.layoutSubviews()
         
         self.pulseLayer.frame = self.bounds
-        self.pulseLayer.cornerRadius = Theme.innerCornerRadius
-        self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
-        self.shadowLayer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        self.pulseLayer.cornerRadius = self.halfHeight
+        self.imageView.makeRound()
+        self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.halfHeight).cgPath
+        self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.halfHeight).cgPath
         #if IOS
         self.contextCueView.pin(.right, offset: .negative(.short))
         self.contextCueView.pin(.bottom, offset: .negative(.short))

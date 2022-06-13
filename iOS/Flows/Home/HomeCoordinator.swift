@@ -58,11 +58,6 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
         self.homeVC.conversationsVC.dataSource.messageContentDelegate = self
         self.homeVC.noticesVC.dataSource.messageContentDelegate = self
         
-        self.homeVC.headerView.button.didSelect { [unowned self] in
-            guard let user = User.current() else { return }
-            self.presentProfile(for: user)
-        }
-        
         self.homeVC.noticesVC.dataSource.didSelectRightOption = { [unowned self] notice in
             self.handleRightOption(with: notice)
         }
@@ -91,14 +86,13 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             guard let itemType = items.first else { return }
             switch itemType {
             case .memberId(let personId):
-                logDebug(personId)
                 Task {
                     guard let person = await PeopleStore.shared.getPerson(withPersonId: personId) else {
                         return
                     }
                     self.presentProfile(for: person)
                 }
-            case .add(_):
+            case .add(let reservationId):
                 self.presentPeoplePicker()
             }
         }.store(in: &self.cancellables)
