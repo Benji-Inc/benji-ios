@@ -44,18 +44,31 @@ class TabView: BaseView, HomeStateHandler {
                                              palletteColors: [.D6],
                                              pointSize: pointSize,
                                              backgroundColor: .clear))
+        self.membersButton.layer.shadowColor = ThemeColor.red.color.cgColor
+        self.membersButton.layer.shadowOpacity = 0.0
+        self.membersButton.layer.shadowOffset = .zero
+        self.membersButton.layer.shadowRadius = 6
+        
         
         self.addSubview(self.conversationsButton)
         self.conversationsButton.set(style: .image(symbol: .rectangleStack,
                                                    palletteColors: [.D6],
                                                    pointSize: pointSize,
                                                    backgroundColor: .clear))
+        self.conversationsButton.layer.shadowColor = ThemeColor.red.color.cgColor
+        self.conversationsButton.layer.shadowOpacity = 0.0
+        self.conversationsButton.layer.shadowOffset = .zero
+        self.conversationsButton.layer.shadowRadius = 6
         
         self.addSubview(self.noticesButton)
         self.noticesButton.set(style: .image(symbol: .bell,
                                              palletteColors: [.D6],
                                              pointSize: pointSize,
                                              backgroundColor: .clear))
+        self.noticesButton.layer.shadowColor = ThemeColor.red.color.cgColor
+        self.noticesButton.layer.shadowOpacity = 0.0
+        self.noticesButton.layer.shadowOffset = .zero
+        self.noticesButton.layer.shadowRadius = 6
         
         self.setupHandlers()
     }
@@ -148,6 +161,9 @@ class TabView: BaseView, HomeStateHandler {
         Task {
             async let first: () = UIView.awaitSpringAnimation(with: .standard, delay: 0.0, animations: {
                 self.barView.width = 4
+                self.buttons.forEach { button in
+                    button.layer.shadowOpacity = 0.0
+                }
                 self.layoutNow()
             })
             
@@ -157,9 +173,10 @@ class TabView: BaseView, HomeStateHandler {
             })
 
             async let third: () = UIView.awaitAnimation(with: .fast, delay: 0.35, animations: {
-                self.membersButton.alpha = self.membersButton.isSelected ? 1.0 : 0.5
-                self.conversationsButton.alpha = self.conversationsButton.isSelected ? 1.0 : 0.5
-                self.noticesButton.alpha = self.noticesButton.isSelected ? 1.0 : 0.5
+                self.buttons.forEach { button in
+                    button.layer.shadowOpacity = button.isSelected ? 0.35 : 0.0
+                    button.alpha = button.isSelected ? 1.0 : 0.5
+                }
             })
             
             let _: [()] = await [first, second, third]

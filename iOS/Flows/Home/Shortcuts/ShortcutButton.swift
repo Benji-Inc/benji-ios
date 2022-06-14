@@ -8,27 +8,38 @@
 
 import Foundation
 
-class ShortcutButton: ThemeButton, HomeStateHandler {
+class ShortcutButton: BaseView, HomeStateHandler {
+    
+    let button = ThemeButton()
+    let darkBlur = DarkBlurView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.alpha = 0
         self.transform = CGAffineTransform.init(scaleX: 1.5, y: 1.5)
-
-        var shortcutConfig = UIImage.SymbolConfiguration(pointSize: 30)
-        var shortcutHightlightConfig = UIImage.SymbolConfiguration(pointSize: 28)
-        shortcutConfig = shortcutConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
-        shortcutHightlightConfig = shortcutHightlightConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
         
-        self.set(style: .image(symbol: .bolt,
-                               palletteColors: [.white],
-                               pointSize: 30,
-                               backgroundColor: .D6))
+        self.button.set(style: .image(symbol: .bolt,
+                                      palletteColors: [.D6],
+                                      pointSize: 30,
+                                      backgroundColor: .clear))
+
+        self.layer.borderColor = ThemeColor.D6.color.cgColor
+        self.layer.borderWidth = 2
+        self.button.layer.shadowColor = ThemeColor.red.color.cgColor
+        self.button.layer.shadowOpacity = 0.15
+        self.button.layer.shadowOffset = .zero
+        self.button.layer.shadowRadius = 12
+        
+        self.insertSubview(self.darkBlur, at: 0)
+        self.insertSubview(self.button, at: 1)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.darkBlur.expandToSuperviewSize()
+        self.button.expandToSuperviewSize()
         
         self.makeRound()
     }
@@ -49,6 +60,8 @@ class ShortcutButton: ThemeButton, HomeStateHandler {
                 case .tabs, .shortcuts:
                     self.transform = .identity
                     self.alpha = 1.0
+                    
+                    self.button.isSelected = state == .shortcuts
                 }
                 
                 self.setNeedsLayout()

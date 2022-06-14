@@ -51,7 +51,7 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.view.addSubview(self.tabView)
         self.view.addSubview(self.shortcutButton)
         
-        self.shortcutButton.didSelect { [unowned self] in
+        self.shortcutButton.button.didSelect { [unowned self] in
             self.state = self.state == .shortcuts ? .tabs : .shortcuts
         }
         
