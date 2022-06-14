@@ -10,6 +10,12 @@ import Foundation
 import Transitions
 
 class HomeViewController: ViewController {
+    
+    enum State {
+        case initial
+        case tabs
+        case shortcuts
+    }
         
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
                                                                  ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
@@ -24,9 +30,13 @@ class HomeViewController: ViewController {
     lazy var membersVC = MembersViewController()
     lazy var noticesVC = NoticesViewController()
     
+    private let shortcutButton = ShortcutButton()
+    
     private var currentVC: UIViewController?
     
     let tabView = TabView()
+    
+    @Published var state: State = .initial
     
     override func initializeViews() {
         super.initializeViews()
@@ -35,12 +45,29 @@ class HomeViewController: ViewController {
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.tabView)
+        self.view.addSubview(self.shortcutButton)
+        
+        self.shortcutButton.didSelect { [unowned self] in
+            self.state = self.state == .shortcuts ? .tabs : .shortcuts
+        }
         
         self.tabView.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
+                self.handleTab(state: state)
+        }.store(in: &self.cancellables)
+        
+        self.$state
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
                 self.handle(state: state)
-        }.store(in: &self.cancellables)        
+        }.store(in: &self.cancellables)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.state = .tabs
     }
     
     override func viewDidLayoutSubviews() {
@@ -50,11 +77,30 @@ class HomeViewController: ViewController {
         self.topGradientView.height = 80
         self.topGradientView.pin(.top)
         
-        self.tabView.height = 80
-        self.tabView.width = self.view.width - Theme.ContentOffset.screenPadding.value.doubled
-        self.tabView.pinToSafeAreaBottom()
-        self.tabView.centerOnX()
+        self.shortcutButton.squaredSize = 60
+        self.shortcutButton.pin(.left, offset: .screenPadding)
+        self.shortcutButton.pinToSafeAreaBottom()
         
+        self.tabView.height = 60
+        self.tabView.width = self.view.halfWidth
+        self.tabView.pinToSafeAreaBottom()
+        
+        switch self.state {
+        case .initial:
+            
+            //self.shortcutButton.transform = CGAffineTransform.init(scaleX: 0.01, y: 0.01)
+           // self.shortcutButton.alpha = 0
+            
+            self.tabView.match(.left, to: .right, of: self.view)
+        case .tabs:
+            //self.shortcutButton.transform = .identity
+            //self.shortcutButton.alpha = 1.0
+            self.tabView.pin(.right)
+
+        case .shortcuts:
+            self.tabView.match(.left, to: .right, of: self.view)
+        }
+
         self.bottomGradientView.expandToSuperviewWidth()
         self.bottomGradientView.height = self.view.height - self.tabView.top
         self.bottomGradientView.pin(.bottom)
@@ -64,9 +110,23 @@ class HomeViewController: ViewController {
         }
     }
     
+    private var stateTask: Task<Void, Never>?
+
+    private func handle(state: State) {
+        self.stateTask?.cancel()
+        
+        self.stateTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitSpringAnimation(with: .slow) {
+                self.view.layoutNow()
+            }
+        }
+    }
+    
     private var loadTask: Task<Void, Never>?
     
-    private func handle(state: TabView.State) {
+    private func handleTab(state: TabView.State) {
         
         self.loadTask?.cancel()
         
@@ -90,6 +150,8 @@ class HomeViewController: ViewController {
                 self.currentVC = self.membersVC
             case .conversations:
                 self.currentVC = self.conversationsVC
+            case .notices:
+                break
             }
             
             guard let vc = self.currentVC else { return }

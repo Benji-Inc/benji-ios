@@ -13,6 +13,7 @@ enum ImageSymbol: String, ImageDisplayable {
     
     case bellSlash = "bell.slash"
     case bell = "bell"
+    case bellFill = "bell.fill"
     case bellBadge = "bell.badge"
     case xMarkCircleFill = "xmark.circle.fill"
     case personCircle = "person.circle"
@@ -60,7 +61,7 @@ enum ImageSymbol: String, ImageDisplayable {
         switch self {
         case .bellSlash:
             colors = [.whiteWithAlpha, .white]
-        case .bell, .person3, .person3Fill, .bolt, .boltFill, .rectangleStack, .rectangleStackFill:
+        case .bell, .bellFill, .person3, .person3Fill, .bolt, .boltFill, .rectangleStack, .rectangleStackFill:
             colors = [.white]
         case .bellBadge:
             colors = [.red, .white]
@@ -87,6 +88,8 @@ enum ImageSymbol: String, ImageDisplayable {
             return .rectangleStackFill
         case .person3:
             return .person3Fill
+        case .bell:
+            return .bellFill
         default:
             return nil 
         }
