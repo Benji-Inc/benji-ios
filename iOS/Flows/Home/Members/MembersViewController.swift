@@ -121,13 +121,7 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
             }
             
             items.append(contentsOf: connections)
-            
-            let add1: MembersDataSource.ItemType = .add("1")
-            let add2: MembersDataSource.ItemType = .add("2")
-            let add3: MembersDataSource.ItemType = .add("3")
-            let add4: MembersDataSource.ItemType = .add("4")
-            let add5: MembersDataSource.ItemType = .add("5")
-            items.append(contentsOf: [add1, add2, add3, add4, add5])
+            items.append(contentsOf: addItems)
             
             var snapshot = self.dataSource.snapshot()
             snapshot.setItems(items, in: .members)

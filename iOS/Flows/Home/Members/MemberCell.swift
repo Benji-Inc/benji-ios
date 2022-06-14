@@ -28,7 +28,11 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     
             guard let person = await PeopleStore.shared.getPerson(withPersonId: item) else { return }            
             self.personView.set(person: person)
-            self.label.setText(person.givenName)
+            if person.isCurrentUser {
+                self.label.setText(person.givenName + " (You)")
+            } else {
+                self.label.setText(person.givenName)
+            }
             self.layoutNow()
         }
     }
