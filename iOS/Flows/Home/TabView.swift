@@ -10,10 +10,12 @@ import Foundation
 
 class TabView: BaseView, HomeStateHandler {
     
-    let darkblur = DarkBlurView()
+    let darkblur = VibrancyView()
     let membersButton = ThemeButton()
     let conversationsButton = ThemeButton()
     let noticesButton = ThemeButton()
+    
+    let barView = BaseView()
     
     enum State {
         case members
@@ -31,25 +33,27 @@ class TabView: BaseView, HomeStateHandler {
         super.initializeSubviews()
         
         self.addSubview(self.darkblur)
+        self.addSubview(self.barView)
+        self.barView.set(backgroundColor: .D6)
         
         self.addSubview(self.membersButton)
         
-        let pointSize: CGFloat = 20
+        let pointSize: CGFloat = 18
         
         self.membersButton.set(style: .image(symbol: .person3,
-                                             palletteColors: [.white],
+                                             palletteColors: [.D6],
                                              pointSize: pointSize,
                                              backgroundColor: .clear))
         
         self.addSubview(self.conversationsButton)
         self.conversationsButton.set(style: .image(symbol: .rectangleStack,
-                                                   palletteColors: [.white],
+                                                   palletteColors: [.D6],
                                                    pointSize: pointSize,
                                                    backgroundColor: .clear))
         
         self.addSubview(self.noticesButton)
         self.noticesButton.set(style: .image(symbol: .bell,
-                                             palletteColors: [.white],
+                                             palletteColors: [.D6],
                                              pointSize: pointSize,
                                              backgroundColor: .clear))
         
@@ -98,6 +102,15 @@ class TabView: BaseView, HomeStateHandler {
         self.noticesButton.width = buttonWidth
         self.noticesButton.pin(.right, offset: .standard)
         self.noticesButton.centerOnY()
+        
+        self.barView.height = 2
+        self.barView.pin(.bottom)
+        
+        self.buttons.forEach { button in
+            if button.isSelected {
+                self.barView.centerX = button.centerX
+            }
+        }
     }
     
     private var stateTask: Task<Void, Never>?
@@ -111,6 +124,7 @@ class TabView: BaseView, HomeStateHandler {
             await UIView.awaitSpringAnimation(with: .slow, delay: 0.3, animations: {
                 switch state {
                 case .initial, .shortcuts:
+                    
                     self.buttons.forEach { button in
                         button.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
                         button.alpha = 0
@@ -118,7 +132,7 @@ class TabView: BaseView, HomeStateHandler {
                 case .tabs:
                     self.buttons.forEach { button in
                         button.transform = .identity
-                        button.alpha = 1.0
+                        button.alpha = button.isSelected ? 1.0 : 0.5
                     }
                 }
                 
@@ -128,6 +142,31 @@ class TabView: BaseView, HomeStateHandler {
     }
     
     private func handle(state: State) {
+        
+        self.updateButtonStates(for: state)
+        
+        Task {
+            async let first: () = UIView.awaitSpringAnimation(with: .standard, delay: 0.0, animations: {
+                self.barView.width = 4
+                self.layoutNow()
+            })
+            
+            async let second: () = UIView.awaitSpringAnimation(with: .standard, delay: 0.15, animations: {
+                self.barView.width = 20
+                self.layoutNow()
+            })
+
+            async let third: () = UIView.awaitAnimation(with: .fast, delay: 0.35, animations: {
+                self.membersButton.alpha = self.membersButton.isSelected ? 1.0 : 0.5
+                self.conversationsButton.alpha = self.conversationsButton.isSelected ? 1.0 : 0.5
+                self.noticesButton.alpha = self.noticesButton.isSelected ? 1.0 : 0.5
+            })
+            
+            let _: [()] = await [first, second, third]
+        }
+    }
+    
+    private func updateButtonStates(for state: State) {
         switch state {
         case .members:
             self.membersButton.isSelected = true
@@ -142,14 +181,5 @@ class TabView: BaseView, HomeStateHandler {
             self.conversationsButton.isSelected = false
             self.noticesButton.isSelected = true
         }
-        
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.membersButton.alpha = self.membersButton.isSelected ? 1.0 : 0.5
-            self.conversationsButton.alpha = self.conversationsButton.isSelected ? 1.0 : 0.5
-            self.noticesButton.alpha = self.noticesButton.isSelected ? 1.0 : 0.5
-        } completion: { _ in
-            
-        }
-
     }
 }

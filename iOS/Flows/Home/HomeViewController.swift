@@ -91,14 +91,15 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.shortcutButton.pinToSafeAreaBottom()
         
         self.tabView.height = 60
-        self.tabView.width = self.view.halfWidth
+        self.tabView.width = self.view.width * 0.6
         self.tabView.pinToSafeAreaBottom()
         
         switch self.state {
         case .initial:
             self.tabView.match(.left, to: .right, of: self.view)
         case .tabs:
-            self.tabView.pin(.right)
+            let offset = self.view.width * 0.05
+            self.tabView.pin(.right, offset: .negative(.custom(offset)))
         case .shortcuts:
             self.tabView.match(.left, to: .right, of: self.view)
         }

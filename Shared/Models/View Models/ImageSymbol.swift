@@ -84,12 +84,6 @@ enum ImageSymbol: String, ImageDisplayable {
         switch self {
         case .bolt:
             return .boltFill
-        case .rectangleStack:
-            return .rectangleStackFill
-        case .person3:
-            return .person3Fill
-        case .bell:
-            return .bellFill
         default:
             return nil 
         }
