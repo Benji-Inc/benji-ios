@@ -8,11 +8,14 @@
 
 import Foundation
 
-class ShortcutButton: ThemeButton {
-    
+class ShortcutButton: ThemeButton, HomeStateHandler {
+
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.alpha = 0
+        self.transform = CGAffineTransform.init(scaleX: 1.5, y: 1.5)
+
         var shortcutConfig = UIImage.SymbolConfiguration(pointSize: 30)
         var shortcutHightlightConfig = UIImage.SymbolConfiguration(pointSize: 28)
         shortcutConfig = shortcutConfig.applying(UIImage.SymbolConfiguration.init(paletteColors: [ThemeColor.white.color]))
@@ -28,5 +31,28 @@ class ShortcutButton: ThemeButton {
         super.layoutSubviews()
         
         self.makeRound()
+    }
+    
+    private var stateTask: Task<Void, Never>?
+
+    func handleHome(state: HomeState) {
+        self.stateTask?.cancel()
+        
+        self.stateTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitSpringAnimation(with: .custom(1.0), animations: {
+                switch state {
+                case .initial:
+                    self.transform = CGAffineTransform.init(scaleX: 1.5, y: 1.5)
+                    self.alpha = 0
+                case .tabs, .shortcuts:
+                    self.transform = .identity
+                    self.alpha = 1.0
+                }
+                
+                self.setNeedsLayout()
+            })
+        }
     }
 }

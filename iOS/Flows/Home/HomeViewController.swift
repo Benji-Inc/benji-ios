@@ -9,14 +9,18 @@
 import Foundation
 import Transitions
 
-class HomeViewController: ViewController {
+enum HomeState {
+    case initial
+    case tabs
+    case shortcuts
+}
+
+protocol HomeStateHandler {
+    func handleHome(state: HomeState)
+}
+
+class HomeViewController: ViewController, HomeStateHandler {
     
-    enum State {
-        case initial
-        case tabs
-        case shortcuts
-    }
-        
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
                                                                  ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                           startPoint: .topCenter,
@@ -36,7 +40,7 @@ class HomeViewController: ViewController {
     
     let tabView = TabView()
     
-    @Published var state: State = .initial
+    @Published var state: HomeState = .initial
     
     override func initializeViews() {
         super.initializeViews()
@@ -60,7 +64,12 @@ class HomeViewController: ViewController {
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
-                self.handle(state: state)
+                self.view.subviews.forEach { subview in
+                    if let handler = subview as? HomeStateHandler {
+                        handler.handleHome(state: state)
+                    }
+                }
+                self.handleHome(state: state)
         }.store(in: &self.cancellables)
     }
     
@@ -87,16 +96,9 @@ class HomeViewController: ViewController {
         
         switch self.state {
         case .initial:
-            
-            //self.shortcutButton.transform = CGAffineTransform.init(scaleX: 0.01, y: 0.01)
-           // self.shortcutButton.alpha = 0
-            
             self.tabView.match(.left, to: .right, of: self.view)
         case .tabs:
-            //self.shortcutButton.transform = .identity
-            //self.shortcutButton.alpha = 1.0
             self.tabView.pin(.right)
-
         case .shortcuts:
             self.tabView.match(.left, to: .right, of: self.view)
         }
@@ -112,7 +114,7 @@ class HomeViewController: ViewController {
     
     private var stateTask: Task<Void, Never>?
 
-    private func handle(state: State) {
+    func handleHome(state: HomeState) {
         self.stateTask?.cancel()
         
         self.stateTask = Task { [weak self] in
@@ -151,7 +153,7 @@ class HomeViewController: ViewController {
             case .conversations:
                 self.currentVC = self.conversationsVC
             case .notices:
-                break
+                self.currentVC = self.noticesVC
             }
             
             guard let vc = self.currentVC else { return }
