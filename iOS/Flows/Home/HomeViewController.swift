@@ -33,6 +33,7 @@ class HomeViewController: ViewController, HomeStateHandler {
     lazy var conversationsVC = ConversationsViewController()
     lazy var membersVC = MembersViewController()
     lazy var noticesVC = NoticesViewController()
+    lazy var shortcutVC = ShortcutViewController()
     
     private let shortcutButton = ShortcutButton()
     
@@ -46,6 +47,8 @@ class HomeViewController: ViewController, HomeStateHandler {
         super.initializeViews()
         
         self.view.set(backgroundColor: .B0)
+        self.addChild(self.shortcutVC)
+        
         self.view.addSubview(self.topGradientView)
         self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.tabView)
@@ -69,6 +72,7 @@ class HomeViewController: ViewController, HomeStateHandler {
                         handler.handleHome(state: state)
                     }
                 }
+                self.shortcutVC.handleHome(state: state)
                 self.handleHome(state: state)
         }.store(in: &self.cancellables)
     }
@@ -111,6 +115,8 @@ class HomeViewController: ViewController, HomeStateHandler {
         if let vc = self.currentVC {
             vc.view.expandToSuperviewSize()
         }
+        
+        self.shortcutVC.view.expandToSuperviewSize()
     }
     
     private var stateTask: Task<Void, Never>?
@@ -118,11 +124,20 @@ class HomeViewController: ViewController, HomeStateHandler {
     func handleHome(state: HomeState) {
         self.stateTask?.cancel()
         
+        if state == .shortcuts {
+            self.view.insertSubview(self.shortcutVC.view, belowSubview: self.shortcutButton)
+            self.view.layoutNow()
+        }
+        
         self.stateTask = Task { [weak self] in
             guard let `self` = self else { return }
             
             await UIView.awaitSpringAnimation(with: .slow) {
                 self.view.layoutNow()
+            }
+            
+            if state != .shortcuts {
+                self.shortcutVC.view.removeFromSuperview()
             }
         }
     }

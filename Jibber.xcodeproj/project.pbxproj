@@ -596,6 +596,7 @@
 		D65D460527A9FE620019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D65D460627A9FEA00019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D65E66D32858F0570040E3D8 /* ShortcutButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65E66D22858F0570040E3D8 /* ShortcutButton.swift */; };
+		D65E66D5285962560040E3D8 /* ShortcutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65E66D4285962560040E3D8 /* ShortcutViewController.swift */; };
 		D660C4C92793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
 		D660C4CA2793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
 		D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
@@ -1265,6 +1266,7 @@
 		D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadMessagesCounter.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D65E66D22858F0570040E3D8 /* ShortcutButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutButton.swift; sourceTree = "<group>"; };
+		D65E66D4285962560040E3D8 /* ShortcutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutViewController.swift; sourceTree = "<group>"; };
 		D660C4C82793626700221F76 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		D6617CE926741C4500439C06 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
@@ -2133,6 +2135,7 @@
 			isa = PBXGroup;
 			children = (
 				D65E66D22858F0570040E3D8 /* ShortcutButton.swift */,
+				D65E66D4285962560040E3D8 /* ShortcutViewController.swift */,
 			);
 			path = Shortcuts;
 			sourceTree = "<group>";
@@ -3728,6 +3731,7 @@
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
+				D65E66D5285962560040E3D8 /* ShortcutViewController.swift in Sources */,
 				D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */,
 				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,
 				804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */,
