@@ -107,7 +107,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         var data: [RoomSectionType: [RoomItemType]] = [:]
         
         try? await NoticeStore.shared.initializeIfNeeded()
-        var notices = NoticeStore.shared.getAllNotices().filter({ notice in
+        var notices = NoticeStore.shared.notices.filter({ notice in
             return notice.type != .unreadMessages
         })
         
@@ -173,7 +173,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             guard let `self` = self else { return }
             
             try? await NoticeStore.shared.initializeIfNeeded()
-            var notices = NoticeStore.shared.getAllNotices().filter({ notice in
+            var notices = NoticeStore.shared.notices.filter({ notice in
                 return notice.type != .unreadMessages
             })
             if notices.isEmpty {
@@ -209,7 +209,7 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
             
             try? await NoticeStore.shared.initializeIfNeeded()
             
-            if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
+            if let unreadNotice = NoticeStore.shared.notices.first(where: { system in
                 return system.notice?.type == .unreadMessages
             }), let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
                 if let conversation = JibberChatClient.shared.conversation(for: dict.key), conversation.totalUnread > 0 {

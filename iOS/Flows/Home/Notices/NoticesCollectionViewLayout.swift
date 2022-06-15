@@ -58,13 +58,6 @@ class NoticesCollectionViewLayout: UICollectionViewCompositionalLayout {
                     }
                 }
                 
-                let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(30))
-                let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-                footerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                   leading: 0,
-                                                                   bottom: 0,
-                                                                   trailing: 0)
-                section.boundarySupplementaryItems = [footerItem]
                 section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
                 
                 return section

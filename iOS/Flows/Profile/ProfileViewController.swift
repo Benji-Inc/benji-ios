@@ -203,7 +203,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
             try? await NoticeStore.shared.initializeIfNeeded()
             
-            if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
+            if let unreadNotice = NoticeStore.shared.notices.first(where: { system in
                 return system.notice?.type == .unreadMessages
             }) {
                 

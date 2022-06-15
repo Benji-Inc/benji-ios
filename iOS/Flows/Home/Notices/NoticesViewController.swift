@@ -23,7 +23,20 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NoticeStore.shared.$notices
+            .mainSink { [unowned self] notices in
+                self.reloadNotices()
+            }.store(in: &self.cancellables)
+        
         self.collectionView.allowsMultipleSelection = false 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        once(caller: self, token: "loadNotices") {
+            self.loadInitialData()
+        }
     }
     
     override func getAllSections() -> [NoticesDataSource.SectionType] {
@@ -34,9 +47,9 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
         var data: [NoticesDataSource.SectionType: [NoticesDataSource.ItemType]] = [:]
         
         try? await NoticeStore.shared.initializeIfNeeded()
-        var notices = NoticeStore.shared.getAllNotices().filter({ notice in
+        var notices = NoticeStore.shared.notices.filter({ notice in
             return notice.type != .unreadMessages
-        })
+        }).sorted()
         
         if notices.isEmpty {
             let empty = SystemNotice(createdAt: Date(),
@@ -64,9 +77,10 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
             guard let `self` = self else { return }
             
             try? await NoticeStore.shared.initializeIfNeeded()
-            var notices = NoticeStore.shared.getAllNotices().filter({ notice in
+            var notices = NoticeStore.shared.notices.filter({ notice in
                 return notice.type != .unreadMessages
-            })
+            }).sorted()
+            
             if notices.isEmpty {
                 let empty = SystemNotice(createdAt: Date(),
                                          notice: nil,

@@ -92,7 +92,7 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
             
             try? await NoticeStore.shared.initializeIfNeeded()
             
-            if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
+            if let unreadNotice = NoticeStore.shared.notices.first(where: { system in
                 return system.notice?.type == .unreadMessages
             }), let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
                 if let conversation = JibberChatClient.shared.conversation(for: dict.key), conversation.totalUnread > 0 {

@@ -21,7 +21,7 @@ class ShortcutButton: BaseView, HomeStateHandler {
         
         self.button.set(style: .image(symbol: .bolt,
                                       palletteColors: [.D6],
-                                      pointSize: 30,
+                                      pointSize: 26,
                                       backgroundColor: .clear))
 
         self.layer.borderColor = ThemeColor.D6.color.cgColor
