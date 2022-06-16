@@ -88,4 +88,13 @@ enum ImageSymbol: String, ImageDisplayable {
             return nil 
         }
     }
+    
+    var selectedSymbol: ImageSymbol? {
+        switch self {
+        case .bolt:
+            return .xMark
+        default:
+            return nil
+        }
+    }
 }

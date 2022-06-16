@@ -135,10 +135,6 @@ class HomeViewController: ViewController, HomeStateHandler {
             await UIView.awaitSpringAnimation(with: .slow) {
                 self.view.layoutNow()
             }
-            
-            if state != .shortcuts {
-                self.shortcutVC.view.removeFromSuperview()
-            }
         }
     }
     

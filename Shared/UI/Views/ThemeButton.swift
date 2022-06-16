@@ -83,7 +83,7 @@ class ThemeButton: UIButton, Statusable {
             self.setImage(symbol.image, for: .normal)
             
             self.setImage(symbol.highlightSymbol?.image, for: .highlighted)
-            self.setImage(symbol.highlightSymbol?.image, for: .selected)
+            self.setImage(symbol.selectedSymbol?.image, for: .selected)
             
             self.setPreferredSymbolConfiguration(config, forImageIn: .normal)
             

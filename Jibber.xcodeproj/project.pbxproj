@@ -597,6 +597,7 @@
 		D65D460627A9FEA00019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D65E66D32858F0570040E3D8 /* ShortcutButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65E66D22858F0570040E3D8 /* ShortcutButton.swift */; };
 		D65E66D5285962560040E3D8 /* ShortcutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65E66D4285962560040E3D8 /* ShortcutViewController.swift */; };
+		D65E66D7285A46AC0040E3D8 /* ShortcutOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65E66D6285A46AC0040E3D8 /* ShortcutOptionView.swift */; };
 		D660C4C92793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
 		D660C4CA2793626700221F76 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660C4C82793626700221F76 /* AddView.swift */; };
 		D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
@@ -1267,6 +1268,7 @@
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D65E66D22858F0570040E3D8 /* ShortcutButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutButton.swift; sourceTree = "<group>"; };
 		D65E66D4285962560040E3D8 /* ShortcutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutViewController.swift; sourceTree = "<group>"; };
+		D65E66D6285A46AC0040E3D8 /* ShortcutOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutOptionView.swift; sourceTree = "<group>"; };
 		D660C4C82793626700221F76 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		D6617CE926741C4500439C06 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
@@ -2136,6 +2138,7 @@
 			children = (
 				D65E66D22858F0570040E3D8 /* ShortcutButton.swift */,
 				D65E66D4285962560040E3D8 /* ShortcutViewController.swift */,
+				D65E66D6285A46AC0040E3D8 /* ShortcutOptionView.swift */,
 			);
 			path = Shortcuts;
 			sourceTree = "<group>";
@@ -3463,6 +3466,7 @@
 				80D5C2B428174DC300182DB6 /* TransitionRouter+Blur.swift in Sources */,
 				D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */,
 				D6129FAC27ADC61F0058811C /* WalletHeaderView.swift in Sources */,
+				D65E66D7285A46AC0040E3D8 /* ShortcutOptionView.swift in Sources */,
 				D650C1E125B5F1730037C59A /* PersonView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
