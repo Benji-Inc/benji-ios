@@ -103,10 +103,6 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             switch itemType {
             case .conversation(let conversationId):
                 self.presentConversation(with: conversationId, messageId: nil)
-            case .unreadMessages(let model):
-                self.presentConversation(with: model.conversationId, messageId: model.messageIds.first)
-            case .empty:
-                break
             }
             
         }.store(in: &self.cancellables)

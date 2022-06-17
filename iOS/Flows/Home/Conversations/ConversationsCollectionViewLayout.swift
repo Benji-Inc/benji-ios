@@ -47,14 +47,6 @@ class ConversationsCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                        bottom: -sectionInset.half,
                                                                        trailing: sectionInset)
                 section.decorationItems = [backgroundItem]
-                
-                let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
-                let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-                headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                                   leading: sectionInset.doubled,
-                                                                   bottom: 0,
-                                                                   trailing: sectionInset.doubled)
-                section.boundarySupplementaryItems = [headerItem]
 
                 return section
             }
