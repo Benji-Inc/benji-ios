@@ -100,7 +100,7 @@ class TabView: BaseView, HomeStateHandler {
         self.darkblur.makeRound()
         self.darkblur.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         
-        let buttonWidth = (self.width - Theme.ContentOffset.standard.value.doubled) * 0.33
+        let buttonWidth = (self.width - Theme.ContentOffset.standard.value.doubled) * 0.3
         
         self.membersButton.height = self.height
         self.membersButton.width = buttonWidth
@@ -109,11 +109,12 @@ class TabView: BaseView, HomeStateHandler {
         
         self.conversationsButton.height = self.height
         self.conversationsButton.width = buttonWidth
-        self.conversationsButton.centerOnXAndY()
+        self.conversationsButton.match(.left, to: .right, of: self.membersButton)
+        self.conversationsButton.centerOnY()
         
         self.noticesButton.height = self.height
         self.noticesButton.width = buttonWidth
-        self.noticesButton.pin(.right, offset: .standard)
+        self.noticesButton.match(.left, to: .right, of: self.conversationsButton)
         self.noticesButton.centerOnY()
         
         self.barView.height = 2

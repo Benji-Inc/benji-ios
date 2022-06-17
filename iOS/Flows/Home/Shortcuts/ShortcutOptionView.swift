@@ -10,7 +10,9 @@ import Foundation
 
 class ShortcutOptionView: BaseView {
     
-    static let height: CGFloat = 60
+    static let height: CGFloat = 40
+    
+    private let selectionImpact = UIImpactFeedbackGenerator(style: .light)
     
     enum OptionType {
         case newMessage
@@ -20,11 +22,11 @@ class ShortcutOptionView: BaseView {
         var symbol: ImageSymbol {
             switch self {
             case .newMessage:
-                return .plus
+                return .squareAndPencil
             case .newConversation:
-                return .bolt
+                return .speechBubbles
             case .newVibe:
-                return .bell
+                return .faceSmiling
             }
         }
         
@@ -33,9 +35,9 @@ class ShortcutOptionView: BaseView {
             case .newMessage:
                 return "New Message"
             case .newConversation:
-                return "New Conversation"
+                return "Add Conversation"
             case .newVibe:
-                return "New Vibe"
+                return "Update Vibe"
             }
         }
     }
@@ -58,6 +60,11 @@ class ShortcutOptionView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.set(backgroundColor: .D6)
+                
+        self.layer.borderColor = ThemeColor.D6.color.cgColor
+        self.layer.borderWidth = Theme.borderWidth
+        
         self.addSubview(self.imageView)
         self.imageView.set(symbol: self.type.symbol)
         self.imageView.tintColor = ThemeColor.white.color
@@ -69,6 +76,8 @@ class ShortcutOptionView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        self.makeRound()
+        
         self.height = ShortcutOptionView.height
         
         self.imageView.squaredSize = 20
@@ -79,6 +88,35 @@ class ShortcutOptionView: BaseView {
         self.titleLabel.match(.left, to: .right, of: self.imageView, offset: .standard)
         self.titleLabel.centerOnY()
         
-        self.width = self.imageView.right + self.titleLabel.width + Theme.ContentOffset.standard.value.doubled
+        self.width = self.imageView.right + self.titleLabel.width + Theme.ContentOffset.long.value + Theme.ContentOffset.standard.value 
+    }
+    
+    private var beginStateTask: Task<Void, Never>?
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+
+        self.selectionImpact.impactOccurred()
+        
+        Task {
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.set(backgroundColor: .clear)
+                self.imageView.tintColor = ThemeColor.D6.color
+                self.titleLabel.setTextColor(.D6)
+            })
+        }
+        
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+
+        Task {
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.set(backgroundColor: .D6)
+                self.imageView.tintColor = ThemeColor.white.color
+                self.titleLabel.setTextColor(.white)
+            })
+        }
     }
 }

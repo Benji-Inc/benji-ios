@@ -91,7 +91,7 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.topGradientView.height = 80
         self.topGradientView.pin(.top)
         
-        self.shortcutButton.squaredSize = 60
+        self.shortcutButton.squaredSize = ShortcutButton.height 
         self.shortcutButton.pin(.left, offset: .screenPadding)
         self.shortcutButton.pinToSafeAreaBottom()
         

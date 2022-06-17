@@ -10,6 +10,8 @@ import Foundation
 
 class ShortcutButton: BaseView, HomeStateHandler {
     
+    static let height: CGFloat = 60
+    
     let button = ThemeButton()
     let darkBlur = DarkBlurView()
 
@@ -37,7 +39,7 @@ class ShortcutButton: BaseView, HomeStateHandler {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+                
         self.darkBlur.expandToSuperviewSize()
         self.button.expandToSuperviewSize()
         

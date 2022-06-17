@@ -69,7 +69,7 @@ class ShortcutViewController: ViewController, HomeStateHandler {
     }
     
     private func animateOptions(for state: HomeState) async {
-        let startingBottonOffset: CGFloat = self.view.height - (self.view.safeAreaInsets.bottom + Theme.ContentOffset.long.value.doubled + self.option1.height)
+        let startingBottonOffset: CGFloat = self.view.height - (self.view.safeAreaInsets.bottom + Theme.ContentOffset.long.value.doubled.doubled + ShortcutButton.height)
         
         async let first: () = UIView.awaitAnimation(with: .fast, delay: 0.0, options: .curveEaseIn) {
             switch state {

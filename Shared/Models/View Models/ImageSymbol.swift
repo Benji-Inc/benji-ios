@@ -50,6 +50,8 @@ enum ImageSymbol: String, ImageDisplayable {
     case rectangleStackFill = "rectangle.stack.fill"
     case bolt = "bolt"
     case boltFill = "bolt.fill"
+    case squareAndPencil = "square.and.pencil"
+    case speechBubbles = "bubble.left.and.bubble.right"
     
     var image: UIImage? {
         return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
@@ -81,12 +83,7 @@ enum ImageSymbol: String, ImageDisplayable {
     }
     
     var highlightSymbol: ImageSymbol? {
-        switch self {
-        case .bolt:
-            return .boltFill
-        default:
-            return nil 
-        }
+        return nil 
     }
     
     var selectedSymbol: ImageSymbol? {
