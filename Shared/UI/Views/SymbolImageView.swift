@@ -23,13 +23,14 @@ class SymbolImageView: UIImageView {
         super.init(coder: coder)
     }
     
-    func set(symbol: ImageSymbol) {
-        self.contentMode = .scaleAspectFit
+    func set(symbol: ImageSymbol, configuration: UIImage.SymbolConfiguration? = nil) {
 
         self.symbol = symbol
         self.image = self.symbol?.image
         self.highlightedImage = self.symbol?.highlightSymbol?.image
-        if let config = symbol.defaultConfig {
+        if let config = configuration {
+            self.preferredSymbolConfiguration = config
+        } else if let config = symbol.defaultConfig {
             self.preferredSymbolConfiguration = config
         }
     }

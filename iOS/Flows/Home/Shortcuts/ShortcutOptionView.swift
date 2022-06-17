@@ -40,16 +40,8 @@ class ShortcutOptionView: BaseView {
         }
     }
     
-    enum State {
-        case initial
-        case collapsed
-        case expanded
-    }
-    
     let imageView = SymbolImageView()
     let titleLabel = ThemeLabel(font: .regular)
-    
-    @Published var state: State = .expanded
     
     let type: OptionType
     var didSelectOption: CompletionOptional = nil
@@ -68,18 +60,10 @@ class ShortcutOptionView: BaseView {
         
         self.addSubview(self.imageView)
         self.imageView.set(symbol: self.type.symbol)
+        self.imageView.tintColor = ThemeColor.white.color
         
         self.addSubview(self.titleLabel)
         self.titleLabel.setText(self.type.text)
-        
-        self.$state.removeDuplicates()
-            .mainSink { [unowned self] state in
-                self.handle(state: state)
-            }.store(in: &self.cancellables)
-        
-        //self.alpha = 0
-       // self.titleLabel.alpha = 0
-        //self.imageView.alpha = 0
     }
     
     override func layoutSubviews() {
@@ -87,62 +71,14 @@ class ShortcutOptionView: BaseView {
         
         self.height = ShortcutOptionView.height
         
-        self.imageView.squaredSize = self.height - Theme.ContentOffset.standard.value.doubled
-        self.imageView.pin(.left, offset: .standard)
+        self.imageView.squaredSize = 20
+        self.imageView.pin(.left, offset: .long)
         self.imageView.centerOnY()
         
         self.titleLabel.setSize(withWidth: 200)
         self.titleLabel.match(.left, to: .right, of: self.imageView, offset: .standard)
         self.titleLabel.centerOnY()
         
-        switch self.state {
-        case .initial, .collapsed:
-            self.width = self.height
-        case .expanded:
-            self.width = self.imageView.right + self.titleLabel.width + Theme.ContentOffset.standard.value.doubled
-        }
-    }
-    
-    private var stateTask: Task<Void, Never>?
-
-    func handle(state: State) {
-    
-        self.stateTask?.cancel()
-        
-        self.stateTask = Task { [weak self] in
-            guard let `self` = self else { return }
-            
-//            switch state {
-//            case .initial:
-//                await self.animateInitial()
-//            case .collapsed:
-//                await self.animateCollapsed()
-//            case .expanded:
-//                await self.animateExpand()
-//            }
-        }
-    }
-    
-    private func animateInitial() async {
-        await UIView.awaitAnimation(with: .slow, animations: {
-//            self.alpha = 0
-//            self.titleLabel.alpha = 0
-//            self.imageView.alpha = 0
-        })
-        
-    }
-    
-    private func animateCollapsed() async {
-        await UIView.awaitAnimation(with: .slow, animations: {
-            self.alpha = 1
-            self.titleLabel.alpha = 0
-        })
-    }
-    
-    private func animateExpand() async {
-        await UIView.awaitAnimation(with: .slow, animations: {
-            self.alpha = 0
-            self.titleLabel.alpha = 1.0 
-        })
+        self.width = self.imageView.right + self.titleLabel.width + Theme.ContentOffset.standard.value.doubled
     }
 }
