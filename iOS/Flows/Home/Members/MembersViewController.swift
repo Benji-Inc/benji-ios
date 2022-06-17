@@ -10,7 +10,11 @@ import Foundation
 
 class MembersViewController: DiffableCollectionViewController<MembersDataSource.SectionType,
                                     MembersDataSource.ItemType,
-                                 MembersDataSource> {
+                                 MembersDataSource>, HomeContentType {
+    
+    var contentTitle: String {
+        return "People"
+    }
     
     var membersCollectionView: MembersCollectionView {
         return self.collectionView as! MembersCollectionView

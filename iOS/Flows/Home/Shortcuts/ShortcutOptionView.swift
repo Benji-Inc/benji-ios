@@ -91,8 +91,6 @@ class ShortcutOptionView: BaseView {
         self.width = self.imageView.right + self.titleLabel.width + Theme.ContentOffset.long.value + Theme.ContentOffset.standard.value 
     }
     
-    private var beginStateTask: Task<Void, Never>?
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
 

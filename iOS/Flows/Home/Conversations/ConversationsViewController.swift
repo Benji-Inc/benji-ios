@@ -11,7 +11,11 @@ import StreamChat
 
 class ConversationsViewController: DiffableCollectionViewController<ConversationsDataSource.SectionType,
                                    ConversationsDataSource.ItemType,
-                                   ConversationsDataSource> {
+                                   ConversationsDataSource>, HomeContentType {
+    
+    var contentTitle: String {
+        return "Conversations"
+    }
     
     private(set) var conversationListController: ConversationListController?
     

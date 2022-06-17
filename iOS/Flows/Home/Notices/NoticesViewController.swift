@@ -10,7 +10,11 @@ import Foundation
 
 class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.SectionType,
                              NoticesDataSource.ItemType,
-                                NoticesDataSource> {
+                                NoticesDataSource>, HomeContentType {
+    
+    var contentTitle: String {
+        return "Notices"
+    }
     
     init() {
         super.init(with: NoticesCollectionView())

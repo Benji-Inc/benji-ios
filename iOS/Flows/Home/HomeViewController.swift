@@ -20,6 +20,12 @@ protocol HomeStateHandler {
     func handleHome(state: HomeState)
 }
 
+protocol HomeContentType {
+    var contentTitle: String { get }
+}
+
+typealias HomeContentController = UIViewController & HomeContentType
+
 class HomeViewController: ViewController, HomeStateHandler {
     
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
@@ -31,6 +37,8 @@ class HomeViewController: ViewController, HomeStateHandler {
                                                              startPoint: .bottomCenter,
                                                              endPoint: .topCenter)
     
+    private let titleLabel = ThemeLabel(font: .mediumBold)
+    
     lazy var conversationsVC = ConversationsViewController()
     lazy var membersVC = MembersViewController()
     lazy var noticesVC = NoticesViewController()
@@ -38,7 +46,7 @@ class HomeViewController: ViewController, HomeStateHandler {
     
     private let shortcutButton = ShortcutButton()
     
-    private var currentVC: UIViewController?
+    private var currentContentVC: HomeContentController?
     
     let tabView = TabView()
     
@@ -51,6 +59,9 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.addChild(self.shortcutVC)
         
         self.view.addSubview(self.topGradientView)
+        self.view.addSubview(self.titleLabel)
+        self.titleLabel.alpha = 0
+
         self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.tabView)
         self.view.addSubview(self.shortcutButton)
@@ -88,8 +99,12 @@ class HomeViewController: ViewController, HomeStateHandler {
         super.viewDidLayoutSubviews()
         
         self.topGradientView.expandToSuperviewWidth()
-        self.topGradientView.height = 80
+        self.topGradientView.height = 100
         self.topGradientView.pin(.top)
+        
+        self.titleLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.titleLabel.pinToSafeAreaTop()
+        self.titleLabel.centerOnX()
         
         self.shortcutButton.squaredSize = ShortcutButton.height 
         self.shortcutButton.pin(.left, offset: .screenPadding)
@@ -113,7 +128,7 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.bottomGradientView.height = self.view.height - self.tabView.top
         self.bottomGradientView.pin(.bottom)
         
-        if let vc = self.currentVC {
+        if let vc = self.currentContentVC {
             vc.view.expandToSuperviewSize()
         }
         
@@ -152,9 +167,15 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
-            if let vc = self.currentVC {
+            let center = self.titleLabel.center
+
+            if let vc = self.currentContentVC {
                 await UIView.awaitAnimation(with: .fast) {
                     vc.view.alpha = 0.0
+                    self.titleLabel.alpha = 0
+                    self.titleLabel.layer.position = center 
+                    self.titleLabel.transform = CGAffineTransform.init(scaleX: 0.9, y: 0.9)
+                    self.view.layoutNow()
                 }
             }
             
@@ -166,14 +187,18 @@ class HomeViewController: ViewController, HomeStateHandler {
             
             switch state {
             case .members:
-                self.currentVC = self.membersVC
+                self.currentContentVC = self.membersVC
             case .conversations:
-                self.currentVC = self.conversationsVC
+                self.currentContentVC = self.conversationsVC
             case .notices:
-                self.currentVC = self.noticesVC
+                self.currentContentVC = self.noticesVC
             }
             
-            guard let vc = self.currentVC else { return }
+            guard let vc = self.currentContentVC else { return }
+            
+            self.titleLabel.setText(vc.contentTitle)
+            self.titleLabel.alpha = 0
+            self.titleLabel.transform = CGAffineTransform.init(scaleX: 0.9, y: 0.9)
             
             vc.view.alpha = 0
             self.addChild(vc)
@@ -182,6 +207,9 @@ class HomeViewController: ViewController, HomeStateHandler {
             
             await UIView.awaitAnimation(with: .fast, animations: {
                 vc.view.alpha = 1.0
+                self.titleLabel.layer.position = center 
+                self.titleLabel.alpha = 1
+                self.titleLabel.transform = .identity
             })
         }
     }
