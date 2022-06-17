@@ -116,6 +116,7 @@ class FaceImageCaptureViewController: ViewController {
 
     private var videoWriter: AVAssetWriter!
     private var videoWriterInput: AVAssetWriterInput!
+    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor!
     private var videoStartTime: Double!
 
     func startVideoCapture() {
@@ -181,14 +182,16 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
     private func initializeAssetWriter(with sampleBuffer: CMSampleBuffer) {
         do {
             // Get a url to temporarily store the video
+            #warning("Use a full UUID")
+            let uuid = UUID().uuidString.prefix(8)
             let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                          isDirectory: true).appendingPathComponent(UUID().uuidString+".mov")
+                          isDirectory: true).appendingPathComponent(uuid+".mov")
 
             // Create an asset writer that will write the video the url
             self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
             let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
                                             AVVideoWidthKey : 720,
-                                           AVVideoHeightKey : 1280,
+                                           AVVideoHeightKey : 720,
                             AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
 
             self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
@@ -196,6 +199,9 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
             self.videoWriterInput.expectsMediaDataInRealTime = true
 
+            self.pixelBufferAdaptor
+            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
+                                                   sourcePixelBufferAttributes: nil)
 
             if self.videoWriter.canAdd(self.videoWriterInput) {
                 self.videoWriter.add(self.videoWriterInput)
@@ -205,6 +211,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
 
             let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
             self.videoWriter.startSession(atSourceTime: startTime)
+            self.videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
         } catch {
             logError(error)
         }
@@ -212,7 +219,29 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
 
     private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
         guard self.videoWriterInput.isReadyForMoreMediaData else { return }
-        self.videoWriterInput.append(sampleBuffer)
+
+        var pixelBuffer: CVPixelBuffer?
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                     kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        let width: Int = Int(self.currentCIImage!.extent.width)
+        let height: Int = Int(self.currentCIImage!.extent.width)
+
+        CVPixelBufferCreate(kCFAllocatorDefault,
+                            width,
+                            height,
+                            kCVPixelFormatType_32BGRA,
+                            attrs,
+                            &pixelBuffer)
+
+        let context = CIContext()
+        context.render(self.currentCIImage!, to: pixelBuffer!)
+
+
+        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+        let presentationTime = CMTime(seconds: currentTime,
+                                      preferredTimescale: CMTimeScale(bitPattern: 600))
+
+        self.pixelBufferAdaptor.append(pixelBuffer!, withPresentationTime: presentationTime)
     }
 
     private func finishWritingVideo() {
@@ -334,7 +363,7 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         // grab image
         guard let ciImage = self.currentCIImage else { return }
 
-        // ensure drawable is free and not tied in the preivous drawing cycle
+        // ensure drawable is free and not tied in the previous drawing cycle
         guard let currentDrawable = view.currentDrawable else { return }
 
         // make sure the image is full screen
@@ -356,7 +385,7 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
                                  bounds: newImage.extent,
                                  colorSpace: CGColorSpaceCreateDeviceRGB())
 
-        // register drawwable to command buffer
+        // register drawable to command buffer
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
 
