@@ -17,6 +17,15 @@ import CoreImage.CIFilterBuiltins
 /// A live preview of the camera is shown on the main view.
 class FaceImageCaptureViewController: ViewController {
 
+    enum VideoCaptureState {
+        case idle
+        case starting
+        case capturing
+        case ending
+    }
+
+    private(set) var videoCaptureState: VideoCaptureState = .idle
+
     var didCapturePhoto: ((UIImage) -> Void)?
     var didCaptureVideo: ((URL) -> Void)?
 
@@ -105,60 +114,23 @@ class FaceImageCaptureViewController: ViewController {
         self.captureCurrentImageAsPhoto()
     }
 
-    private var videoWriter: AVAssetWriter?
-    private var videoWriterInput: AVAssetWriterInput?
-    private var videoStartTime: Double?
+    private var videoWriter: AVAssetWriter!
+    private var videoWriterInput: AVAssetWriterInput!
+    private var videoStartTime: Double!
 
     func startVideoCapture() {
-        guard self.videoWriter.isNil else {
-            logDebug("Video capture is already running.")
-            return
-        }
+        guard self.videoCaptureState == .idle else { return }
 
-        do {
-            // Get a url to temporarily store the video
-            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                          isDirectory: true).appendingPathComponent(UUID().uuidString+".mov")
-
-            // Create an asset writer that will write the video the url
-            let videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
-            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
-                                            AVVideoWidthKey : 720,
-                                           AVVideoHeightKey : 1280,
-                            AVVideoCompressionPropertiesKey : [AVVideoAverageBitRateKey : 2300000]]
-
-            let videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
-                                                      outputSettings: settings)
-            videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
-            videoWriterInput.expectsMediaDataInRealTime = true
-
-
-            if videoWriter.canAdd(videoWriterInput) {
-                videoWriter.add(videoWriterInput)
-            }
-
-            videoWriter.startWriting()
-
-            // Store the video writer so we can add frames to it and stop it later.
-            self.videoWriter = videoWriter
-            self.videoWriterInput = videoWriterInput
-        } catch {
-            logError(error)
-        }
+        self.videoCaptureState = .starting
     }
 
     func finishVideoCapture() {
-        guard let videoWriter = self.videoWriter, let videoWriterInput = self.videoWriterInput else { return }
-
-
-        videoWriterInput.markAsFinished()
-        videoWriter.finishWriting {
-            let url = videoWriter.outputURL
-            self.didCaptureVideo?(url)
-
-            self.videoWriter = nil
-            self.videoWriterInput = nil
-            self.videoStartTime = nil
+        switch self.videoCaptureState {
+        case .starting, .capturing:
+            self.videoCaptureState = .ending
+        case .idle, .ending:
+            // Do nothing
+            break
         }
     }
 }
@@ -190,17 +162,64 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             logError(error)
         }
 
-        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        if let videoWriterInput = self.videoWriterInput, videoWriterInput.isReadyForMoreMediaData {
-            if self.videoStartTime.isNil {
-                self.videoStartTime = currentTime.seconds
-                self.videoWriter?.startSession(atSourceTime: currentTime)
+        switch self.videoCaptureState {
+        case .idle:
+            // Do nothing
+            break
+        case .starting:
+            // Initialize the AVAsset writer to prepare for capture
+            self.initializeAssetWriter(with: sampleBuffer)
+            self.videoCaptureState = .capturing
+        case .capturing:
+            self.writeSampleToFile(sampleBuffer)
+        case .ending:
+            self.finishWritingVideo()
+            self.videoCaptureState = .idle
+        }
+    }
+
+    private func initializeAssetWriter(with sampleBuffer: CMSampleBuffer) {
+        do {
+            // Get a url to temporarily store the video
+            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+                          isDirectory: true).appendingPathComponent(UUID().uuidString+".mov")
+
+            // Create an asset writer that will write the video the url
+            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
+            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
+                                            AVVideoWidthKey : 720,
+                                           AVVideoHeightKey : 1280,
+                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
+
+            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
+                                                       outputSettings: settings)
+            self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
+            self.videoWriterInput.expectsMediaDataInRealTime = true
+
+
+            if self.videoWriter.canAdd(self.videoWriterInput) {
+                self.videoWriter.add(self.videoWriterInput)
             }
 
-//            let startTime = self.videoStartTime ?? 0
-//            let time = CMTime(seconds: currentTime - startTime,
-//                              preferredTimescale: CMTimeScale(bitPattern: 600))
-            videoWriterInput.append(sampleBuffer)
+            self.videoWriter.startWriting()
+
+            let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+            self.videoWriter.startSession(atSourceTime: startTime)
+        } catch {
+            logError(error)
+        }
+    }
+
+    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
+        guard self.videoWriterInput.isReadyForMoreMediaData else { return }
+        self.videoWriterInput.append(sampleBuffer)
+    }
+
+    private func finishWritingVideo() {
+        self.videoWriterInput.markAsFinished()
+        let videoURL = self.videoWriter.outputURL
+        self.videoWriter.finishWriting {
+            self.didCaptureVideo?(videoURL)
         }
     }
 
