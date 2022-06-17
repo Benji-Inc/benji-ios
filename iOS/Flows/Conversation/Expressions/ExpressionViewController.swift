@@ -54,9 +54,8 @@ class ExpressionViewController: ViewController {
     }
     
     private func setupHandlers() {
-        
         self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            guard let data = image.previewData else { return }
+            guard let data = image.heicData else { return }
             self.data = data
                         
             self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
