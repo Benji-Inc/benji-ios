@@ -56,11 +56,6 @@ class RoomCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     private func setupHandlers() {
         self.roomVC.dataSource.messageContentDelegate = self 
         
-        self.roomVC.headerView.button.didSelect { [unowned self] in
-            guard let user = User.current() else { return }
-            self.presentProfile(for: user)
-        }
-        
         self.roomVC.dataSource.didSelectRightOption = { [unowned self] notice in
             self.handleRightOption(with: notice)
         }

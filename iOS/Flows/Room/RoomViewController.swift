@@ -14,7 +14,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
                           RoomItemType,
                           RoomCollectionViewDataSource> {
     
-    let headerView = HomeHeaderView()
     private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
                                                                  ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
                                                           startPoint: .topCenter,
@@ -55,7 +54,6 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
         self.collectionView.refreshControl = self.refreshControl
         self.view.addSubview(self.bottomGradientView)
         self.view.addSubview(self.topGradientView)
-        self.view.addSubview(self.headerView)
         
         self.collectionView.allowsMultipleSelection = false
     }
@@ -85,13 +83,9 @@ class RoomViewController: DiffableCollectionViewController<RoomSectionType,
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        self.headerView.height = 46
-        self.headerView.expandToSuperviewWidth()
-        self.headerView.pinToSafeArea(.top, offset: .noOffset)
+
         
         self.topGradientView.expandToSuperviewWidth()
-        self.topGradientView.height = self.headerView.bottom
         self.topGradientView.pin(.top)
         
         self.bottomGradientView.expandToSuperviewWidth()
