@@ -52,6 +52,7 @@ enum ImageSymbol: String, ImageDisplayable {
     case boltFill = "bolt.fill"
     case squareAndPencil = "square.and.pencil"
     case speechBubbles = "bubble.left.and.bubble.right"
+    case minus = "minus"
     
     var image: UIImage? {
         return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)

@@ -17,7 +17,7 @@ class NoticeFooterView: BaseView {
         super.initializeSubviews()
         
         self.addSubview(self.pageIndicator)
-        self.pageIndicator.preferredIndicatorImage = UIImage(systemName: "minus")
+        self.pageIndicator.preferredIndicatorImage = ImageSymbol.minus.image
         self.pageIndicator.currentPageIndicatorTintColor = ThemeColor.white.color
         self.pageIndicator.pageIndicatorTintColor = ThemeColor.B2.color
         self.pageIndicator.hidesForSinglePage = true
