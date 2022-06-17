@@ -57,7 +57,7 @@ class ShortcutButton: BaseView, HomeStateHandler {
                 case .initial:
                     self.transform = CGAffineTransform.init(scaleX: 1.5, y: 1.5)
                     self.alpha = 0
-                case .tabs, .shortcuts:
+                case .tabs, .shortcuts, .dismissShortcuts:
                     self.transform = .identity
                     self.alpha = 1.0
                     

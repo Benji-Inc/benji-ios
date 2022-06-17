@@ -51,7 +51,7 @@ class ShortcutViewController: ViewController, HomeStateHandler {
             guard let `self` = self else { return }
             
             switch state {
-            case .initial, .tabs:
+            case .initial, .tabs, .dismissShortcuts:
                 if self.blurView.effect.isNil {
                     await self.animateBlur(for: state)
                     await self.animateOptions(for: state)
@@ -73,7 +73,7 @@ class ShortcutViewController: ViewController, HomeStateHandler {
         
         async let first: () = UIView.awaitAnimation(with: .fast, delay: 0.0, options: .curveEaseIn) {
             switch state {
-            case .initial, .tabs:
+            case .initial, .tabs, .dismissShortcuts:
                 self.option3.alpha = 0
                 self.option3.bottom = startingBottonOffset - self.option3.height - Theme.ContentOffset.long.value
             case .shortcuts:
@@ -84,7 +84,7 @@ class ShortcutViewController: ViewController, HomeStateHandler {
         
         async let second: () = UIView.awaitAnimation(with: .fast, delay: 0.1, options: .curveEaseIn) {
             switch state {
-            case .initial, .tabs:
+            case .initial, .tabs, .dismissShortcuts:
                 self.option2.alpha = 0
                 self.option2.bottom = startingBottonOffset
             case .shortcuts:
@@ -95,7 +95,7 @@ class ShortcutViewController: ViewController, HomeStateHandler {
         
         async let third: () = UIView.awaitAnimation(with: .fast, delay: 0.2, options: .curveEaseIn) {
             switch state {
-            case .initial, .tabs:
+            case .initial, .tabs, .dismissShortcuts:
                 self.option1.alpha = 0
                 self.option1.pinToSafeAreaBottom()
             case .shortcuts:
@@ -110,7 +110,7 @@ class ShortcutViewController: ViewController, HomeStateHandler {
     private func animateBlur(for state: HomeState) async {
         await UIView.awaitAnimation(with: .fast, animations: {
             switch state {
-            case .initial, .tabs:
+            case .initial, .tabs, .dismissShortcuts:
                 self.blurView.showBlur(false)
             case .shortcuts:
                 self.blurView.showBlur(true)

@@ -13,6 +13,7 @@ enum HomeState {
     case initial
     case tabs
     case shortcuts
+    case dismissShortcuts
 }
 
 protocol HomeStateHandler {
@@ -55,7 +56,7 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.view.addSubview(self.shortcutButton)
         
         self.shortcutButton.button.didSelect { [unowned self] in
-            self.state = self.state == .shortcuts ? .tabs : .shortcuts
+            self.state = self.state == .shortcuts ? .dismissShortcuts : .shortcuts
         }
         
         self.tabView.$state
@@ -104,7 +105,7 @@ class HomeViewController: ViewController, HomeStateHandler {
         case .tabs:
             let offset = self.view.width * 0.05
             self.tabView.pin(.right, offset: .negative(.custom(offset)))
-        case .shortcuts:
+        case .shortcuts, .dismissShortcuts:
             self.tabView.match(.left, to: .right, of: self.view)
         }
 
@@ -134,6 +135,10 @@ class HomeViewController: ViewController, HomeStateHandler {
             
             await UIView.awaitSpringAnimation(with: .slow) {
                 self.view.layoutNow()
+            }
+            
+            if state == .dismissShortcuts {
+                self.state = .tabs
             }
         }
     }

@@ -136,7 +136,7 @@ class TabView: BaseView, HomeStateHandler {
             
             await UIView.awaitSpringAnimation(with: .slow, delay: 0.3, animations: {
                 switch state {
-                case .initial, .shortcuts:
+                case .initial, .shortcuts, .dismissShortcuts:
                     
                     self.buttons.forEach { button in
                         button.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
