@@ -9,30 +9,15 @@
 import Foundation
 import Combine
 
-class NoticeFooterView: UICollectionReusableView {
+class NoticeFooterView: BaseView {
     
     let pageIndicator = UIPageControl()
-    var cancellables = Set<AnyCancellable>()
-            
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initializeViews()
-    }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.initializeViews()
-    }
-    
-    deinit {
-        self.cancellables.forEach { (cancellable) in
-            cancellable.cancel()
-        }
-    }
-    
-    func initializeViews() {
+    override func initializeSubviews() {
+        super.initializeSubviews()
         
         self.addSubview(self.pageIndicator)
+        self.pageIndicator.preferredIndicatorImage = UIImage(systemName: "minus")
         self.pageIndicator.currentPageIndicatorTintColor = ThemeColor.white.color
         self.pageIndicator.pageIndicatorTintColor = ThemeColor.B2.color
         self.pageIndicator.hidesForSinglePage = true

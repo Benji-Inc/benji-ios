@@ -35,6 +35,7 @@ class NoticeStore {
             }).compactMap({ notice in
                 return SystemNotice(with: notice)
             })
+            
             self.subscribeToUpdates()
         }
 

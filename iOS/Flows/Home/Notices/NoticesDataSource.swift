@@ -19,7 +19,6 @@ class NoticesDataSource: CollectionViewDataSource<NoticesDataSource.SectionType,
     }
     
     private let noticeCell = ManageableCellRegistration<NoticeCell>().provider
-    private let noticeFooter = ManageableFooterRegistration<NoticeFooterView>().provider
     
     var didSelectRightOption: ((SystemNotice) -> Void)? = nil
     var didSelectLeftOption: ((SystemNotice) -> Void)? = nil

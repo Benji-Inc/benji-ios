@@ -16,6 +16,8 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
         return "Notices"
     }
     
+    let noticesFooterView = NoticeFooterView()
+    
     init() {
         super.init(with: NoticesCollectionView())
     }
@@ -27,20 +29,23 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.addSubview(self.noticesFooterView)
+        
         NoticeStore.shared.$notices
             .mainSink { [unowned self] notices in
                 self.reloadNotices()
             }.store(in: &self.cancellables)
         
+        self.collectionView.isScrollEnabled = false 
         self.collectionView.allowsMultipleSelection = false 
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        once(caller: self, token: "loadNotices") {
-            self.loadInitialData()
-        }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.noticesFooterView.height = 20
+        self.noticesFooterView.expandToSuperviewWidth()
+        self.noticesFooterView.top = self.view.height * 0.6 + Theme.ContentOffset.long.value 
     }
     
     override func getAllSections() -> [NoticesDataSource.SectionType] {
@@ -48,27 +53,7 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
     }
     
     override func retrieveDataForSnapshot() async -> [NoticesDataSource.SectionType : [NoticesDataSource.ItemType]] {
-        var data: [NoticesDataSource.SectionType: [NoticesDataSource.ItemType]] = [:]
-        
-        try? await NoticeStore.shared.initializeIfNeeded()
-        var notices = NoticeStore.shared.notices.filter({ notice in
-            return notice.type != .unreadMessages
-        }).sorted()
-        
-        if notices.isEmpty {
-            let empty = SystemNotice(createdAt: Date(),
-                                     notice: nil,
-                                     type: .system,
-                                     priority: 0,
-                                     attributes: [:])
-            notices = [empty]
-        }
-        
-        data[.notices] = notices.compactMap({ notice in
-            return .notice(notice)
-        })
-        
-        return data
+        return [:]
     }
     
     private var loadNoticeTask: Task<Void, Never>?
@@ -81,6 +66,7 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
             guard let `self` = self else { return }
             
             try? await NoticeStore.shared.initializeIfNeeded()
+
             var notices = NoticeStore.shared.notices.filter({ notice in
                 return notice.type != .unreadMessages
             }).sorted()
@@ -98,11 +84,12 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
                 return .notice(notice)
             })
             
+            self.noticesFooterView.pageIndicator.numberOfPages = items.count
+            
             var snapshot = self.dataSource.snapshot()
             snapshot.setItems(items, in: .notices)
             
             await self.dataSource.apply(snapshot)
         }
     }
-    
 }
