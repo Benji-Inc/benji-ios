@@ -69,6 +69,10 @@ class ExpressionViewController: ViewController {
                 await self.createExpression()
             }
         }
+
+        self.expressionPhotoVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
+            logDebug("Video url is "+videoURL.description)
+        }
         
         self.personGradientView.didSelect { [unowned self] in
             guard self.state == .emotionSelection else { return }

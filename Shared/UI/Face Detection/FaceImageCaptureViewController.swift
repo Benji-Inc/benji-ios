@@ -18,7 +18,6 @@ import CoreImage.CIFilterBuiltins
 class FaceImageCaptureViewController: ViewController {
 
     var didCapturePhoto: ((UIImage) -> Void)?
-    #warning("Assign a delegate")
     var didCaptureVideo: ((URL) -> Void)?
 
     @Published private(set) var hasRenderedFaceImage = false
@@ -108,8 +107,8 @@ class FaceImageCaptureViewController: ViewController {
 
     private var videoWriter: AVAssetWriter?
     private var videoWriterInput: AVAssetWriterInput?
+    private var videoStartTime: Double?
 
-    #warning("Call this somewhere")
     func startVideoCapture() {
         guard self.videoWriter.isNil else {
             logDebug("Video capture is already running.")
@@ -125,13 +124,14 @@ class FaceImageCaptureViewController: ViewController {
             let videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
             let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
                                             AVVideoWidthKey : 720,
-                                           AVVideoHeightKey : 720,
+                                           AVVideoHeightKey : 1280,
                             AVVideoCompressionPropertiesKey : [AVVideoAverageBitRateKey : 2300000]]
 
             let videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
                                                       outputSettings: settings)
-
+            videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
             videoWriterInput.expectsMediaDataInRealTime = true
+
 
             if videoWriter.canAdd(videoWriterInput) {
                 videoWriter.add(videoWriterInput)
@@ -150,6 +150,7 @@ class FaceImageCaptureViewController: ViewController {
     func finishVideoCapture() {
         guard let videoWriter = self.videoWriter, let videoWriterInput = self.videoWriterInput else { return }
 
+
         videoWriterInput.markAsFinished()
         videoWriter.finishWriting {
             let url = videoWriter.outputURL
@@ -157,6 +158,7 @@ class FaceImageCaptureViewController: ViewController {
 
             self.videoWriter = nil
             self.videoWriterInput = nil
+            self.videoStartTime = nil
         }
     }
 }
@@ -168,12 +170,6 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
                        from connection: AVCaptureConnection) {
 
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-
-        if let videoWriterInput = self.videoWriterInput {
-            videoWriterInput.append(sampleBuffer)
-        }
-
-        return
 
         let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
 
@@ -192,6 +188,19 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             self.currentCIImage = blendedImage
         } catch {
             logError(error)
+        }
+
+        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        if let videoWriterInput = self.videoWriterInput, videoWriterInput.isReadyForMoreMediaData {
+            if self.videoStartTime.isNil {
+                self.videoStartTime = currentTime.seconds
+                self.videoWriter?.startSession(atSourceTime: currentTime)
+            }
+
+//            let startTime = self.videoStartTime ?? 0
+//            let time = CMTime(seconds: currentTime - startTime,
+//                              preferredTimescale: CMTimeScale(bitPattern: 600))
+            videoWriterInput.append(sampleBuffer)
         }
     }
 
