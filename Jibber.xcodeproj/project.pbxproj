@@ -2017,6 +2017,7 @@
 		D637651627E9295100CCDA7F /* Conversation Detail */ = {
 			isa = PBXGroup;
 			children = (
+				D60B887A27F8A13A00B3E1C2 /* SectionDividerView.swift */,
 				D637651B27E959E200CCDA7F /* ConversationDetailCell.swift */,
 				8057B59927E2A10600B23D0D /* ConversationDetailCollectionViewDataSource.swift */,
 				8057B59527E2A10500B23D0D /* ConversationDetailCollectionViewLayout.swift */,
@@ -2659,7 +2660,6 @@
 			isa = PBXGroup;
 			children = (
 				D6AA61F22852541100FA4D02 /* Home */,
-				D6DEC3EB27A1D9370072D9D0 /* Room */,
 				D6432BF122D8282E0016001A /* Conversation */,
 				8023C6A027EBCDC100FD9DB6 /* Media */,
 				80E228DB27C80B0300AF37AC /* Message Detail */,
@@ -2722,6 +2722,7 @@
 		D6D96EF527C5B44600BDCD01 /* User Conversation List */ = {
 			isa = PBXGroup;
 			children = (
+				D6B2B64F283A9150007D507B /* ConversationContentView.swift */,
 				D6C4BD3F27C95E8400579014 /* ConversationCell.swift */,
 				D6D96EFE27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift */,
 				D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */,
@@ -2741,15 +2742,6 @@
 				D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */,
 			);
 			path = "Person Views";
-			sourceTree = "<group>";
-		};
-		D6DEC3EB27A1D9370072D9D0 /* Room */ = {
-			isa = PBXGroup;
-			children = (
-				D60B887A27F8A13A00B3E1C2 /* SectionDividerView.swift */,
-				D6B2B64F283A9150007D507B /* ConversationContentView.swift */,
-			);
-			path = Room;
 			sourceTree = "<group>";
 		};
 		D6E65F17237791450061AA67 /* Collection View Management  */ = {
