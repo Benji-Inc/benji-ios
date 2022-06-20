@@ -11,15 +11,16 @@ import Parse
 
 class ProfileHeaderView: BaseView {
     
-    static let height: CGFloat = 100 
+    static let height: CGFloat = 160
     
-    let nameLabel = ThemeLabel(font: .medium)
-    let memberLabel = ThemeLabel(font: .small)
+    let nameLabel = ThemeLabel(font: .mediumBold)
+    
+    let positionLabel = ThemeLabel(font: .small)
+    let memberLabel = ThemeLabel(font: .regular)
     
     let localLabel = ThemeLabel(font: .small)
-    let timeLabel = ThemeLabel(font: .small)
+    let timeLabel = ThemeLabel(font: .regular)
     
-    let statusLabel = ThemeLabel(font: .small)
     let focusLabel = ThemeLabel(font: .small)
     let focusCircle = BaseView()
         
@@ -38,18 +39,20 @@ class ProfileHeaderView: BaseView {
         
         self.addSubview(self.nameLabel)
         
+        self.addSubview(self.positionLabel)
+        self.positionLabel.textAlignment = .center
+        self.positionLabel.alpha = 0.25
+        self.positionLabel.setText("Member")
+        
         self.addSubview(self.memberLabel)
-        self.memberLabel.alpha = 0.25
         
         self.addSubview(self.localLabel)
+        self.localLabel.textAlignment = .center
         self.localLabel.alpha = 0.25
         self.localLabel.setText("Local Time")
         
         self.addSubview(self.timeLabel)
-        
-        self.addSubview(self.statusLabel)
-        self.statusLabel.setText("Focus Status")
-        self.statusLabel.alpha = 0.25
+        self.timeLabel.textAlignment = .center
         
         self.addSubview(self.focusLabel)
         self.focusLabel.setTextColor(.D1)
@@ -99,41 +102,41 @@ class ProfileHeaderView: BaseView {
         super.layoutSubviews()
         
         self.personView.squaredSize = 100
-        self.personView.pin(.left, offset: .xtraLong)
-        self.personView.pin(.bottom)
+        self.personView.centerOnX()
+        self.personView.pin(.top)
+        
+        self.localLabel.setSize(withWidth: self.width)
+        self.localLabel.centerX = self.width * 0.2
+        self.localLabel.bottom = self.personView.bottom
+        
+        self.timeLabel.setSize(withWidth: self.width)
+        self.timeLabel.centerX = self.localLabel.centerX
+        self.timeLabel.match(.bottom, to: .top, of: self.localLabel, offset: .negative(.short))
+        
+        self.nameLabel.setSize(withWidth: self.width)
+        self.nameLabel.match(.top, to: .bottom, of: self.personView, offset: .xtraLong)
+        self.nameLabel.centerOnX()
+        
+        self.focusLabel.setSize(withWidth: self.width)
+        self.focusLabel.centerX = self.halfWidth + 7
+        self.focusLabel.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)
         
         self.focusCircle.squaredSize = 10
         self.focusCircle.makeRound()
-        self.focusCircle.match(.left, to: .right, of: self.personView, offset: .xtraLong)
-        self.focusCircle.match(.bottom, to: .bottom, of: self.personView)
-        
-        self.focusLabel.setSize(withWidth: self.width)
-        self.focusLabel.match(.left, to: .right, of: self.focusCircle, offset: .short)
-        self.focusLabel.centerY = self.focusCircle.centerY
-
-        self.statusLabel.setSize(withWidth: self.width)
-        self.statusLabel.match(.left, to: .right, of: self.focusLabel, offset: .short)
-        self.statusLabel.centerY = self.focusCircle.centerY
-        
-        self.timeLabel.setSize(withWidth: self.width)
-        self.timeLabel.match(.left, to: .left, of: self.nameLabel)
-        self.timeLabel.match(.bottom, to: .top, of: self.focusCircle, offset: .negative(.standard))
-        
-        self.localLabel.setSize(withWidth: self.width)
-        self.localLabel.match(.left, to: .right, of: self.timeLabel, offset: .short)
-        self.localLabel.centerY = self.timeLabel.centerY
-        
-        self.nameLabel.setSize(withWidth: self.width)
-        self.nameLabel.match(.bottom, to: .top, of: self.timeLabel, offset: .negative(.standard))
-        self.nameLabel.match(.left, to: .right, of: self.personView, offset: .xtraLong)
+        self.focusCircle.match(.right, to: .left, of: self.focusLabel, offset: .negative(.short))
+        self.focusCircle.centerY = self.focusLabel.centerY
+    
+        self.positionLabel.setSize(withWidth: self.width)
+        self.positionLabel.centerX = self.width * 0.8
+        self.positionLabel.match(.bottom, to: .bottom, of: self.personView)
         
         self.memberLabel.setSize(withWidth: self.width)
-        self.memberLabel.match(.left, to: .right, of: self.nameLabel, offset: .short)
-        self.memberLabel.bottom = self.nameLabel.bottom - 2
+        self.memberLabel.match(.bottom, to: .top, of: self.positionLabel, offset: .negative(.short))
+        self.memberLabel.centerX = self.positionLabel.centerX
         
         self.menuButton.squaredSize = 44
         self.menuButton.pin(.right)
-        self.menuButton.pin(.top, offset: .negative(.xtraLong))
+        self.menuButton.pin(.top, offset: .custom(40))
     }
     
     private func createMenu(for person: PersonType) -> UIMenu? {

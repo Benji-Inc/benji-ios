@@ -13,7 +13,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: String?
     
     private let personView = BorderedPersonView()
-    private let label = ThemeLabel(font: .regular)
+    private let label = ThemeLabel(font: .regular, textColor: .whiteWithAlpha)
     
     override func initializeSubviews() {
         super.initializeSubviews()

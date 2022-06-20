@@ -24,13 +24,14 @@ class JibsDetailView: BaseView {
                                          gradientColor: ThemeColor.B0.color,
                                          gradientStop: 4)
     
-    let subtitleLabel = ThemeLabel(font: .small, textColor: .D1)
+    let subtitleLabel = ThemeLabel(font: .small)
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.titleLabel)
         self.addSubview(self.subtitleLabel)
+        self.subtitleLabel.alpha = 0.25
         self.subtitleLabel.textAlignment = .right
     }
         

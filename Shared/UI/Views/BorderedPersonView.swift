@@ -11,6 +11,8 @@ import UIKit
 
 class BorderedPersonView: PersonView {
     
+    let gradientLayer = GradientLayer(with: [.B0, .B6], startPoint: .topLeft, endPoint: .bottomRight)
+    
     lazy var shadowLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.shadowColor = ThemeColor.B6.color.cgColor
@@ -40,9 +42,10 @@ class BorderedPersonView: PersonView {
         self.clipsToBounds = false
         self.imageView.clipsToBounds = true
         self.layer.insertSublayer(self.shadowLayer, at: 0)
-        self.layer.insertSublayer(self.pulseLayer, at: 2)
+        self.layer.insertSublayer(self.gradientLayer, at: 1)
         #if IOS
         self.addSubview(self.contextCueView)
+        self.layer.insertSublayer(self.pulseLayer, below: self.contextCueView.layer)
         #endif
     }
     
@@ -55,6 +58,8 @@ class BorderedPersonView: PersonView {
         self.imageView.layer.cornerRadius = cornerRadius
         self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
         self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
+        self.gradientLayer.frame = self.bounds
+        self.gradientLayer.cornerRadius = cornerRadius
         #if IOS
         self.contextCueView.pin(.right, offset: .negative(.short))
         self.contextCueView.pin(.bottom, offset: .negative(.short))

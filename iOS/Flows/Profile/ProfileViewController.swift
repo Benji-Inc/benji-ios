@@ -52,7 +52,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
+            sheet.prefersGrabberVisible = false
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
@@ -134,7 +134,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     override func viewDidLayoutSubviews() {
         self.header.expandToSuperviewWidth()
         self.header.height = ProfileHeaderView.height
-        self.header.pinToSafeArea(.top, offset: .xtraLong)
+        self.header.pin(.top)
         
         self.contextCueHeaderLabel.setSize(withWidth: self.view.width)
         self.contextCueHeaderLabel.match(.top, to: .bottom, of: self.header, offset: .xtraLong)
@@ -143,6 +143,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         super.viewDidLayoutSubviews()
         
         self.darkBlurView.expandToSuperviewSize()
+        self.darkBlurView.pin(.top, offset: .custom(40))
+        self.darkBlurView.roundCorners()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
         self.contextCuesVC.view.height = 44

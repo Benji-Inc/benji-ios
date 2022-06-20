@@ -11,7 +11,7 @@ import Foundation
 class WalletHeaderDetailView: BaseView {
     
     let titleLabel = ThemeLabel(font: .medium)
-    let subtitleLabel = ThemeLabel(font: .small, textColor: .D1)
+    let subtitleLabel = ThemeLabel(font: .small)
 
     private let shouldPinLeft: Bool
     private let detailDisclosure = SymbolImageView(symbol: .infoCircle)
@@ -36,6 +36,7 @@ class WalletHeaderDetailView: BaseView {
         
         self.addSubview(self.titleLabel)
         self.addSubview(self.subtitleLabel)
+        self.subtitleLabel.alpha = 0.25
     }
     
     func configure(with title: String,
