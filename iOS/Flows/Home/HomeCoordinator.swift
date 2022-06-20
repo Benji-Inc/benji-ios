@@ -76,24 +76,13 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             
             switch option {
             case .newMessage:
-                break
+                self.presentConversation(with: nil, messageId: nil)
             case .newPerson:
                 self.presentPeoplePicker()
             case .newVibe:
                 self.presentVibeCreator()
             }
         }
-        
-//        self.homeVC.conversationsVC.dataSource.didSelectAddConversation = { [unowned self] in
-//            Task {
-//                guard let conversation = try? await JibberChatClient.shared.createNewConversation() else { return }
-//                self.presentConversation(with: conversation.cid.description, messageId: nil)
-//            }
-//        }
-        
-//        self.roomVC.dataSource.didSelectAddPerson = { [unowned self] in
-//            self.presentPeoplePicker()
-//        }
         
         self.homeVC.membersVC.$selectedItems.mainSink { [unowned self] items in
             guard let itemType = items.first else { return }

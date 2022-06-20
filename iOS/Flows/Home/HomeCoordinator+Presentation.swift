@@ -11,7 +11,7 @@ import Intents
 
 extension HomeCoordinator {
     
-    func presentConversation(with conversationId: String,
+    func presentConversation(with conversationId: String?,
                              messageId: String?,
                              openReplies: Bool = false) {
         

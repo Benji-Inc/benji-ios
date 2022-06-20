@@ -23,7 +23,7 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
     init(router: CoordinatorRouter,
          deepLink: DeepLinkable?,
-         conversationId: String,
+         conversationId: String?,
          startingMessageId: String?,
          openReplies: Bool = false) {
         

@@ -19,6 +19,15 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
     
     private(set) var conversationListController: ConversationListController?
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let action = UIAction { [unowned self] _ in
+            self.startLoadAllTask()
+        }
+        let control = UIRefreshControl(frame: .zero, primaryAction: action)
+        control.tintColor = ThemeColor.white.color
+        return control
+    }()
+    
     init() {
         super.init(with: ConversationsCollectionView())
     }
@@ -31,7 +40,8 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
         super.viewDidLoad()
         
         self.loadInitialData()
-        self.collectionView.allowsMultipleSelection = false 
+        self.collectionView.allowsMultipleSelection = false
+        self.collectionView.refreshControl = self.refreshControl
     }
     
     override func getAllSections() -> [ConversationsDataSource.SectionType] {
@@ -117,5 +127,9 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
         snapshot.setItems(items, in: .conversations)
         
         await self.dataSource.apply(snapshot)
+        
+        if self.refreshControl.isRefreshing {
+            self.refreshControl.endRefreshing()
+        }
     }
 }
