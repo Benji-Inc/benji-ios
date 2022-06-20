@@ -51,6 +51,17 @@ extension HomeCoordinator {
         self.router.present(coordinator, source: self.homeVC)
     }
     
+    func presentVibeCreator() {
+        self.removeChild()
+
+        let coordinator = ContextCueCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { _ in
+            coordinator.toPresentable().dismiss(animated: true, completion: nil)
+        }
+
+        self.router.present(coordinator, source: self.homeVC)
+    }
+    
     func presentPeoplePicker() {
         self.removeChild()
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)

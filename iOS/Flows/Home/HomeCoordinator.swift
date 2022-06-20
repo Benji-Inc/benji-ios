@@ -71,6 +71,19 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             self.handleLeftOption(with: notice)
         }
         
+        self.homeVC.shortcutVC.didSelectOption = { [unowned self] option in
+            self.homeVC.state = .dismissShortcuts
+            
+            switch option {
+            case .newMessage:
+                break
+            case .newPerson:
+                self.presentPeoplePicker()
+            case .newVibe:
+                self.presentVibeCreator()
+            }
+        }
+        
 //        self.homeVC.conversationsVC.dataSource.didSelectAddConversation = { [unowned self] in
 //            Task {
 //                guard let conversation = try? await JibberChatClient.shared.createNewConversation() else { return }

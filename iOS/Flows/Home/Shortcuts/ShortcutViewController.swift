@@ -13,8 +13,10 @@ class ShortcutViewController: ViewController, HomeStateHandler {
     private let blurView = DarkBlurView()
     
     let option1 = ShortcutOptionView(with: .newVibe)
-    let option2 = ShortcutOptionView(with: .newConversation)
+    let option2 = ShortcutOptionView(with: .newPerson)
     let option3 = ShortcutOptionView(with: .newMessage)
+    
+    var didSelectOption: ((ShortcutOptionView.OptionType) -> Void)? = nil
     
     override func initializeViews() {
         super.initializeViews()
@@ -23,8 +25,17 @@ class ShortcutViewController: ViewController, HomeStateHandler {
         self.blurView.showBlur(false)
         
         self.view.addSubview(self.option1)
+        self.option1.didSelectOption = { [unowned self] option in
+            self.didSelectOption?(option)
+        }
         self.view.addSubview(self.option2)
+        self.option2.didSelectOption = { [unowned self] option in
+            self.didSelectOption?(option)
+        }
         self.view.addSubview(self.option3)
+        self.option3.didSelectOption = { [unowned self] option in
+            self.didSelectOption?(option)
+        }
     }
     
     override func viewDidLayoutSubviews() {

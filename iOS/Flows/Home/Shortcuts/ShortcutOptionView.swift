@@ -16,15 +16,15 @@ class ShortcutOptionView: BaseView {
     
     enum OptionType {
         case newMessage
-        case newConversation
+        case newPerson
         case newVibe
         
         var symbol: ImageSymbol {
             switch self {
             case .newMessage:
                 return .squareAndPencil
-            case .newConversation:
-                return .speechBubbles
+            case .newPerson:
+                return .personBadgePlus
             case .newVibe:
                 return .faceSmiling
             }
@@ -34,8 +34,8 @@ class ShortcutOptionView: BaseView {
             switch self {
             case .newMessage:
                 return "New Message"
-            case .newConversation:
-                return "Add Conversation"
+            case .newPerson:
+                return "Add Person"
             case .newVibe:
                 return "Update Vibe"
             }
@@ -46,7 +46,8 @@ class ShortcutOptionView: BaseView {
     let titleLabel = ThemeLabel(font: .regular)
     
     let type: OptionType
-    var didSelectOption: CompletionOptional = nil
+    
+    var didSelectOption: ((OptionType) -> Void)? = nil
     
     init(with type: OptionType) {
         self.type = type
@@ -71,6 +72,11 @@ class ShortcutOptionView: BaseView {
         
         self.addSubview(self.titleLabel)
         self.titleLabel.setText(self.type.text)
+        
+        self.didSelect { [unowned self] in
+            self.didSelectOption?(self.type)
+            self.reset()
+        }
     }
     
     override func layoutSubviews() {
@@ -109,6 +115,10 @@ class ShortcutOptionView: BaseView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
 
+        self.reset()
+    }
+    
+    func reset() {
         Task {
             await UIView.awaitAnimation(with: .fast, animations: {
                 self.set(backgroundColor: .D6)
