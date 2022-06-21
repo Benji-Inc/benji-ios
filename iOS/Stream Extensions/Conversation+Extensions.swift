@@ -35,10 +35,10 @@ extension Conversation {
             return localized(friendlyName.capitalized)
         }
         
-        return nil 
+        return localized(self.description)
     }
 
-    var description: Localized {
+    private var description: Localized {
         let members = self.lastActiveMembers.filter { member in
             return member.personId != User.current()?.objectId
         }

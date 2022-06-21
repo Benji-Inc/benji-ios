@@ -91,7 +91,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     }
     
     private func setTopic(for conversation: Conversation) {
-        self.topicLabel.setText(conversation.description)
+        self.topicLabel.setText(conversation.title)
     }
     
     func update(for state: ConversationUIState) {

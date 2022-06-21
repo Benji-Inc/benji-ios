@@ -46,7 +46,7 @@ class ConversationSelectionCell: CollectionViewManagerCell, ManageableCell {
                     return member.personId != User.current()?.objectId
                 }
                 
-                self.titleLabel.setText(conversation.description)
+                self.titleLabel.setText(conversation.title)
                 self.stackedPersonView.configure(with: members)
                 self.layoutNow()
             }
@@ -65,12 +65,6 @@ class ConversationSelectionCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.centerOnY()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        //self.titleLabel.text = nil
-    }
-    
     override func updateConfiguration(using state: UICellConfigurationState) {
         // Get the system default background configuration for a plain style list cell in the current state.
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell().updated(for: state)
@@ -81,13 +75,15 @@ class ConversationSelectionCell: CollectionViewManagerCell, ManageableCell {
         // Apply the background configuration to the cell.
         self.backgroundConfiguration = backgroundConfig
         
-        if state.isHighlighted {
+        if state.isHighlighted || state.isSelected {
             Task {
                 await UIView.awaitAnimation(with: .fast) {
                     self.contentView.set(backgroundColor: .D6)
                 }
             }
-            self.selectionImpact.impactOccurred(intensity: 1.0)
+            if state.isHighlighted {
+                self.selectionImpact.impactOccurred(intensity: 1.0)
+            }
         } else {
             Task {
                 await UIView.awaitAnimation(with: .fast) {

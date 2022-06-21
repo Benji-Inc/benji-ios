@@ -57,7 +57,7 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
                         
         let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
         let query = ChannelListQuery(filter: filter,
-                                     sort: [Sorting(key: .createdAt, isAscending: false)],
+                                     sort: [Sorting(key: .lastMessageAt, isAscending: false)],
                                      pageSize: .channelsPageSize,
                                      messagesLimit: 1)
         
@@ -97,7 +97,7 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
             
             let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
-                                         sort: [Sorting(key: .createdAt, isAscending: false)],
+                                         sort: [Sorting(key: .lastMessageAt, isAscending: false)],
                                          pageSize: .channelsPageSize,
                                          messagesLimit: 1)
             
