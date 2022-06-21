@@ -13,6 +13,7 @@ class TabView: BaseView, HomeStateHandler {
     let darkblur = VibrancyView()
     let membersButton = ThemeButton()
     let conversationsButton = ThemeButton()
+    let walletButton = ThemeButton()
     let noticesButton = ThemeButton()
     
     let barView = BaseView()
@@ -21,12 +22,13 @@ class TabView: BaseView, HomeStateHandler {
         case members
         case conversations
         case wallet
+        case notices
     }
     
     @Published var state: State = .members
     
     var buttons: [ThemeButton] {
-        return [self.membersButton, self.conversationsButton, self.noticesButton]
+        return [self.membersButton, self.conversationsButton, self.noticesButton, self.walletButton]
     }
     
     override func initializeSubviews() {
@@ -60,10 +62,20 @@ class TabView: BaseView, HomeStateHandler {
         self.conversationsButton.layer.shadowOffset = .zero
         self.conversationsButton.layer.shadowRadius = 6
         
-        self.addSubview(self.noticesButton)
-        self.noticesButton.set(style: .image(symbol: .jibs,
+        self.addSubview(self.walletButton)
+        self.walletButton.set(style: .image(symbol: .jibs,
                                              palletteColors: [.D6],
                                              pointSize: 10,
+                                             backgroundColor: .clear))
+        self.walletButton.layer.shadowColor = ThemeColor.red.color.cgColor
+        self.walletButton.layer.shadowOpacity = 0.0
+        self.walletButton.layer.shadowOffset = .zero
+        self.walletButton.layer.shadowRadius = 6
+        
+        self.addSubview(self.noticesButton)
+        self.noticesButton.set(style: .image(symbol: .bell,
+                                             palletteColors: [.D6],
+                                             pointSize: pointSize,
                                              backgroundColor: .clear))
         self.noticesButton.layer.shadowColor = ThemeColor.red.color.cgColor
         self.noticesButton.layer.shadowOpacity = 0.0
@@ -82,8 +94,12 @@ class TabView: BaseView, HomeStateHandler {
             self.state = .conversations
         }
         
-        self.noticesButton.didSelect { [unowned self] in
+        self.walletButton.didSelect { [unowned self] in
             self.state = .wallet
+        }
+        
+        self.noticesButton.didSelect { [unowned self] in
+            self.state = .notices
         }
         
         self.$state
@@ -100,7 +116,7 @@ class TabView: BaseView, HomeStateHandler {
         self.darkblur.makeRound()
         self.darkblur.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         
-        let buttonWidth = (self.width - Theme.ContentOffset.standard.value.doubled) * 0.3
+        let buttonWidth = (self.width - Theme.ContentOffset.standard.value.doubled) * 0.225
         
         self.membersButton.height = self.height
         self.membersButton.width = buttonWidth
@@ -112,9 +128,14 @@ class TabView: BaseView, HomeStateHandler {
         self.conversationsButton.match(.left, to: .right, of: self.membersButton)
         self.conversationsButton.centerOnY()
         
+        self.walletButton.height = self.height
+        self.walletButton.width = buttonWidth
+        self.walletButton.match(.left, to: .right, of: self.conversationsButton)
+        self.walletButton.centerOnY()
+        
         self.noticesButton.height = self.height
         self.noticesButton.width = buttonWidth
-        self.noticesButton.match(.left, to: .right, of: self.conversationsButton)
+        self.noticesButton.match(.left, to: .right, of: self.walletButton)
         self.noticesButton.centerOnY()
         
         self.barView.height = 2
@@ -190,14 +211,22 @@ class TabView: BaseView, HomeStateHandler {
             self.membersButton.isSelected = true
             self.conversationsButton.isSelected = false
             self.noticesButton.isSelected = false
+            self.walletButton.isSelected = false
         case .conversations:
             self.membersButton.isSelected = false
             self.conversationsButton.isSelected = true
             self.noticesButton.isSelected = false
+            self.walletButton.isSelected = false
         case .wallet:
             self.membersButton.isSelected = false
             self.conversationsButton.isSelected = false
-            self.noticesButton.isSelected = true
+            self.walletButton.isSelected = true
+            self.noticesButton.isSelected = false
+        case .notices:
+            self.membersButton.isSelected = false
+            self.conversationsButton.isSelected = false
+            self.walletButton.isSelected = false
+            self.noticesButton.isSelected = true 
         }
     }
 }

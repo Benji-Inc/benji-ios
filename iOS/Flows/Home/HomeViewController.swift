@@ -112,7 +112,7 @@ class HomeViewController: ViewController, HomeStateHandler {
         self.shortcutButton.pinToSafeAreaBottom()
         
         self.tabView.height = 60
-        self.tabView.width = self.view.width * 0.6
+        self.tabView.width = self.view.width * 0.7
         self.tabView.pinToSafeAreaBottom()
         
         switch self.state {
@@ -193,6 +193,8 @@ class HomeViewController: ViewController, HomeStateHandler {
                 self.currentContentVC = self.conversationsVC
             case .wallet:
                 self.currentContentVC = self.walletVC
+            case .notices:
+                self.currentContentVC = self.noticesVC
             }
             
             guard let vc = self.currentContentVC else { return }
