@@ -169,7 +169,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             break
         case .starting:
             // Initialize the AVAsset writer to prepare for capture
-            self.initializeAssetWriter(with: sampleBuffer)
+            self.startAssetWriter(with: sampleBuffer)
             self.videoCaptureState = .capturing
         case .capturing:
             self.writeSampleToFile(sampleBuffer)
@@ -179,7 +179,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
         }
     }
 
-    private func initializeAssetWriter(with sampleBuffer: CMSampleBuffer) {
+    private func startAssetWriter(with sampleBuffer: CMSampleBuffer) {
         do {
             // Get a url to temporarily store the video
             #warning("Use a full UUID")
