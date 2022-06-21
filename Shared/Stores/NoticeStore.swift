@@ -17,6 +17,16 @@ class NoticeStore {
     static let shared = NoticeStore()
     
     @Published private(set) var notices: [SystemNotice] = []
+    
+    private var __notices: [SystemNotice] = [] {
+        didSet {
+            self.notices = self.__notices.filter({ notice in
+                return notice.type != .unreadMessages &&
+                notice.type != .unknown &&
+                notice.type != .messageRead
+            }).sorted()
+        }
+    }
 
     private var initializeTask: Task<Void, Error>?
 
@@ -30,9 +40,7 @@ class NoticeStore {
         // Otherwise start a new initialization task and wait for it to finish.
         self.initializeTask = Task {
             // Get all of the notices.
-            self.notices = try await Notice.fetchAll().filter({ notice in
-                return notice.type != .system
-            }).compactMap({ notice in
+            self.__notices = try await Notice.fetchAll().compactMap({ notice in
                 return SystemNotice(with: notice)
             })
             
@@ -40,6 +48,7 @@ class NoticeStore {
         }
 
         do {
+            await Task.sleep(seconds: 5.0)
             try await self.initializeTask?.value
         } catch {
             // Dispose of the task because it failed, then pass the error along.
@@ -49,7 +58,7 @@ class NoticeStore {
     }
     
     func delete(notice: SystemNotice) {
-        self.notices.remove(object: notice)
+        self.__notices.remove(object: notice)
         
         if let n = notice.notice {
             do {
@@ -63,7 +72,7 @@ class NoticeStore {
     func removeNoticeIfNeccessary(for message: Messageable) {
         guard message.deliveryType == .timeSensitive else { return }
         
-        guard let first = self.notices.first(where: { notice in
+        guard let first = self.__notices.first(where: { notice in
             if notice.type == .timeSensitiveMessage,
                 let msgId = notice.attributes?["messageId"] as? String,
                 msgId == message.id {
@@ -88,32 +97,32 @@ class NoticeStore {
                 // When a new notice is made, add to the notices array.
                 guard let notice = object as? Notice else { break }
                 
-                if !self.notices.contains(where: { existing in
+                if !self.__notices.contains(where: { existing in
                     return existing.notice?.objectId == notice.objectId
                 }) {
-                    self.notices.append(SystemNotice(with: notice))
+                    self.__notices.append(SystemNotice(with: notice))
                 }
 
             case .updated(let object):
                 // When a notice is updated, we update the corresponding notice.
                 guard let notice = object as? Notice else { break }
                 
-                if let first = self.notices.first(where: { existing in
+                if let first = self.__notices.first(where: { existing in
                     return existing.notice?.objectId == notice.objectId
                 }) {
-                    self.notices.remove(object: first)
+                    self.__notices.remove(object: first)
                 }
                 
-                self.notices.append(SystemNotice(with: notice))
+                self.__notices.append(SystemNotice(with: notice))
 
             case .left(let object), .deleted(let object):
                 // Remove notices when they are deleted.
                 guard let notice = object as? Notice else { break }
 
-                if let first = self.notices.first(where: { existing in
+                if let first = self.__notices.first(where: { existing in
                     return existing.notice?.objectId == notice.objectId
                 }) {
-                    self.notices.remove(object: first)
+                    self.__notices.remove(object: first)
                 }
             }
         }

@@ -30,8 +30,11 @@ class NoticeIndicatorView: BaseView {
         self.addSubview(self.counter)
         self.set(backgroundColor: .D6)
         
+        self.alpha = 0
+        
         NoticeStore.shared.$notices.mainSink { [unowned self] notices in
             self.counter.setValue(Float(notices.count))
+            self.animateChanges(shouldShow: notices.count > 0)
         }.store(in: &self.cancellables)
     }
     
@@ -51,5 +54,18 @@ class NoticeIndicatorView: BaseView {
         self.showShadow(withOffset: 0, opacity: 1.0, color: .red)
         
         self.counter.centerOnXAndY()
+    }
+    
+    private func animateChanges(shouldShow: Bool) {
+        Task {
+            await UIView.awaitSpringAnimation(with: .fast, animations: { [unowned self] in
+                if shouldShow {
+                    self.transform = .identity
+                    self.alpha = 1.0
+                } else {
+                    self.alpha = 0.0
+                }
+            })
+        }
     }
 }

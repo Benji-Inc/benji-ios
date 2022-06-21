@@ -67,18 +67,9 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
             
             try? await NoticeStore.shared.initializeIfNeeded()
 
-            var notices = NoticeStore.shared.notices.filter({ notice in
+            let notices = NoticeStore.shared.notices.filter({ notice in
                 return notice.type != .unreadMessages
             }).sorted()
-            
-            if notices.isEmpty {
-                let empty = SystemNotice(createdAt: Date(),
-                                         notice: nil,
-                                         type: .system,
-                                         priority: 0,
-                                         attributes: [:])
-                notices = [empty]
-            }
             
             let items: [NoticesDataSource.ItemType] = notices.compactMap({ notice in
                 return .notice(notice)

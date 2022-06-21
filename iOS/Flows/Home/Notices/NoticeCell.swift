@@ -49,7 +49,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             content = self.invitePromptContentView
         case .jibberIntro:
             content = self.invitePromptContentView
-        case .system, .unreadMessages:
+        default:
             content = NoticeContentView()
         }
         
