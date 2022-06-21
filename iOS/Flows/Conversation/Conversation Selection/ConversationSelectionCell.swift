@@ -60,7 +60,7 @@ class ConversationSelectionCell: CollectionViewManagerCell, ManageableCell {
         self.stackedPersonView.centerOnY()
         
         let maxWidth = self.contentView.width - self.stackedPersonView.width - Theme.ContentOffset.standard.value.doubled - Theme.ContentOffset.standard.value
-        self.titleLabel.setSize(withWidth: maxWidth)
+        self.titleLabel.setSize(withWidth: maxWidth, height: self.contentView.height)
         self.titleLabel.match(.left, to: .right, of: self.stackedPersonView, offset: .standard)
         self.titleLabel.centerOnY()
     }
@@ -68,7 +68,7 @@ class ConversationSelectionCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.titleLabel.text = nil
+        //self.titleLabel.text = nil
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {

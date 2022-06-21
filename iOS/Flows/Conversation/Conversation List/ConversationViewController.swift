@@ -177,11 +177,9 @@ class ConversationViewController: InputHandlerViewContoller,
                         self.addChild(self.selectionViewController)
                         self.view.insertSubview(self.selectionViewController.view, aboveSubview: self.headerVC.view)
                         self.view.layoutNow()
-                        // display existing conversation as options
-                        // Dont allow swipe to send until a group is chosen
-                        // Prepare for selection
-                        // If optional display keyboard, group selection in header.
+                        
                         Task {
+                            // Hack to get the input text view to layout correctly
                             await Task.sleep(seconds:0.1)
                             self.messageInputController.swipeInputView.textView.becomeFirstResponder()
                         }

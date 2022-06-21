@@ -48,7 +48,6 @@ class NoticeStore {
         }
 
         do {
-            await Task.sleep(seconds: 5.0)
             try await self.initializeTask?.value
         } catch {
             // Dispose of the task because it failed, then pass the error along.
