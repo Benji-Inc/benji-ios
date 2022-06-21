@@ -54,9 +54,8 @@ class ExpressionViewController: ViewController {
     }
     
     private func setupHandlers() {
-        
         self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            guard let data = image.previewData else { return }
+            guard let data = image.heicData else { return }
             self.data = data
                         
             self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
@@ -69,6 +68,10 @@ class ExpressionViewController: ViewController {
             Task {
                 await self.createExpression()
             }
+        }
+
+        self.expressionPhotoVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
+            logDebug("Video url is "+videoURL.description)
         }
         
         self.personGradientView.didSelect { [unowned self] in

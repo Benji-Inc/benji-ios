@@ -15,12 +15,15 @@ class PhotoCaptureSession {
 
     weak var avCaptureDelegate: (AVCaptureVideoDataOutputSampleBufferDelegate & AVCapturePhotoCaptureDelegate)?
 
-    private lazy var session = AVCaptureSession()
-    
     var isRunning: Bool {
         return self.session.isRunning
     }
-    
+
+    var currentPosition: AVCaptureDevice.Position = .front
+    var flashMode: AVCaptureDevice.FlashMode = .auto
+
+    private lazy var session = AVCaptureSession()
+
     private var capturePhotoOutput: AVCapturePhotoOutput!
 
     private let dataOutputQueue = DispatchQueue(label: "video data queue",
@@ -28,10 +31,6 @@ class PhotoCaptureSession {
                                                 attributes: [],
                                                 autoreleaseFrequency: .workItem)
     private var videoOutput: AVCaptureVideoDataOutput?
-
-    var currentPosition: AVCaptureDevice.Position = .front
-
-    var flashMode: AVCaptureDevice.FlashMode = .auto
 
     /// Configures and starts an AV capture session. Requests access for video  capture if needed.
     func begin() {
@@ -44,6 +43,7 @@ class PhotoCaptureSession {
         }
     }
 
+    /// Stops the AV capture session and cleans up inputs and outputs.
     func stop() {
         self.session.stopRunning()
 
@@ -77,9 +77,7 @@ class PhotoCaptureSession {
         // Create the video data output
         self.videoOutput = AVCaptureVideoDataOutput()
         
-        guard let videoOutput = self.videoOutput else {
-            return
-        }
+        guard let videoOutput = self.videoOutput else { return }
 
         videoOutput.setSampleBufferDelegate(self.avCaptureDelegate, queue: self.dataOutputQueue)
         videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]

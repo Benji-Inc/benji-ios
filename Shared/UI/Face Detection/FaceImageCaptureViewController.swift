@@ -17,7 +17,17 @@ import CoreImage.CIFilterBuiltins
 /// A live preview of the camera is shown on the main view.
 class FaceImageCaptureViewController: ViewController {
 
+    enum VideoCaptureState {
+        case idle
+        case starting
+        case capturing
+        case ending
+    }
+
+    private(set) var videoCaptureState: VideoCaptureState = .idle
+
     var didCapturePhoto: ((UIImage) -> Void)?
+    var didCaptureVideo: ((URL) -> Void)?
 
     @Published private(set) var hasRenderedFaceImage = false
     @Published private(set) var faceDetected = false
@@ -100,7 +110,29 @@ class FaceImageCaptureViewController: ViewController {
 
     func capturePhoto() {
         guard self.isSessionRunning else { return }
-        self.faceCaptureSession.capturePhoto()
+
+        self.captureCurrentImageAsPhoto()
+    }
+
+    private var videoWriter: AVAssetWriter!
+    private var videoWriterInput: AVAssetWriterInput!
+    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor!
+    private var videoStartTime: Double!
+
+    func startVideoCapture() {
+        guard self.videoCaptureState == .idle else { return }
+
+        self.videoCaptureState = .starting
+    }
+
+    func finishVideoCapture() {
+        switch self.videoCaptureState {
+        case .starting, .capturing:
+            self.videoCaptureState = .ending
+        case .idle, .ending:
+            // Do nothing
+            break
+        }
     }
 }
 
@@ -123,10 +155,100 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             guard let maskPixelBuffer
                     = self.segmentationRequest.results?.first?.pixelBuffer else { return }
             // Process the images.
-            self.blend(original: imageBuffer, mask: maskPixelBuffer)
+            let blendedImage = self.blend(original: imageBuffer, mask: maskPixelBuffer)
 
+            // Set the new, blended image as current.
+            self.currentCIImage = blendedImage
         } catch {
             logError(error)
+        }
+
+        switch self.videoCaptureState {
+        case .idle:
+            // Do nothing
+            break
+        case .starting:
+            // Initialize the AVAsset writer to prepare for capture
+            self.initializeAssetWriter(with: sampleBuffer)
+            self.videoCaptureState = .capturing
+        case .capturing:
+            self.writeSampleToFile(sampleBuffer)
+        case .ending:
+            self.finishWritingVideo()
+            self.videoCaptureState = .idle
+        }
+    }
+
+    private func initializeAssetWriter(with sampleBuffer: CMSampleBuffer) {
+        do {
+            // Get a url to temporarily store the video
+            #warning("Use a full UUID")
+            let uuid = UUID().uuidString.prefix(8)
+            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+                          isDirectory: true).appendingPathComponent(uuid+".mov")
+
+            // Create an asset writer that will write the video the url
+            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
+            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
+                                            AVVideoWidthKey : 720,
+                                           AVVideoHeightKey : 720,
+                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
+
+            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
+                                                       outputSettings: settings)
+            self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
+            self.videoWriterInput.expectsMediaDataInRealTime = true
+
+            self.pixelBufferAdaptor
+            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
+                                                   sourcePixelBufferAttributes: nil)
+
+            if self.videoWriter.canAdd(self.videoWriterInput) {
+                self.videoWriter.add(self.videoWriterInput)
+            }
+
+            self.videoWriter.startWriting()
+
+            let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+            self.videoWriter.startSession(atSourceTime: startTime)
+            self.videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+        } catch {
+            logError(error)
+        }
+    }
+
+    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
+        guard self.videoWriterInput.isReadyForMoreMediaData else { return }
+
+        var pixelBuffer: CVPixelBuffer?
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                     kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        let width: Int = Int(self.currentCIImage!.extent.width)
+        let height: Int = Int(self.currentCIImage!.extent.width)
+
+        CVPixelBufferCreate(kCFAllocatorDefault,
+                            width,
+                            height,
+                            kCVPixelFormatType_32BGRA,
+                            attrs,
+                            &pixelBuffer)
+
+        let context = CIContext()
+        context.render(self.currentCIImage!, to: pixelBuffer!)
+
+
+        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+        let presentationTime = CMTime(seconds: currentTime,
+                                      preferredTimescale: CMTimeScale(bitPattern: 600))
+
+        self.pixelBufferAdaptor.append(pixelBuffer!, withPresentationTime: presentationTime)
+    }
+
+    private func finishWritingVideo() {
+        self.videoWriterInput.markAsFinished()
+        let videoURL = self.videoWriter.outputURL
+        self.videoWriter.finishWriting {
+            self.didCaptureVideo?(videoURL)
         }
     }
 
@@ -140,7 +262,9 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
     }
 
     /// Makes the image black and white, and makes the background clear.
-    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) {
+    func blend(original framePixelBuffer: CVPixelBuffer,
+               mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
+
         let color = CIColor(color: UIColor.clear)
 
         // Create CIImage objects for the video frame and the segmentation mask.
@@ -159,7 +283,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
         let filter = CIFilter(name: "CIPhotoEffectNoir")
         filter?.setValue(originalImage, forKey: "inputImage")
 
-        guard let bwImage = filter?.outputImage else { return }
+        guard let bwImage = filter?.outputImage else { return nil }
 
         // Blend the original, background, and mask images.
         let blendFilter = CIFilter.blendWithRedMask()
@@ -167,8 +291,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
         blendFilter.backgroundImage = solidColor
         blendFilter.maskImage = maskImage
 
-        // Set the new, blended image as current.
-        self.currentCIImage = blendFilter.outputImage?.oriented(.leftMirrored)
+        return blendFilter.outputImage?.oriented(.leftMirrored)
     }
 }
 
@@ -181,6 +304,10 @@ extension FaceImageCaptureViewController: AVCapturePhotoCaptureDelegate {
         guard let connection = output.connection(with: .video) else { return }
         connection.automaticallyAdjustsVideoMirroring = true
 
+        self.captureCurrentImageAsPhoto()
+    }
+
+    func captureCurrentImageAsPhoto() {
         guard let ciImage = self.currentCIImage else { return }
 
         // If we find a face in the image, we'll crop around it and store it here.
@@ -236,7 +363,7 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         // grab image
         guard let ciImage = self.currentCIImage else { return }
 
-        // ensure drawable is free and not tied in the preivous drawing cycle
+        // ensure drawable is free and not tied in the previous drawing cycle
         guard let currentDrawable = view.currentDrawable else { return }
 
         // make sure the image is full screen
@@ -258,7 +385,7 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
                                  bounds: newImage.extent,
                                  colorSpace: CGColorSpaceCreateDeviceRGB())
 
-        // register drawwable to command buffer
+        // register drawable to command buffer
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
 
