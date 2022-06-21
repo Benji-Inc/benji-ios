@@ -66,7 +66,9 @@ extension UIView: Selectable {
         return nil
     }
 
-    func showShadow(withOffset offset: CGFloat, color: UIColor = .black) {
+    func showShadow(withOffset offset: CGFloat,
+                    opacity: CGFloat = 0.3,
+                    color: UIColor = .black) {
         self.layer.shadowColor = color.cgColor
         self.layer.shadowOpacity = 0.3
         self.layer.shadowOffset = CGSize(width: 0, height: offset)

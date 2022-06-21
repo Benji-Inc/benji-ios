@@ -16,6 +16,8 @@ class TabView: BaseView, HomeStateHandler {
     let walletButton = ThemeButton()
     let noticesButton = ThemeButton()
     
+    let indicatorView = NoticeIndicatorView()
+    
     let barView = BaseView()
     
     enum State {
@@ -71,6 +73,8 @@ class TabView: BaseView, HomeStateHandler {
         self.walletButton.layer.shadowOpacity = 0.0
         self.walletButton.layer.shadowOffset = .zero
         self.walletButton.layer.shadowRadius = 6
+        
+        self.addSubview(self.indicatorView)
         
         self.addSubview(self.noticesButton)
         self.noticesButton.set(style: .image(symbol: .bell,
@@ -137,6 +141,9 @@ class TabView: BaseView, HomeStateHandler {
         self.noticesButton.width = buttonWidth
         self.noticesButton.match(.left, to: .right, of: self.walletButton)
         self.noticesButton.centerOnY()
+        
+        self.indicatorView.center = CGPoint(x: self.noticesButton.centerX + 8,
+                                            y: self.noticesButton.centerY - 8)
         
         self.barView.height = 2
         self.barView.pin(.bottom)

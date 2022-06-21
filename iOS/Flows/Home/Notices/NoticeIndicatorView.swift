@@ -18,7 +18,7 @@ class NoticeIndicatorView: BaseView {
                                               suffix: nil,
                                               seperator: "",
                                               seperatorSpacing: 0,
-                                              font: FontType.small.font,
+                                              font: FontType.xtraSmall.font,
                                               textColor: ThemeColor.white.color,
                                               animateInitialValue: true,
                                               gradientColor: nil,
@@ -40,10 +40,15 @@ class NoticeIndicatorView: BaseView {
         
         self.counter.sizeToFit()
 
-        self.width = self.counter.width + Theme.ContentOffset.standard.value
-        self.height = self.counter.height + Theme.ContentOffset.standard.value
+        self.width = self.counter.width + Theme.ContentOffset.short.value
+        self.height = self.counter.height + Theme.ContentOffset.short.value
+        
+        if self.width < self.height {
+            self.width = self.height 
+        }
         
         self.makeRound()
+        self.showShadow(withOffset: 0, opacity: 1.0, color: .red)
         
         self.counter.centerOnXAndY()
     }
