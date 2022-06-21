@@ -23,7 +23,7 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
         
         self.contentView.addSubview(self.container)
-        self.container.set(backgroundColor: .B0)
+        self.container.set(backgroundColor: .B6)
         self.container.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
         self.container.layer.borderWidth = 1
         self.container.layer.cornerRadius = Theme.cornerRadius
