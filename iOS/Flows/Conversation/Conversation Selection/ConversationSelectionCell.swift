@@ -45,6 +45,7 @@ class ConversationSelectionCell: CollectionViewManagerCell, ManageableCell {
                 
                 self.titleLabel.setText(conversation.description)
                 self.stackedPersonView.configure(with: members)
+                self.layoutNow()
             }
         }
     }
@@ -52,7 +53,7 @@ class ConversationSelectionCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.stackedPersonView.pin(.right, offset: .xtraLong)
+        self.stackedPersonView.pin(.left, offset: .xtraLong)
         self.stackedPersonView.centerOnY()
         
         let maxWidth = self.contentView.width - self.stackedPersonView.width - Theme.ContentOffset.xtraLong.value.doubled + Theme.ContentOffset.standard.value

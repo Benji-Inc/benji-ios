@@ -12,6 +12,12 @@ class ConversationSelectionCollectionView: CollectionView {
     
     init() {
         super.init(layout: ConversationSelectionCollectionViewLayout())
+        guard let window = UIWindow.topWindow() else { return }
+        
+        self.contentInset = UIEdgeInsets(top: 100,
+                                         left: 0,
+                                         bottom: window.halfHeight,
+                                         right: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {

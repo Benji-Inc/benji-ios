@@ -27,6 +27,8 @@ class ConversationViewController: InputHandlerViewContoller,
     override var analyticsIdentifier: String? {
         return "SCREEN_CONVERSATION_LIST"
     }
+    
+    lazy var selectionViewController = ConversationSelectionViewController()
 
     var messageContentDelegate: MessageContentDelegate? {
         get { return self.dataSource.messageContentDelegate}
@@ -65,7 +67,7 @@ class ConversationViewController: InputHandlerViewContoller,
     }
     
     override var canBecomeFirstResponder: Bool {
-        return self.presentedViewController.isNil //&& ConversationsManager.shared.activeConversation.exists
+        return self.presentedViewController.isNil
     }
 
     @Published var state: ConversationUIState = .read
@@ -109,8 +111,6 @@ class ConversationViewController: InputHandlerViewContoller,
 
         self.addChild(viewController: self.headerVC, toView: self.view)
         
-        
-        
         self.subscribeToUIUpdates()
         self.setupInputHandlers()
     }
@@ -129,6 +129,8 @@ class ConversationViewController: InputHandlerViewContoller,
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .xtraLong)
         self.collectionView.height = self.view.height - self.headerVC.view.bottom
+        
+        self.selectionViewController.view.expandToSuperviewSize()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -147,6 +149,18 @@ class ConversationViewController: InputHandlerViewContoller,
                 .mainSink { [unowned self] conversationId in
                 
                     if let conversationId = conversationId {
+                        
+                        if self.selectionViewController.parent.exists {
+                            Task {
+                                await UIView.awaitAnimation(with: .fast, animations: {
+                                    self.selectionViewController.view.alpha = 0
+                                })
+                                
+                                self.selectionViewController.removeFromParent()
+                                self.selectionViewController.view.removeFromSuperview()
+                            }
+                        }
+
                         Task {
                             // Initialize the datasource before listening for updates to ensure that the sections
                             // are set up.
@@ -159,6 +173,10 @@ class ConversationViewController: InputHandlerViewContoller,
                             self.subscribeToConversationUpdates()
                         }
                     } else {
+                        self.selectionViewController.view.alpha = 1.0 
+                        self.addChild(self.selectionViewController)
+                        self.view.insertSubview(self.selectionViewController.view, aboveSubview: self.headerVC.view)
+                        self.view.layoutNow()
                         // display existing conversation as options
                         // Dont allow swipe to send until a group is chosen
                         // Prepare for selection

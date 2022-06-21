@@ -48,6 +48,14 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         self.conversationVC.dataSource.handleAddPeopleSelected = { [unowned self] in
             self.presentPeoplePicker()
         }
+        
+        self.conversationVC.selectionViewController.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first else { return }
+            switch first {
+            case .conversation(let conversationId):
+                self.conversationVC.conversationId = conversationId
+            }
+        }.store(in: &self.cancellables)
     }
     
     func handle(deepLink: DeepLinkable) {

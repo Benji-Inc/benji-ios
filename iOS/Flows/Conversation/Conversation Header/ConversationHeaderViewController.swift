@@ -54,11 +54,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     self.topicLabel.text = nil
                     self.topicLabel.isVisible = false
                     self.stackedView.isVisible = false
+                    self.closeButton.isVisible = false
                     return
                 }
                 
                 self.startLoadDataTask(with: conversation)
-                
+                self.closeButton.isVisible = true 
                 self.setTopic(for: convo)
                 self.stackedView.isVisible = true
                 self.topicLabel.isVisible = true
@@ -90,29 +91,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     }
     
     private func setTopic(for conversation: Conversation) {
-        if let title = conversation.title {
-            self.topicLabel.setText(title)
-        } else {
-            // If there is no title, then list the members of the conversation.
-            let members = conversation.lastActiveMembers.filter { member in
-                return !member.isCurrentUser
-            }
-
-            var membersString = ""
-            members.forEach { member in
-                if membersString.isEmpty {
-                    membersString = member.givenName
-                } else {
-                    membersString.append(", \(member.givenName)")
-                }
-            }
-            
-            if membersString.isEmpty {
-                self.topicLabel.setText("No Topic")
-            } else {
-                self.topicLabel.setText(membersString)
-            }
-        }
+        self.topicLabel.setText(conversation.description)
     }
     
     func update(for state: ConversationUIState) {

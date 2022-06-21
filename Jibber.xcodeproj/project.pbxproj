@@ -2707,11 +2707,11 @@
 		D6D4ECCD28613DB4002C71CE /* Conversation Selection */ = {
 			isa = PBXGroup;
 			children = (
-				D6D4ECCE28613DDF002C71CE /* ConversationSelectionViewController.swift */,
-				D6D4ECD028613DF1002C71CE /* ConversationSelectionCollectionView.swift */,
-				D6D4ECD228613E00002C71CE /* ConversationSelectionDataSource.swift */,
 				D6D4ECD428613E0D002C71CE /* ConversationSelectionCell.swift */,
+				D6D4ECD028613DF1002C71CE /* ConversationSelectionCollectionView.swift */,
 				D6D4ECD628613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift */,
+				D6D4ECD228613E00002C71CE /* ConversationSelectionDataSource.swift */,
+				D6D4ECCE28613DDF002C71CE /* ConversationSelectionViewController.swift */,
 			);
 			path = "Conversation Selection";
 			sourceTree = "<group>";

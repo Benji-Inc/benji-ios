@@ -30,6 +30,10 @@ class ConversationSelectionViewController: DiffableCollectionViewController<Conv
         self.loadInitialData()
     }
     
+    override func getAllSections() -> [ConversationSelectionDataSource.SectionType] {
+        return ConversationSelectionDataSource.SectionType.allCases
+    }
+    
     override func retrieveDataForSnapshot() async -> [ConversationSelectionDataSource.SectionType : [ConversationSelectionDataSource.ItemType]] {
        
         var data: [ConversationSelectionDataSource.SectionType: [ConversationSelectionDataSource.ItemType]] = [:]
@@ -48,7 +52,9 @@ class ConversationSelectionViewController: DiffableCollectionViewController<Conv
         
         try? await self.conversationListController?.synchronize()
                 
-        let conversationIds: [String] = self.conversationListController?.conversations.compactMap({ conversation in
+        let conversationIds: [String] = self.conversationListController?.conversations.filter({ conversation in
+            return conversation.memberCount > 1 
+        }).compactMap({ conversation in
             return conversation.id
         }) ?? []
         
