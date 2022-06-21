@@ -43,7 +43,7 @@ class WalletSegmentControl: UISegmentedControl {
         self.setTitleTextAttributes(attributes, for: .selected)
         self.setTitleTextAttributes(attributes, for: .highlighted)
         self.selectedSegmentTintColor = ThemeColor.white.color.withAlphaComponent(0.1)
-        self.selectedSegmentIndex = 1
+        self.selectedSegmentIndex = 0
     }
     
     required init?(coder: NSCoder) {

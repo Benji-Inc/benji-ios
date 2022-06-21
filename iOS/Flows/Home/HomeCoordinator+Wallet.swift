@@ -1,40 +1,16 @@
 //
-//  WalletCoordinator.swift
+//  HomeCoordinator+Wallet.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 2/4/22.
+//  Created by Benji Dodgson on 6/21/22.
 //  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-class WalletCoordinator: PresentableCoordinator<Void> {
+extension HomeCoordinator {
     
-    lazy var walletVC = WalletViewController()
-
-    override func toPresentable() -> DismissableVC {
-        return self.walletVC
-    }
-    
-    override func start() {
-        super.start()
-        
-        self.walletVC.header.didTapDetail = { [unowned self] in 
-            self.presentAlert()
-        }
-        
-        self.walletVC.$selectedItems.mainSink { [unowned self] items in
-            guard let first = items.first else { return }
-            switch first {
-            case .transaction(_):
-                break
-            case .achievement(let achievement):
-                self.presentAlert(for: achievement)
-            }
-        }.store(in: &self.cancellables)
-    }
-    
-    private func presentAlert() {
+    func presentJibInfoAlert() {
                 
         let alertController = UIAlertController(title: "Jibs",
                                                 message: "Earn Jibs now and soon you can use them to upgrade, vote on features, or invest in Jibber.",
@@ -45,10 +21,10 @@ class WalletCoordinator: PresentableCoordinator<Void> {
         })
 
         alertController.addAction(cancelAction)
-        self.walletVC.present(alertController, animated: true, completion: nil)
+        self.homeVC.present(alertController, animated: true, completion: nil)
     }
     
-    private func presentAlert(for achievement: AchievementViewModel) {
+    func presentAchievementAlert(for achievement: AchievementViewModel) {
         
         var description: String = ""
         
@@ -67,6 +43,6 @@ class WalletCoordinator: PresentableCoordinator<Void> {
         })
 
         alertController.addAction(cancelAction)
-        self.walletVC.present(alertController, animated: true, completion: nil)
+        self.homeVC.present(alertController, animated: true, completion: nil)
     }
 }

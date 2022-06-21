@@ -141,11 +141,6 @@ extension ConversationCoordinator {
         self.conversationVC.present(alertController, animated: true, completion: nil)
     }
     
-    func showWallet() {
-        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
-        self.present(coordinator, finishedHandler: nil)
-    }
-    
     func presentConversationDetail() {
         guard let conversationId = self.activeConversation?.id else { return }
         

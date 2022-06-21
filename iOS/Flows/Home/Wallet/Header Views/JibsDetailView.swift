@@ -18,7 +18,7 @@ class JibsDetailView: BaseView {
                                          suffix: nil,
                                          seperator: ".",
                                          seperatorSpacing: 0,
-                                         font: FontType.medium.font,
+                                         font: FontType.display.font,
                                          textColor: ThemeColor.white.color,
                                          animateInitialValue: true,
                                          gradientColor: ThemeColor.B0.color,
@@ -32,7 +32,7 @@ class JibsDetailView: BaseView {
         self.addSubview(self.titleLabel)
         self.addSubview(self.subtitleLabel)
         self.subtitleLabel.alpha = 0.25
-        self.subtitleLabel.textAlignment = .right
+        self.subtitleLabel.textAlignment = .center
     }
         
     func configure(with value: Double) {
@@ -50,7 +50,7 @@ class JibsDetailView: BaseView {
         self.width = self.titleLabel.width > self.subtitleLabel.width ? self.titleLabel.width : self.subtitleLabel.width
         
         self.titleLabel.pin(.right)
-        self.subtitleLabel.pin(.right)
+        self.subtitleLabel.centerOnX()
         
         self.titleLabel.pin(.top)
         self.subtitleLabel.pin(.bottom)

@@ -10,17 +10,11 @@ import Foundation
 
 class WalletViewController: DiffableCollectionViewController<WalletCollectionViewDataSource.SectionType,
                             WalletCollectionViewDataSource.ItemType,
-                            WalletCollectionViewDataSource> {
+                            WalletCollectionViewDataSource>, HomeContentType {
     
-    private let topGradientView
-    = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                   startPoint: .topCenter,
-                   endPoint: .bottomCenter)
-    
-    private let bottomGradientView
-    = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                   startPoint: .bottomCenter,
-                   endPoint: .topCenter)
+    var contentTitle: String {
+        return "Jibs"
+    }
     
     private let walletGradientView
     = GradientPassThroughView(with: [ThemeColor.B6.color.cgColor,
@@ -65,8 +59,6 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
         
         self.view.addSubview(self.header)
         self.backgroundView.set(backgroundColor: .B6)
-        self.view.addSubview(self.topGradientView)
-        self.view.addSubview(self.bottomGradientView)
         
         self.backgroundView.layer.cornerRadius = Theme.cornerRadius
         self.backgroundView.clipsToBounds = true
@@ -81,22 +73,14 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
     
     override func viewDidLayoutSubviews() {
         
-        self.header.height = 240
+        self.header.height = 200
         self.header.width = self.view.width - Theme.ContentOffset.xtraLong.value.doubled
-        self.header.pin(.top)
+        self.header.pinToSafeAreaTop()
         self.header.centerOnX()
         
         super.viewDidLayoutSubviews()
         
         self.darkBlurView.expandToSuperviewSize()
-        
-        self.topGradientView.expandToSuperviewWidth()
-        self.topGradientView.height = 34
-        self.topGradientView.pin(.top)
-        
-        self.bottomGradientView.expandToSuperviewWidth()
-        self.bottomGradientView.height = 94
-        self.bottomGradientView.pin(.bottom)
         
         let padding = Theme.ContentOffset.xtraLong.value
         let totalWidth = self.collectionView.width - padding.doubled
@@ -159,9 +143,25 @@ class WalletViewController: DiffableCollectionViewController<WalletCollectionVie
             self.header.configure(with: transactions)
         }
         
-        data[.transactions] = transactions.compactMap({ transaction in
-            return .transaction(transaction)
-        })
+        guard let _ = try? await AchievementsManager.shared.initializeIfNeeded() else { return data }
+        
+        let achievements = AchievementsManager.shared.achievements
+        let types = AchievementsManager.shared.types
+        
+        let items: [WalletCollectionViewDataSource.ItemType] = types.map { type in
+            
+            let selected = achievements.filter { achievement in
+                return achievement.type == type
+            }
+            
+            return AchievementViewModel(type: type, achievements: selected)
+        }.sorted { lhs, rhs in
+            return lhs.count > rhs.count
+        }.compactMap { model in
+            return .achievement(model)
+        }
+        
+        data[.achievements] = items 
 
         return data
     }

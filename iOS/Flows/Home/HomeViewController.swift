@@ -41,7 +41,7 @@ class HomeViewController: ViewController, HomeStateHandler {
     
     lazy var conversationsVC = ConversationsViewController()
     lazy var membersVC = MembersViewController()
-    lazy var noticesVC = NoticesViewController()
+    lazy var walletVC = WalletViewController()
     lazy var shortcutVC = ShortcutViewController()
     
     private let shortcutButton = ShortcutButton()
@@ -190,8 +190,8 @@ class HomeViewController: ViewController, HomeStateHandler {
                 self.currentContentVC = self.membersVC
             case .conversations:
                 self.currentContentVC = self.conversationsVC
-            case .notices:
-                self.currentContentVC = self.noticesVC
+            case .wallet:
+                self.currentContentVC = self.walletVC
             }
             
             guard let vc = self.currentContentVC else { return }

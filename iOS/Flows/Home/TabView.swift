@@ -20,7 +20,7 @@ class TabView: BaseView, HomeStateHandler {
     enum State {
         case members
         case conversations
-        case notices
+        case wallet
     }
     
     @Published var state: State = .members
@@ -61,9 +61,9 @@ class TabView: BaseView, HomeStateHandler {
         self.conversationsButton.layer.shadowRadius = 6
         
         self.addSubview(self.noticesButton)
-        self.noticesButton.set(style: .image(symbol: .bell,
+        self.noticesButton.set(style: .image(symbol: .jibs,
                                              palletteColors: [.D6],
-                                             pointSize: pointSize,
+                                             pointSize: 10,
                                              backgroundColor: .clear))
         self.noticesButton.layer.shadowColor = ThemeColor.red.color.cgColor
         self.noticesButton.layer.shadowOpacity = 0.0
@@ -83,7 +83,7 @@ class TabView: BaseView, HomeStateHandler {
         }
         
         self.noticesButton.didSelect { [unowned self] in
-            self.state = .notices
+            self.state = .wallet
         }
         
         self.$state
@@ -194,7 +194,7 @@ class TabView: BaseView, HomeStateHandler {
             self.membersButton.isSelected = false
             self.conversationsButton.isSelected = true
             self.noticesButton.isSelected = false
-        case .notices:
+        case .wallet:
             self.membersButton.isSelected = false
             self.conversationsButton.isSelected = false
             self.noticesButton.isSelected = true

@@ -52,9 +52,18 @@ enum ImageSymbol: String, ImageDisplayable {
     case boltFill = "bolt.fill"
     case squareAndPencil = "square.and.pencil"
     case minus = "minus"
+    case jibs
+    case jiblogo
     
     var image: UIImage? {
-        return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
+        switch self {
+        case .jibs:
+            return UIImage(named: "jibpurple")
+        case .jiblogo:
+            return UIImage(named: "jiblogo")
+        default:
+            return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
+        }
     }
         
     var defaultConfig: UIImage.SymbolConfiguration? {

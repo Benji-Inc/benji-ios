@@ -42,7 +42,7 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             guard let conversationId = deepLink.conversationId else { break }
             self.presentConversation(with: conversationId, messageId: messageID, openReplies: target == .thread)
         case .wallet:
-            self.presentWallet()
+            self.homeVC.tabView.state = .wallet
         case .profile:
             Task {
                 guard let personId = self.deepLink?.personId,
@@ -56,20 +56,21 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     
     private func setupHandlers() {
         self.homeVC.conversationsVC.dataSource.messageContentDelegate = self
-        self.homeVC.noticesVC.dataSource.messageContentDelegate = self
         
-        self.homeVC.noticesVC.dataSource.didSelectRightOption = { [unowned self] notice in
-            self.handleRightOption(with: notice)
-        }
-        
-        self.homeVC.noticesVC.dataSource.didSelectRemoveOption = { [unowned self] notice in
-            NoticeStore.shared.delete(notice: notice)
-            self.homeVC.noticesVC.reloadNotices()
-        }
-        
-        self.homeVC.noticesVC.dataSource.didSelectLeftOption = { [unowned self] notice in
-            self.handleLeftOption(with: notice)
-        }
+//        self.homeVC.noticesVC.dataSource.messageContentDelegate = self
+//
+//        self.homeVC.noticesVC.dataSource.didSelectRightOption = { [unowned self] notice in
+//            self.handleRightOption(with: notice)
+//        }
+//
+//        self.homeVC.noticesVC.dataSource.didSelectRemoveOption = { [unowned self] notice in
+//            NoticeStore.shared.delete(notice: notice)
+//            self.homeVC.noticesVC.reloadNotices()
+//        }
+//
+//        self.homeVC.noticesVC.dataSource.didSelectLeftOption = { [unowned self] notice in
+//            self.handleLeftOption(with: notice)
+//        }
         
         self.homeVC.shortcutVC.didSelectOption = { [unowned self] option in
             self.homeVC.state = .dismissShortcuts
@@ -109,23 +110,38 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             
         }.store(in: &self.cancellables)
         
-        self.homeVC.noticesVC.$selectedItems.mainSink { [unowned self] items in
-            guard let itemType = items.first else { return }
-            switch itemType {
-            case .notice(let notice):
-                switch notice.type {
-                case .timeSensitiveMessage:
-                    guard let conversationId = notice.attributes?["cid"] as? String,
-                          let messageId = notice.attributes?["messageId"] as? String else { return }
-                    
-                    self.presentConversation(with: conversationId, messageId: messageId)
-                    NoticeStore.shared.delete(notice: notice)
-                    self.homeVC.noticesVC.reloadNotices()
-                default:
-                    break
-                }
+        self.homeVC.walletVC.header.didTapDetail = { [unowned self] in
+            self.presentJibInfoAlert()
+        }
+        
+        self.homeVC.walletVC.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first else { return }
+            switch first {
+            case .transaction(_):
+                break
+            case .achievement(let achievement):
+                self.presentAchievementAlert(for: achievement)
             }
         }.store(in: &self.cancellables)
+
+        
+//        self.homeVC.noticesVC.$selectedItems.mainSink { [unowned self] items in
+//            guard let itemType = items.first else { return }
+//            switch itemType {
+//            case .notice(let notice):
+//                switch notice.type {
+//                case .timeSensitiveMessage:
+//                    guard let conversationId = notice.attributes?["cid"] as? String,
+//                          let messageId = notice.attributes?["messageId"] as? String else { return }
+//                    
+//                    self.presentConversation(with: conversationId, messageId: messageId)
+//                    NoticeStore.shared.delete(notice: notice)
+//                    self.homeVC.noticesVC.reloadNotices()
+//                default:
+//                    break
+//                }
+//            }
+//        }.store(in: &self.cancellables)
     }
 }
 

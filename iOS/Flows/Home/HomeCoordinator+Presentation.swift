@@ -75,18 +75,6 @@ extension HomeCoordinator {
         self.router.present(coordinator, source: self.homeVC)
     }
     
-    func presentWallet() {
-        self.removeChild()
-
-        let coordinator = WalletCoordinator(router: self.router, deepLink: self.deepLink)
-
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
-        }
-
-        self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
-    }
-    
     func presentProfile(for person: PersonType) {
         self.removeChild()
 

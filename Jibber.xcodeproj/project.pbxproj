@@ -324,7 +324,6 @@
 		D611F7BB2815B0FD006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D611F7BC2815B0FE006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D611F7BD2815B0FE006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
-		D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA727ADC5F50058811C /* WalletCoordinator.swift */; };
 		D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA927ADC6030058811C /* WalletViewController.swift */; };
 		D6129FAC27ADC61F0058811C /* WalletHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */; };
 		D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAD27ADC6410058811C /* TransactionCell.swift */; };
@@ -642,7 +641,6 @@
 		D671E1F326402B1F00BF2B8D /* ToastQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQueue.swift */; };
 		D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
 		D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */; };
-		D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */; };
 		D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A6227BC45730047BBCA /* JibsDetailView.swift */; };
 		D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */; };
 		D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
@@ -709,6 +707,7 @@
 		D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
+		D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
@@ -1116,7 +1115,6 @@
 		D61128C42804EF2E00574B96 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
 		D611F7B32815A136006D09D3 /* SuggestedReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedReply.swift; sourceTree = "<group>"; };
-		D6129FA727ADC5F50058811C /* WalletCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCoordinator.swift; sourceTree = "<group>"; };
 		D6129FA927ADC6030058811C /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
 		D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderView.swift; sourceTree = "<group>"; };
 		D6129FAD27ADC6410058811C /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
@@ -1292,7 +1290,6 @@
 		D671E1F226402B1F00BF2B8D /* ToastQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastQueue.swift; sourceTree = "<group>"; };
 		D671E1F426402B9800BF2B8D /* ToastScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastScheduler.swift; sourceTree = "<group>"; };
 		D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVURLAsset+Extension.swift"; sourceTree = "<group>"; };
-		D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderDetailView.swift; sourceTree = "<group>"; };
 		D6739A6227BC45730047BBCA /* JibsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JibsDetailView.swift; sourceTree = "<group>"; };
 		D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallanceDetailView.swift; sourceTree = "<group>"; };
 		D677588B25B09F9C007E0184 /* TransitionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionRouter.swift; sourceTree = "<group>"; };
@@ -1327,6 +1324,7 @@
 		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Wallet.swift"; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -1766,7 +1764,6 @@
 				D6129FAF27ADC6530058811C /* WalletCollectionView.swift */,
 				D6129FB127ADC6680058811C /* WalletCollectionViewDataSource.swift */,
 				D6129FB527ADC9CF0058811C /* WalletCollectionViewLayout.swift */,
-				D6129FA727ADC5F50058811C /* WalletCoordinator.swift */,
 				D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */,
 				D6129FA927ADC6030058811C /* WalletViewController.swift */,
 			);
@@ -2363,7 +2360,6 @@
 			isa = PBXGroup;
 			children = (
 				D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */,
-				D6739A5F27BC45070047BBCA /* WalletHeaderDetailView.swift */,
 				D6739A6227BC45730047BBCA /* JibsDetailView.swift */,
 				D6739A6427BC4BC40047BBCA /* BallanceDetailView.swift */,
 			);
@@ -2488,15 +2484,17 @@
 		D6AA61F22852541100FA4D02 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D65E66D12858F0420040E3D8 /* Shortcuts */,
-				D6AA61FE2852604400FA4D02 /* Members */,
 				D6AA61FD2852603A00FA4D02 /* Conversations */,
 				D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */,
+				D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */,
 				D6AA62002852616D00FA4D02 /* HomeCoordinator+Notices.swift */,
 				D6AA62022852617E00FA4D02 /* HomeCoordinator+Presentation.swift */,
 				D6AA61F32852542A00FA4D02 /* HomeViewController.swift */,
+				D6AA61FE2852604400FA4D02 /* Members */,
 				D6AA61FF2852612500FA4D02 /* Notices */,
+				D65E66D12858F0420040E3D8 /* Shortcuts */,
 				D6AA61F9285255ED00FA4D02 /* TabView.swift */,
+				D6129FA627ADC5E70058811C /* Wallet */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2677,7 +2675,6 @@
 				D687F3C426FE4BC6000E4734 /* People */,
 				D6D96EEB27C59DD000BDCD01 /* Profile */,
 				D66A580325DD68F9001B3F64 /* Threads */,
-				D6129FA627ADC5E70058811C /* Wallet */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -3475,6 +3472,7 @@
 				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D69D268227FCFD70004B893B /* EmotionContentCell.swift in Sources */,
 				D61A33CB27D4F25F00056242 /* EmojiCell.swift in Sources */,
+				D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				8057B59C27E2A10600B23D0D /* ConversationMemberCell.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* PhotoCaptureSession.swift in Sources */,
@@ -3553,7 +3551,6 @@
 				D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D6B2B6492839570B007D507B /* ImageSymbol.swift in Sources */,
-				D6739A6027BC45070047BBCA /* WalletHeaderDetailView.swift in Sources */,
 				D6D96EF427C5B11900BDCD01 /* ContextCuesViewController.swift in Sources */,
 				D615534A2745737300B08459 /* ThreadCoordinator.swift in Sources */,
 				D68759692728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */,
@@ -3616,7 +3613,6 @@
 				80632D93278534E600D3A65B /* EventLogger.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D619C58E27F129EB0082AD19 /* EmotionCategoryCell.swift in Sources */,
-				D6129FA827ADC5F50058811C /* WalletCoordinator.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6DBC0DA284ECA05007312FC /* ExpressionCell.swift in Sources */,
 				D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */,

@@ -73,8 +73,6 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
                                                                animateScroll: false,
                                                                animateSelection: true)
             }.add(to: self.taskPool)
-        case .wallet:
-            self.showWallet()
         case .profile:
             Task {
                 guard let personId = self.deepLink?.personId,
