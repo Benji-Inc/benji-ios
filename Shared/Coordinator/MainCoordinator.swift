@@ -64,7 +64,7 @@ class MainCoordinator: BaseCoordinator<Void> {
             if let deepLink = deepLink {
                 self.handle(deeplink: deepLink)
             } else {
-                self.handle(deeplink: DeepLinkObject(target: .room))
+                self.handle(deeplink: DeepLinkObject(target: .home))
             }
         #elseif APPCLIP
             // Code your App Clip may access.
@@ -119,10 +119,10 @@ class MainCoordinator: BaseCoordinator<Void> {
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .room, .conversation, .wallet, .profile, .reservation, .thread:
+        case .home, .conversation, .wallet, .profile, .reservation, .thread:
         #if IOS
             Task {
-                await self.runRoomFlow(with: deeplink)
+                await self.runHomeFlow(with: deeplink)
             }
         #elseif APPCLIP
             self.runWaitlistFlow(with: deeplink)
@@ -140,7 +140,7 @@ class MainCoordinator: BaseCoordinator<Void> {
         self.router.setRootModule(coordinator, animated: true)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             // Attempt to take the user to the room screen after onboarding is complete.
-            self.handle(deeplink: DeepLinkObject(target: .room))
+            self.handle(deeplink: DeepLinkObject(target: .home))
         })
         
         if let launchActivity = self.launchActivity {
@@ -154,7 +154,7 @@ class MainCoordinator: BaseCoordinator<Void> {
         self.router.setRootModule(coordinator, animated: true)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             // Attempt to take the user to the room screen after onboarding is complete.
-            self.handle(deeplink: DeepLinkObject(target: .room))
+            self.handle(deeplink: DeepLinkObject(target: .home))
         })
     }
 

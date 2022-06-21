@@ -31,14 +31,7 @@ class UnreadMessagesCounter: BaseView {
                                       gradientStop: nil)
     
     private var controller: MessageSequenceController?
-    private var cancellables = Set<AnyCancellable>()
     private var subscriptions = Set<AnyCancellable>()
-    
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-    }
     
     override func initializeSubviews() {
         super.initializeSubviews()

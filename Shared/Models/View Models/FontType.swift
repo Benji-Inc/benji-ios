@@ -37,7 +37,7 @@ enum FontType {
     var size: CGFloat {
         switch self {
         case .display:
-            return 30
+            return 36
         case .contextCues:
             return 26
         case .medium, .mediumBold:

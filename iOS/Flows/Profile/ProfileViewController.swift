@@ -35,7 +35,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                                                   endPoint: .topCenter)
     
     private let darkBlurView = DarkBlurView()
-        
+            
     init(with person: PersonType) {
         self.person = person
         super.init(with: UserConversationsCollectionView())
@@ -52,7 +52,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = true
+            sheet.prefersGrabberVisible = false
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
@@ -63,7 +63,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.addChild(viewController: self.contextCuesVC, toView: self.view)
         
         self.view.addSubview(self.contextCueHeaderLabel)
-        self.contextCueHeaderLabel.setText("What I'm up to...")
+        self.contextCueHeaderLabel.setText("My Vibes...")
         
         self.view.addSubview(self.bottomGradientView)
         
@@ -134,7 +134,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     override func viewDidLayoutSubviews() {
         self.header.expandToSuperviewWidth()
         self.header.height = ProfileHeaderView.height
-        self.header.pinToSafeArea(.top, offset: .xtraLong)
+        self.header.pin(.top)
         
         self.contextCueHeaderLabel.setSize(withWidth: self.view.width)
         self.contextCueHeaderLabel.match(.top, to: .bottom, of: self.header, offset: .xtraLong)
@@ -143,6 +143,8 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         super.viewDidLayoutSubviews()
         
         self.darkBlurView.expandToSuperviewSize()
+        self.darkBlurView.pin(.top, offset: .custom(40))
+        self.darkBlurView.roundCorners()
         
         self.contextCuesVC.view.expandToSuperviewWidth()
         self.contextCuesVC.view.height = 44
@@ -203,7 +205,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
             try? await NoticeStore.shared.initializeIfNeeded()
             
-            if let unreadNotice = NoticeStore.shared.getAllNotices().first(where: { system in
+            if let unreadNotice = NoticeStore.shared.notices.first(where: { system in
                 return system.notice?.type == .unreadMessages
             }) {
                 

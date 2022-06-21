@@ -35,7 +35,7 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
     override func start() {
         super.start()
         
-        self.profileVC.dataSource.messageContentDelegate = self 
+        self.profileVC.dataSource.messageContentDelegate = self
                 
         if let user = self.person as? User, user.isCurrentUser {
             

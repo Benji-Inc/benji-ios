@@ -53,11 +53,12 @@ extension ConversationViewController {
     }
     
     func subscribeToConversationUpdates() {
-        self.conversationController
+        guard let controller = self.conversationController else { return }
+            controller
             .channelChangePublisher
             .mainSink { [unowned self] _ in
                 Task {
-                    await self.dataSource.update(with: self.conversationController)
+                    await self.dataSource.update(with: controller)
                 }.add(to: self.autocancelTaskPool)
             }.store(in: &self.cancellables)
 

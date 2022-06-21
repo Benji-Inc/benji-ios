@@ -23,7 +23,7 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
     init(router: CoordinatorRouter,
          deepLink: DeepLinkable?,
-         conversationId: String,
+         conversationId: String?,
          startingMessageId: String?,
          openReplies: Bool = false) {
         
@@ -48,6 +48,14 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         self.conversationVC.dataSource.handleAddPeopleSelected = { [unowned self] in
             self.presentPeoplePicker()
         }
+        
+        self.conversationVC.selectionViewController.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first else { return }
+            switch first {
+            case .conversation(let conversationId):
+                self.conversationVC.conversationId = conversationId
+            }
+        }.store(in: &self.cancellables)
     }
     
     func handle(deepLink: DeepLinkable) {
@@ -65,8 +73,6 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
                                                                animateScroll: false,
                                                                animateSelection: true)
             }.add(to: self.taskPool)
-        case .wallet:
-            self.showWallet()
         case .profile:
             Task {
                 guard let personId = self.deepLink?.personId,

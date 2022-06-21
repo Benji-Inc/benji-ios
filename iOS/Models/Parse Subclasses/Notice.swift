@@ -26,7 +26,9 @@ final class Notice: PFObject, PFSubclassing {
         case tip = "TIP"
         case invitePrompt = "INVITE_PROMPT"
         case jibberIntro = "JIBBER_INTRO"
+        case messageRead = "MESSAGE_READ" // Deprecated
         case system
+        case unknown
     }
 
     static func parseClassName() -> String {
@@ -35,7 +37,11 @@ final class Notice: PFObject, PFSubclassing {
 
     var type: NoticeType {
         get {
-            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return .system }
+            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else {
+                let value: String = self.getObject(for: .type) ?? ""
+                logError(ClientError.apiError(detail: "Unknown notice type: \(value)"))
+                return .unknown
+            }
             return t
         }
     }

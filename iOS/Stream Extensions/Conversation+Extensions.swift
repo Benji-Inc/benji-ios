@@ -35,10 +35,10 @@ extension Conversation {
             return localized(friendlyName.capitalized)
         }
         
-        return nil 
+        return localized(self.description)
     }
 
-    var description: Localized {
+    private var description: Localized {
         let members = self.lastActiveMembers.filter { member in
             return member.personId != User.current()?.objectId
         }
@@ -46,7 +46,7 @@ extension Conversation {
         if members.count == 0 {
             return "Just You"
         } else if members.count == 1, let member = members.first {
-            return member.name ?? "No name"
+            return member.name ?? "No Topic"
         } else {
             return self.displayGroupChat(for: self, with: members)
         }

@@ -33,9 +33,9 @@ class ConversationListCollectionView: CollectionView {
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect {
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            let overlayFrame = CGRect(x: Theme.contentOffset,
+            let overlayFrame = CGRect(x: Theme.ContentOffset.long.value,
                                       y: 100,
-                                      width: self.width - Theme.contentOffset.doubled,
+                                      width: self.width - Theme.ContentOffset.long.value.doubled,
                                       height: 50)
             return self.convert(overlayFrame, to: view)
         }
