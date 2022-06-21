@@ -107,12 +107,12 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let width = self.view.width - Theme.contentOffset.doubled
+        let width = self.view.width - Theme.ContentOffset.long.value.doubled
         let height = self.textEntry.getHeight(for: width)
         self.textEntry.size = CGSize(width: width, height: height)
         self.textEntry.centerOnX()
 
-        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.contentOffset.half
+        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.short.value
         self.textEntry.bottom = defaultOffset
     }
 

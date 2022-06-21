@@ -55,6 +55,7 @@ class SwipeInputPanGestureHandler {
     }
 
     private func shouldHandlePan() -> Bool {
+        guard ConversationsManager.shared.activeConversation.exists else { return false }
         // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     deliveryType: .respectful,

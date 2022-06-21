@@ -89,7 +89,12 @@ extension UICollectionView {
             self.alpha = 1
             let delay: TimeInterval = concatenate ? duration/Double(visibleCells.count)*Double(index) : 0
             UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
-                cell.transform = .identity
+                if let ip = self.indexPath(for: cell),
+                   let transform = self.collectionViewLayout.layoutAttributesForItem(at: ip)?.transform {
+                    cell.transform = transform
+                } else {
+                    cell.transform = .identity
+                }
                 cell.alpha = 1.0
             })
             longestDelay = delay

@@ -75,7 +75,7 @@ class ConversationDetailCollectionViewDataSource: CollectionViewDataSource<Conve
         case pinnedMessage(PinModel)
     }
 
-    private let memberConfig = ManageableCellRegistration<MemberCell>().provider
+    private let memberConfig = ManageableCellRegistration<ConversationMemberCell>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     private let detailConfig = ManageableCellRegistration<ConversationDetailCell>().provider
     private let infoConfig = ManageableCellRegistration<ConversationInfoCell>().provider

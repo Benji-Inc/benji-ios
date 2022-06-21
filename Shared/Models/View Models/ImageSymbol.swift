@@ -13,6 +13,7 @@ enum ImageSymbol: String, ImageDisplayable {
     
     case bellSlash = "bell.slash"
     case bell = "bell"
+    case bellFill = "bell.fill"
     case bellBadge = "bell.badge"
     case xMarkCircleFill = "xmark.circle.fill"
     case personCircle = "person.circle"
@@ -43,10 +44,26 @@ enum ImageSymbol: String, ImageDisplayable {
     case noSign = "nosign"
     case squareAndUp = "square.and.arrow.up"
     case infoCircle = "info.circle"
-    
+    case person3 = "person.3"
+    case person3Fill = "person.3.fill"
+    case rectangleStack = "rectangle.stack"
+    case rectangleStackFill = "rectangle.stack.fill"
+    case bolt = "bolt"
+    case boltFill = "bolt.fill"
+    case squareAndPencil = "square.and.pencil"
+    case minus = "minus"
+    case jibs
+    case jiblogo
     
     var image: UIImage? {
-        return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
+        switch self {
+        case .jibs:
+            return UIImage(named: "jibpurple")
+        case .jiblogo:
+            return UIImage(named: "jiblogo")
+        default:
+            return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
+        }
     }
         
     var defaultConfig: UIImage.SymbolConfiguration? {
@@ -55,7 +72,7 @@ enum ImageSymbol: String, ImageDisplayable {
         switch self {
         case .bellSlash:
             colors = [.whiteWithAlpha, .white]
-        case .bell:
+        case .bell, .bellFill, .person3, .person3Fill, .bolt, .boltFill, .rectangleStack, .rectangleStackFill:
             colors = [.white]
         case .bellBadge:
             colors = [.red, .white]
@@ -72,5 +89,18 @@ enum ImageSymbol: String, ImageDisplayable {
         let multi = UIImage.SymbolConfiguration.preferringMulticolor()
         let combined = config.applying(multi)
         return combined
+    }
+    
+    var highlightSymbol: ImageSymbol? {
+        return nil 
+    }
+    
+    var selectedSymbol: ImageSymbol? {
+        switch self {
+        case .bolt:
+            return .xMark
+        default:
+            return nil
+        }
     }
 }

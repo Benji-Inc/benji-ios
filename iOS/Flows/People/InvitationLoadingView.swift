@@ -118,11 +118,11 @@ class InvitationLoadingView: BaseView {
         self.progressView.centerY = self.height * 0.4
         self.progressView.centerOnX()
         
-        self.label.setSize(withWidth: self.width - Theme.contentOffset.doubled)
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.width))
         self.label.centerOnX()
         self.label.match(.bottom, to: .top, of: self.progressView, offset: .negative(.standard))
         
-        self.nameLabel.setSize(withWidth: self.width - Theme.contentOffset.doubled)
+        self.nameLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.width))
         self.nameLabel.centerOnX()
         self.nameLabel.match(.top, to: .bottom, of: self.progressView, offset: .standard)
     }

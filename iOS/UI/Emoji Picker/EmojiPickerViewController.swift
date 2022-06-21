@@ -41,7 +41,7 @@ class EmojiPickerViewController: DiffableCollectionViewController<EmojiCollectio
     }
     
     func setupNavigationBar() {
-        self.navigationItem.title = "Emojis"
+        self.navigationItem.title = "Update Vibe"
         
         let cancel = UIAction { _ in
             self.dismiss(animated: true, completion: nil)

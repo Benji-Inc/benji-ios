@@ -70,7 +70,6 @@ struct Theme {
     static let cornerRadius: CGFloat = 10
     static let innerCornerRadius: CGFloat = Theme.cornerRadius.half
     static let borderWidth: CGFloat = 2
-    static let contentOffset: CGFloat = 24
     static let buttonHeight: CGFloat = 50
     static let iPadPortraitWidthRatio: CGFloat = 0.65
     static let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)

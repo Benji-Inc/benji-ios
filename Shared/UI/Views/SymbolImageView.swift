@@ -15,7 +15,7 @@ class SymbolImageView: UIImageView {
     
     init(symbol: ImageSymbol? = nil) {
         self.symbol = symbol
-        super.init(image: symbol?.image)
+        super.init(image: symbol?.image, highlightedImage: symbol?.highlightSymbol?.image)
         self.contentMode = .scaleAspectFit
     }
     
@@ -23,12 +23,14 @@ class SymbolImageView: UIImageView {
         super.init(coder: coder)
     }
     
-    func set(symbol: ImageSymbol) {
-        self.contentMode = .scaleAspectFit
+    func set(symbol: ImageSymbol, configuration: UIImage.SymbolConfiguration? = nil) {
 
         self.symbol = symbol
         self.image = self.symbol?.image
-        if let config = symbol.defaultConfig {
+        self.highlightedImage = self.symbol?.highlightSymbol?.image
+        if let config = configuration {
+            self.preferredSymbolConfiguration = config
+        } else if let config = symbol.defaultConfig {
             self.preferredSymbolConfiguration = config
         }
     }

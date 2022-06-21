@@ -19,13 +19,7 @@ class AchievementsManager {
         
     private var initializeTask: Task<Void, Error>?
     
-    init() {
-        Task {
-            try await self.fetchAll()
-        }
-    }
-    
-    private func fetchAll() async throws {
+    func initializeIfNeeded() async throws {
         
         // If we already have an initialization task, wait for it to finish.
         if let initializeTask = self.initializeTask {
@@ -48,6 +42,14 @@ class AchievementsManager {
             }
             
             self.subscribeToUpdates()
+        }
+        
+        do {
+            try await self.initializeTask?.value
+        } catch {
+            // Dispose of the task because it failed, then pass the error along.
+            self.initializeTask = nil
+            throw error
         }
     }
     

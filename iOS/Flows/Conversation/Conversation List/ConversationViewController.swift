@@ -27,6 +27,8 @@ class ConversationViewController: InputHandlerViewContoller,
     override var analyticsIdentifier: String? {
         return "SCREEN_CONVERSATION_LIST"
     }
+    
+    lazy var selectionViewController = ConversationSelectionViewController()
 
     var messageContentDelegate: MessageContentDelegate? {
         get { return self.dataSource.messageContentDelegate}
@@ -40,10 +42,10 @@ class ConversationViewController: InputHandlerViewContoller,
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
 
-    lazy var headerVC = ConversationHeaderViewController()
+    let headerVC = ConversationHeaderViewController()
     private let darkBlur = DarkBlurView()
 
-    private(set) var conversationController: ConversationController
+    private(set) var conversationController: ConversationController?
 
     var swipeableVC: SwipeableInputAccessoryViewController {
         return self.messageInputController
@@ -65,24 +67,23 @@ class ConversationViewController: InputHandlerViewContoller,
     }
     
     override var canBecomeFirstResponder: Bool {
-        return self.presentedViewController.isNil && ConversationsManager.shared.activeConversation.exists
+        return self.presentedViewController.isNil
     }
 
     @Published var state: ConversationUIState = .read
 
     /// The id of the conversation this VC will display.
-    private let conversationId: String
+    @Published var conversationId: String?
     private let startingMessageId: String?
     private let openReplies: Bool
 
-    init(conversationId: String,
+    init(conversationId: String?,
          startingMessageId: String?,
          openReplies: Bool) {
 
         self.conversationId = conversationId
         self.startingMessageId = startingMessageId
         self.openReplies = openReplies
-        self.conversationController = JibberChatClient.shared.conversationController(for: conversationId)!
 
         super.init()
     }
@@ -109,6 +110,9 @@ class ConversationViewController: InputHandlerViewContoller,
         self.collectionView.conversationLayout.delegate = self
 
         self.addChild(viewController: self.headerVC, toView: self.view)
+        
+        self.subscribeToUIUpdates()
+        self.setupInputHandlers()
     }
 
     override func viewDidLayoutSubviews() {
@@ -125,6 +129,8 @@ class ConversationViewController: InputHandlerViewContoller,
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .xtraLong)
         self.collectionView.height = self.view.height - self.headerVC.view.bottom
+        
+        self.selectionViewController.view.expandToSuperviewSize()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -137,14 +143,49 @@ class ConversationViewController: InputHandlerViewContoller,
         super.viewDidAppear(animated)
 
         once(caller: self, token: "initializeCollectionView") {
-            Task {
-                self.subscribeToUIUpdates()
-                self.setupInputHandlers()
-                // Initialize the datasource before listening for updates to ensure that the sections
-                // are set up.
-                await self.initializeDataSource()
-                self.subscribeToConversationUpdates()
-            }
+            
+            self.$conversationId
+                .removeDuplicates()
+                .mainSink { [unowned self] conversationId in
+                
+                    if let conversationId = conversationId {
+                        
+                        if self.selectionViewController.parent.exists {
+                            Task {
+                                await UIView.awaitAnimation(with: .fast, animations: {
+                                    self.selectionViewController.view.alpha = 0
+                                })
+                                
+                                self.selectionViewController.removeFromParent()
+                                self.selectionViewController.view.removeFromSuperview()
+                            }
+                        }
+
+                        Task {
+                            // Initialize the datasource before listening for updates to ensure that the sections
+                            // are set up.
+                            guard let controller = JibberChatClient.shared.conversationController(for: conversationId)  else {
+                                return
+                            }
+
+                            self.conversationController = controller
+                            await self.initializeDataSource()
+                            self.subscribeToConversationUpdates()
+                        }
+                    } else {
+                        self.selectionViewController.view.alpha = 1.0 
+                        self.addChild(self.selectionViewController)
+                        self.view.insertSubview(self.selectionViewController.view, aboveSubview: self.headerVC.view)
+                        self.view.layoutNow()
+                        
+                        Task {
+                            // Hack to get the input text view to layout correctly
+                            await Task.sleep(seconds:0.1)
+                            self.messageInputController.swipeInputView.textView.becomeFirstResponder()
+                        }
+                    }
+                    
+                }.store(in: &self.cancellables)
         }
     }
 
@@ -152,6 +193,12 @@ class ConversationViewController: InputHandlerViewContoller,
         super.viewWillDisappear(animated)
 
         self.resignFirstResponder()
+    }
+    
+    override func viewWasDismissed() {
+        super.viewWasDismissed()
+        
+        ConversationsManager.shared.activeConversation = nil
     }
 
     func updateUI(for state: ConversationUIState, forceLayout: Bool = false) {
@@ -167,11 +214,15 @@ class ConversationViewController: InputHandlerViewContoller,
 
     @MainActor
     func initializeDataSource() async {
+        guard let controller = self.conversationController else {
+            return
+        }
+
         self.collectionView.animationView.play()
         
-        try? await self.conversationController.synchronize()
+        try? await controller.synchronize()
 
-        let snapshot = self.dataSource.updatedSnapshot(with: self.conversationController)
+        let snapshot = self.dataSource.updatedSnapshot(with: controller)
 
         let animationCycle = AnimationCycle(inFromPosition: .inward,
                                             outToPosition: .inward,
@@ -184,9 +235,11 @@ class ConversationViewController: InputHandlerViewContoller,
         self.collectionView.animationView.stop()
 
         Task {
-            await self.scrollToConversation(with: self.conversationId,
-                                            messageId: self.startingMessageId,
-                                            viewReplies: self.openReplies)
+            if let conversationId = conversationId {
+                await self.scrollToConversation(with: conversationId,
+                                                messageId: self.startingMessageId,
+                                                viewReplies: self.openReplies)
+            }
         }.add(to: self.autocancelTaskPool)
     }
 
