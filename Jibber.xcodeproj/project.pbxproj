@@ -860,6 +860,11 @@
 		D6D3927B265AAAA700E49F1E /* MicroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39278265AAAA700E49F1E /* MicroAnimation.swift */; };
 		D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
 		D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
+		D6D4ECCF28613DDF002C71CE /* ConversationSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4ECCE28613DDF002C71CE /* ConversationSelectionViewController.swift */; };
+		D6D4ECD128613DF1002C71CE /* ConversationSelectionCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4ECD028613DF1002C71CE /* ConversationSelectionCollectionView.swift */; };
+		D6D4ECD328613E00002C71CE /* ConversationSelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4ECD228613E00002C71CE /* ConversationSelectionDataSource.swift */; };
+		D6D4ECD528613E0D002C71CE /* ConversationSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4ECD428613E0D002C71CE /* ConversationSelectionCell.swift */; };
+		D6D4ECD728613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4ECD628613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift */; };
 		D6D557FE27C9B8AE0024D1CD /* UserConversationsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D557FD27C9B8AE0024D1CD /* UserConversationsCollectionView.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
@@ -1422,6 +1427,11 @@
 		D6D380C3257FC18300C562E8 /* Selectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
 		D6D39278265AAAA700E49F1E /* MicroAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroAnimation.swift; sourceTree = "<group>"; };
 		D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationView+Extensions.swift"; sourceTree = "<group>"; };
+		D6D4ECCE28613DDF002C71CE /* ConversationSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSelectionViewController.swift; sourceTree = "<group>"; };
+		D6D4ECD028613DF1002C71CE /* ConversationSelectionCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSelectionCollectionView.swift; sourceTree = "<group>"; };
+		D6D4ECD228613E00002C71CE /* ConversationSelectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSelectionDataSource.swift; sourceTree = "<group>"; };
+		D6D4ECD428613E0D002C71CE /* ConversationSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSelectionCell.swift; sourceTree = "<group>"; };
+		D6D4ECD628613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSelectionCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6D557FD27C9B8AE0024D1CD /* UserConversationsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversationsCollectionView.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
@@ -2089,6 +2099,7 @@
 		D6432BF122D8282E0016001A /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				D6D4ECCD28613DB4002C71CE /* Conversation Selection */,
 				D646D35E27E504D70077D20B /* Attachments */,
 				D635F0A927136C2600A02D17 /* Cells */,
 				D637651627E9295100CCDA7F /* Conversation Detail */,
@@ -2691,6 +2702,18 @@
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
 			);
 			path = "UI Extensions";
+			sourceTree = "<group>";
+		};
+		D6D4ECCD28613DB4002C71CE /* Conversation Selection */ = {
+			isa = PBXGroup;
+			children = (
+				D6D4ECCE28613DDF002C71CE /* ConversationSelectionViewController.swift */,
+				D6D4ECD028613DF1002C71CE /* ConversationSelectionCollectionView.swift */,
+				D6D4ECD228613E00002C71CE /* ConversationSelectionDataSource.swift */,
+				D6D4ECD428613E0D002C71CE /* ConversationSelectionCell.swift */,
+				D6D4ECD628613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift */,
+			);
+			path = "Conversation Selection";
 			sourceTree = "<group>";
 		};
 		D6D96EEB27C59DD000BDCD01 /* Profile */ = {
@@ -3463,6 +3486,7 @@
 				D630F2652832F98E00737977 /* PersonConnectionViewController.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
+				D6D4ECD328613E00002C71CE /* ConversationSelectionDataSource.swift in Sources */,
 				D61128C52804EF2E00574B96 /* ReactionType.swift in Sources */,
 				D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */,
 				D6AA61FC2852593500FA4D02 /* HomeCoordinator.swift in Sources */,
@@ -3679,6 +3703,7 @@
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,
+				D6D4ECCF28613DDF002C71CE /* ConversationSelectionViewController.swift in Sources */,
 				D60B885027F217EB00B3E1C2 /* MessageDetailDataSource.swift in Sources */,
 				D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */,
 				80F1C4D6270E505E00616F01 /* Equatable+Extensions.swift in Sources */,
@@ -3708,6 +3733,7 @@
 				D642737122C991A60088256B /* Range+Extensions.swift in Sources */,
 				D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				D6CC1487276BF08F005F617F /* Spacer+Extensions.swift in Sources */,
+				D6D4ECD728613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift in Sources */,
 				D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				D637651A27E936CB00CCDA7F /* SectionBackgroundView.swift in Sources */,
 				80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */,
@@ -3735,6 +3761,7 @@
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
 				D65E66D32858F0570040E3D8 /* ShortcutButton.swift in Sources */,
 				D60CA47F27EE74AD00F0871A /* ExpressionCoordinator.swift in Sources */,
+				D6D4ECD528613E0D002C71CE /* ConversationSelectionCell.swift in Sources */,
 				802EDDAB27ECD496005ECA9C /* String+DataTypes.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
@@ -3799,6 +3826,7 @@
 				8056B326281B448A00358880 /* Expression.swift in Sources */,
 				D62ED57C279CB96E00F7C08A /* ModalPhotoViewController.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
+				D6D4ECD128613DF1002C71CE /* ConversationSelectionCollectionView.swift in Sources */,
 				D646D36227E505030077D20B /* AttachmentsViewController.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
