@@ -13,7 +13,7 @@ class ShortcutViewController: ViewController, HomeStateHandler {
     private let blurView = DarkBlurView()
     
     let option1 = ShortcutOptionView(with: .newVibe)
-    let option2 = ShortcutOptionView(with: .newPerson)
+    let option2 = ShortcutOptionView(with: .addPeople)
     let option3 = ShortcutOptionView(with: .newMessage)
     
     var didSelectOption: ((ShortcutOptionView.OptionType) -> Void)? = nil

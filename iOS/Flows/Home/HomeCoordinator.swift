@@ -77,7 +77,7 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             switch option {
             case .newMessage:
                 self.presentConversation(with: nil, messageId: nil)
-            case .newPerson:
+            case .addPeople:
                 self.presentPeoplePicker()
             case .newVibe:
                 self.presentVibeCreator()

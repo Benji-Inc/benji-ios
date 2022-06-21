@@ -13,6 +13,13 @@ class ConversationSelectionViewController: DiffableCollectionViewController<Conv
                                            ConversationSelectionDataSource.ItemType,
                                            ConversationSelectionDataSource> {
     
+    private let topGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor,
+                                                                 ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                          startPoint: .topCenter,
+                                                          endPoint: .bottomCenter)
+    
+    private let titleLabel = ThemeLabel(font: .mediumBold)
+    
     private(set) var conversationListController: ConversationListController?
     
     init() {
@@ -28,6 +35,23 @@ class ConversationSelectionViewController: DiffableCollectionViewController<Conv
         
         self.collectionView.allowsMultipleSelection = false
         self.loadInitialData()
+        
+        self.view.addSubview(self.topGradientView)
+        self.view.addSubview(self.titleLabel)
+        self.titleLabel.setText("Choose")
+        self.titleLabel.textAlignment = .center
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.topGradientView.expandToSuperviewWidth()
+        self.topGradientView.height = 80
+        self.topGradientView.pin(.top)
+        
+        self.titleLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.titleLabel.pinToSafeAreaTop()
+        self.titleLabel.centerOnX()
     }
     
     override func getAllSections() -> [ConversationSelectionDataSource.SectionType] {

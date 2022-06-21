@@ -18,12 +18,16 @@ class ConversationSelectionCollectionViewLayout: UICollectionViewCompositionalLa
             // Item
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            let offset = Theme.ContentOffset.standard.value
+            item.contentInsets = NSDirectionalEdgeInsets(top: offset,
+                                                          leading: offset,
+                                                          bottom: offset,
+                                                          trailing: offset)
 
             // Group
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(58))
             let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
+            
             // Section
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)

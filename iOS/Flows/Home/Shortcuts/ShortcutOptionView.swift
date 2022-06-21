@@ -16,14 +16,14 @@ class ShortcutOptionView: BaseView {
     
     enum OptionType {
         case newMessage
-        case newPerson
+        case addPeople
         case newVibe
         
         var symbol: ImageSymbol {
             switch self {
             case .newMessage:
                 return .squareAndPencil
-            case .newPerson:
+            case .addPeople:
                 return .personBadgePlus
             case .newVibe:
                 return .faceSmiling
@@ -34,8 +34,8 @@ class ShortcutOptionView: BaseView {
             switch self {
             case .newMessage:
                 return "New Message"
-            case .newPerson:
-                return "Add Person"
+            case .addPeople:
+                return "Add People"
             case .newVibe:
                 return "Update Vibe"
             }
