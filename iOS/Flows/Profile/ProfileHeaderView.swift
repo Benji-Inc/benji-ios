@@ -33,7 +33,7 @@ class ProfileHeaderView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.personView.contextCueView.currentSize = .large
+        self.personView.contextCueView.scale = .large
         self.personView.contextCueView.isVisible = false
         
         self.addSubview(self.nameLabel)

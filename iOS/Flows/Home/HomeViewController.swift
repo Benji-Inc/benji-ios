@@ -43,6 +43,7 @@ class HomeViewController: ViewController, HomeStateHandler {
     lazy var membersVC = MembersViewController()
     lazy var walletVC = WalletViewController()
     lazy var shortcutVC = ShortcutViewController()
+    lazy var noticesVC = NoticesViewController() 
     
     private let shortcutButton = ShortcutButton()
     

@@ -47,7 +47,7 @@ class ConversationMemberCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.personView)
         
-        self.personView.contextCueView.currentSize = .small
+        self.personView.contextCueView.scale = .small
         
         self.addSubview(self.nameLabel)
         

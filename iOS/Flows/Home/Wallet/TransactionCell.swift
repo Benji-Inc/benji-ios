@@ -81,6 +81,8 @@ class TransactionContentView: BaseView, UIContentView {
             self.content.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0.0),
         ])
                 
+        self.avatarView?.contextCueView.scale = .small
+        
         self.titleLabel?.setFont(.small)
         self.titleLabel?.setTextColor(.whiteWithAlpha)
         self.titleLabel?.alpha = 0.35
