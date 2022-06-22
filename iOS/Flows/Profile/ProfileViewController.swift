@@ -134,7 +134,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
     override func viewDidLayoutSubviews() {
         self.header.expandToSuperviewWidth()
         self.header.height = ProfileHeaderView.height
-        self.header.pin(.top)
+        self.header.pin(.top, offset: .standard)
         
         self.contextCueHeaderLabel.setSize(withWidth: self.view.width)
         self.contextCueHeaderLabel.match(.top, to: .bottom, of: self.header, offset: .xtraLong)
@@ -143,7 +143,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         super.viewDidLayoutSubviews()
         
         self.darkBlurView.expandToSuperviewSize()
-        self.darkBlurView.pin(.top, offset: .custom(40))
+        self.darkBlurView.pin(.top, offset: .custom(48))
         self.darkBlurView.roundCorners()
         
         self.contextCuesVC.view.expandToSuperviewWidth()

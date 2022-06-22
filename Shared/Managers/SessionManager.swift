@@ -12,6 +12,8 @@ import Parse
 class SessionManager {
     
     static let shared = SessionManager()
+    
+    var didRecieveReuestToLogOut: (() -> Void)? = nil 
     var didReceiveInvalidSessionError: ((Error) -> ())?
 
     func handleParse(error: Error) {

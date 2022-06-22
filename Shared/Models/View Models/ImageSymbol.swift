@@ -70,7 +70,7 @@ enum ImageSymbol: String, ImageDisplayable {
         var colors: [ThemeColor] = []
         
         switch self {
-        case .bellSlash:
+        case .bellSlash, .personCircle:
             colors = [.whiteWithAlpha, .white]
         case .bell, .bellFill, .person3, .person3Fill, .bolt, .boltFill, .rectangleStack, .rectangleStackFill:
             colors = [.white]

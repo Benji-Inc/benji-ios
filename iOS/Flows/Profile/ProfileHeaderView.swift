@@ -146,11 +146,17 @@ class ProfileHeaderView: BaseView {
                               attributes: []) { [unowned self] action in
             self.didSelectUpdateProfilePicture?()
         }
+        
+        let logout = UIAction(title: "Log Out",
+                              image: ImageSymbol.exclamationmarkTriangle.image,
+                              attributes: []) { _ in
+            SessionManager.shared.didRecieveReuestToLogOut?()
+        }
 
         return UIMenu.init(title: "Menu",
                            image: nil,
                            identifier: nil,
                            options: [],
-                           children: [update])
+                           children: [update, logout])
     }
 }
