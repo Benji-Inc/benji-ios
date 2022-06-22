@@ -62,7 +62,7 @@ class ExpressionViewController: ViewController {
             self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
             self.personGradientView.alpha = 1.0
             self.personGradientView.set(displayable: UIImage(data: data))
-            self.expressionPhotoVC.animate(text: "Tap again to retake")
+            self.expressionPhotoVC.faceCaptureVC.animate(text: "Tap again to retake")
             self.expressionPhotoVC.faceCaptureVC.stopSession()
                         
             self.state = .emotionSelection

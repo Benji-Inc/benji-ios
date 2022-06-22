@@ -36,13 +36,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     lazy var faceCaptureVC = FaceImageCaptureViewController()
 
     private var tapView = BaseView()
-    private let animationView = AnimationView.with(animation: .faceScan)
     private let imageView = DisplayableImageView()
     private let button = ThemeButton()
-    private let label = ThemeLabel(font: .medium, textColor: .white)
-
-    let errorView = PhotoErrorView()
-    private var errorOffset: CGFloat = -100
 
     // MARK: - Analytics
 
@@ -63,22 +58,13 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         self.addChild(viewController: self.faceCaptureVC)
         
         self.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.D6.color.cgColor
-        self.faceCaptureVC.cameraViewContainer.backgroundColor = ThemeColor.D6.color.withAlphaComponent(0.1)
 
-        self.view.addSubview(self.errorView)
         self.view.addSubview(self.tapView)
         self.view.addSubview(self.imageView)
         self.imageView.alpha = 0.0
 
         self.view.addSubview(self.button)
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Looks good! 😁"))
-        
-        self.faceCaptureVC.view.addSubview(self.label)
-        
-        self.animationView.loopMode = .loop
-
-        self.view.addSubview(self.animationView)
-        self.animationView.alpha = 0
 
         self.setupHandlers()
     }
@@ -93,13 +79,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         super.viewDidLayoutSubviews()
         
         self.faceCaptureVC.view.expandToSuperviewSize()
-
-        self.faceCaptureVC.cameraViewContainer.roundCorners()
-
-        self.animationView.size = CGSize(width: 140, height: 140)
-        self.animationView.center = self.faceCaptureVC.cameraViewContainer.center
-
-        self.errorView.bottom = self.view.height - self.errorOffset
         
         self.tapView.expandToSuperviewSize()
         
@@ -111,10 +90,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         } else {
             self.button.top = self.view.height
         }
-        
-        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.label.centerOnX()
-        self.label.top = self.faceCaptureVC.view.height * 0.4 + 20 + Theme.ContentOffset.long.value
     }
     
     private func setupHandlers() {
@@ -229,7 +204,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
                                    arguments: [],
                                    default: "Scanning...")
         case .scanEyesOpen:
-            text = "Smile and tap the screen."
+            text = "😁 and Tap"
         case .didCaptureEyesOpen:
             text = "Good one!"
         case .captureEyesOpen:
@@ -242,20 +217,20 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
             text = ""
         }
         
-        self.label.setText(text)
+        self.faceCaptureVC.animate(text: text)
     }
     
     private func handleInitialState() {
-        if self.animationView.alpha == 0 {
+        if self.faceCaptureVC.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDurationStandard, animations: {
-                self.animationView.alpha = 1
+                self.faceCaptureVC.animationView.alpha = 1
                 self.view.setNeedsLayout()
             }) { (completed) in
-                self.animationView.play()
+                self.faceCaptureVC.animationView.play()
             }
         } else {
             delay(Theme.animationDurationStandard) {
-                self.animationView.play()
+                self.faceCaptureVC.animationView.play()
             }
         }
     }
@@ -306,7 +281,8 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     
         UIView.animate(withDuration: 0.2, animations: {
             self.imageView.alpha = 0
-            self.animationView.alpha = 0
+            self.faceCaptureVC.animationView.alpha = 0
+            self.faceCaptureVC.label.alpha = 1.0
             self.view.layoutNow()
         })
     }
@@ -323,19 +299,18 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
                 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.imageView.alpha = 1.0
+            self.faceCaptureVC.label.alpha = 0.0
             self.view.layoutNow()
         }
     }
 
     private func animateError(with message: String?, show: Bool) {
         if let msg = message {
-            self.errorView.label.setText(msg)
-            self.errorView.label.layoutNow()
+            self.faceCaptureVC.animate(text: msg)
         }
 
-        self.errorOffset = show ? 120 : -100
         UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.view.layoutNow()
+            self.faceCaptureVC.cameraViewContainer.layer.borderColor = show ? ThemeColor.red.color.cgColor : ThemeColor.D6.color.cgColor            
         }
     }
 
@@ -366,38 +341,5 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         } catch {
             self.animateError(with: "There was an error uploading your photo.", show: true)
         }
-    }
-}
-
-
-class PhotoErrorView: BaseView {
-
-    let label = ThemeLabel(font: .smallBold, textColor: .red)
-    private let blurView = BlurView()
-
-    override func initializeSubviews() {
-        super.initializeSubviews()
-
-        self.addSubview(self.blurView)
-        self.addSubview(self.label)
-        self.backgroundColor = ThemeColor.red.color.withAlphaComponent(0.8)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        #if !NOTIFICATION
-        guard let superview = UIWindow.topWindow() else { return }
-        self.label.setSize(withWidth: superview.width - Theme.ContentOffset.long.value.doubled)
-
-        self.size = CGSize(width: self.label.width + Theme.ContentOffset.long.value, height: self.label.height + Theme.ContentOffset.long.value)
-
-        self.label.centerOnXAndY()
-        self.centerOnX()
-
-        self.blurView.expandToSuperviewSize()
-
-        self.roundCorners()
-        #endif
     }
 }
