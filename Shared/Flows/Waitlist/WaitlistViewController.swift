@@ -20,6 +20,7 @@ class WaitlistViewController: ViewController {
     let personView = BorderedPersonView()
     let titleLabel = ThemeLabel(font: .display)
     let descriptionLabel = ThemeLabel(font: .regular)
+    let button = ThemeButton()
     
     override func initializeViews() {
         super.initializeViews()
@@ -32,6 +33,10 @@ class WaitlistViewController: ViewController {
         self.titleLabel.textAlignment = .center
         self.view.addSubview(self.descriptionLabel)
         self.descriptionLabel.textAlignment = .center
+        
+        self.view.addSubview(self.button)
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Enter"))
+        self.button.alpha = 0.0
         
         PeopleStore.shared.$personUpdated.filter({ type in
             return type?.isCurrentUser ?? false
@@ -61,16 +66,17 @@ class WaitlistViewController: ViewController {
             case .active:
                 self.titleLabel.setText("Congrats! 🥳")
                 self.descriptionLabel.setText("You now have access to join Jibber!")
-                self.displayOverlay()
             case .waitlist:
                 if let position = user.quePosition {
-                    self.titleLabel.setText("You're #\(position) on the list!")
-                    self.descriptionLabel.setText("We will notify you when you are available to join.")
+                    self.titleLabel.setText("You're #\(position)")
+                    self.descriptionLabel.setText("We will notify you when you are\navailable to join.")
                 }
             default:
                 break
             }
             
+            self.displayNextStep(show: user.status == .active)
+
             self.view.setNeedsLayout()
         }
     }
@@ -89,14 +95,32 @@ class WaitlistViewController: ViewController {
         self.personView.squaredSize = 100
         self.personView.centerOnX()
         self.personView.match(.bottom, to: .top, of: self.titleLabel, offset: .negative(.screenPadding))
+        
+        self.button.setSize(with: self.view.width)
+        self.button.centerOnX()
     }
     
-    func displayOverlay() {
+    func displayNextStep(show: Bool) {
+        #if IOS
+        Task {
+            await UIView.awaitAnimation(with: .fast, animations: {
+                if show {
+                    self.button.pinToSafeAreaBottom()
+                    self.button.alpha = 1.0
+                    self.view.layoutNow()
+                } else {
+                    self.button.top = self.view.height
+                    self.button.alpha = 0.0
+                    self.view.layoutNow()
+                }
+            })
+        }
+        #else
         guard let scene = view.window?.windowScene else { return }
-
         let config = SKOverlay.AppClipConfiguration(position: .bottom)
         let overlay = SKOverlay(configuration: config)
         overlay.present(in: scene)
+        #endif
     }
 }
 

@@ -31,7 +31,7 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         layer.fillColor = ThemeColor.B6.color.cgColor
         layer.strokeColor = ThemeColor.D6.color.cgColor
         layer.lineWidth = 2
-        layer.lineDashPattern = [4, 8]
+        layer.lineDashPattern = [4, 10]
         return layer
     }()
     

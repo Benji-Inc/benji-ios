@@ -21,6 +21,7 @@ class ToastStatusView: ToastView {
         self.addSubview(self.blurView)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFit
+        self.imageView.tintColor = ThemeColor.white.color
         
         if let symbol = self.toast.displayable as? ImageSymbol {
             self.imageView.set(symbol: symbol)

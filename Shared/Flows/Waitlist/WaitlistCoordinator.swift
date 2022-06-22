@@ -20,6 +20,10 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
         
+        self.waitlistVC.button.didSelect { [unowned self] in
+            self.finishFlow(with: () )
+        }
+        
         guard let deepLink = self.deepLink else { return }
         
         Task {
