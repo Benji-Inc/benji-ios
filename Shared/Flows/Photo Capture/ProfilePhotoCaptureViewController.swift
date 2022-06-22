@@ -56,8 +56,6 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         super.initializeViews()
 
         self.addChild(viewController: self.faceCaptureVC)
-        
-        self.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.D6.color.cgColor
 
         self.view.addSubview(self.tapView)
         self.view.addSubview(self.imageView)
@@ -310,7 +308,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
         }
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.faceCaptureVC.cameraViewContainer.layer.borderColor = show ? ThemeColor.red.color.cgColor : ThemeColor.D6.color.cgColor            
+            self.faceCaptureVC.cameraViewContainer.layer.borderColor = show ? ThemeColor.red.color.cgColor : ThemeColor.B1.color.cgColor
         }
     }
 
