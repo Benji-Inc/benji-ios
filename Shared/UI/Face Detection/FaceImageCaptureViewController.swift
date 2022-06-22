@@ -52,7 +52,6 @@ class FaceImageCaptureViewController: ViewController {
     
     let animationView = AnimationView.with(animation: .faceScan)
     let label = ThemeLabel(font: .medium, textColor: .white)
-    //let errorView = PhotoErrorView()
     
     deinit {
         if self.isSessionRunning {

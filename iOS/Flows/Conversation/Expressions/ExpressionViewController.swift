@@ -63,7 +63,6 @@ class ExpressionViewController: ViewController {
             self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
             self.personGradientView.alpha = 1.0
             self.personGradientView.set(displayable: UIImage(data: data))
-            //self.expressionPhotoVC.faceCaptureVC.animate(text: "Tap again to retake")
             self.expressionPhotoVC.faceCaptureVC.stopSession()
                         
             self.state = .emotionSelection
@@ -110,16 +109,11 @@ class ExpressionViewController: ViewController {
     
     private func createExpression() async {
         guard let data = self.data else { return }
-//        var emotionCounts: [Emotion: Int] = [:]
-//        self.emotionsVC.selectedEmotions.forEach { emotion in
-//            emotionCounts[emotion] = 1
-//        }
         
         let expression = Expression()
         
         expression.author = User.current()
         expression.file = PFFileObject(name: "expression.heic", data: data)
-        //expression.emotionCounts = emotionCounts
         expression.emojiString = nil
         
         guard let saved = try? await expression.saveToServer() else { return }
