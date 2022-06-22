@@ -42,7 +42,9 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
             
             switch first {
             case .pinnedMessage(let model):
-                guard let message = JibberChatClient.shared.message(conversationId: model.conversationId!, id: model.messageId!) else { return }
+                guard let conversationId = model.conversationId,
+                        let messageId = model.messageId,
+                        let message = JibberChatClient.shared.message(conversationId: conversationId, id: messageId) else { return }
                 self.finishFlow(with: .message(message))
             case .member(let member):
                 guard let person = PeopleStore.shared.people.first(where: { person in

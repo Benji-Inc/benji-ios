@@ -34,7 +34,7 @@ extension MainCoordinator: LaunchManagerDelegate {
                 return personId == User.current()?.personId
             })
             .mainSink { [unowned self] user in
-                self.showLogOutAlert()
+                self.logOut()
             }.store(in: &self.cancellables)
     }
 
