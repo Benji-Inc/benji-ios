@@ -56,9 +56,10 @@ extension ConversationController {
     func loadPreviousMessages(including messageId: MessageId, limit: Int = 25) async throws {
         guard let cid = self.cid else { return }
         try await self.loadPreviousMessages(before: messageId, limit: limit)
-        let controller = MessageController.controller(for: cid.description, messageId: messageId)  
+        guard let controller = MessageController.controller(for: cid.description, messageId: messageId) else { return }
         if let messageBefore = self.messages.first(where: { message in
-            return message.createdAt < controller.message!.createdAt
+            guard let msg = controller.message else { return false }
+            return message.createdAt < msg.createdAt
         }) {
             try await self.loadNextMessages(after: messageBefore.id, limit: 1)
         }

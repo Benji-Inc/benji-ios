@@ -112,7 +112,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             let controller = MessageController.controller(for: message)
             
             Task {
-                try await controller.add(expression: expression)
+                try await controller?.add(expression: expression)
             }
         }
     }

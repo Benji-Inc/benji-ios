@@ -158,7 +158,7 @@ extension Message: Messageable {
     }
     
     static func message(with conversationId: String, messageId: MessageId) -> Messageable? {
-        return MessageController.controller(for: conversationId, messageId: messageId).message
+        return MessageController.controller(for: conversationId, messageId: messageId)?.message
     }
     
     func setToConsumed() async {

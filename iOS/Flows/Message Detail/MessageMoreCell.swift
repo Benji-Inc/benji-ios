@@ -48,7 +48,7 @@ class MessageMoreCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: MoreOptionModel) {
         self.imageView.image = item.option.image
         self.label.setText(item.option.title)
-        guard let message = MessageController.controller(for: item.conversationId, messageId: item.messageId).message else { return }
+        guard let message = MessageController.controller(for: item.conversationId, messageId: item.messageId)?.message else { return }
         self.button.menu = self.makeContextMenu(for: message)
         self.setNeedsLayout()
     }
