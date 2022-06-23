@@ -15,13 +15,13 @@ typealias MessageController = ChatMessageController
 extension MessageController {
     
     /// Creates a message controller using the shared ChatClient.
-    static func controller(for message: Messageable) -> MessageController {
+    static func controller(for message: Messageable) -> MessageController? {
         return self.controller(for: message.conversationId, messageId: message.id)
     }
 
     /// Creates a message controller using the shared ChatClient.
-    static func controller(for conversationId: String, messageId: String) -> MessageController {
-        return JibberChatClient.shared.messageController(for: conversationId, id: messageId)!
+    static func controller(for conversationId: String, messageId: String) -> MessageController? {
+        return JibberChatClient.shared.messageController(for: conversationId, id: messageId)
     }
 
     func editMessage(with sendable: Sendable) async throws {
@@ -334,9 +334,10 @@ extension MessageController {
 
     func loadPreviousReplies(including messageId: String, limit: Int = 25) async throws {
         try await self.loadPreviousReplies(before: messageId, limit: limit)
-        let controller = MessageController.controller(for: self.cid.description, messageId: messageId)
+        guard let controller = MessageController.controller(for: self.cid.description, messageId: messageId) else { return }
         if let replyBefore = self.replies.first(where: { message in
-            return message.createdAt < controller.message!.createdAt
+            guard let msg = controller.message else { return false }
+            return message.createdAt < msg.createdAt
         }) {
             try await self.loadNextReplies(after: replyBefore.id, limit: 1)
         }
