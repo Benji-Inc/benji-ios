@@ -708,7 +708,7 @@
 		D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */; };
-		D6953744286234B600CFAF02 /* NoticeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6953743286234B600CFAF02 /* NoticeIndicatorView.swift */; };
+		D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6953743286234B600CFAF02 /* NoticeBadgeView.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
@@ -890,6 +890,7 @@
 		D6DD0C372822F3CD004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C362822F3CD004999F2 /* Sentry */; };
 		D6DD0C392822F3D5004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C382822F3D5004999F2 /* Sentry */; };
 		D6DD0C3B2822F3DE004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C3A2822F3DE004999F2 /* Sentry */; };
+		D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* MemberCell.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
@@ -1326,7 +1327,7 @@
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Wallet.swift"; sourceTree = "<group>"; };
-		D6953743286234B600CFAF02 /* NoticeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeIndicatorView.swift; sourceTree = "<group>"; };
+		D6953743286234B600CFAF02 /* NoticeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBadgeView.swift; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -1446,6 +1447,7 @@
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCell.swift; sourceTree = "<group>"; };
 		D6DBC0E52851295E007312FC /* Transitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transitions; sourceTree = "<group>"; };
+		D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCounterView.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
@@ -1708,6 +1710,7 @@
 				D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */,
 				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
 				D656BF0C28183C0900723068 /* MessagePreview.swift */,
+				D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -2535,7 +2538,7 @@
 				D6AA620E2852701C00FA4D02 /* NoticesCollectionViewLayout.swift */,
 				D6AA620A28526ED700FA4D02 /* NoticesDataSource.swift */,
 				D6AA620C28526FC200FA4D02 /* NoticesViewController.swift */,
-				D6953743286234B600CFAF02 /* NoticeIndicatorView.swift */,
+				D6953743286234B600CFAF02 /* NoticeBadgeView.swift */,
 			);
 			path = Notices;
 			sourceTree = "<group>";
@@ -3636,7 +3639,7 @@
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
-				D6953744286234B600CFAF02 /* NoticeIndicatorView.swift in Sources */,
+				D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */,
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
@@ -3739,6 +3742,7 @@
 				80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */,
 				D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* JibberChatClient.swift in Sources */,
+				D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,

@@ -16,7 +16,7 @@ class TabView: BaseView, HomeStateHandler {
     let walletButton = ThemeButton()
     let noticesButton = ThemeButton()
     
-    let indicatorView = NoticeIndicatorView()
+    let indicatorView = NoticeBadgeView()
     
     let barView = BaseView()
     

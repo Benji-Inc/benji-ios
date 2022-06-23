@@ -104,6 +104,6 @@ class PersonGradientView: DisplayableImageView {
         
         self.emotionGradientView.expandToSuperviewSize()
         
-        self.makeRound()
+        self.layer.cornerRadius = self.height * 0.25
     }
 }
