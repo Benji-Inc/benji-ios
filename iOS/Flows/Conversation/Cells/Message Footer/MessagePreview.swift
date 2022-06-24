@@ -16,7 +16,6 @@ class MessagePreview: BaseView {
     let imageView = SymbolImageView()
     
     static let minimumHeight: CGFloat = 26
-    static let maxHeight: CGFloat = 58
 
     override func initializeSubviews() {
         super.initializeSubviews()

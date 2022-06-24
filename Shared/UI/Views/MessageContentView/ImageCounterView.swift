@@ -94,13 +94,9 @@ class ImageCounterView: BaseView {
         self.counter.sizeToFit()
         self.counter.centerOnY()
         
-        if case ViewState.count(let count) = self.viewState, count > 0 {
-            self.width
-            = offset.value.doubled + self.imageView.width
-            + self.counter.width + offset.value
-        } else {
-            self.width = offset.value.doubled + self.imageView.width
-        }
+        self.width
+        = offset.value.doubled + self.imageView.width
+        + self.counter.width + offset.value
         
         self.imageView.pin(.left, offset: offset)
         self.counter.match(.left, to: .right, of: self.imageView, offset: offset)
@@ -116,21 +112,22 @@ class ImageCounterView: BaseView {
         self.viewStateTask = Task { [weak self] in
             guard let `self` = self else { return }
             
-            await UIView.awaitAnimation(with: .slow, animations: {
-                switch state {
-                case .empty:
-                    self.counter.alpha = 0
-                case .add:
-                    self.counter.alpha = 0
-                case .count(let count):
-                    self.counter.alpha = count > 0 ? 1.0 : 0
-                }
-                
-                self.layoutNow()
-            })
+//            await UIView.awaitAnimation(with: .slow, animations: {
+//                switch state {
+//                case .empty:
+//                    self.counter.alpha = 0
+//                case .add:
+//                    self.counter.alpha = 0
+//                case .count(let count):
+//                    self.counter.alpha = count > 0 ? 1.0 : 0
+//                }
+//
+//                self.layoutNow()
+//            })
             
             if case ViewState.count(let count) = state {
                 self.counter.setValue(Float(count), animated: true)
+                self.layoutNow()
             }
         }
     }

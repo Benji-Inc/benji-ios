@@ -2781,13 +2781,13 @@
 		D6DE47B828664F840005FD28 /* Message Footer */ = {
 			isa = PBXGroup;
 			children = (
-				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
-				D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */,
-				D6DE47B628664F780005FD28 /* RepliesCounterView.swift */,
 				D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */,
+				D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */,
+				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				D656BF0C28183C0900723068 /* MessagePreview.swift */,
 				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
 				D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */,
+				D6DE47B628664F780005FD28 /* RepliesCounterView.swift */,
 			);
 			path = "Message Footer";
 			sourceTree = "<group>";

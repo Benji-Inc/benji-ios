@@ -14,7 +14,7 @@ import UIKit
 class MessageSummaryView: BaseView, MessageConfigureable {
     
     private var controller: MessageController?
-    private let replyView = MessagePreview()
+    let replyView = MessagePreview()
         
     private var replyCount = 0
     private var totalUnreadReplyCount: Int = 0

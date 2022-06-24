@@ -20,6 +20,8 @@ class MessageFooterView: BaseView {
     let experessionSummary = ExpressionSummaryView()
     let readSummary = ReadSummaryView()
     
+    var didTapViewReplies: CompletionOptional = nil
+    
     let detailView  = MessageFooterDetailContainerView()
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
     
@@ -48,6 +50,14 @@ class MessageFooterView: BaseView {
                 self.handleUpdated(content: self.readSummary)
             }
         }.store(in: &self.cancellables)
+        
+        self.replySummary.replyView.didSelect { [unowned self] in
+            self.didTapViewReplies?()
+        }
+        
+        self.detailView.didTapViewReplies = { [unowned self] in
+            self.didTapViewReplies?()
+        }
     }
     
     func configure(for message: Messageable) {

@@ -67,7 +67,7 @@ class MessageCell: UICollectionViewCell {
             self.addReply(with: text)
         }
         
-        self.footerView.detailView.didTapViewReplies = { [unowned self] in
+        self.footerView.didTapViewReplies = { [unowned self] in
             guard let message = self.message else { return }
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }

@@ -20,7 +20,7 @@ class MessageFooterDetailContainerView: BaseView {
         case reads
     }
     
-    let repliesView = ImageCounterView(with: .rectangleStack)
+    let repliesView = RepliesCounterView()
     let expressionsView = ImageCounterView(with: .faceSmiling)
     let readView = ReadIndicatorView()
     
@@ -50,11 +50,12 @@ class MessageFooterDetailContainerView: BaseView {
     
     func configure(for message: Messageable) {
         self.readView.configure(with: message)
+        self.repliesView.configure(for: message)
         self.layoutNow()
     }
     
     private func setupHandlers() {
-        
+                
         self.repliesView.$selectionState.mainSink { [unowned self] state in
             if state == .selected {
                 self.expressionsView.selectionState = .normal
