@@ -25,6 +25,8 @@ class MessageReadContentView: BaseView {
         
         self.label.textAlignment = .center
         self.label.alpha = 0.25
+        
+        self.clipsToBounds = false 
     }
     
     /// A reference to a task for configuring the cell.
@@ -58,11 +60,11 @@ class MessageReadContentView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.personView.squaredSize = self.height * 0.6
+        self.personView.squaredSize = self.width
         self.personView.centerOnX()
         self.personView.pin(.top)
         
-        self.label.setSize(withWidth: self.width * 0.8)
+        self.label.setSize(withWidth: self.width.doubled)
         self.label.centerOnX()
         self.label.match(.top, to: .bottom, of: self.personView, offset: .short)
     }
