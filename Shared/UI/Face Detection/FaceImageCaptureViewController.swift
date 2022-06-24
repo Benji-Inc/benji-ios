@@ -158,10 +158,11 @@ class FaceImageCaptureViewController: ViewController {
         self.captureCurrentImageAsPhoto()
     }
 
+    // MARK: - AVAssetWriter Vars
+
     private var videoWriter: AVAssetWriter!
     private var videoWriterInput: AVAssetWriterInput!
     private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor!
-    private var videoStartTime: Double!
 
     func startVideoCapture() {
         guard self.videoCaptureState == .idle else { return }
@@ -229,91 +230,6 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
         }
     }
 
-    private func startAssetWriter() {
-        do {
-            // Get a url to temporarily store the video
-            #warning("Use a full UUID")
-            let uuid = UUID().uuidString.prefix(8)
-            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                          isDirectory: true).appendingPathComponent(uuid+".mov")
-
-            // Create an asset writer that will write the video the url
-            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
-            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
-                                            AVVideoWidthKey : 720,
-                                           AVVideoHeightKey : 720,
-                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
-
-            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
-                                                       outputSettings: settings)
-            self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
-            self.videoWriterInput.expectsMediaDataInRealTime = true
-
-            self.pixelBufferAdaptor
-            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
-                                                   sourcePixelBufferAttributes: nil)
-
-            if self.videoWriter.canAdd(self.videoWriterInput) {
-                self.videoWriter.add(self.videoWriterInput)
-            }
-
-            self.videoWriter.startWriting()
-
-
-        } catch {
-            logError(error)
-        }
-    }
-
-    private func startSession(with sampleBuffer: CMSampleBuffer) {
-        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        self.videoWriter.startSession(atSourceTime: startTime)
-        self.videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
-    }
-
-    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
-        guard self.videoWriterInput.isReadyForMoreMediaData else { return }
-
-        var pixelBuffer: CVPixelBuffer?
-        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-                     kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
-        let width: Int = Int(self.currentCIImage!.extent.width)
-        let height: Int = Int(self.currentCIImage!.extent.width)
-
-        CVPixelBufferCreate(kCFAllocatorDefault,
-                            width,
-                            height,
-                            kCVPixelFormatType_32BGRA,
-                            attrs,
-                            &pixelBuffer)
-
-        let context = CIContext()
-        context.render(self.currentCIImage!, to: pixelBuffer!)
-
-        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
-        let presentationTime = CMTime(seconds: currentTime,
-                                      preferredTimescale: CMTimeScale(bitPattern: 600))
-
-        self.pixelBufferAdaptor.append(pixelBuffer!, withPresentationTime: presentationTime)
-    }
-
-    private func finishWritingVideo() {
-        self.videoWriterInput.markAsFinished()
-        let videoURL = self.videoWriter.outputURL
-        self.videoWriter.finishWriting {
-            self.didCaptureVideo?(videoURL)
-        }
-    }
-
-    private func detectedFace(request: VNRequest, error: Error?) {
-        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
-            self.faceDetected = false
-            return
-        }
-
-        self.faceDetected = true
-    }
-
     /// Makes the image black and white, and makes the background clear.
     func blend(original framePixelBuffer: CVPixelBuffer,
                mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
@@ -345,6 +261,90 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
         blendFilter.maskImage = maskImage
 
         return blendFilter.outputImage?.oriented(.leftMirrored)
+    }
+
+    private func startAssetWriter() {
+        do {
+            // Get a url to temporarily store the video
+            let uuid = UUID().uuidString
+            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+                          isDirectory: true).appendingPathComponent(uuid+".mov")
+
+            // Create an asset writer that will write the video to the url
+            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
+            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
+                                            AVVideoWidthKey : 720,
+                                           AVVideoHeightKey : 720,
+                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
+
+            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
+                                                       outputSettings: settings)
+
+            self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
+            self.videoWriterInput.expectsMediaDataInRealTime = true
+
+            self.pixelBufferAdaptor
+            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
+                                                   sourcePixelBufferAttributes: nil)
+
+            if self.videoWriter.canAdd(self.videoWriterInput) {
+                self.videoWriter.add(self.videoWriterInput)
+            }
+
+            self.videoWriter.startWriting()
+        } catch {
+            logError(error)
+        }
+    }
+
+    private func startSession(with sampleBuffer: CMSampleBuffer) {
+        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        self.videoWriter.startSession(atSourceTime: startTime)
+    }
+
+    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
+        guard self.videoWriterInput.isReadyForMoreMediaData else { return }
+
+        var pixelBuffer: CVPixelBuffer?
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
+                     kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
+        let width = Int(self.currentCIImage!.extent.width)
+        let height = Int(self.currentCIImage!.extent.width)
+
+        CVPixelBufferCreate(kCFAllocatorDefault,
+                            width,
+                            height,
+                            kCVPixelFormatType_32BGRA,
+                            attrs,
+                            &pixelBuffer)
+
+        let context = CIContext()
+        let transform = CGAffineTransform(translationX: 0, y: -480)
+        let adjustedImage = self.currentCIImage!.transformed(by: transform)
+        context.render(adjustedImage, to: pixelBuffer!)
+
+        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+        let presentationTime = CMTime(seconds: currentTime,
+                                      preferredTimescale: CMTimeScale(bitPattern: 600))
+
+        self.pixelBufferAdaptor.append(pixelBuffer!, withPresentationTime: presentationTime)
+    }
+
+    private func finishWritingVideo() {
+        self.videoWriterInput.markAsFinished()
+        let videoURL = self.videoWriter.outputURL
+        self.videoWriter.finishWriting {
+            self.didCaptureVideo?(videoURL)
+        }
+    }
+
+    private func detectedFace(request: VNRequest, error: Error?) {
+        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
+            self.faceDetected = false
+            return
+        }
+
+        self.faceDetected = true
     }
 }
 
