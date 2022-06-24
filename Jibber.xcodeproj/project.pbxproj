@@ -896,6 +896,7 @@
 		D6DE47B328663BD80005FD28 /* ExpressionSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */; };
 		D6DE47B528663BE60005FD28 /* ReadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */; };
 		D6DE47B728664F780005FD28 /* RepliesCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B628664F780005FD28 /* RepliesCounterView.swift */; };
+		D6DE47BA28666F3F0005FD28 /* MessageReadContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* MemberCell.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
@@ -1458,6 +1459,7 @@
 		D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionSummaryView.swift; sourceTree = "<group>"; };
 		D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadSummaryView.swift; sourceTree = "<group>"; };
 		D6DE47B628664F780005FD28 /* RepliesCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesCounterView.swift; sourceTree = "<group>"; };
+		D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReadContentView.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
@@ -1671,6 +1673,7 @@
 				D60B885B27F2717000B3E1C2 /* MessageMetadataCell.swift */,
 				D60B885F27F37BC800B3E1C2 /* MessageMoreCell.swift */,
 				D60B885727F2447600B3E1C2 /* MessageReadCell.swift */,
+				D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */,
 				D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */,
 			);
 			path = "Message Detail";
@@ -3886,6 +3889,7 @@
 				80D5C28B2817187D00182DB6 /* ExpressionDetailViewController.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */,
+				D6DE47BA28666F3F0005FD28 /* MessageReadContentView.swift in Sources */,
 				D6CC148B276BFDC1005F617F /* Color+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6B2B650283A9150007D507B /* ConversationContentView.swift in Sources */,
