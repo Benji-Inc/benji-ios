@@ -895,6 +895,7 @@
 		D6DE47B128650F220005FD28 /* ImageCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B028650F220005FD28 /* ImageCounterView.swift */; };
 		D6DE47B328663BD80005FD28 /* ExpressionSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */; };
 		D6DE47B528663BE60005FD28 /* ReadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */; };
+		D6DE47B728664F780005FD28 /* RepliesCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B628664F780005FD28 /* RepliesCounterView.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* MemberCell.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
@@ -1456,6 +1457,7 @@
 		D6DE47B028650F220005FD28 /* ImageCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCounterView.swift; sourceTree = "<group>"; };
 		D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionSummaryView.swift; sourceTree = "<group>"; };
 		D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadSummaryView.swift; sourceTree = "<group>"; };
+		D6DE47B628664F780005FD28 /* RepliesCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesCounterView.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
@@ -1716,10 +1718,6 @@
 			isa = PBXGroup;
 			children = (
 				D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */,
-				D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */,
-				D656BF0C28183C0900723068 /* MessagePreview.swift */,
-				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
-				D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */,
 				D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */,
 			);
 			path = Shared;
@@ -2018,6 +2016,7 @@
 		D635F0A927136C2600A02D17 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				D6DE47B828664F840005FD28 /* Message Footer */,
 				8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */,
 				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
 				80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */,
@@ -2026,8 +2025,6 @@
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
-				D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */,
-				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
 				80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */,
 				8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */,
@@ -2779,6 +2776,20 @@
 				D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */,
 			);
 			path = "Person Views";
+			sourceTree = "<group>";
+		};
+		D6DE47B828664F840005FD28 /* Message Footer */ = {
+			isa = PBXGroup;
+			children = (
+				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
+				D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */,
+				D6DE47B628664F780005FD28 /* RepliesCounterView.swift */,
+				D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */,
+				D656BF0C28183C0900723068 /* MessagePreview.swift */,
+				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
+				D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */,
+			);
+			path = "Message Footer";
 			sourceTree = "<group>";
 		};
 		D6E65F17237791450061AA67 /* Collection View Management  */ = {
@@ -3757,6 +3768,7 @@
 				D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* JibberChatClient.swift in Sources */,
 				D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */,
+				D6DE47B728664F780005FD28 /* RepliesCounterView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
