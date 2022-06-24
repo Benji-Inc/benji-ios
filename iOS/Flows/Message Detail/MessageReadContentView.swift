@@ -64,7 +64,7 @@ class MessageReadContentView: BaseView {
         self.personView.centerOnX()
         self.personView.pin(.top)
         
-        self.label.setSize(withWidth: self.width.doubled)
+        self.label.setSize(withWidth: self.width * 1.5)
         self.label.centerOnX()
         self.label.match(.top, to: .bottom, of: self.personView, offset: .short)
     }

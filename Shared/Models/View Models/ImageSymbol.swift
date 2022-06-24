@@ -98,7 +98,7 @@ enum ImageSymbol: String, ImageDisplayable {
     
     var selectedSymbol: ImageSymbol? {
         switch self {
-        case .bolt:
+        case .boltFill:
             return .xMark
         default:
             return nil
