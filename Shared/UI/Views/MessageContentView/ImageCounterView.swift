@@ -79,7 +79,9 @@ class ImageCounterView: BaseView {
         }.store(in: &self.cancellables)
         
         self.didSelect { [unowned self] in
-            self.selectionState = self.selectionState == .normal ? .selected : .normal
+            if self.selectionState == .normal {
+                self.selectionState = .selected
+            }
         }
     }
     

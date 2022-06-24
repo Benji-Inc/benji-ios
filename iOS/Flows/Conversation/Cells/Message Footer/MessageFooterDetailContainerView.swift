@@ -34,11 +34,6 @@ class MessageFooterDetailContainerView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.addSubview(self.repliesView)
-        self.addSubview(self.expressionsView)
-        self.addSubview(self.readView)
-        self.addSubview(self.replyButton)
-        
         self.replyButton.set(style: .image(symbol: .arrowTurnUpLeft, palletteColors: [.B0], pointSize: 12, backgroundColor: .white))
         self.replyButton.layer.cornerRadius = Theme.innerCornerRadius
         
@@ -49,8 +44,22 @@ class MessageFooterDetailContainerView: BaseView {
     }
     
     func configure(for message: Messageable) {
+        
+        self.removeAllSubviews()
+        
+        if message.parentMessageId.isNil {
+            self.addSubview(self.repliesView)
+            self.addSubview(self.expressionsView)
+            self.addSubview(self.readView)
+            self.addSubview(self.replyButton)
+        } else {
+            self.addSubview(self.expressionsView)
+            self.addSubview(self.readView)
+        }
+        
         self.readView.configure(with: message)
         self.repliesView.configure(for: message)
+        
         self.layoutNow()
     }
     
@@ -79,40 +88,31 @@ class MessageFooterDetailContainerView: BaseView {
                 self.state = .reads
             }
         }.store(in: &self.cancellables)
-        
-        self.$state.mainSink { [unowned self] state in
-            self.handleSelected(state: state)
-        }.store(in: &self.cancellables)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+                
         self.height = ImageCounterView.height
         
-        self.repliesView.pin(.left)
-        self.repliesView.pin(.top)
-        
-        self.expressionsView.match(.left, to: .right, of: self.repliesView, offset: .short)
-        self.expressionsView.pin(.top)
+        if self.repliesView.superview.exists {
+            self.repliesView.pin(.left)
+            self.repliesView.pin(.top)
+            
+            self.expressionsView.match(.left, to: .right, of: self.repliesView, offset: .short)
+            self.expressionsView.pin(.top)
+            
+            self.replyButton.size = CGSize(width: self.height * 1.75, height: self.height)
+            self.replyButton.pin(.right)
+            self.replyButton.pin(.top)
+        } else {
+            
+            self.expressionsView.pin(.left)
+            self.expressionsView.pin(.top)
+        }
         
         self.readView.match(.left, to: .right, of: self.expressionsView, offset: .short)
         self.readView.pin(.top)
-        
-        self.replyButton.size = CGSize(width: self.height * 1.75, height: self.height)
-        self.replyButton.pin(.right)
-        self.replyButton.pin(.top)
-    }
-    
-    private func handleSelected(state: State) {
-        switch state {
-        case .replies:
-            break
-        case .expressions:
-            break
-        case .reads:
-            break
-        }
     }
     
     private func addMenu() -> UIMenu {

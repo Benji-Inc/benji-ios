@@ -65,7 +65,11 @@ class MessageFooterView: BaseView {
         self.detailView.configure(for: message)
         self.updateStatus(for: message)
         // Start with replies
-        self.detailView.repliesView.selectionState = .selected
+        if message.parentMessageId.exists {
+            self.detailView.expressionsView.selectionState = .selected
+        } else {
+            self.detailView.repliesView.selectionState = .selected
+        }
     }
         
     override func layoutSubviews() {
