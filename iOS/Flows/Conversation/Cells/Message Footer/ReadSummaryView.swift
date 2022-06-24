@@ -52,7 +52,9 @@ class ReadSummaryView: BaseView, MessageConfigureable {
             
             self.readerCount = controller.message?.readReactions.count ?? 0
             
-            let readers: [ReadViewModel] = self.controller?.message?.readReactions.compactMap({ reaction in
+            let readers: [ReadViewModel] = self.controller?.message?.readReactions.filter({ reaction in
+                return reaction.author.id != User.current()?.objectId
+            }).compactMap({ reaction in
                 return ReadViewModel(authorId: reaction.author.personId, createdAt: reaction.createdAt)
             }) ?? []
             
@@ -116,12 +118,12 @@ class ReadersView: BaseView {
                                           y: 0,
                                           width: 30,
                                           height: self.height)
-                xOffset += view.width + Theme.ContentOffset.long.value
+                xOffset += view.width + Theme.ContentOffset.xtraLong.value
                 count += 1
             }
         }
         
-        xOffset -= Theme.ContentOffset.long.value
+        xOffset -= Theme.ContentOffset.xtraLong.value
         
         self.scrollView.contentSize = CGSize(width: xOffset, height: self.height)
     }
