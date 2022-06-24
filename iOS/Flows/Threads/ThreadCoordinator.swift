@@ -43,6 +43,28 @@ class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
         }.store(in: &self.cancellables)
     }
     
+    /// The currently running task that is loading.
+    private var loadTask: Task<Void, Never>?
+    
+    override func scrollToUnreadMessage() {
+        // Find the oldest unread message.
+        guard let conversation = self.threadVC.messageController.conversation,
+              let unreadMessage = self.threadVC.messageController.replies.reversed().first(where: { message in
+                  return !message.isFromCurrentUser && !message.isConsumedByMe
+              }) else { return }
+        
+        self.loadTask?.cancel()
+        
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            await self.inputHandlerViewController.scrollToConversation(with: conversation.id,
+                                                                       messageId: unreadMessage.id,
+                                                                       viewReplies: false,
+                                                                       animateScroll: true,
+                                                                       animateSelection: true)
+        }
+    }
+    
     override func presentProfile(for person: PersonType) {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] result in

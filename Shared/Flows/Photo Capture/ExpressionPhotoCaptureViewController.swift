@@ -15,7 +15,6 @@ class ExpressionPhotoCaptureViewController: ViewController {
     lazy var faceCaptureVC = FaceImageCaptureViewController()
     /// Tapping on this view will trigger the photo capture.
     private var tapView = BaseView()
-    private let label = ThemeLabel(font: .medium)
 
     // MARK: - Life Cycle
 
@@ -28,8 +27,6 @@ class ExpressionPhotoCaptureViewController: ViewController {
 
         self.view.addSubview(self.tapView)
         
-        self.view.addSubview(self.label)
-
         self.tapView.didSelect { [unowned self] in
             if self.faceCaptureVC.isSessionRunning {
 //                self.faceCaptureVC.capturePhoto()
@@ -48,7 +45,7 @@ class ExpressionPhotoCaptureViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.animate(text: "Tap to take picture")
+        self.faceCaptureVC.animate(text: "Tap to take picture")
     }
     
     override func viewDidLayoutSubviews() {
@@ -58,33 +55,5 @@ class ExpressionPhotoCaptureViewController: ViewController {
         self.faceCaptureVC.cameraViewContainer.makeRound()
 
         self.tapView.expandToSuperviewSize()
-        
-        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.label.pinToSafeAreaBottom()
-        self.label.centerOnX()
-    }
-    
-    private var animateTask: Task<Void, Never>?
-    
-    func animate(text: String) {
-        
-        self.animateTask?.cancel()
-        
-        self.animateTask = Task { [weak self] in
-            guard let `self` = self else { return }
-            
-            await UIView.awaitAnimation(with: .fast, animations: {
-                self.label.alpha = 0
-            })
-            
-            guard !Task.isCancelled else { return }
-            
-            self.label.setText(text)
-            self.view.layoutNow()
-            
-            await UIView.awaitAnimation(with: .fast, animations: {
-                self.label.alpha = 1.0
-            })
-        }
     }
 }

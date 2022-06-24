@@ -12,6 +12,8 @@ import Vision
 import UIKit
 import MetalKit
 import CoreImage.CIFilterBuiltins
+import Lottie
+import Localization
 
 /// A view controller that allows a user to capture an image of their face.
 /// A live preview of the camera is shown on the main view.
@@ -58,6 +60,9 @@ class FaceImageCaptureViewController: ViewController {
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
     private var sequenceHandler = VNSequenceRequestHandler()
     
+    let animationView = AnimationView.with(animation: .faceScan)
+    let label = ThemeLabel(font: .medium, textColor: .white)
+    
     deinit {
         if self.isSessionRunning {
             self.stopSession()
@@ -74,6 +79,12 @@ class FaceImageCaptureViewController: ViewController {
         self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
         self.cameraViewContainer.layer.borderWidth = 2
         self.cameraViewContainer.clipsToBounds = true
+        
+        self.cameraViewContainer.addSubview(self.animationView)
+        self.animationView.loopMode = .loop
+        self.animationView.alpha = 0
+        
+        self.view.addSubview(self.label)
     }
     
     override func viewDidLayoutSubviews() {
@@ -82,11 +93,43 @@ class FaceImageCaptureViewController: ViewController {
         self.cameraViewContainer.squaredSize = self.view.height * 0.4
         self.cameraViewContainer.pinToSafeArea(.top, offset: .custom(20))
         self.cameraViewContainer.centerOnX()
+        self.cameraViewContainer.layer.cornerRadius = self.cameraViewContainer.height * 0.25
+        
+        self.animationView.squaredSize = self.cameraViewContainer.height * 0.5
+        self.animationView.centerOnXAndY()
         
         self.cameraView.width = self.cameraViewContainer.width
         self.cameraView.height = self.cameraViewContainer.height * 1.25
         self.cameraView.pin(.top)
         self.cameraView.centerOnX()
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.label.match(.top, to: .bottom, of: self.cameraViewContainer, offset: .long)
+        self.label.centerOnX()
+    }
+    
+    private var animateTask: Task<Void, Never>?
+    
+    func animate(text: Localized) {
+        
+        self.animateTask?.cancel()
+        
+        self.animateTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 0
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            self.label.setText(text)
+            self.view.layoutNow()
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 1.0
+            })
+        }
     }
 
     // MARK: - Photo Capture Session

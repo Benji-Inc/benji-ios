@@ -20,7 +20,13 @@ class MainCoordinator: BaseCoordinator<Void> {
 
         SessionManager.shared.didReceiveInvalidSessionError = { [unowned self] _ in
             Task.onMainActor {
-                self.showLogOutAlert()
+                self.showSessionErrorAlert()
+            }
+        }
+        
+        SessionManager.shared.didRecieveReuestToLogOut = { [unowned self] in
+            Task.onMainActor {
+                self.logOut()
             }
         }
 
@@ -158,7 +164,7 @@ class MainCoordinator: BaseCoordinator<Void> {
         })
     }
 
-    func showLogOutAlert() {
+    func showSessionErrorAlert() {
         let alert = UIAlertController(title: "🙀",
                                       message: "Someone tripped over a 🐈 and ☠️ the mainframe.",
                                       preferredStyle: .alert)
@@ -174,13 +180,17 @@ class MainCoordinator: BaseCoordinator<Void> {
         }
     }
 
-    private func logOut() {
+    func logOut() {
 #if IOS
         self.logOutChat()
 #endif
         User.logOut()
         self.deepLink = nil
+        if let child = self.childCoordinator as? Presentable {
+            child.toPresentable().dismiss(animated: true)
+        }
         self.removeChild()
+        
         self.runOnboardingFlow(with: nil)
     }
 }

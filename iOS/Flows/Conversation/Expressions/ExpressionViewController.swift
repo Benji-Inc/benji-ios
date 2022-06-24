@@ -13,6 +13,7 @@ import Parse
 class ExpressionViewController: ViewController {
     
     enum State {
+        case initial
         case capture
         case emotionSelection
     }
@@ -28,7 +29,7 @@ class ExpressionViewController: ViewController {
         
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
-    @Published private var state: State = .capture
+    @Published private var state: State = .initial
     
     private var data: Data?
     
@@ -61,7 +62,6 @@ class ExpressionViewController: ViewController {
             self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
             self.personGradientView.alpha = 1.0
             self.personGradientView.set(displayable: UIImage(data: data))
-            self.expressionPhotoVC.animate(text: "Tap again to retake")
             self.expressionPhotoVC.faceCaptureVC.stopSession()
                         
             self.state = .emotionSelection
@@ -79,11 +79,25 @@ class ExpressionViewController: ViewController {
             self.state = .capture
         }
         
+        self.expressionPhotoVC.faceCaptureVC.$hasRenderedFaceImage
+            .removeDuplicates()
+            .mainSink { [unowned self] hasRendered in
+                if hasRendered {
+                    self.state = .capture
+                } else {
+                    self.state = .initial
+                }
+            }.store(in: &self.cancellables)
+        
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
                 self.update(for: state)
             }.store(in: &self.cancellables)
+        
+        if !self.expressionPhotoVC.faceCaptureVC.isSessionRunning {
+            self.expressionPhotoVC.faceCaptureVC.beginSession()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -98,16 +112,11 @@ class ExpressionViewController: ViewController {
     
     private func createExpression() async {
         guard let data = self.data else { return }
-//        var emotionCounts: [Emotion: Int] = [:]
-//        self.emotionsVC.selectedEmotions.forEach { emotion in
-//            emotionCounts[emotion] = 1
-//        }
         
         let expression = Expression()
         
         expression.author = User.current()
         expression.file = PFFileObject(name: "expression.heic", data: data)
-        //expression.emotionCounts = emotionCounts
         expression.emojiString = nil
         
         guard let saved = try? await expression.saveToServer() else { return }
@@ -117,10 +126,18 @@ class ExpressionViewController: ViewController {
     
     private func update(for state: State) {
         switch state {
+        case .initial:
+            self.expressionPhotoVC.faceCaptureVC.animate(text: "Scanning...")
+            self.expressionPhotoVC.faceCaptureVC.animationView.alpha = 1.0
+            self.expressionPhotoVC.faceCaptureVC.animationView.play()
         case .capture:
+            self.expressionPhotoVC.faceCaptureVC.animationView.stop()
+            self.expressionPhotoVC.faceCaptureVC.animate(text: "Tap to capture expression")
+            
             UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
+                    self.expressionPhotoVC.faceCaptureVC.animationView.alpha = 0.0
                     self.view.layoutNow()
                 }
                 
@@ -139,6 +156,10 @@ class ExpressionViewController: ViewController {
             }
             
         case .emotionSelection:
+            self.expressionPhotoVC.faceCaptureVC.animate(text: "")
+            self.expressionPhotoVC.faceCaptureVC.animationView.alpha = 0.0
+            self.expressionPhotoVC.faceCaptureVC.animationView.stop()
+            
             UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {

@@ -104,7 +104,7 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
     private func handleDelete() {
         Task {
             let controller = MessageController.controller(for: self.message)
-            try? await controller.deleteMessage()
+            try? await controller?.deleteMessage()
             
             await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.trash, "Message Deleted"))
             
@@ -209,7 +209,7 @@ extension MessageDetailCoordinator: MessageContentDelegate {
             let controller = MessageController.controller(for: message)
             
             Task {
-                try await controller.add(expression: expression)
+                try await controller?.add(expression: expression)
             }
             self.messageVC.dismiss(animated: true)
         }

@@ -111,9 +111,7 @@ class SwipeableInputAccessoryView: BaseView {
             NSLayoutConstraint.activate([self.textViewCollapsedVerticalCenterConstraint,
                                          self.textViewCollapsedVerticalHeightContstraint])
             
-            if !self.textView.text.isEmpty || self.textView.isFirstResponder {
-                textViewPadding = self.expressionView.right 
-            }
+            textViewPadding = self.expressionView.right
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
             self.textView.isScrollEnabled = false

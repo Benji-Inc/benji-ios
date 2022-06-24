@@ -58,7 +58,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                     return
                 }
                 
-                self.startLoadDataTask(with: conversation)
+                self.startLoadDataTask(with: convo)
                 self.closeButton.isVisible = true 
                 self.setTopic(for: convo)
                 self.stackedView.isVisible = true
