@@ -11,7 +11,7 @@ import Combine
 import Localization
 import UIKit
 
-class MessageSummaryView: BaseView {
+class MessageSummaryView: BaseView, MessageConfigureable {
     
     private var controller: MessageController?
     private let replyView = MessagePreview()
@@ -75,14 +75,6 @@ class MessageSummaryView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.replyView.expandToSuperviewWidth()
-        self.replyView.pin(.top, offset: .standard)
-        self.replyView.pin(.left)
-        
-        if self.replyView.isVisible {
-            self.height = self.replyView.height + 30 + Theme.ContentOffset.short.value
-        } else {
-            self.height = 30
-        }
+        self.replyView.expandToSuperviewSize()
     }
 }

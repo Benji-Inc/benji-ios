@@ -8,7 +8,17 @@
 
 import Foundation
 
+protocol MessageConfigureable {
+    func configure(for message: Messageable)
+}
+
 class MessageFooterDetailContainerView: BaseView {
+    
+    enum State {
+        case replies
+        case expressions
+        case reads
+    }
     
     let repliesView = ImageCounterView(with: .rectangleStack)
     let expressionsView = ImageCounterView(with: .faceSmiling)
@@ -18,49 +28,60 @@ class MessageFooterDetailContainerView: BaseView {
     var didSelectSuggestion: ((String) -> Void)? = nil
 
     let replyButton = ThemeButton()
+    
+    @Published var state: State = .replies
             
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.repliesView)
-        self.repliesView.$selectionState.mainSink { [unowned self] state in
-            if state == .selected {
-                self.expressionsView.selectionState = .normal
-                self.readView.selectionState = .normal
-                self.handleRepliesSelection()
-            }
-        }.store(in: &self.cancellables)
-        
         self.addSubview(self.expressionsView)
-        self.expressionsView.$selectionState.mainSink { [unowned self] state in
-            if state == .selected {
-                self.repliesView.selectionState = .normal
-                self.readView.selectionState = .normal
-                self.handleExpressionSelection()
-            }
-        }.store(in: &self.cancellables)
-        
         self.addSubview(self.readView)
-        self.readView.$selectionState.mainSink { [unowned self] state in
-            if state == .selected {
-                self.repliesView.selectionState = .normal
-                self.expressionsView.selectionState = .normal
-                self.handleReadSelection()
-            }
-        }.store(in: &self.cancellables)
-        
         self.addSubview(self.replyButton)
         
         self.replyButton.set(style: .image(symbol: .arrowTurnUpLeft, palletteColors: [.B0], pointSize: 12, backgroundColor: .white))
         self.replyButton.layer.cornerRadius = Theme.innerCornerRadius
         
         self.replyButton.menu = self.addMenu()
-        self.replyButton.showsMenuAsPrimaryAction = true 
+        self.replyButton.showsMenuAsPrimaryAction = true
+        
+        self.setupHandlers()
     }
     
     func configure(for message: Messageable) {
         self.readView.configure(with: message)
         self.layoutNow()
+    }
+    
+    private func setupHandlers() {
+        
+        self.repliesView.$selectionState.mainSink { [unowned self] state in
+            if state == .selected {
+                self.expressionsView.selectionState = .normal
+                self.readView.selectionState = .normal
+                self.state = .replies
+            }
+        }.store(in: &self.cancellables)
+        
+        self.expressionsView.$selectionState.mainSink { [unowned self] state in
+            if state == .selected {
+                self.repliesView.selectionState = .normal
+                self.readView.selectionState = .normal
+                self.state = .expressions
+            }
+        }.store(in: &self.cancellables)
+        
+        self.readView.$selectionState.mainSink { [unowned self] state in
+            if state == .selected {
+                self.repliesView.selectionState = .normal
+                self.expressionsView.selectionState = .normal
+                self.state = .reads
+            }
+        }.store(in: &self.cancellables)
+        
+        self.$state.mainSink { [unowned self] state in
+            self.handleSelected(state: state)
+        }.store(in: &self.cancellables)
     }
     
     override func layoutSubviews() {
@@ -82,16 +103,15 @@ class MessageFooterDetailContainerView: BaseView {
         self.replyButton.pin(.top)
     }
     
-    private func handleRepliesSelection() {
-        
-    }
-    
-    private func handleExpressionSelection() {
-        
-    }
-    
-    private func handleReadSelection() {
-        
+    private func handleSelected(state: State) {
+        switch state {
+        case .replies:
+            break
+        case .expressions:
+            break
+        case .reads:
+            break
+        }
     }
     
     private func addMenu() -> UIMenu {

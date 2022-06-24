@@ -60,6 +60,8 @@ class ImageCounterView: BaseView {
         self.layer.borderColor = ThemeColor.white.color.cgColor
         self.imageView.tintColor = ThemeColor.white.color
         
+        self.set(backgroundColor: .clear)
+        
         self.addSubview(self.imageView)
         self.imageView.setPoint(size: 10)
         
@@ -92,7 +94,7 @@ class ImageCounterView: BaseView {
         self.counter.sizeToFit()
         self.counter.centerOnY()
         
-        if case ViewState.count(_) = self.viewState {
+        if case ViewState.count(let count) = self.viewState, count > 0 {
             self.width
             = offset.value.doubled + self.imageView.width
             + self.counter.width + offset.value
@@ -120,11 +122,11 @@ class ImageCounterView: BaseView {
                     self.counter.alpha = 0
                 case .add:
                     self.counter.alpha = 0
-                case .count(_):
-                    self.counter.alpha = 1.0
+                case .count(let count):
+                    self.counter.alpha = count > 0 ? 1.0 : 0
                 }
                 
-                self.setNeedsLayout()
+                self.layoutNow()
             })
             
             if case ViewState.count(let count) = state {
@@ -139,12 +141,8 @@ class ImageCounterView: BaseView {
                 switch state {
                 case .normal:
                     self.alpha = 0.35
-                    self.layer.borderColor = ThemeColor.white.color.cgColor
-                    self.set(backgroundColor: .clear)
                 case .selected:
                     self.alpha = 1.0
-                    self.layer.borderColor = ThemeColor.D6.color.cgColor
-                    self.set(backgroundColor: .D6)
                 }
             })
         }
