@@ -25,13 +25,13 @@ class SymbolImageView: UIImageView {
     
     func setPoint(size: CGFloat) {
         let pointCofig = UIImage.SymbolConfiguration(pointSize: size)
-        
-        if let current = self.preferredSymbolConfiguration {
-            current.applying(pointCofig)
-            self.preferredSymbolConfiguration = current
-        } else {
-            self.preferredSymbolConfiguration = pointCofig
-        }
+        self.preferredSymbolConfiguration = pointCofig
+//        if let current = self.preferredSymbolConfiguration {
+//            current.applying(pointCofig)
+//            self.preferredSymbolConfiguration = current
+//        } else {
+//            self.preferredSymbolConfiguration = pointCofig
+//        }
     }
     
     func set(symbol: ImageSymbol, configuration: UIImage.SymbolConfiguration? = nil) {

@@ -15,37 +15,40 @@ class MessageFooterView: BaseView {
     static let collapsedHeight: CGFloat = 30 
 
     let replySummary = MessageSummaryView()
-    let readView = ReadIndicatorView()
-    let statusLabel = ThemeLabel(font: .small, textColor: .white)
+    let detailView  = MessageFooterDetailContainerView()
+    let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.readView)
-        self.addSubview(self.replySummary)
         self.addSubview(self.statusLabel)
+        self.statusLabel.textAlignment = .right
+        
+        self.addSubview(self.detailView)
+        self.detailView.alpha = 0
+        self.addSubview(self.replySummary)
     }
     
     func configure(for message: Messageable) {
-        self.readView.configure(with: message)
+        self.detailView.configure(for: message)
         self.replySummary.configure(for: message)
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             switch message.deliveryStatus {
             case .sending, .error:
                 self.statusLabel.text = self.getString(for: message.deliveryStatus)
-                self.readView.alpha = 0
                 self.statusLabel.alpha = 1
+                self.detailView.alpha = 0
                 if message.deliveryStatus == .sending {
-                    self.statusLabel.textColor =  ThemeColor.white.color
+                    self.statusLabel.textColor =  ThemeColor.whiteWithAlpha.color
                     self.statusLabel.font = FontType.small.font
                 } else {
                     self.statusLabel.textColor = ThemeColor.red.color
                     self.statusLabel.font = FontType.smallBold.font
                 }
             case .sent, .reading, .read:
-                self.readView.alpha = 1
                 self.statusLabel.alpha = 0
+                self.detailView.alpha = 1.0
             }
             self.layoutNow()
         }
@@ -53,14 +56,15 @@ class MessageFooterView: BaseView {
         
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.detailView.expandToSuperviewWidth()
+        self.detailView.pin(.top)
+        self.detailView.pin(.left)
 
-        self.replySummary.width = self.width - self.readView.width - Theme.ContentOffset.standard.value
+        self.replySummary.width = self.width - Theme.ContentOffset.standard.value
         self.replySummary.pin(.left)
-        self.replySummary.pin(.top)
-
-        self.readView.pin(.right)
-        self.readView.pin(.top, offset: .short)
-
+        self.replySummary.match(.top, to: .bottom, of: self.detailView)
+        
         self.statusLabel.setSize(withWidth: self.width)
         self.statusLabel.pin(.top, offset: .short)
         self.statusLabel.pin(.right)
@@ -69,10 +73,10 @@ class MessageFooterView: BaseView {
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         // Only handle touches on the reply and read views.
         let replyPoint = self.convert(point, to: self.replySummary)
-        let readPoint = self.convert(point, to: self.readView)
+        let readPoint = self.convert(point, to: self.detailView)
 
         return self.replySummary.point(inside: replyPoint, with: event)
-        || self.readView.point(inside: readPoint, with: event)
+        || self.detailView.point(inside: readPoint, with: event)
     }
 
     private func getString(for deliveryStatus: DeliveryStatus) -> String {

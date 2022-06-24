@@ -891,6 +891,8 @@
 		D6DD0C392822F3D5004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C382822F3D5004999F2 /* Sentry */; };
 		D6DD0C3B2822F3DE004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C3A2822F3DE004999F2 /* Sentry */; };
 		D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */; };
+		D6DE47AF28650A780005FD28 /* MessageFooterDetailContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */; };
+		D6DE47B128650F220005FD28 /* ImageCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B028650F220005FD28 /* ImageCounterView.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* MemberCell.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
@@ -1448,6 +1450,8 @@
 		D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCell.swift; sourceTree = "<group>"; };
 		D6DBC0E52851295E007312FC /* Transitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transitions; sourceTree = "<group>"; };
 		D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCounterView.swift; sourceTree = "<group>"; };
+		D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFooterDetailContainerView.swift; sourceTree = "<group>"; };
+		D6DE47B028650F220005FD28 /* ImageCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCounterView.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
@@ -2016,6 +2020,7 @@
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
+				D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */,
 				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
 				80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */,
@@ -2792,6 +2797,7 @@
 				D656BF0E281845B800723068 /* MessageDateLabel.swift */,
 				D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */,
 				D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */,
+				D6DE47B028650F220005FD28 /* ImageCounterView.swift */,
 			);
 			path = MessageContentView;
 			sourceTree = "<group>";
@@ -3612,6 +3618,7 @@
 				8057B59B27E2A10600B23D0D /* ConversationDetailCollectionViewLayout.swift in Sources */,
 				8057B59D27E2A10600B23D0D /* ConversationDetailViewController.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
+				D6DE47B128650F220005FD28 /* ImageCounterView.swift in Sources */,
 				80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */,
 				D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */,
@@ -3848,6 +3855,7 @@
 				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
+				D6DE47AF28650A780005FD28 /* MessageFooterDetailContainerView.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,

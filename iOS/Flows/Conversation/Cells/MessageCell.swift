@@ -63,21 +63,11 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
         
-        self.footerView.replySummary.didSelectEmoji = { [unowned self] emoji in
-            self.addReply(with: emoji)
+        self.footerView.detailView.didSelectSuggestion = { [unowned self] text in
+            self.addReply(with: text)
         }
         
-        self.footerView.replySummary.didSelectSuggestion = { [unowned self] suggestion in
-            guard let message = self.message else { return }
-            switch suggestion {
-            case .other:
-                self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
-            default:
-                self.addReply(with: suggestion.text)
-            }
-        }
-        
-        self.footerView.replySummary.didTapViewReplies = { [unowned self] in
+        self.footerView.detailView.didTapViewReplies = { [unowned self] in
             guard let message = self.message else { return }
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }
@@ -101,7 +91,7 @@ class MessageCell: UICollectionViewCell {
         
         self.content.expandToSuperviewWidth()
         self.content.pin(.top)
-        self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.short.value)
+        self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.standard.value)
 
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.content.bounds).cgPath
     }
