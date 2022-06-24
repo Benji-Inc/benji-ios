@@ -22,6 +22,7 @@ class FaceImageCaptureViewController: ViewController {
     enum VideoCaptureState {
         case idle
         case starting
+        case started
         case capturing
         case ending
     }
@@ -170,7 +171,7 @@ class FaceImageCaptureViewController: ViewController {
 
     func finishVideoCapture() {
         switch self.videoCaptureState {
-        case .starting, .capturing:
+        case .starting, .started, .capturing:
             self.videoCaptureState = .ending
         case .idle, .ending:
             // Do nothing
@@ -212,7 +213,13 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             break
         case .starting:
             // Initialize the AVAsset writer to prepare for capture
-            self.startAssetWriter(with: sampleBuffer)
+            self.startAssetWriter()
+            self.videoCaptureState = .started
+        case .started:
+            // Wait for the input to be ready before starting the session
+            guard self.videoWriterInput.isReadyForMoreMediaData else { break }
+            self.startSession(with: sampleBuffer)
+            self.writeSampleToFile(sampleBuffer)
             self.videoCaptureState = .capturing
         case .capturing:
             self.writeSampleToFile(sampleBuffer)
@@ -222,7 +229,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
         }
     }
 
-    private func startAssetWriter(with sampleBuffer: CMSampleBuffer) {
+    private func startAssetWriter() {
         do {
             // Get a url to temporarily store the video
             #warning("Use a full UUID")
@@ -252,12 +259,16 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
 
             self.videoWriter.startWriting()
 
-            let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-            self.videoWriter.startSession(atSourceTime: startTime)
-            self.videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+
         } catch {
             logError(error)
         }
+    }
+
+    private func startSession(with sampleBuffer: CMSampleBuffer) {
+        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        self.videoWriter.startSession(atSourceTime: startTime)
+        self.videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
     }
 
     private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
@@ -278,7 +289,6 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
 
         let context = CIContext()
         context.render(self.currentCIImage!, to: pixelBuffer!)
-
 
         let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
         let presentationTime = CMTime(seconds: currentTime,
