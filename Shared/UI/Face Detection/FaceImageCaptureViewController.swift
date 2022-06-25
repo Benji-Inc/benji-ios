@@ -319,7 +319,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
                             &pixelBuffer)
 
         let context = CIContext()
-        let transform = CGAffineTransform(translationX: 0, y: -480)
+        let transform = CGAffineTransform(translationX: 0, y: -240)
         let adjustedImage = self.currentCIImage!.transformed(by: transform)
         context.render(adjustedImage, to: pixelBuffer!)
 
@@ -419,7 +419,7 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         // ensure drawable is free and not tied in the previous drawing cycle
         guard let currentDrawable = view.currentDrawable else { return }
 
-        // make sure the image is full screen
+        // Make sure the image is full screen (Aspect fill).
         let drawSize = self.cameraView.drawableSize
         var scaleX = drawSize.width / ciImage.extent.width
         var scaleY = drawSize.height / ciImage.extent.height
@@ -431,7 +431,8 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         }
 
         let newImage = ciImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
-        //render into the metal texture
+
+        // Render into the metal texture
         metalView.context.render(newImage,
                                  to: currentDrawable.texture,
                                  commandBuffer: commandBuffer,
