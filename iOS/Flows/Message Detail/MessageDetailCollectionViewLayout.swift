@@ -48,10 +48,10 @@ class MessageDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1.0))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                             leading: 0,
-                                                             bottom: 0,
-                                                             trailing: 0)
+                item.contentInsets = NSDirectionalEdgeInsets(top: sectionInset ,
+                                                             leading: sectionInset,
+                                                             bottom: sectionInset,
+                                                             trailing: sectionInset)
 
                 // Group
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(fraction))

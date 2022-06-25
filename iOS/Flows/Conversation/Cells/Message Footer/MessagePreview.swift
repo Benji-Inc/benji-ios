@@ -16,7 +16,6 @@ class MessagePreview: BaseView {
     let imageView = SymbolImageView()
     
     static let minimumHeight: CGFloat = 26
-    static let maxHeight: CGFloat = 58
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -51,12 +50,10 @@ class MessagePreview: BaseView {
         
         self.imageView.centerY = self.dateLabel.centerY
 
-        let maxLabelHeight = MessagePreview.maxHeight - self.dateLabel.height - Theme.ContentOffset.short.value
+        let maxLabelHeight = self.height - self.dateLabel.bottom - Theme.ContentOffset.short.value
         self.label.setSize(withWidth: self.width - self.personView.width - Theme.ContentOffset.standard.value, height: maxLabelHeight)
         self.label.match(.top, to: .bottom, of: self.dateLabel, offset: .short)
         self.label.match(.left, to: .right, of: self.personView, offset: .standard)
-        
-        self.height = clamp(self.label.bottom, MessagePreview.minimumHeight, MessagePreview.maxHeight)
     }
 
     func configure(with message: Messageable) {

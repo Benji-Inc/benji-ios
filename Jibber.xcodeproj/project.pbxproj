@@ -708,7 +708,7 @@
 		D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */; };
-		D6953744286234B600CFAF02 /* NoticeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6953743286234B600CFAF02 /* NoticeIndicatorView.swift */; };
+		D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6953743286234B600CFAF02 /* NoticeBadgeView.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
@@ -890,6 +890,13 @@
 		D6DD0C372822F3CD004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C362822F3CD004999F2 /* Sentry */; };
 		D6DD0C392822F3D5004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C382822F3D5004999F2 /* Sentry */; };
 		D6DD0C3B2822F3DE004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C3A2822F3DE004999F2 /* Sentry */; };
+		D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */; };
+		D6DE47AF28650A780005FD28 /* MessageFooterDetailContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */; };
+		D6DE47B128650F220005FD28 /* ImageCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B028650F220005FD28 /* ImageCounterView.swift */; };
+		D6DE47B328663BD80005FD28 /* ExpressionSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */; };
+		D6DE47B528663BE60005FD28 /* ReadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */; };
+		D6DE47B728664F780005FD28 /* RepliesCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B628664F780005FD28 /* RepliesCounterView.swift */; };
+		D6DE47BA28666F3F0005FD28 /* MessageReadContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* MemberCell.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
@@ -1326,7 +1333,7 @@
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Wallet.swift"; sourceTree = "<group>"; };
-		D6953743286234B600CFAF02 /* NoticeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeIndicatorView.swift; sourceTree = "<group>"; };
+		D6953743286234B600CFAF02 /* NoticeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBadgeView.swift; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -1446,6 +1453,13 @@
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCell.swift; sourceTree = "<group>"; };
 		D6DBC0E52851295E007312FC /* Transitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transitions; sourceTree = "<group>"; };
+		D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCounterView.swift; sourceTree = "<group>"; };
+		D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFooterDetailContainerView.swift; sourceTree = "<group>"; };
+		D6DE47B028650F220005FD28 /* ImageCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCounterView.swift; sourceTree = "<group>"; };
+		D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionSummaryView.swift; sourceTree = "<group>"; };
+		D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadSummaryView.swift; sourceTree = "<group>"; };
+		D6DE47B628664F780005FD28 /* RepliesCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesCounterView.swift; sourceTree = "<group>"; };
+		D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReadContentView.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
@@ -1659,6 +1673,7 @@
 				D60B885B27F2717000B3E1C2 /* MessageMetadataCell.swift */,
 				D60B885F27F37BC800B3E1C2 /* MessageMoreCell.swift */,
 				D60B885727F2447600B3E1C2 /* MessageReadCell.swift */,
+				D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */,
 				D60B885527F231E000B3E1C2 /* MessageTopOptionCell.swift */,
 			);
 			path = "Message Detail";
@@ -1705,9 +1720,8 @@
 		D60B886327F4C36100B3E1C2 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */,
 				D60B886427F4C37E00B3E1C2 /* StackedPersonView.swift */,
-				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
-				D656BF0C28183C0900723068 /* MessagePreview.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -2005,6 +2019,7 @@
 		D635F0A927136C2600A02D17 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				D6DE47B828664F840005FD28 /* Message Footer */,
 				8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */,
 				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
 				80580E1A2805E17600B7264C /* EmotionCircleCollectionView.swift */,
@@ -2013,7 +2028,6 @@
 				D627E4C7277A9129007B3286 /* InitialMessageCell.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageCell.swift */,
-				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				80471C422732FE450022172C /* MessageSequenceCollectionViewDataSource.swift */,
 				80395ACB275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift */,
 				8043F53E276BC05D0036FAC8 /* PlaceholderConversationCell.swift */,
@@ -2535,7 +2549,7 @@
 				D6AA620E2852701C00FA4D02 /* NoticesCollectionViewLayout.swift */,
 				D6AA620A28526ED700FA4D02 /* NoticesDataSource.swift */,
 				D6AA620C28526FC200FA4D02 /* NoticesViewController.swift */,
-				D6953743286234B600CFAF02 /* NoticeIndicatorView.swift */,
+				D6953743286234B600CFAF02 /* NoticeBadgeView.swift */,
 			);
 			path = Notices;
 			sourceTree = "<group>";
@@ -2767,6 +2781,20 @@
 			path = "Person Views";
 			sourceTree = "<group>";
 		};
+		D6DE47B828664F840005FD28 /* Message Footer */ = {
+			isa = PBXGroup;
+			children = (
+				D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */,
+				D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */,
+				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
+				D656BF0C28183C0900723068 /* MessagePreview.swift */,
+				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
+				D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */,
+				D6DE47B628664F780005FD28 /* RepliesCounterView.swift */,
+			);
+			path = "Message Footer";
+			sourceTree = "<group>";
+		};
 		D6E65F17237791450061AA67 /* Collection View Management  */ = {
 			isa = PBXGroup;
 			children = (
@@ -2789,6 +2817,7 @@
 				D656BF0E281845B800723068 /* MessageDateLabel.swift */,
 				D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */,
 				D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */,
+				D6DE47B028650F220005FD28 /* ImageCounterView.swift */,
 			);
 			path = MessageContentView;
 			sourceTree = "<group>";
@@ -3552,6 +3581,7 @@
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				8056B324281B32A600358880 /* ExpressionPhotoCaptureViewController.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */,
+				D6DE47B328663BD80005FD28 /* ExpressionSummaryView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D6B2B6492839570B007D507B /* ImageSymbol.swift in Sources */,
 				D6D96EF427C5B11900BDCD01 /* ContextCuesViewController.swift in Sources */,
@@ -3609,6 +3639,7 @@
 				8057B59B27E2A10600B23D0D /* ConversationDetailCollectionViewLayout.swift in Sources */,
 				8057B59D27E2A10600B23D0D /* ConversationDetailViewController.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
+				D6DE47B128650F220005FD28 /* ImageCounterView.swift in Sources */,
 				80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */,
 				D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */,
@@ -3636,7 +3667,7 @@
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
-				D6953744286234B600CFAF02 /* NoticeIndicatorView.swift in Sources */,
+				D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */,
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
@@ -3739,6 +3770,8 @@
 				80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */,
 				D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* JibberChatClient.swift in Sources */,
+				D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */,
+				D6DE47B728664F780005FD28 /* RepliesCounterView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
@@ -3780,6 +3813,7 @@
 				D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */,
 				D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
+				D6DE47B528663BE60005FD28 /* ReadSummaryView.swift in Sources */,
 				D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,
 				D68B723327D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
@@ -3844,6 +3878,7 @@
 				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
+				D6DE47AF28650A780005FD28 /* MessageFooterDetailContainerView.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,
@@ -3854,6 +3889,7 @@
 				80D5C28B2817187D00182DB6 /* ExpressionDetailViewController.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */,
+				D6DE47BA28666F3F0005FD28 /* MessageReadContentView.swift in Sources */,
 				D6CC148B276BFDC1005F617F /* Color+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6B2B650283A9150007D507B /* ConversationContentView.swift in Sources */,

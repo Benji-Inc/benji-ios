@@ -360,6 +360,20 @@ extension MessageController {
             }
         }
     }
+    
+    
+    func loadReactions() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.loadReactions(limit: 25) { result in
+                switch result {
+                case .success(_):
+                    continuation.resume(returning: ())
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 
 
     /// Loads new messages from backend after and including the one specified..

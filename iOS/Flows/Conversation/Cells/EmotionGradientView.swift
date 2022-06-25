@@ -37,7 +37,7 @@ class EmotionGradientView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.layer.cornerRadius = self.halfWidth
+        self.layer.cornerRadius = self.height * 0.25
         
         self.gradientLayer.frame = self.bounds
     }
