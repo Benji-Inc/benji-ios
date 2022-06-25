@@ -21,7 +21,7 @@ class ShortcutButton: BaseView, HomeStateHandler {
         self.alpha = 0
         self.transform = CGAffineTransform.init(scaleX: 1.5, y: 1.5)
         
-        self.button.set(style: .image(symbol: .bolt,
+        self.button.set(style: .image(symbol: .boltFill,
                                       palletteColors: [.D6],
                                       pointSize: 26,
                                       backgroundColor: .clear))

@@ -54,6 +54,7 @@ enum ImageSymbol: String, ImageDisplayable {
     case minus = "minus"
     case jibs
     case jiblogo
+    case hare = "hare"
     
     var image: UIImage? {
         switch self {
@@ -97,7 +98,7 @@ enum ImageSymbol: String, ImageDisplayable {
     
     var selectedSymbol: ImageSymbol? {
         switch self {
-        case .bolt:
+        case .boltFill:
             return .xMark
         default:
             return nil

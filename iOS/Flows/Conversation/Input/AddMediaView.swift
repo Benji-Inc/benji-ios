@@ -52,7 +52,7 @@ class AddMediaView: ThemeButton {
     static let expandedHeight: CGFloat = 100
     static let collapsedHeight: CGFloat = 40 
     
-    let plusImageView = SymbolImageView(symbol: .plus)
+    let plusImageView = SymbolImageView(symbol: .photo)
     let displayableImageView = DisplayableImageView()
     
     let countCircle = CircleCountView()
@@ -70,6 +70,7 @@ class AddMediaView: ThemeButton {
         
         self.addSubview(self.plusImageView)
         self.plusImageView.tintColor = ThemeColor.whiteWithAlpha.color
+        self.plusImageView.setPoint(size: 5)
         self.displayableImageView.isVisible = false
         self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
         self.layer.borderWidth = 2
@@ -90,7 +91,7 @@ class AddMediaView: ThemeButton {
         
         self.displayableImageView.expandToSuperviewSize()
         
-        self.plusImageView.squaredSize = self.width * 0.7
+        self.plusImageView.squaredSize = self.width 
         self.plusImageView.centerOnXAndY()
         
         self.countCircle.pin(.bottom, offset: .short)
