@@ -64,6 +64,7 @@ class MessageContentView: BaseView {
 
     /// A speech bubble background view for the message.
     let bubbleView = MessageBubbleView(orientation: .down)
+    let expressionVideoView = ExpressionVideoView()
     let authorView = PersonGradientView()
     /// Date view that shows when the message was last updated.
     let dateView = MessageDateLabel(font: .small)
@@ -147,6 +148,8 @@ class MessageContentView: BaseView {
         self.mainContentArea.addSubview(self.authorView)
         self.authorView.set(backgroundColor: .B6)
         self.authorView.layer.cornerRadius = Theme.innerCornerRadius
+
+        self.mainContentArea.addSubview(self.expressionVideoView)
         
         self.mainContentArea.addSubview(self.deliveryView)
         self.deliveryView.alpha = 0.6
@@ -207,6 +210,10 @@ class MessageContentView: BaseView {
         self.authorView.setSize(forHeight: MessageContentView.authorViewHeight)
         self.authorView.pin(.top)
         self.authorView.pin(.left)
+
+        self.expressionVideoView.size = CGSize(width: 38, height: 38)
+        self.expressionVideoView.pin(.top)
+        self.expressionVideoView.pin(.left)
         
         // Delivery View
         self.deliveryView.squaredSize = 11
@@ -350,8 +357,9 @@ class MessageContentView: BaseView {
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
-            if let info = message.authorExpression,
-               let expression = try? await Expression.getObject(with: info.expressionId) {
+            if let expressionInfo = message.authorExpression,
+               let expression = try? await Expression.getObject(with: expressionInfo.expressionId) {
+
                 let emotionCounts = expression.emotionCounts 
                 // Only animate changes to the emotion when they're not blurred out.
                 let isAnimated = self.areEmotionsShown
@@ -361,7 +369,9 @@ class MessageContentView: BaseView {
                 }
                 self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
 
-                self.authorView.set(info: info, author: message.authorId)
+                self.authorView.set(info: expressionInfo, author: message.authorId)
+
+                self.expressionVideoView.expression = expression
             } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId){
                 self.authorView.set(displayable: author)
                 self.authorView.set(emotionCounts: [:])

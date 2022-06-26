@@ -75,11 +75,12 @@ class ExpressionViewController: ViewController {
             logDebug("Video url is "+videoURL.description)
             self.videoURL = videoURL
 
-            self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
-            self.expressionPhotoVC.faceCaptureVC.stopSession()
 
-            self.state = .emotionSelection
-            Task {
+            Task.onMainActorAsync {
+                self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
+                self.expressionPhotoVC.faceCaptureVC.stopSession()
+
+                self.state = .emotionSelection
                 await self.createVideoExpression()
             }
         }
@@ -140,6 +141,7 @@ class ExpressionViewController: ViewController {
         #warning("make this async")
         let videoData = try! Data(contentsOf: videoURL)
 
+        logDebug("video data size is \(Float(videoData.count)/1_000_000)")
         let expression = Expression()
 
         expression.author = User.current()
@@ -148,6 +150,7 @@ class ExpressionViewController: ViewController {
 
         guard let saved = try? await expression.saveToServer() else { return }
 
+        logDebug("saved to server!")
         self.didCompleteExpression?(saved)
     }
     
