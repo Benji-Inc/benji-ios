@@ -23,6 +23,11 @@ class SymbolImageView: UIImageView {
         super.init(coder: coder)
     }
     
+    func setPoint(size: CGFloat) {
+        let pointCofig = UIImage.SymbolConfiguration(pointSize: size)
+        self.preferredSymbolConfiguration = pointCofig
+    }
+    
     func set(symbol: ImageSymbol, configuration: UIImage.SymbolConfiguration? = nil) {
 
         self.symbol = symbol
