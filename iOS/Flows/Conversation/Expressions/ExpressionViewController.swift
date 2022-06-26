@@ -32,6 +32,7 @@ class ExpressionViewController: ViewController {
     @Published private var state: State = .initial
     
     private var data: Data?
+    private var videoURL: URL?
     
     override func initializeViews() {
         super.initializeViews()
@@ -72,6 +73,15 @@ class ExpressionViewController: ViewController {
 
         self.expressionPhotoVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
             logDebug("Video url is "+videoURL.description)
+            self.videoURL = videoURL
+
+            self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
+            self.expressionPhotoVC.faceCaptureVC.stopSession()
+
+            self.state = .emotionSelection
+            Task {
+                await self.createVideoExpression()
+            }
         }
         
         self.personGradientView.didSelect { [unowned self] in
@@ -121,6 +131,23 @@ class ExpressionViewController: ViewController {
         
         guard let saved = try? await expression.saveToServer() else { return }
         
+        self.didCompleteExpression?(saved)
+    }
+
+    private func createVideoExpression() async {
+        guard let videoURL = self.videoURL else { return }
+
+        #warning("make this async")
+        let videoData = try! Data(contentsOf: videoURL)
+
+        let expression = Expression()
+
+        expression.author = User.current()
+        expression.file = PFFileObject(name: "expression.mov", data: videoData)
+        expression.emojiString = nil
+
+        guard let saved = try? await expression.saveToServer() else { return }
+
         self.didCompleteExpression?(saved)
     }
     
