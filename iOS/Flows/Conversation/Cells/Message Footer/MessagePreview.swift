@@ -70,7 +70,7 @@ class MessagePreview: BaseView {
         self.imageView.set(symbol: message.deliveryType.symbol)
         
         self.personView.set(info: message.authorExpression,
-                            author: message.authorId,
+                            authorId: message.authorId,
                             defaultColors: [.B0, .B1])
         self.dateLabel.configure(with: message)
         self.layoutNow()

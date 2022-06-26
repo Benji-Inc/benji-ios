@@ -11,14 +11,30 @@ import Foundation
 class PersonGradientView: DisplayableImageView {
     
     private let emotionGradientView = EmotionGradientView()
+    private let expressionVideoView = ExpressionVideoView()
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.insertSubview(self.emotionGradientView, at: 0)
 
+        self.addSubview(self.expressionVideoView)
+
         self.set(emotionCounts: [:])
         self.subscribeToUpdates()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.layer.cornerRadius = self.height * 0.25
+
+        self.emotionGradientView.expandToSuperviewSize()
+
+        self.expressionVideoView.expandToSuperviewSize()
+        self.expressionVideoView.layer.cornerRadius = Theme.innerCornerRadius
+        self.expressionVideoView.layer.masksToBounds = true
+        self.expressionVideoView.clipsToBounds = true
     }
     
     func getSize(forHeight height: CGFloat) -> CGSize {
@@ -28,37 +44,53 @@ class PersonGradientView: DisplayableImageView {
     func setSize(forHeight height: CGFloat) {
         self.size = self.getSize(forHeight: height)
     }
-    
+
     // MARK: - Open setters
     
     /// The currently running task that is loading the expression.
     private var loadTask: Task<Void, Never>?
     
     func set(info: ExpressionInfo?,
-             author: String,
+             authorId: String,
              defaultColors: [ThemeColor] = [.B0, .B6]) {
         
         self.loadTask?.cancel()
         
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
-            
-            if let expressionId = info?.expressionId, let expression = try? await Expression.getObject(with: expressionId) {
-                self.set(expression: expression)
-            } else if let person = await PeopleStore.shared.getPerson(withPersonId: author) {
-                self.set(displayable: person)
-                self.set(emotionCounts: [:])
-            } else {
-                logDebug("no person found for \(author)")
+
+            var expression: Expression?
+            if let expressionId = info?.expressionId {
+                expression = try? await Expression.getObject(with: expressionId)
             }
-            
-            self.setNeedsLayout()
+
+            guard !Task.isCancelled else { return }
+
+            var author: PersonType?
+            if expression.isNil {
+                author = await PeopleStore.shared.getPerson(withPersonId: authorId)
+            }
+
+            guard !Task.isCancelled else { return }
+
+            self.set(expression: expression, author: author)
         }
     }
     
-    func set(expression: Expression) {
-        self.set(displayable: expression)
-        self.set(emotionCounts: expression.emotionCounts)
+    func set(expression: Expression?, author: PersonType?) {
+        self.expressionVideoView.expression = expression
+        self.expressionVideoView.isVisible = expression.exists
+        self.imageView.isVisible = expression.isNil
+
+        if let expression = expression {
+            self.set(displayable: nil)
+            self.set(emotionCounts: expression.emotionCounts)
+        } else if let author = author {
+            self.set(displayable: author)
+            self.imageView.isVisible = true
+            self.set(emotionCounts: [:])
+        }
+
         self.setNeedsLayout()
     }
 
@@ -97,13 +129,5 @@ class PersonGradientView: DisplayableImageView {
                 guard let updatedPerson = updatedPerson else { return }
                 self.didRecieveUpdateFor(person: updatedPerson)
             }.store(in: &self.cancellables)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.emotionGradientView.expandToSuperviewSize()
-        
-        self.layer.cornerRadius = self.height * 0.25
     }
 }

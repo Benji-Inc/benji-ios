@@ -23,7 +23,7 @@ class ExpressionCell: CollectionViewManagerCell, ManageableCell {
     }
     
     func configure(with item: Expression) {
-        self.personView.set(expression: item)
+        self.personView.set(expression: item, author: nil)
         self.setNeedsLayout()
     }
     
