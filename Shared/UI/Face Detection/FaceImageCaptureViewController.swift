@@ -273,8 +273,8 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             // Create an asset writer that will write the video to the url
             self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
             let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
-                                            AVVideoWidthKey : 720,
-                                           AVVideoHeightKey : 720,
+                                            AVVideoWidthKey : 480,
+                                           AVVideoHeightKey : 480,
                             AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
 
             self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,

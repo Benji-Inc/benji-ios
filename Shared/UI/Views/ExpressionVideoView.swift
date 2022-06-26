@@ -22,8 +22,6 @@ class ExpressionVideoView: BaseView {
         super.initializeSubviews()
 
         self.layer.addSublayer(self.playerLayer)
-
-        self.set(backgroundColor: .red)
     }
 
     override func layoutSubviews() {

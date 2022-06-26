@@ -72,9 +72,7 @@ class ExpressionViewController: ViewController {
         }
 
         self.expressionPhotoVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
-            logDebug("Video url is "+videoURL.description)
             self.videoURL = videoURL
-
 
             Task.onMainActorAsync {
                 self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
@@ -138,10 +136,8 @@ class ExpressionViewController: ViewController {
     private func createVideoExpression() async {
         guard let videoURL = self.videoURL else { return }
 
-        #warning("make this async")
         let videoData = try! Data(contentsOf: videoURL)
 
-        logDebug("video data size is \(Float(videoData.count)/1_000_000)")
         let expression = Expression()
 
         expression.author = User.current()
@@ -150,7 +146,6 @@ class ExpressionViewController: ViewController {
 
         guard let saved = try? await expression.saveToServer() else { return }
 
-        logDebug("saved to server!")
         self.didCompleteExpression?(saved)
     }
     
