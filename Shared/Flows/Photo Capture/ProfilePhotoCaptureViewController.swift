@@ -33,7 +33,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
 
     // MARK: - Views
 
-    lazy var faceCaptureVC = FaceImageCaptureViewController()
+    lazy var faceCaptureVC = FaceCaptureViewController()
 
     private var tapView = BaseView()
     private let imageView = DisplayableImageView()

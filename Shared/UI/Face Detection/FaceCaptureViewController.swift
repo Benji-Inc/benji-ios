@@ -17,7 +17,7 @@ import Localization
 
 /// A view controller that allows a user to capture an image of their face.
 /// A live preview of the camera is shown on the main view.
-class FaceImageCaptureViewController: ViewController {
+class FaceCaptureViewController: ViewController {
 
     enum VideoCaptureState {
         case idle
@@ -181,7 +181,7 @@ class FaceImageCaptureViewController: ViewController {
     }
 }
 
-extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
@@ -348,7 +348,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
     }
 }
 
-extension FaceImageCaptureViewController: AVCapturePhotoCaptureDelegate {
+extension FaceCaptureViewController: AVCapturePhotoCaptureDelegate {
 
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto,
@@ -403,7 +403,7 @@ extension FaceImageCaptureViewController: AVCapturePhotoCaptureDelegate {
 
 // MARK: - MTKViewDelegate
 
-extension FaceImageCaptureViewController: MTKViewDelegate {
+extension FaceCaptureViewController: MTKViewDelegate {
 
     func draw(in view: MTKView) {
         guard let metalView = view as? MetalView else { return }

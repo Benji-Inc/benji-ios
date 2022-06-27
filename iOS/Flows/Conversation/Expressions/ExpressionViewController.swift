@@ -24,7 +24,7 @@ class ExpressionViewController: ViewController {
     
     let blurView = DarkBlurView()
 
-    private lazy var expressionPhotoVC = ExpressionPhotoCaptureViewController()
+    private lazy var expressionPhotoVC = ExpressionCaptureViewController()
     let personGradientView = PersonGradientView()
         
     var didCompleteExpression: ((Expression) -> Void)? = nil
@@ -157,7 +157,7 @@ class ExpressionViewController: ViewController {
             self.expressionPhotoVC.faceCaptureVC.animationView.play()
         case .capture:
             self.expressionPhotoVC.faceCaptureVC.animationView.stop()
-            self.expressionPhotoVC.faceCaptureVC.animate(text: "Tap to capture expression")
+            self.expressionPhotoVC.faceCaptureVC.animate(text: "Press and hold to take a video")
             
             UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
                 
