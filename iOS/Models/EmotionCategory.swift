@@ -1,5 +1,5 @@
 //
-//  ReactionType.swift
+//  EmotionCategory.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 11/27/21.

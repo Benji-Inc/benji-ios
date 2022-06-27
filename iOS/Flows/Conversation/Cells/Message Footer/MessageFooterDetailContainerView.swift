@@ -24,6 +24,7 @@ class MessageFooterDetailContainerView: BaseView {
     let expressionsView = ImageCounterView(with: .faceSmiling)
     let readView = ReadIndicatorView()
     
+    var didTapAddExpression: CompletionOptional = nil
     var didTapViewReplies: CompletionOptional = nil
     var didSelectSuggestion: ((String) -> Void)? = nil
 
@@ -149,6 +150,12 @@ class MessageFooterDetailContainerView: BaseView {
                 elements.append(action)
             }
         }
+        
+        let action = UIAction(title: "Add expression", image: nil) { [unowned self] _ in
+            self.didTapAddExpression?()
+        }
+        elements.append(action)
+        
 
         return UIMenu(title: "Suggestions", children: elements)
     }

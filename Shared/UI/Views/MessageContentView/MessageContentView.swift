@@ -80,13 +80,13 @@ class MessageContentView: BaseView {
     let blurView = BlurView()
     lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: self.cellDiameter)
     
-    let emotionLabel = ThemeLabel(font: .regular)
-    let addEmotionButton = ThemeButton()
-    let addEmotionImageView = SymbolImageView(symbol: .plus)
+//    let emotionLabel = ThemeLabel(font: .regular)
+//    let addEmotionButton = ThemeButton()
+//    let addEmotionImageView = SymbolImageView(symbol: .plus)
 
-    var areEmotionsShown: Bool {
-        return self.blurView.effect == nil
-    }
+//    var areEmotionsShown: Bool {
+//        return self.blurView.effect == nil
+//    }
     
     var layoutState: Layout = .expanded
     private let cellDiameter: CGFloat
@@ -113,17 +113,17 @@ class MessageContentView: BaseView {
         self.bubbleView.addSubview(self.emotionCollectionView)
 
         self.bubbleView.addSubview(self.blurView)
-        self.bubbleView.addSubview(self.emotionLabel)
-        self.emotionLabel.setText("Empty")
-        self.emotionLabel.alpha = 0 
+//        self.bubbleView.addSubview(self.emotionLabel)
+//        self.emotionLabel.setText("Empty")
+//        self.emotionLabel.alpha = 0
         
-        self.addEmotionImageView.contentMode = .scaleAspectFit
-        self.addEmotionImageView.tintColor = ThemeColor.white.color
-        self.bubbleView.addSubview(self.addEmotionImageView)
-        self.addEmotionImageView.alpha = 0
-        self.bubbleView.addSubview(self.addEmotionButton)
-        self.addEmotionButton.set(style: .normal(color: .clear, text: ""))
-        self.addEmotionButton.alpha = 0
+//        self.addEmotionImageView.contentMode = .scaleAspectFit
+//        self.addEmotionImageView.tintColor = ThemeColor.white.color
+//        self.bubbleView.addSubview(self.addEmotionImageView)
+//        self.addEmotionImageView.alpha = 0
+//        self.bubbleView.addSubview(self.addEmotionButton)
+//        self.addEmotionButton.set(style: .normal(color: .clear, text: ""))
+//        self.addEmotionButton.alpha = 0
 
         self.bubbleView.addSubview(self.mainContentArea)
 
@@ -172,10 +172,10 @@ class MessageContentView: BaseView {
             self.delegate?.messageContent(self, didTapAttachmentForMessage: message)
         }
         
-        self.addEmotionButton.didSelect { [unowned self] in
-            guard let message = self.message else { return }
-            self.delegate?.messageContent(self, didTapAddExpressionForMessage: message)
-        }
+//        self.addEmotionButton.didSelect { [unowned self] in
+//            guard let message = self.message else { return }
+//            self.delegate?.messageContent(self, didTapAddExpressionForMessage: message)
+//        }
     }
 
     override func layoutSubviews() {
@@ -185,16 +185,16 @@ class MessageContentView: BaseView {
 
         self.emotionCollectionView.expandToSuperviewSize()
         
-        self.emotionLabel.setSize(withWidth: self.width)
-        self.emotionLabel.centerOnXAndY()
-        
-        self.addEmotionImageView.squaredSize = 20
-        self.addEmotionImageView.pin(.right, offset: .long)
-        self.addEmotionImageView.pin(.bottom, offset: .long)
-
-        self.addEmotionButton.squaredSize = 44
-        self.addEmotionButton.pin(.bottom)
-        self.addEmotionButton.pin(.right)
+//        self.emotionLabel.setSize(withWidth: self.width)
+//        self.emotionLabel.centerOnXAndY()
+//
+//        self.addEmotionImageView.squaredSize = 20
+//        self.addEmotionImageView.pin(.right, offset: .long)
+//        self.addEmotionImageView.pin(.bottom, offset: .long)
+//
+//        self.addEmotionButton.squaredSize = 44
+//        self.addEmotionButton.pin(.bottom)
+//        self.addEmotionButton.pin(.right)
 
         self.blurView.expandToSuperviewSize()
 
@@ -354,12 +354,12 @@ class MessageContentView: BaseView {
                let expression = try? await Expression.getObject(with: info.expressionId) {
                 let emotionCounts = expression.emotionCounts 
                 // Only animate changes to the emotion when they're not blurred out.
-                let isAnimated = self.areEmotionsShown
-
-                if isAnimated {
-                    self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
-                }
-                self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
+//                let isAnimated = self.areEmotionsShown
+//
+//                if isAnimated {
+//                    self.emotionLabel.alpha = emotionCounts.isEmpty ? 0.2 : 0.0
+//                }
+                self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: false)
 
                 self.authorView.set(info: info, author: message.authorId)
             } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId){
@@ -406,21 +406,21 @@ class MessageContentView: BaseView {
 
             if areShown {
                 if self.emotionCollectionView.emotionCounts.count == 0 {
-                    self.emotionLabel.alpha = 0.2
+                    //self.emotionLabel.alpha = 0.2
                 } else {
-                    self.emotionLabel.alpha = 0.0
+                   // self.emotionLabel.alpha = 0.0
                 }
                 
                 // Only allow the author to add emotions
                 if let msg = self.message, msg.isFromCurrentUser, msg.authorExpression.isNil {
-                    self.addEmotionImageView.alpha = 1.0
-                    self.addEmotionButton.alpha = 1.0
+//                    self.addEmotionImageView.alpha = 1.0
+//                    self.addEmotionButton.alpha = 1.0
                 }
     
             } else {
-                self.addEmotionButton.alpha = 0.0
-                self.addEmotionImageView.alpha = 0.0
-                self.emotionLabel.alpha = 0.0
+//                self.addEmotionButton.alpha = 0.0
+//                self.addEmotionImageView.alpha = 0.0
+//                self.emotionLabel.alpha = 0.0
             }
         } completion: { completed in
             if areShown {
