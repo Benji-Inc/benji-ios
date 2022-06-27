@@ -53,6 +53,8 @@ class FaceCaptureViewController: ViewController {
         return metalView
     }()
 
+    let videoPreviewView = VideoView()
+
     let orientation: CGImagePropertyOrientation = .left
 
     lazy var faceCaptureSession = PhotoCaptureSession()
@@ -80,6 +82,8 @@ class FaceCaptureViewController: ViewController {
         self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
         self.cameraViewContainer.layer.borderWidth = 2
         self.cameraViewContainer.clipsToBounds = true
+
+        self.cameraViewContainer.addSubview(self.videoPreviewView)
         
         self.cameraViewContainer.addSubview(self.animationView)
         self.animationView.loopMode = .loop
@@ -103,7 +107,9 @@ class FaceCaptureViewController: ViewController {
         self.cameraView.height = self.cameraViewContainer.height * 1.25
         self.cameraView.pin(.top)
         self.cameraView.centerOnX()
-        
+
+        self.videoPreviewView.expandToSuperviewSize()
+
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.label.match(.top, to: .bottom, of: self.cameraViewContainer, offset: .long)
         self.label.centerOnX()
@@ -112,7 +118,6 @@ class FaceCaptureViewController: ViewController {
     private var animateTask: Task<Void, Never>?
     
     func animate(text: Localized) {
-        
         self.animateTask?.cancel()
         
         self.animateTask = Task { [weak self] in
@@ -156,6 +161,12 @@ class FaceCaptureViewController: ViewController {
         guard self.isSessionRunning else { return }
 
         self.captureCurrentImageAsPhoto()
+    }
+
+    // MARK: - Video Preview
+
+    func setVideoPreview(with videoURL: URL?) {
+        self.videoPreviewView.videoURL = videoURL
     }
 
     // MARK: - AVAssetWriter Vars

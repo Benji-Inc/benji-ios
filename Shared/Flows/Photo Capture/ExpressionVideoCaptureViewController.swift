@@ -13,6 +13,7 @@ class ExpressionVideoCaptureViewController: ViewController {
     // MARK: - Views
 
     lazy var faceCaptureVC = FaceCaptureViewController()
+    let videoPreviewView = VideoView()
     /// Pressing on this view will trigger the video capture
     private var pressView = BaseView()
 
