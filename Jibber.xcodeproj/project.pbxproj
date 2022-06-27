@@ -64,6 +64,8 @@
 		80632D93278534E600D3A65B /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
 		80632D9427853D2600D3A65B /* EventLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80632D92278534E600D3A65B /* EventLogger.swift */; };
 		80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80665BA527B2F2F3002A8F69 /* MockMessage.swift */; };
+		8068A0062868CA5900786B1E /* ExpressionVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8068A0052868CA5900786B1E /* ExpressionVideoView.swift */; };
+		8068A0072868CA5900786B1E /* ExpressionVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8068A0052868CA5900786B1E /* ExpressionVideoView.swift */; };
 		806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */; };
 		806DA16A27307FA400843C4E /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806DA16927307FA400843C4E /* MessageCell.swift */; };
 		8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8072253427AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift */; };
@@ -1041,6 +1043,7 @@
 		80616E3426EAD2F300C077BA /* DataController+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataController+Async.swift"; sourceTree = "<group>"; };
 		80632D92278534E600D3A65B /* EventLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLogger.swift; sourceTree = "<group>"; };
 		80665BA527B2F2F3002A8F69 /* MockMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMessage.swift; sourceTree = "<group>"; };
+		8068A0052868CA5900786B1E /* ExpressionVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionVideoView.swift; sourceTree = "<group>"; };
 		806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeMachineCollectionViewLayout.swift; sourceTree = "<group>"; };
 		806DA16927307FA400843C4E /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		8072253427AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarIgnoringHostingController.swift; sourceTree = "<group>"; };
@@ -2258,6 +2261,7 @@
 				D62ED578279CA2ED00F7C08A /* BorderedPersonView.swift */,
 				D6FEF02C257EB71700F9789B /* Button+Extensions.swift */,
 				D60C81492209360400A127A3 /* DisplayableImageView.swift */,
+				8068A0052868CA5900786B1E /* ExpressionVideoView.swift */,
 				D67243E027861C2A004C0A52 /* Gradients */,
 				D605AC9B27877F890015D800 /* MessageBubbleView.swift */,
 				D6E974302752B4B000D95F08 /* MessageContentView */,
@@ -2267,13 +2271,13 @@
 				D6850D592798967E001327D3 /* PullView.swift */,
 				D646D36F27E544990077D20B /* SectionHeaderView.swift */,
 				D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */,
+				D61C1D17283FF0B900F58F84 /* SymbolImageView.swift */,
 				D6F733D923D37C6300FBC7BC /* TextEntryField.swift */,
 				D6D1503D21DAF98500CD8CE4 /* TextField.swift */,
 				D61EC0E321D30E9100204BEE /* TextView.swift */,
 				D60C814522092F6B00A127A3 /* ThemeButton.swift */,
 				D61EC0E121D30E6000204BEE /* ThemeLabel.swift */,
 				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
-				D61C1D17283FF0B900F58F84 /* SymbolImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3786,6 +3790,7 @@
 				80FA868C26F111830053101B /* ChatMessage+Extensions.swift in Sources */,
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
+				8068A0062868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* MemberAddCell.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */,
@@ -3980,6 +3985,7 @@
 				D63DB21425E998D700F6B323 /* Connection+Cloud.swift in Sources */,
 				D63DB22B25E9991300F6B323 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D6850D5B2798967E001327D3 /* PullView.swift in Sources */,
+				8068A0072868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D6C3892F2724B8E5004D29D5 /* MessageDeliveryType.swift in Sources */,
 				D62D16342736F60400C542CE /* ToastStatusView.swift in Sources */,
 				D63DB22625E9990900F6B323 /* CGPoint+Extensions.swift in Sources */,

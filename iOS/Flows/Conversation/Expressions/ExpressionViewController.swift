@@ -32,6 +32,7 @@ class ExpressionViewController: ViewController {
     @Published private var state: State = .initial
     
     private var data: Data?
+    private var videoURL: URL?
     
     override func initializeViews() {
         super.initializeViews()
@@ -55,9 +56,8 @@ class ExpressionViewController: ViewController {
     }
     
     private func setupHandlers() {
-        
         self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            guard let data = image.previewData else { return }
+            guard let data = image.heicData else { return }
             self.data = data
                         
             self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
@@ -68,6 +68,18 @@ class ExpressionViewController: ViewController {
             self.state = .emotionSelection
             Task {
                 await self.createExpression()
+            }
+        }
+
+        self.expressionPhotoVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
+            self.videoURL = videoURL
+
+            Task.onMainActorAsync {
+                self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
+                self.expressionPhotoVC.faceCaptureVC.stopSession()
+
+                self.state = .emotionSelection
+                await self.createVideoExpression()
             }
         }
         
@@ -118,6 +130,22 @@ class ExpressionViewController: ViewController {
         
         guard let saved = try? await expression.saveToServer() else { return }
         
+        self.didCompleteExpression?(saved)
+    }
+
+    private func createVideoExpression() async {
+        guard let videoURL = self.videoURL else { return }
+
+        let videoData = try! Data(contentsOf: videoURL)
+
+        let expression = Expression()
+
+        expression.author = User.current()
+        expression.file = PFFileObject(name: "expression.mov", data: videoData)
+        expression.emojiString = nil
+
+        guard let saved = try? await expression.saveToServer() else { return }
+
         self.didCompleteExpression?(saved)
     }
     

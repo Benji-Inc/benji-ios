@@ -86,8 +86,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.currentExpression = nil
     }
 
-    private lazy var panRecognizer
-    = SwipeGestureRecognizer { [unowned self] (recognizer) in
+    private lazy var panRecognizer = SwipeGestureRecognizer { [unowned self] (recognizer) in
         self.panGestureHandler.handle(pan: recognizer)
     }
     private lazy var inputFieldTapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] recognizer in
