@@ -56,7 +56,7 @@ extension UIImage {
         return image.withRenderingMode(self.renderingMode)
     }
 
-    var previewData: Data? {
+    var heicData: Data? {
         return try? self.imageWith(maxSideLength: 200).heicData(compressionQuality: 0.6)
     }
 }

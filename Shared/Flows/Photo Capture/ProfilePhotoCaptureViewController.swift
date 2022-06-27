@@ -322,7 +322,7 @@ class ProfilePhotoCaptureViewController: ViewController, Sizeable, Completable {
     }
 
     private func updateUser(with image: UIImage) async {
-        guard let currentUser = User.current(), let data = image.previewData else { return }
+        guard let currentUser = User.current(), let data = image.heicData else { return }
         
         let nowString = Date.now.ISO8601Format().removeAllNonNumbers()
     

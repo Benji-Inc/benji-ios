@@ -39,10 +39,8 @@ class AddExpressionView: BaseView {
     func configure(with expression: Expression?) {
         self.personGradientView.isVisible = expression.exists
         
-        guard let expression = expression else {
-            return
-        }
-        
-        self.personGradientView.set(expression: expression)
+        guard let expression = expression else { return }
+
+        self.personGradientView.set(expression: expression, author: nil)
     }
 }

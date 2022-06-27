@@ -350,8 +350,9 @@ class MessageContentView: BaseView {
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
-            if let info = message.authorExpression,
-               let expression = try? await Expression.getObject(with: info.expressionId) {
+            if let expressionInfo = message.authorExpression,
+               let expression = try? await Expression.getObject(with: expressionInfo.expressionId) {
+
                 let emotionCounts = expression.emotionCounts 
                 // Only animate changes to the emotion when they're not blurred out.
                 let isAnimated = self.areEmotionsShown
@@ -361,7 +362,7 @@ class MessageContentView: BaseView {
                 }
                 self.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: isAnimated)
 
-                self.authorView.set(info: info, author: message.authorId)
+                self.authorView.set(expression: expression, author: nil)
             } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId){
                 self.authorView.set(displayable: author)
                 self.authorView.set(emotionCounts: [:])
