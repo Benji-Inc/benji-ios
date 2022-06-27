@@ -29,8 +29,6 @@ class ExpressionPhotoCaptureViewController: ViewController {
         
         self.tapView.didSelect { [unowned self] in
             if self.faceCaptureVC.isSessionRunning {
-//                self.faceCaptureVC.capturePhoto()
-
                 self.faceCaptureVC.startVideoCapture()
                 delay(2) {
                     self.faceCaptureVC.finishVideoCapture()

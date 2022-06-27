@@ -22,6 +22,7 @@ class FaceImageCaptureViewController: ViewController {
     enum VideoCaptureState {
         case idle
         case starting
+        case started
         case capturing
         case ending
     }
@@ -157,10 +158,11 @@ class FaceImageCaptureViewController: ViewController {
         self.captureCurrentImageAsPhoto()
     }
 
+    // MARK: - AVAssetWriter Vars
+
     private var videoWriter: AVAssetWriter!
     private var videoWriterInput: AVAssetWriterInput!
     private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor!
-    private var videoStartTime: Double!
 
     func startVideoCapture() {
         guard self.videoCaptureState == .idle else { return }
@@ -170,7 +172,7 @@ class FaceImageCaptureViewController: ViewController {
 
     func finishVideoCapture() {
         switch self.videoCaptureState {
-        case .starting, .capturing:
+        case .starting, .started, .capturing:
             self.videoCaptureState = .ending
         case .idle, .ending:
             // Do nothing
@@ -212,7 +214,13 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             break
         case .starting:
             // Initialize the AVAsset writer to prepare for capture
-            self.startAssetWriter(with: sampleBuffer)
+            self.startAssetWriter()
+            self.videoCaptureState = .started
+        case .started:
+            // Wait for the input to be ready before starting the session
+            guard self.videoWriterInput.isReadyForMoreMediaData else { break }
+            self.startSession(with: sampleBuffer)
+            self.writeSampleToFile(sampleBuffer)
             self.videoCaptureState = .capturing
         case .capturing:
             self.writeSampleToFile(sampleBuffer)
@@ -220,88 +228,6 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
             self.finishWritingVideo()
             self.videoCaptureState = .idle
         }
-    }
-
-    private func startAssetWriter(with sampleBuffer: CMSampleBuffer) {
-        do {
-            // Get a url to temporarily store the video
-            #warning("Use a full UUID")
-            let uuid = UUID().uuidString.prefix(8)
-            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                          isDirectory: true).appendingPathComponent(uuid+".mov")
-
-            // Create an asset writer that will write the video the url
-            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
-            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
-                                            AVVideoWidthKey : 720,
-                                           AVVideoHeightKey : 720,
-                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
-
-            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
-                                                       outputSettings: settings)
-            self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
-            self.videoWriterInput.expectsMediaDataInRealTime = true
-
-            self.pixelBufferAdaptor
-            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
-                                                   sourcePixelBufferAttributes: nil)
-
-            if self.videoWriter.canAdd(self.videoWriterInput) {
-                self.videoWriter.add(self.videoWriterInput)
-            }
-
-            self.videoWriter.startWriting()
-
-            let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-            self.videoWriter.startSession(atSourceTime: startTime)
-            self.videoStartTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
-        } catch {
-            logError(error)
-        }
-    }
-
-    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
-        guard self.videoWriterInput.isReadyForMoreMediaData else { return }
-
-        var pixelBuffer: CVPixelBuffer?
-        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
-                     kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
-        let width: Int = Int(self.currentCIImage!.extent.width)
-        let height: Int = Int(self.currentCIImage!.extent.width)
-
-        CVPixelBufferCreate(kCFAllocatorDefault,
-                            width,
-                            height,
-                            kCVPixelFormatType_32BGRA,
-                            attrs,
-                            &pixelBuffer)
-
-        let context = CIContext()
-        context.render(self.currentCIImage!, to: pixelBuffer!)
-
-
-        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
-        let presentationTime = CMTime(seconds: currentTime,
-                                      preferredTimescale: CMTimeScale(bitPattern: 600))
-
-        self.pixelBufferAdaptor.append(pixelBuffer!, withPresentationTime: presentationTime)
-    }
-
-    private func finishWritingVideo() {
-        self.videoWriterInput.markAsFinished()
-        let videoURL = self.videoWriter.outputURL
-        self.videoWriter.finishWriting {
-            self.didCaptureVideo?(videoURL)
-        }
-    }
-
-    private func detectedFace(request: VNRequest, error: Error?) {
-        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
-            self.faceDetected = false
-            return
-        }
-
-        self.faceDetected = true
     }
 
     /// Makes the image black and white, and makes the background clear.
@@ -335,6 +261,90 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
         blendFilter.maskImage = maskImage
 
         return blendFilter.outputImage?.oriented(.leftMirrored)
+    }
+
+    private func startAssetWriter() {
+        do {
+            // Get a url to temporarily store the video
+            let uuid = UUID().uuidString
+            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+                          isDirectory: true).appendingPathComponent(uuid+".mov")
+
+            // Create an asset writer that will write the video to the url
+            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
+            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
+                                            AVVideoWidthKey : 480,
+                                           AVVideoHeightKey : 480,
+                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
+
+            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
+                                                       outputSettings: settings)
+
+            self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
+            self.videoWriterInput.expectsMediaDataInRealTime = true
+
+            self.pixelBufferAdaptor
+            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
+                                                   sourcePixelBufferAttributes: nil)
+
+            if self.videoWriter.canAdd(self.videoWriterInput) {
+                self.videoWriter.add(self.videoWriterInput)
+            }
+
+            self.videoWriter.startWriting()
+        } catch {
+            logError(error)
+        }
+    }
+
+    private func startSession(with sampleBuffer: CMSampleBuffer) {
+        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        self.videoWriter.startSession(atSourceTime: startTime)
+    }
+
+    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
+        guard self.videoWriterInput.isReadyForMoreMediaData else { return }
+
+        var pixelBuffer: CVPixelBuffer?
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
+                     kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
+        let width = Int(self.currentCIImage!.extent.width)
+        let height = Int(self.currentCIImage!.extent.width)
+
+        CVPixelBufferCreate(kCFAllocatorDefault,
+                            width,
+                            height,
+                            kCVPixelFormatType_32BGRA,
+                            attrs,
+                            &pixelBuffer)
+
+        let context = CIContext()
+        let transform = CGAffineTransform(translationX: 0, y: -240)
+        let adjustedImage = self.currentCIImage!.transformed(by: transform)
+        context.render(adjustedImage, to: pixelBuffer!)
+
+        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+        let presentationTime = CMTime(seconds: currentTime,
+                                      preferredTimescale: CMTimeScale(bitPattern: 600))
+
+        self.pixelBufferAdaptor.append(pixelBuffer!, withPresentationTime: presentationTime)
+    }
+
+    private func finishWritingVideo() {
+        self.videoWriterInput.markAsFinished()
+        let videoURL = self.videoWriter.outputURL
+        self.videoWriter.finishWriting {
+            self.didCaptureVideo?(videoURL)
+        }
+    }
+
+    private func detectedFace(request: VNRequest, error: Error?) {
+        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
+            self.faceDetected = false
+            return
+        }
+
+        self.faceDetected = true
     }
 }
 
@@ -409,7 +419,7 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         // ensure drawable is free and not tied in the previous drawing cycle
         guard let currentDrawable = view.currentDrawable else { return }
 
-        // make sure the image is full screen
+        // Make sure the image is full screen (Aspect fill).
         let drawSize = self.cameraView.drawableSize
         var scaleX = drawSize.width / ciImage.extent.width
         var scaleY = drawSize.height / ciImage.extent.height
@@ -421,7 +431,8 @@ extension FaceImageCaptureViewController: MTKViewDelegate {
         }
 
         let newImage = ciImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
-        //render into the metal texture
+
+        // Render into the metal texture
         metalView.context.render(newImage,
                                  to: currentDrawable.texture,
                                  commandBuffer: commandBuffer,
