@@ -17,7 +17,7 @@ import Localization
 
 /// A view controller that allows a user to capture an image of their face.
 /// A live preview of the camera is shown on the main view.
-class FaceImageCaptureViewController: ViewController {
+class FaceCaptureViewController: ViewController {
 
     enum VideoCaptureState {
         case idle
@@ -53,6 +53,8 @@ class FaceImageCaptureViewController: ViewController {
         return metalView
     }()
 
+    let videoPreviewView = VideoView()
+
     let orientation: CGImagePropertyOrientation = .left
 
     lazy var faceCaptureSession = PhotoCaptureSession()
@@ -80,6 +82,8 @@ class FaceImageCaptureViewController: ViewController {
         self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
         self.cameraViewContainer.layer.borderWidth = 2
         self.cameraViewContainer.clipsToBounds = true
+
+        self.cameraViewContainer.addSubview(self.videoPreviewView)
         
         self.cameraViewContainer.addSubview(self.animationView)
         self.animationView.loopMode = .loop
@@ -103,7 +107,9 @@ class FaceImageCaptureViewController: ViewController {
         self.cameraView.height = self.cameraViewContainer.height * 1.25
         self.cameraView.pin(.top)
         self.cameraView.centerOnX()
-        
+
+        self.videoPreviewView.expandToSuperviewSize()
+
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.label.match(.top, to: .bottom, of: self.cameraViewContainer, offset: .long)
         self.label.centerOnX()
@@ -112,7 +118,6 @@ class FaceImageCaptureViewController: ViewController {
     private var animateTask: Task<Void, Never>?
     
     func animate(text: Localized) {
-        
         self.animateTask?.cancel()
         
         self.animateTask = Task { [weak self] in
@@ -158,6 +163,12 @@ class FaceImageCaptureViewController: ViewController {
         self.captureCurrentImageAsPhoto()
     }
 
+    // MARK: - Video Preview
+
+    func setVideoPreview(with videoURL: URL?) {
+        self.videoPreviewView.videoURL = videoURL
+    }
+
     // MARK: - AVAssetWriter Vars
 
     private var videoWriter: AVAssetWriter!
@@ -181,7 +192,7 @@ class FaceImageCaptureViewController: ViewController {
     }
 }
 
-extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
@@ -348,7 +359,7 @@ extension FaceImageCaptureViewController: AVCaptureVideoDataOutputSampleBufferDe
     }
 }
 
-extension FaceImageCaptureViewController: AVCapturePhotoCaptureDelegate {
+extension FaceCaptureViewController: AVCapturePhotoCaptureDelegate {
 
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto,
@@ -403,7 +414,7 @@ extension FaceImageCaptureViewController: AVCapturePhotoCaptureDelegate {
 
 // MARK: - MTKViewDelegate
 
-extension FaceImageCaptureViewController: MTKViewDelegate {
+extension FaceCaptureViewController: MTKViewDelegate {
 
     func draw(in view: MTKView) {
         guard let metalView = view as? MetalView else { return }

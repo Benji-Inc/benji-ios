@@ -15,7 +15,7 @@ class ExpressionViewController: ViewController {
     enum State {
         case initial
         case capture
-        case emotionSelection
+        case confirm
     }
     
     override var analyticsIdentifier: String? {
@@ -23,8 +23,10 @@ class ExpressionViewController: ViewController {
     }
     
     let blurView = DarkBlurView()
+    private let retakeButton = ThemeButton()
+    private let doneButton = ThemeButton()
 
-    private lazy var expressionPhotoVC = ExpressionPhotoCaptureViewController()
+    private lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
     let personGradientView = PersonGradientView()
         
     var didCompleteExpression: ((Expression) -> Void)? = nil
@@ -47,48 +49,49 @@ class ExpressionViewController: ViewController {
         
         self.view.addSubview(self.blurView)
                 
-        self.addChild(viewController: self.expressionPhotoVC)
+        self.addChild(viewController: self.expressionCaptureVC)
         
         self.view.addSubview(self.personGradientView)
         self.personGradientView.alpha = 0.0
+
+        self.view.addSubview(self.retakeButton)
+        self.retakeButton.set(style: .normal(color: .B1, text: "Retake"))
+        self.view.addSubview(self.doneButton)
+        self.doneButton.set(style: .normal(color: .B2, text: "Done"))
         
         self.setupHandlers()
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
+
+        self.expressionCaptureVC.view.expandToSuperviewSize()
+
+        self.personGradientView.frame = self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.frame
+
+        self.doneButton.setSize(with: 250)
+        self.doneButton.centerOnX()
+        self.doneButton.pinToSafeAreaBottom()
+
+        self.retakeButton.setSize(with: 250)
+        self.retakeButton.centerOnX()
+        self.retakeButton.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.standard))
+    }
     
     private func setupHandlers() {
-        self.expressionPhotoVC.faceCaptureVC.didCapturePhoto = { [unowned self] image in
-            guard let data = image.heicData else { return }
-            self.data = data
-                        
-            self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
-            self.personGradientView.alpha = 1.0
-            self.personGradientView.set(displayable: UIImage(data: data))
-            self.expressionPhotoVC.faceCaptureVC.stopSession()
-                        
-            self.state = .emotionSelection
-            Task {
-                await self.createExpression()
-            }
-        }
-
-        self.expressionPhotoVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
+        self.expressionCaptureVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
             self.videoURL = videoURL
 
-            Task.onMainActorAsync {
-                self.expressionPhotoVC.faceCaptureVC.view.alpha = 0.0
-                self.expressionPhotoVC.faceCaptureVC.stopSession()
+            Task.onMainActor {
+                self.expressionCaptureVC.faceCaptureVC.stopSession()
 
-                self.state = .emotionSelection
-                await self.createVideoExpression()
+                self.state = .confirm
             }
         }
-        
-        self.personGradientView.didSelect { [unowned self] in
-            guard self.state == .emotionSelection else { return }
-            self.state = .capture
-        }
-        
-        self.expressionPhotoVC.faceCaptureVC.$hasRenderedFaceImage
+
+        self.expressionCaptureVC.faceCaptureVC.$hasRenderedFaceImage
             .removeDuplicates()
             .mainSink { [unowned self] hasRendered in
                 if hasRendered {
@@ -104,37 +107,78 @@ class ExpressionViewController: ViewController {
                 self.update(for: state)
             }.store(in: &self.cancellables)
         
-        if !self.expressionPhotoVC.faceCaptureVC.isSessionRunning {
-            self.expressionPhotoVC.faceCaptureVC.beginSession()
+        if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
+            self.expressionCaptureVC.faceCaptureVC.beginSession()
+        }
+
+        self.retakeButton.addAction(for: .touchUpInside) { [unowned self] in
+            if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
+                self.expressionCaptureVC.faceCaptureVC.beginSession()
+            }
+
+            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
+            self.state = .capture
+        }
+
+        self.doneButton.addAction(for: .touchUpInside) {
+            Task {
+                guard let expression = await self.createVideoExpression() else { return }
+                self.didCompleteExpression?(expression)
+            }
         }
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.blurView.expandToSuperviewSize()
-        
-        self.expressionPhotoVC.view.expandToSuperviewSize()
-        
-        self.personGradientView.frame = self.expressionPhotoVC.faceCaptureVC.cameraViewContainer.frame
-    }
-    
-    private func createExpression() async {
-        guard let data = self.data else { return }
-        
-        let expression = Expression()
-        
-        expression.author = User.current()
-        expression.file = PFFileObject(name: "expression.heic", data: data)
-        expression.emojiString = nil
-        
-        guard let saved = try? await expression.saveToServer() else { return }
-        
-        self.didCompleteExpression?(saved)
+
+    private func update(for state: State) {
+        switch state {
+        case .initial:
+            self.expressionCaptureVC.faceCaptureVC.animate(text: "Scanning...")
+            self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 1.0
+            self.expressionCaptureVC.faceCaptureVC.animationView.play()
+
+            self.retakeButton.alpha = 0
+            self.doneButton.alpha = 0
+        case .capture:
+            self.expressionCaptureVC.faceCaptureVC.animationView.stop()
+            self.expressionCaptureVC.faceCaptureVC.animate(text: "Press and hold to take a video")
+
+            self.retakeButton.alpha = 0
+            self.doneButton.alpha = 0
+
+            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
+                UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
+                    self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
+                    self.view.layoutNow()
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
+                    self.expressionCaptureVC.view.alpha = 1.0
+                }
+            })
+
+            UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
+                self.expressionCaptureVC.faceCaptureVC.view.alpha = 1.0
+                self.personGradientView.alpha = 0.0
+            } completion: { _ in
+                if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
+                    self.expressionCaptureVC.faceCaptureVC.beginSession()
+                }
+            }
+        case .confirm:
+            self.expressionCaptureVC.faceCaptureVC.animate(text: "")
+            self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
+            self.expressionCaptureVC.faceCaptureVC.animationView.stop()
+
+            self.retakeButton.alpha = 1
+            self.doneButton.alpha = 1
+
+            guard let videoURL = self.videoURL else { break }
+
+            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: videoURL)
+        }
     }
 
-    private func createVideoExpression() async {
-        guard let videoURL = self.videoURL else { return }
+    private func createVideoExpression() async -> Expression? {
+        guard let videoURL = self.videoURL else { return nil }
 
         let videoData = try! Data(contentsOf: videoURL)
 
@@ -144,57 +188,8 @@ class ExpressionViewController: ViewController {
         expression.file = PFFileObject(name: "expression.mov", data: videoData)
         expression.emojiString = nil
 
-        guard let saved = try? await expression.saveToServer() else { return }
+        guard let saved = try? await expression.saveToServer() else { return nil }
 
-        self.didCompleteExpression?(saved)
-    }
-    
-    private func update(for state: State) {
-        switch state {
-        case .initial:
-            self.expressionPhotoVC.faceCaptureVC.animate(text: "Scanning...")
-            self.expressionPhotoVC.faceCaptureVC.animationView.alpha = 1.0
-            self.expressionPhotoVC.faceCaptureVC.animationView.play()
-        case .capture:
-            self.expressionPhotoVC.faceCaptureVC.animationView.stop()
-            self.expressionPhotoVC.faceCaptureVC.animate(text: "Tap to capture expression")
-            
-            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
-                
-                UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-                    self.expressionPhotoVC.faceCaptureVC.animationView.alpha = 0.0
-                    self.view.layoutNow()
-                }
-                
-                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                    self.expressionPhotoVC.view.alpha = 1.0
-                }
-            })
-            
-            UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
-                self.expressionPhotoVC.faceCaptureVC.view.alpha = 1.0
-                self.personGradientView.alpha = 0.0
-            } completion: { _ in
-                if !self.expressionPhotoVC.faceCaptureVC.isSessionRunning {
-                    self.expressionPhotoVC.faceCaptureVC.beginSession()
-                }
-            }
-            
-        case .emotionSelection:
-            self.expressionPhotoVC.faceCaptureVC.animate(text: "")
-            self.expressionPhotoVC.faceCaptureVC.animationView.alpha = 0.0
-            self.expressionPhotoVC.faceCaptureVC.animationView.stop()
-            
-            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
-                
-                UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-                    self.view.layoutNow()
-                }
-
-                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                    self.expressionPhotoVC.view.alpha = 0.0
-                }
-            })
-        }
+        return saved
     }
 }
