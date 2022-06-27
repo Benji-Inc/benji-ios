@@ -141,6 +141,10 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
             data[.reads] = reads
         }
         
+        data[.expressions] = msg.expressions.compactMap({ info in
+            return .expression(info)
+        })
+        
         data[.metadata] = [.metadata(MetadataModel(conversationId: msg.conversationId, messageId: msg.id))]
         
         return data

@@ -12,6 +12,7 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
 
     enum SectionType: Int, CaseIterable {
         case options
+        case expressions
         case reads
         case metadata
     }
@@ -70,11 +71,13 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
     enum ItemType: Hashable {
         case more(MoreOptionModel)
         case option(OptionType)
+        case expression(ExpressionInfo)
         case read(ReadViewModel)
         case metadata(MetadataModel)
     }
     
     private let topOptionConfig = ManageableCellRegistration<MessageTopOptionCell>().provider
+    private let expressionConfig = ManageableCellRegistration<MessageExpressionCell>().provider
     private let readConfig = ManageableCellRegistration<MessageReadCell>().provider
     private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
     private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
@@ -96,6 +99,11 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.topOptionConfig,
                                                                     for: indexPath,
                                                                     item: option)
+            return cell
+        case .expression(let info):
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.expressionConfig,
+                                                                    for: indexPath,
+                                                                    item: info)
             return cell
         case .read(let read):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.readConfig,
@@ -135,6 +143,8 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
             switch section {
             case .options:
                 break
+            case .expressions:
+                header.leftLabel.setText("Expressions")
             case .reads:
                 header.leftLabel.setText("Read by")
             case .metadata:

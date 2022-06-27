@@ -61,6 +61,8 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                     guard let authorId = model.authorId, let author = await PeopleStore.shared.getPerson(withPersonId: authorId) else { return }
                     self.presentProfile(for: author)
                 }
+            case .expression(let info):
+                break 
             case .metadata(_):
                 break
             case .more(_):

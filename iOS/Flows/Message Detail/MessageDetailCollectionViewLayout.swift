@@ -43,7 +43,7 @@ class MessageDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
                                                                 bottom: sectionInset,
                                                                 trailing: sectionInset)
                 return section
-            case .reads:
+            case .reads, .expressions:
                 let fraction: CGFloat = 0.2
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1.0))

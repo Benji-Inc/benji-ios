@@ -41,9 +41,7 @@ class ReadSummaryView: BaseView, MessageConfigureable {
                 
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
-            
-            guard !Task.isCancelled else { return }
-            
+                        
             self.controller = controller
             
             if let controller = self.controller, !controller.hasLoadedAllReactions  {

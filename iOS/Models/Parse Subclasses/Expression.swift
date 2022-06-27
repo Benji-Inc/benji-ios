@@ -9,7 +9,7 @@
 import Foundation
 import Parse
 
-struct ExpressionInfo {
+struct ExpressionInfo: Hashable {
     var authorId: String
     var expressionId: String 
 }
