@@ -17,12 +17,10 @@ class MessageFooterDetailContainerView: BaseView {
     enum State {
         case replies
         case expressions
-        case reads
     }
     
     let repliesView = RepliesCounterView()
     let expressionsView = ExpressionsCounterView()
-    let readView = ReadIndicatorView()
     
     var didTapAddExpression: CompletionOptional = nil
     var didTapViewReplies: CompletionOptional = nil
@@ -51,14 +49,11 @@ class MessageFooterDetailContainerView: BaseView {
         if message.parentMessageId.isNil {
             self.addSubview(self.repliesView)
             self.addSubview(self.expressionsView)
-            self.addSubview(self.readView)
             self.addSubview(self.replyButton)
         } else {
             self.addSubview(self.expressionsView)
-            self.addSubview(self.readView)
         }
         
-        self.readView.configure(with: message)
         self.expressionsView.configure(for: message)
         self.repliesView.configure(for: message)
         
@@ -70,7 +65,6 @@ class MessageFooterDetailContainerView: BaseView {
         self.repliesView.$selectionState.mainSink { [unowned self] state in
             if state == .selected {
                 self.expressionsView.selectionState = .normal
-                self.readView.selectionState = .normal
                 self.state = .replies
             }
         }.store(in: &self.cancellables)
@@ -78,16 +72,7 @@ class MessageFooterDetailContainerView: BaseView {
         self.expressionsView.$selectionState.mainSink { [unowned self] state in
             if state == .selected {
                 self.repliesView.selectionState = .normal
-                self.readView.selectionState = .normal
                 self.state = .expressions
-            }
-        }.store(in: &self.cancellables)
-        
-        self.readView.$selectionState.mainSink { [unowned self] state in
-            if state == .selected {
-                self.repliesView.selectionState = .normal
-                self.expressionsView.selectionState = .normal
-                self.state = .reads
             }
         }.store(in: &self.cancellables)
     }
@@ -112,9 +97,6 @@ class MessageFooterDetailContainerView: BaseView {
             self.expressionsView.pin(.left)
             self.expressionsView.pin(.top)
         }
-        
-        self.readView.match(.left, to: .right, of: self.expressionsView, offset: .short)
-        self.readView.pin(.top)
     }
     
     private func addMenu() -> UIMenu {

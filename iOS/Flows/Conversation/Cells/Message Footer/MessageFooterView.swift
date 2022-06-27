@@ -18,7 +18,6 @@ class MessageFooterView: BaseView {
 
     let replySummary = MessageSummaryView()
     let experessionSummary = ExpressionSummaryView()
-    let readSummary = ReadSummaryView()
     
     var didTapViewReplies: CompletionOptional = nil
     
@@ -46,8 +45,6 @@ class MessageFooterView: BaseView {
                 self.handleUpdated(content: self.replySummary)
             case .expressions:
                 self.handleUpdated(content: self.experessionSummary)
-            case .reads:
-                self.handleUpdated(content: self.readSummary)
             }
         }.store(in: &self.cancellables)
         
