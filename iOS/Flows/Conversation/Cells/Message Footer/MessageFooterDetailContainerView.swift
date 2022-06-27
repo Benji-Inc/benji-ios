@@ -21,7 +21,7 @@ class MessageFooterDetailContainerView: BaseView {
     }
     
     let repliesView = RepliesCounterView()
-    let expressionsView = ImageCounterView(with: .faceSmiling)
+    let expressionsView = ExpressionsCounterView()
     let readView = ReadIndicatorView()
     
     var didTapAddExpression: CompletionOptional = nil
@@ -59,6 +59,7 @@ class MessageFooterDetailContainerView: BaseView {
         }
         
         self.readView.configure(with: message)
+        self.expressionsView.configure(for: message)
         self.repliesView.configure(for: message)
         
         self.layoutNow()
