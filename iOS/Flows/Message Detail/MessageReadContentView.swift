@@ -52,8 +52,6 @@ class MessageReadContentView: BaseView {
             self.label.setText(dateString)
             
             self.setNeedsLayout()
-            
-            self.subscribeToUpdates()
         }
     }
     
@@ -67,14 +65,5 @@ class MessageReadContentView: BaseView {
         self.label.setSize(withWidth: self.width * 1.5)
         self.label.centerOnX()
         self.label.match(.top, to: .bottom, of: self.personView, offset: .short)
-    }
-    
-    private func subscribeToUpdates() {
-        // Make sure that the person's focus status up to date.
-        PeopleStore.shared.$personUpdated.filter { [unowned self] updatedPerson in
-            self.personId == updatedPerson?.personId
-        }.mainSink { [unowned self] updatedPerson in
-            self.personView.set(person: updatedPerson)
-        }.store(in: &self.cancellables)
     }
 }
