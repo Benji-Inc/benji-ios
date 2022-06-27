@@ -63,6 +63,13 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
         
+        self.footerView.experessionSummary.expressionsView.didSelectExpression = { [unowned self] expression in
+            guard let message = message else {
+                return
+            }
+            self.content.delegate?.messageContent(self.content, didTapExpression: expression, forMessage: message)
+        }
+        
         self.footerView.detailView.didTapAddExpression = { [unowned self] in
             guard let message = self.message else { return }
             self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)

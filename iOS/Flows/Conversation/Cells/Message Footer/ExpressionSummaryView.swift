@@ -36,6 +36,7 @@ class MessageExpressionsView: BaseView {
     private let scrollView = UIScrollView()
     
     private var models: [ExpressionInfo] = []
+    var didSelectExpression: ((ExpressionInfo) -> Void)? = nil 
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -56,6 +57,9 @@ class MessageExpressionsView: BaseView {
         for model in self.models {
             let view = ExpressionContentView()
             view.configure(with: model)
+            view.didSelect { [unowned self] in
+                self.didSelectExpression?(model)
+            }
             self.scrollView.addSubview(view)
         }
         
@@ -120,7 +124,7 @@ class ExpressionContentView: BaseView {
             
             guard let expression = try? await Expression.getObject(with: item.expressionId) else { return }
 
-            self.personView.set(expression: expression)
+            self.personView.set(expression: expression, author: nil)
             let dateString = expression.createdAt?.getTimeAgoString()
             self.label.setText(dateString)
             

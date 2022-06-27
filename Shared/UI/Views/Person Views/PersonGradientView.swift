@@ -19,6 +19,8 @@ class PersonGradientView: DisplayableImageView {
         self.insertSubview(self.emotionGradientView, at: 0)
 
         self.addSubview(self.expressionVideoView)
+        self.expressionVideoView.layer.masksToBounds = true
+        self.expressionVideoView.clipsToBounds = true
 
         self.set(emotionCounts: [:])
         self.subscribeToUpdates()
@@ -30,11 +32,7 @@ class PersonGradientView: DisplayableImageView {
         self.layer.cornerRadius = self.height * 0.25
 
         self.emotionGradientView.expandToSuperviewSize()
-
         self.expressionVideoView.expandToSuperviewSize()
-        self.expressionVideoView.layer.cornerRadius = Theme.innerCornerRadius
-        self.expressionVideoView.layer.masksToBounds = true
-        self.expressionVideoView.clipsToBounds = true
     }
     
     func getSize(forHeight height: CGFloat) -> CGSize {
