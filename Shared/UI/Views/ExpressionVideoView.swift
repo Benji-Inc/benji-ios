@@ -16,25 +16,12 @@ class ExpressionVideoView: VideoView {
         }
     }
 
-    private var repeatTask: Task<Void, Never>?
-
     private func updatePlayer(with expression: Expression?) {
-        self.repeatTask?.cancel()
-
         guard let videoURLString = expression?.file?.url, let videoURL = URL(string: videoURLString) else {
             self.videoURL = nil
             return
         }
 
         self.videoURL = videoURL
-
-        self.repeatTask = Task { [weak self] in
-            // Loop the video until a new video is set.
-            while !Task.isCancelled && self.exists {
-                await Task.sleep(seconds: 6)
-                await self?.player?.seek(to: .zero)
-                self?.player?.play()
-            }
-        }
     }
 }
