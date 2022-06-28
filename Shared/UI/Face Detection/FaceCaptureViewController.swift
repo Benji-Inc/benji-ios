@@ -45,7 +45,7 @@ class FaceCaptureViewController: ViewController {
     
     let cameraViewContainer = UIView()
 
-    /// Shows a live preview of the image the user could take.
+    /// Shows a live preview of what the camera is seeing..
     lazy var cameraView: MetalView = {
         let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
         metalView.delegate = self
@@ -145,7 +145,7 @@ class FaceCaptureViewController: ViewController {
         return self.faceCaptureSession.isRunning
     }
 
-    /// Starts the face capture session so that we can display the photo preview and capture a photo.
+    /// Starts the face capture session so that we can display the photo preview and capture a photo/video.
     func beginSession() {
         guard !self.isSessionRunning else { return }
         self.faceCaptureSession.begin()
@@ -155,6 +155,7 @@ class FaceCaptureViewController: ViewController {
     func stopSession() {
         guard self.isSessionRunning else { return }
         self.faceCaptureSession.stop()
+        self.currentCIImage = nil
     }
 
     func capturePhoto() {
@@ -293,15 +294,15 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
             self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
             self.videoWriterInput.expectsMediaDataInRealTime = true
 
-//            let pixelBufferAttributes = [
-//                    kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
-//                    kCVPixelBufferWidthKey: ExportSettings.width,
-//                    kCVPixelBufferHeightKey: ExportSettings.height,
-//                    kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+            let pixelBufferAttributes = [
+                    kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+                    kCVPixelBufferWidthKey: 480,
+                    kCVPixelBufferHeightKey: 480,
+                    kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
 
             self.pixelBufferAdaptor
             = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
-                                                   sourcePixelBufferAttributes: nil)
+                                                   sourcePixelBufferAttributes: pixelBufferAttributes)
 
             if self.videoWriter.canAdd(self.videoWriterInput) {
                 self.videoWriter.add(self.videoWriterInput)

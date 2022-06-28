@@ -141,6 +141,8 @@ class ExpressionViewController: ViewController {
             self.expressionCaptureVC.faceCaptureVC.animationView.stop()
             self.expressionCaptureVC.faceCaptureVC.animate(text: "Press and hold to take a video")
 
+            self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 1
+
             self.retakeButton.alpha = 0
             self.doneButton.alpha = 0
 
@@ -167,6 +169,7 @@ class ExpressionViewController: ViewController {
             self.expressionCaptureVC.faceCaptureVC.animate(text: "")
             self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
             self.expressionCaptureVC.faceCaptureVC.animationView.stop()
+            self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 0
 
             self.retakeButton.alpha = 1
             self.doneButton.alpha = 1
