@@ -6,14 +6,13 @@
 //  Copyright © 2019 Benjamin Dodgson. All rights reserved.
 //
 
-import Foundation
 import AVFoundation
 import Vision
-import UIKit
 import MetalKit
 import CoreImage.CIFilterBuiltins
 import Lottie
 import Localization
+import VideoToolbox
 
 /// A view controller that allows a user to capture an image of their face.
 /// A live preview of the camera is shown on the main view.
@@ -286,7 +285,9 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
             let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
                                             AVVideoWidthKey : 480,
                                            AVVideoHeightKey : 480,
-                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
+                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
+                                 kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]
+            ]
 
             self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
                                                        outputSettings: settings)
@@ -295,10 +296,10 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
             self.videoWriterInput.expectsMediaDataInRealTime = true
 
             let pixelBufferAttributes = [
-                    kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
-                    kCVPixelBufferWidthKey: 480,
-                    kCVPixelBufferHeightKey: 480,
-                    kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+                kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+                kCVPixelBufferWidthKey: 480,
+                kCVPixelBufferHeightKey: 480,
+                kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
 
             self.pixelBufferAdaptor
             = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
