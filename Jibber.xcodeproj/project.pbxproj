@@ -302,7 +302,7 @@
 		D61128A92804E5E700574B96 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D61128AA2804E5FD00574B96 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D61128AB2804E73600574B96 /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
-		D61128AF2804E81600574B96 /* PhotoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */; };
+		D61128AF2804E81600574B96 /* PhotoVideoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */; };
 		D61128B02804E88700574B96 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461221D583E500CD8CE4 /* NavigationController.swift */; };
 		D61128B22804E8A400574B96 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
 		D61128B42804E8CA00574B96 /* EmotionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* EmotionCategory.swift */; };
@@ -449,7 +449,7 @@
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
 		D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
 		D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
-		D63D71B525F00ED8004C26F7 /* PhotoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */; };
+		D63D71B525F00ED8004C26F7 /* PhotoVideoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */; };
 		D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */; };
 		D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */; };
 		D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63DB1F825E968C300F6B323 /* UserNotifications.framework */; };
@@ -624,7 +624,7 @@
 		D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D66A580525DD68F9001B3F64 /* PeopleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */; };
 		D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580625DD691A001B3F64 /* PeopleViewController.swift */; };
-		D66AB0F3277A498D007A35D1 /* PhotoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */; };
+		D66AB0F3277A498D007A35D1 /* PhotoVideoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */; };
 		D66ED456267D35E100332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D66ED457267D35E100332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D66ED458267D35E200332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
@@ -1220,7 +1220,7 @@
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
 		D63D5C96265811B000543200 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
-		D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureSession.swift; sourceTree = "<group>"; };
+		D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoVideoCaptureSession.swift; sourceTree = "<group>"; };
 		D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionPreference.swift; sourceTree = "<group>"; };
 		D63DB1F725E968C300F6B323 /* Notification Content.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Notification Content.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D63DB1F825E968C300F6B323 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
@@ -2075,7 +2075,7 @@
 			children = (
 				D6EB4DEF23540E48005BF3B4 /* FaceCaptureViewController.swift */,
 				80B046F22819FB180079AE47 /* MetalView.swift */,
-				D63D71B425F00ED8004C26F7 /* PhotoCaptureSession.swift */,
+				D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */,
 			);
 			path = "Face Detection";
 			sourceTree = "<group>";
@@ -3377,7 +3377,7 @@
 				D61128842804DCCA00574B96 /* ResourceObject.swift in Sources */,
 				D61128192804DBC600574B96 /* AnimationView+Extensions.swift in Sources */,
 				D61128BE2804EB3C00574B96 /* PermissionsCoordinator.swift in Sources */,
-				D61128AF2804E81600574B96 /* PhotoCaptureSession.swift in Sources */,
+				D61128AF2804E81600574B96 /* PhotoVideoCaptureSession.swift in Sources */,
 				D61128292804DBD600574B96 /* Optional+Extensions.swift in Sources */,
 				D61128582804DC3E00574B96 /* ToastStatusView.swift in Sources */,
 				D61128102804DB6A00574B96 /* Theme.swift in Sources */,
@@ -3526,7 +3526,7 @@
 				D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				8057B59C27E2A10600B23D0D /* ConversationMemberCell.swift in Sources */,
-				D63D71B525F00ED8004C26F7 /* PhotoCaptureSession.swift in Sources */,
+				D63D71B525F00ED8004C26F7 /* PhotoVideoCaptureSession.swift in Sources */,
 				D687595C2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */,
 				D6AA61FA285255ED00FA4D02 /* TabView.swift in Sources */,
@@ -3949,7 +3949,7 @@
 				D63DB26B25E9997800F6B323 /* UserNotificationCategory.swift in Sources */,
 				D63DB23D25E9992900F6B323 /* UNNotificationContent+Extensions.swift in Sources */,
 				D63DB22F25E9991F00F6B323 /* Publisher+Extensions.swift in Sources */,
-				D66AB0F3277A498D007A35D1 /* PhotoCaptureSession.swift in Sources */,
+				D66AB0F3277A498D007A35D1 /* PhotoVideoCaptureSession.swift in Sources */,
 				D63DB25525E9995700F6B323 /* DeeplinkObject.swift in Sources */,
 				D68B723427D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D63DB26D25E9997F00F6B323 /* PersonType.swift in Sources */,

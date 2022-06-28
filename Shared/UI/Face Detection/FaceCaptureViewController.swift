@@ -6,14 +6,13 @@
 //  Copyright © 2019 Benjamin Dodgson. All rights reserved.
 //
 
-import Foundation
 import AVFoundation
 import Vision
-import UIKit
 import MetalKit
 import CoreImage.CIFilterBuiltins
 import Lottie
 import Localization
+import VideoToolbox
 
 /// A view controller that allows a user to capture an image of their face.
 /// A live preview of the camera is shown on the main view.
@@ -45,7 +44,7 @@ class FaceCaptureViewController: ViewController {
     
     let cameraViewContainer = UIView()
 
-    /// Shows a live preview of the image the user could take.
+    /// Shows a live preview of what the camera is seeing..
     lazy var cameraView: MetalView = {
         let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
         metalView.delegate = self
@@ -57,7 +56,7 @@ class FaceCaptureViewController: ViewController {
 
     let orientation: CGImagePropertyOrientation = .left
 
-    lazy var faceCaptureSession = PhotoCaptureSession()
+    lazy var faceCaptureSession = PhotoVideoCaptureSession()
 
     /// A request to separate a person from the background in an image.
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
@@ -145,7 +144,7 @@ class FaceCaptureViewController: ViewController {
         return self.faceCaptureSession.isRunning
     }
 
-    /// Starts the face capture session so that we can display the photo preview and capture a photo.
+    /// Starts the face capture session so that we can display the photo preview and capture a photo/video.
     func beginSession() {
         guard !self.isSessionRunning else { return }
         self.faceCaptureSession.begin()
@@ -155,6 +154,7 @@ class FaceCaptureViewController: ViewController {
     func stopSession() {
         guard self.isSessionRunning else { return }
         self.faceCaptureSession.stop()
+        self.currentCIImage = nil
     }
 
     func capturePhoto() {
@@ -242,9 +242,8 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
     }
 
     /// Makes the image black and white, and makes the background clear.
-    func blend(original framePixelBuffer: CVPixelBuffer,
-               mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
-
+    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
+        // Make the background clear.
         let color = CIColor(color: UIColor.clear)
 
         // Create CIImage objects for the video frame and the segmentation mask.
@@ -283,10 +282,12 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
 
             // Create an asset writer that will write the video to the url
             self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
-            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevc,
+            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
                                             AVVideoWidthKey : 480,
                                            AVVideoHeightKey : 480,
-                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5]]
+                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
+                                 kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]
+            ]
 
             self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
                                                        outputSettings: settings)
@@ -294,9 +295,15 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
             self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
             self.videoWriterInput.expectsMediaDataInRealTime = true
 
+            let pixelBufferAttributes = [
+                kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+                kCVPixelBufferWidthKey: 480,
+                kCVPixelBufferHeightKey: 480,
+                kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+
             self.pixelBufferAdaptor
             = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
-                                                   sourcePixelBufferAttributes: nil)
+                                                   sourcePixelBufferAttributes: pixelBufferAttributes)
 
             if self.videoWriter.canAdd(self.videoWriterInput) {
                 self.videoWriter.add(self.videoWriterInput)
@@ -330,6 +337,7 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
                             &pixelBuffer)
 
         let context = CIContext()
+        // Using a magic number (-240) for now. We should figure out the appropriate offset dynamically.
         let transform = CGAffineTransform(translationX: 0, y: -240)
         let adjustedImage = self.currentCIImage!.transformed(by: transform)
         context.render(adjustedImage, to: pixelBuffer!)
