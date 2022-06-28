@@ -47,15 +47,15 @@ class MessageFooterDetailContainerView: BaseView {
         self.removeAllSubviews()
         
         if message.parentMessageId.isNil {
-            self.addSubview(self.repliesView)
-            self.addSubview(self.expressionsView)
+//            self.addSubview(self.repliesView)
+//            self.addSubview(self.expressionsView)
             self.addSubview(self.replyButton)
         } else {
-            self.addSubview(self.expressionsView)
+           // self.addSubview(self.expressionsView)
         }
         
-        self.expressionsView.configure(for: message)
-        self.repliesView.configure(for: message)
+//        self.expressionsView.configure(for: message)
+//        self.repliesView.configure(for: message)
         
         self.layoutNow()
     }

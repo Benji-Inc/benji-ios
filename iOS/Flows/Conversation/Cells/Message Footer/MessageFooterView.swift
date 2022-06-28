@@ -17,11 +17,11 @@ class MessageFooterView: BaseView {
     static let collapsedHeight: CGFloat = 30 
 
     let replySummary = MessageSummaryView()
-    let experessionSummary = ExpressionSummaryView()
+    //let experessionSummary = ExpressionSummaryView()
     
     var didTapViewReplies: CompletionOptional = nil
     
-    let detailView  = MessageFooterDetailContainerView()
+    let replyButton = ReplyButton()
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
     
     let selectedDetailContainerView = BaseView()
@@ -34,51 +34,33 @@ class MessageFooterView: BaseView {
         self.addSubview(self.statusLabel)
         self.statusLabel.textAlignment = .right
         
-        self.addSubview(self.detailView)
-        self.detailView.alpha = 0
+        self.addSubview(self.replyButton)
+        self.replyButton.alpha = 0
         
         self.addSubview(self.selectedDetailContainerView)
-        
-        self.detailView.$state.mainSink { [unowned self] state in
-            switch state {
-            case .replies:
-                self.handleUpdated(content: self.replySummary)
-            case .expressions:
-                self.handleUpdated(content: self.experessionSummary)
-            }
-        }.store(in: &self.cancellables)
+        self.handleUpdated(content: self.replySummary)
         
         self.replySummary.replyView.didSelect { [unowned self] in
-            self.didTapViewReplies?()
-        }
-        
-        self.detailView.didTapViewReplies = { [unowned self] in
             self.didTapViewReplies?()
         }
     }
     
     func configure(for message: Messageable) {
         self.message = message
-        self.detailView.configure(for: message)
+        self.replyButton.configure(for: message)
+        self.replySummary.configure(for: message)
         self.updateStatus(for: message)
-        // Start with replies
-        if message.parentMessageId.exists {
-            self.detailView.expressionsView.selectionState = .selected
-        } else {
-            self.detailView.repliesView.selectionState = .selected
-        }
     }
         
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.detailView.expandToSuperviewWidth()
-        self.detailView.pin(.top)
-        self.detailView.pin(.left)
+        self.replyButton.pin(.top)
+        self.replyButton.pin(.right)
         
-        self.selectedDetailContainerView.expandToSuperviewWidth()
-        self.selectedDetailContainerView.height = self.height - self.detailView.height - Theme.ContentOffset.standard.value
-        self.selectedDetailContainerView.match(.top, to: .bottom, of: self.detailView, offset: .standard)
+        self.selectedDetailContainerView.width = self.width - self.replyButton.width - Theme.ContentOffset.long.value
+        self.selectedDetailContainerView.height = self.height
+        self.selectedDetailContainerView.pin(.top)
         
         if let content = self.selectedDetailContainerView.subviews.first(where: { view in
             return view is MessageConfigureable
@@ -94,10 +76,10 @@ class MessageFooterView: BaseView {
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         // Only handle touches on the reply and read views.
         let replyPoint = self.convert(point, to: self.selectedDetailContainerView)
-        let readPoint = self.convert(point, to: self.detailView)
+        let readPoint = self.convert(point, to: self.replyButton)
 
         return self.selectedDetailContainerView.point(inside: replyPoint, with: event)
-        || self.detailView.point(inside: readPoint, with: event)
+        || self.replyButton.point(inside: readPoint, with: event)
     }
 
     private func getString(for deliveryStatus: DeliveryStatus) -> String {
@@ -118,7 +100,7 @@ class MessageFooterView: BaseView {
             case .sending, .error:
                 self.statusLabel.text = self.getString(for: message.deliveryStatus)
                 self.statusLabel.alpha = 1
-                self.detailView.alpha = 0
+                self.replyButton.alpha = 0
                 if message.deliveryStatus == .sending {
                     self.statusLabel.textColor =  ThemeColor.whiteWithAlpha.color
                     self.statusLabel.font = FontType.small.font
@@ -128,7 +110,7 @@ class MessageFooterView: BaseView {
                 }
             case .sent, .reading, .read:
                 self.statusLabel.alpha = 0
-                self.detailView.alpha = 1.0
+                self.replyButton.alpha = 1.0
             }
             self.layoutNow()
         }

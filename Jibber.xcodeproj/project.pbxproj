@@ -715,6 +715,7 @@
 		D692E882286A2D270001F99B /* ExpressionsCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E881286A2D270001F99B /* ExpressionsCounterView.swift */; };
 		D692E884286A44150001F99B /* MessageExpressionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E883286A44150001F99B /* MessageExpressionCell.swift */; };
 		D692E886286B71BF0001F99B /* ExpressionViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */; };
+		D692E888286BB8030001F99B /* ReplyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E887286BB8030001F99B /* ReplyButton.swift */; };
 		D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */; };
 		D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6953743286234B600CFAF02 /* NoticeBadgeView.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
@@ -1345,6 +1346,7 @@
 		D692E881286A2D270001F99B /* ExpressionsCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionsCounterView.swift; sourceTree = "<group>"; };
 		D692E883286A44150001F99B /* MessageExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageExpressionCell.swift; sourceTree = "<group>"; };
 		D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExpressionViewController+Animation.swift"; sourceTree = "<group>"; };
+		D692E887286BB8030001F99B /* ReplyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyButton.swift; sourceTree = "<group>"; };
 		D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Wallet.swift"; sourceTree = "<group>"; };
 		D6953743286234B600CFAF02 /* NoticeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBadgeView.swift; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
@@ -2809,6 +2811,7 @@
 				D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */,
 				D6DE47B628664F780005FD28 /* RepliesCounterView.swift */,
 				D692E881286A2D270001F99B /* ExpressionsCounterView.swift */,
+				D692E887286BB8030001F99B /* ReplyButton.swift */,
 			);
 			path = "Message Footer";
 			sourceTree = "<group>";
@@ -3886,6 +3889,7 @@
 				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
 				D6D4ECD128613DF1002C71CE /* ConversationSelectionCollectionView.swift in Sources */,
 				D646D36227E505030077D20B /* AttachmentsViewController.swift in Sources */,
+				D692E888286BB8030001F99B /* ReplyButton.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
 				D6AA62012852616D00FA4D02 /* HomeCoordinator+Notices.swift in Sources */,
