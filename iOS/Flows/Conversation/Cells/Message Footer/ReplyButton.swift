@@ -155,7 +155,7 @@ class ReplyButton: BaseView {
             }
         }
         
-        let action = UIAction(title: "Add expression", image: nil) { [unowned self] _ in
+        let action = UIAction(title: "Add Expression", image: ImageSymbol.faceSmiling.image) { [unowned self] _ in
             self.didTapAddExpression?()
         }
         elements.append(action)
