@@ -51,6 +51,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.modalPresentationStyle = .overCurrentContext
         
+        self.dismissInteractionController?.handlePan(for: self.blurView)
         self.dismissInteractionController?.handlePan(for: self.messageContentView)
         self.dismissInteractionController?.handleCollectionViewPan(for: self.collectionView)
         self.dismissInteractionController?.handlePan(for: self.pullView)
