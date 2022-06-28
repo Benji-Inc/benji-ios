@@ -152,6 +152,7 @@ class ExpressionViewController: ViewController {
             
             UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
+                    self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 1
                     self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
                     self.view.layoutNow()
                 }
@@ -181,6 +182,7 @@ class ExpressionViewController: ViewController {
             self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: videoURL)
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 0.0
                 self.view.layoutNow()
             }
         }
