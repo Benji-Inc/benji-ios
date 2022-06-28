@@ -9,7 +9,7 @@
 import Foundation
 import ScrollCounter
 
-class ReplyButton: BaseView, MessageConfigureable {
+class ReplyButton: BaseView {
     
     private var controller: MessageController?
     private var replyCount = 0

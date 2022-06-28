@@ -69,6 +69,10 @@ class MessageCell: UICollectionViewCell {
 //            }
 //            self.content.delegate?.messageContent(self.content, didTapExpression: expression, forMessage: message)
 //        }
+        self.footerView.replyButton.didTapViewReplies = { [unowned self] in
+            guard let message = self.message else { return }
+            self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
+        }
         
         self.footerView.replyButton.didTapAddExpression = { [unowned self] in
             guard let message = self.message else { return }

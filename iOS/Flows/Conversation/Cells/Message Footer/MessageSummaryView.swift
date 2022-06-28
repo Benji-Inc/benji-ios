@@ -11,7 +11,7 @@ import Combine
 import Localization
 import UIKit
 
-class MessageSummaryView: BaseView, MessageConfigureable {
+class MessageSummaryView: BaseView {
     
     private var controller: MessageController?
     let replyView = MessagePreview()

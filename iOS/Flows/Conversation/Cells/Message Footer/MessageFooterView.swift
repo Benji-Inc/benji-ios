@@ -9,23 +9,18 @@
 import Foundation
 import Combine
 
-private typealias MessageDetailContent = BaseView & MessageConfigureable
-
 class MessageFooterView: BaseView {
     
     static let height: CGFloat = 86
     static let collapsedHeight: CGFloat = 30 
 
     let replySummary = MessageSummaryView()
-    //let experessionSummary = ExpressionSummaryView()
     
     var didTapViewReplies: CompletionOptional = nil
     
     let replyButton = ReplyButton()
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
-    
-    let selectedDetailContainerView = BaseView()
-        
+            
     private var message: Messageable?
 
     override func initializeSubviews() {
@@ -37,8 +32,7 @@ class MessageFooterView: BaseView {
         self.addSubview(self.replyButton)
         self.replyButton.alpha = 0
         
-        self.addSubview(self.selectedDetailContainerView)
-        self.handleUpdated(content: self.replySummary)
+        self.addSubview(self.replySummary)
         
         self.replySummary.replyView.didSelect { [unowned self] in
             self.didTapViewReplies?()
@@ -58,15 +52,10 @@ class MessageFooterView: BaseView {
         self.replyButton.pin(.top)
         self.replyButton.pin(.right)
         
-        self.selectedDetailContainerView.width = self.width - self.replyButton.width - Theme.ContentOffset.long.value
-        self.selectedDetailContainerView.height = self.height
-        self.selectedDetailContainerView.pin(.top)
-        
-        if let content = self.selectedDetailContainerView.subviews.first(where: { view in
-            return view is MessageConfigureable
-        }) {
-            content.expandToSuperviewSize()
-        }
+        self.replySummary.width = self.width - self.replyButton.width - Theme.ContentOffset.long.value
+        self.replySummary.height = self.height
+        self.replySummary.pin(.top)
+        self.replySummary.pin(.left)
         
         self.statusLabel.setSize(withWidth: self.width)
         self.statusLabel.pin(.top, offset: .short)
@@ -75,10 +64,10 @@ class MessageFooterView: BaseView {
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         // Only handle touches on the reply and read views.
-        let replyPoint = self.convert(point, to: self.selectedDetailContainerView)
+        let replyPoint = self.convert(point, to: self.replySummary)
         let readPoint = self.convert(point, to: self.replyButton)
 
-        return self.selectedDetailContainerView.point(inside: replyPoint, with: event)
+        return self.replySummary.point(inside: replyPoint, with: event)
         || self.replyButton.point(inside: readPoint, with: event)
     }
 
@@ -113,43 +102,6 @@ class MessageFooterView: BaseView {
                 self.replyButton.alpha = 1.0
             }
             self.layoutNow()
-        }
-    }
-    
-    /// The currently running task that is loading.
-    private var loadTask: Task<Void, Never>?
-    
-    private func handleUpdated(content: MessageDetailContent) {
-        
-        self.loadTask?.cancel()
-                
-        self.loadTask = Task { [weak self] in
-            guard let `self` = self, let msg = self.message else { return }
-            
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.selectedDetailContainerView.subviews.forEach { view in
-                    view.alpha = 0
-                }
-            })
-            
-            self.selectedDetailContainerView.removeAllSubviews()
-            
-            content.alpha = 0.0
-            self.selectedDetailContainerView.addSubview(content)
-            content.configure(for: msg)
-            content.expandToSuperviewSize()
-            self.layoutNow()
-            
-            guard !Task.isCancelled else {
-                content.alpha = 1.0
-                return
-            }
-            
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.selectedDetailContainerView.subviews.forEach { view in
-                    view.alpha = 1
-                }
-            })
         }
     }
 }
