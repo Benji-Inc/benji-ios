@@ -35,6 +35,7 @@ class VideoView: BaseView {
     private func updatePlayer(with url: URL?) {
         guard let videoURL = url else {
             self.playerLayer.player = nil
+            self.looper = nil
             return
         }
 
