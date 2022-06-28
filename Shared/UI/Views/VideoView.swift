@@ -16,11 +16,9 @@ class VideoView: BaseView {
         }
     }
 
-    var shouldLoop = true
-    /// How long, in seconds, to wait before playing the video again.
-    var loopDelay: CGFloat = 1
-
     let playerLayer = AVPlayerLayer(player: nil)
+    /// An object that keeps looping the video back to the beginning.
+    private var looper: AVPlayerLooper?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -34,28 +32,19 @@ class VideoView: BaseView {
         self.playerLayer.frame = self.bounds
     }
 
-    private var repeatTask: Task<Void, Never>?
-
     private func updatePlayer(with url: URL?) {
-        self.repeatTask?.cancel()
-
         guard let videoURL = url else {
             self.playerLayer.player = nil
+            self.looper = nil
             return
         }
 
-        let player = AVPlayer(url: videoURL)
+        let videoItem = AVPlayerItem(url: videoURL)
+        let player = AVQueuePlayer(items: [videoItem])
+        self.looper = AVPlayerLooper(player: player, templateItem: videoItem)
+
         self.playerLayer.player = player
 
         player.play()
-
-        self.repeatTask = Task { [weak self] in
-            // Loop the video until a new video is set.
-            while !Task.isCancelled && self.exists {
-                await Task.sleep(seconds: 6)
-                await player.seek(to: .zero)
-                player.play()
-            }
-        }
     }
 }
