@@ -171,9 +171,9 @@ class FaceCaptureViewController: ViewController {
 
     // MARK: - AVAssetWriter Vars
 
-    private var videoWriter: AVAssetWriter!
-    private var videoWriterInput: AVAssetWriterInput!
-    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor!
+    private var videoWriter: AVAssetWriter?
+    private var videoWriterInput: AVAssetWriterInput?
+    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
 
     func startVideoCapture() {
         guard self.videoCaptureState == .idle else { return }
@@ -229,7 +229,7 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
             self.videoCaptureState = .started
         case .started:
             // Wait for the input to be ready before starting the session
-            guard self.videoWriterInput.isReadyForMoreMediaData else { break }
+            guard let input = self.videoWriterInput, input.isReadyForMoreMediaData else { break }
             self.startSession(with: sampleBuffer)
             self.writeSampleToFile(sampleBuffer)
             self.videoCaptureState = .capturing
@@ -292,24 +292,26 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
             self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
                                                        outputSettings: settings)
 
-            self.videoWriterInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
-            self.videoWriterInput.expectsMediaDataInRealTime = true
+            self.videoWriterInput?.mediaTimeScale = CMTimeScale(bitPattern: 600)
+            self.videoWriterInput?.expectsMediaDataInRealTime = true
 
             let pixelBufferAttributes = [
                 kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
                 kCVPixelBufferWidthKey: 480,
                 kCVPixelBufferHeightKey: 480,
                 kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+            
+            guard let writer = self.videoWriter, let input = self.videoWriterInput else { return }
 
             self.pixelBufferAdaptor
-            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: self.videoWriterInput,
+            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input,
                                                    sourcePixelBufferAttributes: pixelBufferAttributes)
 
-            if self.videoWriter.canAdd(self.videoWriterInput) {
-                self.videoWriter.add(self.videoWriterInput)
+            if writer.canAdd(input) {
+                writer.add(input)
             }
 
-            self.videoWriter.startWriting()
+            writer.startWriting()
         } catch {
             logError(error)
         }
@@ -317,17 +319,19 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
 
     private func startSession(with sampleBuffer: CMSampleBuffer) {
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        self.videoWriter.startSession(atSourceTime: startTime)
+        self.videoWriter?.startSession(atSourceTime: startTime)
     }
 
     private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
-        guard self.videoWriterInput.isReadyForMoreMediaData else { return }
+        guard let input = self.videoWriterInput,
+                input.isReadyForMoreMediaData,
+                let currentImage = self.currentCIImage else { return }
 
         var pixelBuffer: CVPixelBuffer?
         let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
                      kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
-        let width = Int(self.currentCIImage!.extent.width)
-        let height = Int(self.currentCIImage!.extent.width)
+        let width = Int(currentImage.extent.width)
+        let height = Int(currentImage.extent.width)
 
         CVPixelBufferCreate(kCFAllocatorDefault,
                             width,
@@ -339,20 +343,20 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
         let context = CIContext()
         // Using a magic number (-240) for now. We should figure out the appropriate offset dynamically.
         let transform = CGAffineTransform(translationX: 0, y: -240)
-        let adjustedImage = self.currentCIImage!.transformed(by: transform)
+        let adjustedImage = currentImage.transformed(by: transform)
         context.render(adjustedImage, to: pixelBuffer!)
 
         let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
         let presentationTime = CMTime(seconds: currentTime,
                                       preferredTimescale: CMTimeScale(bitPattern: 600))
 
-        self.pixelBufferAdaptor.append(pixelBuffer!, withPresentationTime: presentationTime)
+        self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
     }
 
     private func finishWritingVideo() {
-        self.videoWriterInput.markAsFinished()
-        let videoURL = self.videoWriter.outputURL
-        self.videoWriter.finishWriting {
+        self.videoWriterInput?.markAsFinished()
+        guard let videoURL = self.videoWriter?.outputURL else { return }
+        self.videoWriter?.finishWriting { [unowned self] in
             self.didCaptureVideo?(videoURL)
         }
     }

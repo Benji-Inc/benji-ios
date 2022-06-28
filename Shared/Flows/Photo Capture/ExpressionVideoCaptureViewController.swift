@@ -14,8 +14,6 @@ class ExpressionVideoCaptureViewController: ViewController {
 
     lazy var faceCaptureVC = FaceCaptureViewController()
     let videoPreviewView = VideoView()
-    /// Pressing on this view will trigger the video capture
-    private var pressView = BaseView()
 
     // MARK: - Life Cycle
 
@@ -25,48 +23,34 @@ class ExpressionVideoCaptureViewController: ViewController {
         self.addChild(viewController: self.faceCaptureVC)
         
         self.faceCaptureVC.faceCaptureSession.flashMode = .off
-
-        self.view.addSubview(self.pressView)
-
-        let longPress = UILongPressGestureRecognizer()
-        longPress.addTarget(self, action: #selector(onLongPress))
-        self.pressView.addGestureRecognizer(longPress)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.faceCaptureVC.animate(text: "Press and hold to take a video")
+        self.faceCaptureVC.animate(text: "Press and Hold")
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         self.faceCaptureVC.view.expandToSuperviewSize()
-        self.faceCaptureVC.cameraViewContainer.makeRound()
-
-        self.pressView.expandToSuperviewSize()
     }
-
-    // MARK: - Input Handling
-
-    @objc private func onLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        switch gestureRecognizer.state {
-        case .began:
-            if self.faceCaptureVC.isSessionRunning {
-                self.faceCaptureVC.startVideoCapture()
-            } else {
-                self.faceCaptureVC.view.isVisible = true
-                self.faceCaptureVC.beginSession()
-            }
-        case .ended, .cancelled:
-            switch self.faceCaptureVC.videoCaptureState {
-            case .starting, .started, .capturing:
-                self.faceCaptureVC.finishVideoCapture()
-            case .idle, .ending:
-                break
-            }
-        default:
+    
+    func beginVideoCapture() {
+        if self.faceCaptureVC.isSessionRunning {
+            self.faceCaptureVC.startVideoCapture()
+        } else {
+            self.faceCaptureVC.view.isVisible = true
+            self.faceCaptureVC.beginSession()
+        }
+    }
+    
+    func endVideoCapture() {
+        switch self.faceCaptureVC.videoCaptureState {
+        case .starting, .started, .capturing:
+            self.faceCaptureVC.finishVideoCapture()
+        case .idle, .ending:
             break
         }
     }
