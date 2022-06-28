@@ -11,7 +11,7 @@ import AVFoundation
 import Combine
 import UIKit
 
-class PhotoCaptureSession {
+class PhotoVideoCaptureSession {
 
     weak var avCaptureDelegate: (AVCaptureVideoDataOutputSampleBufferDelegate & AVCapturePhotoCaptureDelegate)?
 
