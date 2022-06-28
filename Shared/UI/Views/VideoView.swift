@@ -18,7 +18,7 @@ class VideoView: BaseView {
 
     var shouldLoop = true
     /// How long, in seconds, to wait before playing the video again.
-    var loopDelay: CGFloat = 1
+    var loopDelay: CGFloat = 3
 
     let playerLayer = AVPlayerLayer(player: nil)
 
@@ -50,9 +50,10 @@ class VideoView: BaseView {
         player.play()
 
         self.repeatTask = Task { [weak self] in
+            guard let `self` = self else { return }
             // Loop the video until a new video is set.
-            while !Task.isCancelled && self.exists {
-                await Task.sleep(seconds: 6)
+            while !Task.isCancelled {
+                await Task.sleep(seconds: self.loopDelay)
                 await player.seek(to: .zero)
                 player.play()
             }

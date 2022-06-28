@@ -344,7 +344,7 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
     private func finishWritingVideo() {
         self.videoWriterInput.markAsFinished()
         let videoURL = self.videoWriter.outputURL
-        self.videoWriter.finishWriting {
+        self.videoWriter.finishWriting { [unowned self] in
             self.didCaptureVideo?(videoURL)
         }
     }

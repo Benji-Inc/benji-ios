@@ -23,18 +23,34 @@ class ExpressionViewController: ViewController {
     }
     
     let blurView = DarkBlurView()
-    private let retakeButton = ThemeButton()
     private let doneButton = ThemeButton()
-
-    private lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
+    
+    lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
     let personGradientView = PersonGradientView()
-        
+    
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
-    @Published private var state: State = .initial
+    @Published var state: State = .initial
     
     private var data: Data?
     private var videoURL: URL?
+    
+    static let maxDuration: TimeInterval = 3.0
+    
+    var animation = CABasicAnimation(keyPath: "strokeEnd")
+    
+    var shapeLayer: CAShapeLayer = {
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.fillColor = ThemeColor.clear.color.cgColor
+        shapeLayer.strokeColor = ThemeColor.D6.color.cgColor
+        shapeLayer.lineCap = .round
+        shapeLayer.lineWidth = 2
+        shapeLayer.shadowColor = ThemeColor.D6.color.cgColor
+        shapeLayer.shadowRadius = 5
+        shapeLayer.shadowOffset = .zero
+        shapeLayer.shadowOpacity = 1.0
+        return shapeLayer
+    }()
     
     override func initializeViews() {
         super.initializeViews()
@@ -48,49 +64,48 @@ class ExpressionViewController: ViewController {
         }
         
         self.view.addSubview(self.blurView)
-                
+        
         self.addChild(viewController: self.expressionCaptureVC)
         
         self.view.addSubview(self.personGradientView)
         self.personGradientView.alpha = 0.0
-
-        self.view.addSubview(self.retakeButton)
-        self.retakeButton.set(style: .normal(color: .B1, text: "Retake"))
-        self.view.addSubview(self.doneButton)
-        self.doneButton.set(style: .normal(color: .B2, text: "Done"))
         
+        self.view.addSubview(self.doneButton)
+        self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+                
         self.setupHandlers()
     }
-
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         self.blurView.expandToSuperviewSize()
-
+        
         self.expressionCaptureVC.view.expandToSuperviewSize()
-
+        
         self.personGradientView.frame = self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.frame
-
-        self.doneButton.setSize(with: 250)
+        
+        self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
-        self.doneButton.pinToSafeAreaBottom()
-
-        self.retakeButton.setSize(with: 250)
-        self.retakeButton.centerOnX()
-        self.retakeButton.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.standard))
+        
+        if self.state == .confirm {
+            self.doneButton.pinToSafeAreaBottom()
+        } else {
+            self.doneButton.top = self.view.height
+        }
     }
     
     private func setupHandlers() {
+        
         self.expressionCaptureVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
             self.videoURL = videoURL
-
+            
             Task.onMainActor {
                 self.expressionCaptureVC.faceCaptureVC.stopSession()
-
                 self.state = .confirm
             }
         }
-
+        
         self.expressionCaptureVC.faceCaptureVC.$hasRenderedFaceImage
             .removeDuplicates()
             .mainSink { [unowned self] hasRendered in
@@ -107,54 +122,45 @@ class ExpressionViewController: ViewController {
                 self.update(for: state)
             }.store(in: &self.cancellables)
         
-        if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
-            self.expressionCaptureVC.faceCaptureVC.beginSession()
-        }
-
-        self.retakeButton.addAction(for: .touchUpInside) { [unowned self] in
-            if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
-                self.expressionCaptureVC.faceCaptureVC.beginSession()
-            }
-
-            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
+        self.view.didSelect { [unowned self] in
+            guard self.state == .confirm else { return }
             self.state = .capture
         }
-
+        
         self.doneButton.addAction(for: .touchUpInside) {
             Task {
                 guard let expression = await self.createVideoExpression() else { return }
                 self.didCompleteExpression?(expression)
             }
         }
+        
+        if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
+            self.expressionCaptureVC.faceCaptureVC.beginSession()
+        }
     }
-
+    
     private func update(for state: State) {
         switch state {
         case .initial:
             self.expressionCaptureVC.faceCaptureVC.animate(text: "Scanning...")
             self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 1.0
             self.expressionCaptureVC.faceCaptureVC.animationView.play()
-
-            self.retakeButton.alpha = 0
-            self.doneButton.alpha = 0
         case .capture:
             self.expressionCaptureVC.faceCaptureVC.animationView.stop()
-            self.expressionCaptureVC.faceCaptureVC.animate(text: "Press and hold to take a video")
-
-            self.retakeButton.alpha = 0
-            self.doneButton.alpha = 0
-
+            self.expressionCaptureVC.faceCaptureVC.animate(text: "Press and Hold")
+            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
+            
             UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
                     self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
                     self.view.layoutNow()
                 }
-
+                
                 UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
                     self.expressionCaptureVC.view.alpha = 1.0
                 }
             })
-
+            
             UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
                 self.expressionCaptureVC.faceCaptureVC.view.alpha = 1.0
                 self.personGradientView.alpha = 0.0
@@ -164,32 +170,56 @@ class ExpressionViewController: ViewController {
                 }
             }
         case .confirm:
-            self.expressionCaptureVC.faceCaptureVC.animate(text: "")
+            self.expressionCaptureVC.faceCaptureVC.animate(text: "Tap to retake")
             self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
             self.expressionCaptureVC.faceCaptureVC.animationView.stop()
-
-            self.retakeButton.alpha = 1
-            self.doneButton.alpha = 1
-
+            
+            self.stopRecordingAnimation()
+            
             guard let videoURL = self.videoURL else { break }
-
+            
             self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: videoURL)
+            
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.view.layoutNow()
+            }
         }
     }
-
+    
     private func createVideoExpression() async -> Expression? {
         guard let videoURL = self.videoURL else { return nil }
-
+        
         let videoData = try! Data(contentsOf: videoURL)
-
+        
         let expression = Expression()
-
+        
         expression.author = User.current()
         expression.file = PFFileObject(name: "expression.mov", data: videoData)
         expression.emojiString = nil
-
+        
         guard let saved = try? await expression.saveToServer() else { return nil }
-
+        
         return saved
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard self.state == .capture else { return }
+        
+        self.beginRecordingAnimation()
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        guard self.state == .capture else { return }
+        
+        self.stopRecordingAnimation()
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        guard self.state == .capture else { return }
+        
+        self.stopRecordingAnimation()
     }
 }

@@ -714,6 +714,7 @@
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D692E882286A2D270001F99B /* ExpressionsCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E881286A2D270001F99B /* ExpressionsCounterView.swift */; };
 		D692E884286A44150001F99B /* MessageExpressionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E883286A44150001F99B /* MessageExpressionCell.swift */; };
+		D692E886286B71BF0001F99B /* ExpressionViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */; };
 		D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */; };
 		D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6953743286234B600CFAF02 /* NoticeBadgeView.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
@@ -1343,6 +1344,7 @@
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D692E881286A2D270001F99B /* ExpressionsCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionsCounterView.swift; sourceTree = "<group>"; };
 		D692E883286A44150001F99B /* MessageExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageExpressionCell.swift; sourceTree = "<group>"; };
+		D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExpressionViewController+Animation.swift"; sourceTree = "<group>"; };
 		D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Wallet.swift"; sourceTree = "<group>"; };
 		D6953743286234B600CFAF02 /* NoticeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBadgeView.swift; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
@@ -1758,6 +1760,7 @@
 			children = (
 				D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */,
 				D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */,
+				D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -3772,6 +3775,7 @@
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
 				D692E884286A44150001F99B /* MessageExpressionCell.swift in Sources */,
+				D692E886286B71BF0001F99B /* ExpressionViewController+Animation.swift in Sources */,
 				D65E66D5285962560040E3D8 /* ShortcutViewController.swift in Sources */,
 				D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */,
 				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,

@@ -1,0 +1,66 @@
+//
+//  ExpressionViewController+Animation.swift
+//  Jibber
+//
+//  Created by Benji Dodgson on 6/28/22.
+//  Copyright © 2022 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+import QuartzCore
+
+extension ExpressionViewController {
+    
+    func beginRecordingAnimation() {
+        
+        self.shapeLayer.removeFromSuperlayer()
+        self.view.layer.addSublayer(self.shapeLayer)
+        
+        self.animation.delegate = self
+        self.animation.fromValue = 0
+        self.animation.duration = ExpressionViewController.maxDuration
+        self.animation.isRemovedOnCompletion = false
+        self.animation.fillMode = .forwards
+        
+        let containerView = self.expressionCaptureVC.faceCaptureVC.cameraViewContainer
+        let frame = containerView.convert(containerView.bounds, to: self.view)
+        self.shapeLayer.path = UIBezierPath(roundedRect: frame, byRoundingCorners: [.allCorners], cornerRadii: CGSize(width: frame.height * 0.25, height: frame.height * 0.25)).cgPath
+        
+
+        //let path = UIBezierPath() //UIBezierPath(rect: frame).cgPath
+        
+//        let bottomCenter = CGPoint(x: <#T##CGFloat#>, y: <#T##CGFloat#>)
+//        path.move(to: CGPoint(x: 10, y: 50))
+//        path.addLine(to: CGPoint(x: 200, y: 50))
+//                path.addLine(to: CGPoint(x: 200, y: 240))
+                
+                // create shape layer for that path
+                
+                
+                
+                // animate it
+                
+                
+                
+        self.shapeLayer.add(self.animation, forKey: "MyAnimation")
+    }
+    
+    func stopRecordingAnimation() {
+        self.shapeLayer.removeFromSuperlayer()
+        self.shapeLayer.removeAllAnimations()
+    }
+}
+
+extension ExpressionViewController: CAAnimationDelegate {
+    
+    func animationDidStart(_ anim: CAAnimation) {
+        self.expressionCaptureVC.faceCaptureVC.animate(text: "")
+        self.expressionCaptureVC.beginVideoCapture()
+    }
+    
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if self.state == .capture {
+            self.expressionCaptureVC.endVideoCapture()
+        }
+    }
+}
