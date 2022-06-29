@@ -15,7 +15,6 @@ class ReplyButton: BaseView {
     private var replyCount = 0
     private var totalUnreadReplyCount: Int = 0
     
-    var didTapAddExpression: CompletionOptional = nil
     var didTapViewReplies: CompletionOptional = nil
     var didSelectSuggestion: ((String) -> Void)? = nil
     
@@ -47,13 +46,12 @@ class ReplyButton: BaseView {
         self.imageView.setPoint(size: 10)
         
         self.addSubview(self.counter)
-        
-        self.layer.cornerRadius = Theme.innerCornerRadius
-        
+                
         self.addSubview(self.button)
         
         self.button.menu = self.addMenu()
         self.button.showsMenuAsPrimaryAction = true
+        
     }
     
     override func layoutSubviews() {
@@ -78,6 +76,11 @@ class ReplyButton: BaseView {
         self.counter.centerY = self.imageView.centerY
         
         self.button.expandToSuperviewSize()
+        
+        self.makeRound()
+        
+        self.clipsToBounds = false
+        self.showShadow(withOffset: 0, opacity: 0.5, radius: 5, color: ThemeColor.B0.color)
     }
     
     /// The currently running task that is loading.
@@ -154,11 +157,6 @@ class ReplyButton: BaseView {
                 elements.append(action)
             }
         }
-        
-        let action = UIAction(title: "Add Expression", image: ImageSymbol.faceSmiling.image) { [unowned self] _ in
-            self.didTapAddExpression?()
-        }
-        elements.append(action)
         
 
         return UIMenu(title: "Suggestions", children: elements)

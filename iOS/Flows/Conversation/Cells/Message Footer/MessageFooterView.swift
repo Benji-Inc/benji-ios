@@ -28,8 +28,6 @@ class MessageFooterView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.set(backgroundColor: .red)
-
         self.addSubview(self.statusLabel)
         self.statusLabel.textAlignment = .right
         
@@ -48,6 +46,7 @@ class MessageFooterView: BaseView {
     func configure(for message: Messageable) {
         self.message = message
         self.replyButton.configure(for: message)
+        self.replyButton.isVisible = !message.isReply
         self.replySummary.configure(for: message)
         self.expressionStackedView.configure(with: message)
         self.updateStatus(for: message)

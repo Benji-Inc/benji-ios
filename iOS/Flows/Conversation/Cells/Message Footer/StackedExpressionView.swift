@@ -24,11 +24,11 @@ class StackedExpressionView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.set(backgroundColor: .B1)
+        
         self.addExpressionView.didSelect { [unowned self] in
             self.didTapAdd?() 
         }
-        
-        self.clipsToBounds = false
     }
     
     func configure(with message: Messageable) {
@@ -77,13 +77,15 @@ class StackedExpressionView: BaseView {
         
         self.height = self.itemHeight
         
-        var xOffset: CGFloat = 0
+        let padding: CGFloat = Theme.ContentOffset.standard.value
+        
+        var xOffset: CGFloat = padding
         
         if self.addExpressionView.superview.exists {
-            self.addExpressionView.squaredSize = self.height
-            self.addExpressionView.pin(.left)
-            self.addExpressionView.pin(.top)
-            xOffset = self.addExpressionView.right
+            self.addExpressionView.squaredSize = self.height - padding
+            self.addExpressionView.pin(.left, offset: .custom(padding))
+            self.addExpressionView.pin(.top, offset: .custom(padding.half))
+            xOffset += self.addExpressionView.right
         }
         
         var count: Int = 0
@@ -91,23 +93,27 @@ class StackedExpressionView: BaseView {
             if let personView = view as? BorderedPersonView {
                 personView.shadowLayer.opacity = 0.0
                 personView.frame = CGRect(x: xOffset,
-                                          y: 0,
-                                          width: self.height,
-                                          height: self.height)
-                xOffset += view.width + Theme.ContentOffset.short.value
+                                          y: padding.half,
+                                          width: self.height - padding,
+                                          height: self.height - padding)
+                xOffset += view.width + padding
                 count += 1
             }
         }
-        
-        xOffset -= Theme.ContentOffset.short.value
-         
+                 
         if count == self.max {
             self.label.setSize(withWidth: 30)
-            xOffset += self.label.width + Theme.ContentOffset.short.value
+            xOffset += self.label.width + padding
             self.label.centerOnY()
             self.label.right = xOffset
+        } else if count == 0 {
+            xOffset += padding
         }
         
         self.width = xOffset
+        
+        self.makeRound()
+        self.clipsToBounds = false
+        self.showShadow(withOffset: 0, opacity: 0.5, radius: 5, color: ThemeColor.B0.color)
     }
 }
