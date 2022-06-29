@@ -51,7 +51,7 @@ class MessageContentView: BaseView {
     static var standardHeight: CGFloat {
         return MessageContentView.bubbleHeight - MessageContentView.textViewPadding
     }
-    static let padding = Theme.ContentOffset.long
+    static let padding = Theme.ContentOffset.standard
     static var textViewPadding: CGFloat { return MessageContentView.padding.value.doubled }
 
     static let bubbleTailLength: CGFloat = 12
@@ -75,7 +75,7 @@ class MessageContentView: BaseView {
     let countCircle = CircleCountView()
     let videoImageView = SymbolImageView(symbol: .videoFill)
     let linkView = LPLinkView()
-
+    
     /// A view to blur out the emotions collection view.
     let blurView = BlurView()
     lazy var emotionCollectionView = EmotionCircleCollectionView(cellDiameter: self.cellDiameter)
@@ -85,7 +85,7 @@ class MessageContentView: BaseView {
     
     /// Delegate
     weak var delegate: MessageContentDelegate?
-    
+        
     init(with cellDiameter: CGFloat = 80) {
         self.cellDiameter = cellDiameter
         super.init()
@@ -139,6 +139,7 @@ class MessageContentView: BaseView {
     }
     
     private func setupHandlers() {
+        
         self.authorView.didSelect { [unowned self] in
             guard let message = self.message, let expression = self.message?.authorExpression  else { return }
             self.delegate?.messageContent(self, didTapExpression: expression, forMessage: message)

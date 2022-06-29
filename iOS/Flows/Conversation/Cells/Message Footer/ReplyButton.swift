@@ -59,7 +59,7 @@ class ReplyButton: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.height = ImageCounterView.height
+        self.height = MessageFooterView.collapsedHeight
         
         self.imageView.squaredSize = 18
         self.imageView.centerOnY()

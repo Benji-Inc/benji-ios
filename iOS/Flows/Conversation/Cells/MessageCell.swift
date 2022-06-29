@@ -63,15 +63,21 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
         
-//        self.footerView.experessionSummary.expressionsView.didSelectExpression = { [unowned self] expression in
-//            guard let message = message else {
-//                return
-//            }
-//            self.content.delegate?.messageContent(self.content, didTapExpression: expression, forMessage: message)
-//        }
+        self.footerView.expressionStackedView.didSelectExpression = { [unowned self] expression in
+            guard let message = message else {
+                return
+            }
+            self.content.delegate?.messageContent(self.content, didTapExpression: expression, forMessage: message)
+        }
+        
         self.footerView.replyButton.didTapViewReplies = { [unowned self] in
             guard let message = self.message else { return }
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
+        }
+        
+        self.footerView.expressionStackedView.didTapAdd = { [unowned self] in
+            guard let message = self.message else { return }
+            self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)
         }
         
         self.footerView.replyButton.didTapAddExpression = { [unowned self] in
@@ -107,7 +113,7 @@ class MessageCell: UICollectionViewCell {
         
         self.content.expandToSuperviewWidth()
         self.content.pin(.top)
-        self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.standard.value)
+        self.content.expand(.bottom, to: self.footerView.top, offset: Theme.ContentOffset.long.value)
 
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.content.bounds).cgPath
     }

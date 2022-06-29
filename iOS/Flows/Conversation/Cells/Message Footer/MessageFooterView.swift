@@ -20,11 +20,15 @@ class MessageFooterView: BaseView {
     
     let replyButton = ReplyButton()
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
+    
+    let expressionStackedView = StackedExpressionView()
             
     private var message: Messageable?
 
     override func initializeSubviews() {
         super.initializeSubviews()
+        
+        self.set(backgroundColor: .red)
 
         self.addSubview(self.statusLabel)
         self.statusLabel.textAlignment = .right
@@ -33,6 +37,8 @@ class MessageFooterView: BaseView {
         self.replyButton.alpha = 0
         
         self.addSubview(self.replySummary)
+        
+        self.addSubview(self.expressionStackedView)
         
         self.replySummary.replyView.didSelect { [unowned self] in
             self.didTapViewReplies?()
@@ -43,6 +49,7 @@ class MessageFooterView: BaseView {
         self.message = message
         self.replyButton.configure(for: message)
         self.replySummary.configure(for: message)
+        self.expressionStackedView.configure(with: message)
         self.updateStatus(for: message)
     }
         
@@ -52,9 +59,12 @@ class MessageFooterView: BaseView {
         self.replyButton.pin(.top)
         self.replyButton.pin(.right)
         
-        self.replySummary.width = self.width - self.replyButton.width - Theme.ContentOffset.long.value
-        self.replySummary.height = self.height
-        self.replySummary.pin(.top)
+        self.expressionStackedView.pin(.top)
+        self.expressionStackedView.pin(.left)
+        
+        self.replySummary.width = self.width
+        self.replySummary.height = self.height - self.expressionStackedView.height
+        self.replySummary.match(.top, to: .bottom, of: self.expressionStackedView, offset: .short)
         self.replySummary.pin(.left)
         
         self.statusLabel.setSize(withWidth: self.width)
