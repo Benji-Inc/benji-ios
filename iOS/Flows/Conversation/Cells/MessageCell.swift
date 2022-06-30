@@ -125,7 +125,9 @@ class MessageCell: UICollectionViewCell {
 
         self.message = message
         
-        self.footerView.configure(for: message)
+        if self.shouldShowDetailBar {
+            self.footerView.configure(for: message)
+        }
         self.footerView.isVisible = self.shouldShowDetailBar
 
         self.subscribeToUpdatesIfNeeded(for: message)
@@ -190,6 +192,13 @@ class MessageCell: UICollectionViewCell {
             }).store(in: &self.messageSubscriptions)
 
         self.messageController?.repliesChangesPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                Task {
+                    await self.refreshFooter()
+                }.add(to: self.messageTasks)
+            }).store(in: &self.messageSubscriptions)
+        
+        self.messageController?.messageChangePublisher
             .mainSink(receiveValue: { [unowned self] _ in
                 Task {
                     await self.refreshFooter()

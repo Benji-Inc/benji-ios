@@ -7,14 +7,27 @@
 //
 
 import Foundation
+import ScrollCounter
 
 class StackedExpressionView: BaseView {
     
     var itemHeight: CGFloat = MessageFooterView.collapsedHeight
     
-    private let label = ThemeLabel(font: .small)
+    let counter = NumberScrollCounter(value: 0,
+                                      scrollDuration: Theme.animationDurationSlow,
+                                      decimalPlaces: 0,
+                                      prefix: "+",
+                                      suffix: nil,
+                                      seperator: "",
+                                      seperatorSpacing: 0,
+                                      font: FontType.small.font,
+                                      textColor: ThemeColor.white.color,
+                                      animateInitialValue: false,
+                                      gradientColor: nil,
+                                      gradientStop: nil)
+    
     private var expressions: [ExpressionInfo] = []
-    var max: Int = 3
+    var max: Int = 5
     
     let addExpressionView = AddExpressionView()
     
@@ -32,25 +45,25 @@ class StackedExpressionView: BaseView {
     }
     
     func configure(with message: Messageable) {
+        var expressions: [ExpressionInfo] = []
         
         self.removeAllSubviews()
         
-        if message.authorExpression.isNil {
+        if message.isFromCurrentUser, message.authorExpression.isNil {
             self.addExpressionView.configure(with: nil)
             self.addSubview(self.addExpressionView)
+            
+            expressions = message.expressions.filter { expression in
+                return expression.authorId != User.current()?.objectId
+            }
+        } else {
+            expressions = message.expressions
         }
-        
-        let nonAuthorExpressions = message.expressions.filter { expression in
-            return expression.authorId != User.current()?.objectId
-        }
-        
-        self.configure(with: nonAuthorExpressions)
+                
+        self.configure(with: expressions)
     }
     
     private func configure(with expressions: [ExpressionInfo]) {
-        guard self.expressions != expressions else { return }
-        
-        self.expressions = expressions
         
         for (index, info) in expressions.enumerated() {
             if index <= self.max - 1 {
@@ -65,8 +78,8 @@ class StackedExpressionView: BaseView {
         
         if expressions.count > self.max {
             let remainder = expressions.count - self.max
-            self.label.setText("+\(remainder)")
-            self.addSubview(self.label)
+            self.counter.setValue(Float(remainder))
+            self.addSubview(self.counter)
         }
         
         self.layoutNow()
@@ -90,8 +103,7 @@ class StackedExpressionView: BaseView {
         
         var count: Int = 0
         self.subviews.forEach { view in
-            if let personView = view as? BorderedPersonView {
-                personView.shadowLayer.opacity = 0.0
+            if let personView = view as? PersonGradientView {
                 personView.frame = CGRect(x: xOffset,
                                           y: padding.half,
                                           width: self.height - padding,
@@ -102,10 +114,10 @@ class StackedExpressionView: BaseView {
         }
                  
         if count == self.max {
-            self.label.setSize(withWidth: 30)
-            xOffset += self.label.width + padding
-            self.label.centerOnY()
-            self.label.right = xOffset
+            self.counter.sizeToFit()
+            self.counter.left = xOffset
+            xOffset += self.counter.width + padding
+            self.counter.centerOnY()
         } else if count == 0 {
             xOffset += padding
         }

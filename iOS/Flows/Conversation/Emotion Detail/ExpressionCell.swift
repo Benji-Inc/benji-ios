@@ -10,27 +10,26 @@ import Foundation
 
 class ExpressionCell: CollectionViewManagerCell, ManageableCell {
 
-    typealias ItemType = Expression
+    typealias ItemType = ExpressionInfo
     
-    var currentItem: Expression?
+    var currentItem: ExpressionInfo?
 
-    let personView = PersonGradientView()
+    let content = ExpressionContentView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.addSubview(self.personView)
+        self.contentView.addSubview(self.content)
     }
     
-    func configure(with item: Expression) {
-        self.personView.set(expression: item, author: nil)
+    func configure(with item: ExpressionInfo) {
+        self.content.configure(with: item)
         self.setNeedsLayout()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.personView.squaredSize = self.contentView.width
-        self.personView.centerOnXAndY()
+        self.content.expandToSuperviewSize()
     }
 }
