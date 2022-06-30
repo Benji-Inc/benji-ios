@@ -91,8 +91,8 @@ class ThemeButton: UIButton, Statusable {
             
             if backgroundColor != .clear {
                 self.setBackground(color: backgroundColor.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
-                self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
-                self.setBackground(color: backgroundColor.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
+                self.setBackground(color: backgroundColor.color.resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+                self.setBackground(color: backgroundColor.color.resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
             }
             
         case .custom(let color, let textColor, let text):
