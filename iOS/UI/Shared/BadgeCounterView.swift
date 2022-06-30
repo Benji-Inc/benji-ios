@@ -10,8 +10,8 @@ import Foundation
 import ScrollCounter
 
 class BadgeCounterView: BaseView {
-    
-    let counter = NumberScrollCounter(value: 0,
+        
+    var counter = NumberScrollCounter(value: 0,
                                       scrollDuration: Theme.animationDurationSlow,
                                       decimalPlaces: 0,
                                       prefix: "",
@@ -31,6 +31,7 @@ class BadgeCounterView: BaseView {
         self.set(backgroundColor: .D6)
         
         self.alpha = 0
+        self.showShadow(withOffset: 0, opacity: 1.0, color: .red)
     }
     
     override func layoutSubviews() {
@@ -46,16 +47,19 @@ class BadgeCounterView: BaseView {
         }
         
         self.makeRound()
-        self.showShadow(withOffset: 0, opacity: 1.0, color: .red)
         
         self.counter.centerOnXAndY()
+    }
+    
+    func set(value: Int) {
+        self.counter.setValue(Float(value))
+        self.animateChanges(shouldShow: value > 0)
     }
     
     func animateChanges(shouldShow: Bool) {
         Task {
             await UIView.awaitSpringAnimation(with: .fast, animations: { [unowned self] in
                 if shouldShow {
-                    self.transform = .identity
                     self.alpha = 1.0
                 } else {
                     self.alpha = 0.0

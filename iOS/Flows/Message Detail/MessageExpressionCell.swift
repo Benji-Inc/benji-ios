@@ -32,3 +32,57 @@ class MessageExpressionCell: CollectionViewManagerCell, ManageableCell {
         self.content.expandToSuperviewSize()
     }
 }
+
+class ExpressionContentView: BaseView {
+    
+    let personView = PersonGradientView()
+    let label = ThemeLabel(font: .xtraSmall)
+    
+    private(set) var personId: String?
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.personView)
+        self.addSubview(self.label)
+                
+        self.label.textAlignment = .center
+        self.label.alpha = 0.25
+        
+        self.clipsToBounds = false
+    }
+    
+    /// A reference to a task for configuring the cell.
+    private var configurationTask: Task<Void, Never>?
+
+    func configure(with item: ExpressionInfo) {
+        self.configurationTask?.cancel()
+        
+        self.personView.isVisible = true
+
+        self.configurationTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            guard let expression = try? await Expression.getObject(with: item.expressionId) else { return }
+
+            self.personView.set(expression: expression, author: nil)
+            let dateString = expression.createdAt?.getTimeAgoString()
+            self.label.setText(dateString)
+            
+            self.setNeedsLayout()
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.personView.squaredSize = self.width
+        self.personView.centerOnX()
+        self.personView.pin(.top)
+        
+        self.label.setSize(withWidth: self.width * 1.5)
+        self.label.centerOnX()
+        self.label.match(.top, to: .bottom, of: self.personView, offset: .short)
+    }
+}
+

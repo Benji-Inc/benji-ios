@@ -49,7 +49,7 @@ class PersonGradientView: DisplayableImageView {
     private var loadTask: Task<Void, Never>?
     
     func set(info: ExpressionInfo?,
-             authorId: String,
+             authorId: String?,
              defaultColors: [ThemeColor] = [.B0, .B6]) {
         
         self.loadTask?.cancel()
@@ -65,7 +65,7 @@ class PersonGradientView: DisplayableImageView {
             guard !Task.isCancelled else { return }
 
             var author: PersonType?
-            if expression.isNil {
+            if expression.isNil, let authorId = authorId {
                 author = await PeopleStore.shared.getPerson(withPersonId: authorId)
             }
 

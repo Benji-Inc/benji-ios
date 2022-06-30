@@ -9,82 +9,63 @@
 import Foundation
 import Combine
 
-private typealias MessageDetailContent = BaseView & MessageConfigureable
-
 class MessageFooterView: BaseView {
     
-    static let height: CGFloat = 86
+    static let height: CGFloat = 94
     static let collapsedHeight: CGFloat = 30 
 
     let replySummary = MessageSummaryView()
-    let experessionSummary = ExpressionSummaryView()
     
     var didTapViewReplies: CompletionOptional = nil
     
-    let detailView  = MessageFooterDetailContainerView()
+    let replyButton = ReplyButton()
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
     
-    let selectedDetailContainerView = BaseView()
-        
+    let expressionStackedView = StackedExpressionView()
+            
     private var message: Messageable?
 
     override func initializeSubviews() {
         super.initializeSubviews()
-
+                
         self.addSubview(self.statusLabel)
         self.statusLabel.textAlignment = .right
         
-        self.addSubview(self.detailView)
-        self.detailView.alpha = 0
+        self.addSubview(self.replyButton)
+        self.replyButton.alpha = 0
         
-        self.addSubview(self.selectedDetailContainerView)
+        self.addSubview(self.replySummary)
         
-        self.detailView.$state.mainSink { [unowned self] state in
-            switch state {
-            case .replies:
-                self.handleUpdated(content: self.replySummary)
-            case .expressions:
-                self.handleUpdated(content: self.experessionSummary)
-            }
-        }.store(in: &self.cancellables)
+        self.addSubview(self.expressionStackedView)
         
         self.replySummary.replyView.didSelect { [unowned self] in
-            self.didTapViewReplies?()
-        }
-        
-        self.detailView.didTapViewReplies = { [unowned self] in
             self.didTapViewReplies?()
         }
     }
     
     func configure(for message: Messageable) {
         self.message = message
-        self.detailView.configure(for: message)
+        
+        self.replyButton.isVisible = !message.isReply
+        self.replySummary.isVisible = message.totalReplyCount > 0
+        self.replySummary.configure(for: message)
+        self.expressionStackedView.configure(with: message)
         self.updateStatus(for: message)
-        // Start with replies
-        if message.parentMessageId.exists {
-            self.detailView.expressionsView.selectionState = .selected
-        } else {
-            self.detailView.repliesView.selectionState = .selected
-        }
     }
         
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.detailView.expandToSuperviewWidth()
-        self.detailView.pin(.top)
-        self.detailView.pin(.left)
+        self.replyButton.pin(.top)
+        self.replyButton.pin(.right)
         
-        self.selectedDetailContainerView.expandToSuperviewWidth()
-        self.selectedDetailContainerView.height = self.height - self.detailView.height - Theme.ContentOffset.standard.value
-        self.selectedDetailContainerView.match(.top, to: .bottom, of: self.detailView, offset: .standard)
+        self.expressionStackedView.pin(.top)
+        self.expressionStackedView.pin(.left)
         
-        if let content = self.selectedDetailContainerView.subviews.first(where: { view in
-            return view is MessageConfigureable
-        }) {
-            content.expandToSuperviewSize()
-        }
+        self.replySummary.width = self.width
+        self.replySummary.height = self.height - self.replyButton.height - Theme.ContentOffset.long.value
+        self.replySummary.match(.top, to: .bottom, of: self.replyButton, offset: .long)
+        self.replySummary.pin(.left)
         
         self.statusLabel.setSize(withWidth: self.width)
         self.statusLabel.pin(.top, offset: .short)
@@ -92,12 +73,14 @@ class MessageFooterView: BaseView {
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        // Only handle touches on the reply and read views.
-        let replyPoint = self.convert(point, to: self.selectedDetailContainerView)
-        let readPoint = self.convert(point, to: self.detailView)
+        // Only handle touches on the view that are present.
+        let replyPoint = self.convert(point, to: self.replySummary)
+        let replyButtonPoint = self.convert(point, to: self.replyButton)
+        let expressionPoint = self.convert(point, to: self.expressionStackedView)
 
-        return self.selectedDetailContainerView.point(inside: replyPoint, with: event)
-        || self.detailView.point(inside: readPoint, with: event)
+        return self.replySummary.point(inside: replyPoint, with: event)
+        || self.replyButton.point(inside: replyButtonPoint, with: event)
+        || self.expressionStackedView.point(inside: expressionPoint, with: event)
     }
 
     private func getString(for deliveryStatus: DeliveryStatus) -> String {
@@ -118,7 +101,7 @@ class MessageFooterView: BaseView {
             case .sending, .error:
                 self.statusLabel.text = self.getString(for: message.deliveryStatus)
                 self.statusLabel.alpha = 1
-                self.detailView.alpha = 0
+                self.replyButton.alpha = 0
                 if message.deliveryStatus == .sending {
                     self.statusLabel.textColor =  ThemeColor.whiteWithAlpha.color
                     self.statusLabel.font = FontType.small.font
@@ -128,46 +111,9 @@ class MessageFooterView: BaseView {
                 }
             case .sent, .reading, .read:
                 self.statusLabel.alpha = 0
-                self.detailView.alpha = 1.0
+                self.replyButton.alpha = 1.0
             }
             self.layoutNow()
-        }
-    }
-    
-    /// The currently running task that is loading.
-    private var loadTask: Task<Void, Never>?
-    
-    private func handleUpdated(content: MessageDetailContent) {
-        
-        self.loadTask?.cancel()
-                
-        self.loadTask = Task { [weak self] in
-            guard let `self` = self, let msg = self.message else { return }
-            
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.selectedDetailContainerView.subviews.forEach { view in
-                    view.alpha = 0
-                }
-            })
-            
-            self.selectedDetailContainerView.removeAllSubviews()
-            
-            content.alpha = 0.0
-            self.selectedDetailContainerView.addSubview(content)
-            content.configure(for: msg)
-            content.expandToSuperviewSize()
-            self.layoutNow()
-            
-            guard !Task.isCancelled else {
-                content.alpha = 1.0
-                return
-            }
-            
-            await UIView.awaitAnimation(with: .standard, animations: {
-                self.selectedDetailContainerView.subviews.forEach { view in
-                    view.alpha = 1
-                }
-            })
         }
     }
 }

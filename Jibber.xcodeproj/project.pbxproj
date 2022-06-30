@@ -712,9 +712,11 @@
 		D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
-		D692E882286A2D270001F99B /* ExpressionsCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E881286A2D270001F99B /* ExpressionsCounterView.swift */; };
 		D692E884286A44150001F99B /* MessageExpressionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E883286A44150001F99B /* MessageExpressionCell.swift */; };
 		D692E886286B71BF0001F99B /* ExpressionViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */; };
+		D692E888286BB8030001F99B /* ReplyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E887286BB8030001F99B /* ReplyButton.swift */; };
+		D692E88C286CAA9F0001F99B /* StackedExpressionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E88B286CAA9F0001F99B /* StackedExpressionView.swift */; };
+		D692E88E286E04740001F99B /* RepliesBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D692E88D286E04740001F99B /* RepliesBadgeView.swift */; };
 		D695374228622F8700CFAF02 /* HomeCoordinator+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */; };
 		D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6953743286234B600CFAF02 /* NoticeBadgeView.swift */; };
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
@@ -826,7 +828,6 @@
 		D6C3893A27287491004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893927287491004D29D5 /* StreamChat */; };
 		D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893B2728749C004D29D5 /* StreamChat */; };
 		D6C4BD4027C95E8400579014 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C4BD3F27C95E8400579014 /* ConversationCell.swift */; };
-		D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */; };
 		D6C64541280F4CEB00C10267 /* NoticeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */; };
 		D6C7EC262805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
 		D6C7EC272805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
@@ -899,11 +900,6 @@
 		D6DD0C392822F3D5004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C382822F3D5004999F2 /* Sentry */; };
 		D6DD0C3B2822F3DE004999F2 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = D6DD0C3A2822F3DE004999F2 /* Sentry */; };
 		D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */; };
-		D6DE47AF28650A780005FD28 /* MessageFooterDetailContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */; };
-		D6DE47B128650F220005FD28 /* ImageCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B028650F220005FD28 /* ImageCounterView.swift */; };
-		D6DE47B328663BD80005FD28 /* ExpressionSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */; };
-		D6DE47B528663BE60005FD28 /* ReadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */; };
-		D6DE47B728664F780005FD28 /* RepliesCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B628664F780005FD28 /* RepliesCounterView.swift */; };
 		D6DE47BA28666F3F0005FD28 /* MessageReadContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */; };
 		D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */; };
 		D6DEC40227A22F540072D9D0 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DEC40127A22F540072D9D0 /* MemberCell.swift */; };
@@ -1342,9 +1338,11 @@
 		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		D692E881286A2D270001F99B /* ExpressionsCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionsCounterView.swift; sourceTree = "<group>"; };
 		D692E883286A44150001F99B /* MessageExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageExpressionCell.swift; sourceTree = "<group>"; };
 		D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExpressionViewController+Animation.swift"; sourceTree = "<group>"; };
+		D692E887286BB8030001F99B /* ReplyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplyButton.swift; sourceTree = "<group>"; };
+		D692E88B286CAA9F0001F99B /* StackedExpressionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedExpressionView.swift; sourceTree = "<group>"; };
+		D692E88D286E04740001F99B /* RepliesBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesBadgeView.swift; sourceTree = "<group>"; };
 		D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Wallet.swift"; sourceTree = "<group>"; };
 		D6953743286234B600CFAF02 /* NoticeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBadgeView.swift; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
@@ -1415,7 +1413,6 @@
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
 		D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionViewController.swift; sourceTree = "<group>"; };
 		D6C4BD3F27C95E8400579014 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
-		D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadIndicatorView.swift; sourceTree = "<group>"; };
 		D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeFooterView.swift; sourceTree = "<group>"; };
 		D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistCoordinator.swift; sourceTree = "<group>"; };
 		D6C7EC282805E64000A35808 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
@@ -1467,11 +1464,6 @@
 		D6DBC0D9284ECA05007312FC /* ExpressionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionCell.swift; sourceTree = "<group>"; };
 		D6DBC0E52851295E007312FC /* Transitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transitions; sourceTree = "<group>"; };
 		D6DE47AC286508CF0005FD28 /* BadgeCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCounterView.swift; sourceTree = "<group>"; };
-		D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFooterDetailContainerView.swift; sourceTree = "<group>"; };
-		D6DE47B028650F220005FD28 /* ImageCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCounterView.swift; sourceTree = "<group>"; };
-		D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionSummaryView.swift; sourceTree = "<group>"; };
-		D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadSummaryView.swift; sourceTree = "<group>"; };
-		D6DE47B628664F780005FD28 /* RepliesCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesCounterView.swift; sourceTree = "<group>"; };
 		D6DE47B928666F3F0005FD28 /* MessageReadContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReadContentView.swift; sourceTree = "<group>"; };
 		D6DEC3FF27A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCoordinator+Presentation.swift"; sourceTree = "<group>"; };
 		D6DEC40127A22F540072D9D0 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
@@ -2801,14 +2793,12 @@
 		D6DE47B828664F840005FD28 /* Message Footer */ = {
 			isa = PBXGroup;
 			children = (
-				D6DE47B228663BD80005FD28 /* ExpressionSummaryView.swift */,
-				D6DE47AE28650A780005FD28 /* MessageFooterDetailContainerView.swift */,
 				D60B886127F4C2EC00B3E1C2 /* MessageFooterView.swift */,
 				D656BF0C28183C0900723068 /* MessagePreview.swift */,
 				D60B886627F4F7C200B3E1C2 /* MessageSummaryView.swift */,
-				D6DE47B428663BE60005FD28 /* ReadSummaryView.swift */,
-				D6DE47B628664F780005FD28 /* RepliesCounterView.swift */,
-				D692E881286A2D270001F99B /* ExpressionsCounterView.swift */,
+				D692E887286BB8030001F99B /* ReplyButton.swift */,
+				D692E88B286CAA9F0001F99B /* StackedExpressionView.swift */,
+				D692E88D286E04740001F99B /* RepliesBadgeView.swift */,
 			);
 			path = "Message Footer";
 			sourceTree = "<group>";
@@ -2834,8 +2824,6 @@
 				D615534D2745C1C900B08459 /* MessageContentView.swift */,
 				D656BF0E281845B800723068 /* MessageDateLabel.swift */,
 				D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */,
-				D6C6453E280F236A00C10267 /* ReadIndicatorView.swift */,
-				D6DE47B028650F220005FD28 /* ImageCounterView.swift */,
 			);
 			path = MessageContentView;
 			sourceTree = "<group>";
@@ -3600,7 +3588,6 @@
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				8056B324281B32A600358880 /* ExpressionVideoCaptureViewController.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */,
-				D6DE47B328663BD80005FD28 /* ExpressionSummaryView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D6B2B6492839570B007D507B /* ImageSymbol.swift in Sources */,
 				D6D96EF427C5B11900BDCD01 /* ContextCuesViewController.swift in Sources */,
@@ -3658,7 +3645,6 @@
 				8057B59B27E2A10600B23D0D /* ConversationDetailCollectionViewLayout.swift in Sources */,
 				8057B59D27E2A10600B23D0D /* ConversationDetailViewController.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
-				D6DE47B128650F220005FD28 /* ImageCounterView.swift in Sources */,
 				80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */,
 				D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */,
@@ -3789,10 +3775,8 @@
 				D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				D637651A27E936CB00CCDA7F /* SectionBackgroundView.swift in Sources */,
 				80E228DD27C80B1C00AF37AC /* MessageDetailViewController.swift in Sources */,
-				D6C6453F280F236A00C10267 /* ReadIndicatorView.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* JibberChatClient.swift in Sources */,
 				D6DE47AD286508CF0005FD28 /* BadgeCounterView.swift in Sources */,
-				D6DE47B728664F780005FD28 /* RepliesCounterView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
@@ -3820,6 +3804,7 @@
 				D6D4ECD528613E0D002C71CE /* ConversationSelectionCell.swift in Sources */,
 				802EDDAB27ECD496005ECA9C /* String+DataTypes.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
+				D692E88E286E04740001F99B /* RepliesBadgeView.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6079705279F574E000D0715 /* PersonCell.swift in Sources */,
 				D678EC2426F530850071DB0D /* Circle.swift in Sources */,
@@ -3836,7 +3821,6 @@
 				D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */,
 				D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
-				D6DE47B528663BE60005FD28 /* ReadSummaryView.swift in Sources */,
 				D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,
 				D68B723327D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
@@ -3875,10 +3859,10 @@
 				D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */,
 				D6AA621728528F0D00FA4D02 /* MembersCollectionView.swift in Sources */,
 				D646D36827E5053A0077D20B /* AttachmentsCollectionViewDataSource.swift in Sources */,
-				D692E882286A2D270001F99B /* ExpressionsCounterView.swift in Sources */,
 				D6CC1489276BFA89005F617F /* Shape+Extensions.swift in Sources */,
 				D6AA62092852641800FA4D02 /* ConversationsDataSource.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
+				D692E88C286CAA9F0001F99B /* StackedExpressionView.swift in Sources */,
 				D646D36027E504F10077D20B /* AttachmentsCoordinator.swift in Sources */,
 				D6129FB627ADC9CF0058811C /* WalletCollectionViewLayout.swift in Sources */,
 				8056B326281B448A00358880 /* Expression.swift in Sources */,
@@ -3886,6 +3870,7 @@
 				D61EC0E221D30E6000204BEE /* ThemeLabel.swift in Sources */,
 				D6D4ECD128613DF1002C71CE /* ConversationSelectionCollectionView.swift in Sources */,
 				D646D36227E505030077D20B /* AttachmentsViewController.swift in Sources */,
+				D692E888286BB8030001F99B /* ReplyButton.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
 				D6AA62012852616D00FA4D02 /* HomeCoordinator+Notices.swift in Sources */,
@@ -3902,7 +3887,6 @@
 				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
-				D6DE47AF28650A780005FD28 /* MessageFooterDetailContainerView.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,

@@ -11,10 +11,11 @@ import Combine
 import Localization
 import UIKit
 
-class MessageSummaryView: BaseView, MessageConfigureable {
+class MessageSummaryView: BaseView {
     
     private var controller: MessageController?
     let replyView = MessagePreview()
+    let badgeView = RepliesBadgeView()
         
     private var replyCount = 0
     private var totalUnreadReplyCount: Int = 0
@@ -23,7 +24,9 @@ class MessageSummaryView: BaseView, MessageConfigureable {
         super.initializeSubviews()
         
         self.addSubview(self.replyView)
-        self.replyView.isVisible = false
+        self.addSubview(self.badgeView)
+        
+        self.alpha = 0
     }
     
     /// The currently running task that is loading.
@@ -38,9 +41,7 @@ class MessageSummaryView: BaseView, MessageConfigureable {
             self.totalUnreadReplyCount == controller.message?.totalUnreadReplyCount {
             return
         }
-        
-        self.replyView.isVisible = false
-        
+                
         self.loadTask?.cancel()
                 
         self.loadTask = Task { [weak self] in
@@ -60,13 +61,19 @@ class MessageSummaryView: BaseView, MessageConfigureable {
             self.totalUnreadReplyCount = message.totalUnreadReplyCount
             
             if let reply = self.controller?.message?.recentReplies.first {
-                self.replyView.isVisible = true
                 self.replyView.configure(with: reply)
             } else {
                 self.replyView.isVisible = false
             }
+            
+            self.badgeView.configure(with: message)
                         
             await UIView.awaitAnimation(with: .fast, animations: {
+                if let _ = self.controller?.message?.recentReplies.first {
+                    self.alpha = 1.0
+                } else {
+                    self.alpha = 0.0
+                }
                 self.layoutNow()
             })
         }
@@ -76,5 +83,8 @@ class MessageSummaryView: BaseView, MessageConfigureable {
         super.layoutSubviews()
         
         self.replyView.expandToSuperviewSize()
+        
+        self.badgeView.pin(.bottom, offset: .negative(.custom(4)))
+        self.badgeView.pin(.right, offset: .negative(.custom(4)))
     }
 }

@@ -11,6 +11,7 @@ import UIKit
 
 class AddExpressionView: BaseView {
         
+    let addImageView = SymbolImageView(symbol: .plus)
     let imageView = SymbolImageView(symbol: .faceSmiling)
     let personGradientView = PersonGradientView()
         
@@ -21,8 +22,12 @@ class AddExpressionView: BaseView {
         
         self.addSubview(self.imageView)
         self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
+        
+        self.addSubview(self.addImageView)
+        self.addImageView.tintColor = ThemeColor.whiteWithAlpha.color
 
         self.addSubview(self.personGradientView)
+        self.personGradientView.isVisible = false
         
         self.clipsToBounds = false
     }
@@ -32,12 +37,32 @@ class AddExpressionView: BaseView {
 
         self.personGradientView.expandToSuperviewSize()
 
-        self.imageView.squaredSize = self.width * 0.8
+        self.imageView.squaredSize = self.height
         self.imageView.centerOnXAndY()
+        
+        self.addImageView.squaredSize = self.imageView.height * 0.4
+        self.addImageView.pin(.top, offset: .negative(.custom(self.addImageView.height * 0.2)))
+        self.addImageView.match(.left, to: .right, of: self.imageView, offset: .negative(.custom(self.addImageView.height * 0.2)))
     }
 
-    func configure(with expression: Expression?) {
+    func configure(with info: ExpressionInfo?) {
+        
+        self.personGradientView.isVisible = info.exists
+        
+        self.addImageView.isVisible = info.isNil
+        self.imageView.isVisible = info.isNil
+        
+        guard let info = info else { return }
+
+        self.personGradientView.set(info: info, authorId: nil)
+    }
+    
+    func configure(withExpression expression: Expression?) {
+        
         self.personGradientView.isVisible = expression.exists
+        
+        self.addImageView.isVisible = expression.isNil
+        self.imageView.isVisible = expression.isNil
         
         guard let expression = expression else { return }
 

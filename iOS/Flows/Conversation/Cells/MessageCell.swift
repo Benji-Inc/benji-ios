@@ -63,19 +63,24 @@ class MessageCell: UICollectionViewCell {
         
         self.contentView.addSubview(self.footerView)
         
-        self.footerView.experessionSummary.expressionsView.didSelectExpression = { [unowned self] expression in
+        self.footerView.expressionStackedView.didSelectExpression = { [unowned self] expression in
             guard let message = message else {
                 return
             }
             self.content.delegate?.messageContent(self.content, didTapExpression: expression, forMessage: message)
         }
         
-        self.footerView.detailView.didTapAddExpression = { [unowned self] in
+        self.footerView.replyButton.didTapViewReplies = { [unowned self] in
+            guard let message = self.message else { return }
+            self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
+        }
+        
+        self.footerView.expressionStackedView.didTapAdd = { [unowned self] in
             guard let message = self.message else { return }
             self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)
         }
         
-        self.footerView.detailView.didSelectSuggestion = { [unowned self] text in
+        self.footerView.replyButton.didSelectSuggestion = { [unowned self] text in
             self.addReply(with: text)
         }
         
@@ -103,20 +108,9 @@ class MessageCell: UICollectionViewCell {
         
         self.content.expandToSuperviewWidth()
         self.content.pin(.top)
-        self.content.expand(.bottom, to: self.footerView.top, offset: -Theme.ContentOffset.standard.value)
+        self.content.expand(.bottom, to: self.footerView.top, offset: Theme.ContentOffset.long.value)
 
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.content.bounds).cgPath
-    }
-
-    // MARK: - Touch Handling
-
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        // Only respond to touches that are in the visible content areas.
-        let contentPoint = self.convert(point, to: self.content)
-        let footerPoint = self.convert(point, to: self.footerView)
-
-        return self.content.point(inside: contentPoint, with: event)
-        || self.footerView.point(inside: footerPoint, with: event)
     }
 
     // MARK: Configuration

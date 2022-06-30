@@ -175,7 +175,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
             }.store(in: &self.cancellables)
         
         self.$currentExpression.mainSink { [unowned self] expression in
-            self.swipeInputView.expressionView.configure(with: expression)
+            self.swipeInputView.expressionView.configure(withExpression: expression)
         }.store(in: &self.cancellables)
         
         self.$currentMessageKind

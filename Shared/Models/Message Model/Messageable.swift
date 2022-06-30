@@ -31,6 +31,7 @@ protocol Messageable {
     var canBeConsumed: Bool { get }
     var isConsumedByMe: Bool { get }
     var isConsumed: Bool { get }
+    var isReply: Bool { get }
     var hasBeenConsumedBy: [PersonType] { get }
     var nonMeConsumers: [PersonType] { get }
     var color: ThemeColor { get }
@@ -127,4 +128,7 @@ extension Messageable {
         return count
     }
 
+    var isReply: Bool {
+        return self.parentMessageId.exists
+    }
 }
