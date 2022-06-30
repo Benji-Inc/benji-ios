@@ -11,7 +11,7 @@ import Combine
 
 class MessageFooterView: BaseView {
     
-    static let height: CGFloat = 86
+    static let height: CGFloat = 94
     static let collapsedHeight: CGFloat = 30 
 
     let replySummary = MessageSummaryView()
@@ -27,7 +27,7 @@ class MessageFooterView: BaseView {
 
     override func initializeSubviews() {
         super.initializeSubviews()
-        
+                
         self.addSubview(self.statusLabel)
         self.statusLabel.textAlignment = .right
         
@@ -45,8 +45,9 @@ class MessageFooterView: BaseView {
     
     func configure(for message: Messageable) {
         self.message = message
-        self.replyButton.configure(for: message)
+        
         self.replyButton.isVisible = !message.isReply
+        self.replySummary.isVisible = message.totalReplyCount > 0
         self.replySummary.configure(for: message)
         self.expressionStackedView.configure(with: message)
         self.updateStatus(for: message)
@@ -62,8 +63,8 @@ class MessageFooterView: BaseView {
         self.expressionStackedView.pin(.left)
         
         self.replySummary.width = self.width
-        self.replySummary.height = self.height - self.expressionStackedView.height
-        self.replySummary.match(.top, to: .bottom, of: self.expressionStackedView, offset: .short)
+        self.replySummary.height = self.height - self.expressionStackedView.height - Theme.ContentOffset.long.value
+        self.replySummary.match(.top, to: .bottom, of: self.expressionStackedView, offset: .long)
         self.replySummary.pin(.left)
         
         self.statusLabel.setSize(withWidth: self.width)
@@ -72,12 +73,14 @@ class MessageFooterView: BaseView {
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        // Only handle touches on the reply and read views.
+        // Only handle touches on the view that are present.
         let replyPoint = self.convert(point, to: self.replySummary)
-        let readPoint = self.convert(point, to: self.replyButton)
+        let replyButtonPoint = self.convert(point, to: self.replyButton)
+        let expressionPoint = self.convert(point, to: self.expressionStackedView)
 
         return self.replySummary.point(inside: replyPoint, with: event)
-        || self.replyButton.point(inside: readPoint, with: event)
+        || self.replyButton.point(inside: replyButtonPoint, with: event)
+        || self.expressionStackedView.point(inside: expressionPoint, with: event)
     }
 
     private func getString(for deliveryStatus: DeliveryStatus) -> String {

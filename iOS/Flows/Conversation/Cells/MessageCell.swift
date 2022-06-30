@@ -113,17 +113,6 @@ class MessageCell: UICollectionViewCell {
         self.shadowLayer.shadowPath = UIBezierPath(rect: self.content.bounds).cgPath
     }
 
-    // MARK: - Touch Handling
-
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        // Only respond to touches that are in the visible content areas.
-        let contentPoint = self.convert(point, to: self.content)
-        let footerPoint = self.convert(point, to: self.footerView)
-
-        return self.content.point(inside: contentPoint, with: event)
-        || self.footerView.point(inside: footerPoint, with: event)
-    }
-
     // MARK: Configuration
 
     func configure(with message: Messageable) {

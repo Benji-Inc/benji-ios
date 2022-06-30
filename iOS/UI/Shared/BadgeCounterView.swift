@@ -31,6 +31,7 @@ class BadgeCounterView: BaseView {
         self.set(backgroundColor: .D6)
         
         self.alpha = 0
+        self.showShadow(withOffset: 0, opacity: 1.0, color: .red)
     }
     
     override func layoutSubviews() {
@@ -46,9 +47,13 @@ class BadgeCounterView: BaseView {
         }
         
         self.makeRound()
-        self.showShadow(withOffset: 0, opacity: 1.0, color: .red)
         
         self.counter.centerOnXAndY()
+    }
+    
+    func set(value: Int) {
+        self.counter.setValue(Float(value))
+        self.animateChanges(shouldShow: value > 0)
     }
     
     func animateChanges(shouldShow: Bool) {
