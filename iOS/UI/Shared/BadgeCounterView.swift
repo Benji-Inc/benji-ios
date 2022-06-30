@@ -10,8 +10,8 @@ import Foundation
 import ScrollCounter
 
 class BadgeCounterView: BaseView {
-    
-    let counter = NumberScrollCounter(value: 0,
+        
+    var counter = NumberScrollCounter(value: 0,
                                       scrollDuration: Theme.animationDurationSlow,
                                       decimalPlaces: 0,
                                       prefix: "",
@@ -60,7 +60,6 @@ class BadgeCounterView: BaseView {
         Task {
             await UIView.awaitSpringAnimation(with: .fast, animations: { [unowned self] in
                 if shouldShow {
-                    self.transform = .identity
                     self.alpha = 1.0
                 } else {
                     self.alpha = 0.0

@@ -63,8 +63,8 @@ class MessageFooterView: BaseView {
         self.expressionStackedView.pin(.left)
         
         self.replySummary.width = self.width
-        self.replySummary.height = self.height - self.expressionStackedView.height - Theme.ContentOffset.long.value
-        self.replySummary.match(.top, to: .bottom, of: self.expressionStackedView, offset: .long)
+        self.replySummary.height = self.height - self.replyButton.height - Theme.ContentOffset.long.value
+        self.replySummary.match(.top, to: .bottom, of: self.replyButton, offset: .long)
         self.replySummary.pin(.left)
         
         self.statusLabel.setSize(withWidth: self.width)

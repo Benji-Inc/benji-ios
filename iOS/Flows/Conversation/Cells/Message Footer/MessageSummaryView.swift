@@ -24,9 +24,9 @@ class MessageSummaryView: BaseView {
         super.initializeSubviews()
         
         self.addSubview(self.replyView)
-        self.replyView.isVisible = false
-        
         self.addSubview(self.badgeView)
+        
+        self.alpha = 0
     }
     
     /// The currently running task that is loading.
@@ -41,9 +41,7 @@ class MessageSummaryView: BaseView {
             self.totalUnreadReplyCount == controller.message?.totalUnreadReplyCount {
             return
         }
-        
-        self.replyView.isVisible = false
-        
+                
         self.loadTask?.cancel()
                 
         self.loadTask = Task { [weak self] in
@@ -63,7 +61,6 @@ class MessageSummaryView: BaseView {
             self.totalUnreadReplyCount = message.totalUnreadReplyCount
             
             if let reply = self.controller?.message?.recentReplies.first {
-                self.replyView.isVisible = true
                 self.replyView.configure(with: reply)
             } else {
                 self.replyView.isVisible = false
@@ -72,6 +69,11 @@ class MessageSummaryView: BaseView {
             self.badgeView.configure(with: message)
                         
             await UIView.awaitAnimation(with: .fast, animations: {
+                if let _ = self.controller?.message?.recentReplies.first {
+                    self.alpha = 1.0
+                } else {
+                    self.alpha = 0.0
+                }
                 self.layoutNow()
             })
         }

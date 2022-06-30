@@ -38,6 +38,9 @@ class MessagePreview: BaseView {
         self.dateLabel.alpha = 0.25
         self.imageView.alpha = 0.25
         
+        self.showShadow(withOffset: 0, opacity: 0.3, radius: 5, color: ThemeColor.D6.color)
+        self.layer.shadowOpacity = 0.0
+        
         self.blurView.roundCorners()
     }
 
@@ -82,6 +85,8 @@ class MessagePreview: BaseView {
         } else {
             self.label.setText("View reply")
         }
+        
+        self.layer.shadowOpacity = message.canBeConsumed ? 0.3 : 0.0
         
         self.imageView.set(symbol: message.deliveryType.symbol)
         
