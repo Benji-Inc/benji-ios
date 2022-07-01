@@ -16,7 +16,7 @@ class NoticesViewController: DiffableCollectionViewController<NoticesDataSource.
         return "Notices"
     }
     
-    let noticesFooterView = NoticeFooterView()
+    let noticesFooterView = PagingIndicatorView(with: .onNoticeIndexChanged)
     
     init() {
         super.init(with: NoticesCollectionView())

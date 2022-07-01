@@ -9,9 +9,25 @@
 import Foundation
 import Combine
 
-class NoticeFooterView: BaseView {
+extension Notification.Name {
+    static let onNoticeIndexChanged = Notification.Name("onNoticeIndexChanged")
+    static let onExpressionIndexChanged = Notification.Name("onExpressionIndexChanged")
+}
+
+class PagingIndicatorView: BaseView {
     
     let pageIndicator = UIPageControl()
+    
+    private let name: Notification.Name
+    
+    init(with name: Notification.Name) {
+        self.name = name
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -21,8 +37,8 @@ class NoticeFooterView: BaseView {
         self.pageIndicator.currentPageIndicatorTintColor = ThemeColor.white.color
         self.pageIndicator.pageIndicatorTintColor = ThemeColor.B2.color
         self.pageIndicator.hidesForSinglePage = true
-        
-        NotificationCenter.default.publisher(for: .onNoticeIndexChanged)
+                
+        NotificationCenter.default.publisher(for: self.name)
             .removeDuplicates(by: { lhs, rhs in
                 if let lIndex = lhs.object as? Int, let rIndex = rhs.object as? Int {
                     return lIndex == rIndex

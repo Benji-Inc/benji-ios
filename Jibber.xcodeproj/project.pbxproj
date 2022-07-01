@@ -828,7 +828,7 @@
 		D6C3893A27287491004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893927287491004D29D5 /* StreamChat */; };
 		D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893B2728749C004D29D5 /* StreamChat */; };
 		D6C4BD4027C95E8400579014 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C4BD3F27C95E8400579014 /* ConversationCell.swift */; };
-		D6C64541280F4CEB00C10267 /* NoticeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */; };
+		D6C64541280F4CEB00C10267 /* PagingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C64540280F4CEB00C10267 /* PagingIndicatorView.swift */; };
 		D6C7EC262805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
 		D6C7EC272805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
 		D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
@@ -1413,7 +1413,7 @@
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
 		D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionViewController.swift; sourceTree = "<group>"; };
 		D6C4BD3F27C95E8400579014 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
-		D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeFooterView.swift; sourceTree = "<group>"; };
+		D6C64540280F4CEB00C10267 /* PagingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingIndicatorView.swift; sourceTree = "<group>"; };
 		D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistCoordinator.swift; sourceTree = "<group>"; };
 		D6C7EC282805E64000A35808 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		D6C8F1672826D7AC00226583 /* VideoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoAttachment.swift; sourceTree = "<group>"; };
@@ -2553,7 +2553,7 @@
 			children = (
 				D6B2B655283D39EA007D507B /* Notice Cell Content */,
 				D60B887227F7732100B3E1C2 /* NoticeCell.swift */,
-				D6C64540280F4CEB00C10267 /* NoticeFooterView.swift */,
+				D6C64540280F4CEB00C10267 /* PagingIndicatorView.swift */,
 				D6AA6210285270E200FA4D02 /* NoticesCollectionView.swift */,
 				D6AA620E2852701C00FA4D02 /* NoticesCollectionViewLayout.swift */,
 				D6AA620A28526ED700FA4D02 /* NoticesDataSource.swift */,
@@ -3746,7 +3746,7 @@
 				D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */,
 				8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */,
 				D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */,
-				D6C64541280F4CEB00C10267 /* NoticeFooterView.swift in Sources */,
+				D6C64541280F4CEB00C10267 /* PagingIndicatorView.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
 				D6AA621328528ED100FA4D02 /* MembersDataSource.swift in Sources */,
