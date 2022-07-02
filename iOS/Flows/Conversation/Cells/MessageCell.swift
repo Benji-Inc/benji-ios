@@ -161,9 +161,34 @@ class MessageCell: UICollectionViewCell {
         }
 
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
+        
+        if areDetailsFullyVisible {
+            self.playAllVideo()
+        } else {
+            self.pauseAllVideo()
+        }
+        
         self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
 
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
+    }
+    
+    private func pauseAllVideo() {
+        self.content.authorView.expressionVideoView.shouldPlay = false
+        self.footerView.expressionStackedView.subviews.forEach { view in
+            if let personView = view as? PersonGradientView {
+                personView.expressionVideoView.shouldPlay = false
+            }
+        }
+    }
+    
+    private func playAllVideo() {
+        self.content.authorView.expressionVideoView.shouldPlay = true
+        self.footerView.expressionStackedView.subviews.forEach { view in
+            if let personView = view as? PersonGradientView {
+                personView.expressionVideoView.shouldPlay = true
+            }
+        }
     }
 
     private func getTextColor(for message: Messageable?) -> UIColor {

@@ -180,7 +180,7 @@ class MessageContentView: BaseView {
 
         // Date view
         self.dateView.match(.left, to: .right, of: self.deliveryView, offset: .short)
-        self.dateView.match(.top, to: .top, of: self.authorView)
+        self.dateView.pin(.top)
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
         
         self.deliveryView.centerY = self.dateView.centerY

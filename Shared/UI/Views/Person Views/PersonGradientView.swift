@@ -11,7 +11,7 @@ import Foundation
 class PersonGradientView: DisplayableImageView {
     
     private let emotionGradientView = EmotionGradientView()
-    private let expressionVideoView = ExpressionVideoView()
+    let expressionVideoView = ExpressionVideoView()
     
     override func initializeSubviews() {
         super.initializeSubviews()

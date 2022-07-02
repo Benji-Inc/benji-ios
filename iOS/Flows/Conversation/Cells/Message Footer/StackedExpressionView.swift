@@ -27,7 +27,7 @@ class StackedExpressionView: BaseView {
                                       gradientStop: nil)
     
     private var expressions: [ExpressionInfo] = []
-    var max: Int = 5
+    var max: Int = 3
     
     let addExpressionView = AddExpressionView()
     
@@ -45,6 +45,8 @@ class StackedExpressionView: BaseView {
     }
     
     func configure(with message: Messageable) {
+        guard self.expressions != message.expressions else { return }
+        
         var expressions: [ExpressionInfo] = []
         
         self.removeAllSubviews()
@@ -64,6 +66,8 @@ class StackedExpressionView: BaseView {
     }
     
     private func configure(with expressions: [ExpressionInfo]) {
+        
+        self.expressions = expressions
         
         for (index, info) in expressions.enumerated() {
             if index <= self.max - 1 {

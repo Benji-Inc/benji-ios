@@ -21,7 +21,13 @@ extension HomeCoordinator {
                                                   startingMessageId: messageId,
                                                   openReplies: openReplies)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            coordinator.toPresentable().dismiss(animated: true)
+            coordinator.toPresentable().dismiss(animated: true) {
+                self.homeVC.conversationsVC.collectionView.visibleCells.forEach { cell in
+                    if let c = cell as? ConversationCell {
+                        c.content.messageContent.authorView.expressionVideoView.shouldPlay = true
+                    }
+                }
+            }
         })
         
         self.router.present(coordinator, source: self.homeVC)

@@ -22,6 +22,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
         
         self.contentView.addSubview(self.content)
+        self.content.messageContent.authorView.expressionVideoView.shouldPlay = true 
     }
     
     func configure(with item: String) {

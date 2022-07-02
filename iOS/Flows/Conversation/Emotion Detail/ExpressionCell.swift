@@ -20,6 +20,7 @@ class ExpressionCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.content)
+        self.content.personView.expressionVideoView.shouldPlay = true 
     }
     
     func configure(with item: ExpressionInfo) {

@@ -21,17 +21,15 @@ class ExpressionVideoView: VideoView {
     
     private func updatePlayer(with expression: Expression?) {
         self.loadTask?.cancel()
-        
+
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
             
-            guard let updated = try? await expression?.retrieveDataFromCacheIfNeeded(),
-                    let videoURLString = updated.file?.url,
-                    let videoURL = URL(string: videoURLString) else {
-                self.videoURL = nil
-                return
-            }
+            guard let videoURL = try? await expression?.file?.retrieveCachedPathURL(),
+                  videoURL != self.videoURL,
+            !Task.isCancelled else { return }
 
+            
             self.videoURL = videoURL
         }
     }
