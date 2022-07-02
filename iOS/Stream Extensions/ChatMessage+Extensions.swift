@@ -153,7 +153,7 @@ extension Message: Messageable {
                 values.append(ExpressionInfo(authorId: authorId, expressionId: expressionId))
             }
         }
-        
+                
         return values 
     }
     

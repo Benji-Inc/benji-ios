@@ -246,7 +246,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     @MainActor
     func updateInvitor(userId: String) async throws {
-        let user = try await User.localThenNetworkQuery(for: userId)
+        let user = try await User.getObject(with: userId)
         self.invitor = user
         self.personView.set(person: user)
         self.nameLabel.setText(user.givenName.capitalized)

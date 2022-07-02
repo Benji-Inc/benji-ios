@@ -125,7 +125,9 @@ class MessageCell: UICollectionViewCell {
 
         self.message = message
         
-        self.footerView.configure(for: message)
+        if self.shouldShowDetailBar {
+            self.footerView.configure(for: message)
+        }
         self.footerView.isVisible = self.shouldShowDetailBar
 
         self.subscribeToUpdatesIfNeeded(for: message)
@@ -159,9 +161,34 @@ class MessageCell: UICollectionViewCell {
         }
 
         let areDetailsFullyVisible = messageLayoutAttributes.detailAlpha == 1 && self.shouldShowDetailBar
+        
+        if areDetailsFullyVisible {
+            self.playAllVideo()
+        } else {
+            self.pauseAllVideo()
+        }
+        
         self.messageDetailState = MessageDetailState(areDetailsFullyVisible: areDetailsFullyVisible)
 
         self.handleDetailVisibility(areDetailsFullyVisible: areDetailsFullyVisible)
+    }
+    
+    private func pauseAllVideo() {
+        self.content.authorView.expressionVideoView.shouldPlay = false
+        self.footerView.expressionStackedView.subviews.forEach { view in
+            if let personView = view as? PersonGradientView {
+                personView.expressionVideoView.shouldPlay = false
+            }
+        }
+    }
+    
+    private func playAllVideo() {
+        self.content.authorView.expressionVideoView.shouldPlay = true
+        self.footerView.expressionStackedView.subviews.forEach { view in
+            if let personView = view as? PersonGradientView {
+                personView.expressionVideoView.shouldPlay = true
+            }
+        }
     }
 
     private func getTextColor(for message: Messageable?) -> UIColor {
@@ -190,6 +217,13 @@ class MessageCell: UICollectionViewCell {
             }).store(in: &self.messageSubscriptions)
 
         self.messageController?.repliesChangesPublisher
+            .mainSink(receiveValue: { [unowned self] _ in
+                Task {
+                    await self.refreshFooter()
+                }.add(to: self.messageTasks)
+            }).store(in: &self.messageSubscriptions)
+        
+        self.messageController?.messageChangePublisher
             .mainSink(receiveValue: { [unowned self] _ in
                 Task {
                     await self.refreshFooter()

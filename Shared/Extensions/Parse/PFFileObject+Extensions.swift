@@ -19,6 +19,21 @@ extension PFFileObject: ImageDisplayable {
     var imageFileObject: PFFileObject? {
         return self
     }
+    
+    func retrieveCachedPathURL() async throws -> URL {
+        return try await withCheckedThrowingContinuation { continuation in
+
+            self.getFilePathInBackground { path, error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else if let path = path {
+                    continuation.resume(returning: URL(fileURLWithPath: path))
+                } else {
+                    continuation.resume(throwing: ClientError.apiError(detail: "No error or data returned for file."))
+                }
+            }
+        }
+    }
 
     func retrieveDataInBackground(progressHandler: ((Int) -> Void)? = nil) async throws -> Data {
         return try await withCheckedThrowingContinuation { continuation in

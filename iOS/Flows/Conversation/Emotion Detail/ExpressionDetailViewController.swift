@@ -19,23 +19,20 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
 
     unowned let delegate: ExpressionDetailViewControllerDelegate
 
-    private var emotions: [Emotion]
-    private let expression: Expression
+    private var emotions: [Emotion] = []
+    private let startingExpression: ExpressionInfo?
+    private let expressions: [ExpressionInfo]
+    
+    private let pageIndicator = PagingIndicatorView(with: .onExpressionIndexChanged)
 
-    init(expression: Expression,
-         startingEmotion: Emotion?,
+    init(startingExpression: ExpressionInfo,
+         expressions: [ExpressionInfo],
          delegate: ExpressionDetailViewControllerDelegate) {
 
-        self.expression = expression
+        self.startingExpression = startingExpression
+        self.expressions = expressions
+        
         self.delegate = delegate
-
-        var sortedEmotions = expression.emotions
-        // Put the starting emotion at the front
-        if let startingEmotion = startingEmotion {
-            sortedEmotions.remove(object: startingEmotion)
-            sortedEmotions.insert(startingEmotion, at: 0)
-        }
-        self.emotions = sortedEmotions
 
         let collectionView = CollectionView(layout: EmotionDetailCollectionViewLayout())
 
@@ -45,6 +42,17 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.view.didSelect { [weak self] in
+            guard let `self` = self else { return }
+            self.delegate.emotionDetailViewControllerDidFinish(self)
+        }
+        
+        self.view.insertSubview(self.pageIndicator, aboveSubview: self.collectionView)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,14 +61,13 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
 
         self.loadInitialData()
     }
-
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.view.didSelect { [weak self] in
-            guard let `self` = self else { return }
-            self.delegate.emotionDetailViewControllerDidFinish(self)
-        }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.pageIndicator.height = 20
+        self.pageIndicator.expandToSuperviewWidth()
+        self.pageIndicator.pinToSafeAreaBottom()
     }
     
     override func getAllSections() -> [EmotionDetailCollectionViewDataSource.SectionType] {
@@ -71,12 +78,15 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
     -> [EmotionDetailCollectionViewDataSource.SectionType : [EmotionDetailCollectionViewDataSource.ItemType]] {
 
         var data: [EmotionDetailSection : [EmotionDetailItem]] = [:]
-        var items: [EmotionDetailItem] = [.expression(self.expression)]
-        let emotionItems: [EmotionDetailItem] = self.emotions.compactMap({ emotion in
-            return .emotion(emotion)
+        let items: [EmotionDetailItem] = self.expressions.compactMap({ info in
+            return .expression(info)
         })
-        items.append(contentsOf: emotionItems)
+        
         data[.info] = items
+        
+        self.pageIndicator.pageIndicator.numberOfPages = items.count
+        self.pageIndicator.layoutNow()
+
         return data
     }
 }

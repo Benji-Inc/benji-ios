@@ -20,7 +20,7 @@ class EmotionDetailCollectionViewDataSource: CollectionViewDataSource<EmotionDet
     
     enum ItemType: Hashable {
         case emotion(Emotion)
-        case expression(Expression)
+        case expression(ExpressionInfo)
     }
 
     private let emotionCellRegistration = ManageableCellRegistration<EmotionContentCell>().provider

@@ -11,12 +11,13 @@ import Coordinator
 
 class ExpressionDetailCoordinator: PresentableCoordinator<Void> {
 
-    private let expression: Expression
-    private let startingEmotion: Emotion?
+    private let startingExpression: ExpressionInfo
+    private let expressions: [ExpressionInfo]
+    
     private lazy var emotionDetailVC: ExpressionDetailViewController = {
-        return ExpressionDetailViewController(expression: self.expression,
-                                           startingEmotion: self.startingEmotion,
-                                           delegate: self)
+        return ExpressionDetailViewController(startingExpression: self.startingExpression,
+                                              expressions: self.expressions,
+                                              delegate: self)
     }()
 
     override func toPresentable() -> DismissableVC {
@@ -25,11 +26,11 @@ class ExpressionDetailCoordinator: PresentableCoordinator<Void> {
 
     init(router: CoordinatorRouter,
          deepLink: DeepLinkable?,
-         expression: Expression,
-         startingEmotion: Emotion?) {
+         startingExpression: ExpressionInfo,
+         expressions: [ExpressionInfo]) {
 
-        self.expression = expression
-        self.startingEmotion = startingEmotion
+        self.startingExpression = startingExpression
+        self.expressions = expressions
 
         super.init(router: router, deepLink: deepLink)
     }

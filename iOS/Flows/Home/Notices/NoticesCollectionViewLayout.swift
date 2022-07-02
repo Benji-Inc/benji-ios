@@ -69,7 +69,3 @@ class NoticesCollectionViewLayout: UICollectionViewCompositionalLayout {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-extension Notification.Name {
-    static let onNoticeIndexChanged = Notification.Name("onNoticeIndexChanged")
-}

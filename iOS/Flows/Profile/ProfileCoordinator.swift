@@ -83,8 +83,8 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
         }
 
         let coordinator = ContextCueCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { _ in
-            coordinator.toPresentable().dismiss(animated: true, completion: nil)
+        self.addChildAndStart(coordinator) { [unowned self] _ in
+            self.profileVC.dismiss(animated: true, completion: nil)
         }
 
         self.router.present(coordinator, source: self.profileVC)

@@ -105,6 +105,11 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             
             switch itemType {
             case .conversation(let conversationId):
+                self.homeVC.conversationsVC.collectionView.visibleCells.forEach { cell in
+                    if let c = cell as? ConversationCell {
+                        c.content.messageContent.authorView.expressionVideoView.shouldPlay = false
+                    }
+                }
                 self.presentConversation(with: conversationId, messageId: nil)
             }
             

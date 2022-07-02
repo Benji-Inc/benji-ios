@@ -37,7 +37,7 @@ protocol Objectable: AnyObject {
     func saveLocalThenServer() async throws -> Self
     func saveToServer() async throws -> Self
 
-    static func localThenNetworkQuery(for objectId: String) async throws -> Self
+    func localThenNetworkQuery() async throws -> Self
     static func localThenNetworkArrayQuery(where identifiers: [String],
                                            isEqual: Bool,
                                            container: ContainerName) async throws -> [Self]
@@ -146,9 +146,9 @@ extension Objectable where Self: PFObject {
         return objects
     }
 
-    static func localThenNetworkQuery(for objectId: String) async throws -> Self {
+    func localThenNetworkQuery() async throws -> Self {
         let object: Self = try await withCheckedThrowingContinuation { continuation in
-            guard let query = self.query() else {
+            guard let query = Self.query(), let objectId = self.objectId else {
                 continuation.resume(throwing: ClientError.message(detail: "Unable get query for object"))
                 return
             }
@@ -158,7 +158,7 @@ extension Objectable where Self: PFObject {
                 .continueWith { (task) -> Any? in
                     if let object = task.result as? Self {
                         continuation.resume(returning: object)
-                    } else if let nonCacheQuery = self.query() {
+                    } else if let nonCacheQuery = Self.query() {
                         nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, equalTo: objectId)
                         nonCacheQuery.getFirstObjectInBackground { (object, error) in
                             if let nonCachedObject = object as? Self, let identifier = nonCachedObject.objectId {
@@ -271,5 +271,34 @@ extension Objectable where Self: PFObject {
             }
         }
         return object
+    }
+    
+    func retrieveDataFromCacheIfNeeded() async throws -> Self {
+        if self.isDataAvailable {
+            return self
+        } else if let cachedObject = try? await self.localThenNetworkQuery() {
+            return cachedObject
+        } else {
+            return try await withCheckedThrowingContinuation { continuation in
+                self.fetchIfNeededInBackground { (object, error) in
+                    if let e = error {
+                        SessionManager.shared.handleParse(error: e)
+                        continuation.resume(throwing: e)
+                    } else if let objectWithData = object as? Self, let objectId = objectWithData.objectId {
+                        objectWithData.pinInBackground(withName: objectId) { (success, error) in
+                            if let e = error {
+                                SessionManager.shared.handleParse(error: e)
+                                continuation.resume(throwing: e)
+                            } else {
+                                continuation.resume(returning: objectWithData)
+                            }
+                        }
+                        continuation.resume(returning: objectWithData)
+                    } else {
+                        continuation.resume(throwing: ClientError.generic)
+                    }
+                }
+            }
+        }
     }
 }

@@ -112,6 +112,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             let controller = MessageController.controller(for: message)
             
             Task {
+                // Add new or update
                 try await controller?.add(expression: expression)
             }
         }
@@ -149,7 +150,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
         
         self.addChildAndStart(coordinator) { [unowned self, unowned coordinator] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+            self.inputHandlerViewController.dismiss(animated: true) {
                 finishedHandler?(result)
             }
         }
@@ -304,16 +305,12 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
                         forMessage message: Messageable) {
-        
-        Task.onMainActorAsync {
-            guard let object = try? await Expression.getObject(with: expression.expressionId) else { return }
-            
-            let coordinator = ExpressionDetailCoordinator(router: self.router,
-                                                       deepLink: self.deepLink,
-                                                       expression: object,
-                                                       startingEmotion: nil)
-            self.present(coordinator)
-        }
+                
+        let coordinator = ExpressionDetailCoordinator(router: self.router,
+                                                      deepLink: self.deepLink,
+                                                      startingExpression: expression,
+                                                      expressions: message.expressions)
+        self.present(coordinator)
     }
     
     func presentMediaFlow(for mediaItems: [MediaItem],
@@ -329,7 +326,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .reply(let message):
-                coordinator.toPresentable().dismiss(animated: true) { [unowned self] in
+                self.inputHandlerViewController.dismiss(animated: true) { [unowned self] in
                     self.presentThread(for: message, startingReplyId: nil)
                 }
             case .none:

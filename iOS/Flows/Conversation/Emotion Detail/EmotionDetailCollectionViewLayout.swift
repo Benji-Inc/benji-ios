@@ -53,6 +53,10 @@ class EmotionDetailCollectionViewLayout: UICollectionViewCompositionalLayout {
                     let maxScale: CGFloat = 1.0
                     let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
                     item.transform = CGAffineTransform(scaleX: scale, y: scale).translatedBy(x: scale, y: 1.0)
+                    
+                    if distanceFromCenter < 5 {
+                        NotificationCenter.default.post(name: .onExpressionIndexChanged, object: item.indexPath.row)
+                    }
                 }
             }
 

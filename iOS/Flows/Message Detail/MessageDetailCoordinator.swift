@@ -134,12 +134,12 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+            self.messageVC.dismiss(animated: true) { [unowned self] in
                 switch result {
                 case .conversation(let conversationId):
                     self.finishFlow(with: .conversation(conversationId))
                 case .openReplies(_):
-                    break 
+                    break
                 }
             }
         }
@@ -188,7 +188,7 @@ extension MessageDetailCoordinator: MessageContentDelegate {
         self.addChildAndStart(coordinator) { [unowned self] result in
             switch result {
             case .reply(let message):
-                coordinator.toPresentable().dismiss(animated: true) {
+                self.messageVC.dismiss(animated: true) { [unowned self] in 
                     self.finishFlow(with: .message(message))
                 }
             case .none:

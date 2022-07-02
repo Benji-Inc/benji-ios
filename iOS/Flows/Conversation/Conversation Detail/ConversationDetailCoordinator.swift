@@ -72,7 +72,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+            self.detailVC.dismiss(animated: true) { [unowned self] in
                 switch result {
                 case .conversation(let cid):
                     self.finishFlow(with: .conversation(cid.description))
@@ -189,7 +189,7 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
         }
         
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+            self.detailVC.dismiss(animated: true, completion: nil)
         }
         
         self.router.present(coordinator, source: self.detailVC)

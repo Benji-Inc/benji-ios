@@ -20,6 +20,7 @@ class MessageExpressionCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.content)
+        self.content.personView.expressionVideoView.shouldPlay = true 
     }
 
     func configure(with item: ExpressionInfo) {
