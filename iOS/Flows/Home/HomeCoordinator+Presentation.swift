@@ -20,8 +20,8 @@ extension HomeCoordinator {
                                                   conversationId: conversationId,
                                                   startingMessageId: messageId,
                                                   openReplies: openReplies)
-        self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            coordinator.toPresentable().dismiss(animated: true) {
+        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+            coordinator.toPresentable().dismiss(animated: true) { [unowned self] in 
                 self.homeVC.conversationsVC.collectionView.visibleCells.forEach { cell in
                     if let c = cell as? ConversationCell {
                         c.content.messageContent.authorView.expressionVideoView.shouldPlay = true
