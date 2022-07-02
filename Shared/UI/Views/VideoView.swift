@@ -43,12 +43,10 @@ class VideoView: BaseView {
                 }
                 
                 return false
-            })
-            .mainSink { (value) in
+            }).mainSink { (value) in
                 guard let player = value.object as? AVQueuePlayer else { return }
                 
                 switch player.status {
-                    
                 case .unknown:
                     break
                 case .readyToPlay:
@@ -56,21 +54,14 @@ class VideoView: BaseView {
                     case .paused, .waitingToPlayAtSpecifiedRate:
   
                         guard let reason = player.reasonForWaitingToPlay else { return }
-                        
+                                                
                         switch reason {
                         case .evaluatingBufferingRate:
                             logDebug("evaluatingBufferingRate")
-
                         case .toMinimizeStalls:
                             logDebug("toMinimizeStalls")
-
                         case .noItemToPlay:
                             logDebug("noItemToPlay")
-                            guard let item = player.currentItem else { return }
-                            player.removeAllItems()
-                            player.replaceCurrentItem(with: item)
-                            self.looper = AVPlayerLooper(player: player, templateItem: item)
-
                         default:
                             logDebug("Unknown \(reason)")
                         }

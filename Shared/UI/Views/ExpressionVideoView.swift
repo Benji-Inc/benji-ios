@@ -16,7 +16,7 @@ class ExpressionVideoView: VideoView {
         }
     }
     
-    /// The currently running .
+    /// The currently running.
     private var loadTask: Task<Void, Never>?
     
     private func updatePlayer(with expression: Expression?) {
@@ -29,7 +29,6 @@ class ExpressionVideoView: VideoView {
                   videoURL != self.videoURL,
             !Task.isCancelled else { return }
 
-            
             self.videoURL = videoURL
         }
     }
