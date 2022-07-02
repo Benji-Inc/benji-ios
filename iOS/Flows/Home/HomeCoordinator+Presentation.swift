@@ -21,7 +21,8 @@ extension HomeCoordinator {
                                                   startingMessageId: messageId,
                                                   openReplies: openReplies)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-            coordinator.toPresentable().dismiss(animated: true) { [unowned self] in 
+            self.homeVC.dismiss(animated: true) { [weak self] in
+                guard let `self` = self else { return }
                 self.homeVC.conversationsVC.collectionView.visibleCells.forEach { cell in
                     if let c = cell as? ConversationCell {
                         c.content.messageContent.authorView.expressionVideoView.shouldPlay = true
@@ -46,11 +47,11 @@ extension HomeCoordinator {
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] result in
             switch result {
             case .reply(let message):
-                coordinator.toPresentable().dismiss(animated: true) {
+                self.homeVC.dismiss(animated: true) { [unowned self] in
                     self.presentConversation(with: message.conversationId, messageId: message.id)
                 }
             case .none:
-                coordinator.toPresentable().dismiss(animated: true)
+                self.homeVC.dismiss(animated: true)
             }
         })
         
@@ -62,7 +63,7 @@ extension HomeCoordinator {
 
         let coordinator = ContextCueCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { _ in
-            coordinator.toPresentable().dismiss(animated: true, completion: nil)
+            self.homeVC.dismiss(animated: true, completion: nil)
         }
 
         self.router.present(coordinator, source: self.homeVC)
@@ -73,7 +74,7 @@ extension HomeCoordinator {
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] people in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+            self.homeVC.dismiss(animated: true) { [unowned self] in
                 self.homeVC.membersVC.reloadPeople()
             }
         }
@@ -87,7 +88,7 @@ extension HomeCoordinator {
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [unowned self] in
+            self.homeVC.dismiss(animated: true) { [unowned self] in
                 switch result {
                 case .conversation(let cid):
                     self.presentConversation(with: cid.description, messageId: nil)
@@ -110,7 +111,7 @@ extension HomeCoordinator {
                                                       deepLink: self.deepLink)
 
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+            self.homeVC.dismiss(animated: true, completion: nil)
         }
 
         self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)

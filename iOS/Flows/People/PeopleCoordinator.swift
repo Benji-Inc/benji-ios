@@ -141,8 +141,9 @@ extension PeopleCoordinator {
                                                           deepLink: self.deepLink)
 
             self.addChildAndStart(coordinator) { [unowned self] result in
-                self.router.dismiss(source: coordinator.toPresentable(), animated: true)
-                continuation.resume(returning: result)
+                self.peopleNavController.dismiss(animated: true) {
+                    continuation.resume(returning: result)
+                }
             }
 
             self.router.present(coordinator, source: self.peopleNavController, cancelHandler: {

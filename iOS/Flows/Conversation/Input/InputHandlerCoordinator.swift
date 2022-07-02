@@ -150,7 +150,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
         
         self.addChildAndStart(coordinator) { [unowned self, unowned coordinator] result in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+            self.inputHandlerViewController.dismiss(animated: true) {
                 finishedHandler?(result)
             }
         }
@@ -326,7 +326,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .reply(let message):
-                coordinator.toPresentable().dismiss(animated: true) { [unowned self] in
+                self.inputHandlerViewController.dismiss(animated: true) { [unowned self] in
                     self.presentThread(for: message, startingReplyId: nil)
                 }
             case .none:
