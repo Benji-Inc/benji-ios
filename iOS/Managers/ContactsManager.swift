@@ -15,15 +15,7 @@ class ContactsManager {
     static let shared = ContactsManager()
     private let store = CNContactStore()
     
-    private var fetchedContacts: [CNContact] = []
-    
-    init() {
-        if self.hasPermissions {
-            Task {
-                self.fetchedContacts = await self.fetchContacts()
-            }
-        }
-    }
+    //private var fetchedContacts: [CNContact] = []
     
     var hasPermissions: Bool {
         return CNContactStore.authorizationStatus(for: .contacts) == .authorized
@@ -63,9 +55,7 @@ class ContactsManager {
     }
 
     func fetchContacts() async -> [CNContact] {
-        guard self.fetchedContacts.isEmpty else {
-            return self.fetchedContacts
-        }
+
         // 1.
         do {
             if try await self.store.requestAccess(for: .contacts) {
@@ -84,9 +74,7 @@ class ContactsManager {
                             contacts.append(contact)
                         }
                     })
-                    
-                    self.fetchedContacts = contacts
-                    
+                                        
                     return contacts
                 } catch let error {
                     print("Failed to enumerate contact", error)
