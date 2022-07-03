@@ -43,7 +43,7 @@ class VideoView: BaseView {
                 }
                 
                 return false
-            }).mainSink { (value) in
+            }).mainSink { [unowned self] (value) in
                 guard let player = value.object as? AVQueuePlayer else { return }
                 
                 switch player.status {

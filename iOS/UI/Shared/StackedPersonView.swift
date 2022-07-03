@@ -35,6 +35,7 @@ class StackedPersonView: BaseView {
         for (index, person) in people.enumerated() {
             if index <= self.max - 1 {
                 let view = BorderedPersonView()
+                view.thumbnailSizeMultiplier = 4
                 view.pulseLayer.lineWidth = 1
                 view.pulseLayer.borderWidth = 1
                 view.set(person: person)

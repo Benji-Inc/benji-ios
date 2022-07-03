@@ -67,12 +67,19 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         case .conversation:
             let messageID = deepLink.messageId
             guard let conversationId = deepLink.conversationId else { break }
-            Task {
-                await self.conversationVC.scrollToConversation(with: conversationId,
-                                                               messageId: messageID,
-                                                               animateScroll: false,
-                                                               animateSelection: true)
-            }.add(to: self.taskPool)
+            
+            if conversationId == self.conversationVC.conversationId {
+                Task {
+                    await self.conversationVC.scrollToConversation(with: conversationId,
+                                                                   messageId: messageID,
+                                                                   animateScroll: false,
+                                                                   animateSelection: true)
+                }.add(to: self.taskPool)
+            } else {
+                self.conversationVC.startingMessageId = deepLink.messageId
+                self.conversationVC.conversationId = conversationId 
+            }
+            
         case .profile:
             Task {
                 guard let personId = self.deepLink?.personId,
@@ -125,8 +132,11 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
                                             deepLink: self.deepLink)
         
         self.present(coordinator) { [unowned self] result in
-            Task.onMainActorAsync {
-                await self.conversationVC.scrollToConversation(with: message.conversationId, messageId: nil, animateScroll: false)
+            switch result {
+            case .conversation(let conversationId):
+                self.conversationVC.conversationId = conversationId
+            case .deeplink(let deeplink):
+                self.handle(deepLink: deeplink)
             }
         }
     }

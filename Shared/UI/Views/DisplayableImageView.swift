@@ -50,6 +50,8 @@ class DisplayableImageView: BaseView {
 
     /// The current task that is asynchronously setting the displayable.
     private var displayableTask: Task<Void, Never>?
+    
+    var thumbnailSizeMultiplier: CGFloat = 3
 
     private var displayableState: ImageDisplayableState = ImageDisplayableState() {
         didSet {
@@ -69,7 +71,8 @@ class DisplayableImageView: BaseView {
 
             let displayableStateRef = self.displayableState
 
-            self.displayableTask = Task {
+            self.displayableTask = Task { [weak self] in
+                guard let `self` = self else { return }
                 await self.updateImageView(with: displayableStateRef)
             }
         }
@@ -179,11 +182,11 @@ class DisplayableImageView: BaseView {
             }
 
             let data = try await file.retrieveDataInBackground { _ in }
-
+            
             guard !Task.isCancelled else { return }
 
             let image = UIImage(data: data)
-
+            
             await self.set(image: image, state: image.exists ? .success : .error)
         } catch {
             guard !Task.isCancelled else { return }
@@ -201,10 +204,10 @@ class DisplayableImageView: BaseView {
             let data: Data = try await self.urlSession.dataTask(with: url).0
 
             guard !Task.isCancelled else { return }
-
+                        
             // Contruct the image from the returned data
             guard let image = UIImage(data: data) else { return }
-
+            
             await self.set(image: image, state: .success)
         } catch {
             guard !Task.isCancelled else { return }
@@ -217,12 +220,15 @@ class DisplayableImageView: BaseView {
     func set(image: UIImage?, state: State) async {
         self.state = state
 
-        if let preparedImage = await image?.byPreparingForDisplay() {
+        let size = CGSize(width: self.size.width * self.thumbnailSizeMultiplier,
+                          height: self.height * self.thumbnailSizeMultiplier)
+        
+        if let preparedImage = await image?.byPreparingThumbnail(ofSize: size) {
             self.imageView.image = preparedImage
         } else {
             self.imageView.image = image
         }
-
+        
         self.setNeedsLayout()
     }
 }
