@@ -14,9 +14,7 @@ class ContactsManager {
 
     static let shared = ContactsManager()
     private let store = CNContactStore()
-    
-    //private var fetchedContacts: [CNContact] = []
-    
+        
     var hasPermissions: Bool {
         return CNContactStore.authorizationStatus(for: .contacts) == .authorized
     }
