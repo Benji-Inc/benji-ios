@@ -9,7 +9,12 @@
 import Foundation
 import Coordinator
 
-class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
+enum ThreadResult {
+    case conversation(String)
+    case deeplink(DeepLinkable)
+}
+
+class ThreadCoordinator: InputHandlerCoordinator<ThreadResult>, DeepLinkHandler {
     
     var threadVC: ThreadViewController {
         return self.inputHandlerViewController as! ThreadViewController
@@ -70,7 +75,7 @@ class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .conversation(let conversationId):
-                self.finishFlow(with: conversationId)
+                self.finishFlow(with: .conversation(conversationId))
             case .openReplies(_):
                 break
             }
@@ -90,7 +95,7 @@ class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
             case .reply(_):
                 break
             case .conversation(let conversation):
-                self.finishFlow(with: conversation)
+                self.finishFlow(with: .conversation(conversation))
             case .none:
                 break
             }
@@ -108,6 +113,8 @@ class ThreadCoordinator: InputHandlerCoordinator<String>, DeepLinkHandler {
                       let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
                 self.presentProfile(for: person)
             }
+        case .conversation:
+            self.finishFlow(with: .deeplink(deepLink))
         default:
             break
         }

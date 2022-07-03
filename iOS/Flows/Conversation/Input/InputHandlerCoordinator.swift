@@ -149,7 +149,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             previousFirstResponder?.becomeFirstResponder()
         }
         
-        self.addChildAndStart(coordinator) { [unowned self, unowned coordinator] result in
+        self.addChildAndStart(coordinator) { [unowned self] result in
             self.inputHandlerViewController.dismiss(animated: true) {
                 finishedHandler?(result)
             }

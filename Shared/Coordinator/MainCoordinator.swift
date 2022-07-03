@@ -17,6 +17,16 @@ class MainCoordinator: BaseCoordinator<Void> {
 
     override func start() {
         super.start()
+        
+        Task {
+            await Task.sleep(seconds: 10)
+            var deeplink = DeepLinkObject(target: .conversation)
+            let messageID = "6E308B36-3296-456E-A91A-ACC3D8921045" // Another message
+            let conversationID = "messaging:BD-208D979A-A4A0-48EF-8145-89028F39CFB3"
+            deeplink.conversationId = conversationID
+            deeplink.messageId = messageID
+            self.handle(deeplink: deeplink)
+        }
 
         SessionManager.shared.didReceiveInvalidSessionError = { [unowned self] _ in
             Task.onMainActor {

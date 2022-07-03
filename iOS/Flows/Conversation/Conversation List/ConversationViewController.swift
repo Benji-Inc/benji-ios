@@ -74,7 +74,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
     /// The id of the conversation this VC will display.
     @Published var conversationId: String?
-    private let startingMessageId: String?
+    var startingMessageId: String?
     private let openReplies: Bool
 
     init(conversationId: String?,
