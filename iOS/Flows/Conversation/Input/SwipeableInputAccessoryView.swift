@@ -83,6 +83,7 @@ class SwipeableInputAccessoryView: BaseView {
         
         self.expressionView.configure(with: nil)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+        self.expressionView.personGradientView.expressionVideoView.shouldPlay = true 
     }
 
     override func layoutSubviews() {

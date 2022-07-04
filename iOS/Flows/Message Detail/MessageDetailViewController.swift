@@ -224,6 +224,17 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
                 snapshot.setItems(reads, in: .reads)
             }
             
+            let expressions: [MessageDetailDataSource.ItemType] = msg.expressions.compactMap({ info in
+                return .expression(info)
+            })
+            
+            if expressions.isEmpty {
+                let model = ExpressionInfo(authorId: "", expressionId: "")
+                snapshot.setItems([.expression(model)], in: .expressions)
+            } else {
+                snapshot.setItems(expressions, in: .expressions)
+            }
+            
             snapshot.setItems([.metadata(MetadataModel(conversationId: msg.conversationId, messageId: msg.id))], in: .metadata)
             
             await self.dataSource.apply(snapshot)

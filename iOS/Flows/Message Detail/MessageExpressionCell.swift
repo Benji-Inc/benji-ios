@@ -64,7 +64,12 @@ class ExpressionContentView: BaseView {
         self.configurationTask = Task { [weak self] in
             guard let `self` = self else { return }
             
-            guard let expression = try? await Expression.getObject(with: item.expressionId) else { return }
+            guard let expression = try? await Expression.getObject(with: item.expressionId) else {
+                self.isVisible = false
+                return
+            }
+            
+            self.isVisible = true 
 
             self.personView.set(expression: expression, author: nil)
             let dateString = expression.createdAt?.getTimeAgoString()

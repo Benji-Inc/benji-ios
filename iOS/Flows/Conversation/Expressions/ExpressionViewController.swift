@@ -26,7 +26,6 @@ class ExpressionViewController: ViewController {
     private let doneButton = ThemeButton()
     
     lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
-    let personGradientView = PersonGradientView()
     
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
@@ -66,9 +65,7 @@ class ExpressionViewController: ViewController {
         self.view.addSubview(self.blurView)
         
         self.addChild(viewController: self.expressionCaptureVC)
-        
-        self.view.addSubview(self.personGradientView)
-        self.personGradientView.alpha = 0.0
+        self.expressionCaptureVC.faceCaptureVC.videoPreviewView.shouldPlay = true
         
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
@@ -82,9 +79,7 @@ class ExpressionViewController: ViewController {
         self.blurView.expandToSuperviewSize()
         
         self.expressionCaptureVC.view.expandToSuperviewSize()
-        
-        self.personGradientView.frame = self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.frame
-        
+                
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
         
@@ -127,7 +122,7 @@ class ExpressionViewController: ViewController {
             self.state = .capture
         }
         
-        self.doneButton.addAction(for: .touchUpInside) {
+        self.doneButton.didSelect { [unowned self] in
             Task {
                 guard let expression = await self.createVideoExpression() else { return }
                 self.didCompleteExpression?(expression)
@@ -150,6 +145,8 @@ class ExpressionViewController: ViewController {
             self.expressionCaptureVC.faceCaptureVC.animate(text: "Press and Hold")
             self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
             
+            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
+            
             UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
                     self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 1
@@ -164,7 +161,6 @@ class ExpressionViewController: ViewController {
             
             UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
                 self.expressionCaptureVC.faceCaptureVC.view.alpha = 1.0
-                self.personGradientView.alpha = 0.0
             } completion: { _ in
                 if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
                     self.expressionCaptureVC.faceCaptureVC.beginSession()
