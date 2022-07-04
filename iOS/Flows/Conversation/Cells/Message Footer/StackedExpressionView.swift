@@ -55,26 +55,26 @@ class StackedExpressionView: BaseView {
         
         self.removeAllSubviews()
         
-        if message.isFromCurrentUser, message.authorExpression.isNil {
-            self.addExpressionView.configure(with: nil)
-            self.addSubview(self.addExpressionView)
+        if message.isFromCurrentUser {
+            
+            if message.authorExpression.isNil {
+                self.addExpressionView.configure(with: nil)
+                self.addSubview(self.addExpressionView)
+            }
             
             expressions = message.expressions.filter { expression in
                 return expression.authorId != User.current()?.objectId
             }
-        } else if message.expressions.first(where: { info in
-            info.authorId == User.current()?.objectId
-        }).isNil {
-            
-            self.addExpressionView.configure(with: nil)
-            self.addSubview(self.addExpressionView)
-            
-            expressions = message.expressions.filter { expression in
-                return expression.authorId != User.current()?.objectId
-            }
-            
+        
         } else {
-            expressions = message.expressions
+            if message.expressions.first(where: { info in
+                info.authorId == User.current()?.objectId
+            }).isNil {
+                self.addExpressionView.configure(with: nil)
+                self.addSubview(self.addExpressionView)
+            }
+            
+            expressions = self.expressions
         }
                 
         self.configure(with: expressions)
@@ -87,6 +87,7 @@ class StackedExpressionView: BaseView {
         for (index, info) in expressions.enumerated() {
             if index <= self.max - 1 {
                 let view = PersonGradientView()
+                view.expressionVideoView.shouldPlay = true
                 view.didSelect { [unowned self] in
                     self.didSelectExpression?(info)
                 }
@@ -106,6 +107,8 @@ class StackedExpressionView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.isVisible = self.subviews.count > 0 
         
         self.height = self.itemHeight
         
