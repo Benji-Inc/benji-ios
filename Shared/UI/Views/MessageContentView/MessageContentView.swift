@@ -219,7 +219,7 @@ class MessageContentView: BaseView {
         
         self.videoImageView.squaredSize = 16
         self.videoImageView.match(.bottom, to: .bottom, of: self.imageView, offset: .negative(.short))
-        self.videoImageView.match(.right, to: .right, of: self.imageView, offset: .negative(.short))
+        self.videoImageView.match(.left, to: .left, of: self.imageView, offset: .short)
         self.videoImageView.showShadow(withOffset: 2)
     }
 

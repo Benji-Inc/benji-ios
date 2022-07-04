@@ -21,7 +21,7 @@ class MessagePreview: BaseView {
 
     override func initializeSubviews() {
         super.initializeSubviews()
-        
+                
         self.addSubview(self.blurView)
         self.addSubview(self.mainContentArea)
         

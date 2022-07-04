@@ -45,8 +45,12 @@ class StackedExpressionView: BaseView {
     }
     
     func configure(with message: Messageable) {
-        guard self.expressions != message.expressions else { return }
-        
+        if !self.expressions.isEmpty,
+            !message.expressions.isEmpty,
+           self.expressions == message.expressions {
+            return
+        }
+                
         var expressions: [ExpressionInfo] = []
         
         self.removeAllSubviews()
@@ -58,6 +62,17 @@ class StackedExpressionView: BaseView {
             expressions = message.expressions.filter { expression in
                 return expression.authorId != User.current()?.objectId
             }
+        } else if message.expressions.first(where: { info in
+            info.authorId == User.current()?.objectId
+        }).isNil {
+            
+            self.addExpressionView.configure(with: nil)
+            self.addSubview(self.addExpressionView)
+            
+            expressions = message.expressions.filter { expression in
+                return expression.authorId != User.current()?.objectId
+            }
+            
         } else {
             expressions = message.expressions
         }

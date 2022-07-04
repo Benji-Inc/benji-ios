@@ -47,9 +47,7 @@ class MessageFooterView: BaseView {
         self.message = message
         
         self.replyButton.isVisible = !message.isReply
-        self.replySummary.isVisible = message.totalReplyCount > 0
         self.replySummary.configure(for: message)
-        self.expressionStackedView.isVisible =  message.authorExpression.isNil
         self.expressionStackedView.configure(with: message)
         self.updateStatus(for: message)
         self.layoutNow()

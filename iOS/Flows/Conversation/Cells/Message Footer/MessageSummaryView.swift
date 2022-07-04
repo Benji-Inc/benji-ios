@@ -25,8 +25,6 @@ class MessageSummaryView: BaseView {
         
         self.addSubview(self.replyView)
         self.addSubview(self.badgeView)
-        
-        self.alpha = 0
     }
     
     /// The currently running task that is loading.
@@ -61,6 +59,7 @@ class MessageSummaryView: BaseView {
             self.totalUnreadReplyCount = message.totalUnreadReplyCount
             
             if let reply = self.controller?.message?.recentReplies.first {
+                self.replyView.isVisible = true 
                 self.replyView.configure(with: reply)
             } else {
                 self.replyView.isVisible = false
