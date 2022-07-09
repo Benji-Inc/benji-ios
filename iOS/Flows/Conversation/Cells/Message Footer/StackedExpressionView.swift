@@ -74,9 +74,9 @@ class StackedExpressionView: BaseView {
                 self.addSubview(self.addExpressionView)
             }
             
-            expressions = self.expressions
+            expressions = message.expressions
         }
-                
+        
         self.configure(with: expressions)
     }
     
