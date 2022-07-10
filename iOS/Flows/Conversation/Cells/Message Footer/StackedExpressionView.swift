@@ -58,7 +58,7 @@ class StackedExpressionView: BaseView {
         if message.isFromCurrentUser {
             
             if message.authorExpression.isNil {
-                self.addExpressionView.configure(with: nil)
+                self.addExpressionView.configure(with: nil, showPlus: true)
                 self.addSubview(self.addExpressionView)
             }
             
@@ -70,7 +70,7 @@ class StackedExpressionView: BaseView {
             if message.expressions.first(where: { info in
                 info.authorId == User.current()?.objectId
             }).isNil {
-                self.addExpressionView.configure(with: nil)
+                self.addExpressionView.configure(with: nil, showPlus: true)
                 self.addSubview(self.addExpressionView)
             }
             
