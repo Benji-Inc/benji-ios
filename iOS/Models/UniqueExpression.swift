@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum UniqueExpression {
+enum UniqueExpression: CaseIterable {
     
     case agree
     case happy
