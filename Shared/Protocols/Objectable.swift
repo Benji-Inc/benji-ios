@@ -121,7 +121,7 @@ extension Objectable where Self: PFObject {
         return object
     }
     
-    static func getFirstObject(with pairs: [String: Any]) async throws -> Self {
+    static func getFirstObject(with pairs: [String: AnyHashable]) async throws -> Self {
 
         let object: Self = try await withCheckedThrowingContinuation { continuation in
             guard let query = self.query() else {
