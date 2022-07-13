@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ExpressionVideoView.swift
 //  Jibber
 //
 //  Created by Martin Young on 6/26/22.
@@ -28,7 +28,7 @@ class ExpressionVideoView: VideoView {
             guard let videoURL = try? await expression?.file?.retrieveCachedPathURL(),
                   videoURL != self.videoURL,
             !Task.isCancelled else { return }
-
+            
             self.videoURL = videoURL
         }
     }
