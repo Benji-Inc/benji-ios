@@ -35,50 +35,6 @@ class VideoView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        NotificationCenter.default.publisher(for: AVPlayer.rateDidChangeNotification)
-            .filter({ notification in
-                if let player = notification.object as? AVPlayer,
-                   player === self.playerLayer.player {
-                    return true
-                }
-                
-                return false
-            }).mainSink { [unowned self] (value) in
-                guard let player = value.object as? AVQueuePlayer else { return }
-                
-                switch player.status {
-                case .unknown:
-                    break
-                case .readyToPlay:
-                    switch player.timeControlStatus {
-                    case .paused, .waitingToPlayAtSpecifiedRate:
-  
-                        guard let reason = player.reasonForWaitingToPlay else { return }
-                                                
-                        switch reason {
-                        case .evaluatingBufferingRate:
-                            logDebug("evaluatingBufferingRate")
-                        case .toMinimizeStalls:
-                            logDebug("toMinimizeStalls")
-                        case .noItemToPlay:
-                            logDebug("noItemToPlay")
-                        default:
-                            logDebug("Unknown \(reason)")
-                        }
-
-                    case .playing:
-                        break
-                    @unknown default:
-                        break
-                    }
-                case .failed:
-                    break
-                @unknown default:
-                    break
-                }
-                
-            }.store(in: &self.cancellables)
-        
         self.layer.addSublayer(self.playerLayer)
     }
 
@@ -88,23 +44,35 @@ class VideoView: BaseView {
         self.playerLayer.frame = self.bounds
     }
 
+    /// A task for loading a video track from a url.
+    private var loadTracksTask: Task<Void, Never>?
+
     private func updatePlayer(with url: URL?) {
+        self.loadTracksTask?.cancel()
+
         guard let videoURL = url else {
+            // Stop playback if the url is nil.
             self.playerLayer.player = nil
             return
         }
-        
-        Task {
-            let asset = AVAsset(url: videoURL)
-            let tracks = try? await asset.loadTracks(withMediaType: .video) // Loads from cache if available
 
+        self.loadTracksTask = Task {
+            // Retrieve the video asset.
+            let asset = AVAsset(url: videoURL)
+            let tracks = try? await asset.loadTracks(withMediaType: .video)
+
+            guard !Task.isCancelled else { return }
+
+            // We will only have one video track, so the first one is the one we want.
             guard let videoAsset = tracks?.first?.asset else { return }
             
             let videoItem = AVPlayerItem(asset: videoAsset)
-            
+
             if let player = self.playerLayer.player {
+                // No need to create a new player if we already have one. Just update the video.
                 player.replaceCurrentItem(with: videoItem)
             } else {
+                // If no player exists, create a new one and assign it the downloaded video.
                 let player = AVQueuePlayer(items: [videoItem])
                 player.automaticallyWaitsToMinimizeStalling = false
                 self.playerLayer.player = player
