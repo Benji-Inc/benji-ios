@@ -47,11 +47,8 @@ class VideoView: BaseView {
                 return false
             }).mainSink { [unowned self] (value) in
                 guard let player = value.object as? AVQueuePlayer else { return }
-                
-                self.isPlaying = player.timeControlStatus == .playing 
-                
+                self.isPlaying = player.timeControlStatus == .playing
             }.store(in: &self.cancellables)
-        
         
         self.layer.addSublayer(self.playerLayer)
     }
