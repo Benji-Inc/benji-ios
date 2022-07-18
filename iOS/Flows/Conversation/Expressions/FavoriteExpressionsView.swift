@@ -8,13 +8,13 @@
 
 import Foundation
 
-class UniqueExpressionView: BaseView {
+class FavoriteExpressionView: BaseView {
     
-    let uniqueExpression: UniqueExpression
+    let favoriteType: FavoriteType
     let personView = PersonGradientView()
     
-    init(with expression: UniqueExpression) {
-        self.uniqueExpression = expression
+    init(with expression: FavoriteType) {
+        self.favoriteType = expression
         super.init()
     }
     
@@ -26,16 +26,6 @@ class UniqueExpressionView: BaseView {
         super.initializeSubviews()
         
         self.addSubview(self.personView)
-        
-        Task {
-            if let expression = try await self.uniqueExpression.getExpression() {
-                self.personView.set(expression: expression, author: User.current())
-            } else {
-                // show label? 
-            }
-            
-            self.personView.set(emotionCounts: [self.uniqueExpression.emotion: 1])
-        }
     }
     
     override func layoutSubviews() {
@@ -43,19 +33,30 @@ class UniqueExpressionView: BaseView {
         
         self.personView.expandToSuperviewSize()
     }
+    
+    func loadExpression() async {
+        if let expression = try? await self.favoriteType.getExpression() {
+            self.personView.set(expression: expression, author: User.current())
+        } else {
+            // show label?
+        }
+
+        self.personView.set(emotionCounts: [self.favoriteType.emotion: 1])
+    }
 }
 
-class QuickExpressionsView: BaseView {
+class FavoriteExpressionsView: BaseView {
     
-    var didSelectExpression: ((UniqueExpression) -> Void)?
+    var didSelectExpression: ((FavoriteType) -> Void)?
     static let height: CGFloat = 50
     private let darkBlur = DarkBlurView()
+    private let pool = TaskPool()
     
-    private lazy var expression1 = UniqueExpressionView(with: .love)
-    private lazy var expression2 = UniqueExpressionView(with: .sad)
-    private lazy var expression3 = UniqueExpressionView(with: .agree)
-    private lazy var expression4 = UniqueExpressionView(with: .happy)
-    private lazy var expression5 = UniqueExpressionView(with: .laughter)
+    private lazy var expression1 = FavoriteExpressionView(with: .love)
+    private lazy var expression2 = FavoriteExpressionView(with: .sad)
+    private lazy var expression3 = FavoriteExpressionView(with: .agree)
+    private lazy var expression4 = FavoriteExpressionView(with: .happy)
+    private lazy var expression5 = FavoriteExpressionView(with: .laughter)
     
     private lazy var allViews = [self.expression1, expression2, expression3, expression4, expression5]
     
@@ -71,7 +72,7 @@ class QuickExpressionsView: BaseView {
             view.alpha = 0
             view.transform = CGAffineTransform.init(scaleX: 0.001, y: 0.001)
             view.didSelect { [unowned self] in
-                self.didSelectExpression?(view.uniqueExpression)
+                self.didSelectExpression?(view.favoriteType)
             }
             self.addSubview(view)
         }
@@ -80,7 +81,7 @@ class QuickExpressionsView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.height = QuickExpressionsView.height
+        self.height = FavoriteExpressionsView.height
         
         let padding: CGFloat = Theme.ContentOffset.standard.value
         
@@ -122,9 +123,14 @@ class QuickExpressionsView: BaseView {
             UIView.animate(withDuration: Theme.animationDurationFast, delay: delay, options: .curveEaseInOut) {
                 view.alpha = 1.0
                 view.transform = .identity
-            } completion: { _ in
-                view.personView.expressionVideoView.shouldPlay = true 
             }
+        }
+                
+        await self.allViews.asyncForEach { view in
+            Task {
+                await view.loadExpression()
+            }.add(to: self.pool)
+            view.personView.expressionVideoView.shouldPlay = true
         }
     }
     
@@ -140,6 +146,8 @@ class QuickExpressionsView: BaseView {
             view.transform = CGAffineTransform.init(scaleX: 0.001, y: 0.001)
             view.personView.expressionVideoView.shouldPlay = false
         }
+        
+        self.pool.cancelAndRemoveAll()
         
         await Task.sleep(seconds: 0.1)
         

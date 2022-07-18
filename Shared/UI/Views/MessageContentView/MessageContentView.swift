@@ -314,16 +314,17 @@ class MessageContentView: BaseView {
         self.loadTask?.cancel()
         
         self.loadTask = Task { [weak self] in
-            if let expressionInfo = message.authorExpression,
-               let expression = try? await Expression.getObject(with: expressionInfo.expressionId) {
-
-                guard !Task.isCancelled else { return }
-
-                let emotionCounts = expression.emotionCounts
-                self?.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: false)
-
-                self?.authorView.set(expression: expression, author: nil)
-            } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId) {
+//            if let expressionInfo = message.authorExpression,
+//               let expression = try? await Expression.getObject(with: expressionInfo.expressionId) {
+//
+//                guard !Task.isCancelled else { return }
+//
+//                let emotionCounts = expression.emotionCounts
+//                self?.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: false)
+//
+//                self?.authorView.set(expression: expression, author: nil)
+//            } else
+            if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId) {
 
                 guard !Task.isCancelled else { return }
 

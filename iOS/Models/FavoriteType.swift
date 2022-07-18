@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum UniqueExpression: CaseIterable {
+enum FavoriteType: CaseIterable {
     
     case agree
     case happy
@@ -37,7 +37,7 @@ enum UniqueExpression: CaseIterable {
     func getExpression() async throws -> Expression? {
 //        let emotionCount: [String: Int] = [self.emotion.rawValue: 1]
 //        let pairs: [String: AnyHashable] = ["author": User.current()!]
-        
+
         return try await Expression.getObject(with: "Z2rwrGJyHn")
     }
 }

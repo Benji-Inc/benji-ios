@@ -22,7 +22,7 @@ class MessageFooterView: BaseView {
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
     
     let expressionStackedView = StackedExpressionView()
-    lazy var quickExpressionsView = QuickExpressionsView()
+    lazy var quickExpressionsView = FavoriteExpressionsView()
             
     private(set) var message: Messageable?
 
