@@ -12,7 +12,7 @@ enum FavoriteType: CaseIterable {
     
     case agree
     case happy
-    case suprised
+    case surprised
     case sad
     case love
     case laughter
@@ -23,7 +23,7 @@ enum FavoriteType: CaseIterable {
             return .contentment
         case .happy:
             return .happy
-        case .suprised:
+        case .surprised:
             return .surprised
         case .sad:
             return .sad
