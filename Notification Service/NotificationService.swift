@@ -33,6 +33,8 @@ class NotificationService: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         
+        logDebug("NOTE RECEIVED")
+        
         // Save the request and content handler in case we need to finish early.
         self.request = request
         self.contentHandler = contentHandler
