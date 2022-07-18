@@ -14,9 +14,9 @@ class VideoView: BaseView {
         didSet {
             guard let player = self.playerLayer.player else { return }
             
-            if self.shouldPlay, !player.isPlaying {
+            if self.shouldPlay, !self.isPlaying {
                 player.playImmediately(atRate: 1.0 )
-            } else if !self.shouldPlay, player.isPlaying {
+            } else if !self.shouldPlay, self.isPlaying {
                 player.pause()
             }
         }
@@ -27,6 +27,8 @@ class VideoView: BaseView {
             self.updatePlayer(with: self.videoURL)
         }
     }
+    
+    @Published var isPlaying: Bool = false
 
     let playerLayer = AVPlayerLayer(player: nil)
     /// An object that keeps looping the video back to the beginning.
@@ -86,11 +88,5 @@ class VideoView: BaseView {
                 player.playImmediately(atRate: 1.0)
             }
         }
-    }
-}
-
-extension AVPlayer {
-    var isPlaying: Bool {
-        return self.rate != 0 && self.error == nil
     }
 }

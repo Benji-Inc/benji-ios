@@ -12,7 +12,7 @@ import Combine
 
 class UnreadMessagesCounter: BaseView {
     
-    let imageView = SymbolImageView(symbol: .eyeglasses)
+    let imageView = SymbolImageView(symbol: .chevronUp)
     let circle = BaseView()
     
     let countCircle = BaseView()

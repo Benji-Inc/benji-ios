@@ -28,7 +28,10 @@ class TaskPool {
         for task in self.pool {
             task.cancel()
         }
-        self.pool.removeAll()
+        
+        if self.pool.count > 0 {
+            self.pool.removeAll()
+        }
     }
 }
 

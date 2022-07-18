@@ -593,6 +593,8 @@
 		D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4D2765A13B00FF6E2C /* Localization */; };
 		D657A35827FB4F7900664DD3 /* EmptyUnreadMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */; };
 		D657A35A27FB67D800664DD3 /* UnreadMessagesCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */; };
+		D6594D9F287A22B200473BD6 /* UniqueExpression.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6594D9E287A22B200473BD6 /* UniqueExpression.swift */; };
+		D6594DA1287B27DE00473BD6 /* QuickExpressionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6594DA0287B27DE00473BD6 /* QuickExpressionsView.swift */; };
 		D65D460527A9FE620019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D65D460627A9FEA00019301C /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D65E66D32858F0570040E3D8 /* ShortcutButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65E66D22858F0570040E3D8 /* ShortcutButton.swift */; };
@@ -1271,6 +1273,8 @@
 		D657A35727FB4F7900664DD3 /* EmptyUnreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyUnreadMessageCell.swift; sourceTree = "<group>"; };
 		D657A35927FB67D800664DD3 /* UnreadMessagesCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnreadMessagesCounter.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		D6594D9E287A22B200473BD6 /* UniqueExpression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueExpression.swift; sourceTree = "<group>"; };
+		D6594DA0287B27DE00473BD6 /* QuickExpressionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickExpressionsView.swift; sourceTree = "<group>"; };
 		D65E66D22858F0570040E3D8 /* ShortcutButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutButton.swift; sourceTree = "<group>"; };
 		D65E66D4285962560040E3D8 /* ShortcutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutViewController.swift; sourceTree = "<group>"; };
 		D65E66D6285A46AC0040E3D8 /* ShortcutOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutOptionView.swift; sourceTree = "<group>"; };
@@ -1750,6 +1754,7 @@
 		D60CA47D27EE747D00F0871A /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
+				D6594DA0287B27DE00473BD6 /* QuickExpressionsView.swift */,
 				D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */,
 				D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */,
 				D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */,
@@ -2232,6 +2237,7 @@
 			children = (
 				D695B44125BA398400843780 /* Attachments */,
 				D6E974352752C47F00D95F08 /* EmotionCategory.swift */,
+				D6594D9E287A22B200473BD6 /* UniqueExpression.swift */,
 				D6617CF326743DFE00439C06 /* Parse Subclasses */,
 				D64C323D270391AE004BC1BD /* Person.swift */,
 				D61128C42804EF2E00574B96 /* ReactionType.swift */,
@@ -3657,6 +3663,7 @@
 				D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */,
 				8023C69F27EB98B300FD9DB6 /* MessageContentContextMenuDelegate.swift in Sources */,
 				D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */,
+				D6594DA1287B27DE00473BD6 /* QuickExpressionsView.swift in Sources */,
 				D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D637651C27E959E200CCDA7F /* ConversationDetailCell.swift in Sources */,
@@ -3682,6 +3689,7 @@
 				D6619E582808BFA3004151CE /* PinnedMessageCell.swift in Sources */,
 				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D61A33CD27D4F27000056242 /* EmojiCollectionViewDataSource.swift in Sources */,
+				D6594D9F287A22B200473BD6 /* UniqueExpression.swift in Sources */,
 				D6C7EC262805E62D00A35808 /* WaitlistCoordinator.swift in Sources */,
 				D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,

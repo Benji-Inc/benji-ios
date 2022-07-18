@@ -128,20 +128,24 @@ class UserNotificationManager: NSObject {
         self.center.getDeliveredNotifications { [unowned self] delivered in
             Task.onMainActor {
                 var identifiers: [String] = []
-                var badgeCount = self.application?.applicationIconBadgeNumber ?? 0
+                
                 delivered.forEach { note in
                     if note.request.content.messageId == message.id {
                         identifiers.append(note.request.identifier)
                     }
-                    
-                    if message.deliveryType == .timeSensitive {
-                        badgeCount -= 1
-                    }
                 }
-                
-                // Must be called on Main thread or will crash
-                self.application?.applicationIconBadgeNumber = clamp(badgeCount - identifiers.count, min: 0)
+            
                 self.removeNotifications(with: identifiers)
+                
+                self.center.getDeliveredNotifications { [unowned self] delivered in
+                    // Must be called on Main thread or will crash
+                    let count = delivered.filter { note in
+                        return note.request.content.interruptionLevel == .timeSensitive
+                    }.count
+                    
+                    logDebug(count)
+                    self.application?.applicationIconBadgeNumber = count
+                }
             }
         }
     }
@@ -149,13 +153,9 @@ class UserNotificationManager: NSObject {
     
     // It was suggested that in order for this to work it needs to be called on a background thread.
     private func removeNotifications(with identifiers: [String]) {
-        Task {
-            DispatchQueue.global(qos: .background).async { [unowned self] in
-                //background code
-                self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
-                self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
-            }
-        }
+        //background code
+        self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
+        self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
 }
 

@@ -81,7 +81,7 @@ class SwipeableInputAccessoryView: BaseView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.expressionView.configure(with: nil)
+        self.expressionView.configure(with: nil, showPlus: false)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
         self.expressionView.personGradientView.expressionVideoView.shouldPlay = true 
     }

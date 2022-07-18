@@ -45,11 +45,11 @@ class AddExpressionView: BaseView {
         self.addImageView.match(.left, to: .right, of: self.imageView, offset: .negative(.custom(self.addImageView.height * 0.2)))
     }
 
-    func configure(with info: ExpressionInfo?) {
+    func configure(with info: ExpressionInfo?, showPlus: Bool) {
         
         self.personGradientView.isVisible = info.exists
         
-        self.addImageView.isVisible = info.isNil
+        self.addImageView.isVisible = info.isNil && showPlus
         self.imageView.isVisible = info.isNil
         
         guard let info = info else { return }
@@ -57,11 +57,11 @@ class AddExpressionView: BaseView {
         self.personGradientView.set(info: info, authorId: nil)
     }
     
-    func configure(withExpression expression: Expression?) {
+    func configure(withExpression expression: Expression?, showPlus: Bool) {
         
         self.personGradientView.isVisible = expression.exists
         
-        self.addImageView.isVisible = expression.isNil
+        self.addImageView.isVisible = expression.isNil && showPlus
         self.imageView.isVisible = expression.isNil
         
         guard let expression = expression else { return }

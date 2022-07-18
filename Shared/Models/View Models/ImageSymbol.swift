@@ -33,6 +33,7 @@ enum ImageSymbol: String, ImageDisplayable {
     case handWave = "hand.wave"
     case thumbsUp = "hand.thumbsup"
     case chevronDownCircle = "chevron.down.circle"
+    case chevronUp = "chevron.up"
     case ellipsis = "ellipsis"
     case arrowTurnUpLeft = "arrowshape.turn.up.left"
     case pencil = "pencil"

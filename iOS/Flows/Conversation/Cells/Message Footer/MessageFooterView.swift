@@ -22,6 +22,7 @@ class MessageFooterView: BaseView {
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
     
     let expressionStackedView = StackedExpressionView()
+    //lazy var quickExpressionsView = QuickExpressionsView()
             
     private(set) var message: Messageable?
 
@@ -40,6 +41,18 @@ class MessageFooterView: BaseView {
         
         self.replySummary.replyView.didSelect { [unowned self] in
             self.didTapViewReplies?()
+        }
+        
+        self.expressionStackedView.didTapAdd = { [unowned self] in
+//            Task {
+//                if self.quickExpressionsView.superview.isNil {
+//                    await self.quickExpressionsView.reveal(in: self)
+//                } else {
+//                    await self.quickExpressionsView.dismiss()
+//                }
+//            }
+//            guard let message = self.message else { return }
+//            self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)
         }
     }
     
@@ -70,6 +83,9 @@ class MessageFooterView: BaseView {
         self.statusLabel.setSize(withWidth: self.width)
         self.statusLabel.pin(.top, offset: .short)
         self.statusLabel.pin(.right)
+        
+//        self.quickExpressionsView.match(.bottom, to: .top, of: self.expressionStackedView, offset: .negative(.standard))
+//        self.quickExpressionsView.pin(.left)
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
