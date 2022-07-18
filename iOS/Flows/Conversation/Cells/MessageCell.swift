@@ -75,10 +75,10 @@ class MessageCell: UICollectionViewCell {
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }
         
-        self.footerView.expressionStackedView.didTapAdd = { [unowned self] in
-            guard let message = self.message else { return }
-            self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)
-        }
+//        self.footerView.expressionStackedView.didTapAdd = { [unowned self] in
+//            guard let message = self.message else { return }
+//            self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)
+//        }
         
         self.footerView.replyButton.didSelectSuggestion = { [unowned self] text in
             self.addReply(with: text)

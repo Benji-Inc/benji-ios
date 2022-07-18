@@ -37,6 +37,22 @@ class VideoView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        NotificationCenter.default.publisher(for: AVPlayer.rateDidChangeNotification)
+            .filter({ notification in
+                if let player = notification.object as? AVPlayer,
+                   player === self.playerLayer.player {
+                    return true
+                }
+                
+                return false
+            }).mainSink { [unowned self] (value) in
+                guard let player = value.object as? AVQueuePlayer else { return }
+                
+                self.isPlaying = player.timeControlStatus == .playing 
+                
+            }.store(in: &self.cancellables)
+        
+        
         self.layer.addSublayer(self.playerLayer)
     }
 
