@@ -203,7 +203,7 @@ class ConversationViewController: InputHandlerViewContoller,
 
     func updateUI(for state: ConversationUIState, forceLayout: Bool = false) {
         guard self.presentedViewController.isNil || forceLayout else { return }
-
+        
         self.headerVC.update(for: state)
         self.dataSource.uiState = state
 
