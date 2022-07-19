@@ -47,7 +47,7 @@ class FavoriteExpressionView: BaseView {
 
 class FavoriteExpressionsView: BaseView {
     
-    var didSelectExpression: ((FavoriteType) -> Void)?
+    var didSelectFavorite: ((FavoriteType) -> Void)?
     static let height: CGFloat = 50
     private let darkBlur = DarkBlurView()
     private let pool = TaskPool()
@@ -72,7 +72,7 @@ class FavoriteExpressionsView: BaseView {
             view.alpha = 0
             view.transform = CGAffineTransform.init(scaleX: 0.001, y: 0.001)
             view.didSelect { [unowned self] in
-                self.didSelectExpression?(view.favoriteType)
+                self.didSelectFavorite?(view.favoriteType)
             }
             self.addSubview(view)
         }

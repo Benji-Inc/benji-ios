@@ -75,11 +75,6 @@ class MessageCell: UICollectionViewCell {
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }
         
-//        self.footerView.expressionStackedView.didTapAdd = { [unowned self] in
-//            guard let message = self.message else { return }
-//            self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)
-//        }
-        
         self.footerView.replyButton.didSelectSuggestion = { [unowned self] text in
             self.addReply(with: text)
         }
@@ -87,6 +82,15 @@ class MessageCell: UICollectionViewCell {
         self.footerView.didTapViewReplies = { [unowned self] in
             guard let message = self.message else { return }
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
+        }
+        
+        self.footerView.quickExpressionsView.didSelectFavorite = { [unowned self] favorite in
+            Task {
+                guard let message = self.message,
+                      let info = try? await favorite.getExpression()?.info else { return }
+                
+                self.content.delegate?.messageContent(self.content, didTapExpression: info, forMessage: message)
+            }
         }
 
         self.conversationsManagerSubscription = ConversationsManager.shared.$activeConversation

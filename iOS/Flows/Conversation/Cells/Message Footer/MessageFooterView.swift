@@ -91,10 +91,12 @@ class MessageFooterView: BaseView {
         let replyPoint = self.convert(point, to: self.replySummary)
         let replyButtonPoint = self.convert(point, to: self.replyButton)
         let expressionPoint = self.convert(point, to: self.expressionStackedView)
+        let quickPoint = self.convert(point, to: self.quickExpressionsView)
 
         return self.replySummary.point(inside: replyPoint, with: event)
         || self.replyButton.point(inside: replyButtonPoint, with: event)
         || self.expressionStackedView.point(inside: expressionPoint, with: event)
+        || self.quickExpressionsView.point(inside: quickPoint, with: event)
     }
 
     private func getString(for deliveryStatus: DeliveryStatus) -> String {

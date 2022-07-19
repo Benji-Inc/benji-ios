@@ -71,7 +71,7 @@ class VideoView: BaseView {
             return
         }
 
-        self.loadTracksTask = Task {
+        self.loadTracksTask = Task { [weak self] in
             // Retrieve the video asset.
             let asset = AVAsset(url: videoURL)
             let tracks = try? await asset.loadTracks(withMediaType: .video)
@@ -83,21 +83,21 @@ class VideoView: BaseView {
             
             let videoItem = AVPlayerItem(asset: videoAsset)
 
-            if let player = self.playerLayer.player {
+            if let player = self?.playerLayer.player {
                 // No need to create a new player if we already have one. Just update the video.
                 player.replaceCurrentItem(with: videoItem)
             } else {
                 // If no player exists, create a new one and assign it the downloaded video.
                 let player = AVQueuePlayer(items: [videoItem])
                 player.automaticallyWaitsToMinimizeStalling = false
-                self.playerLayer.player = player
+                self?.playerLayer.player = player
             }
             
-            guard let player = self.playerLayer.player as? AVQueuePlayer else { return }
+            guard let player = self?.playerLayer.player as? AVQueuePlayer else { return }
             
-            self.looper = AVPlayerLooper(player: player, templateItem: videoItem)
+            self?.looper = AVPlayerLooper(player: player, templateItem: videoItem)
             
-            if self.shouldPlay {
+            if let `self` = self, self.shouldPlay {
                 player.playImmediately(atRate: 1.0)
             }
         }

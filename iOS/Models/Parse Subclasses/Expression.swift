@@ -73,6 +73,12 @@ final class Expression: PFObject, PFSubclassing {
         get { self.getObject(for: .isFavorite) }
         set { self.setObject(for: .isFavorite, with: newValue) }
     }
+    
+    var info: ExpressionInfo? {
+        guard let authorId = self.author?.objectId,
+                let objectId = self.objectId else { return nil }
+        return ExpressionInfo(authorId: authorId, expressionId: objectId)
+    }
 }
 
 extension Expression: Objectable {
