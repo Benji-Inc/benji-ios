@@ -18,6 +18,9 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable)
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable)
     func messageContent(_ content: MessageContentView,
+                        didTapAddFavorite expression: Expression,
+                        toMessage message: Messageable)
+    func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
                         forMessage message: Messageable)
 }
@@ -28,6 +31,9 @@ extension MessageContentDelegate {
     func messageContent(_ content: MessageContentView, didTapEditMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {}
+    func messageContent(_ content: MessageContentView,
+                        didTapAddFavorite expression: Expression,
+                        toMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
                         forMessage message: Messageable) {}

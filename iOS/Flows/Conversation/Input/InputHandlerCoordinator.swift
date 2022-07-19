@@ -104,18 +104,21 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         self.present(coordinator) { result in
             guard let expression = result else { return }
             
-            expression.emotions.forEach { emotion in
-                AnalyticsManager.shared.trackEvent(type: .emotionSelected,
-                                                   properties: ["value": emotion.rawValue])
-            }
-            
-            let controller = MessageController.controller(for: message)
-            
             Task {
-                // Add new or update
-                try await controller?.add(expression: expression)
+                await self.add(expression: expression, toMessage: message)
             }
         }
+    }
+    
+    func add(expression: Expression, toMessage message: Messageable) async {
+        expression.emotions.forEach { emotion in
+            AnalyticsManager.shared.trackEvent(type: .emotionSelected,
+                                               properties: ["value": emotion.rawValue])
+        }
+        
+        let controller = MessageController.controller(for: message)
+        // Add new or update
+        try? await controller?.add(expression: expression)
     }
     
     func presentExpressions() {
@@ -300,6 +303,14 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {
         self.presentExpressionCreation(for: message)
+    }
+    
+    func messageContent(_ content: MessageContentView,
+                        didTapAddFavorite expression: Expression,
+                        toMessage message: Messageable) {
+        Task {
+            await self.add(expression: expression, toMessage: message)
+        }
     }
 
     func messageContent(_ content: MessageContentView,

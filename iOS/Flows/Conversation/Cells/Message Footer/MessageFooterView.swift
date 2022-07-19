@@ -22,7 +22,7 @@ class MessageFooterView: BaseView {
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
     
     let expressionStackedView = StackedExpressionView()
-    lazy var quickExpressionsView = FavoriteExpressionsView()
+    lazy var favoriteExpressionsView = FavoriteExpressionsView()
             
     private(set) var message: Messageable?
 
@@ -45,10 +45,10 @@ class MessageFooterView: BaseView {
         
         self.expressionStackedView.didTapAdd = { [unowned self] in
             Task {
-                if self.quickExpressionsView.superview.isNil {
-                    await self.quickExpressionsView.reveal(in: self)
+                if self.favoriteExpressionsView.superview.isNil {
+                    await self.favoriteExpressionsView.reveal(in: self)
                 } else {
-                    await self.quickExpressionsView.dismiss()
+                    await self.favoriteExpressionsView.dismiss()
                 }
             }
         }
@@ -82,8 +82,8 @@ class MessageFooterView: BaseView {
         self.statusLabel.pin(.top, offset: .short)
         self.statusLabel.pin(.right)
         
-        self.quickExpressionsView.match(.bottom, to: .top, of: self.expressionStackedView, offset: .negative(.standard))
-        self.quickExpressionsView.pin(.left)
+        self.favoriteExpressionsView.match(.bottom, to: .top, of: self.expressionStackedView, offset: .negative(.standard))
+        self.favoriteExpressionsView.pin(.left)
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -91,12 +91,12 @@ class MessageFooterView: BaseView {
         let replyPoint = self.convert(point, to: self.replySummary)
         let replyButtonPoint = self.convert(point, to: self.replyButton)
         let expressionPoint = self.convert(point, to: self.expressionStackedView)
-        let quickPoint = self.convert(point, to: self.quickExpressionsView)
+        let quickPoint = self.convert(point, to: self.favoriteExpressionsView)
 
         return self.replySummary.point(inside: replyPoint, with: event)
         || self.replyButton.point(inside: replyButtonPoint, with: event)
         || self.expressionStackedView.point(inside: expressionPoint, with: event)
-        || self.quickExpressionsView.point(inside: quickPoint, with: event)
+        || self.favoriteExpressionsView.point(inside: quickPoint, with: event)
     }
 
     private func getString(for deliveryStatus: DeliveryStatus) -> String {
