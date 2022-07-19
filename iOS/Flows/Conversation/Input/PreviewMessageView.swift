@@ -124,7 +124,7 @@ class PreviewMessageView: SpeechBubbleView {
         self.imageView.pin(.right, offset: .long)
 
         self.deliveryTypeView.centerOnX()
-        self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height * 0.5))
+        self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height - 4))
         
         self.countCircle.pin(.bottom, offset: .short)
         self.countCircle.pin(.right, offset: .short)
