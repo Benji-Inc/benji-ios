@@ -414,7 +414,7 @@ extension MessageTextView {
             return
         }
         
-        self.font = FontType.contextCues.font
+        self.font = FontType.emoji.font
 
         guard self.numberOfLines > 1 else { return }
 

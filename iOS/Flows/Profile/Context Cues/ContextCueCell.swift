@@ -15,7 +15,7 @@ class ContextCueCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: ContextCue?
     
     let container = BaseView()
-    let emojiLabel = ThemeLabel(font: .contextCues)
+    let emojiLabel = ThemeLabel(font: .emoji)
     let daysAgoLabel = ThemeLabel(font: .xtraSmall)
     let timeLabel = ThemeLabel(font: .xtraSmall)
     
