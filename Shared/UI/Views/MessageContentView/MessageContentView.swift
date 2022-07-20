@@ -23,6 +23,9 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
                         forMessage message: Messageable)
+    func messageContent(_ content: MessageContentView,
+                        didTapFavorite type: FavoriteType,
+                        forMessage message: Messageable)
 }
 
 extension MessageContentDelegate {
@@ -36,6 +39,9 @@ extension MessageContentDelegate {
                         toMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
+                        forMessage message: Messageable) {}
+    func messageContent(_ content: MessageContentView,
+                        didTapFavorite type: FavoriteType,
                         forMessage message: Messageable) {}
 }
 

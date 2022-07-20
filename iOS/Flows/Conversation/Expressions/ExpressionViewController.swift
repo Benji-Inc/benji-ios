@@ -38,18 +38,30 @@ class ExpressionViewController: ViewController {
     
     var animation = CABasicAnimation(keyPath: "strokeEnd")
     
-    var shapeLayer: CAShapeLayer = {
+    lazy var shapeLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
+        let color = self.favoriteType?.emotion.color.cgColor ?? ThemeColor.D6.color.cgColor
         shapeLayer.fillColor = ThemeColor.clear.color.cgColor
-        shapeLayer.strokeColor = ThemeColor.D6.color.cgColor
+        shapeLayer.strokeColor = color
         shapeLayer.lineCap = .round
-        shapeLayer.lineWidth = 2
-        shapeLayer.shadowColor = ThemeColor.D6.color.cgColor
+        shapeLayer.lineWidth = 4
+        shapeLayer.shadowColor = color
         shapeLayer.shadowRadius = 5
         shapeLayer.shadowOffset = .zero
         shapeLayer.shadowOpacity = 1.0
         return shapeLayer
     }()
+    
+    @Published var favoriteType: FavoriteType?
+    
+    init(with favoriteType: FavoriteType?) {
+        self.favoriteType = favoriteType
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func initializeViews() {
         super.initializeViews()
@@ -91,6 +103,11 @@ class ExpressionViewController: ViewController {
     }
     
     private func setupHandlers() {
+        
+        self.$favoriteType.mainSink { [unowned self] type in
+            guard let type = type else { return }
+            self.expressionCaptureVC.set(favoriteType: type)
+        }.store(in: &self.cancellables)
         
         self.expressionCaptureVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
             self.videoURL = videoURL
@@ -160,6 +177,7 @@ class ExpressionViewController: ViewController {
             })
             
             UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
+                self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
                 self.expressionCaptureVC.faceCaptureVC.view.alpha = 1.0
             } completion: { _ in
                 if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
@@ -178,6 +196,9 @@ class ExpressionViewController: ViewController {
             self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: videoURL)
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
+                if let favoriteType = self.favoriteType {
+                    self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.layer.borderColor = favoriteType.emotion.color.cgColor
+                }
                 self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 0.0
                 self.view.layoutNow()
             }
@@ -191,6 +212,10 @@ class ExpressionViewController: ViewController {
         
         let expression = Expression()
         
+        if let favoriteType = self.favoriteType {
+            expression.emotionCounts = [favoriteType.emotion: 1]
+            expression.isFavorite = true 
+        }
         expression.author = User.current()
         expression.file = PFFileObject(name: "expression.mov", data: videoData)
         expression.emojiString = nil

@@ -25,23 +25,7 @@ extension ExpressionViewController {
         let containerView = self.expressionCaptureVC.faceCaptureVC.cameraViewContainer
         let frame = containerView.convert(containerView.bounds, to: self.view)
         self.shapeLayer.path = UIBezierPath(roundedRect: frame, byRoundingCorners: [.allCorners], cornerRadii: CGSize(width: frame.height * 0.25, height: frame.height * 0.25)).cgPath
-        
-
-        //let path = UIBezierPath() //UIBezierPath(rect: frame).cgPath
-        
-//        let bottomCenter = CGPoint(x: <#T##CGFloat#>, y: <#T##CGFloat#>)
-//        path.move(to: CGPoint(x: 10, y: 50))
-//        path.addLine(to: CGPoint(x: 200, y: 50))
-//                path.addLine(to: CGPoint(x: 200, y: 240))
-                
-                // create shape layer for that path
-                
-                
-                
-                // animate it
-                
-                
-                
+    
         self.shapeLayer.add(self.animation, forKey: "MyAnimation")
     }
     

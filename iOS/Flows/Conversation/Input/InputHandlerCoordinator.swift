@@ -99,8 +99,10 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentExpressionCreation(for message: Messageable) {
-        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+    func presentExpressionCreation(for message: Messageable, withFavorite type: FavoriteType? = nil) {
+        let coordinator = ExpressionCoordinator(favoriteType: type,
+                                                router: self.router,
+                                                deepLink: self.deepLink)
         self.present(coordinator) { result in
             guard let expression = result else { return }
             
@@ -122,7 +124,9 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func presentExpressions() {
-        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = ExpressionCoordinator(favoriteType: nil,
+                                                router: self.router,
+                                                deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] expression in
             AnalyticsManager.shared.trackEvent(type: .expressionMade)
             self.inputHandlerViewController.swipeableVC.currentExpression = expression
@@ -311,6 +315,13 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         Task {
             await self.add(expression: expression, toMessage: message)
         }
+    }
+    
+    func messageContent(_ content: MessageContentView,
+                        didTapFavorite type: FavoriteType,
+                        forMessage message: Messageable) {
+        
+        self.presentExpressionCreation(for: message, withFavorite: type)
     }
 
     func messageContent(_ content: MessageContentView,
