@@ -335,8 +335,7 @@ class MessageContentView: BaseView {
                 self?.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: false)
 
                 self?.authorView.set(expression: expression, author: nil)
-            } else
-            if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId) {
+            } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId) {
 
                 guard !Task.isCancelled else { return }
 

@@ -60,6 +60,7 @@ class MessageDetailViewController: DiffableCollectionViewController<MessageDetai
         
         self.view.addSubview(self.messageContentView)
         self.messageContentView.configure(with: self.message)
+        self.messageContent?.authorView.expressionVideoView.shouldPlay = true 
         
         self.view.addSubview(self.pullView)
     
