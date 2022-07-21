@@ -8,53 +8,6 @@
 
 import Foundation
 
-class FavoriteExpressionView: BaseView {
-    
-    let favoriteType: FavoriteType
-    let personView = PersonGradientView()
-    private let label = ThemeLabel(font: .emoji)
-    
-    init(with expression: FavoriteType) {
-        self.favoriteType = expression
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.addSubview(self.personView)
-        self.addSubview(self.label)
-        self.label.textAlignment = .center
-        self.label.setText(self.favoriteType.emoji)
-        self.label.isVisible = false
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.personView.expandToSuperviewSize()
-        
-        self.label.sizeToFit()
-        self.label.center = CGPoint(x: self.halfWidth + 1,
-                                    y: self.halfHeight)
-    }
-    
-    func loadExpression() async {
-        if let expression = try? await self.favoriteType.getExpression() {
-            self.personView.set(expression: expression, author: User.current())
-            self.label.isVisible = false
-        } else {
-            self.label.isVisible = true
-        }
-
-        self.personView.set(emotionCounts: [self.favoriteType.emotion: 1])
-    }
-}
-
 class FavoriteExpressionsView: BaseView {
     
     var didSelectFavorite: ((FavoriteType) -> Void)?

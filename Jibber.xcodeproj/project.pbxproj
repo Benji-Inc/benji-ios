@@ -866,6 +866,8 @@
 		D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502C21D6A08300CD8CE4 /* ThreadCollectionView.swift */; };
 		D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */; };
 		D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
+		D6D1CD962888C8BD00382E07 /* FavoriteExpressionPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1CD952888C8BD00382E07 /* FavoriteExpressionPreviewViewController.swift */; };
+		D6D1CD982888CBED00382E07 /* FavoriteExpressionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1CD972888CBED00382E07 /* FavoriteExpressionView.swift */; };
 		D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D380C3257FC18300C562E8 /* Selectable.swift */; };
 		D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39278265AAAA700E49F1E /* MicroAnimation.swift */; };
 		D6D3927B265AAAA700E49F1E /* MicroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39278265AAAA700E49F1E /* MicroAnimation.swift */; };
@@ -1445,6 +1447,8 @@
 		D6D1502C21D6A08300CD8CE4 /* ThreadCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCollectionView.swift; sourceTree = "<group>"; };
 		D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D6D1503D21DAF98500CD8CE4 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		D6D1CD952888C8BD00382E07 /* FavoriteExpressionPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteExpressionPreviewViewController.swift; sourceTree = "<group>"; };
+		D6D1CD972888CBED00382E07 /* FavoriteExpressionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteExpressionView.swift; sourceTree = "<group>"; };
 		D6D380C3257FC18300C562E8 /* Selectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
 		D6D39278265AAAA700E49F1E /* MicroAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroAnimation.swift; sourceTree = "<group>"; };
 		D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationView+Extensions.swift"; sourceTree = "<group>"; };
@@ -1754,10 +1758,12 @@
 		D60CA47D27EE747D00F0871A /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
-				D6594DA0287B27DE00473BD6 /* FavoriteExpressionsView.swift */,
 				D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */,
 				D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */,
 				D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */,
+				D6D1CD952888C8BD00382E07 /* FavoriteExpressionPreviewViewController.swift */,
+				D6594DA0287B27DE00473BD6 /* FavoriteExpressionsView.swift */,
+				D6D1CD972888CBED00382E07 /* FavoriteExpressionView.swift */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -3684,6 +3690,7 @@
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
+				D6D1CD962888C8BD00382E07 /* FavoriteExpressionPreviewViewController.swift in Sources */,
 				D6B2B659283D3A3E007D507B /* TipContentView.swift in Sources */,
 				D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */,
 				D6619E582808BFA3004151CE /* PinnedMessageCell.swift in Sources */,
@@ -3743,6 +3750,7 @@
 				D6AA61F42852542A00FA4D02 /* HomeViewController.swift in Sources */,
 				809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */,
 				80D5C28E281719B200182DB6 /* EmotionDetailCollectionViewLayout.swift in Sources */,
+				D6D1CD982888CBED00382E07 /* FavoriteExpressionView.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
