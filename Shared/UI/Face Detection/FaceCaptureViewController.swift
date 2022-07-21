@@ -26,7 +26,7 @@ class FaceCaptureViewController: ViewController {
         case ending
     }
 
-    private(set) var videoCaptureState: VideoCaptureState = .idle
+    @Published private(set) var videoCaptureState: VideoCaptureState = .idle
 
     var didCapturePhoto: ((UIImage) -> Void)?
     var didCaptureVideo: ((URL) -> Void)?

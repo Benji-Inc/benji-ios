@@ -12,7 +12,7 @@ import QuartzCore
 extension ExpressionViewController {
     
     func beginRecordingAnimation() {
-        
+    
         self.shapeLayer.removeFromSuperlayer()
         self.view.layer.addSublayer(self.shapeLayer)
         

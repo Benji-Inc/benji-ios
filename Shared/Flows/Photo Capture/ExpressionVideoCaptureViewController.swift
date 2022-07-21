@@ -14,7 +14,6 @@ class ExpressionVideoCaptureViewController: ViewController {
 
     private let emotionGradientView = EmotionGradientView()
     lazy var faceCaptureVC = FaceCaptureViewController()
-    private let label = ThemeLabel(font: .emoji)
 
     // MARK: - Life Cycle
 
@@ -25,10 +24,6 @@ class ExpressionVideoCaptureViewController: ViewController {
         self.emotionGradientView.alpha = 0.75
 
         self.addChild(viewController: self.faceCaptureVC)
-        
-        self.view.addSubview(self.label)
-        self.label.isVisible = false 
-        self.label.textAlignment = .center
         
         self.faceCaptureVC.faceCaptureSession.flashMode = .off
     }
@@ -44,11 +39,6 @@ class ExpressionVideoCaptureViewController: ViewController {
         
         self.faceCaptureVC.view.expandToSuperviewSize()
         self.emotionGradientView.frame = self.faceCaptureVC.cameraViewContainer.frame
-        
-        let offset = self.emotionGradientView.height * 0.1
-        self.label.sizeToFit()
-        self.label.match(.right, to: .right, of: self.emotionGradientView, offset: .custom(-offset))
-        self.label.match(.bottom, to: .bottom, of: self.emotionGradientView, offset: .custom(-offset))
     }
     
     func beginVideoCapture() {
@@ -71,8 +61,6 @@ class ExpressionVideoCaptureViewController: ViewController {
     
     func set(favoriteType: FavoriteType) {
         self.emotionGradientView.set(emotionCounts: [favoriteType.emotion: 1])
-        self.label.isVisible = true
-        self.label.setText(favoriteType.emoji)
         self.view.setNeedsLayout()
     }
 }
