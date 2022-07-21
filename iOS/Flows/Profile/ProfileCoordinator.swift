@@ -93,6 +93,10 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
 
 extension ProfileCoordinator: MessageContentDelegate {
     
+    func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {
+        
+    }
+    
     func messageContent(_ content: MessageContentView, didTapViewReplies message: Messageable) {
         self.finishFlow(with: .openReplies(message))
     }

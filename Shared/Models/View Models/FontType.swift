@@ -19,7 +19,7 @@ enum FontType {
     case small
     case smallBold
     case xtraSmall
-    case contextCues
+    case emoji
     
     var symbolConfiguration: UIImage.SymbolConfiguration {
         return UIImage.SymbolConfiguration(font: self.font)
@@ -27,7 +27,7 @@ enum FontType {
 
     var font: UIFont {
         switch self {
-        case .display, .medium, .regular, .small, .xtraSmall, .contextCues:
+        case .display, .medium, .regular, .small, .xtraSmall, .emoji:
             return UIFont.systemFont(ofSize: self.size)
         case .mediumBold, .regularBold, .smallBold:
             return UIFont.systemFont(ofSize: self.size, weight: .bold)
@@ -38,7 +38,7 @@ enum FontType {
         switch self {
         case .display:
             return 36
-        case .contextCues:
+        case .emoji:
             return 26
         case .medium, .mediumBold:
             return 20
@@ -55,7 +55,7 @@ enum FontType {
         switch self {
         case .small, .xtraSmall:
             return 0
-        case .contextCues:
+        case .emoji:
             return 2
         default:
             return 0.2

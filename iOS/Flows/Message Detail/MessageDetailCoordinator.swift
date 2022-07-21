@@ -199,7 +199,9 @@ extension MessageDetailCoordinator: MessageContentDelegate {
     }
     
     func presentExpressionCreation(for message: Messageable) {
-        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = ExpressionCoordinator(favoriteType: nil,
+                                                router: self.router,
+                                                deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { [unowned self] result in
             guard let expression = result else { return }
             

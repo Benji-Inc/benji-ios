@@ -23,9 +23,11 @@ class ExpressionViewController: ViewController {
     }
     
     let blurView = DarkBlurView()
+    
     private let doneButton = ThemeButton()
     
     lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
+    let favoriteLabel = FavoriteLabel()
     
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
@@ -38,18 +40,30 @@ class ExpressionViewController: ViewController {
     
     var animation = CABasicAnimation(keyPath: "strokeEnd")
     
-    var shapeLayer: CAShapeLayer = {
+    lazy var shapeLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
+        let color = self.favoriteType?.emotion.color.cgColor ?? ThemeColor.D6.color.cgColor
         shapeLayer.fillColor = ThemeColor.clear.color.cgColor
-        shapeLayer.strokeColor = ThemeColor.D6.color.cgColor
+        shapeLayer.strokeColor = color
         shapeLayer.lineCap = .round
-        shapeLayer.lineWidth = 2
-        shapeLayer.shadowColor = ThemeColor.D6.color.cgColor
+        shapeLayer.lineWidth = 4
+        shapeLayer.shadowColor = color
         shapeLayer.shadowRadius = 5
         shapeLayer.shadowOffset = .zero
         shapeLayer.shadowOpacity = 1.0
         return shapeLayer
     }()
+    
+    @Published var favoriteType: FavoriteType?
+    
+    init(with favoriteType: FavoriteType?) {
+        self.favoriteType = favoriteType
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func initializeViews() {
         super.initializeViews()
@@ -69,6 +83,8 @@ class ExpressionViewController: ViewController {
         
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
+        
+        self.view.addSubview(self.favoriteLabel)
                 
         self.setupHandlers()
     }
@@ -83,6 +99,14 @@ class ExpressionViewController: ViewController {
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
         
+        if self.expressionCaptureVC.faceCaptureVC.videoCaptureState == .starting {
+            self.favoriteLabel.match(.top, to: .top, of: self.expressionCaptureVC.faceCaptureVC.label)
+        } else {
+            self.favoriteLabel.match(.top, to: .bottom, of: self.expressionCaptureVC.faceCaptureVC.label, offset: .short)
+        }
+        
+        self.favoriteLabel.centerOnX()
+        
         if self.state == .confirm {
             self.doneButton.pinToSafeAreaBottom()
         } else {
@@ -91,6 +115,13 @@ class ExpressionViewController: ViewController {
     }
     
     private func setupHandlers() {
+        
+        self.$favoriteType.mainSink { [unowned self] type in
+            guard let type = type else { return }
+            self.favoriteLabel.configure(with: type)
+            self.expressionCaptureVC.set(favoriteType: type)
+            self.view.setNeedsLayout()
+        }.store(in: &self.cancellables)
         
         self.expressionCaptureVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
             self.videoURL = videoURL
@@ -132,11 +163,31 @@ class ExpressionViewController: ViewController {
         if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
             self.expressionCaptureVC.faceCaptureVC.beginSession()
         }
+        
+        self.expressionCaptureVC.faceCaptureVC.$videoCaptureState
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+                
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                if state == .starting {
+                    if self.favoriteLabel.transform == .identity {
+                        var transform = CGAffineTransform.identity
+                        transform = transform.scaledBy(x: 1.5, y: 1.5)
+                        self.favoriteLabel.transform = transform
+                        self.view.layoutNow()
+                    }
+                } else if state == .ending {
+                    self.favoriteLabel.transform = .identity
+                    self.view.layoutNow()
+                }
+            }
+        }.store(in: &self.cancellables)
     }
     
     private func update(for state: State) {
         switch state {
         case .initial:
+            self.favoriteLabel.alpha = 0.0
             self.expressionCaptureVC.faceCaptureVC.animate(text: "Scanning...")
             self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 1.0
             self.expressionCaptureVC.faceCaptureVC.animationView.play()
@@ -147,8 +198,11 @@ class ExpressionViewController: ViewController {
             
             self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
             
-            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, animations: {
+            let duration: TimeInterval = 0.25
+            
+            UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
+                    self.favoriteLabel.alpha = 1.0
                     self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 1
                     self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
                     self.view.layoutNow()
@@ -159,7 +213,8 @@ class ExpressionViewController: ViewController {
                 }
             })
             
-            UIView.animate(withDuration: 0.1, delay: 0.5, options: []) {
+            UIView.animate(withDuration: 0.1, delay: duration, options: []) {
+                self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
                 self.expressionCaptureVC.faceCaptureVC.view.alpha = 1.0
             } completion: { _ in
                 if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
@@ -178,6 +233,11 @@ class ExpressionViewController: ViewController {
             self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: videoURL)
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
+                if let favoriteType = self.favoriteType {
+                    self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.layer.borderColor = favoriteType.emotion.color.cgColor
+                }
+                self.favoriteLabel.alpha = 0.0
+                self.favoriteLabel.transform = .identity
                 self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 0.0
                 self.view.layoutNow()
             }
@@ -189,20 +249,38 @@ class ExpressionViewController: ViewController {
         
         let videoData = try! Data(contentsOf: videoURL)
         
-        let expression = Expression()
-        
-        expression.author = User.current()
-        expression.file = PFFileObject(name: "expression.mov", data: videoData)
-        expression.emojiString = nil
-        
-        guard let saved = try? await expression.saveToServer() else { return nil }
-        
-        return saved
+        // If an expression exists, then update it
+        if let type = self.favoriteType, let expression = try? await type.getExpression() {
+            
+            expression.file = PFFileObject(name: "expression.mov", data: videoData)
+            guard let saved = try? await expression.saveToServer() else { return nil }
+            return saved
+            
+        // Otherwise create a new one
+        } else {
+            let expression = Expression()
+            
+            if let favoriteType = self.favoriteType {
+                expression.emotionCounts = [favoriteType.emotion: 1]
+                expression.isFavorite = true
+            }
+            expression.author = User.current()
+            expression.file = PFFileObject(name: "expression.mov", data: videoData)
+            expression.emojiString = nil
+            
+            guard let saved = try? await expression.saveToServer() else { return nil }
+            
+            return saved
+        }
     }
-    
+        
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         guard self.state == .capture else { return }
+        
+        if let _ = touches.first?.view as? VideoView {
+            return
+        }
         
         self.beginRecordingAnimation()
     }

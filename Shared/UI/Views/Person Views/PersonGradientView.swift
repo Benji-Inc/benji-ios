@@ -10,8 +10,9 @@ import Foundation
 
 class PersonGradientView: DisplayableImageView {
     
-    private let emotionGradientView = EmotionGradientView()
+    let emotionGradientView = EmotionGradientView()
     let expressionVideoView = ExpressionVideoView()
+    var cornerRadiusRatio: CGFloat = 0.25
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -29,7 +30,7 @@ class PersonGradientView: DisplayableImageView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.layer.cornerRadius = self.height * 0.25
+        self.layer.cornerRadius = self.height * self.cornerRadiusRatio
 
         self.emotionGradientView.expandToSuperviewSize()
         self.expressionVideoView.expandToSuperviewSize()

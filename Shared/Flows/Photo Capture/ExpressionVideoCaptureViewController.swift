@@ -12,13 +12,16 @@ class ExpressionVideoCaptureViewController: ViewController {
 
     // MARK: - Views
 
+    private let emotionGradientView = EmotionGradientView()
     lazy var faceCaptureVC = FaceCaptureViewController()
-    let videoPreviewView = VideoView()
 
     // MARK: - Life Cycle
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.view.addSubview(self.emotionGradientView)
+        self.emotionGradientView.alpha = 0.75
 
         self.addChild(viewController: self.faceCaptureVC)
         
@@ -35,6 +38,7 @@ class ExpressionVideoCaptureViewController: ViewController {
         super.viewDidLayoutSubviews()
         
         self.faceCaptureVC.view.expandToSuperviewSize()
+        self.emotionGradientView.frame = self.faceCaptureVC.cameraViewContainer.frame
     }
     
     func beginVideoCapture() {
@@ -53,5 +57,10 @@ class ExpressionVideoCaptureViewController: ViewController {
         case .idle, .ending:
             break
         }
+    }
+    
+    func set(favoriteType: FavoriteType) {
+        self.emotionGradientView.set(emotionCounts: [favoriteType.emotion: 1])
+        self.view.setNeedsLayout()
     }
 }

@@ -34,7 +34,7 @@ class SwipeableInputAccessoryView: BaseView {
     
     // MARK: - Layout/Animation Properties
 
-    static let inputContainerCollapsedHeight: CGFloat = 64
+    static let inputContainerCollapsedHeight: CGFloat = 52
 
     // Override intrinsic content size so that height is adjusted for safe areas and text input.
     // https://stackoverflow.com/questions/46282987/iphone-x-how-to-handle-view-controller-inputaccessoryview

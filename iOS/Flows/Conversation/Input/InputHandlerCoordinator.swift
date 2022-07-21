@@ -99,27 +99,34 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentExpressionCreation(for message: Messageable) {
-        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+    func presentExpressionCreation(for message: Messageable, withFavorite type: FavoriteType? = nil) {
+        let coordinator = ExpressionCoordinator(favoriteType: type,
+                                                router: self.router,
+                                                deepLink: self.deepLink)
         self.present(coordinator) { result in
             guard let expression = result else { return }
             
-            expression.emotions.forEach { emotion in
-                AnalyticsManager.shared.trackEvent(type: .emotionSelected,
-                                                   properties: ["value": emotion.rawValue])
-            }
-            
-            let controller = MessageController.controller(for: message)
-            
             Task {
-                // Add new or update
-                try await controller?.add(expression: expression)
+                await self.add(expression: expression, toMessage: message)
             }
         }
     }
     
+    func add(expression: Expression, toMessage message: Messageable) async {
+        expression.emotions.forEach { emotion in
+            AnalyticsManager.shared.trackEvent(type: .emotionSelected,
+                                               properties: ["value": emotion.rawValue])
+        }
+        
+        let controller = MessageController.controller(for: message)
+        // Add new or update
+        try? await controller?.add(expression: expression)
+    }
+    
     func presentExpressions() {
-        let coordinator = ExpressionCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = ExpressionCoordinator(favoriteType: nil,
+                                                router: self.router,
+                                                deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] expression in
             AnalyticsManager.shared.trackEvent(type: .expressionMade)
             self.inputHandlerViewController.swipeableVC.currentExpression = expression
@@ -300,6 +307,21 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
 
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {
         self.presentExpressionCreation(for: message)
+    }
+    
+    func messageContent(_ content: MessageContentView,
+                        didTapAddFavorite expression: Expression,
+                        toMessage message: Messageable) {
+        Task {
+            await self.add(expression: expression, toMessage: message)
+        }
+    }
+    
+    func messageContent(_ content: MessageContentView,
+                        didTapFavorite type: FavoriteType,
+                        forMessage message: Messageable) {
+        
+        self.presentExpressionCreation(for: message, withFavorite: type)
     }
 
     func messageContent(_ content: MessageContentView,

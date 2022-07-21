@@ -18,7 +18,13 @@ protocol MessageContentDelegate: AnyObject {
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable)
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable)
     func messageContent(_ content: MessageContentView,
+                        didTapAddFavorite expression: Expression,
+                        toMessage message: Messageable)
+    func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
+                        forMessage message: Messageable)
+    func messageContent(_ content: MessageContentView,
+                        didTapFavorite type: FavoriteType,
                         forMessage message: Messageable)
 }
 
@@ -29,7 +35,13 @@ extension MessageContentDelegate {
     func messageContent(_ content: MessageContentView, didTapAttachmentForMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView, didTapAddExpressionForMessage message: Messageable) {}
     func messageContent(_ content: MessageContentView,
+                        didTapAddFavorite expression: Expression,
+                        toMessage message: Messageable) {}
+    func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
+                        forMessage message: Messageable) {}
+    func messageContent(_ content: MessageContentView,
+                        didTapFavorite type: FavoriteType,
                         forMessage message: Messageable) {}
 }
 
@@ -323,7 +335,8 @@ class MessageContentView: BaseView {
                 self?.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: false)
 
                 self?.authorView.set(expression: expression, author: nil)
-            } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId) {
+            } else
+            if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId) {
 
                 guard !Task.isCancelled else { return }
 
@@ -407,7 +420,7 @@ extension MessageTextView {
             return
         }
         
-        self.font = FontType.contextCues.font
+        self.font = FontType.emoji.font
 
         guard self.numberOfLines > 1 else { return }
 

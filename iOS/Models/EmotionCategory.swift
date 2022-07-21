@@ -493,7 +493,7 @@ enum Emotion: String, CaseIterable, Identifiable {
         case .interested:
             return #colorLiteral(red: 0.4039215686, green: 0.2274509804, blue: 0.7176470588, alpha: 1)
         case .surprised:
-            return #colorLiteral(red: 0.368627451, green: 0.2078431373, blue: 0.6941176471, alpha: 1)
+            return #colorLiteral(red: 0.6666666667, green: 0, blue: 1, alpha: 1)
             
         case .amused:
             return #colorLiteral(red: 0.6235294118, green: 0.6588235294, blue: 0.8549019608, alpha: 1)
@@ -517,7 +517,7 @@ enum Emotion: String, CaseIterable, Identifiable {
         case .despair:
             return #colorLiteral(red: 0.3921568627, green: 0.7098039216, blue: 0.9647058824, alpha: 1)
         case .sad:
-            return #colorLiteral(red: 0.2588235294, green: 0.6470588235, blue: 0.9607843137, alpha: 1)
+            return #colorLiteral(red: 0.1607843137, green: 0.3843137255, blue: 1, alpha: 1)
         case .grief:
             return #colorLiteral(red: 0.1294117647, green: 0.5882352941, blue: 0.9529411765, alpha: 1)
             
@@ -563,7 +563,7 @@ enum Emotion: String, CaseIterable, Identifiable {
             return #colorLiteral(red: 0, green: 0.4745098039, blue: 0.4196078431, alpha: 1)
             
         case .love:
-            return #colorLiteral(red: 0.7843137255, green: 0.9019607843, blue: 0.7882352941, alpha: 1)
+            return #colorLiteral(red: 0.8352941176, green: 0, blue: 0, alpha: 1)
         case .lovelessness:
             return #colorLiteral(red: 0.6470588235, green: 0.8392156863, blue: 0.6549019608, alpha: 1)
         case .heartbroken:
@@ -582,13 +582,13 @@ enum Emotion: String, CaseIterable, Identifiable {
             return #colorLiteral(red: 0.1058823529, green: 0.368627451, blue: 0.1254901961, alpha: 1)
             
         case .joy:
-            return #colorLiteral(red: 0.862745098, green: 0.9294117647, blue: 0.7843137255, alpha: 1)
+            return #colorLiteral(red: 1, green: 0.4274509804, blue: 0, alpha: 1)
         case .happy:
-            return #colorLiteral(red: 0.7725490196, green: 0.8823529412, blue: 0.6470588235, alpha: 1)
+            return #colorLiteral(red: 1, green: 0.8392156863, blue: 0, alpha: 1)
         case .calm:
             return #colorLiteral(red: 0.6823529412, green: 0.8352941176, blue: 0.5058823529, alpha: 1)
         case .contentment:
-            return #colorLiteral(red: 0.6117647059, green: 0.8, blue: 0.3960784314, alpha: 1)
+            return #colorLiteral(red: 0.3921568627, green: 0.8666666667, blue: 0.09019607843, alpha: 1)
         case .gratitude:
             return #colorLiteral(red: 0.5450980392, green: 0.7647058824, blue: 0.2901960784, alpha: 1)
         case .forebodingJoy:
