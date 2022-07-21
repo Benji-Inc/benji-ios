@@ -14,6 +14,8 @@ class FavoriteExpressionView: BaseView {
     let personView = PersonGradientView()
     private let label = ThemeLabel(font: .emoji)
     
+    var didSelectEdit: ((FavoriteType) -> Void)? = nil
+    
     private weak var firstResponderBeforeDisplay: UIResponder?
     private weak var inputHandlerBeforeDisplay: InputHandlerViewContoller?
     
@@ -76,8 +78,8 @@ extension FavoriteExpressionView: UIContextMenuInteractionDelegate {
     private func makeContextMenu() -> UIMenu {
 
         let edit = UIAction(title: "Edit",
-                            image: ImageSymbol.faceSmiling.image) { [unowned self] action in
-           // self.content.delegate?.messageContent(self.content, didTapEditMessage: message)
+                            image: ImageSymbol.faceSmiling.image) { [unowned self] _ in
+            self.didSelectEdit?(self.favoriteType)
         }
 
         var menuElements: [UIMenuElement] = []
@@ -89,6 +91,10 @@ extension FavoriteExpressionView: UIContextMenuInteractionDelegate {
                            identifier: nil,
                            options: [],
                            children: menuElements)
+    }
+    
+    func loadMenu(completion: @escaping (([UIMenuElement]) -> Void)) {
+            // load menu
     }
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,

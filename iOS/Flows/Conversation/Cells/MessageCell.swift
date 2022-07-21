@@ -87,7 +87,6 @@ class MessageCell: UICollectionViewCell {
         self.footerView.favoriteExpressionsView.didSelectFavorite = { [unowned self] favorite in
             
             Task {
-                await self.footerView.favoriteExpressionsView.dismiss()
                 guard let message = self.message else { return }
                 
                 if let expression = try? await favorite.getExpression() {
@@ -97,6 +96,17 @@ class MessageCell: UICollectionViewCell {
                 } else {
                     self.content.delegate?.messageContent(self.content, didTapFavorite: favorite, forMessage: message)
                 }
+                
+                await self.footerView.favoriteExpressionsView.dismiss()
+            }
+        }
+        
+        self.footerView.favoriteExpressionsView.didSelectEdit = { [unowned self] favorite in
+            Task {
+                guard let message = self.message else { return }
+                
+                self.content.delegate?.messageContent(self.content, didTapFavorite: favorite, forMessage: message)
+                await self.footerView.favoriteExpressionsView.dismiss()
             }
         }
 

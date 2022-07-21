@@ -249,19 +249,29 @@ class ExpressionViewController: ViewController {
         
         let videoData = try! Data(contentsOf: videoURL)
         
-        let expression = Expression()
-        
-        if let favoriteType = self.favoriteType {
-            expression.emotionCounts = [favoriteType.emotion: 1]
-            expression.isFavorite = true 
+        // If an expression exists, then update it
+        if let type = self.favoriteType, let expression = try? await type.getExpression() {
+            
+            expression.file = PFFileObject(name: "expression.mov", data: videoData)
+            guard let saved = try? await expression.saveToServer() else { return nil }
+            return saved
+            
+        // Otherwise create a new one
+        } else {
+            let expression = Expression()
+            
+            if let favoriteType = self.favoriteType {
+                expression.emotionCounts = [favoriteType.emotion: 1]
+                expression.isFavorite = true
+            }
+            expression.author = User.current()
+            expression.file = PFFileObject(name: "expression.mov", data: videoData)
+            expression.emojiString = nil
+            
+            guard let saved = try? await expression.saveToServer() else { return nil }
+            
+            return saved
         }
-        expression.author = User.current()
-        expression.file = PFFileObject(name: "expression.mov", data: videoData)
-        expression.emojiString = nil
-        
-        guard let saved = try? await expression.saveToServer() else { return nil }
-        
-        return saved
     }
         
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
