@@ -28,6 +28,11 @@ class FavoriteExpressionPreviewViewController: ViewController {
         
         self.view.addSubview(self.content)
         self.content.personView.expressionVideoView.shouldPlay = true
+        self.content.personView.cornerRadiusRatio = 0
+        
+        self.view.layer.borderColor = type.emotion.color.cgColor
+        self.view.layer.borderWidth = 4
+        self.view.layer.cornerRadius = 12
         
         Task {
             await self.content.loadExpression()
