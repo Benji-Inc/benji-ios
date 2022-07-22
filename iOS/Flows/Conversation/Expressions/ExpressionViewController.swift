@@ -64,7 +64,7 @@ class ExpressionViewController: ViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+            
     override func initializeViews() {
         super.initializeViews()
         
@@ -76,6 +76,8 @@ class ExpressionViewController: ViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
+        self.presentationController?.delegate = self
+                
         self.view.addSubview(self.blurView)
         
         self.addChild(viewController: self.expressionCaptureVC)
@@ -297,5 +299,15 @@ class ExpressionViewController: ViewController {
         guard self.state == .capture else { return }
         
         self.stopRecordingAnimation()
+    }
+}
+
+extension ExpressionViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        self.stopRecordingAnimation()
+        self.expressionCaptureVC.endVideoCapture()
+        self.state = .capture
+        return true
     }
 }
