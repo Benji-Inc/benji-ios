@@ -16,14 +16,14 @@ class ExpressionVideoView: VideoView {
             guard self.expression != oldValue else { return }
 
             self.videoURL = nil
-            self.updatePlayer(with: self.expression)
+            self.updatePlayer()
         }
     }
     
     /// The currently running task that loads the video url.
     private var loadTask: Task<Void, Never>?
     
-    private func updatePlayer(with expression: Expression?) {
+    private func updatePlayer() {
         self.loadTask?.cancel()
 
         guard let expression = self.expression else {
