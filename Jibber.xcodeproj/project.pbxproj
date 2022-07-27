@@ -2860,13 +2860,29 @@
 		D6F6A4F02891AA81000A1CDF /* Moments */ = {
 			isa = PBXGroup;
 			children = (
+				D6F6A4FD2891B78E000A1CDF /* Capture */,
+				D6F6A4FE2891B79D000A1CDF /* Detail */,
+			);
+			path = Moments;
+			sourceTree = "<group>";
+		};
+		D6F6A4FD2891B78E000A1CDF /* Capture */ = {
+			isa = PBXGroup;
+			children = (
 				D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */,
 				D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */,
 				D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		D6F6A4FE2891B79D000A1CDF /* Detail */ = {
+			isa = PBXGroup;
+			children = (
 				D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */,
 				D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */,
 			);
-			path = Moments;
+			path = Detail;
 			sourceTree = "<group>";
 		};
 		D6FA273B2767A65600315528 /* Packages */ = {

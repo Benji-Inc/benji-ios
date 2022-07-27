@@ -10,6 +10,11 @@ import Foundation
 import Combine
 import Parse
 
+// Capture Expression
+// Capture Media
+// Create conversation of type moment
+// Add all connected users to conversation
+
 class MomentCaptureViewController: ViewController {
     
     enum State {
@@ -19,7 +24,7 @@ class MomentCaptureViewController: ViewController {
     }
     
     override var analyticsIdentifier: String? {
-        return "SCREEN_EXPRESSION"
+        return "SCREEN_MOMENT"
     }
     
     let blurView = DarkBlurView()
@@ -27,7 +32,6 @@ class MomentCaptureViewController: ViewController {
     private let doneButton = ThemeButton()
     
     lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
-    let favoriteLabel = FavoriteLabel()
     
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
