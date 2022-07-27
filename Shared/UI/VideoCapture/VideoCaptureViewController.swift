@@ -140,7 +140,7 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
-
+        
         switch self.videoCaptureState {
         case .idle:
             // Do nothing

@@ -22,7 +22,7 @@ class PhotoVideoCaptureSession {
     var currentPosition: AVCaptureDevice.Position = .front
     var flashMode: AVCaptureDevice.FlashMode = .auto
 
-    private lazy var session = AVCaptureSession()
+    private(set) lazy var session = AVCaptureSession()
 
     private var capturePhotoOutput: AVCapturePhotoOutput!
 
