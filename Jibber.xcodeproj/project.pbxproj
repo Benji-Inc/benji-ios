@@ -926,6 +926,7 @@
 		D6F6A4F82891AD54000A1CDF /* MomentDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */; };
 		D6F6A4FA2891AD62000A1CDF /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */; };
 		D6F6A4FC2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */; };
+		D6F6A5002891B9BE000A1CDF /* MomentVideoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4FF2891B9BE000A1CDF /* MomentVideoCaptureViewController.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
 		D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
@@ -1500,6 +1501,7 @@
 		D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailCoordinator.swift; sourceTree = "<group>"; };
 		D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
 		D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentCaptureViewController+Animation.swift"; sourceTree = "<group>"; };
+		D6F6A4FF2891B9BE000A1CDF /* MomentVideoCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentVideoCaptureViewController.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOnboardingViewController.swift; sourceTree = "<group>"; };
 		D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
@@ -2872,6 +2874,7 @@
 				D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */,
 				D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */,
 				D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */,
+				D6F6A4FF2891B9BE000A1CDF /* MomentVideoCaptureViewController.swift */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -3554,6 +3557,7 @@
 				D650C1E125B5F1730037C59A /* PersonView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				8041FB0D27A0C2BB00FEBD78 /* CGVector+Extensions.swift in Sources */,
+				D6F6A5002891B9BE000A1CDF /* MomentVideoCaptureViewController.swift in Sources */,
 				D60B887F27F933CC00B3E1C2 /* UnreadMessagesCell.swift in Sources */,
 				806C99572748632900011728 /* TimeMachineCollectionViewLayout.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,

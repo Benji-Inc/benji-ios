@@ -20,8 +20,8 @@ class MomentCaptureCoordinator: PresentableCoordinator<Moment?> {
     override func start() {
         super.start()
         
-//        self.expressionVC.didCompleteExpression = { [unowned self] expression in
-//            self.finishFlow(with: expression)
-//        }
+        self.momentCaptureVC.didCompleteMoment = { [unowned self] moment in 
+            self.finishFlow(with: moment)
+        }
     }
 }

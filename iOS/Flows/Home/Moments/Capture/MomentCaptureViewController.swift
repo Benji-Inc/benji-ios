@@ -32,13 +32,17 @@ class MomentCaptureViewController: ViewController {
     private let doneButton = ThemeButton()
     
     lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
+    lazy var momentCatureVC = MomentVideoCaptureViewController()
     
-    var didCompleteExpression: ((Expression) -> Void)? = nil
+    var didCompleteMoment: ((Moment) -> Void)? = nil
     
     @Published var state: State = .initial
     
-    private var data: Data?
-    private var videoURL: URL?
+    private var expressionData: Data?
+    private var expressionURL: URL?
+    
+    private var momentData: Data?
+    private var momentURL: URL?
     
     static let maxDuration: TimeInterval = 3.0
     
@@ -78,9 +82,7 @@ class MomentCaptureViewController: ViewController {
         
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-        
-        self.view.addSubview(self.favoriteLabel)
-                
+                        
         self.setupHandlers()
     }
     
@@ -94,14 +96,12 @@ class MomentCaptureViewController: ViewController {
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
         
-        if self.expressionCaptureVC.faceCaptureVC.videoCaptureState == .starting {
-            self.favoriteLabel.match(.top, to: .top, of: self.expressionCaptureVC.faceCaptureVC.label)
-        } else {
-            self.favoriteLabel.match(.top, to: .bottom, of: self.expressionCaptureVC.faceCaptureVC.label, offset: .short)
-        }
-        
-        self.favoriteLabel.centerOnX()
-        
+//        if self.expressionCaptureVC.faceCaptureVC.videoCaptureState == .starting {
+//            self.favoriteLabel.match(.top, to: .top, of: self.expressionCaptureVC.faceCaptureVC.label)
+//        } else {
+//            self.favoriteLabel.match(.top, to: .bottom, of: self.expressionCaptureVC.faceCaptureVC.label, offset: .short)
+//        }
+                
         if self.state == .confirm {
             self.doneButton.pinToSafeAreaBottom()
         } else {
@@ -112,7 +112,7 @@ class MomentCaptureViewController: ViewController {
     private func setupHandlers() {
         
         self.expressionCaptureVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
-            self.videoURL = videoURL
+            self.expressionURL = videoURL
             
             Task.onMainActor {
                 self.expressionCaptureVC.faceCaptureVC.stopSession()
@@ -143,8 +143,8 @@ class MomentCaptureViewController: ViewController {
         
         self.doneButton.didSelect { [unowned self] in
             Task {
-                guard let expression = await self.createVideoExpression() else { return }
-                self.didCompleteExpression?(expression)
+                guard let moment = await self.createMoment() else { return }
+                self.didCompleteMoment?(moment)
             }
         }
         
@@ -156,26 +156,12 @@ class MomentCaptureViewController: ViewController {
             .removeDuplicates()
             .mainSink { [unowned self] state in
                 
-            UIView.animate(withDuration: Theme.animationDurationFast) {
-                if state == .starting {
-                    if self.favoriteLabel.transform == .identity {
-                        var transform = CGAffineTransform.identity
-                        transform = transform.scaledBy(x: 1.5, y: 1.5)
-                        self.favoriteLabel.transform = transform
-                        self.view.layoutNow()
-                    }
-                } else if state == .ending {
-                    self.favoriteLabel.transform = .identity
-                    self.view.layoutNow()
-                }
-            }
         }.store(in: &self.cancellables)
     }
     
     private func update(for state: State) {
         switch state {
         case .initial:
-            self.favoriteLabel.alpha = 0.0
             self.expressionCaptureVC.faceCaptureVC.animate(text: "Scanning...")
             self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 1.0
             self.expressionCaptureVC.faceCaptureVC.animationView.play()
@@ -190,7 +176,6 @@ class MomentCaptureViewController: ViewController {
             
             UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-                    self.favoriteLabel.alpha = 1.0
                     self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 1
                     self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
                     self.view.layoutNow()
@@ -216,43 +201,42 @@ class MomentCaptureViewController: ViewController {
             
             self.stopRecordingAnimation()
             
-            guard let videoURL = self.videoURL else { break }
+            guard let videoURL = self.expressionURL else { break }
             
             self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: videoURL)
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
-                self.favoriteLabel.alpha = 0.0
-                self.favoriteLabel.transform = .identity
                 self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 0.0
                 self.view.layoutNow()
             }
         }
     }
     
-    private func createVideoExpression() async -> Expression? {
-        guard let videoURL = self.videoURL else { return nil }
+    private func createMoment() async -> Moment? {
+        guard let expressionURL = self.expressionURL, let momentURL = self.momentURL else { return nil }
         
-        let videoData = try! Data(contentsOf: videoURL)
+        let expressionData = try! Data(contentsOf: expressionURL)
+        let momentData = try! Data(contentsOf: momentURL)
         
-        // If an expression exists, then update it
-//        if let type = self.favoriteType, let expression = try? await type.getExpression() {
-//
-//            expression.file = PFFileObject(name: "expression.mov", data: videoData)
-//            guard let saved = try? await expression.saveToServer() else { return nil }
-//            return saved
-//
-//        // Otherwise create a new one
-//        } else {
-            let expression = Expression()
+        let expression = Expression()
+        
+        expression.author = User.current()
+        expression.file = PFFileObject(name: "expression.mov", data: expressionData)
+        expression.emojiString = nil
+        
+        guard let savedExpression = try? await expression.saveToServer() else { return nil }
+        
+        #warning("Add conversation id to moment creation")
+        
+        let moment = Moment()
+        moment.expression = savedExpression
+        moment.conversationId = "Some conversation ID"
+        moment.author = User.current()
+        moment.file = PFFileObject(name: "moment.mov", data: momentData)
+        
+        guard let savedMoment = try? await moment.saveToServer() else { return nil }
 
-            expression.author = User.current()
-            expression.file = PFFileObject(name: "expression.mov", data: videoData)
-            expression.emojiString = nil
-
-            guard let saved = try? await expression.saveToServer() else { return nil }
-
-            return saved
-       // }
+        return savedMoment
     }
         
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
