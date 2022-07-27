@@ -22,7 +22,7 @@ extension ExpressionViewController {
         self.animation.isRemovedOnCompletion = false
         self.animation.fillMode = .forwards
         
-        let containerView = self.expressionCaptureVC.faceCaptureVC.cameraViewContainer
+        let containerView = self.expressionCaptureVC.cameraViewContainer
         let frame = containerView.convert(containerView.bounds, to: self.view)
         self.shapeLayer.path = UIBezierPath(roundedRect: frame, byRoundingCorners: [.allCorners], cornerRadii: CGSize(width: frame.height * 0.25, height: frame.height * 0.25)).cgPath
     
@@ -38,7 +38,7 @@ extension ExpressionViewController {
 extension ExpressionViewController: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
-        self.expressionCaptureVC.faceCaptureVC.animate(text: "")
+        self.expressionCaptureVC.animate(text: "")
         self.expressionCaptureVC.beginVideoCapture()
     }
     

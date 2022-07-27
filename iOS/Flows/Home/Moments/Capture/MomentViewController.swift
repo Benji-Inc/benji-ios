@@ -78,7 +78,7 @@ class MomentViewController: ViewController {
         self.view.addSubview(self.blurView)
         
         self.addChild(viewController: self.expressionCaptureVC)
-        self.expressionCaptureVC.faceCaptureVC.videoPreviewView.shouldPlay = true
+        self.expressionCaptureVC.videoPreviewView.shouldPlay = true
         
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
@@ -105,16 +105,16 @@ class MomentViewController: ViewController {
     
     private func setupHandlers() {
         
-        self.expressionCaptureVC.faceCaptureVC.didCaptureVideo = { [unowned self] videoURL in
+        self.expressionCaptureVC.didCaptureVideo = { [unowned self] videoURL in
             self.expressionURL = videoURL
             
             Task.onMainActor {
-                self.expressionCaptureVC.faceCaptureVC.stopSession()
+                self.expressionCaptureVC.stopSession()
                 self.state = .confirm
             }
         }
         
-        self.expressionCaptureVC.faceCaptureVC.$hasRenderedFaceImage
+        self.expressionCaptureVC.$hasRenderedFaceImage
             .removeDuplicates()
             .mainSink { [unowned self] hasRendered in
                 if hasRendered {
@@ -142,11 +142,11 @@ class MomentViewController: ViewController {
             }
         }
         
-        if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
-            self.expressionCaptureVC.faceCaptureVC.beginSession()
+        if !self.expressionCaptureVC.isSessionRunning {
+            self.expressionCaptureVC.beginSession()
         }
         
-        self.expressionCaptureVC.faceCaptureVC.$videoCaptureState
+        self.expressionCaptureVC.$videoCaptureState
             .removeDuplicates()
             .mainSink { [unowned self] state in
                 
@@ -156,22 +156,22 @@ class MomentViewController: ViewController {
     private func update(for state: State) {
         switch state {
         case .initial:
-            self.expressionCaptureVC.faceCaptureVC.animate(text: "Scanning...")
-            self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 1.0
-            self.expressionCaptureVC.faceCaptureVC.animationView.play()
+            self.expressionCaptureVC.animate(text: "Scanning...")
+            self.expressionCaptureVC.animationView.alpha = 1.0
+            self.expressionCaptureVC.animationView.play()
         case .capture:
-            self.expressionCaptureVC.faceCaptureVC.animationView.stop()
-            self.expressionCaptureVC.faceCaptureVC.animate(text: "Press and Hold")
-            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
+            self.expressionCaptureVC.animationView.stop()
+            self.expressionCaptureVC.animate(text: "Press and Hold")
+            self.expressionCaptureVC.setVideoPreview(with: nil)
             
-            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: nil)
+            self.expressionCaptureVC.setVideoPreview(with: nil)
             
             let duration: TimeInterval = 0.25
             
             UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-                    self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 1
-                    self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
+                    self.expressionCaptureVC.cameraView.alpha = 1
+                    self.expressionCaptureVC.animationView.alpha = 0.0
                     self.view.layoutNow()
                 }
                 
@@ -181,26 +181,26 @@ class MomentViewController: ViewController {
             })
             
             UIView.animate(withDuration: 0.1, delay: duration, options: []) {
-                self.expressionCaptureVC.faceCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
-                self.expressionCaptureVC.faceCaptureVC.view.alpha = 1.0
+                self.expressionCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
+                self.expressionCaptureVC.view.alpha = 1.0
             } completion: { _ in
-                if !self.expressionCaptureVC.faceCaptureVC.isSessionRunning {
-                    self.expressionCaptureVC.faceCaptureVC.beginSession()
+                if !self.expressionCaptureVC.isSessionRunning {
+                    self.expressionCaptureVC.beginSession()
                 }
             }
         case .confirm:
-            self.expressionCaptureVC.faceCaptureVC.animate(text: "Tap to retake")
-            self.expressionCaptureVC.faceCaptureVC.animationView.alpha = 0.0
-            self.expressionCaptureVC.faceCaptureVC.animationView.stop()
+            self.expressionCaptureVC.animate(text: "Tap to retake")
+            self.expressionCaptureVC.animationView.alpha = 0.0
+            self.expressionCaptureVC.animationView.stop()
             
             self.stopRecordingAnimation()
             
             guard let videoURL = self.expressionURL else { break }
             
-            self.expressionCaptureVC.faceCaptureVC.setVideoPreview(with: videoURL)
+            self.expressionCaptureVC.setVideoPreview(with: videoURL)
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
-                self.expressionCaptureVC.faceCaptureVC.cameraView.alpha = 0.0
+                self.expressionCaptureVC.cameraView.alpha = 0.0
                 self.view.layoutNow()
             }
         }

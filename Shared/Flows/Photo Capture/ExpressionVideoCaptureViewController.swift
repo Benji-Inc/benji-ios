@@ -8,52 +8,48 @@
 
 import Foundation
 
-class ExpressionVideoCaptureViewController: ViewController {
+class ExpressionVideoCaptureViewController: FaceCaptureViewController {
 
     // MARK: - Views
 
     private let emotionGradientView = EmotionGradientView()
-    lazy var faceCaptureVC = FaceCaptureViewController()
 
     // MARK: - Life Cycle
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.emotionGradientView)
+        self.view.insertSubview(self.emotionGradientView, at: 0)
         self.emotionGradientView.alpha = 0.75
-
-        self.addChild(viewController: self.faceCaptureVC)
         
-        self.faceCaptureVC.captureSession.flashMode = .off
+        self.captureSession.flashMode = .off
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.faceCaptureVC.animate(text: "Press and Hold")
+        self.animate(text: "Press and Hold")
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.faceCaptureVC.view.expandToSuperviewSize()
-        self.emotionGradientView.frame = self.faceCaptureVC.cameraViewContainer.frame
+        self.emotionGradientView.frame = self.cameraViewContainer.frame
     }
     
     func beginVideoCapture() {
-        if self.faceCaptureVC.isSessionRunning {
-            self.faceCaptureVC.startVideoCapture()
+        if self.isSessionRunning {
+            self.startVideoCapture()
         } else {
-            self.faceCaptureVC.view.isVisible = true
-            self.faceCaptureVC.beginSession()
+            self.view.isVisible = true
+            self.beginSession()
         }
     }
     
     func endVideoCapture() {
-        switch self.faceCaptureVC.videoCaptureState {
+        switch self.videoCaptureState {
         case .starting, .started, .capturing:
-            self.faceCaptureVC.finishVideoCapture()
+            self.finishVideoCapture()
         case .idle, .ending:
             break
         }
