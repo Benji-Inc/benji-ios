@@ -79,6 +79,7 @@ class MomentViewController: ViewController {
         
         self.addChild(viewController: self.expressionCaptureVC)
         self.expressionCaptureVC.videoPreviewView.shouldPlay = true
+        self.expressionCaptureVC.label.removeFromSuperview()
         
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
@@ -91,7 +92,9 @@ class MomentViewController: ViewController {
         
         self.blurView.expandToSuperviewSize()
         
-        self.expressionCaptureVC.view.expandToSuperviewSize()
+        self.expressionCaptureVC.view.squaredSize = self.view.width * 0.25
+        self.expressionCaptureVC.view.pinToSafeAreaTop()
+        self.expressionCaptureVC.view.pinToSafeAreaLeft()
                 
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()

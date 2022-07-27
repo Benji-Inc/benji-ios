@@ -55,6 +55,17 @@ class ExpressionVideoCaptureViewController: FaceCaptureViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.cameraViewContainer.expandToSuperviewSize()
+        self.cameraViewContainer.layer.cornerRadius = self.cameraViewContainer.height * 0.25
+        
+        self.animationView.squaredSize = self.cameraViewContainer.height * 0.5
+        self.animationView.centerOnXAndY()
+        
+        self.cameraView.width = self.cameraViewContainer.width
+        self.cameraView.height = self.cameraViewContainer.height * 1.25
+        self.cameraView.pin(.top)
+        self.cameraView.centerOnX()
+        
         self.emotionGradientView.frame = self.cameraViewContainer.frame
         
         if self.videoCaptureState == .starting {
