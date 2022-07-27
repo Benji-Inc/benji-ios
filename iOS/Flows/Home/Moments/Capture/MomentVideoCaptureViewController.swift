@@ -8,47 +8,29 @@
 
 import Foundation
 
-class MomentVideoCaptureViewController: ViewController {
-
-    // MARK: - Views
-
-    lazy var faceCaptureVC = FaceCaptureViewController()
+class MomentVideoCaptureViewController: VideoCaptureViewController {
 
     // MARK: - Life Cycle
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.addChild(viewController: self.faceCaptureVC)
         
-        self.faceCaptureVC.captureSession.flashMode = .off
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.faceCaptureVC.animate(text: "Press and Hold")
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.faceCaptureVC.view.expandToSuperviewSize()
+        self.captureSession.flashMode = .off
     }
     
     func beginVideoCapture() {
-        if self.faceCaptureVC.isSessionRunning {
-            self.faceCaptureVC.startVideoCapture()
+        if self.isSessionRunning {
+            self.startVideoCapture()
         } else {
-            self.faceCaptureVC.view.isVisible = true
-            self.faceCaptureVC.beginSession()
+            self.view.isVisible = true
+            self.beginSession()
         }
     }
     
     func endVideoCapture() {
-        switch self.faceCaptureVC.videoCaptureState {
+        switch self.videoCaptureState {
         case .starting, .started, .capturing:
-            self.faceCaptureVC.finishVideoCapture()
+            self.finishVideoCapture()
         case .idle, .ending:
             break
         }

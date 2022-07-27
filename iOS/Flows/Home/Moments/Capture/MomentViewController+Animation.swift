@@ -40,11 +40,13 @@ extension MomentViewController: CAAnimationDelegate {
     func animationDidStart(_ anim: CAAnimation) {
         self.expressionCaptureVC.animate(text: "")
         self.expressionCaptureVC.beginVideoCapture()
+        self.momentCatureVC.beginVideoCapture()
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if self.state == .capture {
             self.expressionCaptureVC.endVideoCapture()
+            self.momentCatureVC.endVideoCapture()
         }
     }
 }
