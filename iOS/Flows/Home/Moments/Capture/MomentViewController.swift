@@ -1,5 +1,5 @@
 //
-//  MomentCaptureViewController.swift
+//  MomentViewController.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 7/27/22.
@@ -15,7 +15,7 @@ import Parse
 // Create conversation of type moment
 // Add all connected users to conversation
 
-class MomentCaptureViewController: ViewController {
+class MomentViewController: ViewController {
     
     enum State {
         case initial
@@ -259,7 +259,7 @@ class MomentCaptureViewController: ViewController {
     }
 }
 
-extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate {
+extension MomentViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         self.stopRecordingAnimation()

@@ -919,11 +919,11 @@
 		D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
 		D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */; };
 		D6F6A4F22891AAAC000A1CDF /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F12891AAAC000A1CDF /* Moment.swift */; };
-		D6F6A4F42891AD1F000A1CDF /* MomentCaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */; };
-		D6F6A4F62891AD38000A1CDF /* MomentCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */; };
+		D6F6A4F42891AD1F000A1CDF /* MomentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F32891AD1F000A1CDF /* MomentCoordinator.swift */; };
+		D6F6A4F62891AD38000A1CDF /* MomentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F52891AD38000A1CDF /* MomentViewController.swift */; };
 		D6F6A4F82891AD54000A1CDF /* MomentDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */; };
 		D6F6A4FA2891AD62000A1CDF /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */; };
-		D6F6A4FC2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */; };
+		D6F6A4FC2891AE68000A1CDF /* MomentViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4FB2891AE68000A1CDF /* MomentViewController+Animation.swift */; };
 		D6F6A5002891B9BE000A1CDF /* MomentVideoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4FF2891B9BE000A1CDF /* MomentVideoCaptureViewController.swift */; };
 		D6F6A5032891C442000A1CDF /* VideoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A5022891C442000A1CDF /* VideoCaptureViewController.swift */; };
 		D6F6A5062891CB9D000A1CDF /* PhotoVideoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */; };
@@ -1497,11 +1497,11 @@
 		D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrancyView.swift; sourceTree = "<group>"; };
 		D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniBadgeView.swift; sourceTree = "<group>"; };
 		D6F6A4F12891AAAC000A1CDF /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
-		D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureCoordinator.swift; sourceTree = "<group>"; };
-		D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureViewController.swift; sourceTree = "<group>"; };
+		D6F6A4F32891AD1F000A1CDF /* MomentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCoordinator.swift; sourceTree = "<group>"; };
+		D6F6A4F52891AD38000A1CDF /* MomentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentViewController.swift; sourceTree = "<group>"; };
 		D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailCoordinator.swift; sourceTree = "<group>"; };
 		D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
-		D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentCaptureViewController+Animation.swift"; sourceTree = "<group>"; };
+		D6F6A4FB2891AE68000A1CDF /* MomentViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentViewController+Animation.swift"; sourceTree = "<group>"; };
 		D6F6A4FF2891B9BE000A1CDF /* MomentVideoCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentVideoCaptureViewController.swift; sourceTree = "<group>"; };
 		D6F6A5022891C442000A1CDF /* VideoCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewController.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
@@ -2873,9 +2873,9 @@
 		D6F6A4FD2891B78E000A1CDF /* Capture */ = {
 			isa = PBXGroup;
 			children = (
-				D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */,
-				D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */,
-				D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */,
+				D6F6A4F32891AD1F000A1CDF /* MomentCoordinator.swift */,
+				D6F6A4F52891AD38000A1CDF /* MomentViewController.swift */,
+				D6F6A4FB2891AE68000A1CDF /* MomentViewController+Animation.swift */,
 				D6F6A4FF2891B9BE000A1CDF /* MomentVideoCaptureViewController.swift */,
 			);
 			path = Capture;
@@ -3695,7 +3695,7 @@
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
 				D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */,
 				D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */,
-				D6F6A4F62891AD38000A1CDF /* MomentCaptureViewController.swift in Sources */,
+				D6F6A4F62891AD38000A1CDF /* MomentViewController.swift in Sources */,
 				8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */,
 				D6AA620B28526ED700FA4D02 /* NoticesDataSource.swift in Sources */,
 				8023C6A227EBCDEF00FD9DB6 /* MediaCoordinator.swift in Sources */,
@@ -3812,7 +3812,7 @@
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */,
-				D6F6A4FC2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift in Sources */,
+				D6F6A4FC2891AE68000A1CDF /* MomentViewController+Animation.swift in Sources */,
 				D6AA61F42852542A00FA4D02 /* HomeViewController.swift in Sources */,
 				809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */,
 				80D5C28E281719B200182DB6 /* EmotionDetailCollectionViewLayout.swift in Sources */,
@@ -3840,7 +3840,7 @@
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
-				D6F6A4F42891AD1F000A1CDF /* MomentCaptureCoordinator.swift in Sources */,
+				D6F6A4F42891AD1F000A1CDF /* MomentCoordinator.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
 				D692E884286A44150001F99B /* MessageExpressionCell.swift in Sources */,

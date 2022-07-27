@@ -64,10 +64,6 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
         
         self.view.addSubview(self.cameraViewContainer)
         self.cameraViewContainer.addSubview(self.cameraView)
-        self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
-        self.cameraViewContainer.layer.borderWidth = 4
-        self.cameraViewContainer.clipsToBounds = true
-
         self.cameraViewContainer.addSubview(self.videoPreviewView)
     }
     
@@ -145,27 +141,6 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
 
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-
-//        let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
-//
-//        do {
-//            try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
-//                                             on: imageBuffer,
-//                                             orientation: self.orientation)
-//
-//            // Get the pixel buffer that contains the mask image.
-//            guard let maskPixelBuffer
-//                    = self.segmentationRequest.results?.first?.pixelBuffer else { return }
-//            // Process the images.
-//            let blendedImage = self.blend(original: imageBuffer, mask: maskPixelBuffer)
-//
-//            // Set the new, blended image as current.
-//            self.currentCIImage = blendedImage
-//        } catch {
-//            logError(error)
-//        }
-
         switch self.videoCaptureState {
         case .idle:
             // Do nothing
@@ -187,40 +162,8 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
             self.videoCaptureState = .idle
         }
     }
-    
-    /// Makes the image black and white, and makes the background clear.
-    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
-        // Make the background clear.
-        let color = CIColor(color: UIColor.clear)
 
-        // Create CIImage objects for the video frame and the segmentation mask.
-        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(self.orientation)
-        var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
-
-        // Scale the mask image to fit the bounds of the video frame.
-        let scaleX = originalImage.extent.width / maskImage.extent.width
-        let scaleY = originalImage.extent.height / maskImage.extent.height
-        maskImage = maskImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
-
-        let solidColor = CIImage(color: color).cropped(to: maskImage.extent)
-
-        // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
-
-        let filter = CIFilter(name: "CIPhotoEffectNoir")
-        filter?.setValue(originalImage, forKey: "inputImage")
-
-        guard let bwImage = filter?.outputImage else { return nil }
-
-        // Blend the original, background, and mask images.
-        let blendFilter = CIFilter.blendWithRedMask()
-        blendFilter.inputImage = bwImage
-        blendFilter.backgroundImage = solidColor
-        blendFilter.maskImage = maskImage
-
-        return blendFilter.outputImage?.oriented(.leftMirrored)
-    }
-
-    private func startAssetWriter() {
+    func startAssetWriter() {
         do {
             // Get a url to temporarily store the video
             let uuid = UUID().uuidString
@@ -369,8 +312,6 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
         commandBuffer.present(currentDrawable)
         commandBuffer.commit()
     }
-
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // Delegate method not implemented.
-    }
+    
+    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
 }

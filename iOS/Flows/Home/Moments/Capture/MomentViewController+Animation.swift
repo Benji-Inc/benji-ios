@@ -1,5 +1,5 @@
 //
-//  MomentCaptureViewController+Animation.swift
+//  MomentViewController+Animation.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 7/27/22.
@@ -9,7 +9,7 @@
 import Foundation
 import QuartzCore
 
-extension MomentCaptureViewController {
+extension MomentViewController {
     
     func beginRecordingAnimation() {
     
@@ -35,7 +35,7 @@ extension MomentCaptureViewController {
     }
 }
 
-extension MomentCaptureViewController: CAAnimationDelegate {
+extension MomentViewController: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
         self.expressionCaptureVC.faceCaptureVC.animate(text: "")
