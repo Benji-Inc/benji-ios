@@ -921,6 +921,11 @@
 		D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
 		D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */; };
 		D6F6A4F22891AAAC000A1CDF /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F12891AAAC000A1CDF /* Moment.swift */; };
+		D6F6A4F42891AD1F000A1CDF /* MomentCaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */; };
+		D6F6A4F62891AD38000A1CDF /* MomentCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */; };
+		D6F6A4F82891AD54000A1CDF /* MomentDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */; };
+		D6F6A4FA2891AD62000A1CDF /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */; };
+		D6F6A4FC2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
 		D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
@@ -1490,6 +1495,11 @@
 		D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrancyView.swift; sourceTree = "<group>"; };
 		D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniBadgeView.swift; sourceTree = "<group>"; };
 		D6F6A4F12891AAAC000A1CDF /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
+		D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureCoordinator.swift; sourceTree = "<group>"; };
+		D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureViewController.swift; sourceTree = "<group>"; };
+		D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailCoordinator.swift; sourceTree = "<group>"; };
+		D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
+		D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentCaptureViewController+Animation.swift"; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOnboardingViewController.swift; sourceTree = "<group>"; };
 		D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
@@ -2529,11 +2539,12 @@
 			children = (
 				D6AA61FD2852603A00FA4D02 /* Conversations */,
 				D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */,
-				D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */,
 				D6AA62002852616D00FA4D02 /* HomeCoordinator+Notices.swift */,
 				D6AA62022852617E00FA4D02 /* HomeCoordinator+Presentation.swift */,
+				D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */,
 				D6AA61F32852542A00FA4D02 /* HomeViewController.swift */,
 				D6AA61FE2852604400FA4D02 /* Members */,
+				D6F6A4F02891AA81000A1CDF /* Moments */,
 				D6AA61FF2852612500FA4D02 /* Notices */,
 				D65E66D12858F0420040E3D8 /* Shortcuts */,
 				D6AA61F9285255ED00FA4D02 /* TabView.swift */,
@@ -2712,7 +2723,6 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				D6F6A4F02891AA81000A1CDF /* Moments */,
 				D6AA61F22852541100FA4D02 /* Home */,
 				D6432BF122D8282E0016001A /* Conversation */,
 				8023C6A027EBCDC100FD9DB6 /* Media */,
@@ -2850,6 +2860,11 @@
 		D6F6A4F02891AA81000A1CDF /* Moments */ = {
 			isa = PBXGroup;
 			children = (
+				D6F6A4F32891AD1F000A1CDF /* MomentCaptureCoordinator.swift */,
+				D6F6A4F52891AD38000A1CDF /* MomentCaptureViewController.swift */,
+				D6F6A4FB2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift */,
+				D6F6A4F72891AD54000A1CDF /* MomentDetailCoordinator.swift */,
+				D6F6A4F92891AD62000A1CDF /* MomentDetailViewController.swift */,
 			);
 			path = Moments;
 			sourceTree = "<group>";
@@ -3647,6 +3662,7 @@
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
 				D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */,
 				D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */,
+				D6F6A4F62891AD38000A1CDF /* MomentCaptureViewController.swift in Sources */,
 				8072253527AC8AAB00D7EBC0 /* NavBarIgnoringHostingController.swift in Sources */,
 				D6AA620B28526ED700FA4D02 /* NoticesDataSource.swift in Sources */,
 				8023C6A227EBCDEF00FD9DB6 /* MediaCoordinator.swift in Sources */,
@@ -3658,6 +3674,7 @@
 				D6B2B65F283D3D98007D507B /* NoticeContentView.swift in Sources */,
 				D646D36C27E53B880077D20B /* CaptureCell.swift in Sources */,
 				D61A33C627D4F21700056242 /* ContextCueCreatorViewController.swift in Sources */,
+				D6F6A4F82891AD54000A1CDF /* MomentDetailCoordinator.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
 				D630F25F2832F8BE00737977 /* PersonPreviewViewController.swift in Sources */,
 				D6D1502921D6085200CD8CE4 /* ResourceObject.swift in Sources */,
@@ -3762,6 +3779,7 @@
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */,
+				D6F6A4FC2891AE68000A1CDF /* MomentCaptureViewController+Animation.swift in Sources */,
 				D6AA61F42852542A00FA4D02 /* HomeViewController.swift in Sources */,
 				809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */,
 				80D5C28E281719B200182DB6 /* EmotionDetailCollectionViewLayout.swift in Sources */,
@@ -3789,6 +3807,7 @@
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
+				D6F6A4F42891AD1F000A1CDF /* MomentCaptureCoordinator.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ConversationsSegmentControl.swift in Sources */,
 				D692E884286A44150001F99B /* MessageExpressionCell.swift in Sources */,
@@ -3909,6 +3928,7 @@
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
+				D6F6A4FA2891AD62000A1CDF /* MomentDetailViewController.swift in Sources */,
 				D60B887327F7732100B3E1C2 /* NoticeCell.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
 				D6AA621528528EE600FA4D02 /* OrbCollectionViewLayout.swift in Sources */,
