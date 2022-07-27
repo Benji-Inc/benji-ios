@@ -27,7 +27,6 @@ class ExpressionViewController: ViewController {
     private let doneButton = ThemeButton()
     
     lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
-    let favoriteLabel = FavoriteLabel()
     
     var didCompleteExpression: ((Expression) -> Void)? = nil
     
@@ -85,9 +84,7 @@ class ExpressionViewController: ViewController {
         
         self.view.addSubview(self.doneButton)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-        
-        self.view.addSubview(self.favoriteLabel)
-                
+                        
         self.setupHandlers()
     }
     
@@ -101,14 +98,6 @@ class ExpressionViewController: ViewController {
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
         
-        if self.expressionCaptureVC.videoCaptureState == .starting {
-            self.favoriteLabel.match(.top, to: .top, of: self.expressionCaptureVC.label)
-        } else {
-            self.favoriteLabel.match(.top, to: .bottom, of: self.expressionCaptureVC.label, offset: .short)
-        }
-        
-        self.favoriteLabel.centerOnX()
-        
         if self.state == .confirm {
             self.doneButton.pinToSafeAreaBottom()
         } else {
@@ -120,7 +109,6 @@ class ExpressionViewController: ViewController {
         
         self.$favoriteType.mainSink { [unowned self] type in
             guard let type = type else { return }
-            self.favoriteLabel.configure(with: type)
             self.expressionCaptureVC.set(favoriteType: type)
             self.view.setNeedsLayout()
         }.store(in: &self.cancellables)
@@ -165,31 +153,12 @@ class ExpressionViewController: ViewController {
         if !self.expressionCaptureVC.isSessionRunning {
             self.expressionCaptureVC.beginSession()
         }
-        
-        self.expressionCaptureVC.$videoCaptureState
-            .removeDuplicates()
-            .mainSink { [unowned self] state in
-                
-            UIView.animate(withDuration: Theme.animationDurationFast) {
-                if state == .starting {
-                    if self.favoriteLabel.transform == .identity {
-                        var transform = CGAffineTransform.identity
-                        transform = transform.scaledBy(x: 1.5, y: 1.5)
-                        self.favoriteLabel.transform = transform
-                        self.view.layoutNow()
-                    }
-                } else if state == .ending {
-                    self.favoriteLabel.transform = .identity
-                    self.view.layoutNow()
-                }
-            }
-        }.store(in: &self.cancellables)
     }
     
     private func update(for state: State) {
         switch state {
         case .initial:
-            self.favoriteLabel.alpha = 0.0
+            self.expressionCaptureVC.favoriteLabel.alpha = 0.0
             self.expressionCaptureVC.animate(text: "Scanning...")
             self.expressionCaptureVC.animationView.alpha = 1.0
             self.expressionCaptureVC.animationView.play()
@@ -204,7 +173,7 @@ class ExpressionViewController: ViewController {
             
             UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-                    self.favoriteLabel.alpha = 1.0
+                    self.expressionCaptureVC.favoriteLabel.alpha = 1.0
                     self.expressionCaptureVC.cameraView.alpha = 1
                     self.expressionCaptureVC.animationView.alpha = 0.0
                     self.view.layoutNow()
@@ -238,8 +207,8 @@ class ExpressionViewController: ViewController {
                 if let favoriteType = self.favoriteType {
                     self.expressionCaptureVC.cameraViewContainer.layer.borderColor = favoriteType.emotion.color.cgColor
                 }
-                self.favoriteLabel.alpha = 0.0
-                self.favoriteLabel.transform = .identity
+                self.expressionCaptureVC.favoriteLabel.alpha = 0.0
+                self.expressionCaptureVC.favoriteLabel.transform = .identity
                 self.expressionCaptureVC.cameraView.alpha = 0.0
                 self.view.layoutNow()
             }

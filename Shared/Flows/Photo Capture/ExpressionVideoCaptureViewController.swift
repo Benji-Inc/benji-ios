@@ -12,6 +12,7 @@ class ExpressionVideoCaptureViewController: FaceCaptureViewController {
 
     // MARK: - Views
 
+    let favoriteLabel = FavoriteLabel()
     private let emotionGradientView = EmotionGradientView()
 
     // MARK: - Life Cycle
@@ -23,6 +24,26 @@ class ExpressionVideoCaptureViewController: FaceCaptureViewController {
         self.emotionGradientView.alpha = 0.75
         
         self.captureSession.flashMode = .off
+        self.view.addSubview(self.favoriteLabel)
+        
+        self.$videoCaptureState
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+                
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                if state == .starting {
+                    if self.favoriteLabel.transform == .identity {
+                        var transform = CGAffineTransform.identity
+                        transform = transform.scaledBy(x: 1.5, y: 1.5)
+                        self.favoriteLabel.transform = transform
+                        self.view.layoutNow()
+                    }
+                } else if state == .ending {
+                    self.favoriteLabel.transform = .identity
+                    self.view.layoutNow()
+                }
+            }
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLoad() {
@@ -35,6 +56,14 @@ class ExpressionVideoCaptureViewController: FaceCaptureViewController {
         super.viewDidLayoutSubviews()
         
         self.emotionGradientView.frame = self.cameraViewContainer.frame
+        
+        if self.videoCaptureState == .starting {
+            self.favoriteLabel.match(.top, to: .top, of: self.label)
+        } else {
+            self.favoriteLabel.match(.top, to: .bottom, of: self.label, offset: .short)
+        }
+        
+        self.favoriteLabel.centerOnX()
     }
     
     func beginVideoCapture() {
@@ -57,6 +86,7 @@ class ExpressionVideoCaptureViewController: FaceCaptureViewController {
     
     func set(favoriteType: FavoriteType) {
         self.emotionGradientView.set(emotionCounts: [favoriteType.emotion: 1])
+        self.favoriteLabel.configure(with: favoriteType)
         self.view.setNeedsLayout()
     }
 }
