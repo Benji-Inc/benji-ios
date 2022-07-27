@@ -24,12 +24,12 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
         case ending
     }
 
-    @Published private(set) var videoCaptureState: VideoCaptureState = .idle
+    @Published var videoCaptureState: VideoCaptureState = .idle
 
     var didCapturePhoto: ((UIImage) -> Void)?
     var didCaptureVideo: ((URL) -> Void)?
 
-    private var currentCIImage: CIImage? {
+    var currentCIImage: CIImage? {
         didSet {
             self.cameraView.draw()
         }
@@ -121,9 +121,9 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
 
     // MARK: - AVAssetWriter Vars
 
-    private var videoWriter: AVAssetWriter?
-    private var videoWriterInput: AVAssetWriterInput?
-    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+    var videoWriter: AVAssetWriter?
+    var videoWriterInput: AVAssetWriterInput?
+    var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
 
     func startVideoCapture() {
         guard self.videoCaptureState == .idle else { return }

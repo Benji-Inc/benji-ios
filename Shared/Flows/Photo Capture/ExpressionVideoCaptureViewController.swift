@@ -25,7 +25,7 @@ class ExpressionVideoCaptureViewController: ViewController {
 
         self.addChild(viewController: self.faceCaptureVC)
         
-        self.faceCaptureVC.faceCaptureSession.flashMode = .off
+        self.faceCaptureVC.captureSession.flashMode = .off
     }
     
     override func viewDidLoad() {

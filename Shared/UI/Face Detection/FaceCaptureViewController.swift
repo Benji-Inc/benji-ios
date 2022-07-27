@@ -16,51 +16,16 @@ import VideoToolbox
 
 /// A view controller that allows a user to capture an image of their face.
 /// A live preview of the camera is shown on the main view.
-class FaceCaptureViewController: ViewController {
-
-    enum VideoCaptureState {
-        case idle
-        case starting
-        case started
-        case capturing
-        case ending
-    }
-
-    @Published private(set) var videoCaptureState: VideoCaptureState = .idle
-
-    var didCapturePhoto: ((UIImage) -> Void)?
-    var didCaptureVideo: ((URL) -> Void)?
-
-    @Published private(set) var hasRenderedFaceImage = false
-    @Published private(set) var faceDetected = false
-    @Published private(set) var eyesAreClosed = false
-    @Published private(set) var isSmiling = false
-
-    private var currentCIImage: CIImage? {
-        didSet {
-            self.cameraView.draw()
-        }
-    }
-    
-    let cameraViewContainer = UIView()
-
-    /// Shows a live preview of what the camera is seeing..
-    lazy var cameraView: MetalView = {
-        let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
-        metalView.delegate = self
-        metalView.alpha = 0 
-        return metalView
-    }()
-
-    let videoPreviewView = VideoView()
-
-    let orientation: CGImagePropertyOrientation = .left
-
-    lazy var faceCaptureSession = PhotoVideoCaptureSession()
+class FaceCaptureViewController: VideoCaptureViewController {
 
     /// A request to separate a person from the background in an image.
     private var segmentationRequest = VNGeneratePersonSegmentationRequest()
     private var sequenceHandler = VNSequenceRequestHandler()
+    
+    @Published private(set) var hasRenderedFaceImage = false
+    @Published private(set) var faceDetected = false
+    @Published private(set) var eyesAreClosed = false
+    @Published private(set) var isSmiling = false
     
     let animationView = AnimationView.with(animation: .faceScan)
     let label = ThemeLabel(font: .medium, textColor: .white)
@@ -74,15 +39,11 @@ class FaceCaptureViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.faceCaptureSession.avCaptureDelegate = self
+        self.captureSession.avCaptureDelegate = self
         
-        self.view.addSubview(self.cameraViewContainer)
-        self.cameraViewContainer.addSubview(self.cameraView)
         self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
         self.cameraViewContainer.layer.borderWidth = 4
         self.cameraViewContainer.clipsToBounds = true
-
-        self.cameraViewContainer.addSubview(self.videoPreviewView)
         
         self.cameraViewContainer.addSubview(self.animationView)
         self.animationView.loopMode = .loop
@@ -136,65 +97,8 @@ class FaceCaptureViewController: ViewController {
             })
         }
     }
-
-    // MARK: - Photo Capture Session
-
-    /// Returns true if the underlaying photo capture session is running.
-    var isSessionRunning: Bool {
-        return self.faceCaptureSession.isRunning
-    }
-
-    /// Starts the face capture session so that we can display the photo preview and capture a photo/video.
-    func beginSession() {
-        guard !self.isSessionRunning else { return }
-        self.faceCaptureSession.begin()
-    }
     
-    /// Stops the face capture session.
-    func stopSession() {
-        guard self.isSessionRunning else { return }
-        self.faceCaptureSession.stop()
-        self.currentCIImage = nil
-    }
-
-    func capturePhoto() {
-        guard self.isSessionRunning else { return }
-
-        self.captureCurrentImageAsPhoto()
-    }
-
-    // MARK: - Video Preview
-
-    func setVideoPreview(with videoURL: URL?) {
-        self.videoPreviewView.videoURL = videoURL
-    }
-
-    // MARK: - AVAssetWriter Vars
-
-    private var videoWriter: AVAssetWriter?
-    private var videoWriterInput: AVAssetWriterInput?
-    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
-
-    func startVideoCapture() {
-        guard self.videoCaptureState == .idle else { return }
-
-        self.videoCaptureState = .starting
-    }
-
-    func finishVideoCapture() {
-        switch self.videoCaptureState {
-        case .starting, .started, .capturing:
-            self.videoCaptureState = .ending
-        case .idle, .ending:
-            // Do nothing
-            break
-        }
-    }
-}
-
-extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-
-    func captureOutput(_ output: AVCaptureOutput,
+    override func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
 
@@ -240,9 +144,9 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
             self.videoCaptureState = .idle
         }
     }
-
+    
     /// Makes the image black and white, and makes the background clear.
-    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
+    override func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
         // Make the background clear.
         let color = CIColor(color: UIColor.clear)
 
@@ -272,7 +176,7 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
 
         return blendFilter.outputImage?.oriented(.leftMirrored)
     }
-
+    
     private func startAssetWriter() {
         do {
             // Get a url to temporarily store the video
@@ -369,21 +273,8 @@ extension FaceCaptureViewController: AVCaptureVideoDataOutputSampleBufferDelegat
 
         self.faceDetected = true
     }
-}
-
-extension FaceCaptureViewController: AVCapturePhotoCaptureDelegate {
-
-    func photoOutput(_ output: AVCapturePhotoOutput,
-                     didFinishProcessingPhoto photo: AVCapturePhoto,
-                     error: Error?) {
-
-        guard let connection = output.connection(with: .video) else { return }
-        connection.automaticallyAdjustsVideoMirroring = true
-
-        self.captureCurrentImageAsPhoto()
-    }
-
-    func captureCurrentImageAsPhoto() {
+    
+    override func captureCurrentImageAsPhoto() {
         guard let ciImage = self.currentCIImage else { return }
 
         // If we find a face in the image, we'll crop around it and store it here.
@@ -422,50 +313,10 @@ extension FaceCaptureViewController: AVCapturePhotoCaptureDelegate {
         let image = UIImage(cgImage: cgImage, scale: 1, orientation: .up)
         self.didCapturePhoto?(image)
     }
-}
-
-// MARK: - MTKViewDelegate
-
-extension FaceCaptureViewController: MTKViewDelegate {
-
-    func draw(in view: MTKView) {
-        guard let metalView = view as? MetalView else { return }
-
-        // grab command buffer so we can encode instructions to GPU
-        guard let commandBuffer = metalView.commandQueue.makeCommandBuffer() else {
-            return
-        }
-
-        // grab image
-        guard let ciImage = self.currentCIImage else { return }
-
-        // ensure drawable is free and not tied in the previous drawing cycle
-        guard let currentDrawable = view.currentDrawable else { return }
-
-        // Make sure the image is full screen (Aspect fill).
-        let drawSize = self.cameraView.drawableSize
-        var scaleX = drawSize.width / ciImage.extent.width
-        var scaleY = drawSize.height / ciImage.extent.height
-
-        if scaleX > scaleY {
-            scaleY = scaleX
-        } else {
-            scaleX = scaleY
-        }
-
-        let newImage = ciImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
-
-        // Render into the metal texture
-        metalView.context.render(newImage,
-                                 to: currentDrawable.texture,
-                                 commandBuffer: commandBuffer,
-                                 bounds: newImage.extent,
-                                 colorSpace: CGColorSpaceCreateDeviceRGB())
-
-        // register drawable to command buffer
-        commandBuffer.present(currentDrawable)
-        commandBuffer.commit()
-
+    
+    override func draw(in view: MTKView) {
+        super.draw(in: view)
+        
         if !self.hasRenderedFaceImage {
             Task.onMainActorAsync {
                 await Task.sleep(seconds: 1.5)
@@ -473,9 +324,5 @@ extension FaceCaptureViewController: MTKViewDelegate {
                 view.alpha = 1.0
             }
         }
-    }
-
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // Delegate method not implemented.
     }
 }
