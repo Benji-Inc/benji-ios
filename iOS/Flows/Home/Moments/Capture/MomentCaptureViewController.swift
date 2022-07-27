@@ -95,12 +95,6 @@ class MomentCaptureViewController: ViewController {
                 
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
-        
-//        if self.expressionCaptureVC.faceCaptureVC.videoCaptureState == .starting {
-//            self.favoriteLabel.match(.top, to: .top, of: self.expressionCaptureVC.faceCaptureVC.label)
-//        } else {
-//            self.favoriteLabel.match(.top, to: .bottom, of: self.expressionCaptureVC.faceCaptureVC.label, offset: .short)
-//        }
                 
         if self.state == .confirm {
             self.doneButton.pinToSafeAreaBottom()
