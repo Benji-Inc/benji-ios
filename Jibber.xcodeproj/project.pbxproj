@@ -928,6 +928,9 @@
 		D6F6A5032891C442000A1CDF /* VideoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A5022891C442000A1CDF /* VideoCaptureViewController.swift */; };
 		D6F6A5062891CB9D000A1CDF /* PhotoVideoCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */; };
 		D6F6A5072891CE51000A1CDF /* VideoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A5022891C442000A1CDF /* VideoCaptureViewController.swift */; };
+		D6F6A5092893016D000A1CDF /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A5082893016D000A1CDF /* VideoRecorder.swift */; };
+		D6F6A50A28930461000A1CDF /* VideoRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A5082893016D000A1CDF /* VideoRecorder.swift */; };
+		D6F6A50C28930979000A1CDF /* ExpressionRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F6A50B28930979000A1CDF /* ExpressionRecorder.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
 		D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
@@ -1504,6 +1507,8 @@
 		D6F6A4FB2891AE68000A1CDF /* MomentViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentViewController+Animation.swift"; sourceTree = "<group>"; };
 		D6F6A4FF2891B9BE000A1CDF /* MomentVideoCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentVideoCaptureViewController.swift; sourceTree = "<group>"; };
 		D6F6A5022891C442000A1CDF /* VideoCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureViewController.swift; sourceTree = "<group>"; };
+		D6F6A5082893016D000A1CDF /* VideoRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRecorder.swift; sourceTree = "<group>"; };
+		D6F6A50B28930979000A1CDF /* ExpressionRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionRecorder.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOnboardingViewController.swift; sourceTree = "<group>"; };
 		D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
@@ -1777,6 +1782,8 @@
 			isa = PBXGroup;
 			children = (
 				D60CA47E27EE74AD00F0871A /* ExpressionCoordinator.swift */,
+				D6F6A50B28930979000A1CDF /* ExpressionRecorder.swift */,
+				8056B323281B32A600358880 /* ExpressionVideoCaptureViewController.swift */,
 				D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */,
 				D692E885286B71BF0001F99B /* ExpressionViewController+Animation.swift */,
 				D6D1CD952888C8BD00382E07 /* FavoriteExpressionPreviewViewController.swift */,
@@ -2497,7 +2504,6 @@
 		D68C0833272B2EAB0033C8AE /* Photo Capture */ = {
 			isa = PBXGroup;
 			children = (
-				8056B323281B32A600358880 /* ExpressionVideoCaptureViewController.swift */,
 				D62ED57B279CB96E00F7C08A /* ModalPhotoViewController.swift */,
 				D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */,
 				D68C08272729D9980033C8AE /* PermissionsViewController.swift */,
@@ -2895,6 +2901,7 @@
 			children = (
 				D6F6A5022891C442000A1CDF /* VideoCaptureViewController.swift */,
 				D63D71B425F00ED8004C26F7 /* PhotoVideoCaptureSession.swift */,
+				D6F6A5082893016D000A1CDF /* VideoRecorder.swift */,
 			);
 			path = VideoCapture;
 			sourceTree = "<group>";
@@ -3533,6 +3540,7 @@
 				D611287E2804DCB000574B96 /* StringCasing.swift in Sources */,
 				D611288B2804DD4600574B96 /* PeopleStore.swift in Sources */,
 				8007AB72286A348800CF5B0F /* VideoView.swift in Sources */,
+				D6F6A50A28930461000A1CDF /* VideoRecorder.swift in Sources */,
 				D61128222804DBCD00574B96 /* Error+Extensions.swift in Sources */,
 				D61128332804DBE400574B96 /* String+Extensions.swift in Sources */,
 				D61128312804DBDF00574B96 /* PhoneKit.swift in Sources */,
@@ -3596,6 +3604,7 @@
 				D630F2652832F98E00737977 /* PersonConnectionViewController.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
+				D6F6A5092893016D000A1CDF /* VideoRecorder.swift in Sources */,
 				D6D4ECD328613E00002C71CE /* ConversationSelectionDataSource.swift in Sources */,
 				D61128C52804EF2E00574B96 /* ReactionType.swift in Sources */,
 				D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */,
@@ -3970,6 +3979,7 @@
 				D619C59027F129FB0082AD19 /* EmotionsCollectionViewDataSource.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
+				D6F6A50C28930979000A1CDF /* ExpressionRecorder.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,

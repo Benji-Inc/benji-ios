@@ -50,6 +50,16 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
     let orientation: CGImagePropertyOrientation = .left
 
     lazy var captureSession = PhotoVideoCaptureSession()
+    let recorder: VideoRecorder?
+    
+    init(with recorder: VideoRecorder? = nil) {
+        self.recorder = recorder
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     deinit {
         if self.isSessionRunning {
@@ -117,9 +127,9 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
 
     // MARK: - AVAssetWriter Vars
 
-    var videoWriter: AVAssetWriter?
-    var videoWriterInput: AVAssetWriterInput?
-    var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+//    var videoWriter: AVAssetWriter?
+//    var videoWriterInput: AVAssetWriterInput?
+//    var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
 
     func startVideoCapture() {
         guard self.videoCaptureState == .idle else { return }
@@ -147,11 +157,12 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
             break
         case .starting:
             // Initialize the AVAsset writer to prepare for capture
-            self.startAssetWriter()
+            self.recorder?.startRecording()
             self.videoCaptureState = .started
         case .started:
             // Wait for the input to be ready before starting the session
-            guard let input = self.videoWriterInput, input.isReadyForMoreMediaData else { break }
+            //guard let input = self.videoWriterInput, input.isReadyForMoreMediaData else { break }
+            self.recorder.
             self.startSession(with: sampleBuffer)
             self.writeSampleToFile(sampleBuffer)
             self.videoCaptureState = .capturing
@@ -163,93 +174,92 @@ class VideoCaptureViewController: ViewController, AVCaptureVideoDataOutputSample
         }
     }
 
-    func startAssetWriter() {
-        do {
-            // Get a url to temporarily store the video
-            let uuid = UUID().uuidString
-            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                          isDirectory: true).appendingPathComponent(uuid+".mov")
+//    func startAssetWriter() {
+// //       do {
+//            // Get a url to temporarily store the video
+//////            let uuid = UUID().uuidString
+//////            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+//////                          isDirectory: true).appendingPathComponent(uuid+".mov")
+//
+////            let recorder = VideoRecorder(audioSettings: [:],
+////                                         videoSettings: [:],
+////                                         videoTransform: .identity)
+////
+////            // Create an asset writer that will write the video to the url
+////            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
+//
+//
+////            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
+////                                                       outputSettings: settings)
+////
+////            self.videoWriterInput?.mediaTimeScale = CMTimeScale(bitPattern: 600)
+////            self.videoWriterInput?.expectsMediaDataInRealTime = true
+//
+//            let pixelBufferAttributes = [
+//                kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+//                kCVPixelBufferWidthKey: 480,
+//                kCVPixelBufferHeightKey: 480,
+//                kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+//
+//            guard let writer = self.videoWriter, let input = self.videoWriterInput else { return }
+//
+//            self.pixelBufferAdaptor
+//            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input,
+//                                                   sourcePixelBufferAttributes: pixelBufferAttributes)
+//
+//            if writer.canAdd(input) {
+//                writer.add(input)
+//            }
+//
+//            writer.startWriting()
+//        } catch {
+//            logError(error)
+//        }
+//    }
 
-            // Create an asset writer that will write the video to the url
-            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
-            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
-                                            AVVideoWidthKey : 480,
-                                           AVVideoHeightKey : 480,
-                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
-                                 kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]
-            ]
+//    private func startSession(with sampleBuffer: CMSampleBuffer) {
+//        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+//        self.videoWriter?.startSession(atSourceTime: startTime)
+//    }
 
-            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
-                                                       outputSettings: settings)
+//    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
+//        guard let input = self.videoWriterInput,
+//                input.isReadyForMoreMediaData,
+//                let currentImage = self.currentCIImage else { return }
+//
+//        var pixelBuffer: CVPixelBuffer?
+//        let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
+//                     kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
+//        let width = Int(currentImage.extent.width)
+//        let height = Int(currentImage.extent.width)
+//
+//        CVPixelBufferCreate(kCFAllocatorDefault,
+//                            width,
+//                            height,
+//                            kCVPixelFormatType_32BGRA,
+//                            attrs,
+//                            &pixelBuffer)
+//
+//        let context = CIContext()
+//        // Using a magic number (-240) for now. We should figure out the appropriate offset dynamically.
+//        let transform = CGAffineTransform(translationX: 0, y: -240)
+//        let adjustedImage = currentImage.transformed(by: transform)
+//        context.render(adjustedImage, to: pixelBuffer!)
+//
+//        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+//        let presentationTime = CMTime(seconds: currentTime,
+//                                      preferredTimescale: CMTimeScale(bitPattern: 600))
+//
+//        self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
+//    }
 
-            self.videoWriterInput?.mediaTimeScale = CMTimeScale(bitPattern: 600)
-            self.videoWriterInput?.expectsMediaDataInRealTime = true
-
-            let pixelBufferAttributes = [
-                kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
-                kCVPixelBufferWidthKey: 480,
-                kCVPixelBufferHeightKey: 480,
-                kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
-            
-            guard let writer = self.videoWriter, let input = self.videoWriterInput else { return }
-
-            self.pixelBufferAdaptor
-            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input,
-                                                   sourcePixelBufferAttributes: pixelBufferAttributes)
-
-            if writer.canAdd(input) {
-                writer.add(input)
-            }
-
-            writer.startWriting()
-        } catch {
-            logError(error)
-        }
-    }
-
-    private func startSession(with sampleBuffer: CMSampleBuffer) {
-        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        self.videoWriter?.startSession(atSourceTime: startTime)
-    }
-
-    private func writeSampleToFile(_ sampleBuffer: CMSampleBuffer) {
-        guard let input = self.videoWriterInput,
-                input.isReadyForMoreMediaData,
-                let currentImage = self.currentCIImage else { return }
-
-        var pixelBuffer: CVPixelBuffer?
-        let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
-                     kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
-        let width = Int(currentImage.extent.width)
-        let height = Int(currentImage.extent.width)
-
-        CVPixelBufferCreate(kCFAllocatorDefault,
-                            width,
-                            height,
-                            kCVPixelFormatType_32BGRA,
-                            attrs,
-                            &pixelBuffer)
-
-        let context = CIContext()
-        // Using a magic number (-240) for now. We should figure out the appropriate offset dynamically.
-        let transform = CGAffineTransform(translationX: 0, y: -240)
-        let adjustedImage = currentImage.transformed(by: transform)
-        context.render(adjustedImage, to: pixelBuffer!)
-
-        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
-        let presentationTime = CMTime(seconds: currentTime,
-                                      preferredTimescale: CMTimeScale(bitPattern: 600))
-
-        self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
-    }
-
-    private func finishWritingVideo() {
-        self.videoWriterInput?.markAsFinished()
-        guard let videoURL = self.videoWriter?.outputURL else { return }
-        self.videoWriter?.finishWriting { [unowned self] in
-            self.didCaptureVideo?(videoURL)
-        }
-    }
+//    private func finishWritingVideo() {
+//        self.videoWriterInput?.markAsFinished()
+//        guard let videoURL = self.videoWriter?.outputURL else { return }
+//        self.videoWriter?.finishWriting { [unowned self] in
+//            self.didCaptureVideo?(videoURL)
+//        }
+//    }
     
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto,

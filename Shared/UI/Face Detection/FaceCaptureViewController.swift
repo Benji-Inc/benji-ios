@@ -156,49 +156,49 @@ class FaceCaptureViewController: VideoCaptureViewController {
         return blendFilter.outputImage?.oriented(.leftMirrored)
     }
     
-    override func startAssetWriter() {
-        do {
-            // Get a url to temporarily store the video
-            let uuid = UUID().uuidString
-            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
-                          isDirectory: true).appendingPathComponent(uuid+".mov")
-
-            // Create an asset writer that will write the video to the url
-            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
-            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
-                                            AVVideoWidthKey : 480,
-                                           AVVideoHeightKey : 480,
-                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
-                                 kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]
-            ]
-
-            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
-                                                       outputSettings: settings)
-
-            self.videoWriterInput?.mediaTimeScale = CMTimeScale(bitPattern: 600)
-            self.videoWriterInput?.expectsMediaDataInRealTime = true
-
-            let pixelBufferAttributes = [
-                kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
-                kCVPixelBufferWidthKey: 480,
-                kCVPixelBufferHeightKey: 480,
-                kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
-            
-            guard let writer = self.videoWriter, let input = self.videoWriterInput else { return }
-
-            self.pixelBufferAdaptor
-            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input,
-                                                   sourcePixelBufferAttributes: pixelBufferAttributes)
-
-            if writer.canAdd(input) {
-                writer.add(input)
-            }
-
-            writer.startWriting()
-        } catch {
-            logError(error)
-        }
-    }
+//    override func startAssetWriter() {
+//        do {
+//            // Get a url to temporarily store the video
+//            let uuid = UUID().uuidString
+//            let url = URL(fileURLWithPath: NSTemporaryDirectory(),
+//                          isDirectory: true).appendingPathComponent(uuid+".mov")
+//
+//            // Create an asset writer that will write the video to the url
+//            self.videoWriter = try AVAssetWriter(outputURL: url, fileType: .mov)
+//            let settings: [String : Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
+//                                            AVVideoWidthKey : 480,
+//                                           AVVideoHeightKey : 480,
+//                            AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
+//                                 kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]
+//            ]
+//
+//            self.videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video,
+//                                                       outputSettings: settings)
+//
+//            self.videoWriterInput?.mediaTimeScale = CMTimeScale(bitPattern: 600)
+//            self.videoWriterInput?.expectsMediaDataInRealTime = true
+//
+//            let pixelBufferAttributes = [
+//                kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+//                kCVPixelBufferWidthKey: 480,
+//                kCVPixelBufferHeightKey: 480,
+//                kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+//            
+//            guard let writer = self.videoWriter, let input = self.videoWriterInput else { return }
+//
+//            self.pixelBufferAdaptor
+//            = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input,
+//                                                   sourcePixelBufferAttributes: pixelBufferAttributes)
+//
+//            if writer.canAdd(input) {
+//                writer.add(input)
+//            }
+//
+//            writer.startWriting()
+//        } catch {
+//            logError(error)
+//        }
+//    }
 
     private func detectedFace(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNFaceObservation], let _ = results.first else {

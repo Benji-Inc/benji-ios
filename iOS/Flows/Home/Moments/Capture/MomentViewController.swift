@@ -159,13 +159,13 @@ class MomentViewController: ViewController {
             }
         }
         
-//        if !self.expressionCaptureVC.isSessionRunning {
-//            self.expressionCaptureVC.beginSession()
-//        }
-        
-        if !self.momentCatureVC.isSessionRunning {
-            self.momentCatureVC.beginSession()
+        if !self.expressionCaptureVC.isSessionRunning {
+            self.expressionCaptureVC.beginSession()
         }
+        
+//        if !self.momentCatureVC.isSessionRunning {
+//            self.momentCatureVC.beginSession()
+//        }
         
         self.expressionCaptureVC.$videoCaptureState
             .removeDuplicates()
@@ -209,8 +209,8 @@ class MomentViewController: ViewController {
                 self.expressionCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
                 self.expressionCaptureVC.view.alpha = 1.0
             } completion: { _ in
-                //self.expressionCaptureVC.beginSession()
-                self.momentCatureVC.beginSession()
+                self.expressionCaptureVC.beginSession()
+                //self.momentCatureVC.beginSession()
             }
         case .confirm:
             self.expressionCaptureVC.animate(text: "Tap to retake")
