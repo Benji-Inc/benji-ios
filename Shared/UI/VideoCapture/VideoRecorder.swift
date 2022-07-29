@@ -17,8 +17,7 @@ class VideoRecorder {
     
     private(set) var assetWriterAudioInput: AVAssetWriterInput?
     
-    private var videoTransform: CGAffineTransform?
-    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+    private(set) var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
 
     private var videoSettings: [String: Any]
     private var audioSettings: [String: Any]?
@@ -28,12 +27,10 @@ class VideoRecorder {
     
     init(audioSettings: [String: Any]?,
          videoSettings: [String: Any],
-         pixelBufferAttributes: [String: Any],
-         videoTransform: CGAffineTransform?) {
+         pixelBufferAttributes: [String: Any]) {
         
         self.audioSettings = audioSettings
         self.videoSettings = videoSettings
-        self.videoTransform = videoTransform
         self.pixelBufferAttributes = pixelBufferAttributes
         
         self.prepareToRecord()
@@ -59,10 +56,10 @@ class VideoRecorder {
         // Add a video input
         let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: self.videoSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
-        if let transform = self.videoTransform {
-            assetWriterVideoInput.transform = transform
+        
+        if assetWriter.canAdd(assetWriterVideoInput) {
+            assetWriter.add(assetWriterVideoInput)
         }
-        assetWriter.add(assetWriterVideoInput)
         
         self.pixelBufferAdaptor
         = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterVideoInput,
@@ -78,6 +75,7 @@ class VideoRecorder {
         return await withCheckedContinuation({ continuation in
             if let assetWriter = self.assetWriter {
                 self.isReadyToRecord = false
+                self.assetWriterVideoInput?.markAsFinished()
                 self.assetWriter = nil
                 
                 assetWriter.finishWriting {
@@ -98,7 +96,7 @@ class VideoRecorder {
             assetWriter.startWriting()
             assetWriter.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
         } else if assetWriter.status == .writing {
-            if let input = assetWriterVideoInput,
+            if let input = self.assetWriterVideoInput,
                 input.isReadyForMoreMediaData {
                 input.append(sampleBuffer)
             }
