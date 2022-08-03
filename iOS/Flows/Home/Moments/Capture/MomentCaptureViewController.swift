@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import Parse
 
- class MomentCaptureViewController: ViewController {
+ class MomentCaptureViewController: PiPRecordingViewController {
 
      enum State {
          case initial
@@ -67,7 +67,7 @@ import Parse
 
          self.presentationController?.delegate = self
 
-         self.view.addSubview(self.blurView)
+         //self.view.addSubview(self.blurView)
 
         // self.addChild(viewController: self.momentCatureVC)
 //         self.momentCatureVC.videoPreviewView.shouldPlay = true

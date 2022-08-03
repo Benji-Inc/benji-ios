@@ -49,8 +49,15 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
     var frontCameraDeviceInput: AVCaptureDeviceInput?
     let frontCameraVideoDataOutput = AVCaptureVideoDataOutput()
     
+    var isSessionRunning: Bool {
+        return self.session.isRunning
+    }
+    
     override func initializeViews() {
         super.initializeViews()
+        
+        self.view.addSubview(self.backCameraVideoPreviewView)
+        self.view.addSubview(self.frontCameraVideoPreviewView)
         
         // Set up the back and front video preview views.
         self.backCameraVideoPreviewView.videoPreviewLayer.setSessionWithNoConnection(self.session)
@@ -99,5 +106,46 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
             self.setupResult = .configurationFailed
             return
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.sessionQueue.async {
+            switch self.setupResult {
+            case .success:
+                // Only setup observers and start the session running if setup succeeded.
+                //self.addObservers()
+                self.session.startRunning()
+                
+            case .notAuthorized:
+                break
+            case .configurationFailed:
+                break
+            case .multiCamNotSupported:
+                break
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.sessionQueue.async {
+            if self.setupResult == .success {
+                self.session.stopRunning()
+                //self.removeObservers()
+            }
+        }
+        
+        super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.backCameraVideoPreviewView.expandToSuperviewSize()
+        
+        self.frontCameraVideoPreviewView.squaredSize = self.view.width * 0.33
+        self.frontCameraVideoPreviewView.pinToSafeAreaTop()
+        self.frontCameraVideoPreviewView.pinToSafeAreaLeft()
     }
 }
