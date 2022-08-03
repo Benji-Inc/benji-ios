@@ -29,8 +29,7 @@ class ExpressionRecorder: VideoRecorder {
         
         super.init(audioSettings: nil,
                    videoSettings: settings,
-                   pixelBufferAttributes: pixelBufferAttributes,
-                   videoTransform: nil)
+                   pixelBufferAttributes: pixelBufferAttributes)
         
         self.assetWriterVideoInput?.mediaTimeScale = CMTimeScale(bitPattern: 600)
     }
