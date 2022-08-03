@@ -548,6 +548,9 @@
 		D63F9640289AE3D2004F6C0D /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */; };
 		D63F9642289AE403004F6C0D /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9641289AE403004F6C0D /* Moment.swift */; };
 		D63F9645289B1E81004F6C0D /* PiPRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9644289B1E81004F6C0D /* PiPRecorder.swift */; };
+		D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */; };
+		D63F964A289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */; };
+		D63F964C289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -1245,6 +1248,9 @@
 		D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
 		D63F9641289AE403004F6C0D /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
 		D63F9644289B1E81004F6C0D /* PiPRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecorder.swift; sourceTree = "<group>"; };
+		D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecordingViewController.swift; sourceTree = "<group>"; };
+		D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Costs.swift"; sourceTree = "<group>"; };
+		D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Cameras.swift"; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -2127,9 +2133,20 @@
 				D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */,
 				D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */,
 				D63F963B289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift */,
-				D63F9644289B1E81004F6C0D /* PiPRecorder.swift */,
+				D63F9648289B29D2004F6C0D /* PIP */,
 			);
 			path = Capture;
+			sourceTree = "<group>";
+		};
+		D63F9648289B29D2004F6C0D /* PIP */ = {
+			isa = PBXGroup;
+			children = (
+				D63F9644289B1E81004F6C0D /* PiPRecorder.swift */,
+				D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */,
+				D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */,
+				D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */,
+			);
+			path = PIP;
 			sourceTree = "<group>";
 		};
 		D6405B65236E001A00FAA06B /* Parse Subclasses */ = {
@@ -3809,6 +3826,7 @@
 				8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */,
 				D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */,
 				D6C64541280F4CEB00C10267 /* PagingIndicatorView.swift in Sources */,
+				D63F964A289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
 				D6AA621328528ED100FA4D02 /* MembersDataSource.swift in Sources */,
@@ -3852,6 +3870,7 @@
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				8068A0062868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
+				D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* MemberAddCell.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
@@ -3891,6 +3910,7 @@
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D6AA620F2852701D00FA4D02 /* NoticesCollectionViewLayout.swift in Sources */,
 				D67896BF2302683C0059BA75 /* ProfilePhotoCaptureViewController.swift in Sources */,
+				D63F964C289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D60B886927F5026700B3E1C2 /* TypingIndicatorView.swift in Sources */,
