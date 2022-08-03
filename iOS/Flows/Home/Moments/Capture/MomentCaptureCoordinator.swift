@@ -9,9 +9,9 @@
 import Foundation
 import Coordinator
 
- class MomentCoordinator: PresentableCoordinator<Moment?> {
+ class MomentCaptureCoordinator: PresentableCoordinator<Moment?> {
 
-     private lazy var momentCaptureVC = MomentViewController()
+     private lazy var momentCaptureVC = MomentCaptureViewController()
 
      override func toPresentable() -> DismissableVC {
          return self.momentCaptureVC

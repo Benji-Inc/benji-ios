@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import Parse
 
- class MomentViewController: ViewController {
+ class MomentCaptureViewController: ViewController {
 
      enum State {
          case initial
@@ -277,7 +277,7 @@ import Parse
      }
  }
 
- extension MomentViewController: UIAdaptivePresentationControllerDelegate {
+ extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate {
 
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
          self.stopRecordingAnimation()

@@ -9,7 +9,7 @@
 import Foundation
 import QuartzCore
 
- extension MomentViewController {
+ extension MomentCaptureViewController {
 
      func beginRecordingAnimation() {
 
@@ -35,7 +35,7 @@ import QuartzCore
      }
  }
 
- extension MomentViewController: CAAnimationDelegate {
+ extension MomentCaptureViewController: CAAnimationDelegate {
 
      func animationDidStart(_ anim: CAAnimation) {
          //self.expressionCaptureVC.animate(text: "")
