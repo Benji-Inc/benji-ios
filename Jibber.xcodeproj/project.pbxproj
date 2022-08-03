@@ -542,12 +542,12 @@
 		D63DB29A25E999B200F6B323 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D63F9636289AE2CA004F6C0D /* MomentCaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */; };
-		D63F9638289AE2F7004F6C0D /* MomentVideoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9637289AE2F7004F6C0D /* MomentVideoCaptureViewController.swift */; };
 		D63F963A289AE33C004F6C0D /* MomentCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */; };
 		D63F963C289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963B289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift */; };
 		D63F963E289AE3A5004F6C0D /* MomentDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */; };
 		D63F9640289AE3D2004F6C0D /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */; };
 		D63F9642289AE403004F6C0D /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9641289AE403004F6C0D /* Moment.swift */; };
+		D63F9645289B1E81004F6C0D /* PiPRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9644289B1E81004F6C0D /* PiPRecorder.swift */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -1239,12 +1239,12 @@
 		D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationAction.swift; sourceTree = "<group>"; };
 		D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClipStaging.entitlements; sourceTree = "<group>"; };
 		D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureCoordinator.swift; sourceTree = "<group>"; };
-		D63F9637289AE2F7004F6C0D /* MomentVideoCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentVideoCaptureViewController.swift; sourceTree = "<group>"; };
 		D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureViewController.swift; sourceTree = "<group>"; };
 		D63F963B289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentCaptureViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailCoordinator.swift; sourceTree = "<group>"; };
 		D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
 		D63F9641289AE403004F6C0D /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
+		D63F9644289B1E81004F6C0D /* PiPRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecorder.swift; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -2125,9 +2125,9 @@
 			isa = PBXGroup;
 			children = (
 				D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */,
-				D63F9637289AE2F7004F6C0D /* MomentVideoCaptureViewController.swift */,
 				D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */,
 				D63F963B289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift */,
+				D63F9644289B1E81004F6C0D /* PiPRecorder.swift */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -3731,7 +3731,6 @@
 				D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */,
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
-				D63F9638289AE2F7004F6C0D /* MomentVideoCaptureViewController.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D6D1CD962888C8BD00382E07 /* FavoriteExpressionPreviewViewController.swift in Sources */,
@@ -3800,6 +3799,7 @@
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,
+				D63F9645289B1E81004F6C0D /* PiPRecorder.swift in Sources */,
 				D63F963A289AE33C004F6C0D /* MomentCaptureViewController.swift in Sources */,
 				D6D4ECCF28613DDF002C71CE /* ConversationSelectionViewController.swift in Sources */,
 				D60B885027F217EB00B3E1C2 /* MessageDetailDataSource.swift in Sources */,

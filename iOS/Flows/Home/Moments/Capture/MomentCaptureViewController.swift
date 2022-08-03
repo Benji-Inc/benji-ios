@@ -26,9 +26,6 @@ import Parse
 
      private let doneButton = ThemeButton()
 
-     lazy var expressionCaptureVC = ExpressionVideoCaptureViewController()
-     lazy var momentCatureVC = MomentVideoCaptureViewController()
-
      var didCompleteMoment: ((Moment) -> Void)? = nil
 
      @Published var state: State = .initial
@@ -72,7 +69,7 @@ import Parse
 
          self.view.addSubview(self.blurView)
 
-         self.addChild(viewController: self.momentCatureVC)
+        // self.addChild(viewController: self.momentCatureVC)
 //         self.momentCatureVC.videoPreviewView.shouldPlay = true
 //
 //         self.addChild(viewController: self.expressionCaptureVC)
@@ -90,11 +87,11 @@ import Parse
 
          self.blurView.expandToSuperviewSize()
 
-         self.momentCatureVC.view.expandToSuperviewSize()
-
-         self.expressionCaptureVC.view.squaredSize = self.view.width * 0.25
-         self.expressionCaptureVC.view.pinToSafeAreaTop()
-         self.expressionCaptureVC.view.pinToSafeAreaLeft()
+//         self.momentCatureVC.view.expandToSuperviewSize()
+//
+//         self.expressionCaptureVC.view.squaredSize = self.view.width * 0.25
+//         self.expressionCaptureVC.view.pinToSafeAreaTop()
+//         self.expressionCaptureVC.view.pinToSafeAreaLeft()
 
          self.doneButton.setSize(with: self.view.width)
          self.doneButton.centerOnX()
@@ -195,15 +192,15 @@ import Parse
                  }
 
                  UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                     self.momentCatureVC.view.alpha = 1.0
-                     self.expressionCaptureVC.view.alpha = 1.0
+//                     self.momentCatureVC.view.alpha = 1.0
+//                     self.expressionCaptureVC.view.alpha = 1.0
                  }
              })
 
              UIView.animate(withDuration: 0.1, delay: duration, options: []) {
-                 self.momentCatureVC.view.alpha = 1.0
+                 //self.momentCatureVC.view.alpha = 1.0
                 // self.expressionCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
-                 self.expressionCaptureVC.view.alpha = 1.0
+                // self.expressionCaptureVC.view.alpha = 1.0
              } completion: { _ in
                  //self.expressionCaptureVC.beginSession()
                  //self.momentCatureVC.beginSession()
@@ -281,8 +278,8 @@ import Parse
 
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
          self.stopRecordingAnimation()
-         self.expressionCaptureVC.endVideoCapture()
-         self.momentCatureVC.endVideoCapture()
+//         self.expressionCaptureVC.endVideoCapture()
+//         self.momentCatureVC.endVideoCapture()
          self.state = .capture
          return true
      }
