@@ -1,5 +1,5 @@
 //
-//  MomentViewController.swift
+//  MomentCaptureViewController.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 8/3/22.
@@ -23,9 +23,11 @@ import Localization
          return "SCREEN_MOMENT"
      }
 
-     let blurView = DarkBlurView()
-     let label = ThemeLabel(font: .medium, textColor: .white)
-
+     private let blurView = DarkBlurView()
+     private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
+                                                              startPoint: .bottomCenter,
+                                                              endPoint: .topCenter)
+     private let label = ThemeLabel(font: .medium, textColor: .white)
      private let doneButton = ThemeButton()
 
      var didCompleteMoment: ((Moment) -> Void)? = nil
@@ -49,7 +51,9 @@ import Localization
 
          self.view.insertSubview(self.blurView, at: 0)
          
+         self.view.addSubview(self.bottomGradientView)
          self.view.addSubview(self.label)
+         self.label.showShadow(withOffset: 0)
 
          self.view.addSubview(self.doneButton)
          self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
@@ -75,6 +79,10 @@ import Localization
              self.doneButton.top = self.view.height
              self.label.pinToSafeAreaBottom()
          }
+         
+         self.bottomGradientView.expandToSuperviewWidth()
+         self.bottomGradientView.height = self.view.height - (self.label.top - Theme.ContentOffset.long.value)
+         self.bottomGradientView.pin(.bottom)
      }
 
      private func setupHandlers() {
@@ -162,7 +170,7 @@ import Localization
 
              UIView.animate(withDuration: 0.1, delay: duration, options: []) {
                  self.backCameraVideoPreviewView.alpha = 1.0
-                 self.frontCameraVideoPreviewView.layer.borderColor = ThemeColor.B1.color.cgColor
+                 self.frontCameraVideoPreviewView.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
                  self.frontCameraVideoPreviewView.alpha = 1.0
              } completion: { _ in
                  self.beginSession()

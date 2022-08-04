@@ -39,6 +39,9 @@ class FrontPreviewVideoView: VideoPreviewView {
         self.animationView.loopMode = .loop
         self.animationView.alpha = 0
         
+        self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
+        self.layer.borderWidth = 4
+        
         self.clipsToBounds = true
     }
     
