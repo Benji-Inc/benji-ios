@@ -30,12 +30,6 @@ import Parse
 
      @Published var state: State = .initial
 
-     private var expressionData: Data?
-     private var expressionURL: URL?
-
-     private var momentData: Data?
-     private var momentURL: URL?
-
      static let maxDuration: TimeInterval = 3.0
 
      override func initializeViews() {
@@ -75,6 +69,19 @@ import Parse
      }
 
      private func setupHandlers() {
+         
+         self.frontCameraVideoPreviewView.animationDidStart = { [unowned self] in
+             
+         }
+         
+         self.frontCameraVideoPreviewView.animationDidEnd = { [unowned self] in
+             
+         }
+         
+         self.recorder.didCapturePIPRecording = { [unowned self] in
+             self.stopSession()
+             self.state = .confirm
+         }
 
 //         self.momentCatureVC.didCaptureVideo = { [unowned self] videoURL in
 //             self.momentURL = videoURL
@@ -117,24 +124,15 @@ import Parse
 
          self.doneButton.didSelect { [unowned self] in
              Task {
-                 guard let moment = await self.createMoment() else { return }
+                 guard let recording = self.recorder.recording,
+                       let moment = await self.createMoment(from: recording) else { return }
                  self.didCompleteMoment?(moment)
              }
          }
-
-//         if !self.expressionCaptureVC.isSessionRunning {
-//             self.expressionCaptureVC.beginSession()
-//         }
-
- //        if !self.momentCatureVC.isSessionRunning {
- //            self.momentCatureVC.beginSession()
- //        }
          
-//         self.expressionCaptureVC.$videoCaptureState
-//             .removeDuplicates()
-//             .mainSink { [unowned self] state in
-//
-//         }.store(in: &self.cancellables)
+         if !self.isSessionRunning {
+             self.beginSession()
+         }
      }
 
      private func update(for state: State) {
@@ -173,6 +171,7 @@ import Parse
                 // self.expressionCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
                 // self.expressionCaptureVC.view.alpha = 1.0
              } completion: { _ in
+                 self.beginSession()
                  //self.expressionCaptureVC.beginSession()
                  //self.momentCatureVC.beginSession()
              }
@@ -181,9 +180,10 @@ import Parse
 //             self.expressionCaptureVC.animationView.alpha = 0.0
 //             self.expressionCaptureVC.animationView.stop()
 
-             self.stopRecordingAnimation()
+             self.frontCameraVideoPreviewView.stopRecordingAnimation()
 
-             guard let expressionURL = self.expressionURL, let momentURL = self.momentURL else { break }
+             guard let expressionURL = self.recorder.recording?.frontRecordingURL,
+                   let momentURL = self.recorder.recording?.backRecordingURL else { break }
 
 //             self.expressionCaptureVC.setVideoPreview(with: expressionURL)
 //             self.momentCatureVC.setVideoPreview(with: momentURL)
@@ -196,8 +196,8 @@ import Parse
          }
      }
 
-     private func createMoment() async -> Moment? {
-         guard let expressionURL = self.expressionURL, let momentURL = self.momentURL else { return nil }
+     private func createMoment(from recording: PiPRecording) async -> Moment? {
+         guard let expressionURL = recording.frontRecordingURL, let momentURL = recording.backRecordingURL else { return nil }
 
          let expressionData = try! Data(contentsOf: expressionURL)
          let momentData = try! Data(contentsOf: momentURL)
@@ -227,30 +227,29 @@ import Parse
          super.touchesBegan(touches, with: event)
          guard self.state == .capture else { return }
 
-         self.beginRecordingAnimation()
+         self.frontCameraVideoPreviewView.beginRecordingAnimation()
      }
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesEnded(touches, with: event)
          guard self.state == .capture else { return }
 
-         self.stopRecordingAnimation()
+         self.frontCameraVideoPreviewView.stopRecordingAnimation()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesCancelled(touches, with: event)
          guard self.state == .capture else { return }
 
-         self.stopRecordingAnimation()
+         self.frontCameraVideoPreviewView.stopRecordingAnimation()
      }
  }
 
  extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate {
 
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-         self.stopRecordingAnimation()
-//         self.expressionCaptureVC.endVideoCapture()
-//         self.momentCatureVC.endVideoCapture()
+         self.frontCameraVideoPreviewView.stopRecordingAnimation()
+         self.stopVideoCapture()
          self.state = .capture
          return true
      }

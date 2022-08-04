@@ -25,6 +25,9 @@ class PiPRecorder {
     private let frontVideoSettings: [String: Any]
     private let backVideoSettings: [String: Any]
     
+    private(set) var recording: PiPRecording?
+    var didCapturePIPRecording: CompletionOptional = nil
+    
     init(frontVideoSettings: [String: Any], backVideoSettings: [String: Any]) {
         self.frontVideoSettings = frontVideoSettings
         self.backVideoSettings = backVideoSettings
@@ -40,7 +43,7 @@ class PiPRecorder {
         // Create an asset writer that records to a temporary file
         let outputFileName = NSUUID().uuidString
         let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("MOV")
-        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov) else {
+        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov), !self.frontVideoSettings.isEmpty else {
             return
         }
         
@@ -57,7 +60,7 @@ class PiPRecorder {
         // Create an asset writer that records to a temporary file
         let outputFileName = NSUUID().uuidString
         let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("MOV")
-        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov) else {
+        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov), !self.backVideoSettings.isEmpty else {
             return
         }
         
@@ -71,6 +74,8 @@ class PiPRecorder {
     }
     
     func startRecording(frontSampleBuffer: CMSampleBuffer, backSampleBuffer: CMSampleBuffer) {
+        self.recording = nil
+        
         guard let frontWriter = self.frontAssetWriter, let backWriter = self.backAssetWriter else { return }
         
         // Front
@@ -96,13 +101,16 @@ class PiPRecorder {
         }
     }
     
-    func stopRecording() async -> PiPRecording? {
-        
-        let frontURL = await self.stopRecordingFront()
-        let backURL = await self.stopRecordingBack()
-        
-        return PiPRecording(frontRecordingURL: frontURL,
-                            backRecordingURL: backURL)
+    func stopRecording() {
+        Task {
+            let frontURL = await self.stopRecordingFront()
+            let backURL = await self.stopRecordingBack()
+            
+            let recording = PiPRecording(frontRecordingURL: frontURL,
+                                         backRecordingURL: backURL)
+            self.recording = recording
+            self.didCapturePIPRecording?()
+        }
     }
     
     private func stopRecordingFront() async -> URL? {

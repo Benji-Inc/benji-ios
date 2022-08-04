@@ -543,7 +543,6 @@
 		D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D63F9636289AE2CA004F6C0D /* MomentCaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */; };
 		D63F963A289AE33C004F6C0D /* MomentCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */; };
-		D63F963C289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963B289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift */; };
 		D63F963E289AE3A5004F6C0D /* MomentDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */; };
 		D63F9640289AE3D2004F6C0D /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */; };
 		D63F9642289AE403004F6C0D /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9641289AE403004F6C0D /* Moment.swift */; };
@@ -1245,7 +1244,6 @@
 		D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClipStaging.entitlements; sourceTree = "<group>"; };
 		D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureCoordinator.swift; sourceTree = "<group>"; };
 		D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureViewController.swift; sourceTree = "<group>"; };
-		D63F963B289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentCaptureViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailCoordinator.swift; sourceTree = "<group>"; };
 		D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
 		D63F9641289AE403004F6C0D /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
@@ -2136,7 +2134,6 @@
 			children = (
 				D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */,
 				D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */,
-				D63F963B289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift */,
 				D63F9648289B29D2004F6C0D /* PIP */,
 			);
 			path = Capture;
@@ -3907,7 +3904,6 @@
 				D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */,
 				D6B2B661283D3E4D007D507B /* UrgentMessageContentView.swift in Sources */,
-				D63F963C289AE35B004F6C0D /* MomentCaptureViewController+Extensions.swift in Sources */,
 				D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,

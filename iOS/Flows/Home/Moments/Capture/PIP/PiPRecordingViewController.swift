@@ -12,6 +12,7 @@ import AVFoundation
 class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSampleBufferDelegate, AVCaptureVideoDataOutputSampleBufferDelegate  {
     
     lazy var session = AVCaptureMultiCamSession()
+    lazy var recorder = PiPRecorder(frontVideoSettings: [:], backVideoSettings: [:])
     
     private enum SessionSetupResult {
         case success
@@ -96,9 +97,24 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        self.stopSession()
+        super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
+        self.backCameraVideoPreviewView.expandToSuperviewSize()
+        
+        self.frontCameraVideoPreviewView.squaredSize = self.view.width * 0.25
+        self.frontCameraVideoPreviewView.pinToSafeAreaTop()
+        self.frontCameraVideoPreviewView.pinToSafeAreaLeft()
+    }
+    
+    // MARK: - PUBLIC
+    
+    func beginSession() {
         self.sessionQueue.async {
             switch self.setupResult {
             case .success:
@@ -116,23 +132,19 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    func stopSession() {
         self.sessionQueue.async {
             if self.setupResult == .success {
                 self.session.stopRunning()
             }
         }
-        
-        super.viewWillDisappear(animated)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        self.backCameraVideoPreviewView.expandToSuperviewSize()
-        
-        self.frontCameraVideoPreviewView.squaredSize = self.view.width * 0.25
-        self.frontCameraVideoPreviewView.pinToSafeAreaTop()
-        self.frontCameraVideoPreviewView.pinToSafeAreaLeft()
+    func startVideoCapture() {
+       // self.recorder.startRecording(frontSampleBuffer: <#T##CMSampleBuffer#>, backSampleBuffer: <#T##CMSampleBuffer#>)
+    }
+    
+    func stopVideoCapture() {
+        self.recorder.stopRecording()
     }
 }
