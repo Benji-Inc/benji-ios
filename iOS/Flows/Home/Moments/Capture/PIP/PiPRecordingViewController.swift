@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSampleBufferDelegate, AVCaptureVideoDataOutputSampleBufferDelegate  {
+class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate  {
     
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder(frontVideoSettings: [:], backVideoSettings: [:])
