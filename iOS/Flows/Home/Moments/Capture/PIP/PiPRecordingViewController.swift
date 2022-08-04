@@ -8,92 +8,41 @@
 
 import Foundation
 import AVFoundation
+import Vision
 
-class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSampleBufferDelegate, AVCaptureVideoDataOutputSampleBufferDelegate  {
+class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    lazy var session = AVCaptureMultiCamSession()
+    lazy var pipCapture = PiPCapture(delegate: self,
+                                     frontPreviewLayer: self.frontCameraView.videoPreviewLayer,
+                                     backPreviewLayer: self.backCameraView.videoPreviewLayer)
+    
     lazy var recorder = PiPRecorder(frontVideoSettings: [:], backVideoSettings: [:])
     
-    private enum SessionSetupResult {
-        case success
-        case notAuthorized
-        case configurationFailed
-        case multiCamNotSupported
-    }
+    let backCameraView = VideoPreviewView()
+    let frontCameraView = FrontPreviewVideoView()
     
-    private var setupResult: SessionSetupResult = .success
-    
-    // Communicate with the session and other session objects on this queue.
-    private let sessionQueue = DispatchQueue(label: "session queue")
-    let dataOutputQueue = DispatchQueue(label: "data output queue")
-    
-    let backCameraVideoPreviewView = VideoPreviewView()
-    let frontCameraVideoPreviewView = FrontPreviewVideoView()
-    
-    var backCameraDeviceInput: AVCaptureDeviceInput?
-    let backCameraVideoDataOutput = AVCaptureVideoDataOutput()
-    
-    var frontCameraDeviceInput: AVCaptureDeviceInput?
-    let frontCameraVideoDataOutput = AVCaptureVideoDataOutput()
+    /// A request to separate a person from the background in an image.
+    private var segmentationRequest = VNGeneratePersonSegmentationRequest()
+    private var sequenceHandler = VNSequenceRequestHandler()
     
     var isSessionRunning: Bool {
-        return self.session.isRunning
+        return self.pipCapture.isRunning
     }
     
     override func initializeViews() {
         super.initializeViews()
         
-        self.view.addSubview(self.backCameraVideoPreviewView)
-        self.view.addSubview(self.frontCameraVideoPreviewView)
-        
-        // Set up the back and front video preview views.
-        self.backCameraVideoPreviewView.videoPreviewLayer.setSessionWithNoConnection(self.session)
-        self.frontCameraVideoPreviewView.videoPreviewLayer.setSessionWithNoConnection(self.session)
-        
-        /*
-        Configure the capture session.
-        In general it is not safe to mutate an AVCaptureSession or any of its
-        inputs, outputs, or connections from multiple threads at the same time.
-        
-        Don't do this on the main queue, because AVCaptureMultiCamSession.startRunning()
-        is a blocking call, which can take a long time. Dispatch session setup
-        to the sessionQueue so as not to block the main queue, which keeps the UI responsive.
-        */
-        self.sessionQueue.async {
-            Task {
-                await self.configureSession()
-            }
-        }
+        self.view.addSubview(self.backCameraView)
+        self.view.addSubview(self.frontCameraView)
     }
     
-    // Must be called on the session queue
-    private func configureSession() async {
-        guard self.setupResult == .success else { return }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        guard AVCaptureMultiCamSession.isMultiCamSupported else {
-            print("MultiCam not supported on this device")
-            self.setupResult = .multiCamNotSupported
-            return
-        }
-        
-        // When using AVCaptureMultiCamSession, it is best to manually add connections from AVCaptureInputs to AVCaptureOutputs
-        self.session.beginConfiguration()
-        
-        defer {
-            self.session.commitConfiguration()
-            if self.setupResult == .success {
-                self.checkSystemCost()
-            }
-        }
-    
-        guard await self.configureBackCamera() else {
-            self.setupResult = .configurationFailed
-            return
-        }
-        
-        guard await self.configureFrontCamera() else {
-            self.setupResult = .configurationFailed
-            return
+        if self.backCameraView.videoPreviewLayer.session.isNil {
+            // Set up the back and front video preview views.
+            self.backCameraView.videoPreviewLayer.setSessionWithNoConnection(self.pipCapture.session)
+            self.frontCameraView.videoPreviewLayer.setSessionWithNoConnection(self.pipCapture.session)
         }
     }
     
@@ -105,39 +54,22 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.backCameraVideoPreviewView.expandToSuperviewSize()
+        self.backCameraView.expandToSuperviewSize()
         
-        self.frontCameraVideoPreviewView.squaredSize = self.view.width * 0.25
-        self.frontCameraVideoPreviewView.pinToSafeAreaTop()
-        self.frontCameraVideoPreviewView.pinToSafeAreaLeft()
+        self.frontCameraView.squaredSize = self.view.width * 0.25
+        self.frontCameraView.pinToSafeAreaTop()
+        self.frontCameraView.pinToSafeAreaLeft()
     }
     
     // MARK: - PUBLIC
     
     func beginSession() {
-        self.sessionQueue.async {
-            switch self.setupResult {
-            case .success:
-                // Only setup observers and start the session running if setup succeeded.
-                //self.addObservers()
-                self.session.startRunning()
-                
-            case .notAuthorized:
-                break
-            case .configurationFailed:
-                break
-            case .multiCamNotSupported:
-                break
-            }
-        }
+        self.pipCapture.begin()
     }
     
     func stopSession() {
-        self.sessionQueue.async {
-            if self.setupResult == .success {
-                self.session.stopRunning()
-            }
-        }
+        self.pipCapture.stop()
+        self.frontCameraView.currentCIImage = nil
     }
     
     func startVideoCapture() {
@@ -152,12 +84,12 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
         guard let frontURL = self.recorder.recording?.frontRecordingURL,
                 let backURL = self.recorder.recording?.backRecordingURL else { return }
         
-        self.frontCameraVideoPreviewView.beginPlayback(with: frontURL)
-        self.backCameraVideoPreviewView.beginPlayback(with: backURL)
+        self.frontCameraView.beginPlayback(with: frontURL)
+        self.backCameraView.beginPlayback(with: backURL)
     }
     
     func stopPlayback() {
-        self.frontCameraVideoPreviewView.stopPlayback()
-        self.backCameraVideoPreviewView.stopPlayback()
+        self.frontCameraView.stopPlayback()
+        self.backCameraView.stopPlayback()
     }
 }

@@ -20,7 +20,7 @@ struct ExceededCaptureSessionCosts: OptionSet {
  Helps adjust the cameras to not overload the system or hardware.
  */
 
-extension PiPRecordingViewController {
+extension PiPCapture {
     
     func checkSystemCost() {
         var exceededSessionCosts: ExceededCaptureSessionCosts = []
@@ -253,5 +253,4 @@ extension PiPRecordingViewController {
         
         return false
     }
-    
 }
