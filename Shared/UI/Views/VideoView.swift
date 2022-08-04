@@ -38,7 +38,7 @@ class VideoView: BaseView {
         super.initializeSubviews()
         
         NotificationCenter.default.publisher(for: AVPlayer.rateDidChangeNotification)
-            .filter({ notification in
+            .filter({ [unowned self] notification in
                 if let player = notification.object as? AVPlayer,
                    player === self.playerLayer.player {
                     return true
@@ -97,7 +97,7 @@ class VideoView: BaseView {
             
             self?.looper = AVPlayerLooper(player: player, templateItem: videoItem)
             
-            if let `self` = self, self.shouldPlay {
+            if self?.shouldPlay == true {
                 player.playImmediately(atRate: 1.0)
             }
         }
