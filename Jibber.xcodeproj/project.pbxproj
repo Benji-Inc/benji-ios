@@ -551,6 +551,8 @@
 		D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */; };
 		D63F964A289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */; };
 		D63F964C289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */; };
+		D63F964E289C24ED004F6C0D /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */; };
+		D63F9650289C2B55004F6C0D /* FrontPreviewVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -1251,6 +1253,8 @@
 		D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecordingViewController.swift; sourceTree = "<group>"; };
 		D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Costs.swift"; sourceTree = "<group>"; };
 		D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Cameras.swift"; sourceTree = "<group>"; };
+		D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
+		D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontPreviewVideoView.swift; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -2143,8 +2147,10 @@
 			children = (
 				D63F9644289B1E81004F6C0D /* PiPRecorder.swift */,
 				D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */,
-				D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */,
 				D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */,
+				D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */,
+				D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */,
+				D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */,
 			);
 			path = PIP;
 			sourceTree = "<group>";
@@ -3746,6 +3752,7 @@
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
 				D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */,
+				D63F9650289C2B55004F6C0D /* FrontPreviewVideoView.swift in Sources */,
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
@@ -3937,6 +3944,7 @@
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
 				D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */,
 				D646D37627E579310077D20B /* AddMediaView.swift in Sources */,
+				D63F964E289C24ED004F6C0D /* VideoPreviewView.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D60B886027F37BC800B3E1C2 /* MessageMoreCell.swift in Sources */,
 				D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */,

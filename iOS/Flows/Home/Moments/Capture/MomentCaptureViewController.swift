@@ -38,22 +38,6 @@ import Parse
 
      static let maxDuration: TimeInterval = 3.0
 
-     var animation = CABasicAnimation(keyPath: "strokeEnd")
-
-     lazy var shapeLayer: CAShapeLayer = {
-         let shapeLayer = CAShapeLayer()
-         let color = ThemeColor.D6.color.cgColor
-         shapeLayer.fillColor = ThemeColor.clear.color.cgColor
-         shapeLayer.strokeColor = color
-         shapeLayer.lineCap = .round
-         shapeLayer.lineWidth = 4
-         shapeLayer.shadowColor = color
-         shapeLayer.shadowRadius = 5
-         shapeLayer.shadowOffset = .zero
-         shapeLayer.shadowOpacity = 1.0
-         return shapeLayer
-     }()
-
      override func initializeViews() {
          super.initializeViews()
 
@@ -67,18 +51,11 @@ import Parse
 
          self.presentationController?.delegate = self
 
-         //self.view.addSubview(self.blurView)
-
-        // self.addChild(viewController: self.momentCatureVC)
-//         self.momentCatureVC.videoPreviewView.shouldPlay = true
-//
-//         self.addChild(viewController: self.expressionCaptureVC)
-//         self.expressionCaptureVC.videoPreviewView.shouldPlay = true
-//         self.expressionCaptureVC.label.removeFromSuperview()
+         self.view.insertSubview(self.blurView, at: 0)
 
          self.view.addSubview(self.doneButton)
          self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-
+         
          self.setupHandlers()
      }
 
@@ -86,13 +63,7 @@ import Parse
          super.viewDidLayoutSubviews()
 
          self.blurView.expandToSuperviewSize()
-
-//         self.momentCatureVC.view.expandToSuperviewSize()
-//
-//         self.expressionCaptureVC.view.squaredSize = self.view.width * 0.25
-//         self.expressionCaptureVC.view.pinToSafeAreaTop()
-//         self.expressionCaptureVC.view.pinToSafeAreaLeft()
-
+         
          self.doneButton.setSize(with: self.view.width)
          self.doneButton.centerOnX()
 

@@ -9,20 +9,6 @@
 import Foundation
 import AVFoundation
 
-class VideoPreviewView: BaseView {
-    var videoPreviewLayer: AVCaptureVideoPreviewLayer {
-        guard let layer = layer as? AVCaptureVideoPreviewLayer else {
-            fatalError("Expected `AVCaptureVideoPreviewLayer` type for layer. Check PreviewView.layerClass implementation.")
-        }
-        
-        return layer
-    }
-    
-    override class var layerClass: AnyClass {
-        return AVCaptureVideoPreviewLayer.self
-    }
-}
-
 class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSampleBufferDelegate, AVCaptureVideoDataOutputSampleBufferDelegate  {
     
     lazy var session = AVCaptureMultiCamSession()
@@ -41,7 +27,7 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
     let dataOutputQueue = DispatchQueue(label: "data output queue")
     
     let backCameraVideoPreviewView = VideoPreviewView()
-    let frontCameraVideoPreviewView = VideoPreviewView()
+    let frontCameraVideoPreviewView = FrontPreviewVideoView()
     
     var backCameraDeviceInput: AVCaptureDeviceInput?
     let backCameraVideoDataOutput = AVCaptureVideoDataOutput()
@@ -73,12 +59,14 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
         to the sessionQueue so as not to block the main queue, which keeps the UI responsive.
         */
         self.sessionQueue.async {
-            self.configureSession()
+            Task {
+                await self.configureSession()
+            }
         }
     }
     
     // Must be called on the session queue
-    private func configureSession() {
+    private func configureSession() async {
         guard self.setupResult == .success else { return }
         
         guard AVCaptureMultiCamSession.isMultiCamSupported else {
@@ -96,13 +84,13 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
                 self.checkSystemCost()
             }
         }
-
-        guard self.configureBackCamera() else {
+    
+        guard await self.configureBackCamera() else {
             self.setupResult = .configurationFailed
             return
         }
         
-        guard self.configureFrontCamera() else {
+        guard await self.configureFrontCamera() else {
             self.setupResult = .configurationFailed
             return
         }
@@ -132,7 +120,6 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
         self.sessionQueue.async {
             if self.setupResult == .success {
                 self.session.stopRunning()
-                //self.removeObservers()
             }
         }
         
@@ -144,7 +131,7 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
         
         self.backCameraVideoPreviewView.expandToSuperviewSize()
         
-        self.frontCameraVideoPreviewView.squaredSize = self.view.width * 0.33
+        self.frontCameraVideoPreviewView.squaredSize = self.view.width * 0.25
         self.frontCameraVideoPreviewView.pinToSafeAreaTop()
         self.frontCameraVideoPreviewView.pinToSafeAreaLeft()
     }
