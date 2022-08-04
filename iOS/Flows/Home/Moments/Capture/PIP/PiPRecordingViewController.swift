@@ -60,14 +60,12 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         to the sessionQueue so as not to block the main queue, which keeps the UI responsive.
         */
         self.sessionQueue.async {
-            Task {
-                await self.configureSession()
-            }
+            self.configureSession()
         }
     }
     
     // Must be called on the session queue
-    private func configureSession() async {
+    private func configureSession() {
         guard self.setupResult == .success else { return }
         
         guard AVCaptureMultiCamSession.isMultiCamSupported else {
@@ -86,12 +84,12 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             }
         }
     
-        guard await self.configureBackCamera() else {
+        guard self.configureBackCamera() else {
             self.setupResult = .configurationFailed
             return
         }
         
-        guard await self.configureFrontCamera() else {
+        guard self.configureFrontCamera() else {
             self.setupResult = .configurationFailed
             return
         }

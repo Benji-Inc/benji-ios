@@ -12,7 +12,7 @@ import AVFoundation
 extension PiPRecordingViewController {
     
     
-    func configureBackCamera() async -> Bool {
+    func configureBackCamera() -> Bool {
         self.session.beginConfiguration()
         defer {
             self.session.commitConfiguration()
@@ -95,7 +95,7 @@ extension PiPRecordingViewController {
         return true
     }
     
-    func configureFrontCamera() async -> Bool {
+    func configureFrontCamera() -> Bool {
         self.session.beginConfiguration()
         defer {
             self.session.commitConfiguration()
