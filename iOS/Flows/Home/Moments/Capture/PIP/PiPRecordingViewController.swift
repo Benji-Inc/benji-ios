@@ -147,4 +147,17 @@ class PiPRecordingViewController: ViewController, AVCaptureAudioDataOutputSample
     func stopVideoCapture() {
         self.recorder.stopRecording()
     }
+    
+    func beginPlayback() {
+        guard let frontURL = self.recorder.recording?.frontRecordingURL,
+                let backURL = self.recorder.recording?.backRecordingURL else { return }
+        
+        self.frontCameraVideoPreviewView.beginPlayback(with: frontURL)
+        self.backCameraVideoPreviewView.beginPlayback(with: backURL)
+    }
+    
+    func stopPlayback() {
+        self.frontCameraVideoPreviewView.stopPlayback()
+        self.backCameraVideoPreviewView.stopPlayback()
+    }
 }

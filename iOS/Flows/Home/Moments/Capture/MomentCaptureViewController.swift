@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import Parse
+import Localization
 
  class MomentCaptureViewController: PiPRecordingViewController {
 
@@ -23,6 +24,7 @@ import Parse
      }
 
      let blurView = DarkBlurView()
+     let label = ThemeLabel(font: .medium, textColor: .white)
 
      private let doneButton = ThemeButton()
 
@@ -46,6 +48,8 @@ import Parse
          self.presentationController?.delegate = self
 
          self.view.insertSubview(self.blurView, at: 0)
+         
+         self.view.addSubview(self.label)
 
          self.view.addSubview(self.doneButton)
          self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
@@ -58,24 +62,32 @@ import Parse
 
          self.blurView.expandToSuperviewSize()
          
+         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+         self.label.centerOnX()
+         
          self.doneButton.setSize(with: self.view.width)
          self.doneButton.centerOnX()
 
          if self.state == .confirm {
              self.doneButton.pinToSafeAreaBottom()
+             self.label.top = self.view.height
          } else {
              self.doneButton.top = self.view.height
+             self.label.pinToSafeAreaBottom()
          }
      }
 
      private func setupHandlers() {
          
          self.frontCameraVideoPreviewView.animationDidStart = { [unowned self] in
-             
+             self.animate(text: "")
+             self.startVideoCapture()
          }
          
          self.frontCameraVideoPreviewView.animationDidEnd = { [unowned self] in
-             
+             if self.state == .capture {
+                 self.stopVideoCapture()
+             }
          }
          
          self.recorder.didCapturePIPRecording = { [unowned self] in
@@ -83,23 +95,6 @@ import Parse
              self.state = .confirm
          }
 
-//         self.momentCatureVC.didCaptureVideo = { [unowned self] videoURL in
-//             self.momentURL = videoURL
-//
-//             Task.onMainActor {
-//                 self.momentCatureVC.stopSession()
-//                 self.state = .confirm
-//             }
-//         }
-//
-//         self.expressionCaptureVC.didCaptureVideo = { [unowned self] videoURL in
-//             self.expressionURL = videoURL
-//
-//             Task.onMainActor {
-//                 self.expressionCaptureVC.stopSession()
-//                 self.state = .confirm
-//             }
-//         }
 //
 //         self.expressionCaptureVC.$hasRenderedFaceImage
 //             .removeDuplicates()
@@ -138,66 +133,59 @@ import Parse
      private func update(for state: State) {
          switch state {
          case .initial:
-             break
-             //self.expressionCaptureVC.animate(text: "Scanning...")
-//             self.expressionCaptureVC.animationView.alpha = 1.0
-//             self.expressionCaptureVC.animationView.play()
+             self.animate(text: "Scanning...")
+             self.frontCameraVideoPreviewView.animationView.alpha = 1.0
+             self.frontCameraVideoPreviewView.animationView.play()
          case .capture:
-             //self.momentCatureVC.setVideoPreview(with: nil)
+             self.stopPlayback()
 
-             //self.expressionCaptureVC.animationView.stop()
-             //self.expressionCaptureVC.animate(text: "Press and Hold")
-             //self.expressionCaptureVC.setVideoPreview(with: nil)
+             self.frontCameraVideoPreviewView.animationView.stop()
+             self.animate(text: "Press and Hold")
 
              let duration: TimeInterval = 0.25
 
              UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
                  UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-//                     self.momentCatureVC.cameraView.alpha = 1
-//
-//                     self.expressionCaptureVC.cameraView.alpha = 1
-//                     self.expressionCaptureVC.animationView.alpha = 0.0
+                     self.backCameraVideoPreviewView.videoPreviewLayer.opacity = 1
+
+                     self.frontCameraVideoPreviewView.videoPreviewLayer.opacity = 1
+                     self.frontCameraVideoPreviewView.animationView.alpha = 0.0
+                     
                      self.view.layoutNow()
                  }
 
                  UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-//                     self.momentCatureVC.view.alpha = 1.0
-//                     self.expressionCaptureVC.view.alpha = 1.0
+                     self.backCameraVideoPreviewView.alpha = 1.0
+                     self.frontCameraVideoPreviewView.alpha = 1.0
                  }
              })
 
              UIView.animate(withDuration: 0.1, delay: duration, options: []) {
-                 //self.momentCatureVC.view.alpha = 1.0
-                // self.expressionCaptureVC.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
-                // self.expressionCaptureVC.view.alpha = 1.0
+                 self.backCameraVideoPreviewView.alpha = 1.0
+                 self.frontCameraVideoPreviewView.layer.borderColor = ThemeColor.B1.color.cgColor
+                 self.frontCameraVideoPreviewView.alpha = 1.0
              } completion: { _ in
                  self.beginSession()
-                 //self.expressionCaptureVC.beginSession()
-                 //self.momentCatureVC.beginSession()
              }
          case .confirm:
-//             self.expressionCaptureVC.animate(text: "Tap to retake")
-//             self.expressionCaptureVC.animationView.alpha = 0.0
-//             self.expressionCaptureVC.animationView.stop()
+             self.animate(text: "Tap to retake")
+             self.frontCameraVideoPreviewView.animationView.alpha = 0.0
+             self.frontCameraVideoPreviewView.animationView.stop()
 
              self.frontCameraVideoPreviewView.stopRecordingAnimation()
-
-             guard let expressionURL = self.recorder.recording?.frontRecordingURL,
-                   let momentURL = self.recorder.recording?.backRecordingURL else { break }
-
-//             self.expressionCaptureVC.setVideoPreview(with: expressionURL)
-//             self.momentCatureVC.setVideoPreview(with: momentURL)
+             self.beginPlayback()
 
              UIView.animate(withDuration: Theme.animationDurationFast) {
-//                 self.momentCatureVC.cameraView.alpha = 0.0
-//                 self.expressionCaptureVC.cameraView.alpha = 0.0
+                 self.backCameraVideoPreviewView.videoPreviewLayer.opacity = 0.0
+                 self.frontCameraVideoPreviewView.videoPreviewLayer.opacity = 0.0
                  self.view.layoutNow()
              }
          }
      }
 
      private func createMoment(from recording: PiPRecording) async -> Moment? {
-         guard let expressionURL = recording.frontRecordingURL, let momentURL = recording.backRecordingURL else { return nil }
+         guard let expressionURL = recording.frontRecordingURL,
+                let momentURL = recording.backRecordingURL else { return nil }
 
          let expressionData = try! Data(contentsOf: expressionURL)
          let momentData = try! Data(contentsOf: momentURL)
@@ -221,6 +209,29 @@ import Parse
          guard let savedMoment = try? await moment.saveToServer() else { return nil }
 
          return savedMoment
+     }
+     
+     private var animateTask: Task<Void, Never>?
+     
+     func animate(text: Localized) {
+         self.animateTask?.cancel()
+         
+         self.animateTask = Task { [weak self] in
+             guard let `self` = self else { return }
+             
+             await UIView.awaitAnimation(with: .fast, animations: {
+                 self.label.alpha = 0
+             })
+             
+             guard !Task.isCancelled else { return }
+             
+             self.label.setText(text)
+             self.view.layoutNow()
+             
+             await UIView.awaitAnimation(with: .fast, animations: {
+                 self.label.alpha = 1.0
+             })
+         }
      }
 
      override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -11,6 +11,8 @@ import AVFoundation
 
 class VideoPreviewView: BaseView {
     
+    private let playbackView = VideoView()
+    
     @MainActor
     var videoPreviewLayer: AVCaptureVideoPreviewLayer {
         guard let layer = layer as? AVCaptureVideoPreviewLayer else {
@@ -28,5 +30,23 @@ class VideoPreviewView: BaseView {
         super.initializeSubviews()
         
         self.videoPreviewLayer.videoGravity = .resizeAspectFill
+        self.addSubview(self.playbackView)
+        self.playbackView.alpha = 0
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.playbackView.expandToSuperviewSize()
+    }
+    
+    func beginPlayback(with url: URL) {
+        self.playbackView.videoURL = url
+        self.playbackView.alpha = 1.0
+    }
+    
+    func stopPlayback() {
+        self.playbackView.videoURL = nil
+        self.playbackView.alpha = 0.0 
     }
 }

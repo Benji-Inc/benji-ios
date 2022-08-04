@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import Lottie
 
 class FrontPreviewVideoView: VideoPreviewView {
+    
+    let animationView = AnimationView.with(animation: .faceScan)
     
     var animationDidStart: CompletionOptional = nil
     var animationDidEnd: CompletionOptional = nil
@@ -32,11 +35,18 @@ class FrontPreviewVideoView: VideoPreviewView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.addSubview(self.animationView)
+        self.animationView.loopMode = .loop
+        self.animationView.alpha = 0
+        
         self.clipsToBounds = true
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.animationView.squaredSize = self.height * 0.5
+        self.animationView.centerOnXAndY()
                 
         self.layer.cornerRadius = self.height * 0.25
     }
