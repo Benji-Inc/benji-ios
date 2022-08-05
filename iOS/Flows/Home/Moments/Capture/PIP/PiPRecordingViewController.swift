@@ -19,7 +19,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     @Published var faceDetected = false
     
     lazy var session = AVCaptureMultiCamSession()
-    lazy var recorder = PiPRecorder(frontVideoSettings: [:], backVideoSettings: [:])
+    lazy var recorder = PiPRecorder()
     
     private enum SessionSetupResult {
         case success
@@ -37,11 +37,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
     
-    var backCameraDeviceInput: AVCaptureDeviceInput?
-    let backCameraVideoDataOutput = AVCaptureVideoDataOutput()
+    var backInput: AVCaptureDeviceInput?
+    let backOutput = AVCaptureVideoDataOutput()
     
-    var frontCameraDeviceInput: AVCaptureDeviceInput?
-    let frontCameraVideoDataOutput = AVCaptureVideoDataOutput()
+    var frontInput: AVCaptureDeviceInput?
+    let frontOutput = AVCaptureVideoDataOutput()
     
     var isSessionRunning: Bool {
         return self.session.isRunning

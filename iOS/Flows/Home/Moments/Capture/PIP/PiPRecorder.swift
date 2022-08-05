@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import VideoToolbox
 
 struct PiPRecording {
     var frontRecordingURL: URL?
@@ -22,15 +23,25 @@ class PiPRecorder {
     private var backAssetWriter: AVAssetWriter?
     private var backAssetWriterVideoInput: AVAssetWriterInput?
     
-    private let frontVideoSettings: [String: Any]
-    private let backVideoSettings: [String: Any]
+    private let frontVideoSettings: [String: Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
+                                                     AVVideoWidthKey : 480,
+                                                    AVVideoHeightKey : 480,
+                                     AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
+                                          kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
+    
+    let pixelBufferAttributes: [String: Any] = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+                                                           kCVPixelBufferWidthKey: 480,
+                                                          kCVPixelBufferHeightKey: 480,
+                                              kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+    
+    private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
+    
+    private let backVideoSettings: [String: Any] = [:]
     
     private(set) var recording: PiPRecording?
     var didCapturePIPRecording: CompletionOptional = nil
     
-    init(frontVideoSettings: [String: Any], backVideoSettings: [String: Any]) {
-        self.frontVideoSettings = frontVideoSettings
-        self.backVideoSettings = backVideoSettings
+    init() {
         self.prepareToRecord()
     }
     
@@ -50,10 +61,16 @@ class PiPRecorder {
         // Add a video input
         let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: self.frontVideoSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
+        assetWriterVideoInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
         assetWriter.add(assetWriterVideoInput)
         
         self.frontAssetWriter = assetWriter
         self.frontAssetWriterVideoInput = assetWriterVideoInput
+        
+        self.pixelBufferAdaptor
+        = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterVideoInput,
+                                               sourcePixelBufferAttributes: self.pixelBufferAttributes)
+
     }
     
     private func initializeBack() {
@@ -73,30 +90,49 @@ class PiPRecorder {
         self.backAssetWriterVideoInput = assetWriterVideoInput
     }
     
-    func startRecording(frontSampleBuffer: CMSampleBuffer, backSampleBuffer: CMSampleBuffer) {
+    func startRecordingFront(with sampleBuffer: CMSampleBuffer, image: CIImage) {
+        guard let input = self.frontAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+
+        var pixelBuffer: CVPixelBuffer?
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
+                     kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
+        let width = Int(image.extent.width)
+        let height = Int(image.extent.width)
+
+        CVPixelBufferCreate(kCFAllocatorDefault,
+                            width,
+                            height,
+                            kCVPixelFormatType_32BGRA,
+                            attrs,
+                            &pixelBuffer)
+
+        let context = CIContext()
+        // Using a magic number (-240) for now. We should figure out the appropriate offset dynamically.
+        let transform = CGAffineTransform(translationX: 0, y: -240)
+        let adjustedImage = image.transformed(by: transform)
+        context.render(adjustedImage, to: pixelBuffer!)
+
+        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
+        let presentationTime = CMTime(seconds: currentTime,
+                                      preferredTimescale: CMTimeScale(bitPattern: 600))
+
+        self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
+    }
+    
+    func startRecordingBack(with sampleBuffer: CMSampleBuffer) {
         self.recording = nil
         
-        guard let frontWriter = self.frontAssetWriter, let backWriter = self.backAssetWriter else { return }
-        
-        // Front
-        if frontWriter.status == .unknown {
-            frontWriter.startWriting()
-            frontWriter.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(frontSampleBuffer))
-        } else if frontWriter.status == .writing {
-            if let input = self.frontAssetWriterVideoInput,
-                input.isReadyForMoreMediaData {
-                input.append(frontSampleBuffer)
-            }
-        }
+        guard let backWriter = self.backAssetWriter else { return }
+
         
         // Back
         if backWriter.status == .unknown {
             backWriter.startWriting()
-            backWriter.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(frontSampleBuffer))
+            backWriter.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
         } else if backWriter.status == .writing {
             if let input = self.backAssetWriterVideoInput,
-                input.isReadyForMoreMediaData {
-                input.append(frontSampleBuffer)
+               input.isReadyForMoreMediaData {
+                input.append(sampleBuffer)
             }
         }
     }
