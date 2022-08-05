@@ -142,12 +142,8 @@ import Localization
          switch state {
          case .initial:
              self.animate(text: "Scanning...")
-             self.frontCameraView.animationView.alpha = 1.0
-             self.frontCameraView.animationView.play()
          case .capture:
              self.stopPlayback()
-
-             self.frontCameraView.animationView.stop()
              self.animate(text: "Press and Hold")
 
              let duration: TimeInterval = 0.25
@@ -155,10 +151,7 @@ import Localization
              UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
                  UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
                      self.backCameraView.videoPreviewLayer.opacity = 1
-
-                     self.frontCameraView.videoPreviewLayer.opacity = 1
-                     self.frontCameraView.animationView.alpha = 0.0
-                     
+                     self.frontCameraView.cameraView.alpha = 1
                      self.view.layoutNow()
                  }
 
@@ -177,15 +170,12 @@ import Localization
              }
          case .confirm:
              self.animate(text: "Tap to retake")
-             self.frontCameraView.animationView.alpha = 0.0
-             self.frontCameraView.animationView.stop()
-
              self.frontCameraView.stopRecordingAnimation()
              self.beginPlayback()
 
              UIView.animate(withDuration: Theme.animationDurationFast) {
                  self.backCameraView.videoPreviewLayer.opacity = 0.0
-                 self.frontCameraView.videoPreviewLayer.opacity = 0.0
+                 self.frontCameraView.cameraView.alpha = 0.0
                  self.view.layoutNow()
              }
          }

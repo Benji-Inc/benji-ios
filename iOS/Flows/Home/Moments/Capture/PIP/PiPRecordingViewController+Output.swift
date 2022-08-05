@@ -18,7 +18,7 @@ extension PiPRecordingViewController {
         
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-        let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: nil)
+        let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
 
         do {
             try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
@@ -36,6 +36,15 @@ extension PiPRecordingViewController {
         } catch {
             logError(error)
         }
+    }
+    
+    private func detectedFace(request: VNRequest, error: Error?) {
+        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
+            self.faceDetected = false
+            return
+        }
+
+        self.faceDetected = true
     }
     
     /// Makes the image black and white, and makes the background clear.

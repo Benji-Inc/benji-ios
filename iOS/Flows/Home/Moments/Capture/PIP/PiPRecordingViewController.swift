@@ -16,6 +16,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     let segmentationRequest = VNGeneratePersonSegmentationRequest()
     let sequenceHandler = VNSequenceRequestHandler()
     
+    @Published var faceDetected = false
+    
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder(frontVideoSettings: [:], backVideoSettings: [:])
     

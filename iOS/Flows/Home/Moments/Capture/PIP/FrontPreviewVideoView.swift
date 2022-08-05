@@ -12,7 +12,7 @@ import MetalKit
 
 class FrontPreviewVideoView: VideoPreviewView {
     
-    let animationView = AnimationView.with(animation: .faceScan)
+    private let emotionGradientView = EmotionGradientView()
     
     var animationDidStart: CompletionOptional = nil
     var animationDidEnd: CompletionOptional = nil
@@ -25,7 +25,7 @@ class FrontPreviewVideoView: VideoPreviewView {
         shapeLayer.fillColor = ThemeColor.clear.color.cgColor
         shapeLayer.strokeColor = color
         shapeLayer.lineCap = .round
-        shapeLayer.lineWidth = 4
+        shapeLayer.lineWidth = 2
         shapeLayer.shadowColor = color
         shapeLayer.shadowRadius = 5
         shapeLayer.shadowOffset = .zero
@@ -50,14 +50,13 @@ class FrontPreviewVideoView: VideoPreviewView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.addSubview(self.emotionGradientView)
+        self.emotionGradientView.alpha = 0.75
+        
         self.addSubview(self.cameraView)
         
-        self.addSubview(self.animationView)
-        self.animationView.loopMode = .loop
-        self.animationView.alpha = 0
-        
         self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
-        self.layer.borderWidth = 4
+        self.layer.borderWidth = 2
         
         self.clipsToBounds = true
     }
@@ -65,13 +64,12 @@ class FrontPreviewVideoView: VideoPreviewView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        self.emotionGradientView.expandToSuperviewSize()
+        
         self.cameraView.width = self.width
         self.cameraView.height = self.height * 1.25
         self.cameraView.pin(.top)
         self.cameraView.centerOnX()
-
-        self.animationView.squaredSize = self.height * 0.5
-        self.animationView.centerOnXAndY()
                 
         self.layer.cornerRadius = self.height * 0.25
     }
