@@ -11,9 +11,8 @@ import AVFoundation
 
 class VideoPreviewView: BaseView {
     
-    private let playbackView = VideoView()
+    let playbackView = VideoView()
     
-    @MainActor
     var videoPreviewLayer: AVCaptureVideoPreviewLayer {
         guard let layer = layer as? AVCaptureVideoPreviewLayer else {
             fatalError("Expected `AVCaptureVideoPreviewLayer` type for layer. Check PreviewView.layerClass implementation.")
@@ -43,10 +42,12 @@ class VideoPreviewView: BaseView {
     func beginPlayback(with url: URL) {
         self.playbackView.videoURL = url
         self.playbackView.alpha = 1.0
+        self.videoPreviewLayer.opacity = 0.0
     }
     
     func stopPlayback() {
         self.playbackView.videoURL = nil
-        self.playbackView.alpha = 0.0 
+        self.playbackView.alpha = 0.0
+        self.videoPreviewLayer.opacity = 1.0 
     }
 }

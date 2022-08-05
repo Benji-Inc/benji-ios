@@ -16,25 +16,46 @@ extension PiPRecordingViewController {
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
         
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        let isFrontOutput = connection.isVideoMirrored
+        
+        // If mirrored, then its the front camera output
+        if isFrontOutput {
+            guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-        let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
+            let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
 
-        do {
-            try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
-                                             on: imageBuffer,
-                                             orientation: .left)
+            do {
+                try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
+                                                 on: imageBuffer,
+                                                 orientation: .left)
 
-            // Get the pixel buffer that contains the mask image.
-            guard let maskPixelBuffer
-                    = self.segmentationRequest.results?.first?.pixelBuffer else { return }
-            // Process the images.
-            let blendedImage = self.blend(original: imageBuffer, mask: maskPixelBuffer)
+                // Get the pixel buffer that contains the mask image.
+                guard let maskPixelBuffer
+                        = self.segmentationRequest.results?.first?.pixelBuffer else { return }
+                // Process the images.
+                let blendedImage = self.blend(original: imageBuffer, mask: maskPixelBuffer)
 
-            // Set the new, blended image as current.
-            self.frontCameraView.currentCIImage = blendedImage
-        } catch {
-            logError(error)
+                // Set the new, blended image as current.
+                self.frontCameraView.currentCIImage = blendedImage
+            } catch {
+                logError(error)
+            }
+        }
+        
+        switch self.videoCaptureState {
+        case .idle:
+            // Do nothing
+            break
+        case .recording:
+            if isFrontOutput {
+                guard let ciImage = self.frontCameraView.currentCIImage else { return }
+                self.recorder.recordFront(with: sampleBuffer, image: ciImage)
+            } else {
+                self.recorder.recordBack(with: sampleBuffer)
+            }
+        case .ending:
+            self.recorder.stopRecording()
+            self.videoCaptureState = .idle
         }
     }
     

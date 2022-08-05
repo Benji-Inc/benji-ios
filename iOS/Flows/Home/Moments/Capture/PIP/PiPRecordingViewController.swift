@@ -21,14 +21,23 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder()
     
-    private enum SessionSetupResult {
+    enum SessionSetupResult {
+        case initial
         case success
         case notAuthorized
         case configurationFailed
         case multiCamNotSupported
     }
     
-    private var setupResult: SessionSetupResult = .success
+    @Published var setupResult: SessionSetupResult = .initial
+    
+    enum VideoCaptureState {
+        case idle
+        case recording
+        case ending
+    }
+
+    @Published var videoCaptureState: VideoCaptureState = .idle
     
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
@@ -73,7 +82,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     // Must be called on the session queue
     private func configureSession() {
-        guard self.setupResult == .success else { return }
+        guard self.setupResult == .initial else { return }
         
         guard AVCaptureMultiCamSession.isMultiCamSupported else {
             print("MultiCam not supported on this device")
@@ -86,8 +95,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         
         defer {
             self.session.commitConfiguration()
-            if self.setupResult == .success {
+            if self.setupResult == .initial {
                 self.checkSystemCost()
+                self.setupResult = .success
             }
         }
     
@@ -122,9 +132,10 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     func beginSession() {
         self.sessionQueue.async {
             switch self.setupResult {
+            case .initial:
+                break 
             case .success:
                 // Only setup observers and start the session running if setup succeeded.
-                //self.addObservers()
                 self.session.startRunning()
                 
             case .notAuthorized:
@@ -146,17 +157,19 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     func startVideoCapture() {
-       // self.recorder.startRecording(frontSampleBuffer: <#T##CMSampleBuffer#>, backSampleBuffer: <#T##CMSampleBuffer#>)
+        self.videoCaptureState = .recording
     }
     
     func stopVideoCapture() {
-        self.recorder.stopRecording()
+        self.videoCaptureState = .ending
     }
     
     func beginPlayback() {
         guard let frontURL = self.recorder.recording?.frontRecordingURL,
                 let backURL = self.recorder.recording?.backRecordingURL else { return }
         
+        logDebug("front: \(frontURL)")
+        logDebug("back: \(backURL)")
         self.frontCameraView.beginPlayback(with: frontURL)
         self.backCameraView.beginPlayback(with: backURL)
     }

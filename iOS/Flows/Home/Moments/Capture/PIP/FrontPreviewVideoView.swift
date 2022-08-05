@@ -25,7 +25,7 @@ class FrontPreviewVideoView: VideoPreviewView {
         shapeLayer.fillColor = ThemeColor.clear.color.cgColor
         shapeLayer.strokeColor = color
         shapeLayer.lineCap = .round
-        shapeLayer.lineWidth = 2
+        shapeLayer.lineWidth = 4
         shapeLayer.shadowColor = color
         shapeLayer.shadowRadius = 5
         shapeLayer.shadowOffset = .zero
@@ -95,6 +95,18 @@ class FrontPreviewVideoView: VideoPreviewView {
     func stopRecordingAnimation() {
         self.shapeLayer.removeFromSuperlayer()
         self.shapeLayer.removeAllAnimations()
+    }
+    
+    override func beginPlayback(with url: URL) {
+        super.beginPlayback(with: url)
+        
+        self.cameraView.alpha = 0.0
+    }
+    
+    override func stopPlayback() {
+        super.stopPlayback()
+        
+        self.cameraView.alpha = 1.0 
     }
 }
 

@@ -90,7 +90,7 @@ class PiPRecorder {
         self.backAssetWriterVideoInput = assetWriterVideoInput
     }
     
-    func startRecordingFront(with sampleBuffer: CMSampleBuffer, image: CIImage) {
+    func recordFront(with sampleBuffer: CMSampleBuffer, image: CIImage) {
         guard let input = self.frontAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
 
         var pixelBuffer: CVPixelBuffer?
@@ -119,7 +119,7 @@ class PiPRecorder {
         self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
     }
     
-    func startRecordingBack(with sampleBuffer: CMSampleBuffer) {
+    func recordBack(with sampleBuffer: CMSampleBuffer) {
         self.recording = nil
         
         guard let backWriter = self.backAssetWriter else { return }
@@ -151,7 +151,7 @@ class PiPRecorder {
     
     private func stopRecordingFront() async -> URL? {
         return await withCheckedContinuation({ continuation in
-            if let assetWriter = self.frontAssetWriter {
+            if let assetWriter = self.frontAssetWriter, assetWriter.status != .unknown {
                 self.frontAssetWriter = nil
                 
                 assetWriter.finishWriting {
@@ -165,7 +165,7 @@ class PiPRecorder {
     
     private func stopRecordingBack() async -> URL? {
         return await withCheckedContinuation({ continuation in
-            if let assetWriter = self.frontAssetWriter {
+            if let assetWriter = self.frontAssetWriter, assetWriter.status != .unknown {
                 self.frontAssetWriter = nil
                 
                 assetWriter.finishWriting {

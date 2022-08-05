@@ -74,7 +74,7 @@ import Localization
 
          if self.state == .confirm {
              self.doneButton.pinToSafeAreaBottom()
-             self.label.top = self.view.height
+             self.label.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
          } else {
              self.doneButton.top = self.view.height
              self.label.pinToSafeAreaBottom()
@@ -102,17 +102,16 @@ import Localization
              self.stopSession()
              self.state = .confirm
          }
-
-//
-//         self.expressionCaptureVC.$hasRenderedFaceImage
-//             .removeDuplicates()
-//             .mainSink { [unowned self] hasRendered in
-//                 if hasRendered {
-//                     self.state = .capture
-//                 } else {
-//                     self.state = .initial
-//                 }
-//             }.store(in: &self.cancellables)
+         
+         self.$setupResult
+             .removeDuplicates()
+             .mainSink { [unowned self] result in
+                 if result == .success {
+                     self.state = .capture
+                 } else {
+                     self.state = .initial
+                 }
+         }.store(in: &self.cancellables)
 
          self.$state
              .removeDuplicates()
@@ -145,39 +144,11 @@ import Localization
          case .capture:
              self.stopPlayback()
              self.animate(text: "Press and Hold")
-
-             let duration: TimeInterval = 0.25
-
-             UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
-                 UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-                     self.backCameraView.videoPreviewLayer.opacity = 1
-                     self.frontCameraView.cameraView.alpha = 1
-                     self.view.layoutNow()
-                 }
-
-                 UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                     self.backCameraView.alpha = 1.0
-                     self.frontCameraView.alpha = 1.0
-                 }
-             })
-
-             UIView.animate(withDuration: 0.1, delay: duration, options: []) {
-                 self.backCameraView.alpha = 1.0
-                 self.frontCameraView.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
-                 self.frontCameraView.alpha = 1.0
-             } completion: { _ in
-                 self.beginSession()
-             }
+             self.beginSession()
          case .confirm:
              self.animate(text: "Tap to retake")
              self.frontCameraView.stopRecordingAnimation()
              self.beginPlayback()
-
-             UIView.animate(withDuration: Theme.animationDurationFast) {
-                 self.backCameraView.videoPreviewLayer.opacity = 0.0
-                 self.frontCameraView.cameraView.alpha = 0.0
-                 self.view.layoutNow()
-             }
          }
      }
 
