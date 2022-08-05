@@ -75,7 +75,7 @@ class VideoView: BaseView {
             // Retrieve the video asset.
             let asset = AVAsset(url: videoURL)
             let tracks = try? await asset.loadTracks(withMediaType: .video)
-
+            
             guard !Task.isCancelled else { return }
 
             // We will only have one video track, so the first one is the one we want.

@@ -70,7 +70,7 @@ extension PiPRecordingViewController {
             self.backOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
         }
         
-        self.backOutput.setSampleBufferDelegate(self, queue: self.dataOutputQueue)
+        self.backOutput.setSampleBufferDelegate(self, queue: self.backDataOutputQueue)
                 
         // Connect the back camera device input to the back camera video data output
         let backCameraVideoDataOutputConnection = AVCaptureConnection(inputPorts: [backCameraVideoPort],
@@ -150,7 +150,7 @@ extension PiPRecordingViewController {
             self.frontOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
         }
 
-        self.frontOutput.setSampleBufferDelegate(self, queue: self.dataOutputQueue)
+        self.frontOutput.setSampleBufferDelegate(self, queue: self.frontDataOutputQueue)
         
         // Connect the front camera device input to the front camera video data output
         let frontCameraVideoDataOutputConnection = AVCaptureConnection(inputPorts: [frontCameraVideoPort],

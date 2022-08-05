@@ -20,7 +20,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder()
-    
+        
     enum SessionSetupResult {
         case initial
         case success
@@ -41,7 +41,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
-    let dataOutputQueue = DispatchQueue(label: "data output queue")
+    let frontDataOutputQueue = DispatchQueue(label: "front data output queue")
+    let backDataOutputQueue = DispatchQueue(label: "front data output queue")
     
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()

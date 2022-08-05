@@ -40,14 +40,22 @@ class VideoPreviewView: BaseView {
     }
     
     func beginPlayback(with url: URL) {
-        self.playbackView.videoURL = url
-        self.playbackView.alpha = 1.0
-        self.videoPreviewLayer.opacity = 0.0
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.playbackView.alpha = 1.0
+            self.videoPreviewLayer.opacity = 0.0
+        } completion: { _ in
+            self.playbackView.shouldPlay = true
+            self.playbackView.videoURL = url
+        }
     }
     
     func stopPlayback() {
         self.playbackView.videoURL = nil
-        self.playbackView.alpha = 0.0
-        self.videoPreviewLayer.opacity = 1.0 
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.playbackView.alpha = 0.0
+            self.videoPreviewLayer.opacity = 1.0
+        }
     }
 }

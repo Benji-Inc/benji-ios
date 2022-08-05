@@ -100,13 +100,17 @@ class FrontPreviewVideoView: VideoPreviewView {
     override func beginPlayback(with url: URL) {
         super.beginPlayback(with: url)
         
-        self.cameraView.alpha = 0.0
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.cameraView.alpha = 0.0
+        }
     }
     
     override func stopPlayback() {
         super.stopPlayback()
         
-        self.cameraView.alpha = 1.0 
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.cameraView.alpha = 1.0
+        }
     }
 }
 
