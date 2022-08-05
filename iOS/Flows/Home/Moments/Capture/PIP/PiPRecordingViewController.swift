@@ -8,8 +8,13 @@
 
 import Foundation
 import AVFoundation
+import Vision
 
 class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate  {
+    
+    /// A request to separate a person from the background in an image.
+    let segmentationRequest = VNGeneratePersonSegmentationRequest()
+    let sequenceHandler = VNSequenceRequestHandler()
     
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder(frontVideoSettings: [:], backVideoSettings: [:])
@@ -27,8 +32,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     private let sessionQueue = DispatchQueue(label: "session queue")
     let dataOutputQueue = DispatchQueue(label: "data output queue")
     
-    let backCameraVideoPreviewView = VideoPreviewView()
-    let frontCameraVideoPreviewView = FrontPreviewVideoView()
+    let backCameraView = VideoPreviewView()
+    let frontCameraView = FrontPreviewVideoView()
     
     var backCameraDeviceInput: AVCaptureDeviceInput?
     let backCameraVideoDataOutput = AVCaptureVideoDataOutput()
@@ -43,12 +48,12 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     override func initializeViews() {
         super.initializeViews()
         
-        self.view.addSubview(self.backCameraVideoPreviewView)
-        self.view.addSubview(self.frontCameraVideoPreviewView)
+        self.view.addSubview(self.backCameraView)
+        self.view.addSubview(self.frontCameraView)
         
         // Set up the back and front video preview views.
-        self.backCameraVideoPreviewView.videoPreviewLayer.setSessionWithNoConnection(self.session)
-        self.frontCameraVideoPreviewView.videoPreviewLayer.setSessionWithNoConnection(self.session)
+        self.backCameraView.videoPreviewLayer.setSessionWithNoConnection(self.session)
+        self.frontCameraView.videoPreviewLayer.setSessionWithNoConnection(self.session)
         
         /*
         Configure the capture session.
@@ -103,11 +108,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.backCameraVideoPreviewView.expandToSuperviewSize()
+        self.backCameraView.expandToSuperviewSize()
         
-        self.frontCameraVideoPreviewView.squaredSize = self.view.width * 0.25
-        self.frontCameraVideoPreviewView.pinToSafeAreaTop()
-        self.frontCameraVideoPreviewView.pinToSafeAreaLeft()
+        self.frontCameraView.squaredSize = self.view.width * 0.25
+        self.frontCameraView.pinToSafeAreaTop()
+        self.frontCameraView.pinToSafeAreaLeft()
     }
     
     // MARK: - PUBLIC
@@ -150,12 +155,12 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         guard let frontURL = self.recorder.recording?.frontRecordingURL,
                 let backURL = self.recorder.recording?.backRecordingURL else { return }
         
-        self.frontCameraVideoPreviewView.beginPlayback(with: frontURL)
-        self.backCameraVideoPreviewView.beginPlayback(with: backURL)
+        self.frontCameraView.beginPlayback(with: frontURL)
+        self.backCameraView.beginPlayback(with: backURL)
     }
     
     func stopPlayback() {
-        self.frontCameraVideoPreviewView.stopPlayback()
-        self.backCameraVideoPreviewView.stopPlayback()
+        self.frontCameraView.stopPlayback()
+        self.backCameraView.stopPlayback()
     }
 }

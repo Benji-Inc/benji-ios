@@ -552,6 +552,7 @@
 		D63F964C289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */; };
 		D63F964E289C24ED004F6C0D /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */; };
 		D63F9650289C2B55004F6C0D /* FrontPreviewVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */; };
+		D63F9654289C94BD004F6C0D /* PiPRecordingViewController+Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -1253,6 +1254,7 @@
 		D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Cameras.swift"; sourceTree = "<group>"; };
 		D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
 		D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontPreviewVideoView.swift; sourceTree = "<group>"; };
+		D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Output.swift"; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -2142,12 +2144,13 @@
 		D63F9648289B29D2004F6C0D /* PIP */ = {
 			isa = PBXGroup;
 			children = (
+				D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */,
 				D63F9644289B1E81004F6C0D /* PiPRecorder.swift */,
 				D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */,
 				D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */,
 				D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */,
+				D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */,
 				D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */,
-				D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */,
 			);
 			path = PIP;
 			sourceTree = "<group>";
@@ -3833,6 +3836,7 @@
 				D63F964A289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
+				D63F9654289C94BD004F6C0D /* PiPRecordingViewController+Output.swift in Sources */,
 				D6AA621328528ED100FA4D02 /* MembersDataSource.swift in Sources */,
 				D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */,
 				D637651E27E983FC00CCDA7F /* ConversationInfoCell.swift in Sources */,

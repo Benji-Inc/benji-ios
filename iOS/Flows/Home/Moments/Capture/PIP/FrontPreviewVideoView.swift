@@ -37,7 +37,7 @@ class FrontPreviewVideoView: VideoPreviewView {
     lazy var cameraView: MetalView = {
         let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
         metalView.delegate = self
-        metalView.alpha = 0
+       // metalView.alpha = 0
         return metalView
     }()
     
@@ -83,7 +83,7 @@ class FrontPreviewVideoView: VideoPreviewView {
         
         self.animation.delegate = self
         self.animation.fromValue = 0
-        self.animation.duration = ExpressionViewController.maxDuration
+        self.animation.duration = MomentCaptureViewController.maxDuration
         self.animation.isRemovedOnCompletion = false
         self.animation.fillMode = .forwards
         

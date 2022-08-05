@@ -87,12 +87,12 @@ import Localization
 
      private func setupHandlers() {
          
-         self.frontCameraVideoPreviewView.animationDidStart = { [unowned self] in
+         self.frontCameraView.animationDidStart = { [unowned self] in
              self.animate(text: "")
              self.startVideoCapture()
          }
          
-         self.frontCameraVideoPreviewView.animationDidEnd = { [unowned self] in
+         self.frontCameraView.animationDidEnd = { [unowned self] in
              if self.state == .capture {
                  self.stopVideoCapture()
              }
@@ -142,50 +142,50 @@ import Localization
          switch state {
          case .initial:
              self.animate(text: "Scanning...")
-             self.frontCameraVideoPreviewView.animationView.alpha = 1.0
-             self.frontCameraVideoPreviewView.animationView.play()
+             self.frontCameraView.animationView.alpha = 1.0
+             self.frontCameraView.animationView.play()
          case .capture:
              self.stopPlayback()
 
-             self.frontCameraVideoPreviewView.animationView.stop()
+             self.frontCameraView.animationView.stop()
              self.animate(text: "Press and Hold")
 
              let duration: TimeInterval = 0.25
 
              UIView.animateKeyframes(withDuration: duration, delay: 0.0, animations: {
                  UIView.addKeyframe(withRelativeStartTime: 0.1, relativeDuration: 0.75) {
-                     self.backCameraVideoPreviewView.videoPreviewLayer.opacity = 1
+                     self.backCameraView.videoPreviewLayer.opacity = 1
 
-                     self.frontCameraVideoPreviewView.videoPreviewLayer.opacity = 1
-                     self.frontCameraVideoPreviewView.animationView.alpha = 0.0
+                     self.frontCameraView.videoPreviewLayer.opacity = 1
+                     self.frontCameraView.animationView.alpha = 0.0
                      
                      self.view.layoutNow()
                  }
 
                  UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                     self.backCameraVideoPreviewView.alpha = 1.0
-                     self.frontCameraVideoPreviewView.alpha = 1.0
+                     self.backCameraView.alpha = 1.0
+                     self.frontCameraView.alpha = 1.0
                  }
              })
 
              UIView.animate(withDuration: 0.1, delay: duration, options: []) {
-                 self.backCameraVideoPreviewView.alpha = 1.0
-                 self.frontCameraVideoPreviewView.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
-                 self.frontCameraVideoPreviewView.alpha = 1.0
+                 self.backCameraView.alpha = 1.0
+                 self.frontCameraView.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
+                 self.frontCameraView.alpha = 1.0
              } completion: { _ in
                  self.beginSession()
              }
          case .confirm:
              self.animate(text: "Tap to retake")
-             self.frontCameraVideoPreviewView.animationView.alpha = 0.0
-             self.frontCameraVideoPreviewView.animationView.stop()
+             self.frontCameraView.animationView.alpha = 0.0
+             self.frontCameraView.animationView.stop()
 
-             self.frontCameraVideoPreviewView.stopRecordingAnimation()
+             self.frontCameraView.stopRecordingAnimation()
              self.beginPlayback()
 
              UIView.animate(withDuration: Theme.animationDurationFast) {
-                 self.backCameraVideoPreviewView.videoPreviewLayer.opacity = 0.0
-                 self.frontCameraVideoPreviewView.videoPreviewLayer.opacity = 0.0
+                 self.backCameraView.videoPreviewLayer.opacity = 0.0
+                 self.frontCameraView.videoPreviewLayer.opacity = 0.0
                  self.view.layoutNow()
              }
          }
@@ -246,28 +246,28 @@ import Localization
          super.touchesBegan(touches, with: event)
          guard self.state == .capture else { return }
 
-         self.frontCameraVideoPreviewView.beginRecordingAnimation()
+         self.frontCameraView.beginRecordingAnimation()
      }
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesEnded(touches, with: event)
          guard self.state == .capture else { return }
 
-         self.frontCameraVideoPreviewView.stopRecordingAnimation()
+         self.frontCameraView.stopRecordingAnimation()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesCancelled(touches, with: event)
          guard self.state == .capture else { return }
 
-         self.frontCameraVideoPreviewView.stopRecordingAnimation()
+         self.frontCameraView.stopRecordingAnimation()
      }
  }
 
  extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate {
 
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-         self.frontCameraVideoPreviewView.stopRecordingAnimation()
+         self.frontCameraView.stopRecordingAnimation()
          self.stopVideoCapture()
          self.state = .capture
          return true
