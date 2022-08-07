@@ -20,24 +20,18 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder()
-        
-    enum SessionSetupResult {
-        case initial
-        case success
-        case notAuthorized
-        case configurationFailed
-        case multiCamNotSupported
-    }
     
-    @Published var setupResult: SessionSetupResult = .initial
-    
-    enum VideoCaptureState {
+    enum State {
+        case setup
         case idle
+        case displaying
         case recording
-        case ending
+        case playback
+        case confirm
+        case error
     }
 
-    @Published var videoCaptureState: VideoCaptureState = .idle
+    @Published var state: State = .idle
     
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
@@ -83,11 +77,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     // Must be called on the session queue
     private func configureSession() {
-        guard self.setupResult == .initial else { return }
+        guard self.state == .setup else { return }
         
         guard AVCaptureMultiCamSession.isMultiCamSupported else {
-            print("MultiCam not supported on this device")
-            self.setupResult = .multiCamNotSupported
+            logDebug("MultiCam not supported on this device")
+            self.state = .error
             return
         }
         
@@ -96,19 +90,19 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         
         defer {
             self.session.commitConfiguration()
-            if self.setupResult == .initial {
+            if self.state == .setup {
                 self.checkSystemCost()
-                self.setupResult = .success
+                self.state = .idle
             }
         }
     
         guard self.configureBackCamera() else {
-            self.setupResult = .configurationFailed
+            self.state = .error
             return
         }
         
         guard self.configureFrontCamera() else {
-            self.setupResult = .configurationFailed
+            self.state = .error
             return
         }
     }
@@ -131,38 +125,24 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     // MARK: - PUBLIC
     
     func beginSession() {
-        self.sessionQueue.async {
-            switch self.setupResult {
-            case .initial:
-                break 
-            case .success:
-                // Only setup observers and start the session running if setup succeeded.
-                self.session.startRunning()
-                
-            case .notAuthorized:
-                break
-            case .configurationFailed:
-                break
-            case .multiCamNotSupported:
-                break
-            }
-        }
+        guard self.state == .idle else { return }
+        self.session.startRunning()
     }
     
     func stopSession() {
         self.sessionQueue.async {
-            if self.setupResult == .success {
+            if self.isSessionRunning {
                 self.session.stopRunning()
             }
         }
     }
     
     func startVideoCapture() {
-        self.videoCaptureState = .recording
+        self.state = .recording
     }
     
     func stopVideoCapture() {
-        self.videoCaptureState = .ending
+        self.state = .playback
     }
     
     func beginPlayback() {

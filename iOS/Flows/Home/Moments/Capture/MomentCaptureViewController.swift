@@ -13,12 +13,6 @@ import Localization
 
  class MomentCaptureViewController: PiPRecordingViewController {
 
-     enum State {
-         case initial
-         case capture
-         case confirm
-     }
-
      override var analyticsIdentifier: String? {
          return "SCREEN_MOMENT"
      }
@@ -31,8 +25,6 @@ import Localization
      private let doneButton = ThemeButton()
 
      var didCompleteMoment: ((Moment) -> Void)? = nil
-
-     @Published var state: State = .initial
 
      static let maxDuration: TimeInterval = 3.0
 
@@ -86,14 +78,14 @@ import Localization
      }
 
      private func setupHandlers() {
-         
+                  
          self.frontCameraView.animationDidStart = { [unowned self] in
              self.animate(text: "")
              self.startVideoCapture()
          }
          
          self.frontCameraView.animationDidEnd = { [unowned self] in
-             if self.state == .capture {
+             if self.state == .recording {
                  self.stopVideoCapture()
              }
          }
@@ -101,17 +93,8 @@ import Localization
          self.recorder.didCapturePIPRecording = { [unowned self] in
              self.stopSession()
              self.state = .confirm
+             
          }
-         
-         self.$setupResult
-             .removeDuplicates()
-             .mainSink { [unowned self] result in
-                 if result == .success {
-                     self.state = .capture
-                 } else {
-                     self.state = .initial
-                 }
-         }.store(in: &self.cancellables)
 
          self.$state
              .removeDuplicates()
@@ -121,7 +104,7 @@ import Localization
 
          self.view.didSelect { [unowned self] in
              guard self.state == .confirm else { return }
-             self.state = .capture
+             self.state = .displaying
          }
 
          self.doneButton.didSelect { [unowned self] in
@@ -139,16 +122,18 @@ import Localization
 
      private func update(for state: State) {
          switch state {
-         case .initial:
+         case .setup:
              self.animate(text: "Scanning...")
-         case .capture:
+         case .displaying:
              self.stopPlayback()
              self.animate(text: "Press and Hold")
              self.beginSession()
-         case .confirm:
+         case .playback:
              self.animate(text: "Tap to retake")
              self.frontCameraView.stopRecordingAnimation()
              self.beginPlayback()
+         default:
+             break
          }
      }
 
@@ -205,21 +190,21 @@ import Localization
 
      override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesBegan(touches, with: event)
-         guard self.state == .capture else { return }
+         guard self.state == .displaying else { return }
 
          self.frontCameraView.beginRecordingAnimation()
      }
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesEnded(touches, with: event)
-         guard self.state == .capture else { return }
+         guard self.state == .displaying else { return }
 
          self.frontCameraView.stopRecordingAnimation()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesCancelled(touches, with: event)
-         guard self.state == .capture else { return }
+         guard self.state == .displaying else { return }
 
          self.frontCameraView.stopRecordingAnimation()
      }
@@ -230,8 +215,23 @@ import Localization
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
          self.frontCameraView.stopRecordingAnimation()
          self.stopVideoCapture()
-         self.state = .capture
+         self.state = .displaying
          return true
      }
  }
+
+extension FileManager {
+    static func clearTmpDirectory() {
+        do {
+            let tmpDirURL = FileManager.default.temporaryDirectory
+            let tmpDirectory = try FileManager.default.contentsOfDirectory(atPath: tmpDirURL.path)
+            try tmpDirectory.forEach { file in
+                let fileUrl = tmpDirURL.appendingPathComponent(file)
+                try FileManager.default.removeItem(atPath: fileUrl.path)
+            }
+        } catch {
+           //catch the error somehow
+        }
+    }
+}
 

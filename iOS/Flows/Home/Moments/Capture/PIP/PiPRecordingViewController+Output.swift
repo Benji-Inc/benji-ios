@@ -42,10 +42,7 @@ extension PiPRecordingViewController {
             }
         }
         
-        switch self.videoCaptureState {
-        case .idle:
-            // Do nothing
-            break
+        switch self.state {
         case .recording:
             if isFrontOutput {
                 guard let ciImage = self.frontCameraView.currentCIImage else { return }
@@ -53,9 +50,11 @@ extension PiPRecordingViewController {
             } else {
                 self.recorder.recordBack(with: sampleBuffer)
             }
-        case .ending:
+        case .playback:
             self.recorder.stopRecording()
-            self.videoCaptureState = .idle
+            self.state = .displaying
+        default:
+            break
         }
     }
     

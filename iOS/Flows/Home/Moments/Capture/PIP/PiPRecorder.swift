@@ -50,8 +50,8 @@ class PiPRecorder {
     
     private func initializeFront() {
         // Create an asset writer that records to a temporary file
-        let outputFileName = NSUUID().uuidString
-        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("MOV")
+        let outputFileName = NSUUID().uuidString + "front"
+        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("mov")
         guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov) else {
             return
         }
@@ -60,7 +60,9 @@ class PiPRecorder {
         let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: self.frontVideoSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         assetWriterVideoInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
-        assetWriter.add(assetWriterVideoInput)
+        if assetWriter.canAdd(assetWriterVideoInput) {
+            assetWriter.add(assetWriterVideoInput)
+        }
         
         self.frontAssetWriter = assetWriter
         self.frontAssetWriterVideoInput = assetWriterVideoInput
@@ -73,8 +75,8 @@ class PiPRecorder {
     
     private func initializeBack() {
         // Create an asset writer that records to a temporary file
-        let outputFileName = NSUUID().uuidString
-        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("MOV")
+        let outputFileName = NSUUID().uuidString + "back"
+        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("mov")
         guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov) else {
             return
         }
@@ -82,7 +84,9 @@ class PiPRecorder {
         // Add a video input
         let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: nil)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
-        assetWriter.add(assetWriterVideoInput)
+        if assetWriter.canAdd(assetWriterVideoInput) {
+            assetWriter.add(assetWriterVideoInput)
+        }
         
         self.backAssetWriter = assetWriter
         self.backAssetWriterVideoInput = assetWriterVideoInput
@@ -131,10 +135,13 @@ class PiPRecorder {
                              input: AVAssetWriterInput) {
         
         if writer.status == .unknown {
+            if input.isReadyForMoreMediaData {
+                input.append(sampleBuffer)
+            }
+            
             writer.startWriting()
-            writer.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
+            self.startSession(with: sampleBuffer, for: writer)
         } else if writer.status == .writing, input.isReadyForMoreMediaData {
-            logDebug("APPENDING")
             input.append(sampleBuffer)
         }
     }
