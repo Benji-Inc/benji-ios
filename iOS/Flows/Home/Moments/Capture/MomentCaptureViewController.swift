@@ -115,6 +115,8 @@ import Localization
      }
 
      private func update(for state: State) {
+         
+         logDebug(state.rawValue)
          switch state {
          case .setup:
              self.animate(text: "Scanning...")

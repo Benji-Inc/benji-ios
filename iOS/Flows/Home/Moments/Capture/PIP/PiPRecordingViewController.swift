@@ -21,7 +21,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder()
     
-    enum State {
+    enum State: String {
         case setup
         case idle
         case displaying
@@ -31,12 +31,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case error
     }
 
-    @Published var state: State = .idle
+    @Published var state: State = .setup
     
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
-    let frontDataOutputQueue = DispatchQueue(label: "front data output queue")
-    let backDataOutputQueue = DispatchQueue(label: "front data output queue")
+    let dataOutputQue = DispatchQueue(label: "data output queue")
     
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
@@ -100,7 +99,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             self.session.commitConfiguration()
             if self.state == .setup {
                 self.checkSystemCost()
-                self.state = .idle
+                self.state = .displaying
             }
         }
     
@@ -133,7 +132,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     // MARK: - PUBLIC
     
     func beginSession() {
-        guard self.state == .idle else { return }
+        guard self.state == .displaying else { return }
         self.session.startRunning()
     }
     
