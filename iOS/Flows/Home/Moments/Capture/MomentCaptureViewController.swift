@@ -89,12 +89,6 @@ import Localization
                  self.stopVideoCapture()
              }
          }
-         
-         self.recorder.didCapturePIPRecording = { [unowned self] in
-             self.stopSession()
-             self.state = .confirm
-             
-         }
 
          self.$state
              .removeDuplicates()
@@ -109,7 +103,7 @@ import Localization
 
          self.doneButton.didSelect { [unowned self] in
              Task {
-                 guard let recording = self.recorder.recording,
+                 guard let recording = self.recording,
                        let moment = await self.createMoment(from: recording) else { return }
                  self.didCompleteMoment?(moment)
              }

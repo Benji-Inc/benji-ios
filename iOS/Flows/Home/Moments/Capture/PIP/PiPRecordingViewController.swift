@@ -51,6 +51,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         return self.session.isRunning
     }
     
+    private(set) var recording: PiPRecording?
+    
     override func initializeViews() {
         super.initializeViews()
         
@@ -72,6 +74,12 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         */
         self.sessionQueue.async {
             self.configureSession()
+        }
+        
+        self.recorder.didCapturePIPRecording = { [unowned self] recording in
+            self.recording = recording
+            self.stopSession()
+            self.state = .confirm
         }
     }
     
@@ -146,8 +154,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     func beginPlayback() {
-        guard let frontURL = self.recorder.recording?.frontRecordingURL,
-                let backURL = self.recorder.recording?.backRecordingURL else { return }
+        guard let frontURL = self.recording?.frontRecordingURL,
+                let backURL = self.recording?.backRecordingURL else { return }
         
         logDebug("front: \(frontURL)")
         logDebug("back: \(backURL)")

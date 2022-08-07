@@ -36,8 +36,7 @@ class PiPRecorder {
     
     private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
         
-    private(set) var recording: PiPRecording?
-    var didCapturePIPRecording: CompletionOptional = nil
+    var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
     init() {
         self.prepareToRecord()
@@ -124,7 +123,6 @@ class PiPRecorder {
     }
     
     func recordBack(with sampleBuffer: CMSampleBuffer) {
-        self.recording = nil
         guard let writer = self.backAssetWriter, let input = self.backAssetWriterVideoInput else { return }
         
         self.startWriter(with: sampleBuffer, writer: writer, input: input)
@@ -133,7 +131,7 @@ class PiPRecorder {
     private func startWriter(with sampleBuffer: CMSampleBuffer,
                              writer: AVAssetWriter,
                              input: AVAssetWriterInput) {
-        
+            
         if writer.status == .unknown {
             if input.isReadyForMoreMediaData {
                 input.append(sampleBuffer)
@@ -158,8 +156,7 @@ class PiPRecorder {
             
             let recording = PiPRecording(frontRecordingURL: frontURL,
                                          backRecordingURL: backURL)
-            self.recording = recording
-            self.didCapturePIPRecording?()
+            self.didCapturePIPRecording?(recording)
         }
     }
     
