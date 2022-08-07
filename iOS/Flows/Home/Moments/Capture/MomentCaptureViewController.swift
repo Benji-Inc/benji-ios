@@ -17,19 +17,18 @@ import Localization
          return "SCREEN_MOMENT"
      }
 
-     private let blurView = DarkBlurView()
-     private let bottomGradientView = GradientPassThroughView(with: [ThemeColor.B0.color.cgColor, ThemeColor.B0.color.withAlphaComponent(0.0).cgColor],
-                                                              startPoint: .bottomCenter,
-                                                              endPoint: .topCenter)
      private let label = ThemeLabel(font: .medium, textColor: .white)
      private let doneButton = ThemeButton()
 
      var didCompleteMoment: ((Moment) -> Void)? = nil
 
      static let maxDuration: TimeInterval = 3.0
+     let cornerRadius: CGFloat = 30
 
      override func initializeViews() {
          super.initializeViews()
+         
+         FileManager.clearTmpDirectory()
 
          self.modalPresentationStyle = .popover
          if let pop = self.popoverPresentationController {
@@ -37,15 +36,16 @@ import Localization
              sheet.detents = [.large()]
              sheet.prefersGrabberVisible = true
              sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+             sheet.preferredCornerRadius = self.cornerRadius
          }
+         
+         self.view.set(backgroundColor: .B0)
 
          self.presentationController?.delegate = self
 
-         self.view.insertSubview(self.blurView, at: 0)
-         
-         self.view.addSubview(self.bottomGradientView)
+         self.backCameraView.layer.cornerRadius = self.cornerRadius
+
          self.view.addSubview(self.label)
-         self.label.showShadow(withOffset: 0)
 
          self.view.addSubview(self.doneButton)
          self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
@@ -55,8 +55,9 @@ import Localization
 
      override func viewDidLayoutSubviews() {
          super.viewDidLayoutSubviews()
-
-         self.blurView.expandToSuperviewSize()
+         
+         self.backCameraView.height = self.view.height * 0.75
+         self.backCameraView.pin(.top)
          
          self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
          self.label.centerOnX()
@@ -72,9 +73,6 @@ import Localization
              self.label.pinToSafeAreaBottom()
          }
          
-         self.bottomGradientView.expandToSuperviewWidth()
-         self.bottomGradientView.height = self.view.height - (self.label.top - Theme.ContentOffset.long.value)
-         self.bottomGradientView.pin(.bottom)
      }
 
      private func setupHandlers() {
@@ -116,7 +114,6 @@ import Localization
 
      private func update(for state: State) {
          
-         logDebug(state.rawValue)
          switch state {
          case .setup:
              self.animate(text: "Scanning...")

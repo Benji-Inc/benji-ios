@@ -89,8 +89,7 @@ class PhotoVideoCaptureSession {
         
         self.session.addOutput(videoOutput)
 
-        let videoConnection = videoOutput.connection(with: .video)
-        videoConnection?.videoOrientation = .portrait
+        videoOutput.connection(with: .video)?.videoOrientation = .portrait
 
         // Get an instance of ACCapturePhotoOutput class
         self.capturePhotoOutput = AVCapturePhotoOutput()

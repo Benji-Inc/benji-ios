@@ -153,13 +153,17 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     func beginPlayback() {
-        guard let frontURL = self.recording?.frontRecordingURL,
-                let backURL = self.recording?.backRecordingURL else { return }
+        guard let frontURL = self.recording?.frontRecordingURL else {
+            return
+        }
+
+//        guard let frontURL = self.recording?.frontRecordingURL,
+//                let backURL = self.recording?.backRecordingURL else { return }
         
         logDebug("front: \(frontURL)")
-        logDebug("back: \(backURL)")
+        //logDebug("back: \(backURL)")
         self.frontCameraView.beginPlayback(with: frontURL)
-        self.backCameraView.beginPlayback(with: backURL)
+        //self.backCameraView.beginPlayback(with: backURL)
     }
     
     func stopPlayback() {

@@ -21,13 +21,19 @@ class PiPRecorder {
     private var frontAssetWriterVideoInput: AVAssetWriterInput?
     
     private var backAssetWriter: AVAssetWriter?
-    private var backAssetWriterVideoInput: AVAssetWriterInput?
+    private(set) var backAssetWriterVideoInput: AVAssetWriterInput?
     
     private let frontVideoSettings: [String: Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
                                                      AVVideoWidthKey : 480,
                                                     AVVideoHeightKey : 480,
                                      AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
                                           kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
+    
+    private let backVideoSettings: [String: Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
+                                                    AVVideoWidthKey : 480,
+                                                   AVVideoHeightKey : 600,
+                                    AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
+                                         kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
     
     let pixelBufferAttributes: [String: Any] = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
                                                            kCVPixelBufferWidthKey: 480,
@@ -81,7 +87,7 @@ class PiPRecorder {
         }
         
         // Add a video input
-        let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: nil)
+        let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: self.backVideoSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         if assetWriter.canAdd(assetWriterVideoInput) {
             assetWriter.add(assetWriterVideoInput)
@@ -124,7 +130,6 @@ class PiPRecorder {
     
     func recordBack(with sampleBuffer: CMSampleBuffer) {
         guard let writer = self.backAssetWriter, let input = self.backAssetWriterVideoInput else { return }
-        
         self.startWriter(with: sampleBuffer, writer: writer, input: input)
     }
     
@@ -152,10 +157,10 @@ class PiPRecorder {
     func stopRecording() {
         Task {
             let frontURL = await self.stopRecordingFront()
-            let backURL = await self.stopRecordingBack()
+            //let backURL = await self.stopRecordingBack()
             
             let recording = PiPRecording(frontRecordingURL: frontURL,
-                                         backRecordingURL: backURL)
+                                         backRecordingURL: URL(string: ""))
             self.didCapturePIPRecording?(recording)
         }
     }
