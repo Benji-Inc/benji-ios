@@ -15,9 +15,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     /// A request to separate a person from the background in an image.
     let segmentationRequest = VNGeneratePersonSegmentationRequest()
     let sequenceHandler = VNSequenceRequestHandler()
-    
-    @Published var faceDetected = false
-    
+        
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder()
     
@@ -26,7 +24,6 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case idle
         case displaying
         case recording
-        case playback
         case confirm
         case error
     }
@@ -58,9 +55,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         self.view.addSubview(self.backCameraView)
         self.view.addSubview(self.frontCameraView)
         
-        // Set up the back and front video preview views.
+        // Set up the back video preview views.
         self.backCameraView.videoPreviewLayer.setSessionWithNoConnection(self.session)
-        self.frontCameraView.videoPreviewLayer.setSessionWithNoConnection(self.session)
         
         /*
         Configure the capture session.
@@ -144,26 +140,22 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         }
     }
     
-    func startVideoCapture() {
+    func startRecording() {
         self.state = .recording
     }
     
-    func stopVideoCapture() {
-        self.state = .playback
+    func stopRecording() {
+        self.recorder.stopRecording()
     }
     
     func beginPlayback() {
-        guard let frontURL = self.recording?.frontRecordingURL else {
-            return
-        }
-
-//        guard let frontURL = self.recording?.frontRecordingURL,
-//                let backURL = self.recording?.backRecordingURL else { return }
+        guard let frontURL = self.recording?.frontRecordingURL,
+                let backURL = self.recording?.backRecordingURL else { return }
         
         logDebug("front: \(frontURL)")
-        //logDebug("back: \(backURL)")
+        logDebug("back: \(backURL)")
         self.frontCameraView.beginPlayback(with: frontURL)
-        //self.backCameraView.beginPlayback(with: backURL)
+        self.backCameraView.beginPlayback(with: backURL)
     }
     
     func stopPlayback() {

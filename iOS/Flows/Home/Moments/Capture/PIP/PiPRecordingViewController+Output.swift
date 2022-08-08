@@ -22,10 +22,8 @@ extension PiPRecordingViewController {
         if isFrontOutput {
             guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
-            let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
-
             do {
-                try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
+                try self.sequenceHandler.perform([self.segmentationRequest],
                                                  on: imageBuffer,
                                                  orientation: .left)
 
@@ -43,6 +41,21 @@ extension PiPRecordingViewController {
         }
         
         switch self.state {
+        case .setup:
+            break
+        case .idle:
+            break
+        case .displaying:
+            break
+        case .recording:
+            break
+        case .confirm:
+            break
+        case .error:
+            break 
+        }
+        
+        switch self.state {
         case .recording:
             if isFrontOutput {
                 guard let ciImage = self.frontCameraView.currentCIImage else { return }
@@ -50,7 +63,7 @@ extension PiPRecordingViewController {
             } else {
                 self.recorder.recordBack(with: sampleBuffer)
             }
-        case .playback:
+        case .confirm:
             self.recorder.stopRecording()
             self.state = .displaying
         default:
@@ -60,11 +73,8 @@ extension PiPRecordingViewController {
     
     private func detectedFace(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
-            self.faceDetected = false
             return
         }
-
-        self.faceDetected = true
     }
     
     /// Makes the image black and white, and makes the background clear.

@@ -138,29 +138,20 @@ class PiPRecorder {
                              input: AVAssetWriterInput) {
             
         if writer.status == .unknown {
-            if input.isReadyForMoreMediaData {
-                input.append(sampleBuffer)
-            }
-            
             writer.startWriting()
-            self.startSession(with: sampleBuffer, for: writer)
+            writer.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
         } else if writer.status == .writing, input.isReadyForMoreMediaData {
             input.append(sampleBuffer)
         }
     }
     
-    private func startSession(with sampleBuffer: CMSampleBuffer, for writer: AVAssetWriter) {
-        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        writer.startSession(atSourceTime: startTime)
-    }
-    
     func stopRecording() {
         Task {
             let frontURL = await self.stopRecordingFront()
-            //let backURL = await self.stopRecordingBack()
+            let backURL = await self.stopRecordingBack()
             
             let recording = PiPRecording(frontRecordingURL: frontURL,
-                                         backRecordingURL: URL(string: ""))
+                                         backRecordingURL: backURL)
             self.didCapturePIPRecording?(recording)
         }
     }

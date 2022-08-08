@@ -79,12 +79,12 @@ import Localization
                   
          self.frontCameraView.animationDidStart = { [unowned self] in
              self.animate(text: "")
-             self.startVideoCapture()
+             self.startRecording()
          }
          
          self.frontCameraView.animationDidEnd = { [unowned self] in
              if self.state == .recording {
-                 self.stopVideoCapture()
+                 self.stopRecording()
              }
          }
 
@@ -121,7 +121,7 @@ import Localization
              self.stopPlayback()
              self.animate(text: "Press and Hold")
              self.beginSession()
-         case .playback:
+         case .confirm:
              self.animate(text: "Tap to retake")
              self.frontCameraView.stopRecordingAnimation()
              self.beginPlayback()
@@ -207,7 +207,7 @@ import Localization
 
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
          self.frontCameraView.stopRecordingAnimation()
-         self.stopVideoCapture()
+         self.stopRecording()
          self.state = .displaying
          return true
      }
