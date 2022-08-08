@@ -10,11 +10,12 @@ import Foundation
 
 class OrbCollectionViewLayout: UICollectionViewLayout {
 
-    let interimSpace: CGFloat = 200
+    let interimSpace: CGFloat = 160
     let itemSize: CGFloat = 160
-    var screenCenter: CGPoint {
-        return CGPoint(x: UIScreen.main.bounds.width * 0.5,
-                       y: UIScreen.main.bounds.height * 0.5)
+    var collectionViewCenter: CGPoint {
+        guard let collectionView = self.collectionView else { return .zero }
+        return CGPoint(x: collectionView.contentOffset.x + collectionView.halfWidth,
+                       y: collectionView.contentOffset.y + collectionView.halfHeight)
     }
 
     var firstOrbitItemCount: Int = 6 {
@@ -49,6 +50,7 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
 
         var ringIndex: Int = 0
 
+        // Generate points that describe the rings of this layout.
         while self.itemPositions.count < self.cellCount {
             // The number of items the current ring can hold.
             let ringItemCount: Int
@@ -62,7 +64,7 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
             // Generate the path for the current ring
             let ringPath = self.getRingPath(centerPoint: centerPoint,
                                             radius: CGFloat(ringIndex) * self.interimSpace,
-                                            n: ringItemCount)
+                                            n: self.firstOrbitItemCount)
 
             // How far we've progressed along the current ring path.
             var currentNormalized: CGFloat = 0
@@ -80,6 +82,41 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         }
     }
 
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        var attributes: [UICollectionViewLayoutAttributes] = []
+        for i in 0 ..< self.cellCount {
+            let indexPath = IndexPath(item: i, section: 0)
+            if let attributesForItem = self.layoutAttributesForItem(at: indexPath) {
+                attributes.append(attributesForItem)
+            }
+        }
+        return attributes
+    }
+
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+
+        let centerPoint = self.getCenter(forIndexPath: indexPath)
+        attributes.center = centerPoint
+        attributes.size = CGSize(width: self.itemSize, height: self.itemSize)
+
+        // Shrink the size of cells that aren't centered.
+        let distanceFromCenter = centerPoint.distanceTo(self.collectionViewCenter)
+        let scale = lerpClamped(distanceFromCenter/self.interimSpace,
+                                start: 1,
+                                end: 0.5)
+        attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
+
+        return attributes
+    }
+
+    // MARK: - Helper Functions
+
+    private func getCenter(forIndexPath indexPath: IndexPath) -> CGPoint {
+        return self.itemPositions[indexPath.item]
+    }
+
+    /// Gets a set a points representing the path for a ring centered around a point.
     private func getRingPath(centerPoint point: CGPoint, radius: CGFloat, n: Int) -> [CGPoint] {
         let angles = stride(from: 0, to: twoPi, by: twoPi/CGFloat(n))
 
@@ -94,38 +131,5 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         }
 
         return points
-    }
-
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        var attributes = [UICollectionViewLayoutAttributes]()
-        for i in 0 ..< self.cellCount {
-            let indexPath = IndexPath(item: i, section: 0)
-            if let attributesForItem = self.layoutAttributesForItem(at: indexPath) {
-                attributes.append(attributesForItem)
-            }
-        }
-        return attributes
-    }
-
-    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-
-        let centerPoint = self.getCenter(forIndexPath: indexPath)
-        var x = centerPoint.x
-        var y = centerPoint.y
-        attributes.center = centerPoint
-
-//        let offset = self.collectionView!.contentOffset
-//        x -= self.screenCenter.x + CGFloat(offset.x)
-//        y -= self.screenCenter.y + CGFloat(offset.y)
-//        attributes.transform = CGAffineTransform(scaleX: z, y: z)
-
-        attributes.size = CGSize(width: self.itemSize, height: self.itemSize)
-
-        return attributes
-    }
-
-    private func getCenter(forIndexPath indexPath: IndexPath) -> CGPoint {
-        return self.itemPositions[indexPath.item]
     }
 }

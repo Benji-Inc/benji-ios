@@ -88,7 +88,6 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
     }
     
     private func subscribeToUpdates() {
-        
         PeopleStore.shared.$personDeleted.mainSink { [unowned self] _ in
             self.reloadPeople()
         }.store(in: &self.cancellables)

@@ -111,14 +111,14 @@ func lerp(_ normalized: CGFloat, keyPoints: [CGPoint]) -> CGPoint {
     // Determine which segment we're currently on.
     let currentIndex = Int(normalized/segmentLength)
 
-    guard let segmentLowerBound = keyPoints[safe: currentIndex] else {
+    guard let segmentStartPoint = keyPoints[safe: currentIndex] else {
         return keyPoints.first ?? .zero
     }
-    guard let segmentUpperBound = keyPoints[safe: currentIndex + 1] else { return segmentLowerBound }
+    guard let segmentEndPoint = keyPoints[safe: currentIndex + 1] else { return segmentStartPoint }
 
     // Figure out how far we've travelled within the current segment
     let normalizedInSegment = (normalized/segmentLength).truncatingRemainder(dividingBy: 1)
-    return lerp(normalizedInSegment/segmentLength, start: segmentLowerBound, end: segmentUpperBound)
+    return lerp(normalizedInSegment, start: segmentStartPoint, end: segmentEndPoint)
 }
 
 // MARK: Trig Functions
