@@ -33,11 +33,13 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         return true
     }
 
+    /// A cache of all the possible positions for the items. Indices correspond to item IndexPaths.
     private var itemPositions: [CGPoint] = []
 
     override var collectionViewContentSize: CGSize {
         guard let collectionView = self.collectionView else { return .zero }
-        return CGSize(width: collectionView.width.doubled, height: collectionView.height.doubled)
+        return CGSize(width: collectionView.width.doubled + 500,
+                      height: collectionView.height.doubled + 500)
     }
 
     override func prepare() {
@@ -102,12 +104,39 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
 
         // Shrink the size of cells that aren't centered.
         let distanceFromCenter = centerPoint.distanceTo(self.collectionViewCenter)
-        let scale = lerpClamped(distanceFromCenter/self.interimSpace,
+        let scale = lerpClamped(distanceFromCenter/(self.interimSpace*2),
                                 start: 1,
-                                end: 0.5)
+                                end: 0.1)
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
 
         return attributes
+    }
+
+    // MARK: - Scroll Behavior
+
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
+                                      withScrollingVelocity velocity: CGPoint) -> CGPoint {
+
+        guard let collectionView = self.collectionView else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset,
+                                             withScrollingVelocity: velocity)
+        }
+
+        // Find the item position that is closest to the proposed offset
+        let proposedCenter = CGPoint(x: proposedContentOffset.x + collectionView.halfWidth,
+                                     y: proposedContentOffset.y + collectionView.halfHeight)
+
+        let closestPosition = self.itemPositions.min { (position1, position2) in
+            return proposedCenter.distanceTo(position1) < proposedCenter.distanceTo(position2)
+        }
+
+        guard let closestPosition = closestPosition else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset,
+                                             withScrollingVelocity: velocity)
+        }
+
+        return CGPoint(x: closestPosition.x - collectionView.halfWidth,
+                       y: closestPosition.y - collectionView.halfHeight)
     }
 
     // MARK: - Helper Functions

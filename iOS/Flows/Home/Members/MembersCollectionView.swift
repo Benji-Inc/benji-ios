@@ -14,6 +14,7 @@ class MembersCollectionView: CollectionView {
         super.init(layout: OrbCollectionViewLayout())
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
+        self.decelerationRate = .normal
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,20 +34,8 @@ class MembersCollectionView: CollectionView {
     
     func reveal() {
         Task.onMainActorAsync {
-            
-            var offset: CGFloat = 1.2
-
-            switch ScreenSize.current {
-            case .phoneSmall:
-                offset = 0.8
-            case .phoneMedium:
-                offset = 1.1
-            default:
-                offset = 1.2
-            }
-
             let centerOffsetX = (self.contentSize.width - self.frame.size.width) / 2
-            let centerOffsetY = ((self.contentSize.height - self.frame.size.height) * offset) / 2
+            let centerOffsetY = (self.contentSize.height - self.frame.size.height) / 2
             let centerPoint = CGPoint(x: centerOffsetX, y: centerOffsetY)
             self.setContentOffset(centerPoint, animated: false)
             

@@ -9,8 +9,8 @@
 import Foundation
 
 class MembersViewController: DiffableCollectionViewController<MembersDataSource.SectionType,
-                                    MembersDataSource.ItemType,
-                                 MembersDataSource>, HomeContentType {
+                             MembersDataSource.ItemType,
+                             MembersDataSource>, HomeContentType {
     
     var contentTitle: String {
         return "People"
@@ -43,7 +43,7 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
     }
     
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersDataSource.SectionType, MembersDataSource.ItemType>) -> AnimationCycle? {
-        return nil 
+        return nil
     }
     
     override func collectionViewDataWasLoaded() {
@@ -105,7 +105,7 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
         
         self.loadPeopleTask = Task { [weak self] in
             guard let `self` = self else { return }
-                        
+
             var items: [MembersDataSource.ItemType] = [.memberId(User.current()!.objectId!)]
             
             let connections: [MembersDataSource.ItemType] = PeopleStore.shared.connectedPeople.filter({ type in
