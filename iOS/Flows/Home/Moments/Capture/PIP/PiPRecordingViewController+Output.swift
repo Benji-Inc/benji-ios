@@ -41,39 +41,32 @@ extension PiPRecordingViewController {
         }
         
         switch self.state {
-        case .setup:
+        case .idle, .error:
+            // Do nothing
             break
-        case .idle:
-            break
-        case .displaying:
-            break
-        case .recording:
-            break
-        case .confirm:
-            break
-        case .error:
-            break 
-        }
-        
-        switch self.state {
-        case .recording:
+        case .starting:
+            // Initialize the AVAsset writer to prepare for capture
+            self.recorder.initialize()
+            self.state = .started
+        case .started:
+            
             if isFrontOutput {
-                guard let ciImage = self.frontCameraView.currentCIImage else { return }
-                self.recorder.recordFront(with: sampleBuffer, image: ciImage)
+                self.recorder.startFrontSession(with: sampleBuffer)
+                self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
             } else {
-                self.recorder.recordBack(with: sampleBuffer)
+                self.recorder.startBackSession(with: sampleBuffer)
+                self.recorder.writeBackSampleToFile(sampleBuffer)
             }
-        case .confirm:
-            self.recorder.stopRecording()
-            self.state = .displaying
-        default:
-            break
-        }
-    }
-    
-    private func detectedFace(request: VNRequest, error: Error?) {
-        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
-            return
+            
+            self.state = .capturing
+        case .capturing:
+            if isFrontOutput {
+                self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
+            } else {
+                self.recorder.writeBackSampleToFile(sampleBuffer)
+            }
+        case .ending:
+            self.recorder.finishWritingVideo()
         }
     }
     

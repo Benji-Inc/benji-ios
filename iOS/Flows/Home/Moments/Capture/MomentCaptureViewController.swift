@@ -65,38 +65,29 @@ import Localization
          self.doneButton.setSize(with: self.view.width)
          self.doneButton.centerOnX()
 
-         if self.state == .confirm {
+         if self.state == .ending {
              self.doneButton.pinToSafeAreaBottom()
              self.label.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
          } else {
              self.doneButton.top = self.view.height
              self.label.pinToSafeAreaBottom()
          }
-         
      }
 
      private func setupHandlers() {
                   
          self.frontCameraView.animationDidStart = { [unowned self] in
              self.animate(text: "")
-             self.startRecording()
+             self.state = .starting
          }
          
          self.frontCameraView.animationDidEnd = { [unowned self] in
-             if self.state == .recording {
-                 self.stopRecording()
-             }
+             self.state = .ending
          }
 
-         self.$state
-             .removeDuplicates()
-             .mainSink { [unowned self] state in
-                 self.update(for: state)
-             }.store(in: &self.cancellables)
-
          self.view.didSelect { [unowned self] in
-             guard self.state == .confirm else { return }
-             self.state = .displaying
+             guard self.state == .ending else { return }
+             self.state = .starting
          }
 
          self.doneButton.didSelect { [unowned self] in
@@ -106,25 +97,16 @@ import Localization
                  self.didCompleteMoment?(moment)
              }
          }
-         
-         if !self.isSessionRunning {
-             self.beginSession()
-         }
      }
 
-     private func update(for state: State) {
+     override func handle(state: State) {
+         super.handle(state: state)
          
          switch state {
-         case .setup:
-             self.animate(text: "Scanning...")
-         case .displaying:
-             self.stopPlayback()
+         case .idle:
              self.animate(text: "Press and Hold")
-             self.beginSession()
-         case .confirm:
+         case .ending:
              self.animate(text: "Tap to retake")
-             self.frontCameraView.stopRecordingAnimation()
-             self.beginPlayback()
          default:
              break
          }
@@ -183,21 +165,21 @@ import Localization
 
      override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesBegan(touches, with: event)
-         guard self.state == .displaying else { return }
+         guard self.state == .idle else { return }
 
          self.frontCameraView.beginRecordingAnimation()
      }
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesEnded(touches, with: event)
-         guard self.state == .displaying else { return }
+         guard self.state == .started || self.state == .starting else { return }
 
          self.frontCameraView.stopRecordingAnimation()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesCancelled(touches, with: event)
-         guard self.state == .displaying else { return }
+         guard self.state == .started || self.state == .starting else { return }
 
          self.frontCameraView.stopRecordingAnimation()
      }
@@ -207,8 +189,6 @@ import Localization
 
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
          self.frontCameraView.stopRecordingAnimation()
-         self.stopRecording()
-         self.state = .displaying
          return true
      }
  }

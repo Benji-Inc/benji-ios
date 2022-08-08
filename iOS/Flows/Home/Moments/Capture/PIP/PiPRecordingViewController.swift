@@ -19,19 +19,19 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder()
     
-    enum State: String {
-        case setup
+    enum State {
         case idle
-        case displaying
-        case recording
-        case confirm
+        case starting
+        case started
+        case capturing
+        case ending
         case error
     }
 
-    @Published var state: State = .setup
+    @Published var state: State = .idle
     
     // Communicate with the session and other session objects on this queue.
-    private let sessionQueue = DispatchQueue(label: "session queue")
+    //private let sessionQueue = DispatchQueue(label: "session queue")
     let dataOutputQue = DispatchQueue(label: "data output queue")
     
     let backCameraView = VideoPreviewView()
@@ -67,51 +67,27 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         is a blocking call, which can take a long time. Dispatch session setup
         to the sessionQueue so as not to block the main queue, which keeps the UI responsive.
         */
-        self.sessionQueue.async {
-            self.configureSession()
-        }
+//        self.sessionQueue.async {
+//
+//        }
+        
+        self.configureSession()
         
         self.recorder.didCapturePIPRecording = { [unowned self] recording in
             self.recording = recording
-            self.stopSession()
-            self.state = .confirm
-        }
-    }
-    
-    // Must be called on the session queue
-    private func configureSession() {
-        guard self.state == .setup else { return }
-        
-        guard AVCaptureMultiCamSession.isMultiCamSupported else {
-            logDebug("MultiCam not supported on this device")
-            self.state = .error
-            return
+            self.endSession()
+            self.state = .ending
         }
         
-        // When using AVCaptureMultiCamSession, it is best to manually add connections from AVCaptureInputs to AVCaptureOutputs
-        self.session.beginConfiguration()
-        
-        defer {
-            self.session.commitConfiguration()
-            if self.state == .setup {
-                self.checkSystemCost()
-                self.state = .displaying
-            }
-        }
-    
-        guard self.configureBackCamera() else {
-            self.state = .error
-            return
-        }
-        
-        guard self.configureFrontCamera() else {
-            self.state = .error
-            return
-        }
+        self.$state
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+                self.handle(state: state)
+        }.store(in: &self.cancellables)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.stopSession()
+        self.endSession()
         super.viewWillDisappear(animated)
     }
     
@@ -127,38 +103,79 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     // MARK: - PUBLIC
     
-    func beginSession() {
-        guard self.state == .displaying else { return }
-        self.session.startRunning()
-    }
-    
-    func stopSession() {
-        self.sessionQueue.async {
-            if self.isSessionRunning {
-                self.session.stopRunning()
-            }
+    func handle(state: State) {
+        switch state {
+        case .idle:
+            self.stopPlayback()
+            self.beginSession()
+        case .starting:
+            break
+        case .started:
+            break
+        case .capturing:
+            break
+        case .ending:
+            self.frontCameraView.stopRecordingAnimation()
+            self.beginPlayback()
+        case .error:
+            break
         }
     }
     
-    func startRecording() {
-        self.state = .recording
+    // MARK: - PRIVATE
+    
+    // Must be called on the session queue
+    private func configureSession() {
+        guard self.state == .idle else { return }
+        
+        guard AVCaptureMultiCamSession.isMultiCamSupported else {
+            logDebug("MultiCam not supported on this device")
+            self.state = .error
+            return
+        }
+        
+        // When using AVCaptureMultiCamSession, it is best to manually add connections from AVCaptureInputs to AVCaptureOutputs
+        self.session.beginConfiguration()
+        
+        defer {
+            self.session.commitConfiguration()
+            if self.state == .idle {
+                self.checkSystemCost()
+            }
+        }
+    
+        guard self.configureBackCamera() else {
+            self.state = .error
+            return
+        }
+        
+        guard self.configureFrontCamera() else {
+            self.state = .error
+            return
+        }
     }
     
-    func stopRecording() {
-        self.recorder.stopRecording()
+    private func beginSession() {
+        guard !self.isSessionRunning else { return }
+        self.session.startRunning()
     }
     
-    func beginPlayback() {
+    private func endSession() {
+        guard self.isSessionRunning else { return }
+        self.session.stopRunning()
+    }
+    
+    private func beginPlayback() {
         guard let frontURL = self.recording?.frontRecordingURL,
                 let backURL = self.recording?.backRecordingURL else { return }
-        
+
         logDebug("front: \(frontURL)")
         logDebug("back: \(backURL)")
         self.frontCameraView.beginPlayback(with: frontURL)
         self.backCameraView.beginPlayback(with: backURL)
     }
-    
-    func stopPlayback() {
+
+    private func stopPlayback() {
         self.frontCameraView.stopPlayback()
         self.backCameraView.stopPlayback()
     }

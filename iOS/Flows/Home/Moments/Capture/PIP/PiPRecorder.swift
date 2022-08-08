@@ -29,11 +29,7 @@ class PiPRecorder {
                                      AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
                                           kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
     
-    private let backVideoSettings: [String: Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
-                                                    AVVideoWidthKey : 480,
-                                                   AVVideoHeightKey : 600,
-                                    AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
-                                         kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
+    private let backVideoSettings: [String: Any] = [kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA] as [String: Any]
     
     let pixelBufferAttributes: [String: Any] = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
                                                            kCVPixelBufferWidthKey: 480,
@@ -44,11 +40,7 @@ class PiPRecorder {
         
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
-    init() {
-        self.prepareToRecord()
-    }
-    
-    private func prepareToRecord() {
+    func initialize() {
         self.initializeFront()
         self.initializeBack()
     }
@@ -75,7 +67,8 @@ class PiPRecorder {
         self.pixelBufferAdaptor
         = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterVideoInput,
                                                sourcePixelBufferAttributes: self.pixelBufferAttributes)
-
+        
+        assetWriter.startWriting()
     }
     
     private func initializeBack() {
@@ -95,18 +88,32 @@ class PiPRecorder {
         
         self.backAssetWriter = assetWriter
         self.backAssetWriterVideoInput = assetWriterVideoInput
+        
+        assetWriter.startWriting()
     }
     
-    func recordFront(with sampleBuffer: CMSampleBuffer, image: CIImage) {
-        guard let writer = self.frontAssetWriter, let input = self.frontAssetWriterVideoInput else { return }
-        
-        self.startWriter(with: sampleBuffer, writer: writer, input: input)
+    func startFrontSession(with sampleBuffer: CMSampleBuffer) {
+        guard let input = self.frontAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        self.frontAssetWriter?.startSession(atSourceTime: startTime)
+    }
+    
+    func startBackSession(with sampleBuffer: CMSampleBuffer) {
+        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        self.backAssetWriter?.startSession(atSourceTime: startTime)
+    }
+    
+    func writeFrontSampleToFile(_ sampleBuffer: CMSampleBuffer, image: CIImage?) {
+        guard let input = self.frontAssetWriterVideoInput,
+                input.isReadyForMoreMediaData,
+                let currentImage = image else { return }
 
         var pixelBuffer: CVPixelBuffer?
         let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
                      kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
-        let width = Int(image.extent.width)
-        let height = Int(image.extent.width)
+        let width = Int(currentImage.extent.width)
+        let height = Int(currentImage.extent.width)
 
         CVPixelBufferCreate(kCFAllocatorDefault,
                             width,
@@ -118,7 +125,7 @@ class PiPRecorder {
         let context = CIContext()
         // Using a magic number (-240) for now. We should figure out the appropriate offset dynamically.
         let transform = CGAffineTransform(translationX: 0, y: -240)
-        let adjustedImage = image.transformed(by: transform)
+        let adjustedImage = currentImage.transformed(by: transform)
         context.render(adjustedImage, to: pixelBuffer!)
 
         let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
@@ -128,24 +135,12 @@ class PiPRecorder {
         self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
     }
     
-    func recordBack(with sampleBuffer: CMSampleBuffer) {
-        guard let writer = self.backAssetWriter, let input = self.backAssetWriterVideoInput else { return }
-        self.startWriter(with: sampleBuffer, writer: writer, input: input)
+    func writeBackSampleToFile(_ sampleBuffer: CMSampleBuffer) {
+        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+        input.append(sampleBuffer)
     }
     
-    private func startWriter(with sampleBuffer: CMSampleBuffer,
-                             writer: AVAssetWriter,
-                             input: AVAssetWriterInput) {
-            
-        if writer.status == .unknown {
-            writer.startWriting()
-            writer.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
-        } else if writer.status == .writing, input.isReadyForMoreMediaData {
-            input.append(sampleBuffer)
-        }
-    }
-    
-    func stopRecording() {
+    func finishWritingVideo() {
         Task {
             let frontURL = await self.stopRecordingFront()
             let backURL = await self.stopRecordingBack()
@@ -155,6 +150,23 @@ class PiPRecorder {
             self.didCapturePIPRecording?(recording)
         }
     }
+//
+//    func recordBack(with sampleBuffer: CMSampleBuffer) {
+//        guard let writer = self.backAssetWriter, let input = self.backAssetWriterVideoInput else { return }
+//       // self.startWriter(with: sampleBuffer, writer: writer, input: input)
+//    }
+    
+//    private func startWriter(with sampleBuffer: CMSampleBuffer,
+//                             writer: AVAssetWriter,
+//                             input: AVAssetWriterInput) {
+//
+//        if writer.status == .unknown {
+//            writer.startWriting()
+//            writer.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
+//        } else if writer.status == .writing, input.isReadyForMoreMediaData {
+//            input.append(sampleBuffer)
+//        }
+//    }
     
     private func stopRecordingFront() async -> URL? {
         return await withCheckedContinuation({ continuation in
