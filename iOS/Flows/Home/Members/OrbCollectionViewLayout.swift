@@ -42,6 +42,8 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         return true
     }
 
+    private var itemPositions: [CGPoint] = []
+
     override var collectionViewContentSize: CGSize {
         guard let collectionView = self.collectionView else { return .zero }
 
@@ -49,6 +51,68 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         let width: CGFloat = radius.doubled + collectionView.halfWidth
         let height: CGFloat = radius.doubled + collectionView.halfHeight
         return CGSize(width: width, height: height)
+    }
+
+    private let cutoffs = [0, 6, 18, 36]
+    private let pi2 = CGFloat.pi * 2
+
+    override func prepare() {
+        super.prepare()
+
+        self.itemPositions.removeAll()
+
+        let centerPoint = CGPoint(x: self.collectionViewContentSize.width.half,
+                                  y: self.collectionViewContentSize.height.half)
+
+        var ringIndex: Int = 0
+
+        while self.itemPositions.count < self.cellCount {
+            // The number of items the current ring can hold.
+            let ringItemCount: Int
+            if ringIndex == 0 {
+                // The first "ring" isn't truly a ring. It's just a point in the center so make special case.
+                ringItemCount = 1
+            } else {
+                ringItemCount = (ringIndex - 1) * 6 + 6
+            }
+
+            // Generate the path for the current ring
+            let ringPath = self.getRingPath(centerPoint: centerPoint,
+                                            radius: CGFloat(ringIndex * 100),
+                                            n: ringItemCount)
+
+            // How far we've progressed along the current ring path.
+            var currentNormalized: CGFloat = 0
+            // How much to move along the path to place the get the next point.
+            let ringNormalizedSegment: CGFloat = 1/CGFloat(ringItemCount)
+
+            for _ in 0..<ringItemCount {
+                let position = lerp(currentNormalized, keyPoints: ringPath)
+                self.itemPositions.append(position)
+
+                currentNormalized += ringNormalizedSegment
+            }
+
+            ringIndex += 1
+        }
+
+        logDebug(self.itemPositions)
+    }
+
+    private func getRingPath(centerPoint point: CGPoint, radius: CGFloat, n: Int) -> [CGPoint] {
+        let angles = stride(from: 0, to: self.pi2, by: self.pi2/CGFloat(n))
+
+        var points: [CGPoint] = angles.map { angle in
+            let x = point.x + radius * cos(angle)
+            let y = point.y + radius * sin(angle)
+            return CGPoint(x: x, y: y)
+        }
+
+        if let firstPoint = points.first {
+            points.append(firstPoint)
+        }
+
+        return points
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
