@@ -78,6 +78,11 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
                 self.itemPositions.append(position)
 
                 currentNormalized += ringNormalizedSegment
+
+                // OPTIMATIZATION: No need to compute more positions than we have items.
+                if self.itemPositions.count >= cellCount {
+                    break
+                }
             }
 
             ringIndex += 1
@@ -122,7 +127,7 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
                                              withScrollingVelocity: velocity)
         }
 
-        // Find the item position that is closest to the proposed offset
+        // Find the item position that is closest to the proposed offset.
         let proposedCenter = CGPoint(x: proposedContentOffset.x + collectionView.halfWidth,
                                      y: proposedContentOffset.y + collectionView.halfHeight)
 

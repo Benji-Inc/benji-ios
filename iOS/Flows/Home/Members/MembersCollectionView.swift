@@ -14,7 +14,7 @@ class MembersCollectionView: CollectionView {
         super.init(layout: OrbCollectionViewLayout())
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
-        self.decelerationRate = .normal
+        self.decelerationRate = .fast
     }
     
     required init?(coder aDecoder: NSCoder) {
