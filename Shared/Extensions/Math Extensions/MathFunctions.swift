@@ -52,7 +52,7 @@ func lerpClamped(_ normalized: CGFloat, start: CGFloat, end: CGFloat) -> CGFloat
     return lerp((0...1).clamp(normalized), start: start, end: end)
 }
 
-/// Linearly interpolates along a path as defined by the key points.
+/// Linearly interpolates along a range as defined by the key points.
 /// For example, for the key points: [0, 100, 50]:
 /// normalized 0 == 0
 /// normalized 0.25 == 50
@@ -81,6 +81,46 @@ func lerp(_ normalized: CGFloat, keyPoints: [CGFloat]) -> CGFloat {
 
 func lerpClamped(_ normalized: CGFloat, keyPoints: [CGFloat]) -> CGFloat {
     return lerp((0...1).clamp(normalized), keyPoints: keyPoints)
+}
+
+// MARK: - CGPoint Interpolation
+
+func lerp(_ normalized: CGFloat, start: CGPoint, end: CGPoint) -> CGPoint {
+    return CGPoint(x: start.x + normalized * (end.x - start.x),
+                   y: start.y + normalized * (end.y - start.y))
+}
+
+/// Linearly interpolates along a 2D path as defined by the key points.
+/// For example, for the key points: [(0,0), (0,50), (100,100)]:
+/// normalized 0 == (0,0)
+/// normalized 0.5 == (0,50)
+/// normalized 0.75 == (50,75)
+/// normalized 1 == (100, 100)
+func lerp(_ normalized: CGFloat, keyPoints: [CGPoint]) -> CGPoint {
+    let pointCount = keyPoints.count
+
+    // There needs to be at least two keypoints to form a path.
+    guard pointCount > 1 else { return keyPoints.first ?? .zero }
+
+    // Normalized values outside of the 0 to 1 range are clamped.
+    guard normalized > 0 else { return keyPoints.first ?? .zero }
+    guard normalized < 1 else { return keyPoints.last ?? .zero }
+
+    // Determine how much of the normalized value each path segment takes up.
+    let segmentLength = 1/CGFloat(pointCount - 1)
+    // Determine which segment we're currently on.
+    let currentIndex = Int(normalized/segmentLength)
+
+    guard let segmentLowerBound = keyPoints[safe: currentIndex] else {
+        return keyPoints.first ?? .zero
+    }
+    guard let segmentUpperBound = keyPoints[safe: currentIndex + 1] else { return segmentLowerBound }
+
+    // Figure out how far we've travelled within the current segment
+    let normalizedInSegment
+    = normalized.truncatingRemainder(dividingBy: segmentLength)
+
+    return lerp(normalizedInSegment/segmentLength, start: segmentLowerBound, end: segmentUpperBound)
 }
 
 // MARK: Trig Functions
