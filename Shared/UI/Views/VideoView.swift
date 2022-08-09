@@ -74,9 +74,8 @@ class VideoView: BaseView {
         self.loadTracksTask = Task { [weak self] in
             // Retrieve the video asset.
             let asset = AVAsset(url: videoURL)
-            let tracks = try! await asset.loadTracks(withMediaType: .video)
             
-            guard !Task.isCancelled else { return }
+            guard let tracks = try? await asset.loadTracks(withMediaType: .video), !Task.isCancelled else { return }
 
             // We will only have one video track, so the first one is the one we want.
             guard let videoAsset = tracks.first?.asset else { return }

@@ -39,7 +39,6 @@ class FrontPreviewVideoView: VideoPreviewView {
     lazy var cameraView: MetalView = {
         let metalView = MetalView(frame: .zero, device: MTLCreateSystemDefaultDevice())
         metalView.delegate = self
-       // metalView.alpha = 0
         return metalView
     }()
     
@@ -175,14 +174,6 @@ extension FrontPreviewVideoView: CAAnimationDelegate {
          // register drawable to command buffer
          commandBuffer.present(currentDrawable)
          commandBuffer.commit()
-
- //        if !self.hasRenderedFaceImage {
- //            Task.onMainActorAsync {
- //                await Task.sleep(seconds: 1.5)
- //                self.hasRenderedFaceImage = true
- //                view.alpha = 1.0
- //            }
- //        }
      }
 
      func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

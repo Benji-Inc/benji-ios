@@ -147,7 +147,6 @@ class PiPRecorder {
         return true
     }
     
-    
     private var finishVideoTask: Task<Void, Error>?
 
     // This cant be called more than once per recording otherwise inputs will crash

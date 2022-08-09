@@ -12,10 +12,6 @@ import AVFoundation
 extension PiPRecordingViewController {
     
     func configureBackCamera() -> Bool {
-        self.session.beginConfiguration()
-        defer {
-            self.session.commitConfiguration()
-        }
         
         // Find the back camera
         guard let backCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
@@ -97,10 +93,6 @@ extension PiPRecordingViewController {
     }
     
     func configureFrontCamera() -> Bool {
-        self.session.beginConfiguration()
-        defer {
-            self.session.commitConfiguration()
-        }
         
         // Find the front camera
         guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
