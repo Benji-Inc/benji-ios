@@ -10,11 +10,12 @@ import Foundation
 
 class OrbCollectionViewLayout: UICollectionViewLayout {
 
-    let interimSpace: CGFloat = 40.0
+    let interimSpace: CGFloat = 160
     let itemSize: CGFloat = 160
-    var screenCenter: CGPoint {
-        return CGPoint(x: UIScreen.main.bounds.width * 0.5,
-                       y: UIScreen.main.bounds.height * 0.5)
+    var collectionViewCenter: CGPoint {
+        guard let collectionView = self.collectionView else { return .zero }
+        return CGPoint(x: collectionView.contentOffset.x + collectionView.halfWidth,
+                       y: collectionView.contentOffset.y + collectionView.halfHeight)
     }
 
     var firstOrbitItemCount: Int = 6 {
@@ -28,31 +29,68 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         return self.collectionView?.numberOfItems(inSection: 0) ?? 0
     }
 
-    var a: CGFloat {
-        return 2.5 * UIScreen.main.bounds.width
-    }
-
-    var b: CGFloat {
-        return 2.5 * UIScreen.main.bounds.height
-    }
-
-    let c: CGFloat = 15
-
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
 
+    /// A cache of all the possible positions for the items. Indices correspond to item IndexPaths.
+    private var itemPositions: [CGPoint] = []
+
     override var collectionViewContentSize: CGSize {
         guard let collectionView = self.collectionView else { return .zero }
+        return CGSize(width: collectionView.width.doubled + 500,
+                      height: collectionView.height.doubled + 500)
+    }
 
-        let radius = self.getRadius(forIndexPath: IndexPath(item: self.cellCount - 1, section: 0))
-        let width: CGFloat = radius.doubled + collectionView.halfWidth
-        let height: CGFloat = radius.doubled + collectionView.halfHeight
-        return CGSize(width: width, height: height)
+    override func prepare() {
+        super.prepare()
+
+        self.itemPositions.removeAll()
+
+        let centerPoint = CGPoint(x: self.collectionViewContentSize.width.half,
+                                  y: self.collectionViewContentSize.height.half)
+
+        var ringIndex: Int = 0
+
+        // Generate points that describe the rings of this layout.
+        while self.itemPositions.count < self.cellCount {
+            // The number of items the current ring can hold.
+            let ringItemCount: Int
+            if ringIndex == 0 {
+                // The first "ring" isn't truly a ring. It's just a point in the center so make a special case.
+                ringItemCount = 1
+            } else {
+                ringItemCount = (ringIndex - 1) * self.firstOrbitItemCount + self.firstOrbitItemCount
+            }
+
+            // Generate the path for the current ring
+            let ringPath = self.getRingPath(centerPoint: centerPoint,
+                                            radius: CGFloat(ringIndex) * self.interimSpace,
+                                            n: self.firstOrbitItemCount)
+
+            // How far we've progressed along the current ring path.
+            var currentNormalized: CGFloat = 0
+            // How much to move along the path to place the get the next point.
+            let ringNormalizedSegment: CGFloat = 1/CGFloat(ringItemCount)
+
+            for _ in 0..<ringItemCount {
+                let position = lerp(currentNormalized, keyPoints: ringPath)
+                self.itemPositions.append(position)
+
+                currentNormalized += ringNormalizedSegment
+
+                // OPTIMATIZATION: No need to compute more positions than we have items.
+                if self.itemPositions.count >= cellCount {
+                    break
+                }
+            }
+
+            ringIndex += 1
+        }
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        var attributes = [UICollectionViewLayoutAttributes]()
+        var attributes: [UICollectionViewLayoutAttributes] = []
         for i in 0 ..< self.cellCount {
             let indexPath = IndexPath(item: i, section: 0)
             if let attributesForItem = self.layoutAttributesForItem(at: indexPath) {
@@ -66,82 +104,66 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
 
         let centerPoint = self.getCenter(forIndexPath: indexPath)
-        var x = centerPoint.x
-        var y = centerPoint.y
         attributes.center = centerPoint
-
-        let offset = self.collectionView!.contentOffset
-        x -= self.screenCenter.x + CGFloat(offset.x)
-        y -= self.screenCenter.y + CGFloat(offset.y)
-
-        x = -x*x/(self.a * self.a)
-        y = -y*y/(self.b * self.b)
-        var z = self.c * (x+y) + 1.0
-        z = z < 0.0 ? 0.0 : z
-
-        attributes.transform = CGAffineTransform(scaleX: z, y: z)
         attributes.size = CGSize(width: self.itemSize, height: self.itemSize)
+
+        // Shrink the size of cells that aren't centered.
+        let distanceFromCenter = centerPoint.distanceTo(self.collectionViewCenter)
+        let scale = lerpClamped(distanceFromCenter/(self.interimSpace*2),
+                                start: 1,
+                                end: 0.1)
+        attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
 
         return attributes
     }
 
-    private func getCenter(forIndexPath indexPath: IndexPath) -> CGPoint {
-        let center = CGPoint(x: self.collectionViewContentSize.width.half,
-                             y: self.collectionViewContentSize.height.half)
+    // MARK: - Scroll Behavior
 
-        guard indexPath.row > 0 else { return center }
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
+                                      withScrollingVelocity velocity: CGPoint) -> CGPoint {
 
-        var orbitIndex: Int = 0
-        // The index of an item relative to the starting index of the orbit it is in
-        var indexInOrbit: Int = 0
-        // Because the first item is reserved for the center, start on index 1
-        var currentOrbitStartIndex: Int = 1
-
-        // Determine which orbit the item is in and the index of that item within its orbit
-        while true {
-            // The starting index of the next orbit.
-            // We add 1 at the end because the first item is in the center, which shifts everything up 1
-            let nextOrbitStartIndex = (pow(2, orbitIndex + 1) - 1) * self.firstOrbitItemCount + 1
-
-            // Check to see if the index path is in the current orbit
-            if indexPath.row < nextOrbitStartIndex {
-                // If so calculate its index within the current orbit.
-                indexInOrbit = indexPath.row - currentOrbitStartIndex
-                break
-            }
-
-            orbitIndex += 1
-            currentOrbitStartIndex = nextOrbitStartIndex
+        guard let collectionView = self.collectionView else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset,
+                                             withScrollingVelocity: velocity)
         }
 
-        // The distance between the previous orbits center and the following orbits circumference
-        let radius = (self.itemSize + self.interimSpace) * CGFloat(orbitIndex + 1)
-        let totalInGivenOrbit = pow(2, orbitIndex) * self.firstOrbitItemCount
-        // The angle between each item in the current orbit
-        let angle = CGFloat(2 * Double.pi) / CGFloat(totalInGivenOrbit)
-        let itemAngle = angle * CGFloat(indexInOrbit) // The actual angle of the item
-        let itemX = (radius * cos(itemAngle)) + center.x
-        let itemY = (radius * sin(itemAngle)) + center.y
+        // Find the item position that is closest to the proposed offset.
+        let proposedCenter = CGPoint(x: proposedContentOffset.x + collectionView.halfWidth,
+                                     y: proposedContentOffset.y + collectionView.halfHeight)
 
-        return CGPoint(x: itemX, y: itemY) // Used to set the center point of the current item
+        let closestPosition = self.itemPositions.min { (position1, position2) in
+            return proposedCenter.distanceTo(position1) < proposedCenter.distanceTo(position2)
+        }
+
+        guard let closestPosition = closestPosition else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset,
+                                             withScrollingVelocity: velocity)
+        }
+
+        return CGPoint(x: closestPosition.x - collectionView.halfWidth,
+                       y: closestPosition.y - collectionView.halfHeight)
     }
 
-    private func getRadius(forIndexPath indexPath: IndexPath) -> CGFloat {
-        guard indexPath.row > 0 else { return 0 }
+    // MARK: - Helper Functions
 
-        var orbitRadius: Int = 0
-        var orbitIndex: Int = 0
+    private func getCenter(forIndexPath indexPath: IndexPath) -> CGPoint {
+        return self.itemPositions[indexPath.item]
+    }
 
-        while true {
-            orbitIndex = 1 + self.firstOrbitItemCount * 2 * orbitRadius
-            orbitRadius+=1
-            if indexPath.row < orbitIndex  {
-                break
-            }
+    /// Gets a set a points representing the path for a ring centered around a point.
+    private func getRingPath(centerPoint point: CGPoint, radius: CGFloat, n: Int) -> [CGPoint] {
+        let angles = stride(from: 0, to: twoPi, by: twoPi/CGFloat(n))
+
+        var points: [CGPoint] = angles.map { angle in
+            let x = point.x + radius * cos(angle)
+            let y = point.y + radius * sin(angle)
+            return CGPoint(x: x, y: y)
         }
 
-        let radius = (self.itemSize + self.interimSpace) * CGFloat(orbitRadius)
+        if let firstPoint = points.first {
+            points.append(firstPoint)
+        }
 
-        return radius
+        return points
     }
 }
