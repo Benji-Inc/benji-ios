@@ -73,9 +73,16 @@ extension PiPRecordingViewController {
                 self.recorder.writeBackSampleToFile(sampleBuffer)
             }
         case .ending:
-            self.recorder.finishWritingVideo()
-            self.backIsSampling = false
-            self.frontIsSampling = false
+            Task {
+                do {
+                    try await self.recorder.finishWritingVideo()
+                    self.backIsSampling = false
+                    self.frontIsSampling = false
+                } catch {
+                    logError(error)
+                }
+            }
+            
         case .playback:
             break
         }

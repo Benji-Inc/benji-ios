@@ -70,8 +70,6 @@ class PiPRecorder {
         self.pixelBufferAdaptor
         = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: assetWriterVideoInput,
                                                sourcePixelBufferAttributes: self.pixelBufferAttributes)
-        
-        assetWriter.startWriting()
     }
     
     private func initializeBack() {
@@ -95,7 +93,7 @@ class PiPRecorder {
     
     func startFrontSession(with sampleBuffer: CMSampleBuffer) {
         guard let writer = self.frontAssetWriter else { return }
-        
+        writer.startWriting()
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         writer.startSession(atSourceTime: startTime)
         logDebug("FRONT STARTED")
@@ -153,14 +151,34 @@ class PiPRecorder {
         return true
     }
     
-    func finishWritingVideo() {
-        Task {
+    
+    private var finishVideoTask: Task<Void, Error>?
+
+    // This cant be called more than once per recording otherwise inputs will crash
+    func finishWritingVideo() async throws {
+        // If we already have an initialization task, wait for it to finish.
+        if let finishVideoTask = self.finishVideoTask {
+            try await finishVideoTask.value
+            return
+        }
+
+        // Otherwise start a new initialization task and wait for it to finish.
+        self.finishVideoTask = Task {
             let frontURL = await self.stopRecordingFront()
             let backURL = await self.stopRecordingBack()
             
             let recording = PiPRecording(frontRecordingURL: frontURL,
                                                backRecordingURL: backURL)
             self.didCapturePIPRecording?(recording)
+            logDebug("FINISH")
+        }
+
+        do {
+            try await self.finishVideoTask?.value
+        } catch {
+            // Dispose of the task because it failed, then pass the error along.
+            self.finishVideoTask = nil
+            throw error
         }
     }
     

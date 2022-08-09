@@ -79,7 +79,6 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         
         self.recorder.didCapturePIPRecording = { [unowned self] recording in
             self.recording = recording
-            self.endSession()
             self.state = .playback
         }
         
@@ -121,6 +120,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .ending:
             break 
         case .playback:
+            self.endSession()
             self.frontCameraView.stopRecordingAnimation()
             self.beginPlayback()
         case .error:
