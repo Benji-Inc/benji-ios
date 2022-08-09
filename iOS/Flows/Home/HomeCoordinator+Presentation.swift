@@ -88,7 +88,7 @@ extension HomeCoordinator {
         if person.isCurrentUser {
             let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
             self.addChildAndStart(coordinator) { [unowned self] result in
-                
+                self.homeVC.dismiss(animated: true)
             }
             self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
         } else {
