@@ -102,7 +102,7 @@ class PiPRecorder {
     }
     
     func startBackSession(with sampleBuffer: CMSampleBuffer) {
-        guard let writer = self.backAssetWriter, writer.status != .writing else { return }
+        guard let writer = self.backAssetWriter else { return }
         writer.startWriting()
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         writer.startSession(atSourceTime: startTime)
@@ -157,9 +157,9 @@ class PiPRecorder {
         Task {
             let frontURL = await self.stopRecordingFront()
             let backURL = await self.stopRecordingBack()
-
-            let recording = PiPRecording(frontRecordingURL: URL(string: ""),
-                                         backRecordingURL: backURL)
+            
+            let recording = PiPRecording(frontRecordingURL: frontURL,
+                                               backRecordingURL: backURL)
             self.didCapturePIPRecording?(recording)
         }
     }
@@ -181,8 +181,8 @@ class PiPRecorder {
         guard let writer = self.backAssetWriter else { return nil }
 
         if writer.status == .writing {
-            await writer.finishWriting()
             self.backAssetWriterVideoInput?.markAsFinished()
+            await writer.finishWriting()
             return writer.outputURL
         } else {
             logDebug("Back Failied \(writer.status)")

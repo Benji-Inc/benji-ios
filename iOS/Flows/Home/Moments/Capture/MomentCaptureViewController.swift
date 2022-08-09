@@ -105,7 +105,7 @@ import Localization
          switch state {
          case .idle:
              self.animate(text: "Press and Hold")
-         case .ending:
+         case .playback:
              self.animate(text: "Tap to retake")
          default:
              break

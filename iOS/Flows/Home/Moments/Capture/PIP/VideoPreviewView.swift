@@ -43,7 +43,6 @@ class VideoPreviewView: BaseView {
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.playbackView.alpha = 1.0
-            self.videoPreviewLayer.opacity = 0.0
         } completion: { _ in
             self.playbackView.shouldPlay = true
             self.playbackView.videoURL = url
@@ -55,7 +54,6 @@ class VideoPreviewView: BaseView {
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.playbackView.alpha = 0.0
-            self.videoPreviewLayer.opacity = 1.0
         }
     }
 }
