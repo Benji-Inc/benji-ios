@@ -41,6 +41,7 @@ class PiPRecorder {
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
     func initialize(backVideoSettings: [String: Any]?) {
+        FileManager.clearTmpDirectory()
         self.finishVideoTask = nil 
         self.backVideoSettings = backVideoSettings
         self.initializeFront()

@@ -553,6 +553,8 @@
 		D63F964E289C24ED004F6C0D /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */; };
 		D63F9650289C2B55004F6C0D /* FrontPreviewVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */; };
 		D63F9654289C94BD004F6C0D /* PiPRecordingViewController+Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */; };
+		D63F965828A32043004F6C0D /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F965728A32043004F6C0D /* FileManager+Extensions.swift */; };
+		D63F965928A32043004F6C0D /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F965728A32043004F6C0D /* FileManager+Extensions.swift */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -1255,6 +1257,7 @@
 		D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
 		D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontPreviewVideoView.swift; sourceTree = "<group>"; };
 		D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Output.swift"; sourceTree = "<group>"; };
+		D63F965728A32043004F6C0D /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -2040,6 +2043,7 @@
 				D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */,
 				80F1C4D5270E505E00616F01 /* Equatable+Extensions.swift */,
 				D69EB4492457EB4500473530 /* Error+Extensions.swift */,
+				D63F965728A32043004F6C0D /* FileManager+Extensions.swift */,
 				802C448926CC76CC00A333A4 /* Logger.swift */,
 				D642735C22C90C640088256B /* Math Extensions */,
 				D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */,
@@ -3480,6 +3484,7 @@
 				D61128A92804E5E700574B96 /* CloudFunction.swift in Sources */,
 				D61128A12804E22F00574B96 /* Person.swift in Sources */,
 				D61C1D29284041DE00F58F84 /* PresentableCoordinator.swift in Sources */,
+				D63F965928A32043004F6C0D /* FileManager+Extensions.swift in Sources */,
 				D61128382804DBEE00574B96 /* UICollectionView+Extensions.swift in Sources */,
 				D611280D2804DB5000574B96 /* AppDelegate.swift in Sources */,
 				D61128592804DC3E00574B96 /* ToastBannerView.swift in Sources */,
@@ -3915,6 +3920,7 @@
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
+				D63F965828A32043004F6C0D /* FileManager+Extensions.swift in Sources */,
 				D6AA620F2852701D00FA4D02 /* NoticesCollectionViewLayout.swift in Sources */,
 				D67896BF2302683C0059BA75 /* ProfilePhotoCaptureViewController.swift in Sources */,
 				D63F964C289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift in Sources */,

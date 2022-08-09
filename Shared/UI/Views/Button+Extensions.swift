@@ -17,7 +17,7 @@ extension ThemeButton {
         return await withCheckedContinuation { continuation in
             if !self.alphaOutAnimator.isRunning {
                 self.isUserInteractionEnabled = false
-                self.isEnabled = false
+                //self.isEnabled = false
 
                 self.alphaOutAnimator.stopAnimation(true)
 
