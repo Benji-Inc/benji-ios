@@ -154,26 +154,33 @@ class PiPRecorder {
     }
     
     func finishWritingVideo() {
-        Task {
-            let frontURL = await self.stopRecordingFront()
-            let backURL = await self.stopRecordingBack()
-            
-            let recording = PiPRecording(frontRecordingURL: frontURL,
-                                         backRecordingURL: backURL)
+        
+        self.stopRecordingFront { [unowned self] url in
+            let recording = PiPRecording(frontRecordingURL: url,
+                                         backRecordingURL: URL(string: ""))
             self.didCapturePIPRecording?(recording)
         }
+//        Task {
+//            let frontURL = await self.stopRecordingFront()
+//            //let backURL = await self.stopRecordingBack()
+//
+//            let recording = PiPRecording(frontRecordingURL: frontURL,
+//                                         backRecordingURL: URL(string: ""))
+//            self.didCapturePIPRecording?(recording)
+//        }
     }
     
-    private func stopRecordingFront() async -> URL? {
-        guard let writer = self.frontAssetWriter else { return nil }
+    private func stopRecordingFront(completion: @escaping ((URL?) -> Void)) {
+        guard let writer = self.frontAssetWriter else { return  }
 
         if writer.status == .writing {
             self.frontAssetWriterVideoInput?.markAsFinished()
-            await writer.finishWriting()
-            return writer.outputURL
+            writer.finishWriting {
+                completion(writer.outputURL)
+            }
         } else {
             logDebug("Front Failied \(writer.status)")
-            return nil
+            completion(nil)
         }
     }
     

@@ -86,7 +86,7 @@ import Localization
          }
 
          self.view.didSelect { [unowned self] in
-             guard self.state == .ending else { return }
+             guard self.state == .playback else { return }
              self.state = .starting
          }
 

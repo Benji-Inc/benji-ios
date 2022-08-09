@@ -50,7 +50,7 @@ class FrontPreviewVideoView: VideoPreviewView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        self.addSubview(self.emotionGradientView)
+        self.insertSubview(self.emotionGradientView, at: 0)
         self.emotionGradientView.alpha = 0.75
         
         self.addSubview(self.cameraView)
@@ -97,18 +97,23 @@ class FrontPreviewVideoView: VideoPreviewView {
         self.shapeLayer.removeAllAnimations()
     }
     
+    // Overriding because changing the alpha on the preivew layer, hides the entire view.
     override func beginPlayback(with url: URL) {
-        super.beginPlayback(with: url)
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.cameraView.alpha = 0.0
+            self.playbackView.alpha = 1.0
+        } completion: { _ in
+            self.playbackView.shouldPlay = true
+            self.playbackView.videoURL = url
         }
     }
     
     override func stopPlayback() {
-        super.stopPlayback()
+        self.playbackView.videoURL = nil
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.playbackView.alpha = 0.0
             self.cameraView.alpha = 1.0
         }
     }

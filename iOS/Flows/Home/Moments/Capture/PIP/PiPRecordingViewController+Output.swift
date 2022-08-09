@@ -75,6 +75,8 @@ extension PiPRecordingViewController {
                 self.recorder.finishWritingVideo()
                 self.backIsSampling = false
                 self.frontIsSampling = false
+            case .playback:
+                break 
             }
     }
     
