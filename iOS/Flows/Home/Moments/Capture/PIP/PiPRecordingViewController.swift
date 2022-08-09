@@ -33,9 +33,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
-    let dataOutputQue = DispatchQueue(label: "data output queue")
-//    let frontDataOutputQue = DispatchQueue(label: "front data output queue")
-//    let backDataOutputQue = DispatchQueue(label: "back data output queue")
+    //let dataOutputQue = DispatchQueue(label: "data output queue")
+    let frontDataOutputQue = DispatchQueue(label: "front data output queue")
+    let backDataOutputQue = DispatchQueue(label: "back data output queue")
 
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
@@ -176,14 +176,14 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     private func beginPlayback() {
-        guard let frontURL = self.recording?.frontRecordingURL else { return }
-//        guard let frontURL = self.recording?.frontRecordingURL,
-//                let backURL = self.recording?.backRecordingURL else { return }
+       // guard let frontURL = self.recording?.frontRecordingURL else { return }
+        guard let frontURL = self.recording?.frontRecordingURL,
+                let backURL = self.recording?.backRecordingURL else { return }
 
         logDebug("front: \(frontURL)")
-        //logDebug("back: \(backURL)")
+        logDebug("back: \(backURL)")
         self.frontCameraView.beginPlayback(with: frontURL)
-        //self.backCameraView.beginPlayback(with: backURL)
+        self.backCameraView.beginPlayback(with: backURL)
     }
 
     private func stopPlayback() {

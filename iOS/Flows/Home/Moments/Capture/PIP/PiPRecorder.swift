@@ -155,12 +155,11 @@ class PiPRecorder {
     
     func finishWritingVideo() {
         Task {
-
             let frontURL = await self.stopRecordingFront()
-            //let backURL = await self.stopRecordingBack()
+            let backURL = await self.stopRecordingBack()
 
-            let recording = PiPRecording(frontRecordingURL: frontURL,
-                                         backRecordingURL: URL(string: ""))
+            let recording = PiPRecording(frontRecordingURL: URL(string: ""),
+                                         backRecordingURL: backURL)
             self.didCapturePIPRecording?(recording)
         }
     }
