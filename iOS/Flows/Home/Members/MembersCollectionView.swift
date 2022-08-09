@@ -11,7 +11,7 @@ import Foundation
 class MembersCollectionView: CollectionView {
     
     init() {
-        super.init(layout: OrbCollectionViewLayout())
+        super.init(layout: MembersCollectionViewLayout())
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
         self.decelerationRate = .fast
