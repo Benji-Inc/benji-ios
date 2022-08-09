@@ -118,10 +118,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .capturing:
             break
         case .ending:
-            break 
+            self.frontCameraView.stopRecordingAnimation()
         case .playback:
             self.endSession()
-            self.frontCameraView.stopRecordingAnimation()
             self.beginPlayback()
         case .error:
             break
@@ -176,12 +175,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     private func beginPlayback() {
-       // guard let frontURL = self.recording?.frontRecordingURL else { return }
         guard let frontURL = self.recording?.frontRecordingURL,
                 let backURL = self.recording?.backRecordingURL else { return }
 
-        logDebug("front: \(frontURL)")
-        logDebug("back: \(backURL)")
         self.frontCameraView.beginPlayback(with: frontURL)
         self.backCameraView.beginPlayback(with: backURL)
     }

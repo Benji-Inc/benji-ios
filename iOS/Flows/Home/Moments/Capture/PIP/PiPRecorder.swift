@@ -98,7 +98,6 @@ class PiPRecorder {
         writer.startWriting()
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         writer.startSession(atSourceTime: startTime)
-        logDebug("FRONT STARTED")
     }
     
     func startBackSession(with sampleBuffer: CMSampleBuffer) {
@@ -106,7 +105,6 @@ class PiPRecorder {
         writer.startWriting()
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         writer.startSession(atSourceTime: startTime)
-        logDebug("BACK STARTED")
     }
     
     @discardableResult
@@ -139,7 +137,6 @@ class PiPRecorder {
                                       preferredTimescale: CMTimeScale(bitPattern: 600))
 
         self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
-        //logDebug("front")
         return true
     }
     
@@ -148,7 +145,6 @@ class PiPRecorder {
         guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else {
             return false
         }
-        //logDebug("back")
         input.append(sampleBuffer)
         return true
     }
@@ -172,7 +168,6 @@ class PiPRecorder {
             let recording = PiPRecording(frontRecordingURL: frontURL,
                                                backRecordingURL: backURL)
             self.didCapturePIPRecording?(recording)
-            logDebug("FINISH")
         }
 
         do {
