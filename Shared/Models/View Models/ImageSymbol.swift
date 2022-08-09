@@ -56,6 +56,7 @@ enum ImageSymbol: String, ImageDisplayable {
     case jibs
     case jiblogo
     case hare = "hare"
+    case recordingTape = "recordingtape"
     
     var image: UIImage? {
         switch self {

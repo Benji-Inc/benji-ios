@@ -84,7 +84,7 @@ extension HomeCoordinator {
     
     func presentProfile(for person: PersonType) {
         self.removeChild()
-
+        
         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
         
         self.addChildAndStart(coordinator) { [unowned self] result in
@@ -100,6 +100,16 @@ extension HomeCoordinator {
             }
         }
         
+        self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
+    }
+    
+    func presentMoment() {
+        self.removeChild()
+        
+        let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.homeVC.dismiss(animated: true)
+        }
         self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
     }
     

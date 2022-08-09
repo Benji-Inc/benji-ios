@@ -80,8 +80,8 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                 self.presentConversation(with: nil, messageId: nil)
             case .addPeople:
                 self.presentPeoplePicker()
-            case .newVibe:
-                self.presentVibeCreator()
+            case .newMoment:
+                self.presentMoment()
             }
         }
         
