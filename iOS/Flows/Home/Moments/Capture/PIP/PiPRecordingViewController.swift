@@ -33,7 +33,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
-    //let dataOutputQue = DispatchQueue(label: "data output queue")
+    
     let frontDataOutputQue = DispatchQueue(label: "front data output queue")
     let backDataOutputQue = DispatchQueue(label: "back data output queue")
 
@@ -52,6 +52,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     var isSessionRunning: Bool {
         return self.session.isRunning
     }
+    
+    var isSessiongBeingConfigured: Bool = false
     
     private(set) var recording: PiPRecording?
     
@@ -118,7 +120,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .capturing:
             break
         case .ending:
-            self.frontCameraView.stopRecordingAnimation()
+            break
         case .playback:
             self.endSession()
             self.beginPlayback()
@@ -141,12 +143,14 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         
         // When using AVCaptureMultiCamSession, it is best to manually add connections from AVCaptureInputs to AVCaptureOutputs
         self.session.beginConfiguration()
+        self.isSessiongBeingConfigured = true
         
         defer {
             self.session.commitConfiguration()
             if self.state == .idle {
                 self.checkSystemCost()
             }
+            self.isSessiongBeingConfigured = false
         }
     
         guard self.configureBackCamera() else {
@@ -162,7 +166,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     private func beginSession() {
         self.sessionQueue.async { [unowned self] in
-            guard !self.isSessionRunning else { return }
+            guard !self.isSessionRunning, !self.isSessiongBeingConfigured else { return }
             self.session.startRunning()
         }
     }

@@ -46,6 +46,7 @@ import Localization
          self.backCameraView.layer.cornerRadius = self.cornerRadius
 
          self.view.addSubview(self.label)
+         self.label.showShadow(withOffset: 0, opacity: 1.0)
 
          self.view.addSubview(self.doneButton)
          self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
@@ -62,7 +63,7 @@ import Localization
          self.doneButton.setSize(with: self.view.width)
          self.doneButton.centerOnX()
 
-         if self.state == .ending {
+         if self.state == .playback {
              self.doneButton.pinToSafeAreaBottom()
              self.label.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
          } else {
@@ -84,7 +85,7 @@ import Localization
 
          self.view.didSelect { [unowned self] in
              guard self.state == .playback else { return }
-             self.state = .starting
+             self.state = .idle
          }
 
          self.doneButton.didSelect { [unowned self] in
@@ -103,7 +104,7 @@ import Localization
          case .idle:
              self.animate(text: "Press and Hold")
          case .playback:
-             self.animate(text: "Tap to retake")
+             self.animate(text: "")
          default:
              break
          }
@@ -169,14 +170,14 @@ import Localization
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesEnded(touches, with: event)
-         guard self.state == .started || self.state == .starting else { return }
+         guard self.frontCameraView.isAnimating else { return }
 
          self.frontCameraView.stopRecordingAnimation()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesCancelled(touches, with: event)
-         guard self.state == .started || self.state == .starting else { return }
+         guard self.frontCameraView.isAnimating else { return }
 
          self.frontCameraView.stopRecordingAnimation()
      }

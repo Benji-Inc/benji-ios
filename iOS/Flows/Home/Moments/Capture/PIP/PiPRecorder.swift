@@ -41,13 +41,10 @@ class PiPRecorder {
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
     func initialize(backVideoSettings: [String: Any]?) {
+        self.finishVideoTask = nil 
         self.backVideoSettings = backVideoSettings
         self.initializeFront()
         self.initializeBack()
-    }
-    
-    private func reset() {
-        
     }
     
     private func initializeFront() {

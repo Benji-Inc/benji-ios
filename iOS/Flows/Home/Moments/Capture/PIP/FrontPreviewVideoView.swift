@@ -19,6 +19,8 @@ class FrontPreviewVideoView: VideoPreviewView {
     
     var animation = CABasicAnimation(keyPath: "strokeEnd")
     
+    private(set) var isAnimating: Bool = false
+    
     lazy var shapeLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
         let color = ThemeColor.D6.color.cgColor
@@ -78,7 +80,7 @@ class FrontPreviewVideoView: VideoPreviewView {
     
         self.shapeLayer.removeFromSuperlayer()
         self.layer.addSublayer(self.shapeLayer)
-        
+                
         self.animation.delegate = self
         self.animation.fromValue = 0
         self.animation.duration = MomentCaptureViewController.maxDuration
@@ -93,8 +95,8 @@ class FrontPreviewVideoView: VideoPreviewView {
     }
     
     func stopRecordingAnimation() {
-        self.shapeLayer.removeFromSuperlayer()
         self.shapeLayer.removeAllAnimations()
+        self.shapeLayer.removeFromSuperlayer()
     }
     
     // Overriding because changing the alpha on the preivew layer, hides the entire view.
@@ -122,10 +124,12 @@ class FrontPreviewVideoView: VideoPreviewView {
 extension FrontPreviewVideoView: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
+        self.isAnimating = true
         self.animationDidStart?()
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        self.isAnimating = false 
         self.animationDidEnd?()
     }
 }
