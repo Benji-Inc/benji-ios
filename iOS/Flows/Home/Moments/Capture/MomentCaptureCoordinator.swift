@@ -22,7 +22,7 @@ import Coordinator
 
          self.momentCaptureVC.didCompleteMoment = { [unowned self] moment in
              Task {
-                 await ToastScheduler.shared.schedule(toastType: .success(.bolt, "Moment made"))
+                 await ToastScheduler.shared.schedule(toastType: .success(.recordingTape, "Moment made"))
              }
              self.finishFlow(with: moment)
          }

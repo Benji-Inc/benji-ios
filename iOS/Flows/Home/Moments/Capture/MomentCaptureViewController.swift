@@ -61,7 +61,7 @@ import Localization
          self.doneButton.setSize(with: self.view.width)
          self.doneButton.centerOnX()
 
-         if self.state == .playback {
+         if self.state == .playback, !self.isBeingClosed {
              self.doneButton.pinToSafeAreaBottom()
              self.label.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
          } else {

@@ -85,30 +85,32 @@ extension HomeCoordinator {
     func presentProfile(for person: PersonType) {
         self.removeChild()
         
-        if person.isCurrentUser {
-            let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
-            self.addChildAndStart(coordinator) { [unowned self] result in
-                self.homeVC.dismiss(animated: true)
-            }
-            self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
-        } else {
-            let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
-            
-            self.addChildAndStart(coordinator) { [unowned self] result in
-                self.homeVC.dismiss(animated: true) { [unowned self] in
-                    switch result {
-                    case .conversation(let cid):
-                        self.presentConversation(with: cid.description, messageId: nil)
-                    case .openReplies(let message):
-                        self.presentConversation(with: message.conversationId,
-                                                 messageId: message.id,
-                                                 openReplies: false)
-                    }
+        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.homeVC.dismiss(animated: true) { [unowned self] in
+                switch result {
+                case .conversation(let cid):
+                    self.presentConversation(with: cid.description, messageId: nil)
+                case .openReplies(let message):
+                    self.presentConversation(with: message.conversationId,
+                                             messageId: message.id,
+                                             openReplies: false)
                 }
             }
-            
-            self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
         }
+        
+        self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
+    }
+    
+    func presentMoment() {
+        self.removeChild()
+        
+        let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.homeVC.dismiss(animated: true)
+        }
+        self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
     }
     
     func presentPersonConnection(for activity: LaunchActivity) {
