@@ -21,7 +21,7 @@ class PiPRecorder {
     private var frontAssetWriterVideoInput: AVAssetWriterInput?
     
     private var backAssetWriter: AVAssetWriter?
-    private(set) var backAssetWriterVideoInput: AVAssetWriterInput?
+    private var backAssetWriterVideoInput: AVAssetWriterInput?
     
     private let frontVideoSettings: [String: Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
                                                      AVVideoWidthKey : 480,
@@ -29,7 +29,10 @@ class PiPRecorder {
                                      AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
                                           kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
     
-    private let backVideoSettings: [String: Any] = [kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA] as [String: Any]
+    private let backVideoSettings: [String: Any] = [ AVVideoCompressionPropertiesKey: [AVVideoAverageBitRateKey:NSNumber(value:250000)],
+                                                                     AVVideoCodecKey: AVVideoCodecType.h264,
+                                                                    AVVideoHeightKey: 480,
+                                                                     AVVideoWidthKey: 480] as [String: Any]
     
     let pixelBufferAttributes: [String: Any] = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
                                                            kCVPixelBufferWidthKey: 480,
@@ -88,27 +91,30 @@ class PiPRecorder {
         
         self.backAssetWriter = assetWriter
         self.backAssetWriterVideoInput = assetWriterVideoInput
-        
-        assetWriter.startWriting()
     }
     
     func startFrontSession(with sampleBuffer: CMSampleBuffer) {
-        guard let input = self.frontAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+        guard let writer = self.frontAssetWriter else { return }
+        
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        self.frontAssetWriter?.startSession(atSourceTime: startTime)
+        writer.startSession(atSourceTime: startTime)
+        logDebug("FRONT STARTED")
     }
     
     func startBackSession(with sampleBuffer: CMSampleBuffer) {
-        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+        guard let writer = self.backAssetWriter, writer.status != .writing else { return }
+        writer.startWriting()
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        self.backAssetWriter?.startSession(atSourceTime: startTime)
+        writer.startSession(atSourceTime: startTime)
+        logDebug("BACK STARTED")
     }
     
-    func writeFrontSampleToFile(_ sampleBuffer: CMSampleBuffer, image: CIImage?) {
+    @discardableResult
+    func writeFrontSampleToFile(_ sampleBuffer: CMSampleBuffer, image: CIImage?) -> Bool {
         guard let input = self.frontAssetWriterVideoInput,
                 input.isReadyForMoreMediaData,
-                let currentImage = image else { return }
-
+              let currentImage = image else { return false }
+        
         var pixelBuffer: CVPixelBuffer?
         let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
                      kCVPixelBufferCGBitmapContextCompatibilityKey : kCFBooleanTrue] as CFDictionary
@@ -133,11 +139,18 @@ class PiPRecorder {
                                       preferredTimescale: CMTimeScale(bitPattern: 600))
 
         self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
+        //logDebug("front")
+        return true
     }
     
-    func writeBackSampleToFile(_ sampleBuffer: CMSampleBuffer) {
-        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+    @discardableResult
+    func writeBackSampleToFile(_ sampleBuffer: CMSampleBuffer) -> Bool {
+        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else {
+            return false
+        }
+        //logDebug("back")
         input.append(sampleBuffer)
+        return true
     }
     
     func finishWritingVideo() {
@@ -150,49 +163,30 @@ class PiPRecorder {
             self.didCapturePIPRecording?(recording)
         }
     }
-//
-//    func recordBack(with sampleBuffer: CMSampleBuffer) {
-//        guard let writer = self.backAssetWriter, let input = self.backAssetWriterVideoInput else { return }
-//       // self.startWriter(with: sampleBuffer, writer: writer, input: input)
-//    }
-    
-//    private func startWriter(with sampleBuffer: CMSampleBuffer,
-//                             writer: AVAssetWriter,
-//                             input: AVAssetWriterInput) {
-//
-//        if writer.status == .unknown {
-//            writer.startWriting()
-//            writer.startSession(atSourceTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
-//        } else if writer.status == .writing, input.isReadyForMoreMediaData {
-//            input.append(sampleBuffer)
-//        }
-//    }
     
     private func stopRecordingFront() async -> URL? {
-        return await withCheckedContinuation({ continuation in
-            if let assetWriter = self.frontAssetWriter, assetWriter.status != .unknown {
-                self.frontAssetWriterVideoInput?.markAsFinished()
-                assetWriter.finishWriting {
-                    continuation.resume(returning: assetWriter.outputURL)
-                }
-            } else {
-                logDebug("Front Failied")
-                continuation.resume(returning: nil)
-            }
-        })
+        guard let writer = self.frontAssetWriter else { return nil }
+
+        if writer.status == .writing {
+            self.frontAssetWriterVideoInput?.markAsFinished()
+            await writer.finishWriting()
+            return writer.outputURL
+        } else {
+            logDebug("Front Failied \(writer.status)")
+            return nil
+        }
     }
     
     private func stopRecordingBack() async -> URL? {
-        return await withCheckedContinuation({ continuation in
-            if let assetWriter = self.backAssetWriter, assetWriter.status != .unknown {
-                self.backAssetWriterVideoInput?.markAsFinished()
-                assetWriter.finishWriting {
-                    continuation.resume(returning: assetWriter.outputURL)
-                }
-            } else {
-                logDebug("Back Failied")
-                continuation.resume(returning: nil)
-            }
-        })
+        guard let writer = self.backAssetWriter else { return nil }
+
+        if writer.status == .writing {
+            await writer.finishWriting()
+            self.backAssetWriterVideoInput?.markAsFinished()
+            return writer.outputURL
+        } else {
+            logDebug("Back Failied \(writer.status)")
+            return nil
+        }
     }
 }

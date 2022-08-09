@@ -40,34 +40,42 @@ extension PiPRecordingViewController {
             }
         }
         
-        switch self.state {
-        case .idle, .error:
-            // Do nothing
-            break
-        case .starting:
-            // Initialize the AVAsset writer to prepare for capture
-            self.recorder.initialize()
-            self.state = .started
-        case .started:
-            
-            if isFrontOutput {
-                self.recorder.startFrontSession(with: sampleBuffer)
-                self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
-            } else {
-                self.recorder.startBackSession(with: sampleBuffer)
-                self.recorder.writeBackSampleToFile(sampleBuffer)
+            switch self.state {
+            case .idle, .error:
+                // Do nothing
+                break
+            case .starting:
+                // Initialize the AVAsset writer to prepare for capture
+                self.recorder.initialize()
+                self.state = .started
+            case .started:
+                
+                if isFrontOutput {
+                    if !self.frontIsSampling {
+                        self.recorder.startFrontSession(with: sampleBuffer)
+                    }
+                    self.frontIsSampling = self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
+                } else {
+                    if !self.backIsSampling {
+                        self.recorder.startBackSession(with: sampleBuffer)
+                    }
+                    self.backIsSampling = self.recorder.writeBackSampleToFile(sampleBuffer)
+                }
+                
+                if self.frontIsSampling, self.backIsSampling {
+                    self.state = .capturing
+                }
+            case .capturing:
+                if isFrontOutput {
+                    self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
+                } else {
+                    self.recorder.writeBackSampleToFile(sampleBuffer)
+                }
+            case .ending:
+                self.recorder.finishWritingVideo()
+                self.backIsSampling = false
+                self.frontIsSampling = false
             }
-            
-            self.state = .capturing
-        case .capturing:
-            if isFrontOutput {
-                self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
-            } else {
-                self.recorder.writeBackSampleToFile(sampleBuffer)
-            }
-        case .ending:
-            self.recorder.finishWritingVideo()
-        }
     }
     
     /// Makes the image black and white, and makes the background clear.

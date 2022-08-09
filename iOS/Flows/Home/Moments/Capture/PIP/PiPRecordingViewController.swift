@@ -31,9 +31,10 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     @Published var state: State = .idle
     
     // Communicate with the session and other session objects on this queue.
-    //private let sessionQueue = DispatchQueue(label: "session queue")
-    let dataOutputQue = DispatchQueue(label: "data output queue")
-    
+    private let sessionQueue = DispatchQueue(label: "session queue")
+    let frontDataOutputQue = DispatchQueue(label: "front data output queue")
+    let backDataOutputQue = DispatchQueue(label: "back data output queue")
+
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
     
@@ -42,6 +43,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     var frontInput: AVCaptureDeviceInput?
     let frontOutput = AVCaptureVideoDataOutput()
+    
+    var backIsSampling: Bool = false
+    var frontIsSampling: Bool = false
     
     var isSessionRunning: Bool {
         return self.session.isRunning
@@ -67,11 +71,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         is a blocking call, which can take a long time. Dispatch session setup
         to the sessionQueue so as not to block the main queue, which keeps the UI responsive.
         */
-//        self.sessionQueue.async {
-//
-//        }
-        
-        self.configureSession()
+        self.sessionQueue.async {
+            self.configureSession()
+        }
         
         self.recorder.didCapturePIPRecording = { [unowned self] recording in
             self.recording = recording
@@ -156,13 +158,17 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     private func beginSession() {
-        guard !self.isSessionRunning else { return }
-        self.session.startRunning()
+        self.sessionQueue.async { [unowned self] in
+            guard !self.isSessionRunning else { return }
+            self.session.startRunning()
+        }
     }
     
     private func endSession() {
-        guard self.isSessionRunning else { return }
-        self.session.stopRunning()
+        self.sessionQueue.async { [unowned self] in
+            guard self.isSessionRunning else { return }
+            self.session.stopRunning()
+        }
     }
     
     private func beginPlayback() {

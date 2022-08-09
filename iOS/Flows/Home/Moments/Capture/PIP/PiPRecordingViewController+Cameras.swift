@@ -11,7 +11,6 @@ import AVFoundation
 
 extension PiPRecordingViewController {
     
-    
     func configureBackCamera() -> Bool {
         self.session.beginConfiguration()
         defer {
@@ -70,7 +69,7 @@ extension PiPRecordingViewController {
             self.backOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
         }
         
-        self.backOutput.setSampleBufferDelegate(self, queue: self.dataOutputQue)
+        self.backOutput.setSampleBufferDelegate(self, queue: self.backDataOutputQue)
                 
         // Connect the back camera device input to the back camera video data output
         let backCameraVideoDataOutputConnection = AVCaptureConnection(inputPorts: [backCameraVideoPort],
@@ -152,7 +151,7 @@ extension PiPRecordingViewController {
             self.frontOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
         }
 
-        self.frontOutput.setSampleBufferDelegate(self, queue: self.dataOutputQue)
+        self.frontOutput.setSampleBufferDelegate(self, queue: self.frontDataOutputQue)
         
         // Connect the front camera device input to the front camera video data output
         let frontCameraVideoDataOutputConnection = AVCaptureConnection(inputPorts: [frontCameraVideoPort],
