@@ -31,6 +31,7 @@ class VideoPreviewView: BaseView {
         self.videoPreviewLayer.videoGravity = .resizeAspectFill
         self.addSubview(self.playbackView)
         self.playbackView.alpha = 0
+        self.playbackView.playerLayer.videoGravity = .resizeAspectFill
     }
     
     override func layoutSubviews() {
