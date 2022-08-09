@@ -29,10 +29,7 @@ class PiPRecorder {
                                      AVVideoCompressionPropertiesKey : [AVVideoQualityKey : 0.5,
                                           kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
     
-    private let backVideoSettings: [String: Any] = [ AVVideoCompressionPropertiesKey: [AVVideoAverageBitRateKey:NSNumber(value:250000)],
-                                                                     AVVideoCodecKey: AVVideoCodecType.h264,
-                                                                    AVVideoHeightKey: 480,
-                                                                     AVVideoWidthKey: 480] as [String: Any]
+    private var backVideoSettings: [String: Any]?
     
     let pixelBufferAttributes: [String: Any] = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
                                                            kCVPixelBufferWidthKey: 480,
@@ -43,9 +40,14 @@ class PiPRecorder {
         
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
-    func initialize() {
+    func initialize(backVideoSettings: [String: Any]?) {
+        self.backVideoSettings = backVideoSettings
         self.initializeFront()
         self.initializeBack()
+    }
+    
+    private func reset() {
+        
     }
     
     private func initializeFront() {
@@ -76,12 +78,12 @@ class PiPRecorder {
         // Create an asset writer that records to a temporary file
         let outputFileName = NSUUID().uuidString + "back"
         let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("mov")
-        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov) else {
+        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov), let settings = self.backVideoSettings else {
             return
         }
-        
+                
         // Add a video input
-        let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: self.backVideoSettings)
+        let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: settings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         if assetWriter.canAdd(assetWriterVideoInput) {
             assetWriter.add(assetWriterVideoInput)

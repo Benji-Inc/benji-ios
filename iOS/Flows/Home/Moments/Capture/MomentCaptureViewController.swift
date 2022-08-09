@@ -55,10 +55,7 @@ import Localization
 
      override func viewDidLayoutSubviews() {
          super.viewDidLayoutSubviews()
-         
-         self.backCameraView.height = self.view.height * 0.75
-         self.backCameraView.pin(.top)
-         
+                  
          self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
          self.label.centerOnX()
          

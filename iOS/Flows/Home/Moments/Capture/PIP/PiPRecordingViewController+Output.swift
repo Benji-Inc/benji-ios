@@ -47,7 +47,8 @@ extension PiPRecordingViewController {
             break
         case .starting:
             // Initialize the AVAsset writer to prepare for capture
-            self.recorder.initialize()
+            let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mov)
+            self.recorder.initialize(backVideoSettings: settings)
             self.state = .started
         case .started:
             
