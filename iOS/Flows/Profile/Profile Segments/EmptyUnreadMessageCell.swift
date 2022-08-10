@@ -10,9 +10,9 @@ import Foundation
 
 class EmptyUnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     
-    typealias ItemType = UserConversationsDataSource.ItemType
+    typealias ItemType = ProfileDataSource.ItemType
     
-    var currentItem: UserConversationsDataSource.ItemType?
+    var currentItem: ProfileDataSource.ItemType?
     
     let titleLabel = ThemeLabel(font: .regular)
     let label = ThemeLabel(font: .small)
@@ -34,7 +34,7 @@ class EmptyUnreadMessagesCell: CollectionViewManagerCell, ManageableCell {
     
     private var loadConversationTask: Task<Void, Never>?
     
-    func configure(with item: UserConversationsDataSource.ItemType) {}
+    func configure(with item: ProfileDataSource.ItemType) {}
     
     override func layoutSubviews() {
         super.layoutSubviews()

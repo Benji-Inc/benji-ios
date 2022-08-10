@@ -9,9 +9,9 @@
 import Foundation
 import StreamChat
 
-class ProfileViewController: DiffableCollectionViewController<UserConversationsDataSource.SectionType,
-                             UserConversationsDataSource.ItemType,
-                             UserConversationsDataSource> {
+class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.SectionType,
+                             ProfileDataSource.ItemType,
+                             ProfileDataSource> {
     
     private var person: PersonType
     
@@ -178,11 +178,11 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.collectionView.centerOnX()
     }
     
-    override func getAllSections() -> [UserConversationsDataSource.SectionType] {
-        return UserConversationsDataSource.SectionType.allCases
+    override func getAllSections() -> [ProfileDataSource.SectionType] {
+        return ProfileDataSource.SectionType.allCases
     }
 
-    override func retrieveDataForSnapshot() async -> [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] {
+    override func retrieveDataForSnapshot() async -> [ProfileDataSource.SectionType : [ProfileDataSource.ItemType]] {
         return [:]
     }
 
@@ -230,7 +230,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             }
             return messages.count > 0
         }).map { convo in
-            return UserConversationsDataSource.ItemType.conversation(convo.cid.description)
+            return ProfileDataSource.ItemType.conversation(convo.cid.description)
         }
         var snapshot = self.dataSource.snapshot()
         snapshot.setItems(items, in: .conversations)

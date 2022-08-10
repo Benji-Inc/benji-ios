@@ -15,7 +15,7 @@ class ProfileCollectionViewLayout: UICollectionViewCompositionalLayout {
         config.scrollDirection = .vertical
 
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = UserConversationsDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = ProfileDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
             switch sectionType {
             case .conversations:

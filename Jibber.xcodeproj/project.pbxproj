@@ -908,7 +908,7 @@
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
 		D6D96EF127C5A07C00BDCD01 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EF027C5A07C00BDCD01 /* ProfileHeaderView.swift */; };
 		D6D96EF427C5B11900BDCD01 /* ContextCuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EF327C5B11900BDCD01 /* ContextCuesViewController.swift */; };
-		D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFA27C5B4EC00BDCD01 /* UserConversationsDataSource.swift */; };
+		D6D96EFB27C5B4EC00BDCD01 /* ProfileDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFA27C5B4EC00BDCD01 /* ProfileDataSource.swift */; };
 		D6D96EFD27C5B50100BDCD01 /* ProfileCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFC27C5B50100BDCD01 /* ProfileCollectionViewLayout.swift */; };
 		D6D96EFF27C5BD3E00BDCD01 /* ProfileSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EFE27C5BD3E00BDCD01 /* ProfileSegmentControl.swift */; };
 		D6D9ECBD281AFA0C000C5C46 /* PersonGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */; };
@@ -1504,7 +1504,7 @@
 		D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		D6D96EF027C5A07C00BDCD01 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		D6D96EF327C5B11900BDCD01 /* ContextCuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCuesViewController.swift; sourceTree = "<group>"; };
-		D6D96EFA27C5B4EC00BDCD01 /* UserConversationsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversationsDataSource.swift; sourceTree = "<group>"; };
+		D6D96EFA27C5B4EC00BDCD01 /* ProfileDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDataSource.swift; sourceTree = "<group>"; };
 		D6D96EFC27C5B50100BDCD01 /* ProfileCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6D96EFE27C5BD3E00BDCD01 /* ProfileSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSegmentControl.swift; sourceTree = "<group>"; };
 		D6D9ECBC281AFA0C000C5C46 /* PersonGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonGradientView.swift; sourceTree = "<group>"; };
@@ -2876,7 +2876,7 @@
 				D60B887E27F933CC00B3E1C2 /* UnreadMessagesCell.swift */,
 				D6D557FD27C9B8AE0024D1CD /* ProfileCollectionView.swift */,
 				D6D96EFC27C5B50100BDCD01 /* ProfileCollectionViewLayout.swift */,
-				D6D96EFA27C5B4EC00BDCD01 /* UserConversationsDataSource.swift */,
+				D6D96EFA27C5B4EC00BDCD01 /* ProfileDataSource.swift */,
 			);
 			path = "Profile Segments";
 			sourceTree = "<group>";
@@ -4013,7 +4013,7 @@
 				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
-				D6D96EFB27C5B4EC00BDCD01 /* UserConversationsDataSource.swift in Sources */,
+				D6D96EFB27C5B4EC00BDCD01 /* ProfileDataSource.swift in Sources */,
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,

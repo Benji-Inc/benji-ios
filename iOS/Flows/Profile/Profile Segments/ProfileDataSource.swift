@@ -1,5 +1,5 @@
 //
-//  UserConversationsDataSource.swift
+//  ProfileDataSource.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 2/22/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class UserConversationsDataSource: CollectionViewDataSource<UserConversationsDataSource.SectionType, UserConversationsDataSource.ItemType> {
+class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType, ProfileDataSource.ItemType> {
     
     enum SectionType: Int, CaseIterable {
         case conversations

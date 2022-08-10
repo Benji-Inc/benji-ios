@@ -8,17 +8,17 @@
 
 import Foundation
 
-struct MomentModel: Hashable {
+struct MomentViewModel: Hashable {
     var date: Date
     var momentId: String?
 }
 
 class MomentCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = MomentModel
+    typealias ItemType = MomentViewModel
     
-    var currentItem: MomentModel?
+    var currentItem: MomentViewModel?
     
-    func configure(with item: MomentModel) {
+    func configure(with item: MomentViewModel) {
         
     }
 }
