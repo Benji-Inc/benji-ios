@@ -334,12 +334,12 @@ class MessageContentView: BaseView {
                 let emotionCounts = expression.emotionCounts
                 self?.emotionCollectionView.setEmotionsCounts(emotionCounts, animated: false)
 
-                self?.authorView.set(expression: expression, author: nil)
+                self?.authorView.set(expression: expression, person: nil)
             } else if let author = await PeopleStore.shared.getPerson(withPersonId: message.authorId) {
 
                 guard !Task.isCancelled else { return }
 
-                self?.authorView.set(expression: nil, author: author)
+                self?.authorView.set(expression: nil, person: author)
                 self?.authorView.set(emotionCounts: [:])
             }
             

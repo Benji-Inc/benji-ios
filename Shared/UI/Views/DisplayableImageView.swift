@@ -45,7 +45,7 @@ class DisplayableImageView: BaseView {
     @Published var state: State = .initial
 
     private(set) var imageView = UIImageView()
-    private let blurView = BlurView()
+    let blurView = BlurView()
     private let animationView = AnimationView()
 
     /// The current task that is asynchronously setting the displayable.

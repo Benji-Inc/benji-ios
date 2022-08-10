@@ -13,8 +13,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = String
     var currentItem: String?
     
-    private let personView = PersonGradientView()
-    //private let videoView = VideoView()
+    private let personView = BorderedPersonView()
     private let label = ThemeLabel(font: .regular, textColor: .whiteWithAlpha)
     
     override func initializeSubviews() {
@@ -42,7 +41,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         Task.onMainActorAsync {
             guard let person = await PeopleStore.shared.getPerson(withPersonId: item) else { return }
             let expression = await MomentsStore.shared.getTodaysMoment(withPersonId: item)?.expression
-            self.personView.set(expression: expression, author: person)
+            self.personView.set(expression: expression, person: person)
             if person.isCurrentUser {
                 self.label.setText(person.givenName + " (You)")
             } else {

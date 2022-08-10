@@ -12,7 +12,9 @@ import Localization
 import UIKit
 
 class OnboardingPersonView: BorderedPersonView {
-    override func setColors(for person: PersonType) {
+    
+    override func set(expression: Expression? = nil, person: PersonType?) {
+        super.set(expression: expression, person: person)
         self.pulseLayer.borderColor = ThemeColor.D6.color.cgColor
         self.shadowLayer.shadowColor = ThemeColor.D6.color.cgColor
     }

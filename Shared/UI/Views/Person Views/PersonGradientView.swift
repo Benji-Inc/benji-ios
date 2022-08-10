@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class PersonGradientView: DisplayableImageView {
     
@@ -33,7 +34,10 @@ class PersonGradientView: DisplayableImageView {
         self.layer.cornerRadius = self.height * self.cornerRadiusRatio
 
         self.emotionGradientView.expandToSuperviewSize()
+        self.emotionGradientView.layer.cornerRadius = self.layer.cornerRadius
+
         self.expressionVideoView.expandToSuperviewSize()
+        self.expressionVideoView.layer.cornerRadius = self.layer.cornerRadius
     }
     
     func getSize(forHeight height: CGFloat) -> CGSize {
@@ -65,18 +69,18 @@ class PersonGradientView: DisplayableImageView {
 
             guard !Task.isCancelled else { return }
 
-            var author: PersonType?
+            var person: PersonType?
             if expression.isNil, let authorId = authorId {
-                author = await PeopleStore.shared.getPerson(withPersonId: authorId)
+                person = await PeopleStore.shared.getPerson(withPersonId: authorId)
             }
 
             guard !Task.isCancelled else { return }
 
-            self.set(expression: expression, author: author)
+            self.set(expression: expression, person: person)
         }
     }
     
-    func set(expression: Expression?, author: PersonType?) {
+    func set(expression: Expression?, person: PersonType?) {
         self.expressionVideoView.expression = expression
         self.expressionVideoView.isVisible = expression.exists
         self.imageView.isVisible = expression.isNil
@@ -84,11 +88,13 @@ class PersonGradientView: DisplayableImageView {
         if let expression = expression {
             self.set(displayable: nil)
             self.set(emotionCounts: expression.emotionCounts)
-        } else if let author = author {
-            self.set(displayable: author)
+        } else if let person = person {
+            self.set(displayable: person)
             self.imageView.isVisible = true
             self.set(emotionCounts: [:])
         }
+        
+        self.blurView.isHidden = true
 
         self.setNeedsLayout()
     }
@@ -103,7 +109,7 @@ class PersonGradientView: DisplayableImageView {
                 
         self.layer.borderWidth = 2
         self.layer.borderColor = last?.withAlphaComponent(0.9).cgColor
-        self.layer.masksToBounds = true
+        self.layer.masksToBounds = false
         
         self.setNeedsLayout()
     }
