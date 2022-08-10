@@ -742,7 +742,7 @@
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6977D6527D1780900A65330 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6977D6427D1780900A65330 /* StreamChat */; };
-		D69972CB28A422A400920998 /* MomentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972CA28A422A400920998 /* MomentStore.swift */; };
+		D69972CB28A422A400920998 /* MomentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972CA28A422A400920998 /* MomentsStore.swift */; };
 		D69D268227FCFD70004B893B /* EmotionContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D268127FCFD70004B893B /* EmotionContentCell.swift */; };
 		D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */; };
 		D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9927C0070C001D8855 /* Achievement.swift */; };
@@ -1385,7 +1385,7 @@
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
-		D69972CA28A422A400920998 /* MomentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentStore.swift; sourceTree = "<group>"; };
+		D69972CA28A422A400920998 /* MomentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsStore.swift; sourceTree = "<group>"; };
 		D69972FD25EAFC18000AEE6A /* NotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContent.entitlements; sourceTree = "<group>"; };
 		D69D268127FCFD70004B893B /* EmotionContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionContentCell.swift; sourceTree = "<group>"; };
 		D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSegmentControl.swift; sourceTree = "<group>"; };
@@ -2740,7 +2740,7 @@
 			children = (
 				D6B95AF2272324BD00FBE66A /* PeopleStore.swift */,
 				D60B887827F7E05500B3E1C2 /* NoticeStore.swift */,
-				D69972CA28A422A400920998 /* MomentStore.swift */,
+				D69972CA28A422A400920998 /* MomentsStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -3675,7 +3675,7 @@
 				D646D36A27E5055D0077D20B /* AttachmentsCollectionViewLayout.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				8056B324281B32A600358880 /* ExpressionVideoCaptureViewController.swift in Sources */,
-				D69972CB28A422A400920998 /* MomentStore.swift in Sources */,
+				D69972CB28A422A400920998 /* MomentsStore.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastBannerView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D6B2B6492839570B007D507B /* ImageSymbol.swift in Sources */,

@@ -13,16 +13,14 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = String
     var currentItem: String?
     
-    private let personView = BorderedPersonView()
-    private let videoView = VideoView()
+    private let personView = PersonGradientView()
+    //private let videoView = VideoView()
     private let label = ThemeLabel(font: .regular, textColor: .whiteWithAlpha)
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.contentView.addSubview(self.personView)
-        // TODO: Layout and size the video view or add it to the person view.
-        self.contentView.addSubview(self.videoView)
         self.contentView.addSubview(self.label)
         self.label.textAlignment = .center
     }
@@ -43,7 +41,8 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         // TODO: Configure the video view.
         Task.onMainActorAsync {
             guard let person = await PeopleStore.shared.getPerson(withPersonId: item) else { return }
-            self.personView.set(person: person)
+            let expression = await MomentsStore.shared.getTodaysMoment(withPersonId: item)?.expression
+            self.personView.set(expression: expression, author: person)
             if person.isCurrentUser {
                 self.label.setText(person.givenName + " (You)")
             } else {
@@ -59,6 +58,6 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         guard let memberCellAttributes = layoutAttributes as? MemberCellLayoutAttributes else { return }
 
         self.contentView.alpha = memberCellAttributes.alpha 
-        self.videoView.shouldPlay = memberCellAttributes.isCentered
+        self.personView.expressionVideoView.shouldPlay = memberCellAttributes.isCentered
     }
 }

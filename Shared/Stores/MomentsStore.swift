@@ -12,9 +12,9 @@ import ParseLiveQuery
 import Parse
 import Localization
 
-class MomentStore {
+class MomentsStore {
 
-    static let shared = MomentStore()
+    static let shared = MomentsStore()
     
     @Published private(set) var todaysMoments: [Moment] = []
     
@@ -52,6 +52,13 @@ class MomentStore {
         }
     }
     
+    func getTodaysMoment(withPersonId personId: String) async -> Moment? {
+        try? await self.initializeIfNeeded()
+        return self.todaysMoments.first { moment in
+            return moment.author?.objectId == personId
+        }
+    }
+    
     func fetchAllMoments(for person: PersonType) async throws -> [Moment] {
         return []
     }
@@ -59,7 +66,36 @@ class MomentStore {
     //MARK: PRIVATE
     
     private func fetchAllOfTodaysMoments() async throws -> [Moment] {
-        return []
+        try await PeopleStore.shared.initializeIfNeeded()
+        
+        var allPeople: [User] = PeopleStore.shared.allConnections
+            .filter({ connection in
+                return connection.status == .accepted
+            })
+            .compactMap { connection in
+            return connection.nonMeUser
+        }
+        
+        allPeople.insert(User.current()!, at: 0)
+                
+        return try await withCheckedThrowingContinuation { continuation in
+            if let query = Moment.query() {
+                query.whereKey("author", containedIn: allPeople)
+                query.includeKey("expression")
+                query.whereKey("createdAt", greaterThan: Date.today)
+                query.findObjectsInBackground { objects, error in
+                    if let moments = objects as? [Moment] {
+                        continuation.resume(returning: moments)
+                    } else if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(throwing: ClientError.apiError(detail: "Failed to retrieve moments"))
+                    }
+                }
+            } else {
+                continuation.resume(throwing: ClientError.apiError(detail: "No query for Moments"))
+            }
+        }
     }
     
     private func subscribeToUpdates() {
