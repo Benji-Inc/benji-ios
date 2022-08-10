@@ -10,20 +10,25 @@ import Foundation
 
 class OrbCollectionViewLayout: UICollectionViewLayout {
 
+    /// The distance between adjacent cells.
     let interimSpace: CGFloat = 160
+    /// How big cells should be at 100% scale
     let itemSize: CGFloat = 160
-    var collectionViewCenter: CGPoint {
-        guard let collectionView = self.collectionView else { return .zero }
-        return CGPoint(x: collectionView.contentOffset.x + collectionView.halfWidth,
-                       y: collectionView.contentOffset.y + collectionView.halfHeight)
-    }
 
     var firstOrbitItemCount: Int = 6 {
         didSet {
             self.invalidateLayout()
         }
     }
-    
+
+    /// The current center center of the collection view, taking its content offset into account.
+    var collectionViewCenter: CGPoint {
+        guard let collectionView = self.collectionView else { return .zero }
+        return CGPoint(x: collectionView.contentOffset.x + collectionView.halfWidth,
+                       y: collectionView.contentOffset.y + collectionView.halfHeight)
+    }
+
+    /// The total number of items that could be displayed. Not necessarily how many are on screen.
     var cellCount: Int {
         guard let sections = self.collectionView?.numberOfSections, sections > 0 else { return 0 }
         return self.collectionView?.numberOfItems(inSection: 0) ?? 0
@@ -41,6 +46,7 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         return CGSize(width: collectionView.width.doubled + 500,
                       height: collectionView.height.doubled + 500)
     }
+
 
     override func prepare() {
         super.prepare()
@@ -79,7 +85,7 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
 
                 currentNormalized += ringNormalizedSegment
 
-                // OPTIMATIZATION: No need to compute more positions than we have items.
+                // OPTIMIZATION: No need to compute more positions than we have items.
                 if self.itemPositions.count >= cellCount {
                     break
                 }
@@ -101,7 +107,8 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+        let layoutClass = type(of: self).layoutAttributesClass as? UICollectionViewLayoutAttributes.Type
+        guard let attributes = layoutClass?.init(forCellWith: indexPath) else { return nil }
 
         let centerPoint = self.getCenter(forIndexPath: indexPath)
         attributes.center = centerPoint
@@ -127,7 +134,7 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
                                              withScrollingVelocity: velocity)
         }
 
-        // Find the item position that is closest to the proposed offset.
+        // Scroll to the item position that is closest to the proposed offset.
         let proposedCenter = CGPoint(x: proposedContentOffset.x + collectionView.halfWidth,
                                      y: proposedContentOffset.y + collectionView.halfHeight)
 
@@ -139,7 +146,6 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
             return super.targetContentOffset(forProposedContentOffset: proposedContentOffset,
                                              withScrollingVelocity: velocity)
         }
-
         return CGPoint(x: closestPosition.x - collectionView.halfWidth,
                        y: closestPosition.y - collectionView.halfHeight)
     }
