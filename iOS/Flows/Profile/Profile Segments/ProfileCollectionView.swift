@@ -1,5 +1,5 @@
 //
-//  UserConversationsCollectionView.swift
+//  ProfileCollectionView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 2/25/22.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-class UserConversationsCollectionView: CollectionView {
+class ProfileCollectionView: CollectionView {
     
     init() {
-        super.init(layout: UserConversationsCollectionViewLayout())
+        super.init(layout: ProfileCollectionViewLayout())
         self.showsVerticalScrollIndicator = false
         
         let padding = Theme.ContentOffset.xtraLong.value

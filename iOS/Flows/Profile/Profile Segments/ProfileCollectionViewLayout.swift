@@ -1,5 +1,5 @@
 //
-//  UserConversationsCollectionViewLayout.swift
+//  ProfileCollectionViewLayout.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 2/22/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class UserConversationsCollectionViewLayout: UICollectionViewCompositionalLayout {
+class ProfileCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
