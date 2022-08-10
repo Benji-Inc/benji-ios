@@ -31,10 +31,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
         
         self.label.setSize(withWidth: self.contentView.width)
-        self.label.pin(.bottom)
+        self.label.match(.top, to: .bottom, of: self.contentView, offset: .standard)
         self.label.centerOnX()
         
-        self.personView.squaredSize = self.contentView.height - 30
+        self.personView.squaredSize = self.contentView.height
         self.personView.centerOnX()
         self.personView.pin(.top)
     }
@@ -58,6 +58,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
         guard let memberCellAttributes = layoutAttributes as? MemberCellLayoutAttributes else { return }
 
+        self.contentView.alpha = memberCellAttributes.alpha 
         self.videoView.shouldPlay = memberCellAttributes.isCentered
     }
 }
