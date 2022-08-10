@@ -11,9 +11,9 @@ import Foundation
 class OrbCollectionViewLayout: UICollectionViewLayout {
 
     /// The distance between adjacent cells.
-    let interimSpace: CGFloat = 160
+    let interimSpace: CGFloat = 190
     /// How big cells should be at 100% scale
-    let itemSize: CGFloat = 160
+    let itemSize: CGFloat = 140
 
     var firstOrbitItemCount: Int = 6 {
         didSet {
@@ -118,9 +118,11 @@ class OrbCollectionViewLayout: UICollectionViewLayout {
         let distanceFromCenter = centerPoint.distanceTo(self.collectionViewCenter)
         let scale = lerpClamped(distanceFromCenter/(self.interimSpace*2),
                                 start: 1,
-                                end: 0.1)
+                                end: 0.2)
+        let alpha: CGFloat = scale >= 0.95 ? 1 : 0.8
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
-
+        attributes.alpha = alpha
+        
         return attributes
     }
 

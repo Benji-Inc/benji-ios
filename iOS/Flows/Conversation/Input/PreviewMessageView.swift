@@ -138,6 +138,6 @@ class PreviewMessageView: SpeechBubbleView {
             return
         }
         
-        self.personGradientView.set(expression: expression, author: nil)
+        self.personGradientView.set(expression: expression, person: nil)
     }
 }

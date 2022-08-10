@@ -60,4 +60,12 @@ class MemberAddCell: CollectionViewManagerCell, ManageableCell {
         self.pulseLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
         self.shadowLayer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: cornerRadius).cgPath
     }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+
+        guard let memberCellAttributes = layoutAttributes as? MemberCellLayoutAttributes else { return }
+
+        self.contentView.alpha = memberCellAttributes.alpha
+    }
 }

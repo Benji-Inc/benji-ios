@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class BorderedPersonView: PersonView {
+class BorderedPersonView: PersonGradientView {
     
     let gradientLayer = GradientLayer(with: [.B0, .B6], startPoint: .topLeft, endPoint: .bottomRight)
     
@@ -63,37 +63,31 @@ class BorderedPersonView: PersonView {
         #if IOS
         self.contextCueView.pin(.right, offset: .negative(.short))
         self.contextCueView.pin(.bottom, offset: .negative(.short))
+        self.bringSubviewToFront(self.contextCueView)
         #endif
     }
 
     @MainActor
-    override func set(person: PersonType?) {
-        super.set(person: person)
-
+    
+    override func set(expression: Expression? = nil, person: PersonType?) {
+        super.set(expression: expression, person: person)
+        
         guard let person = person else { return }
         
-        self.setColors(for: person)
         #if IOS
         self.contextCueView.configure(with: person)
         #endif
+        
+        self.layer.borderWidth = 0 
+        self.pulseLayer.borderColor = self.layer.borderColor
+        self.shadowLayer.shadowColor = self.layer.borderColor
     }
 
     override func didRecieveUpdateFor(person: PersonType) {
         super.didRecieveUpdateFor(person: person)
-        self.setColors(for: person)
         #if IOS
         self.contextCueView.configure(with: person)
         #endif
-    }
-    
-    func setColors(for person: PersonType) {
-        let isAvailable = person.focusStatus == .available
-        let color = isAvailable ? ThemeColor.D6.color.cgColor : ThemeColor.yellow.color.cgColor
-
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.pulseLayer.borderColor = color
-            self.shadowLayer.shadowColor = color
-        }
     }
     
     @MainActor
@@ -101,8 +95,8 @@ class BorderedPersonView: PersonView {
         await super.set(image: image, state: state)
         
         if image.isNil {
-            self.shadowLayer.shadowColor = ThemeColor.B6.color.cgColor
-            self.pulseLayer.borderColor = ThemeColor.B6.color.cgColor
+            self.shadowLayer.shadowColor = self.layer.borderColor
+            self.pulseLayer.borderColor = self.layer.borderColor
             self.pulseLayer.borderWidth = 2
         }
     }

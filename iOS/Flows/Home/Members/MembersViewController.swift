@@ -61,6 +61,7 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
         var data: [MembersDataSource.SectionType: [MembersDataSource.ItemType]] = [:]
         
         try? await PeopleStore.shared.initializeIfNeeded()
+        try? await MomentsStore.shared.initializeIfNeeded()
         
         var items: [MembersDataSource.ItemType] = [.memberId(User.current()!.objectId!)]
         

@@ -53,7 +53,7 @@ class FavoriteExpressionView: BaseView {
     
     func loadExpression() async {
         if let expression = try? await self.favoriteType.getExpression() {
-            self.personView.set(expression: expression, author: User.current())
+            self.personView.set(expression: expression, person: User.current())
             self.label.isVisible = false
         } else {
             self.label.isVisible = true
