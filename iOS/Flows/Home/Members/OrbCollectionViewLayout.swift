@@ -10,7 +10,7 @@ import Foundation
 
 class OrbCollectionViewLayout: UICollectionViewLayout {
 
-    /// The distance from
+    /// The distance between adjacent cells.
     let interimSpace: CGFloat = 160
     /// How big cells should be at 100% scale
     let itemSize: CGFloat = 160
