@@ -63,6 +63,7 @@ class BorderedPersonView: PersonGradientView {
         #if IOS
         self.contextCueView.pin(.right, offset: .negative(.short))
         self.contextCueView.pin(.bottom, offset: .negative(.short))
+        self.bringSubviewToFront(self.contextCueView)
         #endif
     }
 
@@ -77,6 +78,7 @@ class BorderedPersonView: PersonGradientView {
         self.contextCueView.configure(with: person)
         #endif
         
+        self.layer.borderWidth = 0 
         self.pulseLayer.borderColor = self.layer.borderColor
         self.shadowLayer.shadowColor = self.layer.borderColor
     }

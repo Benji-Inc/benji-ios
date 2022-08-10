@@ -62,36 +62,42 @@ class ContextCueView: EmojiCircleView {
     private var animateContextCueTask: Task<Void, Never>?
     
     func configure(with person: PersonType) {
-        // Cancel any currently running swipe hint tasks so we don't trigger the animation multiple times.
+        // Cancel any currently running tasks so we don't trigger the animation multiple times.
         self.newContextCueTask?.cancel()
         self.animateContextCueTask?.cancel()
         
         self.newContextCueTask = Task { [weak self] in
             guard let `self` = self else { return }
             
-            guard let user = person as? User,
-                  let updated = try? await user.latestContextCue?.retrieveDataIfNeeded(),
-                  let createdAt = updated.createdAt,
-                  createdAt.isSameDay(as: Date.today),
-                  !updated.emojis.isEmpty else {
-                      self.isHidden = true
-                      return
-                  }
+            var emojis: [String] = []
+            
+            if let user = person as? User,
+               let updated = try? await user.latestContextCue?.retrieveDataIfNeeded(),
+               let createdAt = updated.createdAt,
+               createdAt.isSameDay(as: Date.today),
+               !updated.emojis.isEmpty {
+                emojis = updated.emojis
+            } else {
+                let status: FocusStatus = person.focusStatus ?? .focused
+                emojis = status == .available ? ["👋"] : ["😴"]
+            }
+            
             if !self.shouldStayHidden {
                 self.isHidden = false
             }
-            await self.animate(emojiIndex: 0, for: updated)
+            
+            await self.animate(emojiIndex: 0, for: emojis)
         }
     }
     
     
-    private func animate(emojiIndex: Int, for contextCue: ContextCue) async {
+    private func animate(emojiIndex: Int, for emojis: [String]) async {
         self.animateContextCueTask?.cancel()
         
-        guard !contextCue.emojis.isEmpty else { return }
+        guard !emojis.isEmpty else { return }
         
         self.animateContextCueTask = Task { [weak self] in
-            if let emoji = contextCue.emojis[safe: emojiIndex] {
+            if let emoji = emojis[safe: emojiIndex] {
                 
                 await UIView.awaitSpringAnimation(with: .slow,
                                                   damping: 0.7,
@@ -120,12 +126,12 @@ class ContextCueView: EmojiCircleView {
                 
                 guard !Task.isCancelled else { return }
 
-                if contextCue.emojis.count > 1 {
-                    await self?.animate(emojiIndex: emojiIndex + 1, for: contextCue)
+                if emojis.count > 1 {
+                    await self?.animate(emojiIndex: emojiIndex + 1, for: emojis)
                 }
 
             } else {
-               await self?.animate(emojiIndex: 0, for: contextCue)
+               await self?.animate(emojiIndex: 0, for: emojis)
             }
         }
     }

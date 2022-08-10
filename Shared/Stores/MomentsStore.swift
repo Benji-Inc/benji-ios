@@ -101,7 +101,7 @@ class MomentsStore {
     private func subscribeToUpdates() {
         Client.shared.shouldPrintWebSocketLog = false
 
-        // Query for all notices related to the user.
+        // Query for all of todays moments.
         let query = Moment.query()!
         let subscription = Client.shared.subscribe(query)
         subscription.handleEvent { query, event in
