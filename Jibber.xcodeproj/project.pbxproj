@@ -542,6 +542,20 @@
 		D63DB29925E999B200F6B323 /* ThemeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* ThemeLabel.swift */; };
 		D63DB29A25E999B200F6B323 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
+		D63F9636289AE2CA004F6C0D /* MomentCaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */; };
+		D63F963A289AE33C004F6C0D /* MomentCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */; };
+		D63F963E289AE3A5004F6C0D /* MomentDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */; };
+		D63F9640289AE3D2004F6C0D /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */; };
+		D63F9642289AE403004F6C0D /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9641289AE403004F6C0D /* Moment.swift */; };
+		D63F9645289B1E81004F6C0D /* PiPRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9644289B1E81004F6C0D /* PiPRecorder.swift */; };
+		D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */; };
+		D63F964A289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */; };
+		D63F964C289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */; };
+		D63F964E289C24ED004F6C0D /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */; };
+		D63F9650289C2B55004F6C0D /* FrontPreviewVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */; };
+		D63F9654289C94BD004F6C0D /* PiPRecordingViewController+Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */; };
+		D63F965828A32043004F6C0D /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F965728A32043004F6C0D /* FileManager+Extensions.swift */; };
+		D63F965928A32043004F6C0D /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F965728A32043004F6C0D /* FileManager+Extensions.swift */; };
 		D640329025AF3CA500139396 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D640329425AF3CA500139396 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
@@ -1233,6 +1247,19 @@
 		D63DB20225E968C300F6B323 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationAction.swift; sourceTree = "<group>"; };
 		D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClipStaging.entitlements; sourceTree = "<group>"; };
+		D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureCoordinator.swift; sourceTree = "<group>"; };
+		D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureViewController.swift; sourceTree = "<group>"; };
+		D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailCoordinator.swift; sourceTree = "<group>"; };
+		D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
+		D63F9641289AE403004F6C0D /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
+		D63F9644289B1E81004F6C0D /* PiPRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecorder.swift; sourceTree = "<group>"; };
+		D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecordingViewController.swift; sourceTree = "<group>"; };
+		D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Costs.swift"; sourceTree = "<group>"; };
+		D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Cameras.swift"; sourceTree = "<group>"; };
+		D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
+		D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrontPreviewVideoView.swift; sourceTree = "<group>"; };
+		D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PiPRecordingViewController+Output.swift"; sourceTree = "<group>"; };
+		D63F965728A32043004F6C0D /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D640328C25AF3CA500139396 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -2018,6 +2045,7 @@
 				D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */,
 				80F1C4D5270E505E00616F01 /* Equatable+Extensions.swift */,
 				D69EB4492457EB4500473530 /* Error+Extensions.swift */,
+				D63F965728A32043004F6C0D /* FileManager+Extensions.swift */,
 				802C448926CC76CC00A333A4 /* Logger.swift */,
 				D642735C22C90C640088256B /* Math Extensions */,
 				D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */,
@@ -2099,6 +2127,40 @@
 			path = "Notification Content";
 			sourceTree = "<group>";
 		};
+		D63F9634289AE27E004F6C0D /* Moments */ = {
+			isa = PBXGroup;
+			children = (
+				D63F9643289B09AD004F6C0D /* Capture */,
+				D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */,
+				D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */,
+			);
+			path = Moments;
+			sourceTree = "<group>";
+		};
+		D63F9643289B09AD004F6C0D /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */,
+				D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */,
+				D63F9648289B29D2004F6C0D /* PIP */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		D63F9648289B29D2004F6C0D /* PIP */ = {
+			isa = PBXGroup;
+			children = (
+				D63F964F289C2B55004F6C0D /* FrontPreviewVideoView.swift */,
+				D63F9644289B1E81004F6C0D /* PiPRecorder.swift */,
+				D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */,
+				D63F964B289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift */,
+				D63F9649289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift */,
+				D63F9653289C94BD004F6C0D /* PiPRecordingViewController+Output.swift */,
+				D63F964D289C24ED004F6C0D /* VideoPreviewView.swift */,
+			);
+			path = PIP;
+			sourceTree = "<group>";
+		};
 		D6405B65236E001A00FAA06B /* Parse Subclasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -2178,11 +2240,12 @@
 		D6617CF326743DFE00439C06 /* Parse Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				8056B325281B448A00358880 /* Expression.swift */,
 				D69D2F9927C0070C001D8855 /* Achievement.swift */,
 				D666126C27E29AED006CDF3D /* AchievementType.swift */,
 				D678EC2326F530850071DB0D /* Circle.swift */,
 				D61A33D027D4F2AE00056242 /* ContextCue.swift */,
+				8056B325281B448A00358880 /* Expression.swift */,
+				D63F9641289AE403004F6C0D /* Moment.swift */,
 				D6617CF426743DFE00439C06 /* Notice.swift */,
 				D6129FB327ADC72E0058811C /* Transaction.swift */,
 			);
@@ -2526,6 +2589,7 @@
 		D6AA61F22852541100FA4D02 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D63F9634289AE27E004F6C0D /* Moments */,
 				D6AA61FD2852603A00FA4D02 /* Conversations */,
 				D6AA61FB2852593500FA4D02 /* HomeCoordinator.swift */,
 				D695374128622F8700CFAF02 /* HomeCoordinator+Wallet.swift */,
@@ -3423,6 +3487,7 @@
 				D61128A92804E5E700574B96 /* CloudFunction.swift in Sources */,
 				D61128A12804E22F00574B96 /* Person.swift in Sources */,
 				D61C1D29284041DE00F58F84 /* PresentableCoordinator.swift in Sources */,
+				D63F965928A32043004F6C0D /* FileManager+Extensions.swift in Sources */,
 				D61128382804DBEE00574B96 /* UICollectionView+Extensions.swift in Sources */,
 				D611280D2804DB5000574B96 /* AppDelegate.swift in Sources */,
 				D61128592804DC3E00574B96 /* ToastBannerView.swift in Sources */,
@@ -3593,6 +3658,8 @@
 				D6AA620D28526FC200FA4D02 /* NoticesViewController.swift in Sources */,
 				D630F2682832F99F00737977 /* PersonConnectionCoordinator.swift in Sources */,
 				80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */,
+				D63F963E289AE3A5004F6C0D /* MomentDetailCoordinator.swift in Sources */,
+				D63F9640289AE3D2004F6C0D /* MomentDetailViewController.swift in Sources */,
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
 				D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
@@ -3680,6 +3747,7 @@
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D637651C27E959E200CCDA7F /* ConversationDetailCell.swift in Sources */,
 				D611F7B42815A136006D09D3 /* SuggestedReply.swift in Sources */,
+				D63F9636289AE2CA004F6C0D /* MomentCaptureCoordinator.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D619C58927F129B70082AD19 /* EmotionsViewController.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
@@ -3692,6 +3760,7 @@
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
 				D6953744286234B600CFAF02 /* NoticeBadgeView.swift in Sources */,
+				D63F9650289C2B55004F6C0D /* FrontPreviewVideoView.swift in Sources */,
 				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D60B885827F2447600B3E1C2 /* MessageReadCell.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
@@ -3736,6 +3805,7 @@
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
 				D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */,
+				D63F9642289AE403004F6C0D /* Moment.swift in Sources */,
 				D60C814622092F6B00A127A3 /* ThemeButton.swift in Sources */,
 				80E228DF27C8132500AF37AC /* MessageDetailCoordinator.swift in Sources */,
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
@@ -3761,6 +3831,8 @@
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,
+				D63F9645289B1E81004F6C0D /* PiPRecorder.swift in Sources */,
+				D63F963A289AE33C004F6C0D /* MomentCaptureViewController.swift in Sources */,
 				D6D4ECCF28613DDF002C71CE /* ConversationSelectionViewController.swift in Sources */,
 				D60B885027F217EB00B3E1C2 /* MessageDetailDataSource.swift in Sources */,
 				D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */,
@@ -3769,8 +3841,10 @@
 				8052574127441EAC00B6DC23 /* Filter+Extensions.swift in Sources */,
 				D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */,
 				D6C64541280F4CEB00C10267 /* PagingIndicatorView.swift in Sources */,
+				D63F964A289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* UserConversationsCollectionViewLayout.swift in Sources */,
+				D63F9654289C94BD004F6C0D /* PiPRecordingViewController+Output.swift in Sources */,
 				D6AA621328528ED100FA4D02 /* MembersDataSource.swift in Sources */,
 				D61A33E127D572F100056242 /* ContextCueCollectionView.swift in Sources */,
 				D637651E27E983FC00CCDA7F /* ConversationInfoCell.swift in Sources */,
@@ -3813,6 +3887,7 @@
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				8068A0062868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
+				D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* MemberAddCell.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
@@ -3849,8 +3924,10 @@
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
+				D63F965828A32043004F6C0D /* FileManager+Extensions.swift in Sources */,
 				D6AA620F2852701D00FA4D02 /* NoticesCollectionViewLayout.swift in Sources */,
 				D67896BF2302683C0059BA75 /* ProfilePhotoCaptureViewController.swift in Sources */,
+				D63F964C289B2DFA004F6C0D /* PiPRecordingViewController+Cameras.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D60B886927F5026700B3E1C2 /* TypingIndicatorView.swift in Sources */,
@@ -3877,6 +3954,7 @@
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
 				D60CA47C27EE2D2700F0871A /* EmojiPickerViewController+Search.swift in Sources */,
 				D646D37627E579310077D20B /* AddMediaView.swift in Sources */,
+				D63F964E289C24ED004F6C0D /* VideoPreviewView.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D60B886027F37BC800B3E1C2 /* MessageMoreCell.swift in Sources */,
 				D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */,

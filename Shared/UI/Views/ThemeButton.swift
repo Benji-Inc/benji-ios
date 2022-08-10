@@ -116,8 +116,8 @@ class ThemeButton: UIButton, Statusable {
                 self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
             }
 
-            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
-            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
+            self.setBackground(color: color.color.withAlphaComponent(0.9).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+            self.setBackground(color: color.color.withAlphaComponent(0.9).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
 
             self.setAttributedTitle(normalString, for: .normal)
             self.setAttributedTitle(highlightedString, for: .highlighted)
@@ -143,8 +143,8 @@ class ThemeButton: UIButton, Statusable {
                 self.setBackground(color: color.color.resolvedColor(with: self.traitCollection), forUIControlState: .normal)
             }
 
-            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
-            self.setBackground(color: color.color.withAlphaComponent(0.3).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
+            self.setBackground(color: color.color.withAlphaComponent(0.9).resolvedColor(with: self.traitCollection), forUIControlState: .highlighted)
+            self.setBackground(color: color.color.withAlphaComponent(0.9).resolvedColor(with: self.traitCollection), forUIControlState: .disabled)
 
             self.setAttributedTitle(normalString, for: .normal)
             self.setAttributedTitle(highlightedString, for: .highlighted)
