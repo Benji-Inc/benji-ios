@@ -143,6 +143,12 @@ extension Date {
         let day = calendar.component(.weekOfYear, from: self)
         return day
     }
+    
+    var weekday: Int {
+        let calendar = Calendar.current
+        let day = calendar.component(.weekday, from: self)
+        return day
+    }
 
     var day: Int {
         let calendar = Calendar.current

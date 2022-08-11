@@ -13,6 +13,7 @@ import Parse
      case author
      case expression
      case file
+     case preview
      case conversationId
  }
 
@@ -35,6 +36,11 @@ import Parse
      var file: PFFileObject? {
          get { self.getObject(for: .file) }
          set { self.setObject(for: .file, with: newValue) }
+     }
+     
+     var preview: PFFileObject? {
+         get { self.getObject(for: .preview) }
+         set { self.setObject(for: .preview, with: newValue) }
      }
 
      var conversationId: String? {

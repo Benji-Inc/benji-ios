@@ -25,7 +25,7 @@ class ProfileSegmentControl: UISegmentedControl {
             self.didSelectSegmentIndex?(.conversations)
         }
         
-        let momentsAction = UIAction(title: "Memories") { _ in
+        let momentsAction = UIAction(title: "Moments") { _ in
             self.didSelectSegmentIndex?(.moments)
         }
             

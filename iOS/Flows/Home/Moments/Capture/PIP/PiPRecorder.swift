@@ -13,6 +13,7 @@ import VideoToolbox
 struct PiPRecording {
     var frontRecordingURL: URL?
     var backRecordingURL: URL?
+    var previewURL: URL?
 }
 
 class PiPRecorder {
@@ -161,9 +162,10 @@ class PiPRecorder {
         self.finishVideoTask = Task {
             let frontURL = await self.stopRecordingFront()
             let backURL = await self.stopRecordingBack()
-            
+            let previewURL = await self.compressVideo(for: backURL)
             let recording = PiPRecording(frontRecordingURL: frontURL,
-                                               backRecordingURL: backURL)
+                                         backRecordingURL: backURL,
+                                         previewURL: previewURL)
             self.didCapturePIPRecording?(recording)
         }
 
@@ -200,5 +202,26 @@ class PiPRecorder {
             logDebug("Back Failied \(writer.status)")
             return nil
         }
+    }
+    
+    private func compressVideo(for inputURL: URL?) async -> URL? {
+        guard let inputURL = inputURL else {
+            return nil 
+        }
+
+        let urlAsset = AVURLAsset(url: inputURL, options: nil)
+        
+        let outputFileName = NSUUID().uuidString + "preview"
+        let outputURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("mov")
+        
+        guard let exportSession = AVAssetExportSession(asset: urlAsset,
+                                                       presetName: AVAssetExportPresetLowQuality) else {
+            return nil
+        }
+        
+        exportSession.outputURL = outputURL
+        exportSession.outputFileType = .mp4
+        await exportSession.export()
+        return outputURL
     }
 }

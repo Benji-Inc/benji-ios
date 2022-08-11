@@ -194,20 +194,43 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
 
         self.loadMomentsTask = Task { [weak self] in
             guard let `self` = self else { return }
-            guard let user = self.person as? User else { return }
-
+            
+            let moments = try? await MomentsStore.shared.getLast14DaysMoments(for: self.person)
             
             var items: [ProfileDataSource.ItemType] = []
             
-            for i in 0...14 {
+            let weekday = Date.today.weekday
+            let daysTillSat = 7 - weekday
+            
+            // Add the rest of the week
+            if daysTillSat > 0 {
+                for i in stride(from: daysTillSat, to: 0, by: -1) {
+                    if let date = Date().add(component: .day, amount: i) {
+                        items.append(.moment(MomentViewModel(date: date)))
+                    }
+                }
+            }
+            
+            // Add past dates
+            for i in stride(from: 0, to: 21 - daysTillSat, by: 1) {
                 if let date = Date().subtract(component: .day, amount: i) {
-                    items.append(.moment(MomentViewModel(date: date)))
+                    if let moment = moments?.first(where: { moment in
+                        if let createdAt = moment.createdAt, createdAt.isSameDay(as: date) {
+                            return true
+                        } else {
+                            return false
+                        }
+                    }) {
+                        items.append(.moment(MomentViewModel(date: date, momentId: moment.objectId!)))
+                    } else {
+                        items.append(.moment(MomentViewModel(date: date)))
+                    }
                 }
             }
             
             var snapshot = self.dataSource.snapshot()
             snapshot.setItems([], in: .conversations)
-            snapshot.setItems(items, in: .moments)
+            snapshot.setItems(items.reversed(), in: .moments)
             await self.dataSource.apply(snapshot)
             
         }.add(to: self.autocancelTaskPool)
@@ -264,5 +287,15 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
         snapshot.setItems(items, in: .conversations)
         
         await self.dataSource.apply(snapshot)
+    }
+}
+
+extension Calendar {
+    func numberOfDaysBetween(_ from: Date, and to: Date) -> Int {
+        let fromDate = startOfDay(for: from) // <1>
+        let toDate = startOfDay(for: to) // <2>
+        let numberOfDays = dateComponents([.day], from: fromDate, to: toDate) // <3>
+        
+        return numberOfDays.day!
     }
 }

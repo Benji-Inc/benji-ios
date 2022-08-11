@@ -59,8 +59,29 @@ class MomentsStore {
         }
     }
     
-    func fetchAllMoments(for person: PersonType) async throws -> [Moment] {
-        return []
+    func getLast14DaysMoments(for person: PersonType) async throws -> [Moment] {
+        return try await withCheckedThrowingContinuation { continuation in
+            if let query = Moment.query(),
+                let user = person as? User,
+                let daysAgoDate = Date.today.subtract(component: .day, amount: 14) {
+                
+                query.whereKey("author", equalTo: user)
+                query.includeKey("expression")
+                query.includeKey("preview")
+                query.whereKey("createdAt", greaterThan: daysAgoDate)
+                query.findObjectsInBackground { objects, error in
+                    if let moments = objects as? [Moment] {
+                        continuation.resume(returning: moments)
+                    } else if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(throwing: ClientError.apiError(detail: "Failed to retrieve moments"))
+                    }
+                }
+            } else {
+                continuation.resume(throwing: ClientError.apiError(detail: "No query for Moments"))
+            }
+        }
     }
     
     //MARK: PRIVATE
@@ -82,6 +103,7 @@ class MomentsStore {
             if let query = Moment.query() {
                 query.whereKey("author", containedIn: allPeople)
                 query.includeKey("expression")
+                query.includeKey("preview")
                 query.whereKey("createdAt", greaterThan: Date.today)
                 query.findObjectsInBackground { objects, error in
                     if let moments = objects as? [Moment] {
