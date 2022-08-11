@@ -12,9 +12,11 @@ class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType,
     
     enum SectionType: Int, CaseIterable {
         case conversations
+        case moments
     }
     
     enum ItemType: Hashable {
+        case moment(MomentViewModel)
         case conversation(String)
         case unreadMessages(UnreadMessagesModel)
         case empty
@@ -23,12 +25,20 @@ class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType,
     let config = ManageableCellRegistration<ConversationCell>().provider
     let unreadConfig = ManageableCellRegistration<UnreadMessagesCell>().provider
     let emptyConfig = ManageableCellRegistration<EmptyUnreadMessagesCell>().provider
+    let momentConfig = ManageableCellRegistration<MomentCell>().provider
+    
+    private let headerConfig = ManageableHeaderRegistration<MomentsHeaderView>().provider
+    private let footerConfig = ManageableFooterRegistration<MomentsFooterView>().provider
     
     weak var messageContentDelegate: MessageContentDelegate?
     
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
         
         switch item {
+        case .moment(let model):
+            return collectionView.dequeueConfiguredReusableCell(using: self.momentConfig,
+                                                                for: indexPath,
+                                                                item: model)
         case .conversation(let conversationId):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                     for: indexPath,
@@ -45,6 +55,22 @@ class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType,
             return collectionView.dequeueConfiguredReusableCell(using: self.emptyConfig,
                                                                 for: indexPath,
                                                                 item: item)
+        }
+    }
+    
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
+                                           section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+        guard section == .moments else { return nil }
+        
+        switch kind {
+        case UICollectionView.elementKindSectionFooter:
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+        case UICollectionView.elementKindSectionHeader:
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+        default:
+            return nil 
         }
     }
 }

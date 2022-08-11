@@ -85,7 +85,7 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             case .conversations:
                 self.startLoadAllTask()
             case .moments:
-                break
+                self.startLoadAllMoments()
             }
         }
         
@@ -185,6 +185,33 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
     override func retrieveDataForSnapshot() async -> [ProfileDataSource.SectionType : [ProfileDataSource.ItemType]] {
         return [:]
     }
+    
+    /// The currently running task that is loading conversations.
+    private var loadMomentsTask: Task<Void, Never>?
+    
+    private func startLoadAllMoments() {
+        self.loadMomentsTask?.cancel()
+
+        self.loadMomentsTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            guard let user = self.person as? User else { return }
+
+            
+            var items: [ProfileDataSource.ItemType] = []
+            
+            for i in 0...14 {
+                if let date = Date().subtract(component: .day, amount: i) {
+                    items.append(.moment(MomentViewModel(date: date)))
+                }
+            }
+            
+            var snapshot = self.dataSource.snapshot()
+            snapshot.setItems([], in: .conversations)
+            snapshot.setItems(items, in: .moments)
+            await self.dataSource.apply(snapshot)
+            
+        }.add(to: self.autocancelTaskPool)
+    }
 
     // MARK: - Conversation Loading
 
@@ -233,6 +260,7 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             return ProfileDataSource.ItemType.conversation(convo.cid.description)
         }
         var snapshot = self.dataSource.snapshot()
+        snapshot.setItems([], in: .moments)
         snapshot.setItems(items, in: .conversations)
         
         await self.dataSource.apply(snapshot)
