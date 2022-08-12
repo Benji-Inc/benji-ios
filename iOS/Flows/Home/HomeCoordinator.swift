@@ -81,7 +81,7 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
             case .updateVibe:
                 self.presentVibeCreator()
             case .newMoment:
-                self.presentMoment()
+                self.presentMomentCapture()
             }
         }
         

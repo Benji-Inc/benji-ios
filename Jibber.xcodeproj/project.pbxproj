@@ -544,8 +544,8 @@
 		D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D63F9636289AE2CA004F6C0D /* MomentCaptureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */; };
 		D63F963A289AE33C004F6C0D /* MomentCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */; };
-		D63F963E289AE3A5004F6C0D /* MomentDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */; };
-		D63F9640289AE3D2004F6C0D /* MomentDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */; };
+		D63F963E289AE3A5004F6C0D /* MomentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */; };
+		D63F9640289AE3D2004F6C0D /* MomentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F963F289AE3D2004F6C0D /* MomentViewController.swift */; };
 		D63F9642289AE403004F6C0D /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9641289AE403004F6C0D /* Moment.swift */; };
 		D63F9645289B1E81004F6C0D /* PiPRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9644289B1E81004F6C0D /* PiPRecorder.swift */; };
 		D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */; };
@@ -819,6 +819,8 @@
 		D6AE0FFF267D2D9B00C6B048 /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
 		D6AF4AB528A58AEA00225F37 /* MomentsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4AB428A58AEA00225F37 /* MomentsHeaderView.swift */; };
 		D6AF4AB728A58B0C00225F37 /* MomentsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4AB628A58B0C00225F37 /* MomentsFooterView.swift */; };
+		D6AF4ABA28A6CFE600225F37 /* MomentVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */; };
+		D6AF4ABC28A6EA8200225F37 /* MomentExpressiontVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */; };
 		D6B00D3C2796480D00DF07B1 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D6B00D3B2796480D00DF07B1 /* loading.json */; };
 		D6B00D3D2796480D00DF07B1 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D6B00D3B2796480D00DF07B1 /* loading.json */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
@@ -1258,8 +1260,8 @@
 		D63DC4FA28075C4F00867A7F /* AppClipStaging.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClipStaging.entitlements; sourceTree = "<group>"; };
 		D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureCoordinator.swift; sourceTree = "<group>"; };
 		D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCaptureViewController.swift; sourceTree = "<group>"; };
-		D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailCoordinator.swift; sourceTree = "<group>"; };
-		D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentDetailViewController.swift; sourceTree = "<group>"; };
+		D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCoordinator.swift; sourceTree = "<group>"; };
+		D63F963F289AE3D2004F6C0D /* MomentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentViewController.swift; sourceTree = "<group>"; };
 		D63F9641289AE403004F6C0D /* Moment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moment.swift; sourceTree = "<group>"; };
 		D63F9644289B1E81004F6C0D /* PiPRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecorder.swift; sourceTree = "<group>"; };
 		D63F9646289B2758004F6C0D /* PiPRecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPRecordingViewController.swift; sourceTree = "<group>"; };
@@ -1442,6 +1444,8 @@
 		D6AE0FAA267D037900C6B048 /* User+INPerson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+INPerson.swift"; sourceTree = "<group>"; };
 		D6AF4AB428A58AEA00225F37 /* MomentsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsHeaderView.swift; sourceTree = "<group>"; };
 		D6AF4AB628A58B0C00225F37 /* MomentsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsFooterView.swift; sourceTree = "<group>"; };
+		D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentVideoView.swift; sourceTree = "<group>"; };
+		D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentExpressiontVideoView.swift; sourceTree = "<group>"; };
 		D6B00D3B2796480D00DF07B1 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2B646283596C9007D507B /* MediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewController.swift; sourceTree = "<group>"; };
@@ -2144,8 +2148,7 @@
 			isa = PBXGroup;
 			children = (
 				D63F9643289B09AD004F6C0D /* Capture */,
-				D63F963D289AE3A5004F6C0D /* MomentDetailCoordinator.swift */,
-				D63F963F289AE3D2004F6C0D /* MomentDetailViewController.swift */,
+				D6AF4AB828A6CD2800225F37 /* Detail */,
 			);
 			path = Moments;
 			sourceTree = "<group>";
@@ -2718,6 +2721,17 @@
 				D6AE0FAA267D037900C6B048 /* User+INPerson.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		D6AF4AB828A6CD2800225F37 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */,
+				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
+				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
+				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 		D6B2603622E6AA3800143CF0 /* Input */ = {
@@ -3687,8 +3701,8 @@
 				D6AA620D28526FC200FA4D02 /* NoticesViewController.swift in Sources */,
 				D630F2682832F99F00737977 /* PersonConnectionCoordinator.swift in Sources */,
 				80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */,
-				D63F963E289AE3A5004F6C0D /* MomentDetailCoordinator.swift in Sources */,
-				D63F9640289AE3D2004F6C0D /* MomentDetailViewController.swift in Sources */,
+				D63F963E289AE3A5004F6C0D /* MomentCoordinator.swift in Sources */,
+				D63F9640289AE3D2004F6C0D /* MomentViewController.swift in Sources */,
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
 				D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
@@ -3857,6 +3871,7 @@
 				D6AA61F42852542A00FA4D02 /* HomeViewController.swift in Sources */,
 				809EDC6A273ECBC300597473 /* ConversationListController+Extensions.swift in Sources */,
 				80D5C28E281719B200182DB6 /* EmotionDetailCollectionViewLayout.swift in Sources */,
+				D6AF4ABC28A6EA8200225F37 /* MomentExpressiontVideoView.swift in Sources */,
 				D6D1CD982888CBED00382E07 /* FavoriteExpressionView.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
@@ -3968,6 +3983,7 @@
 				8028C9E9273ECB1200520465 /* ConversationViewController.swift in Sources */,
 				D6D557FE27C9B8AE0024D1CD /* ProfileCollectionView.swift in Sources */,
 				D66A580525DD68F9001B3F64 /* PeopleCoordinator.swift in Sources */,
+				D6AF4ABA28A6CFE600225F37 /* MomentVideoView.swift in Sources */,
 				8059AD4C27851162004330DC /* ChatUser+Extensions.swift in Sources */,
 				D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D60B885227F2181900B3E1C2 /* MessageDetailCollectionView.swift in Sources */,

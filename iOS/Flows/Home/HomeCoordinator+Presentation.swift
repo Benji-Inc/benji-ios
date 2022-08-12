@@ -83,27 +83,44 @@ extension HomeCoordinator {
     }
     
     func presentProfile(for person: PersonType) {
-        self.removeChild()
         
-        let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
-        
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.homeVC.dismiss(animated: true) { [unowned self] in
-                switch result {
-                case .conversation(let cid):
-                    self.presentConversation(with: cid.description, messageId: nil)
-                case .openReplies(let message):
-                    self.presentConversation(with: message.conversationId,
-                                             messageId: message.id,
-                                             openReplies: false)
+        Task.onMainActorAsync {
+            if let moment = await MomentsStore.shared.getTodaysMoment(withPersonId: person.personId) {
+                self.presentMoment(with: moment)
+            } else {
+                self.removeChild()
+                
+                let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+                
+                self.addChildAndStart(coordinator) { [unowned self] result in
+                    self.homeVC.dismiss(animated: true) { [unowned self] in
+                        switch result {
+                        case .conversation(let cid):
+                            self.presentConversation(with: cid.description, messageId: nil)
+                        case .openReplies(let message):
+                            self.presentConversation(with: message.conversationId,
+                                                     messageId: message.id,
+                                                     openReplies: false)
+                        }
+                    }
                 }
+                
+                self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
             }
         }
+    }
+    
+    func presentMoment(with moment: Moment) {
+        self.removeChild()
         
+        let coordinator = MomentCoordinator(moment: moment, router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.homeVC.dismiss(animated: true)
+        }
         self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
     }
     
-    func presentMoment() {
+    func presentMomentCapture() {
         if MomentsStore.shared.hasRecordedToday {
             let alert = UIAlertController(title: "Todays Moment", message: "You have already recorded todays moment. You can record another one tomorrow.", preferredStyle: .alert)
             

@@ -1,5 +1,5 @@
 //
-//  MomentDetailCoordinator.swift
+//  MomentCoordinator.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 8/3/22.
@@ -9,12 +9,12 @@
 import Foundation
 import Coordinator
 
- class MomentDetailCoordinator: PresentableCoordinator<Void> {
+ class MomentCoordinator: PresentableCoordinator<Void> {
 
      private let moment: Moment
 
-     private lazy var momentDetailVC: MomentDetailViewController = {
-         return MomentDetailViewController(with: self.moment)
+     private lazy var momentVC: MomentViewController = {
+         return MomentViewController(with: self.moment)
      }()
 
      init(moment: Moment,
@@ -27,6 +27,6 @@ import Coordinator
      }
 
      override func toPresentable() -> DismissableVC {
-         return self.momentDetailVC
+         return self.momentVC
      }
  }
