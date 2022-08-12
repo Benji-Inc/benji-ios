@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Lottie
 
 struct MomentViewModel: Hashable {
     var date: Date
@@ -19,7 +20,8 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: MomentViewModel?
     let label = ThemeLabel(font: .regularBold)
     let videoView = VideoView()
-    
+    let animationView = AnimationView.with(animation: .loading)
+
     override func initializeSubviews() {
         super.initializeSubviews()
         
@@ -32,10 +34,15 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.label)
         self.label.textAlignment = .center
+        self.label.alpha = 0
+        
+        self.contentView.addSubview(self.animationView)
+        self.animationView.loopMode = .loop
     }
     
     func configure(with item: MomentViewModel) {
         
+        self.label.alpha = item.momentId.exists ? 0 : 1.0
         self.label.text = ""
         
         if let daysAgo = Date.today.subtract(component: .day, amount: 14), item.date.isBetween(Date.today, and: daysAgo) {
@@ -45,10 +52,19 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         }
         
         Task {
-            if let previewURL = try? await Moment.getObject(with: item.momentId).preview?.retrieveCachedPathURL() {
-                self.videoView.videoURL = previewURL
+            if let momentId = item.momentId {
+                self.animationView.play()
+                if let previewURL = try? await Moment.getObject(with: momentId).preview?.retrieveCachedPathURL() {
+                    self.videoView.videoURL = previewURL
+                }
+                self.animationView.stop()
+            }
+            
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.label.alpha = 1
             }
         }
+        
         self.setNeedsLayout()
     }
     
@@ -59,11 +75,15 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         
         self.label.setSize(withWidth: self.width)
         self.label.centerOnXAndY()
+        
+        self.animationView.size = CGSize(width: 10, height: 10)
+        self.animationView.centerOnXAndY()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        self.animationView.stop()
         self.label.text = ""
         self.videoView.videoURL = nil 
     }

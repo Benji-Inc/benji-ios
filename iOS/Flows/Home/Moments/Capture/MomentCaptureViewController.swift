@@ -22,7 +22,7 @@ import Localization
 
      var didCompleteMoment: ((Moment) -> Void)? = nil
 
-     static let maxDuration: TimeInterval = 3.0
+     static let maxDuration: TimeInterval = 6.0
      let cornerRadius: CGFloat = 30
 
      override func initializeViews() {
