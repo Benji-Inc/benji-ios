@@ -105,7 +105,7 @@ extension HomeCoordinator {
     
     func presentMoment() {
         if MomentsStore.shared.hasRecordedToday {
-            let alert = UIAlertController(title: "Moment already recorded", message: "You have already recorded todays moment. You can record another one tomorrow.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Todays Moment", message: "You have already recorded todays moment. You can record another one tomorrow.", preferredStyle: .alert)
             
             let cancel = UIAlertAction(title: "Ok", style: .cancel)
             
