@@ -21,7 +21,6 @@ class MomentViewController: ViewController {
     enum State {
         case initial
         case loading
-        case blocked
         case playback
     }
     
@@ -54,18 +53,13 @@ class MomentViewController: ViewController {
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
         
-        Task {
-            guard let expression = self.moment.expression else { return }
-            self.expressionView.expression = expression
-            self.expressionView.shouldPlay = true
-            
-            self.momentView.moment = self.moment
-            self.momentView.shouldPlay = true
-        }
+        self.$state
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
+                self.handle(state: state)
+            }.store(in: &self.cancellables)
         
-        //Load moment
-        //Check if user has recorded
-        //Show blur/button OR moment if recorded
+        self.state = .loading
     }
     
     override func viewDidLayoutSubviews() {
@@ -78,5 +72,27 @@ class MomentViewController: ViewController {
         self.expressionView.pinToSafeAreaLeft()
         
         self.blurView.expandToSuperviewSize()
+    }
+    
+    private func handle(state: State) {
+        switch state {
+        case .initial:
+            break
+        case .loading:
+            
+            self.blurView.configure(for: self.moment)
+            self.expressionView.expression = self.moment.expression
+            
+            if MomentsStore.shared.hasRecordedToday {
+                self.blurView.animateBlur(shouldShow: false)
+                self.momentView.loadFullMoment(for: self.moment)
+                self.state = .playback
+            } else {
+                self.blurView.animateBlur(shouldShow: true)
+                self.momentView.loadPreview(for: self.moment)
+            }
+        case .playback:
+            break
+        }
     }
 }

@@ -11,7 +11,7 @@ import Foundation
 class MomentBlurView: BaseView {
     
     let blurEffect = UIBlurEffect(style: .systemThinMaterial)
-    lazy var blurredEffectView = UIVisualEffectView(effect: self.blurEffect)
+    lazy var blurredEffectView = UIVisualEffectView(effect: nil)
     lazy var vibrancyEffectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: self.blurEffect))
     
     let imageView = SymbolImageView(symbol: .eyeSlash)
@@ -30,10 +30,27 @@ class MomentBlurView: BaseView {
         
         self.vibrancyEffectView.contentView.addSubview(self.label)
         self.label.textAlignment = .center
-        self.label.setText("To view this moment, first share one of yours.")
         
         self.addSubview(self.button)
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Record Moment"))
+    }
+    
+    func configure(for moment: Moment) {
+        Task {
+            guard let person = try? await moment.author?.retrieveDataIfNeeded() else { return }
+            
+            self.label.setText("To view this Moment from \(person.givenName),\nfirst share one of yours.")
+            self.layoutNow()
+        }
+    }
+    
+    func animateBlur(shouldShow: Bool) {
+        Task {
+            await UIView.awaitAnimation(with: .fast) {
+                self.blurredEffectView.effect = shouldShow ? self.blurEffect : nil
+                self.layoutNow()
+            }
+        }
     }
     
     override func layoutSubviews() {
@@ -50,7 +67,12 @@ class MomentBlurView: BaseView {
         self.imageView.centerOnX()
         
         self.button.setSize(with: self.width)
-        self.button.pinToSafeAreaBottom()
         self.button.centerOnX()
+        
+        if self.blurredEffectView.effect.exists {
+            self.button.pinToSafeAreaBottom()
+        } else {
+            self.button.top = self.height
+        }
     }
 }

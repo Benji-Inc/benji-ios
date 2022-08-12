@@ -43,7 +43,9 @@ import Coordinator
          
          let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
          self.addChildAndStart(coordinator) { [unowned self] result in
-             self.momentVC.dismiss(animated: true)
+             self.momentVC.dismiss(animated: true) {
+                 self.momentVC.state = .loading
+             }
          }
          self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
      }

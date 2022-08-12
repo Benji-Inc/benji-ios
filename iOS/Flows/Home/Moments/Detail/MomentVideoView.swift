@@ -7,38 +7,35 @@
 //
 
 import Foundation
+import Parse
 
 class MomentVideoView: VideoView {
-
-    var moment: Moment? {
-        didSet {
-            // Only update the video if this is a new moment.
-            guard self.moment != oldValue else { return }
-
-            self.videoURL = nil
-            self.updatePlayer()
-        }
-    }
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.shouldPlay = true 
         self.playerLayer.videoGravity = .resizeAspectFill
+    }
+    
+    func loadPreview(for moment: Moment) {
+        guard let preview = moment.preview else { return }
+        self.updatePlayer(with: preview)
+    }
+    
+    func loadFullMoment(for moment: Moment) {
+        guard let file = moment.file else { return }
+        self.updatePlayer(with: file)
     }
     
     /// The currently running task that loads the video url.
     private var loadTask: Task<Void, Never>?
     
-    private func updatePlayer() {
+    private func updatePlayer(with file: PFFileObject) {
         self.loadTask?.cancel()
 
-        guard let moment = self.moment else {
-            self.videoURL = nil
-            return
-        }
-
         self.loadTask = Task { [weak self] in
-            guard let videoURL = try? await moment.file?.retrieveCachedPathURL(),
+            guard let videoURL = try? await file.retrieveCachedPathURL(),
                   videoURL != self?.videoURL else { return }
 
             guard !Task.isCancelled else { return }

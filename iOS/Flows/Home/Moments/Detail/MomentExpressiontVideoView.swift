@@ -25,6 +25,7 @@ class MomentExpressiontVideoView: VideoView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.shouldPlay = true 
         self.insertSubview(self.emotionGradientView, at: 0)
         self.emotionGradientView.alpha = 0.75
         
