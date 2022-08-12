@@ -9,9 +9,9 @@
 import Foundation
 import StreamChat
 
-class ProfileViewController: DiffableCollectionViewController<UserConversationsDataSource.SectionType,
-                             UserConversationsDataSource.ItemType,
-                             UserConversationsDataSource> {
+class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.SectionType,
+                             ProfileDataSource.ItemType,
+                             ProfileDataSource> {
     
     private var person: PersonType
     
@@ -26,7 +26,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
                                                   startPoint: .topCenter,
                                                   endPoint: .bottomCenter)
     private let backgroundView = BaseView()
-    lazy var segmentControl = ConversationsSegmentControl()
+    lazy var segmentControl = ProfileSegmentControl()
     
     private(set) var conversationListController: ConversationListController?
     
@@ -38,7 +38,7 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             
     init(with person: PersonType) {
         self.person = person
-        super.init(with: UserConversationsCollectionView())
+        super.init(with: ProfileCollectionView())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -82,12 +82,10 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         
         self.segmentControl.didSelectSegmentIndex = { [unowned self] index in
             switch index {
-            case .recents:
-                self.startLoadRecentTask()
-            case .all:
+            case .conversations:
                 self.startLoadAllTask()
-            case .unread:
-                self.startLoadingUnreadConversations()
+            case .moments:
+                self.startLoadAllMoments()
             }
         }
         
@@ -119,13 +117,9 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
 
             self.header.configure(with: updatedPerson)
             self.loadInitialData()
-            if !updatedPerson.isCurrentUser {
-                self.segmentControl.removeSegment(at: 0, animated: false)
-                self.segmentControl.selectedSegmentIndex = 0
-            } else {
-                self.segmentControl.selectedSegmentIndex = 1
-            }
-            self.startLoadRecentTask()
+            
+            self.segmentControl.selectedSegmentIndex = 0
+            self.startLoadAllTask()
 
             self.view.setNeedsLayout()
         }.add(to: self.autocancelTaskPool)
@@ -184,92 +178,68 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
         self.collectionView.centerOnX()
     }
     
-    override func getAllSections() -> [UserConversationsDataSource.SectionType] {
-        return UserConversationsDataSource.SectionType.allCases
+    override func getAllSections() -> [ProfileDataSource.SectionType] {
+        return ProfileDataSource.SectionType.allCases
     }
 
-    override func retrieveDataForSnapshot() async -> [UserConversationsDataSource.SectionType : [UserConversationsDataSource.ItemType]] {
+    override func retrieveDataForSnapshot() async -> [ProfileDataSource.SectionType : [ProfileDataSource.ItemType]] {
         return [:]
+    }
+    
+    /// The currently running task that is loading conversations.
+    private var loadMomentsTask: Task<Void, Never>?
+    
+    private func startLoadAllMoments() {
+        self.loadMomentsTask?.cancel()
+
+        self.loadMomentsTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            let moments = try? await MomentsStore.shared.getLast14DaysMoments(for: self.person)
+            
+            var items: [ProfileDataSource.ItemType] = []
+            
+            let weekday = Date.today.weekday
+            let daysTillSat = 7 - weekday
+            
+            // Add the rest of the week
+            if daysTillSat > 0 {
+                for i in stride(from: daysTillSat, to: 0, by: -1) {
+                    if let date = Date().add(component: .day, amount: i) {
+                        items.append(.moment(MomentViewModel(date: date)))
+                    }
+                }
+            }
+            
+            // Add past dates
+            for i in stride(from: 0, to: 21 - daysTillSat, by: 1) {
+                if let date = Date().subtract(component: .day, amount: i) {
+                    if let moment = moments?.first(where: { moment in
+                        if let createdAt = moment.createdAt, createdAt.isSameDay(as: date) {
+                            return true
+                        } else {
+                            return false
+                        }
+                    }) {
+                        items.append(.moment(MomentViewModel(date: date, momentId: moment.objectId!)))
+                    } else {
+                        items.append(.moment(MomentViewModel(date: date)))
+                    }
+                }
+            }
+            
+            var snapshot = self.dataSource.snapshot()
+            snapshot.setItems([], in: .conversations)
+            snapshot.setItems(items.reversed(), in: .moments)
+            await self.dataSource.apply(snapshot)
+            
+        }.add(to: self.autocancelTaskPool)
     }
 
     // MARK: - Conversation Loading
 
     /// The currently running task that is loading conversations.
     private var loadConversationsTask: Task<Void, Never>?
-
-    private func startLoadingUnreadConversations() {
-        self.loadConversationsTask?.cancel()
-
-        self.loadConversationsTask = Task { [weak self] in
-            guard let `self` = self else { return }
-            
-            try? await NoticeStore.shared.initializeIfNeeded()
-            
-            if let unreadNotice = NoticeStore.shared.notices.first(where: { system in
-                return system.notice?.type == .unreadMessages
-            }) {
-                
-                let models: [UnreadMessagesModel] = unreadNotice.notice?.unreadConversations.compactMap({ dict in
-                    return UnreadMessagesModel(conversationId: dict.key, messageIds: dict.value)
-                }) ?? []
-                
-                // Only show unread message models for messages that the person is the author of UNLESS currentUser.
-                var items: Set<UserConversationsDataSource.ItemType> = []
-                
-                if person.isCurrentUser {
-                    await models.asyncForEach({ model in
-                        await model.messageIds.asyncForEach { messageId in
-                            let controller = JibberChatClient.shared.messageController(for: model.conversationId, id: messageId)
-                            try? await controller?.synchronize()
-                            if let msg = controller?.message, msg.author.personId == self.person.personId {
-                                items.insert(.unreadMessages(model))
-                            }
-                        }
-                    })
-                } else {
-                    models.forEach { model in
-                        items.insert(.unreadMessages(model))
-                    }
-                }
-                
-                if items.isEmpty {
-                    items = [.empty]
-                }
-                
-                var snapshot = self.dataSource.snapshot()
-                snapshot.setItems(Array(items), in: .conversations)
-
-                await self.dataSource.apply(snapshot)
-            } else {
-                var snapshot = self.dataSource.snapshot()
-                snapshot.setItems([.empty], in: .conversations)
-                await self.dataSource.apply(snapshot)
-            }
-        }.add(to: self.autocancelTaskPool)
-    }
-
-    private func startLoadRecentTask() {
-        self.loadConversationsTask?.cancel()
-
-        self.loadConversationsTask = Task { [weak self] in
-            guard let user = self?.person as? User else { return }
-
-            var userIds: [String] = []
-            if user.isCurrentUser {
-                userIds.append(user.objectId!)
-            } else {
-                userIds = [User.current()!.objectId!, user.objectId!]
-            }
-
-            let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
-            let query = ChannelListQuery(filter: filter,
-                                         sort: [Sorting(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 5,
-                                         messagesLimit: 1)
-            
-            await self?.loadConversations(with: query)
-        }.add(to: self.autocancelTaskPool)
-    }
     
     private func startLoadAllTask() {
         self.loadConversationsTask?.cancel()
@@ -310,9 +280,10 @@ class ProfileViewController: DiffableCollectionViewController<UserConversationsD
             }
             return messages.count > 0
         }).map { convo in
-            return UserConversationsDataSource.ItemType.conversation(convo.cid.description)
+            return ProfileDataSource.ItemType.conversation(convo.cid.description)
         }
         var snapshot = self.dataSource.snapshot()
+        snapshot.setItems([], in: .moments)
         snapshot.setItems(items, in: .conversations)
         
         await self.dataSource.apply(snapshot)

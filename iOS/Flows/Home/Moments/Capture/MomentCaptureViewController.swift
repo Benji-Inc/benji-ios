@@ -22,7 +22,7 @@ import Localization
 
      var didCompleteMoment: ((Moment) -> Void)? = nil
 
-     static let maxDuration: TimeInterval = 3.0
+     static let maxDuration: TimeInterval = 6.0
      let cornerRadius: CGFloat = 30
 
      override func initializeViews() {
@@ -109,41 +109,14 @@ import Localization
      }
 
      private func createMoment(from recording: PiPRecording) async -> Moment? {
-         guard let expressionURL = recording.frontRecordingURL,
-                let momentURL = recording.backRecordingURL else { return nil }
-         
          await self.doneButton.handleEvent(status: .loading)
-
-         let expressionData = try! Data(contentsOf: expressionURL)
-         let momentData = try! Data(contentsOf: momentURL)
-
-         let expression = Expression()
-
-         expression.author = User.current()
-         expression.file = PFFileObject(name: "expression.mov", data: expressionData)
-         expression.emojiString = nil
-
-         guard let savedExpression = try? await expression.saveToServer() else {
-             await self.doneButton.handleEvent(status: .error("Error"))
-             return nil
-         }
-
-         #warning("Add conversation id to moment creation")
-
-         let moment = Moment()
-         moment.expression = savedExpression
-         moment.conversationId = "Some conversation ID"
-         moment.author = User.current()
-         moment.file = PFFileObject(name: "moment.mov", data: momentData)
-
-         guard let savedMoment = try? await moment.saveToServer() else {
-             await self.doneButton.handleEvent(status: .error("Error"))
-             return nil
-         }
          
-         await self.doneButton.handleEvent(status: .complete)
-        
-         return savedMoment
+         do {
+             return  try await MomentsStore.shared.createMoment(from: recording)
+         } catch {
+             await self.doneButton.handleEvent(status: .error("Error"))
+             return nil
+         }
      }
      
      private var animateTask: Task<Void, Never>?

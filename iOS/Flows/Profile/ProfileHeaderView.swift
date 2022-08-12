@@ -66,7 +66,25 @@ class ProfileHeaderView: BaseView {
     
     @MainActor
     func configure(with person: PersonType) {
-        self.personView.set(person: person)
+        
+        Task {
+            guard let person = await PeopleStore.shared.getPerson(withPersonId: person.personId) else { return }
+            let expression = await MomentsStore.shared.getTodaysMoment(withPersonId: person.personId)?.expression
+            self.personView.set(expression: expression, person: person)
+            self.personView.expressionVideoView.shouldPlay = true
+            
+            MomentsStore.shared.$todaysMoments.mainSink { [unowned self] moments in
+                if let first = moments.first(where: { moment in
+                    return moment.author?.objectId == person.personId
+                }) {
+                    Task {
+                        self.personView.set(expression: first.expression, person: person)
+                        self.personView.expressionVideoView.shouldPlay = true
+                    }
+                }
+            }.store(in: &self.cancellables)
+        }
+        
         self.nameLabel.setText(person.givenName)
 
         if let user = person as? User {

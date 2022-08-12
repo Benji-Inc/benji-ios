@@ -80,7 +80,6 @@ class MessageDetailDataSource: CollectionViewDataSource<MessageDetailDataSource.
     private let expressionConfig = ManageableCellRegistration<MessageExpressionCell>().provider
     private let readConfig = ManageableCellRegistration<MessageReadCell>().provider
     private let headerConfig = ManageableHeaderRegistration<SectionHeaderView>().provider
-    private let backgroundConfig = ManageableSupplementaryViewRegistration<SectionBackgroundView>().provider
     private let metadatConfig = ManageableCellRegistration<MessageMetadataCell>().provider
     private let moreConfige = ManageableCellRegistration<MessageMoreCell>().provider
     

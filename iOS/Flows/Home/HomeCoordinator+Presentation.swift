@@ -104,13 +104,22 @@ extension HomeCoordinator {
     }
     
     func presentMoment() {
-        self.removeChild()
-        
-        let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { [unowned self] result in
-            self.homeVC.dismiss(animated: true)
+        if MomentsStore.shared.hasRecordedToday {
+            let alert = UIAlertController(title: "Todays Moment", message: "You have already recorded todays moment. You can record another one tomorrow.", preferredStyle: .alert)
+            
+            let cancel = UIAlertAction(title: "Ok", style: .cancel)
+            
+            alert.addAction(cancel)
+            self.homeVC.present(alert, animated: true)
+        } else {
+            self.removeChild()
+            
+            let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
+            self.addChildAndStart(coordinator) { [unowned self] result in
+                self.homeVC.dismiss(animated: true)
+            }
+            self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
         }
-        self.router.present(coordinator, source: self.homeVC, cancelHandler: nil)
     }
     
     func presentPersonConnection(for activity: LaunchActivity) {

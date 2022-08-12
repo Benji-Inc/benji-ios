@@ -37,7 +37,6 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: String) {
-        // TODO: Configure the video view.
         Task.onMainActorAsync {
             guard let person = await PeopleStore.shared.getPerson(withPersonId: item) else { return }
             let expression = await MomentsStore.shared.getTodaysMoment(withPersonId: item)?.expression
@@ -48,6 +47,17 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
                 self.label.setText(person.givenName)
             }
             self.layoutNow()
+            
+            MomentsStore.shared.$todaysMoments.mainSink { [unowned self] moments in
+                if let first = moments.first(where: { moment in
+                    return moment.author?.objectId == person.personId
+                }) {
+                    Task {
+                        self.personView.set(expression: first.expression, person: person)
+                        self.personView.expressionVideoView.shouldPlay = true
+                    }
+                }
+            }.store(in: &self.cancellables)
         }
     }
 
