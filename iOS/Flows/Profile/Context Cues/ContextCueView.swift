@@ -78,8 +78,7 @@ class ContextCueView: EmojiCircleView {
                !updated.emojis.isEmpty {
                 emojis = updated.emojis
             } else {
-                let status: FocusStatus = person.focusStatus ?? .focused
-                emojis = status == .available ? ["👋"] : ["😴"]
+                self.shouldStayHidden = true
             }
             
             if !self.shouldStayHidden {

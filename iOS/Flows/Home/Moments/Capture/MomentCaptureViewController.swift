@@ -109,44 +109,14 @@ import Localization
      }
 
      private func createMoment(from recording: PiPRecording) async -> Moment? {
-         guard let expressionURL = recording.frontRecordingURL,
-                let momentURL = recording.backRecordingURL,
-               let previewURL = recording.previewURL else { return nil }
-         
          await self.doneButton.handleEvent(status: .loading)
-
-         let expressionData = try! Data(contentsOf: expressionURL)
-         let momentData = try! Data(contentsOf: momentURL)
-         let previewData = try! Data(contentsOf: previewURL)
-
-         let expression = Expression()
-
-         expression.author = User.current()
-         expression.file = PFFileObject(name: "expression.mov", data: expressionData)
-         expression.emojiString = nil
-
-         guard let savedExpression = try? await expression.saveToServer() else {
-             await self.doneButton.handleEvent(status: .error("Error"))
-             return nil
-         }
-
-         #warning("Add conversation id to moment creation")
-
-         let moment = Moment()
-         moment.expression = savedExpression
-         moment.conversationId = "Some conversation ID"
-         moment.author = User.current()
-         moment.file = PFFileObject(name: "moment.mov", data: momentData)
-         moment.preview = PFFileObject(name: "preview.mov", data: previewData)
-
-         guard let savedMoment = try? await moment.saveToServer() else {
-             await self.doneButton.handleEvent(status: .error("Error"))
-             return nil
-         }
          
-         await self.doneButton.handleEvent(status: .complete)
-        
-         return savedMoment
+         do {
+             return  try await MomentsStore.shared.createMoment(from: recording)
+         } catch {
+             await self.doneButton.handleEvent(status: .error("Error"))
+             return nil
+         }
      }
      
      private var animateTask: Task<Void, Never>?

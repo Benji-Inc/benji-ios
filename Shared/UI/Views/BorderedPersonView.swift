@@ -85,9 +85,20 @@ class BorderedPersonView: PersonGradientView {
 
     override func didRecieveUpdateFor(person: PersonType) {
         super.didRecieveUpdateFor(person: person)
+        self.setColors(for: person)
         #if IOS
         self.contextCueView.configure(with: person)
         #endif
+    }
+    
+    func setColors(for person: PersonType) {
+        let isAvailable = person.focusStatus == .available
+        let color = isAvailable ? ThemeColor.D6.color.cgColor : self.layer.borderColor
+
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.pulseLayer.borderColor = color
+            self.shadowLayer.shadowColor = color
+        }
     }
     
     @MainActor

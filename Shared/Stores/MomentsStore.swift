@@ -18,6 +18,12 @@ class MomentsStore {
     
     @Published private(set) var todaysMoments: [Moment] = []
     
+    var hasRecordedToday: Bool {
+        return self.todaysMoments.first { moment in
+            moment.author == User.current()
+        }.exists
+    }
+    
     private var __moments: [Moment] = [] {
         didSet {
             self.todaysMoments = self.__moments
@@ -82,6 +88,44 @@ class MomentsStore {
                 continuation.resume(throwing: ClientError.apiError(detail: "No query for Moments"))
             }
         }
+    }
+    
+    func createMoment(from recording: PiPRecording) async throws -> Moment? {
+        
+        guard let expressionURL = recording.frontRecordingURL,
+               let momentURL = recording.backRecordingURL,
+              let previewURL = recording.previewURL else { return nil }
+        
+        try await self.initializeIfNeeded()
+        
+        guard !self.hasRecordedToday else { return nil }
+        
+        let expressionData = try! Data(contentsOf: expressionURL)
+        let momentData = try! Data(contentsOf: momentURL)
+        let previewData = try! Data(contentsOf: previewURL)
+
+        let expression = Expression()
+
+        expression.author = User.current()
+        expression.file = PFFileObject(name: "expression.mov", data: expressionData)
+        expression.emojiString = nil
+
+        let savedExpression = try await expression.saveToServer()
+
+        #warning("Add conversation id to moment creation")
+
+        let moment = Moment()
+        moment.expression = savedExpression
+        moment.conversationId = "Some conversation ID"
+        moment.author = User.current()
+        moment.file = PFFileObject(name: "moment.mov", data: momentData)
+        moment.preview = PFFileObject(name: "preview.mov", data: previewData)
+
+        let savedMoment = try await moment.saveToServer()
+        
+        self.__moments.append(savedMoment)
+
+        return savedMoment
     }
     
     //MARK: PRIVATE
