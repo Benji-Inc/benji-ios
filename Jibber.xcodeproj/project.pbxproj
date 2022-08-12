@@ -821,6 +821,7 @@
 		D6AF4AB728A58B0C00225F37 /* MomentsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4AB628A58B0C00225F37 /* MomentsFooterView.swift */; };
 		D6AF4ABA28A6CFE600225F37 /* MomentVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */; };
 		D6AF4ABC28A6EA8200225F37 /* MomentExpressiontVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */; };
+		D6AF4ABE28A6F91400225F37 /* MomentBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */; };
 		D6B00D3C2796480D00DF07B1 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D6B00D3B2796480D00DF07B1 /* loading.json */; };
 		D6B00D3D2796480D00DF07B1 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D6B00D3B2796480D00DF07B1 /* loading.json */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
@@ -1446,6 +1447,7 @@
 		D6AF4AB628A58B0C00225F37 /* MomentsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsFooterView.swift; sourceTree = "<group>"; };
 		D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentVideoView.swift; sourceTree = "<group>"; };
 		D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentExpressiontVideoView.swift; sourceTree = "<group>"; };
+		D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentBlurView.swift; sourceTree = "<group>"; };
 		D6B00D3B2796480D00DF07B1 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2B646283596C9007D507B /* MediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewController.swift; sourceTree = "<group>"; };
@@ -2730,6 +2732,7 @@
 				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
 				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
 				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
+				D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -3762,6 +3765,7 @@
 				D61A33C627D4F21700056242 /* ContextCueCreatorViewController.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
 				D630F25F2832F8BE00737977 /* PersonPreviewViewController.swift in Sources */,
+				D6AF4ABE28A6F91400225F37 /* MomentBlurView.swift in Sources */,
 				D6D1502921D6085200CD8CE4 /* ResourceObject.swift in Sources */,
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
 				D691794222F6418700340AA3 /* Router.swift in Sources */,

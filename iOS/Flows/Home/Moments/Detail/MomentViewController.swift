@@ -12,9 +12,20 @@ class MomentViewController: ViewController {
     
     private let moment: Moment
     
-    let expressionView = MomentExpressiontVideoView()
-    let momentView = MomentVideoView()
+    private let expressionView = MomentExpressiontVideoView()
+    private let momentView = MomentVideoView()
+    let blurView = MomentBlurView()
+    
     let cornerRadius: CGFloat = 30
+    
+    enum State {
+        case initial
+        case loading
+        case blocked
+        case playback
+    }
+    
+    @Published var state: State = .initial
     
     init(with moment: Moment) {
         self.moment = moment
@@ -40,6 +51,7 @@ class MomentViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
+        self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
         
         Task {
@@ -64,5 +76,7 @@ class MomentViewController: ViewController {
         self.expressionView.squaredSize = self.view.width * 0.25
         self.expressionView.pinToSafeAreaTop()
         self.expressionView.pinToSafeAreaLeft()
+        
+        self.blurView.expandToSuperviewSize()
     }
 }

@@ -29,4 +29,22 @@ import Coordinator
      override func toPresentable() -> DismissableVC {
          return self.momentVC
      }
+     
+     override func start() {
+         super.start()
+         
+         self.momentVC.blurView.button.didSelect { [unowned self] in
+             self.presentMomentCapture()
+         }
+     }
+     
+     func presentMomentCapture() {
+         self.removeChild()
+         
+         let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
+         self.addChildAndStart(coordinator) { [unowned self] result in
+             self.momentVC.dismiss(animated: true)
+         }
+         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
+     }
  }
