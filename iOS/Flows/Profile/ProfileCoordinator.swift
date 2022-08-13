@@ -55,8 +55,14 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
                 self.finishFlow(with: .conversation(cid.description))
             case .unreadMessages(let model):
                 self.finishFlow(with: .conversation(model.conversationId))
+            case .moment(let model):
+                Task {
+                    if let moment = try? await Moment.getObject(with: model.momentId) {
+                        self.presentMoment(with: moment)
+                    }
+                }
             default:
-                break 
+                break
             }
         }.store(in: &self.cancellables)
     }
@@ -88,6 +94,16 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
         }
 
         self.router.present(coordinator, source: self.profileVC)
+    }
+    
+    func presentMoment(with moment: Moment) {
+        self.removeChild()
+        
+        let coordinator = MomentCoordinator(moment: moment, router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.profileVC.dismiss(animated: true)
+        }
+        self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
     }
 }
 
