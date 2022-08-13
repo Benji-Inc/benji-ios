@@ -62,18 +62,15 @@ class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType,
                                            kind: String,
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
-        guard section == .moments else { return nil }
-        
-        let isVisible = self.snapshot().numberOfItems(inSection: .conversations) == 0
-                
+                        
         switch kind {
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-            footer.isVisible = isVisible
+            footer.animate()
             return footer
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            header.isVisible = isVisible
+            header.animate()
             return header
         default:
             return nil 

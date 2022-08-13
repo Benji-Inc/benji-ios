@@ -28,6 +28,17 @@ class MomentsFooterView: UICollectionReusableView {
         self.timeLabel.textAlignment = .center
     }
     
+    func animate() {
+        self.timeLabel.alpha = 0.0
+
+        Task.onMainActorAsync {
+            await Task.sleep(seconds: 0.65)
+            await UIView.awaitAnimation(with: .slow, animations: {
+                self.timeLabel.alpha = 1.0
+            })
+        }
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         

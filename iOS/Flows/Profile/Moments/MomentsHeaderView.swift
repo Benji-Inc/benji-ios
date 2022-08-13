@@ -99,4 +99,19 @@ class MomentsHeaderView: UICollectionReusableView {
         self.saturdayLabel.pin(.bottom, offset: .short)
         self.saturdayLabel.match(.left, to: .right, of: self.fridayLabel)
     }
+    
+    func animate() {
+        self.subviews.forEach { view in
+            view.alpha = 0
+        }
+
+        Task.onMainActorAsync {
+            await Task.sleep(seconds: 0.15)
+            await UIView.awaitAnimation(with: .slow, animations: {
+                self.subviews.forEach { view in
+                    view.alpha = 1.0
+                }
+            })
+        }
+    }
 }
