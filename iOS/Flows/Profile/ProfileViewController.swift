@@ -232,7 +232,7 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             snapshot.setItems([], in: .conversations)
             snapshot.setItems(items.reversed(), in: .moments)
             await self.dataSource.apply(snapshot)
-            
+                        
         }.add(to: self.autocancelTaskPool)
     }
 

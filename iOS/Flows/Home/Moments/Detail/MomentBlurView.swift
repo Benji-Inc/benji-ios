@@ -1,0 +1,82 @@
+//
+//  MomentBlurView.swift
+//  Jibber
+//
+//  Created by Benji Dodgson on 8/12/22.
+//  Copyright © 2022 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+
+class MomentBlurView: BaseView {
+    
+    let blurEffect = UIBlurEffect(style: .systemThinMaterial)
+    lazy var blurredEffectView = UIVisualEffectView(effect: nil)
+    lazy var vibrancyEffectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: self.blurEffect))
+    
+    let imageView = SymbolImageView(symbol: .eyeSlash)
+    let label = ThemeLabel(font: .regular)
+    let button = ThemeButton()
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.blurredEffectView)
+        
+        self.blurredEffectView.contentView.addSubview(self.vibrancyEffectView)
+        
+        self.vibrancyEffectView.contentView.addSubview(self.imageView)
+        self.imageView.tintColor = ThemeColor.white.color
+        self.imageView.alpha = 0
+        
+        self.vibrancyEffectView.contentView.addSubview(self.label)
+        self.label.textAlignment = .center
+        self.label.alpha = 0 
+        
+        self.addSubview(self.button)
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Record Moment"))
+    }
+    
+    func configure(for moment: Moment) {
+        Task {
+            guard let person = try? await moment.author?.retrieveDataIfNeeded() else { return }
+            
+            self.label.setText("To view this Moment from \(person.givenName),\nfirst share one of yours.")
+            self.layoutNow()
+        }
+    }
+    
+    func animateBlur(shouldShow: Bool) {
+        Task {
+            await UIView.awaitAnimation(with: .fast) {
+                self.blurredEffectView.effect = shouldShow ? self.blurEffect : nil
+                self.label.alpha = shouldShow ? 1.0 : 0
+                self.imageView.alpha = shouldShow ? 1.0 : 0
+                self.layoutNow()
+            }
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.blurredEffectView.expandToSuperviewSize()
+        self.vibrancyEffectView.expandToSuperviewSize()
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.width))
+        self.label.centerOnXAndY()
+        
+        self.imageView.squaredSize = 50
+        self.imageView.match(.bottom, to: .top, of: self.label, offset: .negative(.xtraLong))
+        self.imageView.centerOnX()
+        
+        self.button.setSize(with: self.width)
+        self.button.centerOnX()
+        
+        if self.blurredEffectView.effect.exists {
+            self.button.pinToSafeAreaBottom()
+        } else {
+            self.button.top = self.height
+        }
+    }
+}
