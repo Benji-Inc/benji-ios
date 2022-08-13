@@ -70,8 +70,8 @@ class ProfileCollectionViewLayout: UICollectionViewCompositionalLayout {
     }
 }
 
-// Breaking these out to get the headers/footers to show up correctly 
-class ProfileCollectionViewLayout2: UICollectionViewCompositionalLayout {
+// Breaking these out to get the headers/footers to show up correctly
+class MomentsCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
