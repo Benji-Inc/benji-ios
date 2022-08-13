@@ -195,6 +195,8 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
         self.loadMomentsTask = Task { [weak self] in
             guard let `self` = self else { return }
             
+            self.collectionView.collectionViewLayout = ProfileCollectionViewLayout2()
+            
             let moments = try? await MomentsStore.shared.getLast14DaysMoments(for: self.person)
             
             var items: [ProfileDataSource.ItemType] = []
@@ -246,6 +248,9 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
 
         self.loadConversationsTask = Task { [weak self] in
             guard let user = self?.person as? User else { return }
+            
+            self?.collectionView.collectionViewLayout = ProfileCollectionViewLayout()
+
 
             var userIds: [String] = []
             if user.isCurrentUser {

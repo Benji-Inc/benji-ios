@@ -41,7 +41,47 @@ class ProfileCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let section = NSCollectionLayoutSection(group: group)
                 return section
             default:
-                
+                // Item
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                             leading: 0,
+                                                             bottom: 0,
+                                                             trailing: 0)
+
+                // Group
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(1))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                              leading: 0,
+                                                              bottom: 0,
+                                                              trailing: 0)
+
+                // Section
+                let section = NSCollectionLayoutSection(group: group)
+                return section
+            }
+
+        }, configuration: config)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// Breaking these out to get the headers/footers to show up correctly 
+class ProfileCollectionViewLayout2: UICollectionViewCompositionalLayout {
+
+    init() {
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.scrollDirection = .vertical
+
+        super.init(sectionProvider: { sectionIndex, environment in
+            guard let sectionType = ProfileDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+
+            switch sectionType {
+            case .moments:
                 let groupInset = Theme.ContentOffset.short.value
                 
                 let fractionWidth: CGFloat = 1 / 7
@@ -77,6 +117,26 @@ class ProfileCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
                 
                 section.boundarySupplementaryItems = [headerItem, footerItem]
+                return section
+            default:
+                // Item
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                             leading: 0,
+                                                             bottom: 0,
+                                                             trailing: 0)
+
+                // Group
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(1))
+                let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                              leading: 0,
+                                                              bottom: 0,
+                                                              trailing: 0)
+
+                // Section
+                let section = NSCollectionLayoutSection(group: group)
                 return section
             }
 
