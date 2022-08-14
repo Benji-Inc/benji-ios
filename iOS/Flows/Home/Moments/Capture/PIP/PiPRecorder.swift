@@ -108,7 +108,6 @@ class PiPRecorder {
         let assetWriterAudioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: settings)
         assetWriterAudioInput.expectsMediaDataInRealTime = true
         if writer.canAdd(assetWriterAudioInput) {
-            logDebug("Audio input added")
             writer.add(assetWriterAudioInput)
         }
         
@@ -177,11 +176,9 @@ class PiPRecorder {
               let input = self.assetWriterAudioInput,
               input.isReadyForMoreMediaData else {
             logDebug("Audio failed")
-
                 return
         }
         
-        logDebug("Recording audio")
         input.append(sampleBuffer)
     }
     
