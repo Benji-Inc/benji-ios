@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 import Vision
 
-class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate  {
+class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
     /// A request to separate a person from the background in an image.
     let segmentationRequest = VNGeneratePersonSegmentationRequest()
@@ -36,6 +36,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     let frontDataOutputQue = DispatchQueue(label: "front data output queue")
     let backDataOutputQue = DispatchQueue(label: "back data output queue")
+    let micDataOutputQue = DispatchQueue(label: "mic data output queue")
 
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
@@ -45,6 +46,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     var frontInput: AVCaptureDeviceInput?
     let frontOutput = AVCaptureVideoDataOutput()
+    
+    var micInput: AVCaptureDeviceInput?
+    let micDataOutput = AVCaptureAudioDataOutput()
     
     var backIsSampling: Bool = false
     var frontIsSampling: Bool = false
@@ -159,6 +163,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         }
         
         guard self.configureFrontCamera() else {
+            self.state = .error
+            return
+        }
+        
+        guard self.configureMicrophone() else {
             self.state = .error
             return
         }
