@@ -17,10 +17,6 @@ extension PiPRecordingViewController {
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
         
-        if let audioDataOutput = output as? AVCaptureAudioDataOutput {
-            self.processsAudioSampleBuffer(sampleBuffer, fromOutput: audioDataOutput)
-        }
-        
         let isVideoOutput = output is AVCaptureVideoDataOutput
         let isFrontOutput = connection.isVideoMirrored
         
@@ -103,21 +99,6 @@ extension PiPRecordingViewController {
         }
     }
     
-    private func processsAudioSampleBuffer(_ sampleBuffer: CMSampleBuffer, fromOutput audioDataOutput: AVCaptureAudioDataOutput) {
-        
-//        guard (pipDevicePosition == .back && audioDataOutput == backMicrophoneAudioDataOutput) ||
-//            (pipDevicePosition == .front && audioDataOutput == frontMicrophoneAudioDataOutput) else {
-//                // Ignoring audio sample buffer
-//                return
-//        }
-//
-//        // If we're recording, append this buffer to the movie
-//        if let recorder = movieRecorder,
-//            recorder.isRecording {
-//            recorder.recordAudio(sampleBuffer: sampleBuffer)
-//        }
-    }
-    
     /// Makes the image black and white, and makes the background clear.
     private func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
         // Make the background clear.
@@ -134,16 +115,9 @@ extension PiPRecordingViewController {
 
         let solidColor = CIImage(color: color).cropped(to: maskImage.extent)
 
-        // List of all filters: https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/
-
-        let filter = CIFilter(name: "CIPhotoEffectNoir")
-        filter?.setValue(originalImage, forKey: "inputImage")
-
-        guard let bwImage = filter?.outputImage else { return nil }
-
         // Blend the original, background, and mask images.
         let blendFilter = CIFilter.blendWithRedMask()
-        blendFilter.inputImage = bwImage
+        blendFilter.inputImage = originalImage
         blendFilter.backgroundImage = solidColor
         blendFilter.maskImage = maskImage
 
