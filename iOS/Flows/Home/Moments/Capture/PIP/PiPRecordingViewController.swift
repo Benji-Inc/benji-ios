@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import Vision
+import Speech
 
 class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
@@ -52,6 +53,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     var backIsSampling: Bool = false
     var frontIsSampling: Bool = false
+    var micIsSampling: Bool = false 
     
     var isSessionRunning: Bool {
         return self.session.isRunning
@@ -193,10 +195,46 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
 
         self.frontCameraView.beginPlayback(with: frontURL)
         self.backCameraView.beginPlayback(with: backURL)
+        
+        Task.onMainActorAsync {
+            let status = await self.requestTranscribePermissions()
+            guard status == .authorized else { return }
+            self.transcribeAudio(url: frontURL)
+        }
     }
 
     private func stopPlayback() {
         self.frontCameraView.stopPlayback()
         self.backCameraView.stopPlayback()
+    }
+    
+    @MainActor
+    func requestTranscribePermissions() async -> SFSpeechRecognizerAuthorizationStatus {
+        return await withCheckedContinuation({ continuation in
+            SFSpeechRecognizer.requestAuthorization { authStatus in
+                continuation.resume(returning: authStatus)
+            }
+        })
+    }
+    
+    func transcribeAudio(url: URL) {
+        // create a new recognizer and point it at our audio
+        let recognizer = SFSpeechRecognizer()
+        let request = SFSpeechURLRecognitionRequest(url: url)
+
+        // start recognition!
+        recognizer?.recognitionTask(with: request) { [unowned self] (result, error) in
+            // abort if we didn't get any transcription back
+            guard let result = result else {
+                logDebug("There was an error: \(error!)")
+                return
+            }
+
+            // if we got the final transcription back, print it
+            if result.isFinal {
+                // pull out the best transcription...
+                logDebug(result.bestTranscription.formattedString)
+            }
+        }
     }
 }

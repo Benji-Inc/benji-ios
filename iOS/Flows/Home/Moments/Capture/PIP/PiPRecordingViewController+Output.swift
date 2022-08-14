@@ -66,11 +66,11 @@ extension PiPRecordingViewController {
                     }
                     self.backIsSampling = self.recorder.writeBackSampleToFile(sampleBuffer)
                 }
-            } else {
-                self.recorder.recordAudio(sampleBuffer: sampleBuffer)
+            } else if !self.micIsSampling, self.frontIsSampling {
+                self.micIsSampling = self.recorder.recordAudio(sampleBuffer: sampleBuffer)
             }
             
-            if isVideoOutput, self.frontIsSampling, self.backIsSampling {
+            if self.frontIsSampling, self.backIsSampling, self.micIsSampling {
                 self.state = .capturing
             }
         case .capturing:

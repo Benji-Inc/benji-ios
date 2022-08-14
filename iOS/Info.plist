@@ -59,9 +59,11 @@
 	<key>NSFocusStatusUsageDescription</key>
 	<string>To communicate your current status to connections. </string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Used to send audio messages, and record moments. </string>
+	<string>Used to send audio messages, and record Moments. </string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send photos and create a profile picture of yourself. </string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Used to transcibe the audio you capture for your Moments and messages. </string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INSendMessageIntent</string>

@@ -108,6 +108,7 @@ class PiPRecorder {
         let assetWriterAudioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: settings)
         assetWriterAudioInput.expectsMediaDataInRealTime = true
         if writer.canAdd(assetWriterAudioInput) {
+            logDebug("Audio Added")
             writer.add(assetWriterAudioInput)
         }
         
@@ -170,16 +171,18 @@ class PiPRecorder {
         return true
     }
     
-    func recordAudio(sampleBuffer: CMSampleBuffer) {
+    @discardableResult
+    func recordAudio(sampleBuffer: CMSampleBuffer) -> Bool {
         guard let assetWriter = self.frontAssetWriter,
             assetWriter.status == .writing,
               let input = self.assetWriterAudioInput,
               input.isReadyForMoreMediaData else {
             logDebug("Audio failed")
-                return
+            return false
         }
-        
+        logDebug("Recording Audio")
         input.append(sampleBuffer)
+        return true
     }
     
     private var finishVideoTask: Task<Void, Error>?
