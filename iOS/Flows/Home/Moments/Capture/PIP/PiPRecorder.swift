@@ -24,6 +24,8 @@ class PiPRecorder {
     private var backAssetWriter: AVAssetWriter?
     private var backAssetWriterVideoInput: AVAssetWriterInput?
     
+    private var assetWriterAudioInput: AVAssetWriterInput?
+    
     private let frontVideoSettings: [String: Any] = [AVVideoCodecKey : AVVideoCodecType.hevcWithAlpha,
                                                      AVVideoWidthKey : 480,
                                                     AVVideoHeightKey : 480,
@@ -31,6 +33,7 @@ class PiPRecorder {
                                           kVTCompressionPropertyKey_TargetQualityForAlpha : 0.5]]
     
     private var backVideoSettings: [String: Any]?
+    private var audioSettings: [String: Any]?
     
     let pixelBufferAttributes: [String: Any] = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
                                                            kCVPixelBufferWidthKey: 480,
@@ -41,12 +44,19 @@ class PiPRecorder {
         
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
-    func initialize(backVideoSettings: [String: Any]?) {
+    deinit {
+        FileManager.clearTmpDirectory()
+    }
+    
+    func initialize(backVideoSettings: [String: Any]?, audioSettings: [String: Any]?) {
         FileManager.clearTmpDirectory()
         self.finishVideoTask = nil 
         self.backVideoSettings = backVideoSettings
+        self.audioSettings = audioSettings
+        self.assetWriterAudioInput = nil
         self.initializeFront()
         self.initializeBack()
+        self.initializeAudio()
     }
     
     private func initializeFront() {
@@ -90,6 +100,19 @@ class PiPRecorder {
         
         self.backAssetWriter = assetWriter
         self.backAssetWriterVideoInput = assetWriterVideoInput
+    }
+    
+    private func initializeAudio() {
+        guard let settings = self.audioSettings, let writer = self.frontAssetWriter, self.assetWriterAudioInput.isNil else { return }
+        // Add an audio input
+        let assetWriterAudioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: settings)
+        assetWriterAudioInput.expectsMediaDataInRealTime = true
+        if writer.canAdd(assetWriterAudioInput) {
+            logDebug("Audio input added")
+            writer.add(assetWriterAudioInput)
+        }
+        
+        self.assetWriterAudioInput = assetWriterAudioInput
     }
     
     func startFrontSession(with sampleBuffer: CMSampleBuffer) {
@@ -148,10 +171,24 @@ class PiPRecorder {
         return true
     }
     
+    func recordAudio(sampleBuffer: CMSampleBuffer) {
+        guard let assetWriter = self.frontAssetWriter,
+            assetWriter.status == .writing,
+              let input = self.assetWriterAudioInput,
+              input.isReadyForMoreMediaData else {
+            logDebug("Audio failed")
+
+                return
+        }
+        
+        logDebug("Recording audio")
+        input.append(sampleBuffer)
+    }
+    
     private var finishVideoTask: Task<Void, Error>?
 
     // This cant be called more than once per recording otherwise inputs will crash
-    func finishWritingVideo() async throws {
+    func finishRecording() async throws {
         // If we already have an initialization task, wait for it to finish.
         if let finishVideoTask = self.finishVideoTask {
             try await finishVideoTask.value

@@ -15,7 +15,7 @@ extension PiPRecordingViewController {
         
         // Find the back camera
         guard let backCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
-            print("Could not find the back camera")
+            logDebug("Could not find the back camera")
             return false
         }
         
@@ -25,7 +25,7 @@ extension PiPRecordingViewController {
             
             guard let backCameraDeviceInput = self.backInput,
                   self.session.canAddInput(backCameraDeviceInput) else {
-                    print("Could not add back camera device input")
+                logDebug("Could not add back camera device input")
                     return false
             }
             self.session.addInputWithNoConnections(backCameraDeviceInput)
@@ -39,13 +39,13 @@ extension PiPRecordingViewController {
             let backCameraVideoPort = backCameraDeviceInput.ports(for: .video,
                                                               sourceDeviceType: backCamera.deviceType,
                                                               sourceDevicePosition: backCamera.position).first else {
-                                                                print("Could not find the back camera device input's video port")
+            logDebug("Could not find the back camera device input's video port")
                                                                 return false
         }
         
         // Add the back camera video data output
         guard self.session.canAddOutput(self.backOutput) else {
-            print("Could not add the back camera video data output")
+            logDebug("Could not add the back camera video data output")
             return false
         }
         self.session.addOutputWithNoConnections(self.backOutput)
@@ -53,15 +53,15 @@ extension PiPRecordingViewController {
         
         if self.backOutput.availableVideoPixelFormatTypes.contains(kCVPixelFormatType_Lossy_32BGRA) {
             // Set the Lossy format
-            print("Selecting lossy pixel format")
+            logDebug("Selecting lossy pixel format")
             self.backOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_Lossy_32BGRA)]
         } else if self.backOutput.availableVideoPixelFormatTypes.contains(kCVPixelFormatType_Lossless_32BGRA) {
             // Set the Lossless format
-            print("Selecting a lossless pixel format")
+            logDebug("Selecting a lossless pixel format")
             self.backOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_Lossless_32BGRA)]
         } else {
             // Set to the fallback format
-            print("Selecting a 32BGRA pixel format")
+            logDebug("Selecting a 32BGRA pixel format")
             self.backOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
         }
         
@@ -72,7 +72,7 @@ extension PiPRecordingViewController {
                                                                       output: self.backOutput)
         
         guard self.session.canAddConnection(backCameraVideoDataOutputConnection) else {
-            print("Could not add a connection to the back camera video data output")
+            logDebug("Could not add a connection to the back camera video data output")
             return false
         }
         self.session.addConnection(backCameraVideoDataOutputConnection)
@@ -83,7 +83,7 @@ extension PiPRecordingViewController {
             let backCameraVideoPreviewLayerConnection = AVCaptureConnection(inputPort: backCameraVideoPort,
                                                                             videoPreviewLayer: self.backCameraView.videoPreviewLayer)
             guard self.session.canAddConnection(backCameraVideoPreviewLayerConnection) else {
-                print("Could not add a connection to the back camera video preview layer")
+                logDebug("Could not add a connection to the back camera video preview layer")
                 return 
             }
             self.session.addConnection(backCameraVideoPreviewLayerConnection)
@@ -96,7 +96,7 @@ extension PiPRecordingViewController {
         
         // Find the front camera
         guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
-            print("Could not find the front camera")
+            logDebug("Could not find the front camera")
             return false
         }
         
@@ -106,12 +106,12 @@ extension PiPRecordingViewController {
             
             guard let frontCameraDeviceInput = self.frontInput,
                   self.session.canAddInput(frontCameraDeviceInput) else {
-                    print("Could not add front camera device input")
+                logDebug("Could not add front camera device input")
                     return false
             }
             self.session.addInputWithNoConnections(frontCameraDeviceInput)
         } catch {
-            print("Could not create front camera device input: \(error)")
+            logDebug("Could not create front camera device input: \(error)")
             return false
         }
         
@@ -120,13 +120,13 @@ extension PiPRecordingViewController {
             let frontCameraVideoPort = frontCameraDeviceInput.ports(for: .video,
                                                                     sourceDeviceType: frontCamera.deviceType,
                                                                     sourceDevicePosition: frontCamera.position).first else {
-                                                                        print("Could not find the front camera device input's video port")
+            logDebug("Could not find the front camera device input's video port")
                                                                         return false
         }
         
         // Add the front camera video data output
         guard self.session.canAddOutput(self.frontOutput) else {
-            print("Could not add the front camera video data output")
+            logDebug("Could not add the front camera video data output")
             return false
         }
         self.session.addOutputWithNoConnections(self.frontOutput)
@@ -149,7 +149,7 @@ extension PiPRecordingViewController {
         let frontCameraVideoDataOutputConnection = AVCaptureConnection(inputPorts: [frontCameraVideoPort],
                                                                        output: self.frontOutput)
         guard self.session.canAddConnection(frontCameraVideoDataOutputConnection) else {
-            print("Could not add a connection to the front camera video data output")
+            logDebug("Could not add a connection to the front camera video data output")
             return false
         }
         
@@ -158,6 +158,56 @@ extension PiPRecordingViewController {
         frontCameraVideoDataOutputConnection.isVideoMirrored = true
         
         self.session.addConnection(frontCameraVideoDataOutputConnection)
+        
+        return true
+    }
+    
+    func configureMicrophone() -> Bool {
+        
+        // Find the microphone
+        guard let microphone = AVCaptureDevice.default(for: .audio) else {
+            logDebug("Could not find the microphone")
+            return false
+        }
+        
+        // Add the microphone input to the session
+        do {
+            self.micInput = try AVCaptureDeviceInput(device: microphone)
+            
+            guard let microphoneDeviceInput = self.micInput,
+                  self.session.canAddInput(microphoneDeviceInput) else {
+                logDebug("Could not add microphone device input")
+                    return false
+            }
+            self.session.addInputWithNoConnections(microphoneDeviceInput)
+        } catch {
+            logDebug("Could not create microphone input: \(error)")
+            return false
+        }
+        
+        // Find the audio device input's front audio port
+        guard let frontMicrophonePort = self.micInput?.ports(for: .audio,
+                                                             sourceDeviceType: microphone.deviceType,
+                                                             sourceDevicePosition: .front).first else {
+            logDebug("Could not find the front camera device input's audio port")
+            return false
+        }
+        
+        // Add the front microphone audio data output
+        guard session.canAddOutput(self.micDataOutput) else {
+            logDebug("Could not add the front microphone audio data output")
+            return false
+        }
+        self.session.addOutputWithNoConnections(self.micDataOutput)
+        self.micDataOutput.setSampleBufferDelegate(self, queue: self.micDataOutputQue)
+        
+        // Connect the front microphone to the back audio data output
+        let frontMicrophoneAudioDataOutputConnection = AVCaptureConnection(inputPorts: [frontMicrophonePort], output: self.micDataOutput)
+        guard self.session.canAddConnection(frontMicrophoneAudioDataOutputConnection) else {
+            logDebug("Could not add a connection to the front microphone audio data output")
+            return false
+        }
+        self.session.addConnection(frontMicrophoneAudioDataOutputConnection)
         
         return true
     }

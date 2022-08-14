@@ -17,10 +17,15 @@ extension PiPRecordingViewController {
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
         
+        if let audioDataOutput = output as? AVCaptureAudioDataOutput {
+            self.processsAudioSampleBuffer(sampleBuffer, fromOutput: audioDataOutput)
+        }
+        
+        let isVideoOutput = output is AVCaptureVideoDataOutput
         let isFrontOutput = connection.isVideoMirrored
         
         // If mirrored, then its the front camera output
-        if isFrontOutput {
+        if isFrontOutput, isVideoOutput {
             guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
             do {
@@ -48,49 +53,73 @@ extension PiPRecordingViewController {
         case .starting:
             // Initialize the AVAsset writer to prepare for capture
             let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
-            self.recorder.initialize(backVideoSettings: settings)
+            let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
+            self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
             self.state = .started
         case .started:
             
-            if isFrontOutput {
-                if !self.frontIsSampling {
-                    self.recorder.startFrontSession(with: sampleBuffer)
+            if isVideoOutput {
+                if isFrontOutput {
+                    if !self.frontIsSampling {
+                        self.recorder.startFrontSession(with: sampleBuffer)
+                    }
+                    self.frontIsSampling = self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
+                } else {
+                    if !self.backIsSampling {
+                        self.recorder.startBackSession(with: sampleBuffer)
+                    }
+                    self.backIsSampling = self.recorder.writeBackSampleToFile(sampleBuffer)
                 }
-                self.frontIsSampling = self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
             } else {
-                if !self.backIsSampling {
-                    self.recorder.startBackSession(with: sampleBuffer)
-                }
-                self.backIsSampling = self.recorder.writeBackSampleToFile(sampleBuffer)
+                self.recorder.recordAudio(sampleBuffer: sampleBuffer)
             }
             
-            if self.frontIsSampling, self.backIsSampling {
+            if isVideoOutput, self.frontIsSampling, self.backIsSampling {
                 self.state = .capturing
             }
         case .capturing:
-            if isFrontOutput {
-                self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
+            if isVideoOutput {
+                if isFrontOutput {
+                    self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)
+                } else {
+                    self.recorder.writeBackSampleToFile(sampleBuffer)
+                }
             } else {
-                self.recorder.writeBackSampleToFile(sampleBuffer)
+                self.recorder.recordAudio(sampleBuffer: sampleBuffer)
             }
+            
         case .ending:
             Task {
                 do {
-                    try await self.recorder.finishWritingVideo()
+                    try await self.recorder.finishRecording()
                     self.backIsSampling = false
                     self.frontIsSampling = false
                 } catch {
                     logError(error)
                 }
             }
-            
         case .playback:
             break
         }
     }
     
+    private func processsAudioSampleBuffer(_ sampleBuffer: CMSampleBuffer, fromOutput audioDataOutput: AVCaptureAudioDataOutput) {
+        
+//        guard (pipDevicePosition == .back && audioDataOutput == backMicrophoneAudioDataOutput) ||
+//            (pipDevicePosition == .front && audioDataOutput == frontMicrophoneAudioDataOutput) else {
+//                // Ignoring audio sample buffer
+//                return
+//        }
+//
+//        // If we're recording, append this buffer to the movie
+//        if let recorder = movieRecorder,
+//            recorder.isRecording {
+//            recorder.recordAudio(sampleBuffer: sampleBuffer)
+//        }
+    }
+    
     /// Makes the image black and white, and makes the background clear.
-    func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
+    private func blend(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) -> CIImage? {
         // Make the background clear.
         let color = CIColor(color: UIColor.clear)
 

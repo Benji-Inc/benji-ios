@@ -51,7 +51,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Create photo messages and profile pictures for yourself. </string>
+	<string>Used to create profile pictures, messages and record moments.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Select contacts to message. Contact information never leaves this device. </string>
 	<key>NSFaceIDUsageDescription</key>
@@ -59,7 +59,7 @@
 	<key>NSFocusStatusUsageDescription</key>
 	<string>To communicate your current status to connections. </string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>You can use the microphone to send audio with your messages. </string>
+	<string>Used to send audio messages, and record moments. </string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send photos and create a profile picture of yourself. </string>
 	<key>NSUserActivityTypes</key>

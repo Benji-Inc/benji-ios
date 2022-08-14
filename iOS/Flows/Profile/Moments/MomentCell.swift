@@ -45,7 +45,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         self.label.alpha = item.momentId.exists ? 0 : 1.0
         self.label.text = ""
         
-        if let daysAgo = Date.today.subtract(component: .day, amount: 14), item.date.isBetween(Date.today, and: daysAgo) {
+        if let daysAgo = Date.today.subtract(component: .day, amount: 13), item.date.isBetween(Date.today, and: daysAgo) {
             self.label.setText("\(item.date.day)")
         } else if item.date.isSameDay(as: Date.today) {
             self.label.setText("\(item.date.day)")

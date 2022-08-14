@@ -68,6 +68,7 @@ class VideoView: BaseView {
         guard let videoURL = url else {
             // Stop playback if the url is nil.
             self.playerLayer.player = nil
+            self.looper = nil 
             return
         }
 
