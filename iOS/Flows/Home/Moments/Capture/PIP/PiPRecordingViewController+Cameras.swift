@@ -199,7 +199,7 @@ extension PiPRecordingViewController {
             return false
         }
         self.session.addOutputWithNoConnections(self.micDataOutput)
-        self.micDataOutput.setSampleBufferDelegate(self, queue: self.micDataOutputQue)
+        self.micDataOutput.setSampleBufferDelegate(self, queue: self.frontDataOutputQue)
         
         // Connect the front microphone to the back audio data output
         let frontMicrophoneAudioDataOutputConnection = AVCaptureConnection(inputPorts: [frontMicrophonePort], output: self.micDataOutput)

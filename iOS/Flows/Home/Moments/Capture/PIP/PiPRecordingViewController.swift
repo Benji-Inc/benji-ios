@@ -22,7 +22,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     enum State {
         case idle
-        case starting
+        case initialize
         case started
         case capturing
         case ending
@@ -37,7 +37,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     let frontDataOutputQue = DispatchQueue(label: "front data output queue")
     let backDataOutputQue = DispatchQueue(label: "back data output queue")
-    let micDataOutputQue = DispatchQueue(label: "mic data output queue")
+    //let micDataOutputQue = DispatchQueue(label: "mic data output queue")
 
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
@@ -119,7 +119,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .idle:
             self.stopPlayback()
             self.beginSession()
-        case .starting:
+        case .initialize:
             break
         case .started:
             break
