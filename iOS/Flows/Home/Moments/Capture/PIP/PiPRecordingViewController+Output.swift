@@ -46,12 +46,6 @@ extension PiPRecordingViewController {
         case .idle, .error:
             // Do nothing
             break
-        case .initialize:
-            // Initialize the AVAsset writer to prepare for capture
-            let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
-            let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
-            self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
-            self.state = .started
         case .started:
             
             if isVideoOutput {
@@ -71,9 +65,9 @@ extension PiPRecordingViewController {
             }
             
             if self.frontIsSampling, self.backIsSampling, self.micIsSampling {
-                self.state = .capturing
+                self.state = .recording
             }
-        case .capturing:
+        case .recording:
             if isVideoOutput {
                 if isFrontOutput {
                     self.recorder.writeFrontSampleToFile(sampleBuffer, image: self.frontCameraView.currentCIImage)

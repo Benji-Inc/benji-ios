@@ -44,19 +44,33 @@ class PiPRecorder {
         
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
+    private var isReadyToRecord: Bool = false
+    
     deinit {
         FileManager.clearTmpDirectory()
     }
     
-    func initialize(backVideoSettings: [String: Any]?, audioSettings: [String: Any]?) {
+    func initialize(backVideoSettings: [String: Any]?,
+                    audioSettings: [String: Any]?,
+                    on dispatchQue: DispatchQueue) {
+        dispatchQue.async {
+            self.reset()
+            
+            self.backVideoSettings = backVideoSettings
+            self.audioSettings = audioSettings
+            self.initializeFront()
+            self.initializeBack()
+            self.initializeAudio()
+            
+            self.isReadyToRecord = true
+        }
+    }
+    
+    private func reset() {
         FileManager.clearTmpDirectory()
-        self.finishVideoTask = nil 
-        self.backVideoSettings = backVideoSettings
-        self.audioSettings = audioSettings
+        self.finishVideoTask = nil
         self.assetWriterAudioInput = nil
-        self.initializeFront()
-        self.initializeBack()
-        self.initializeAudio()
+        self.isReadyToRecord = false
     }
     
     private func initializeFront() {

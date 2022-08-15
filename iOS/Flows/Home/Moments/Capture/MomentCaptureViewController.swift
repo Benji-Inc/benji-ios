@@ -74,7 +74,6 @@ import Localization
                   
          self.frontCameraView.animationDidStart = { [unowned self] in
              self.animate(text: "")
-             self.state = .initialize
          }
          
          self.frontCameraView.animationDidEnd = { [unowned self] in

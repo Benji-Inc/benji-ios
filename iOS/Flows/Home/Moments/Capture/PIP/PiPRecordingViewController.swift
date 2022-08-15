@@ -22,9 +22,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     enum State {
         case idle
-        case initialize
         case started
-        case capturing
+        case recording
         case ending
         case playback
         case error
@@ -35,8 +34,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
     
-    let frontDataOutputQue = DispatchQueue(label: "front data output queue")
-    let backDataOutputQue = DispatchQueue(label: "back data output queue")
+    let dataOutputQue = DispatchQueue(label: "data output queue")
+//    let frontDataOutputQue = DispatchQueue(label: "front data output queue")
+//    let backDataOutputQue = DispatchQueue(label: "back data output queue")
     //let micDataOutputQue = DispatchQueue(label: "mic data output queue")
 
     let backCameraView = VideoPreviewView()
@@ -119,11 +119,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .idle:
             self.stopPlayback()
             self.beginSession()
-        case .initialize:
-            break
         case .started:
             break
-        case .capturing:
+        case .recording:
             break
         case .ending:
             break
@@ -133,6 +131,18 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .error:
             break
         }
+    }
+    
+    // MARK: - PUBLIC
+    
+    func startRecording() {
+        let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
+        let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
+        self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings, on: self.dataOutputQue)
+    }
+    
+    func stopRecording() {
+        
     }
     
     // MARK: - PRIVATE
@@ -209,7 +219,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     @MainActor
-    func requestTranscribePermissions() async -> SFSpeechRecognizerAuthorizationStatus {
+    private func requestTranscribePermissions() async -> SFSpeechRecognizerAuthorizationStatus {
         return await withCheckedContinuation({ continuation in
             SFSpeechRecognizer.requestAuthorization { authStatus in
                 continuation.resume(returning: authStatus)
@@ -217,7 +227,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         })
     }
     
-    func transcribeAudio(url: URL) {
+    private func transcribeAudio(url: URL) {
         // create a new recognizer and point it at our audio
         let recognizer = SFSpeechRecognizer()
         let request = SFSpeechURLRecognitionRequest(url: url)
