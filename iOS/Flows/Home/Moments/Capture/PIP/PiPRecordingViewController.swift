@@ -34,10 +34,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
     
-    let dataOutputQue = DispatchQueue(label: "data output queue")
-//    let frontDataOutputQue = DispatchQueue(label: "front data output queue")
-//    let backDataOutputQue = DispatchQueue(label: "back data output queue")
-    //let micDataOutputQue = DispatchQueue(label: "mic data output queue")
+    let dataOutputQue = DispatchQueue(label: "data output queue", attributes: .concurrent)
 
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
@@ -50,10 +47,6 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     var micInput: AVCaptureDeviceInput?
     let micDataOutput = AVCaptureAudioDataOutput()
-    
-    var backIsSampling: Bool = false
-    var frontIsSampling: Bool = false
-    var micIsSampling: Bool = false 
     
     var isSessionRunning: Bool {
         return self.session.isRunning
@@ -119,16 +112,10 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .idle:
             self.stopPlayback()
             self.beginSession()
-        case .started:
-            break
-        case .recording:
-            break
-        case .ending:
-            break
         case .playback:
             self.endSession()
             self.beginPlayback()
-        case .error:
+        default:
             break
         }
     }
@@ -142,7 +129,15 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     }
     
     func stopRecording() {
-        
+        self.dataOutputQue.async {
+            Task {
+                do {
+                    try await self.recorder.stopRecording()
+                } catch {
+                    logError(error)
+                }
+            }
+        }
     }
     
     // MARK: - PRIVATE

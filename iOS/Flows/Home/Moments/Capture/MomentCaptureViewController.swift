@@ -71,10 +71,6 @@ import Localization
      }
 
      private func setupHandlers() {
-                  
-         self.frontCameraView.animationDidStart = { [unowned self] in
-             self.animate(text: "")
-         }
          
          self.frontCameraView.animationDidEnd = { [unowned self] in
              self.state = .ending
@@ -100,7 +96,7 @@ import Localization
          switch state {
          case .idle:
              self.animate(text: "Press and Hold")
-         case .playback:
+         case .playback, .recording:
              self.animate(text: "")
          default:
              break
@@ -145,14 +141,19 @@ import Localization
          super.touchesBegan(touches, with: event)
          guard self.state == .idle else { return }
 
-         self.frontCameraView.beginRecordingAnimation()
+         self.startRecording()
+         //self.frontCameraView.beginRecordingAnimation()
      }
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesEnded(touches, with: event)
-         guard self.frontCameraView.isAnimating else { return }
-
-         self.frontCameraView.stopRecordingAnimation()
+         guard self.state == .recording else { return }
+         
+         self.stopRecording()
+         
+//         guard self.frontCameraView.isAnimating else { return }
+//
+//         self.frontCameraView.stopRecordingAnimation()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
