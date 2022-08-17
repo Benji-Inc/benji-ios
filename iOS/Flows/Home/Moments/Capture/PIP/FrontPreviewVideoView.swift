@@ -14,7 +14,6 @@ class FrontPreviewVideoView: VideoPreviewView {
     
     private let emotionGradientView = EmotionGradientView()
     
-    var animationDidStart: CompletionOptional = nil
     var animationDidEnd: CompletionOptional = nil
     
     var animation = CABasicAnimation(keyPath: "strokeEnd")
@@ -149,7 +148,6 @@ extension FrontPreviewVideoView: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
         self.isAnimating = true
-        self.animationDidStart?()
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {

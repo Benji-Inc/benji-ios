@@ -73,7 +73,8 @@ import Localization
      private func setupHandlers() {
          
          self.frontCameraView.animationDidEnd = { [unowned self] in
-             self.state = .ending
+             guard self.state == .recording else { return }
+             self.stopRecording()
          }
 
          self.view.didSelect { [unowned self] in
@@ -142,7 +143,6 @@ import Localization
          guard self.state == .idle else { return }
 
          self.startRecording()
-         //self.frontCameraView.beginRecordingAnimation()
      }
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -150,17 +150,13 @@ import Localization
          guard self.state == .recording else { return }
          
          self.stopRecording()
-         
-//         guard self.frontCameraView.isAnimating else { return }
-//
-//         self.frontCameraView.stopRecordingAnimation()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesCancelled(touches, with: event)
-         guard self.frontCameraView.isAnimating else { return }
-
-         self.frontCameraView.stopRecordingAnimation()
+         guard self.state == .recording else { return }
+         
+         self.stopRecording()
      }
  }
 

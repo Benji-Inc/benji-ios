@@ -22,9 +22,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     enum State {
         case idle
-        case started
         case recording
-        case ending
         case playback
         case error
     }
@@ -118,6 +116,12 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         default:
             break
         }
+        
+        if self.state == .recording, !self.frontCameraView.isAnimating {
+            self.frontCameraView.beginRecordingAnimation()
+        } else {
+            self.frontCameraView.stopRecordingAnimation()
+        }
     }
     
     // MARK: - PUBLIC
@@ -126,10 +130,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
         let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
         self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings, on: self.dataOutputQue)
+        self.state = .recording
     }
     
     func stopRecording() {
-        self.dataOutputQue.async {
+        let _ = self.dataOutputQue.sync {
             Task {
                 do {
                     try await self.recorder.stopRecording()
