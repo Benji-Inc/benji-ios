@@ -133,7 +133,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     func startRecording() {
         let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
         let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
-        self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings, on: self.dataOutputQue)
+        self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
         self.state = .recording
     }
     
@@ -146,7 +146,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
                     self.state = .error
                     logError(error)
 
-                    await Task.sleep(seconds: 1.0)
+                    await Task.sleep(seconds: 1.5)
                     self.state = .idle
                 }
             }

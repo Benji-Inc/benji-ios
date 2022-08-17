@@ -53,19 +53,16 @@ class PiPRecorder {
     // MARK: - PUBLIC
     
     func initialize(backVideoSettings: [String: Any]?,
-                    audioSettings: [String: Any]?,
-                    on dispatchQue: DispatchQueue) {
-        dispatchQue.async {
-            self.reset()
-            
-            self.backVideoSettings = backVideoSettings
-            self.audioSettings = audioSettings
-            self.initializeFront()
-            self.initializeBack()
-            self.initializeAudio()
-            
-            self.isReadyToRecord = true
-        }
+                    audioSettings: [String: Any]?) {
+        self.reset()
+        
+        self.backVideoSettings = backVideoSettings
+        self.audioSettings = audioSettings
+        self.initializeFront()
+        self.initializeBack()
+        self.initializeAudio()
+        
+        self.isReadyToRecord = true
     }
     
     // MARK: - RECORDING

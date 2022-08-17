@@ -33,13 +33,12 @@ class TranscriptionTextView: TextView {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.innerCornerRadius
         self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
-        self.layer.borderWidth = 2
+        self.layer.borderWidth = 1
         
-        self.backgroundColor = ThemeColor.white.color.withAlphaComponent(0.15)
+        self.backgroundColor = ThemeColor.white.color.withAlphaComponent(0.1)
     }
     
     func animateSpeech(result: SFSpeechRecognitionResult) {
-        guard let metadata = result.speechRecognitionMetadata else { return }
 
         self.animationTask?.cancel()
         self.setTextColor(.clear)
@@ -49,7 +48,6 @@ class TranscriptionTextView: TextView {
         self.textAlignment = .left 
                 
         Task {
-            await Task.sleep(seconds: metadata.speechStartTimestamp)
             async let fadeIn: () = UIView.awaitAnimation(with: .fast, animations: {
                 self.alpha = 1.0
             })
