@@ -32,7 +32,7 @@ class VideoView: BaseView {
 
     let playerLayer = AVPlayerLayer(player: nil)
     /// An object that keeps looping the video back to the beginning.
-    private var looper: AVPlayerLooper?
+    private(set) var looper: AVPlayerLooper?
     
     override func initializeSubviews() {
         super.initializeSubviews()

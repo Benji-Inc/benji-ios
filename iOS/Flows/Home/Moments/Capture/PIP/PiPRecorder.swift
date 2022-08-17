@@ -44,7 +44,7 @@ class PiPRecorder {
         
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
-    private var isReadyToRecord: Bool = false
+    @Published private(set) var isReadyToRecord: Bool = false
     
     deinit {
         FileManager.clearTmpDirectory()
@@ -114,8 +114,8 @@ class PiPRecorder {
 
         // Otherwise start a new initialization task and wait for it to finish.
         self.stopRecordingTask = Task {
-            let frontURL = await self.stopRecordingFront()
-            let backURL = await self.stopRecordingBack()
+            let frontURL = try await self.stopRecordingFront()
+            let backURL = try await self.stopRecordingBack()
             let previewURL = await self.compressVideo(for: backURL)
             let recording = PiPRecording(frontRecordingURL: frontURL,
                                          backRecordingURL: backURL,
@@ -192,7 +192,6 @@ class PiPRecorder {
         let assetWriterAudioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: settings)
         assetWriterAudioInput.expectsMediaDataInRealTime = true
         if writer.canAdd(assetWriterAudioInput) {
-            logDebug("Audio Added")
             writer.add(assetWriterAudioInput)
         }
         
@@ -250,29 +249,27 @@ class PiPRecorder {
     
     // MARK: - STOP RECORDING 
     
-    private func stopRecordingFront() async -> URL? {
-        guard let writer = self.frontAssetWriter else { return nil }
+    private func stopRecordingFront() async throws -> URL {
+        guard let writer = self.frontAssetWriter else { throw ClientError.apiError(detail: "No front asset writer") }
 
         if writer.status == .writing {
             self.frontAssetWriterVideoInput?.markAsFinished()
             await writer.finishWriting()
             return writer.outputURL
         } else {
-            logDebug("Front Failied \(writer.status)")
-            return nil
+            throw ClientError.apiError(detail: "Front Failied \(writer.status)")
         }
     }
     
-    private func stopRecordingBack() async -> URL? {
-        guard let writer = self.backAssetWriter else { return nil }
+    private func stopRecordingBack() async throws -> URL {
+        guard let writer = self.backAssetWriter else { throw ClientError.apiError(detail: "No front asset writer") }
 
         if writer.status == .writing {
             self.backAssetWriterVideoInput?.markAsFinished()
             await writer.finishWriting()
             return writer.outputURL
         } else {
-            logDebug("Back Failied \(writer.status)")
-            return nil
+            throw ClientError.apiError(detail: "Back Failied \(writer.status)")
         }
     }
     

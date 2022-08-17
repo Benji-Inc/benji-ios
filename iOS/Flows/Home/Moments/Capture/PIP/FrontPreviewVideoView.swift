@@ -74,7 +74,7 @@ class FrontPreviewVideoView: VideoPreviewView {
         self.layer.cornerRadius = self.height * 0.25
     }
     
-    func beginRecordingAnimation() {
+    func startRecordingAnimation() {
     
         self.shapeLayer.removeFromSuperlayer()
         self.layer.addSublayer(self.shapeLayer)

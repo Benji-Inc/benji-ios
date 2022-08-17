@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import Parse
 import Localization
+import Speech
 
  class MomentCaptureViewController: PiPRecordingViewController {
 
@@ -19,6 +20,7 @@ import Localization
 
      private let label = ThemeLabel(font: .medium, textColor: .white)
      private let doneButton = ThemeButton()
+     private let textView = TranscriptionTextView()
 
      var didCompleteMoment: ((Moment) -> Void)? = nil
 
@@ -49,6 +51,9 @@ import Localization
          self.view.addSubview(self.doneButton)
          self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
          
+         self.view.addSubview(self.textView)
+         self.textView.textAlignment = .center
+         
          self.setupHandlers()
      }
 
@@ -68,6 +73,10 @@ import Localization
              self.doneButton.top = self.view.height
              self.label.pinToSafeAreaBottom()
          }
+         
+         self.textView.setSize(withMaxWidth: self.doneButton.width)
+         self.textView.match(.left, to: .left, of: self.doneButton)
+         self.textView.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
      }
 
      private func setupHandlers() {
@@ -96,12 +105,18 @@ import Localization
          
          switch state {
          case .idle:
+             self.textView.alpha = 0 
              self.animate(text: "Press and Hold")
          case .playback, .recording:
              self.animate(text: "")
-         default:
-             break
+         case .error:
+             self.animate(text: "Recording Failed")
          }
+     }
+     
+     override func handleSpeech(result: SFSpeechRecognitionResult) {
+         self.textView.animateSpeech(result: result)
+         self.view.layoutNow()
      }
 
      private func createMoment(from recording: PiPRecording) async -> Moment? {

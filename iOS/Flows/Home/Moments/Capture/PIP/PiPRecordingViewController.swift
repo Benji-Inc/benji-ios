@@ -86,6 +86,16 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             .mainSink { [unowned self] state in
                 self.handle(state: state)
         }.store(in: &self.cancellables)
+        
+        self.recorder.$isReadyToRecord
+            .removeDuplicates()
+            .mainSink { [unowned self] isReady in
+                if isReady, !self.frontCameraView.isAnimating {
+                    self.frontCameraView.startRecordingAnimation()
+                } else {
+                    self.frontCameraView.stopRecordingAnimation()
+                }
+            }.store(in: &self.cancellables)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -116,12 +126,6 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         default:
             break
         }
-        
-        if self.state == .recording, !self.frontCameraView.isAnimating {
-            self.frontCameraView.beginRecordingAnimation()
-        } else {
-            self.frontCameraView.stopRecordingAnimation()
-        }
     }
     
     // MARK: - PUBLIC
@@ -139,7 +143,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
                 do {
                     try await self.recorder.stopRecording()
                 } catch {
+                    self.state = .error
                     logError(error)
+
+                    await Task.sleep(seconds: 1.0)
+                    self.state = .idle
                 }
             }
         }
@@ -239,12 +247,13 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
                 logDebug("There was an error: \(error!)")
                 return
             }
-
+            
             // if we got the final transcription back, print it
             if result.isFinal {
-                // pull out the best transcription...
-                logDebug(result.bestTranscription.formattedString)
+                self.handleSpeech(result: result)
             }
         }
     }
+    
+    func handleSpeech(result: SFSpeechRecognitionResult) {}
 }

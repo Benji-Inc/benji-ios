@@ -38,7 +38,7 @@ extension PiPRecordingViewController {
             }
         }
         
-        if self.state == .recording {
+        if self.recorder.isReadyToRecord {
             // then record
             if isVideoOutput {
                 if isFrontVideoOutput {
