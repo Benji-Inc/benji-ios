@@ -216,8 +216,10 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         
         Task.onMainActorAsync {
             let status = await self.requestTranscribePermissions()
-            guard status == .authorized else { return }
-            self.transcribeAudio(url: frontURL)
+            Task {
+                guard status == .authorized else { return }
+                self.transcribeAudio(url: frontURL)
+            }
         }
     }
 
