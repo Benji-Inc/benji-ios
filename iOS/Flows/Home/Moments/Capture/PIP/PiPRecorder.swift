@@ -44,20 +44,101 @@ class PiPRecorder {
         
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
+    @Published private(set) var isReadyToRecord: Bool = false
+    
     deinit {
         FileManager.clearTmpDirectory()
     }
     
-    func initialize(backVideoSettings: [String: Any]?, audioSettings: [String: Any]?) {
-        FileManager.clearTmpDirectory()
-        self.finishVideoTask = nil 
+    // MARK: - PUBLIC
+    
+    func initialize(backVideoSettings: [String: Any]?,
+                    audioSettings: [String: Any]?) {
+        self.reset()
+        
         self.backVideoSettings = backVideoSettings
         self.audioSettings = audioSettings
-        self.assetWriterAudioInput = nil
         self.initializeFront()
         self.initializeBack()
         self.initializeAudio()
+        
+        self.isReadyToRecord = true
     }
+    
+    // MARK: - RECORDING
+    
+    func recordFrontVideo(sampleBuffer: CMSampleBuffer, ciImage: CIImage?) {
+        guard self.isReadyToRecord, let assetWriter = self.frontAssetWriter else { return }
+        
+        if assetWriter.status == .unknown {
+            self.startWritingSession(with: assetWriter, and: sampleBuffer)
+        } else if assetWriter.status == .writing {
+            self.handleFrontInput(from: sampleBuffer, image: ciImage)
+        }
+    }
+    
+    func recordBackVideo(sampleBuffer: CMSampleBuffer) {
+        guard self.isReadyToRecord, let assetWriter = self.backAssetWriter else { return }
+        
+        if assetWriter.status == .unknown {
+            self.startWritingSession(with: assetWriter, and: sampleBuffer)
+        } else if assetWriter.status == .writing {
+            self.handleBackInput(from: sampleBuffer)
+        }
+    }
+    
+    func recordAudio(sampleBuffer: CMSampleBuffer) {
+        guard self.isReadyToRecord, let assetWriter = self.frontAssetWriter else { return }
+        
+        if assetWriter.status == .unknown {
+            self.startWritingSession(with: assetWriter, and: sampleBuffer)
+        } else if assetWriter.status == .writing {
+            self.handleAudioInput(from: sampleBuffer)
+        }
+    }
+    
+    // MARK: - STOP RECORDING
+    
+    private var stopRecordingTask: Task<Void, Error>?
+
+    // This cant be called more than once per recording otherwise inputs will crash
+    func stopRecording() async throws {
+        // If we already have an initialization task, wait for it to finish.
+        if let finishVideoTask = self.stopRecordingTask {
+            try await finishVideoTask.value
+            return
+        }
+
+        // Otherwise start a new initialization task and wait for it to finish.
+        self.stopRecordingTask = Task {
+            let frontURL = try await self.stopRecordingFront()
+            let backURL = try await self.stopRecordingBack()
+            let previewURL = await self.compressVideo(for: backURL)
+            let recording = PiPRecording(frontRecordingURL: frontURL,
+                                         backRecordingURL: backURL,
+                                         previewURL: previewURL)
+            self.didCapturePIPRecording?(recording)
+        }
+
+        do {
+            try await self.stopRecordingTask?.value
+        } catch {
+            // Dispose of the task because it failed, then pass the error along.
+            self.stopRecordingTask = nil
+            throw error
+        }
+    }
+    
+    // MARK: - PRIVATE
+    
+    private func reset() {
+        FileManager.clearTmpDirectory()
+        self.stopRecordingTask = nil
+        self.assetWriterAudioInput = nil
+        self.isReadyToRecord = false
+    }
+    
+    // MARK: - INITIALZE WRITERS/INPUTS
     
     private func initializeFront() {
         // Create an asset writer that records to a temporary file
@@ -114,25 +195,18 @@ class PiPRecorder {
         self.assetWriterAudioInput = assetWriterAudioInput
     }
     
-    func startFrontSession(with sampleBuffer: CMSampleBuffer) {
-        guard let writer = self.frontAssetWriter else { return }
+    private func startWritingSession(with writer: AVAssetWriter, and sampleBuffer: CMSampleBuffer) {
         writer.startWriting()
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         writer.startSession(atSourceTime: startTime)
     }
     
-    func startBackSession(with sampleBuffer: CMSampleBuffer) {
-        guard let writer = self.backAssetWriter else { return }
-        writer.startWriting()
-        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        writer.startSession(atSourceTime: startTime)
-    }
+    // MARK: - HANDLE SAMPLE BUFFERS
     
-    @discardableResult
-    func writeFrontSampleToFile(_ sampleBuffer: CMSampleBuffer, image: CIImage?) -> Bool {
+    private func handleFrontInput(from sampleBuffer: CMSampleBuffer, image: CIImage?) {
         guard let input = self.frontAssetWriterVideoInput,
                 input.isReadyForMoreMediaData,
-              let currentImage = image else { return false }
+              let currentImage = image else { return }
         
         var pixelBuffer: CVPixelBuffer?
         let attrs = [kCVPixelBufferCGImageCompatibilityKey : kCFBooleanTrue,
@@ -158,85 +232,45 @@ class PiPRecorder {
                                       preferredTimescale: CMTimeScale(bitPattern: 600))
 
         self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
-        return true
     }
     
-    @discardableResult
-    func writeBackSampleToFile(_ sampleBuffer: CMSampleBuffer) -> Bool {
-        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else {
-            return false
-        }
-        input.append(sampleBuffer)
-        return true
-    }
-    
-    func recordAudio(sampleBuffer: CMSampleBuffer) {
-        guard let assetWriter = self.frontAssetWriter,
-            assetWriter.status == .writing,
-              let input = self.assetWriterAudioInput,
-              input.isReadyForMoreMediaData else {
-            logDebug("Audio failed")
-                return
-        }
-        
+    private func handleBackInput(from sampleBuffer: CMSampleBuffer) {
+        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
         input.append(sampleBuffer)
     }
     
-    private var finishVideoTask: Task<Void, Error>?
-
-    // This cant be called more than once per recording otherwise inputs will crash
-    func finishRecording() async throws {
-        // If we already have an initialization task, wait for it to finish.
-        if let finishVideoTask = self.finishVideoTask {
-            try await finishVideoTask.value
-            return
-        }
-
-        // Otherwise start a new initialization task and wait for it to finish.
-        self.finishVideoTask = Task {
-            let frontURL = await self.stopRecordingFront()
-            let backURL = await self.stopRecordingBack()
-            let previewURL = await self.compressVideo(for: backURL)
-            let recording = PiPRecording(frontRecordingURL: frontURL,
-                                         backRecordingURL: backURL,
-                                         previewURL: previewURL)
-            self.didCapturePIPRecording?(recording)
-        }
-
-        do {
-            try await self.finishVideoTask?.value
-        } catch {
-            // Dispose of the task because it failed, then pass the error along.
-            self.finishVideoTask = nil
-            throw error
-        }
+    private func handleAudioInput(from sampleBuffer: CMSampleBuffer) {
+        guard let input = self.assetWriterAudioInput, input.isReadyForMoreMediaData else { return }
+        input.append(sampleBuffer)
     }
     
-    private func stopRecordingFront() async -> URL? {
-        guard let writer = self.frontAssetWriter else { return nil }
+    // MARK: - STOP RECORDING 
+    
+    private func stopRecordingFront() async throws -> URL {
+        guard let writer = self.frontAssetWriter else { throw ClientError.apiError(detail: "No front asset writer") }
 
         if writer.status == .writing {
             self.frontAssetWriterVideoInput?.markAsFinished()
             await writer.finishWriting()
             return writer.outputURL
         } else {
-            logDebug("Front Failied \(writer.status)")
-            return nil
+            throw ClientError.apiError(detail: "Front Failied \(writer.status)")
         }
     }
     
-    private func stopRecordingBack() async -> URL? {
-        guard let writer = self.backAssetWriter else { return nil }
+    private func stopRecordingBack() async throws -> URL {
+        guard let writer = self.backAssetWriter else { throw ClientError.apiError(detail: "No front asset writer") }
 
         if writer.status == .writing {
             self.backAssetWriterVideoInput?.markAsFinished()
             await writer.finishWriting()
             return writer.outputURL
         } else {
-            logDebug("Back Failied \(writer.status)")
-            return nil
+            throw ClientError.apiError(detail: "Back Failied \(writer.status)")
         }
     }
+    
+    // MARK: - COMPRESSING
     
     private func compressVideo(for inputURL: URL?) async -> URL? {
         guard let inputURL = inputURL else {

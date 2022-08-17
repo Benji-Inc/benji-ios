@@ -330,6 +330,7 @@
 		D611F7BB2815B0FD006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D611F7BC2815B0FE006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
 		D611F7BD2815B0FE006D09D3 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
+		D6125B8628AD771500199414 /* TranscriptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6125B8528AD771500199414 /* TranscriptionTextView.swift */; };
 		D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FA927ADC6030058811C /* WalletViewController.swift */; };
 		D6129FAC27ADC61F0058811C /* WalletHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */; };
 		D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6129FAD27ADC6410058811C /* TransactionCell.swift */; };
@@ -1162,6 +1163,7 @@
 		D61128C42804EF2E00574B96 /* ReactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionType.swift; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
 		D611F7B32815A136006D09D3 /* SuggestedReply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedReply.swift; sourceTree = "<group>"; };
+		D6125B8528AD771500199414 /* TranscriptionTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionTextView.swift; sourceTree = "<group>"; };
 		D6129FA927ADC6030058811C /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
 		D6129FAB27ADC61F0058811C /* WalletHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderView.swift; sourceTree = "<group>"; };
 		D6129FAD27ADC6410058811C /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
@@ -2160,6 +2162,7 @@
 			children = (
 				D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */,
 				D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */,
+				D6125B8528AD771500199414 /* TranscriptionTextView.swift */,
 				D63F9648289B29D2004F6C0D /* PIP */,
 			);
 			path = Capture;
@@ -3739,6 +3742,7 @@
 				D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceCaptureViewController.swift in Sources */,
 				D656BF0F281845B800723068 /* MessageDateLabel.swift in Sources */,
+				D6125B8628AD771500199414 /* TranscriptionTextView.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,

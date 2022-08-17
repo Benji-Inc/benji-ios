@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import Vision
+import Speech
 
 class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
@@ -21,10 +22,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     enum State {
         case idle
-        case starting
-        case started
-        case capturing
-        case ending
+        case recording
         case playback
         case error
     }
@@ -34,9 +32,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
     
-    let frontDataOutputQue = DispatchQueue(label: "front data output queue")
-    let backDataOutputQue = DispatchQueue(label: "back data output queue")
-    let micDataOutputQue = DispatchQueue(label: "mic data output queue")
+    let dataOutputQue = DispatchQueue(label: "data output queue", attributes: .concurrent)
 
     let backCameraView = VideoPreviewView()
     let frontCameraView = FrontPreviewVideoView()
@@ -49,9 +45,6 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     var micInput: AVCaptureDeviceInput?
     let micDataOutput = AVCaptureAudioDataOutput()
-    
-    var backIsSampling: Bool = false
-    var frontIsSampling: Bool = false
     
     var isSessionRunning: Bool {
         return self.session.isRunning
@@ -93,6 +86,16 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             .mainSink { [unowned self] state in
                 self.handle(state: state)
         }.store(in: &self.cancellables)
+        
+        self.recorder.$isReadyToRecord
+            .removeDuplicates()
+            .mainSink { [unowned self] isReady in
+                if isReady, !self.frontCameraView.isAnimating {
+                    self.frontCameraView.startRecordingAnimation()
+                } else {
+                    self.frontCameraView.stopRecordingAnimation()
+                }
+            }.store(in: &self.cancellables)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,19 +120,36 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case .idle:
             self.stopPlayback()
             self.beginSession()
-        case .starting:
-            break
-        case .started:
-            break
-        case .capturing:
-            break
-        case .ending:
-            break
         case .playback:
             self.endSession()
             self.beginPlayback()
-        case .error:
+        default:
             break
+        }
+    }
+    
+    // MARK: - PUBLIC
+    
+    func startRecording() {
+        let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
+        let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
+        self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
+        self.state = .recording
+    }
+    
+    func stopRecording() {
+        let _ = self.dataOutputQue.sync {
+            Task {
+                do {
+                    try await self.recorder.stopRecording()
+                } catch {
+                    self.state = .error
+                    logError(error)
+
+                    await Task.sleep(seconds: 1.5)
+                    self.state = .idle
+                }
+            }
         }
     }
     
@@ -193,10 +213,49 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
 
         self.frontCameraView.beginPlayback(with: frontURL)
         self.backCameraView.beginPlayback(with: backURL)
+        
+        Task.onMainActorAsync {
+            let status = await self.requestTranscribePermissions()
+            Task {
+                guard status == .authorized else { return }
+                self.transcribeAudio(url: frontURL)
+            }
+        }
     }
 
     private func stopPlayback() {
         self.frontCameraView.stopPlayback()
         self.backCameraView.stopPlayback()
     }
+    
+    @MainActor
+    private func requestTranscribePermissions() async -> SFSpeechRecognizerAuthorizationStatus {
+        return await withCheckedContinuation({ continuation in
+            SFSpeechRecognizer.requestAuthorization { authStatus in
+                continuation.resume(returning: authStatus)
+            }
+        })
+    }
+    
+    private func transcribeAudio(url: URL) {
+        // create a new recognizer and point it at our audio
+        let recognizer = SFSpeechRecognizer()
+        let request = SFSpeechURLRecognitionRequest(url: url)
+
+        // start recognition!
+        recognizer?.recognitionTask(with: request) { [unowned self] (result, error) in
+            // abort if we didn't get any transcription back
+            guard let result = result else {
+                logDebug("There was an error: \(error!)")
+                return
+            }
+            
+            // if we got the final transcription back, print it
+            if result.isFinal {
+                self.handleSpeech(result: result)
+            }
+        }
+    }
+    
+    func handleSpeech(result: SFSpeechRecognitionResult) {}
 }

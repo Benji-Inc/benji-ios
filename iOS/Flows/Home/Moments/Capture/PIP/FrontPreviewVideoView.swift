@@ -14,7 +14,6 @@ class FrontPreviewVideoView: VideoPreviewView {
     
     private let emotionGradientView = EmotionGradientView()
     
-    var animationDidStart: CompletionOptional = nil
     var animationDidEnd: CompletionOptional = nil
     
     var animation = CABasicAnimation(keyPath: "strokeEnd")
@@ -42,7 +41,7 @@ class FrontPreviewVideoView: VideoPreviewView {
         return metalView
     }()
     
-    var currentCIImage: CIImage? {
+    private(set) var currentCIImage: CIImage? {
         didSet {
             self.cameraView.draw()
         }
@@ -75,7 +74,7 @@ class FrontPreviewVideoView: VideoPreviewView {
         self.layer.cornerRadius = self.height * 0.25
     }
     
-    func beginRecordingAnimation() {
+    func startRecordingAnimation() {
     
         self.shapeLayer.removeFromSuperlayer()
         self.layer.addSublayer(self.shapeLayer)
@@ -96,6 +95,31 @@ class FrontPreviewVideoView: VideoPreviewView {
     func stopRecordingAnimation() {
         self.shapeLayer.removeAllAnimations()
         self.shapeLayer.removeFromSuperlayer()
+    }
+    
+    /// Makes the image black and white, and makes the background clear.
+    func setImage(original framePixelBuffer: CVPixelBuffer, mask maskPixelBuffer: CVPixelBuffer) {
+        // Make the background clear.
+        let color = CIColor(color: UIColor.clear)
+
+        // Create CIImage objects for the video frame and the segmentation mask.
+        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(.left)
+        var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
+
+        // Scale the mask image to fit the bounds of the video frame.
+        let scaleX = originalImage.extent.width / maskImage.extent.width
+        let scaleY = originalImage.extent.height / maskImage.extent.height
+        maskImage = maskImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
+
+        let solidColor = CIImage(color: color).cropped(to: maskImage.extent)
+
+        // Blend the original, background, and mask images.
+        let blendFilter = CIFilter.blendWithRedMask()
+        blendFilter.inputImage = originalImage
+        blendFilter.backgroundImage = solidColor
+        blendFilter.maskImage = maskImage
+
+        self.currentCIImage = blendFilter.outputImage?.oriented(.leftMirrored)
     }
     
     // Overriding because changing the alpha on the preivew layer, hides the entire view.
@@ -124,7 +148,6 @@ extension FrontPreviewVideoView: CAAnimationDelegate {
     
     func animationDidStart(_ anim: CAAnimation) {
         self.isAnimating = true
-        self.animationDidStart?()
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {

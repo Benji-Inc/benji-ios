@@ -124,7 +124,7 @@ class TextView: UITextView {
         self.set(backgroundColor: .clear)
 
         NotificationCenter.default.publisher(for: UITextView.textDidChangeNotification)
-            .filter({ notification in
+            .filter({ [unowned self] notification in
                 if let tv = notification.object as? TextView,
                     tv === self {
                     return true
