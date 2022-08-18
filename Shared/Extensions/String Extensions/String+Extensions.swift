@@ -109,3 +109,35 @@ extension Range where Bound == String.Index {
                        length: self.upperBound.utf16Offset(in: string) - self.lowerBound.utf16Offset(in: string))
     }
 }
+
+extension NSString {
+
+    func getRangesOfSubstringsSeparatedBySpaces() -> [NSRange] {
+        var substringRanges: [NSRange] = []
+
+        let fullRange = NSRange(location: 0, length: self.length)
+        var location: Int?
+        self.enumerateSubstrings(in: fullRange, options: .byComposedCharacterSequences)
+        { (substring, substringRange, _, _) in
+
+            if substring == " " {
+                if let location = location {
+                    substringRanges.append(NSRange(location: location,
+                                                   length: substringRange.location - location))
+                }
+
+                location = nil
+            } else {
+                if location.isNil {
+                    location = substringRange.location
+                }
+            }
+        }
+
+        if let location = location {
+            substringRanges.append(NSRange(location: location, length: self.length - location))
+        }
+
+        return substringRanges
+    }
+}

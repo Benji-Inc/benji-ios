@@ -26,6 +26,7 @@ class MessagePreview: BaseView {
         self.addSubview(self.mainContentArea)
         
         self.mainContentArea.addSubview(self.personView)
+        self.personView.expressionVideoView.shouldPlay = true 
         self.mainContentArea.addSubview(self.label)
         self.label.lineBreakMode = .byTruncatingTail
         

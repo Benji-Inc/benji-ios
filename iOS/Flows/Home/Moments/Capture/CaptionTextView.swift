@@ -10,7 +10,7 @@ import Foundation
 import Localization
 import Speech
 
-class TranscriptionTextView: TextView {
+class CaptionTextView: TextView {
 
     override func initializeViews() {
         super.initializeViews()
@@ -39,6 +39,75 @@ class TranscriptionTextView: TextView {
         self.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
     }
     
+    func animateCaption(text: String?) {
+
+        if let text = text {
+            self.animationTask?.cancel()
+            self.setTextColor(.clear)
+            self.alpha = 0
+            
+            self.setText(text)
+            self.textAlignment = .left
+                    
+            Task {
+                async let fadeIn: () = UIView.awaitAnimation(with: .fast, animations: {
+                    self.alpha = 1.0
+                })
+                async let textAnimation: () = self.startAnimation()
+                let _: [()] = await [fadeIn, textAnimation]
+            }
+        } else {
+            self.setText("No caption")
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.alpha = 1
+            }
+        }
+    }
+
+    var animationTask: Task<Void, Never>?
+    
+    func startAnimation() async {
+        self.animationTask?.cancel()
+
+        self.animationTask = Task {
+            let nsString = self.attributedText.string as NSString
+            let substringRanges: [NSRange] = nsString.getRangesOfSubstringsSeparatedBySpaces()
+
+            let lookAheadCount = 5
+            for index in -lookAheadCount..<substringRanges.count {
+                guard !Task.isCancelled else { return }
+
+                let updatedText = self.attributedText.mutableCopy() as! NSMutableAttributedString
+
+                let keyPoints: [CGFloat] = [1, 0.9, 0.7, 0.35, 0]
+
+                for i in 0...lookAheadCount {
+                    guard let nextRange = substringRanges[safe: index + i] else { continue }
+
+                    let alpha = lerp(CGFloat(i)/CGFloat(lookAheadCount), keyPoints: keyPoints)
+                    updatedText.addAttribute(.foregroundColor,
+                                             value: ThemeColor.white.color.withAlphaComponent(alpha),
+                                             range: nextRange)
+
+                }
+
+                await withCheckedContinuation { continuation in
+                    UIView.transition(with: self,
+                                      duration: 0.1,
+                                      options: [.transitionCrossDissolve, .curveLinear]) {
+                        self.attributedText = updatedText
+                    } completion: { completed in
+                        continuation.resume(returning: ())
+                    }
+                }
+            }
+
+            self.textColor = ThemeColor.white.color
+        }
+
+        await self.animationTask?.value
+    }
+    
     func animateSpeech(result: SFSpeechRecognitionResult?) {
 
         if let result = result {
@@ -62,10 +131,7 @@ class TranscriptionTextView: TextView {
                 self.alpha = 1
             }
         }
-        
     }
-
-    var animationTask: Task<Void, Never>?
     
     func startAnimation(with segments: [SFTranscriptionSegment]) async {
         self.animationTask?.cancel()

@@ -12,6 +12,9 @@ class MomentViewController: ViewController {
     
     private let moment: Moment
     
+    private let captionTextView = CaptionTextView()
+    private let createAtLabel = ThemeLabel(font: .xtraSmall)
+    private let personView = BorderedPersonView()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
     let blurView = MomentBlurView()
@@ -38,10 +41,6 @@ class MomentViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
         
-        // Show captions
-        // Show profile pic
-        // Date created 
-        
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
@@ -54,6 +53,14 @@ class MomentViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
+        self.view.addSubview(self.captionTextView)
+        self.view.addSubview(self.createAtLabel)
+        self.createAtLabel.textAlignment = .right
+        self.createAtLabel.alpha = 0.5
+        self.createAtLabel.showShadow(withOffset: 0, opacity: 1.0)
+        
+        self.view.addSubview(self.personView)
+        
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
         
@@ -74,6 +81,19 @@ class MomentViewController: ViewController {
         self.expressionView.squaredSize = self.view.width * 0.25
         self.expressionView.pinToSafeAreaTop()
         self.expressionView.pinToSafeAreaLeft()
+        
+        self.personView.squaredSize = 40
+        self.personView.pinToSafeAreaLeft()
+        
+        self.captionTextView.setSize(withMaxWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.captionTextView.match(.left, to: .right, of: self.personView, offset: .standard)
+        self.captionTextView.pinToSafeAreaBottom()
+        
+        self.createAtLabel.setSize(withWidth: self.view.width)
+        self.createAtLabel.match(.bottom, to: .top, of: self.captionTextView, offset: .negative(.standard))
+        self.createAtLabel.match(.left, to: .left, of: self.captionTextView)
+        
+        self.personView.match(.top, to: .top, of: self.createAtLabel)
         
         self.blurView.expandToSuperviewSize()
     }
@@ -96,7 +116,18 @@ class MomentViewController: ViewController {
                 self.momentView.loadPreview(for: self.moment)
             }
         case .playback:
-            break
+            Task {
+                guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
+                self.captionTextView.animateCaption(text: moment.caption)
+                
+                if let createAt = moment.createdAt {
+                    let dateText = Date.hourMinuteTimeOfDayWithDate.string(from: createAt)
+                    self.createAtLabel.setText(dateText)
+                }
+                
+                self.personView.set(expression: nil, person: moment.author)
+                self.view.layoutNow()
+            }
         }
     }
 }

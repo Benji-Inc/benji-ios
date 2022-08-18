@@ -21,7 +21,7 @@ import KeyboardManager
 
      private let label = ThemeLabel(font: .medium, textColor: .white)
      private let doneButton = ThemeButton()
-     private let textView = TranscriptionTextView()
+     private let textView = CaptionTextView()
 
      var didCompleteMoment: ((Moment) -> Void)? = nil
 
