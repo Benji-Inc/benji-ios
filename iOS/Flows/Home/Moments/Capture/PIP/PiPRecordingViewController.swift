@@ -100,6 +100,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     override func viewWillDisappear(_ animated: Bool) {
         self.endSession()
+        self.stopPlayback()
         super.viewWillDisappear(animated)
     }
     

@@ -56,18 +56,15 @@ import Coordinator
      }
      
      func presentProfile(for person: PersonType) {
-         if self.parentCoordinator is ProfileCoordinator {
-             self.finishFlow(with: nil)
-         } else {
-             self.removeChild()
-             
-             let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
-             
-             self.addChildAndStart(coordinator) { [unowned self] result in
-                 self.finishFlow(with: result)
-             }
-             
-             self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
+         
+         self.removeChild()
+         
+         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+         
+         self.addChildAndStart(coordinator) { [unowned self] result in
+             self.finishFlow(with: result)
          }
+         
+         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
      }
  }

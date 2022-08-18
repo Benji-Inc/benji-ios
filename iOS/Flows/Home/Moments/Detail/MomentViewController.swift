@@ -12,6 +12,7 @@ class MomentViewController: ViewController {
     
     private let moment: Moment
     
+    private let controlsContainer = BaseView()
     private let captionTextView = CaptionTextView()
     private let createAtLabel = ThemeLabel(font: .xtraSmall)
     let personView = BorderedPersonView()
@@ -53,13 +54,9 @@ class MomentViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
-        self.view.addSubview(self.captionTextView)
-        self.view.addSubview(self.createAtLabel)
-        self.createAtLabel.textAlignment = .right
-        self.createAtLabel.alpha = 0.5
-        self.createAtLabel.showShadow(withOffset: 0, opacity: 1.0)
-        
-        self.view.addSubview(self.personView)
+        self.view.addSubview(self.controlsContainer)
+        self.controlsContainer.addSubview(self.captionTextView)
+        self.controlsContainer.addSubview(self.personView)
         
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
@@ -77,22 +74,20 @@ class MomentViewController: ViewController {
         super.viewDidLayoutSubviews()
         
         self.momentView.expandToSuperviewSize()
+        self.controlsContainer.expandToSuperviewSize()
         
         self.expressionView.squaredSize = self.view.width * 0.25
         self.expressionView.pinToSafeAreaTop()
         self.expressionView.pinToSafeAreaLeft()
         
-        self.personView.squaredSize = 40
+        self.personView.squaredSize = 35
         self.personView.pinToSafeAreaRight()
         self.personView.pinToSafeAreaBottom()
         
-        self.captionTextView.setSize(withMaxWidth: Theme.getPaddedWidth(with: self.view.width))
+        let maxWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - Theme.ContentOffset.xtraLong.value
+        self.captionTextView.setSize(withMaxWidth: maxWidth)
         self.captionTextView.pinToSafeAreaLeft()
         self.captionTextView.pinToSafeAreaBottom()
-        
-        self.createAtLabel.setSize(withWidth: self.view.width)
-        self.createAtLabel.match(.top, to: .bottom, of: self.captionTextView, offset: .short)
-        self.createAtLabel.pinToSafeAreaLeft()
         
         self.blurView.expandToSuperviewSize()
     }
@@ -128,5 +123,41 @@ class MomentViewController: ViewController {
                 self.view.layoutNow()
             }
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard self.state == .playback else { return }
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.controlsContainer.alpha = 0.0
+        }
+
+        self.expressionView.playerLayer.player?.pause()
+        self.momentView.playerLayer.player?.pause()
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        guard self.state == .playback else { return }
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.controlsContainer.alpha = 1.0
+        }
+        
+        self.expressionView.playerLayer.player?.play()
+        self.momentView.playerLayer.player?.play()
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        guard self.state == .playback else { return }
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.controlsContainer.alpha = 1.0
+        }
+        
+        self.expressionView.playerLayer.player?.play()
+        self.momentView.playerLayer.player?.play()
     }
 }
