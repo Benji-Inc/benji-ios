@@ -247,15 +247,18 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             // abort if we didn't get any transcription back
             guard let result = result else {
                 logDebug("There was an error: \(error!)")
+                self.handleSpeech(result: nil)
                 return
             }
             
             // if we got the final transcription back, print it
             if result.isFinal {
                 self.handleSpeech(result: result)
+            } else {
+                self.handleSpeech(result: nil)
             }
         }
     }
     
-    func handleSpeech(result: SFSpeechRecognitionResult) {}
+    func handleSpeech(result: SFSpeechRecognitionResult?) {}
 }

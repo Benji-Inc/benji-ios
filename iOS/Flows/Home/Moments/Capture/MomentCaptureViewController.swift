@@ -130,7 +130,7 @@ import KeyboardManager
          }
      }
      
-     override func handleSpeech(result: SFSpeechRecognitionResult) {
+     override func handleSpeech(result: SFSpeechRecognitionResult?) {
          self.textView.animateSpeech(result: result)
          self.view.layoutNow()
      }
@@ -139,7 +139,8 @@ import KeyboardManager
          await self.doneButton.handleEvent(status: .loading)
          
          do {
-             return  try await MomentsStore.shared.createMoment(from: recording)
+             return  try await MomentsStore.shared.createMoment(from: recording,
+                                                                caption: self.textView.text)
          } catch {
              await self.doneButton.handleEvent(status: .error("Error"))
              return nil

@@ -39,22 +39,30 @@ class TranscriptionTextView: TextView {
         self.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
     }
     
-    func animateSpeech(result: SFSpeechRecognitionResult) {
+    func animateSpeech(result: SFSpeechRecognitionResult?) {
 
-        self.animationTask?.cancel()
-        self.setTextColor(.clear)
-        self.alpha = 0
-        
-        self.setText(result.bestTranscription.formattedString)
-        self.textAlignment = .left 
-                
-        Task {
-            async let fadeIn: () = UIView.awaitAnimation(with: .fast, animations: {
-                self.alpha = 1.0
-            })
-            async let textAnimation: () = self.startAnimation(with: result.bestTranscription.segments)
-            let _: [()] = await [fadeIn, textAnimation]
+        if let result = result {
+            self.animationTask?.cancel()
+            self.setTextColor(.clear)
+            self.alpha = 0
+            
+            self.setText(result.bestTranscription.formattedString)
+            self.textAlignment = .left
+                    
+            Task {
+                async let fadeIn: () = UIView.awaitAnimation(with: .fast, animations: {
+                    self.alpha = 1.0
+                })
+                async let textAnimation: () = self.startAnimation(with: result.bestTranscription.segments)
+                let _: [()] = await [fadeIn, textAnimation]
+            }
+        } else {
+            self.setText("No caption")
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.alpha = 1
+            }
         }
+        
     }
 
     var animationTask: Task<Void, Never>?
