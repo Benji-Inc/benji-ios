@@ -76,8 +76,8 @@ class ThreadCoordinator: InputHandlerCoordinator<ThreadResult>, DeepLinkHandler 
             switch result {
             case .conversation(let conversationId):
                 self.finishFlow(with: .conversation(conversationId))
-            case .openReplies(_):
-                break
+            default:
+                break 
             }
         }
     }

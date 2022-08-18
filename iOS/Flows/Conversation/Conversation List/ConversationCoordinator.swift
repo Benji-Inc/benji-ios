@@ -106,6 +106,13 @@ class ConversationCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
                                                                    viewReplies: true,
                                                                    animateScroll: false)
                 }
+            case .message(let message):
+                Task.onMainActorAsync {
+                    await self.conversationVC.scrollToConversation(with: message.conversationId,
+                                                                   messageId: message.id,
+                                                                   viewReplies: false,
+                                                                   animateScroll: false)
+                }
             }
         }
     }

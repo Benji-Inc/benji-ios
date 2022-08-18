@@ -55,6 +55,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
                     Task {
                         self.personView.set(expression: first.expression, person: person)
                         self.personView.expressionVideoView.shouldPlay = true
+                        self.personView.expressionVideoView.shouldPlayAudio = false 
                     }
                 }
             }.store(in: &self.cancellables)

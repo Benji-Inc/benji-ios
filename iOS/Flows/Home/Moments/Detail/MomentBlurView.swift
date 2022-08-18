@@ -27,11 +27,9 @@ class MomentBlurView: BaseView {
         
         self.vibrancyEffectView.contentView.addSubview(self.imageView)
         self.imageView.tintColor = ThemeColor.white.color
-        self.imageView.alpha = 0
         
         self.vibrancyEffectView.contentView.addSubview(self.label)
         self.label.textAlignment = .center
-        self.label.alpha = 0 
         
         self.addSubview(self.button)
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Record Moment"))
@@ -48,10 +46,10 @@ class MomentBlurView: BaseView {
     
     func animateBlur(shouldShow: Bool) {
         Task {
+            
             await UIView.awaitAnimation(with: .fast) {
                 self.blurredEffectView.effect = shouldShow ? self.blurEffect : nil
-                self.label.alpha = shouldShow ? 1.0 : 0
-                self.imageView.alpha = shouldShow ? 1.0 : 0
+                self.alpha = shouldShow ? 1.0 : 0
                 self.layoutNow()
             }
         }

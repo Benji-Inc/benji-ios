@@ -348,7 +348,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         self.present(coordinator) { [unowned self] result in
             switch result {
             case .reply(let message):
-                self.inputHandlerViewController.dismiss(animated: true) { [unowned self] in
+                self.router.dismiss(source: coordinator.toPresentable(), animated: true) { [weak self] in
+                    guard let `self` = self else { return }
                     self.presentThread(for: message, startingReplyId: nil)
                 }
             case .none:

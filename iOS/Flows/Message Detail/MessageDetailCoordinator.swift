@@ -138,8 +138,8 @@ class MessageDetailCoordinator: PresentableCoordinator<MessageDetailResult> {
                 switch result {
                 case .conversation(let conversationId):
                     self.finishFlow(with: .conversation(conversationId))
-                case .openReplies(_):
-                    break
+                default:
+                    break 
                 }
             }
         }

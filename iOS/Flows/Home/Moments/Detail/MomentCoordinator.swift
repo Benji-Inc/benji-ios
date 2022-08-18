@@ -9,7 +9,7 @@
 import Foundation
 import Coordinator
 
- class MomentCoordinator: PresentableCoordinator<Void> {
+ class MomentCoordinator: PresentableCoordinator<ProfileResult?> {
 
      private let moment: Moment
 
@@ -36,6 +36,11 @@ import Coordinator
          self.momentVC.blurView.button.didSelect { [unowned self] in
              self.presentMomentCapture()
          }
+         
+         self.momentVC.personView.didSelect { [unowned self] in
+             guard let author = self.moment.author else { return }
+             self.presentProfile(for: author)
+         }
      }
      
      func presentMomentCapture() {
@@ -47,6 +52,19 @@ import Coordinator
                  self.momentVC.state = .loading
              }
          }
+         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
+     }
+     
+     func presentProfile(for person: PersonType) {
+         
+         self.removeChild()
+         
+         let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
+         
+         self.addChildAndStart(coordinator) { [unowned self] result in
+             self.finishFlow(with: result)
+         }
+         
          self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
      }
  }

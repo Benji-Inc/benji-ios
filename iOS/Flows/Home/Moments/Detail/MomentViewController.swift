@@ -12,6 +12,10 @@ class MomentViewController: ViewController {
     
     private let moment: Moment
     
+    private let controlsContainer = BaseView()
+    private let captionTextView = CaptionTextView()
+    private let createAtLabel = ThemeLabel(font: .xtraSmall)
+    let personView = BorderedPersonView()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
     let blurView = MomentBlurView()
@@ -50,6 +54,10 @@ class MomentViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
+        self.view.addSubview(self.controlsContainer)
+        self.controlsContainer.addSubview(self.captionTextView)
+        self.controlsContainer.addSubview(self.personView)
+        
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
         
@@ -66,10 +74,20 @@ class MomentViewController: ViewController {
         super.viewDidLayoutSubviews()
         
         self.momentView.expandToSuperviewSize()
+        self.controlsContainer.expandToSuperviewSize()
         
         self.expressionView.squaredSize = self.view.width * 0.25
         self.expressionView.pinToSafeAreaTop()
         self.expressionView.pinToSafeAreaLeft()
+        
+        self.personView.squaredSize = 35
+        self.personView.pinToSafeAreaRight()
+        self.personView.pinToSafeAreaBottom()
+        
+        let maxWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - Theme.ContentOffset.xtraLong.value
+        self.captionTextView.setSize(withMaxWidth: maxWidth)
+        self.captionTextView.pinToSafeAreaLeft()
+        self.captionTextView.pinToSafeAreaBottom()
         
         self.blurView.expandToSuperviewSize()
     }
@@ -83,7 +101,7 @@ class MomentViewController: ViewController {
             self.blurView.configure(for: self.moment)
             self.expressionView.expression = self.moment.expression
             
-            if MomentsStore.shared.hasRecordedToday {
+            if MomentsStore.shared.hasRecordedToday || self.moment.isFromCurrentUser {
                 self.blurView.animateBlur(shouldShow: false)
                 self.momentView.loadFullMoment(for: self.moment)
                 self.state = .playback
@@ -92,7 +110,54 @@ class MomentViewController: ViewController {
                 self.momentView.loadPreview(for: self.moment)
             }
         case .playback:
-            break
+            Task {
+                guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
+                self.captionTextView.animateCaption(text: moment.caption)
+                
+                if let createAt = moment.createdAt {
+                    let dateText = Date.hourMinuteTimeOfDayWithDate.string(from: createAt)
+                    self.createAtLabel.setText(dateText)
+                }
+                
+                self.personView.set(expression: nil, person: moment.author)
+                self.view.layoutNow()
+            }
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard self.state == .playback else { return }
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.controlsContainer.alpha = 0.0
+        }
+
+        self.expressionView.playerLayer.player?.pause()
+        self.momentView.playerLayer.player?.pause()
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        guard self.state == .playback else { return }
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.controlsContainer.alpha = 1.0
+        }
+        
+        self.expressionView.playerLayer.player?.play()
+        self.momentView.playerLayer.player?.play()
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        guard self.state == .playback else { return }
+        
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.controlsContainer.alpha = 1.0
+        }
+        
+        self.expressionView.playerLayer.player?.play()
+        self.momentView.playerLayer.player?.play()
     }
 }

@@ -15,12 +15,17 @@ import Parse
      case file
      case preview
      case conversationId
+     case caption
  }
 
  final class Moment: PFObject, PFSubclassing {
 
      static func parseClassName() -> String {
          return String(describing: self)
+     }
+     
+     var isFromCurrentUser: Bool {
+         return self.author?.objectId == User.current()?.objectId
      }
 
      var author: User? {
@@ -46,6 +51,11 @@ import Parse
      var conversationId: String? {
          get { self.getObject(for: .conversationId) }
          set { self.setObject(for: .conversationId, with: newValue) }
+     }
+     
+     var caption: String? {
+         get { self.getObject(for: .caption) }
+         set { self.setObject(for: .caption, with: newValue) }
      }
  }
 

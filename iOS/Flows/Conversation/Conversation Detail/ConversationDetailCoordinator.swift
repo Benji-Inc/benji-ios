@@ -76,8 +76,8 @@ class ConversationDetailCoordinator: PresentableCoordinator<DetailCoordinatorRes
                 switch result {
                 case .conversation(let cid):
                     self.finishFlow(with: .conversation(cid.description))
-                case .openReplies(_):
-                    break
+                default:
+                    break 
                 }
             }
         }

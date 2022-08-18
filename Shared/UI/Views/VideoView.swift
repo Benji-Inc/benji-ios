@@ -10,6 +10,13 @@ import AVFoundation
 
 class VideoView: BaseView {
     
+    var shouldPlayAudio: Bool = true {
+        didSet {
+            guard let player = self.playerLayer.player else { return }
+            player.volume = self.shouldPlayAudio ? 1.0 : 0.0 
+        }
+    }
+    
     var shouldPlay: Bool = false {
         didSet {
             guard let player = self.playerLayer.player else { return }
@@ -99,6 +106,10 @@ class VideoView: BaseView {
             
             if self?.shouldPlay == true {
                 player.playImmediately(atRate: 1.0)
+            }
+            
+            if let audio = self?.shouldPlayAudio {
+                player.volume = audio ? 1.0 : 0.0
             }
         }
     }

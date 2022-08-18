@@ -100,6 +100,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     override func viewWillDisappear(_ animated: Bool) {
         self.endSession()
+        self.stopPlayback()
         super.viewWillDisappear(animated)
     }
     
@@ -247,6 +248,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             // abort if we didn't get any transcription back
             guard let result = result else {
                 logDebug("There was an error: \(error!)")
+                self.handleSpeech(result: nil)
                 return
             }
             
@@ -257,5 +259,5 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         }
     }
     
-    func handleSpeech(result: SFSpeechRecognitionResult) {}
+    func handleSpeech(result: SFSpeechRecognitionResult?) {}
 }
