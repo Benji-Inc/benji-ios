@@ -8,14 +8,20 @@
 
 import Foundation
 import Parse
+import Lottie
 
 class MomentVideoView: VideoView {
+    
+    let animationView = AnimationView.with(animation: .loading)
     
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.shouldPlay = true 
         self.playerLayer.videoGravity = .resizeAspectFill
+        
+        self.addSubview(self.animationView)
+        self.animationView.loopMode = .loop
     }
     
     func loadPreview(for moment: Moment) {
@@ -35,12 +41,24 @@ class MomentVideoView: VideoView {
         self.loadTask?.cancel()
 
         self.loadTask = Task { [weak self] in
+            
+            self?.animationView.play()
+            
             guard let videoURL = try? await file.retrieveCachedPathURL(),
                   videoURL != self?.videoURL else { return }
 
             guard !Task.isCancelled else { return }
 
             self?.videoURL = videoURL
+            
+            self?.animationView.stop()
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.animationView.squaredSize = 20
+        self.animationView.centerOnXAndY()
     }
 }

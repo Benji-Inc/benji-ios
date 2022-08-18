@@ -148,6 +148,10 @@ extension Objectable where Self: PFObject {
     }
 
     static func getObject(with objectId: String?) async throws -> Self {
+        guard let objectId = objectId else {
+            throw ClientError.apiError(detail: "No objectId found for query")
+        }
+
         let object = try await self.getFirstObject(where: "objectId", contains: objectId)
         return object
     }

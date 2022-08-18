@@ -60,6 +60,10 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
                 Task {
                     if let moment = try? await Moment.getObject(with: model.momentId) {
                         self.presentMoment(with: moment)
+                    } else {
+                        Task {
+                            await ToastScheduler.shared.schedule(toastType: .success(.eyeSlash, "No Moment Recorded"), position: .bottom)
+                        }
                     }
                 }
             default:
