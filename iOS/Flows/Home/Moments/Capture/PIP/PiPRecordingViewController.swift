@@ -255,8 +255,6 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             // if we got the final transcription back, print it
             if result.isFinal {
                 self.handleSpeech(result: result)
-            } else {
-                self.handleSpeech(result: nil)
             }
         }
     }
