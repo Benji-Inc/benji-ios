@@ -56,6 +56,9 @@ class MomentViewController: ViewController {
         self.view.addSubview(self.momentView)
         self.view.addSubview(self.controlsContainer)
         self.controlsContainer.addSubview(self.captionTextView)
+        self.captionTextView.isEditable = false
+        self.captionTextView.isSelectable = false
+        
         self.controlsContainer.addSubview(self.personView)
         
         self.view.addSubview(self.blurView)
