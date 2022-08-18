@@ -100,6 +100,10 @@ extension HomeCoordinator {
                         case .openReplies(let message):
                             self.presentConversation(with: message.conversationId,
                                                      messageId: message.id,
+                                                     openReplies: true)
+                        case .message(let message):
+                            self.presentConversation(with: message.conversationId,
+                                                     messageId: message.id,
                                                      openReplies: false)
                         }
                     }

@@ -13,6 +13,7 @@ import Coordinator
 enum ProfileResult {
     case conversation(String)
     case openReplies(Messageable)
+    case message(Messageable)
 }
 
 class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
@@ -101,7 +102,11 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
         
         let coordinator = MomentCoordinator(moment: moment, router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { [unowned self] result in
-            self.profileVC.dismiss(animated: true)
+            if let result = result {
+                self.finishFlow(with: result)
+            } else {
+                self.profileVC.dismiss(animated: true)
+            }
         }
         self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
     }

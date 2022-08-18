@@ -14,7 +14,7 @@ class MomentViewController: ViewController {
     
     private let captionTextView = CaptionTextView()
     private let createAtLabel = ThemeLabel(font: .xtraSmall)
-    private let personView = BorderedPersonView()
+    let personView = BorderedPersonView()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
     let blurView = MomentBlurView()
@@ -83,17 +83,16 @@ class MomentViewController: ViewController {
         self.expressionView.pinToSafeAreaLeft()
         
         self.personView.squaredSize = 40
-        self.personView.pinToSafeAreaLeft()
+        self.personView.pinToSafeAreaRight()
+        self.personView.pinToSafeAreaBottom()
         
         self.captionTextView.setSize(withMaxWidth: Theme.getPaddedWidth(with: self.view.width))
-        self.captionTextView.match(.left, to: .right, of: self.personView, offset: .standard)
+        self.captionTextView.pinToSafeAreaLeft()
         self.captionTextView.pinToSafeAreaBottom()
         
         self.createAtLabel.setSize(withWidth: self.view.width)
-        self.createAtLabel.match(.bottom, to: .top, of: self.captionTextView, offset: .negative(.standard))
-        self.createAtLabel.match(.left, to: .left, of: self.captionTextView)
-        
-        self.personView.match(.top, to: .top, of: self.createAtLabel)
+        self.createAtLabel.match(.top, to: .bottom, of: self.captionTextView, offset: .short)
+        self.createAtLabel.pinToSafeAreaLeft()
         
         self.blurView.expandToSuperviewSize()
     }
