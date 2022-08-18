@@ -38,6 +38,10 @@ class MomentViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
         
+        // Show captions
+        // Show profile pic
+        // Date created 
+        
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
@@ -83,7 +87,7 @@ class MomentViewController: ViewController {
             self.blurView.configure(for: self.moment)
             self.expressionView.expression = self.moment.expression
             
-            if MomentsStore.shared.hasRecordedToday {
+            if MomentsStore.shared.hasRecordedToday || self.moment.isFromCurrentUser {
                 self.blurView.animateBlur(shouldShow: false)
                 self.momentView.loadFullMoment(for: self.moment)
                 self.state = .playback

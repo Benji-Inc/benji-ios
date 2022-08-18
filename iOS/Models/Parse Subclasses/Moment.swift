@@ -22,6 +22,10 @@ import Parse
      static func parseClassName() -> String {
          return String(describing: self)
      }
+     
+     var isFromCurrentUser: Bool {
+         return self.author?.objectId == User.current()?.objectId
+     }
 
      var author: User? {
          get { self.getObject(for: .author) }

@@ -11,6 +11,7 @@ import Combine
 import Parse
 import Localization
 import Speech
+import KeyboardManager
 
  class MomentCaptureViewController: PiPRecordingViewController {
 
@@ -76,7 +77,12 @@ import Speech
          
          self.textView.setSize(withMaxWidth: self.doneButton.width)
          self.textView.match(.left, to: .left, of: self.doneButton)
-         self.textView.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
+         
+         if KeyboardManager.shared.isKeyboardShowing {
+             self.textView.bottom = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.long.value
+         } else {
+             self.textView.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
+         }
      }
 
      private func setupHandlers() {
@@ -87,8 +93,11 @@ import Speech
          }
 
          self.view.didSelect { [unowned self] in
-             guard self.state == .playback else { return }
-             self.state = .idle
+             if self.textView.isFirstResponder {
+                 self.textView.resignFirstResponder()
+             } else if self.state == .playback {
+                 self.state = .idle
+             }
          }
 
          self.doneButton.didSelect { [unowned self] in
@@ -98,6 +107,13 @@ import Speech
                  self.didCompleteMoment?(moment)
              }
          }
+         
+         KeyboardManager.shared.$currentEvent.mainSink { [unowned self] event in
+             UIView.animate(withDuration: Theme.animationDurationFast) {
+                 self.view.layoutNow()
+                 self.textView.backgroundColor = KeyboardManager.shared.isKeyboardShowing ? ThemeColor.B0.color.withAlphaComponent(0.8) : ThemeColor.B0.color.withAlphaComponent(0.4)
+             }
+         }.store(in: &self.cancellables)
      }
 
      override func handle(state: State) {

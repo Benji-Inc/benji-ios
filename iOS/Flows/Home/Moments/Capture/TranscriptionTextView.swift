@@ -16,12 +16,15 @@ class TranscriptionTextView: TextView {
         super.initializeViews()
         
         self.setFont(.regular)
+        self.textColor = ThemeColor.white.color.withAlphaComponent(0.8)
         
-        self.isEditable = false
+        self.isEditable = true
         self.isScrollEnabled = false
-        self.isSelectable = false
+        self.isSelectable = true
         self.textAlignment = .left
         self.alpha = 0
+        self.tintColor = ThemeColor.D6.color
+        self.returnKeyType = .done
         
         let offset = Theme.ContentOffset.standard.value
 
@@ -32,10 +35,8 @@ class TranscriptionTextView: TextView {
         
         self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = ThemeColor.whiteWithAlpha.color.cgColor
-        self.layer.borderWidth = 1
         
-        self.backgroundColor = ThemeColor.white.color.withAlphaComponent(0.1)
+        self.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
     }
     
     func animateSpeech(result: SFSpeechRecognitionResult) {
@@ -63,7 +64,7 @@ class TranscriptionTextView: TextView {
 
         self.animationTask = Task {
 
-            let keyPoints: [CGFloat] = [1, 0.9, 0.7, 0.35, 0]
+            let keyPoints: [CGFloat] = [0.8, 0.7, 0.6, 0.35, 0]
 
             for index in -keyPoints.count..<segments.count {
                 guard !Task.isCancelled else { return }
@@ -91,7 +92,7 @@ class TranscriptionTextView: TextView {
                 }
             }
 
-            self.textColor = ThemeColor.white.color
+            self.textColor = ThemeColor.white.color.withAlphaComponent(0.8)
         }
 
         await self.animationTask?.value
