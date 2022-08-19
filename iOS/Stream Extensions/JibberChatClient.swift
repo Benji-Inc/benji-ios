@@ -208,6 +208,24 @@ class JibberChatClient {
         return people
     }
     
+    func createNewConversation(for moment: Moment) async throws {
+        guard let momentId = moment.objectId else { throw ClientError.message(detail: "No moment for the conversation.")}
+        // Give the moment id is unique, we use that set the conversationId for easy query. 
+        let channelId = ChannelId(type: .custom("moment"), id: momentId)
+        let userIDs = Set([User.current()!.objectId!])
+        let controller = try self.client?.channelController(createChannelWithId: channelId,
+                                                            name: nil,
+                                                            imageURL: nil,
+                                                            team: nil,
+                                                            members: userIDs,
+                                                            isCurrentUserMember: true,
+                                                            messageOrdering: .bottomToTop,
+                                                            invites: [],
+                                                            extraData: [:])
+        
+        try await controller?.synchronize()
+    }
+    
     func createNewConversation() async throws -> Conversation? {
         let username = User.current()?.initials ?? ""
         let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)

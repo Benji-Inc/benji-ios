@@ -755,6 +755,7 @@
 		D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9927C0070C001D8855 /* Achievement.swift */; };
 		D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
+		D6A0095428B03AAA0018FA98 /* CommentsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095328B03AAA0018FA98 /* CommentsButton.swift */; };
 		D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -1406,6 +1407,7 @@
 		D69D2F9927C0070C001D8855 /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
 		D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementCell.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
+		D6A0095328B03AAA0018FA98 /* CommentsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsButton.swift; sourceTree = "<group>"; };
 		D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderViewController.swift; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
@@ -2736,6 +2738,7 @@
 				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
 				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
 				D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */,
+				D6A0095328B03AAA0018FA98 /* CommentsButton.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -3637,6 +3640,7 @@
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
 				D646D36627E505280077D20B /* AttachmentCell.swift in Sources */,
 				D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */,
+				D6A0095428B03AAA0018FA98 /* CommentsButton.swift in Sources */,
 				D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */,
 				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
 				D6C8F1682826D7AC00226583 /* VideoAttachment.swift in Sources */,
