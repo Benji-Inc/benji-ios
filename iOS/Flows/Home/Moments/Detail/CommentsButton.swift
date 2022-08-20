@@ -22,7 +22,7 @@ class CommentsButton: ThemeButton {
                                       suffix: nil,
                                       seperator: "",
                                       seperatorSpacing: 0,
-                                      font: FontType.xtraSmall.font,
+                                      font: FontType.smallBold.font,
                                       textColor: ThemeColor.white.color,
                                       animateInitialValue: true,
                                       gradientColor: nil,
@@ -51,9 +51,7 @@ class CommentsButton: ThemeButton {
         }
         
         self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
-        
-        self.counter.setValue(Float(10))
-        
+                
         self.controller?.messageSequenceChangePublisher.mainSink(receiveValue: { [unowned self] _ in
             guard let sequence = self.controller?.messageSequence else { return }
             self.counter.setValue(Float(sequence.totalUnread))
@@ -65,6 +63,6 @@ class CommentsButton: ThemeButton {
         
         self.counter.sizeToFit()
         self.counter.centerX = self.halfWidth - 1
-        self.counter.top = self.height - 4
+        self.counter.top = self.height 
     }
 }

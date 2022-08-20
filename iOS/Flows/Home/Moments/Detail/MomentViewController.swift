@@ -26,7 +26,6 @@ class MomentViewController: ViewController {
         case initial
         case loading
         case playback
-        case comments
     }
     
     @Published var state: State = .initial
@@ -73,10 +72,6 @@ class MomentViewController: ViewController {
                 self.handle(state: state)
             }.store(in: &self.cancellables)
         
-        self.commentsButton.didSelect { [unowned self] in
-            self.state = .comments
-        }
-        
         self.state = .loading
     }
     
@@ -96,7 +91,7 @@ class MomentViewController: ViewController {
         
         self.commentsButton.squaredSize = self.personView.height
         self.commentsButton.centerX = self.personView.centerX
-        self.commentsButton.match(.bottom, to: .top, of: self.personView, offset: .negative(.long))
+        self.commentsButton.match(.bottom, to: .top, of: self.personView, offset: .negative(.custom(30)))
         
         let maxWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - Theme.ContentOffset.xtraLong.value
         self.captionTextView.setSize(withMaxWidth: maxWidth)
@@ -129,10 +124,7 @@ class MomentViewController: ViewController {
                 self.captionTextView.animateCaption(text: moment.caption)
                 self.personView.set(expression: nil, person: moment.author)
                 self.view.layoutNow()
-            }
-        case .comments:
-            break
-            // show comments 
+            } 
         }
     }
     
