@@ -9,11 +9,32 @@
 import Foundation
 import Localization
 import Speech
+import Combine
 
 class CaptionTextView: TextView {
-
+    
+    var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        super.init(frame: .zero, font: .regular, textColor: .white, alignment: .left, textContainer: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        self.cancellables.forEach { (cancellable) in
+            cancellable.cancel()
+        }
+    }
+    
     override func initializeViews() {
         super.initializeViews()
+        
+        self.set(placeholder: "Add caption", alignment: .left)
+        
+        self.delegate = self
         
         self.setFont(.regular)
         self.textColor = ThemeColor.white.color.withAlphaComponent(0.8)
@@ -37,6 +58,37 @@ class CaptionTextView: TextView {
         self.layer.cornerRadius = Theme.innerCornerRadius
         
         self.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
+        
+        self.$publishedText.mainSink { [unowned self] text in
+            let color: ThemeColor = text.isEmpty ? .whiteWithAlpha : .clear
+            let styleAttributes = StringStyle(font: .regular, color: color).attributes
+            let string = NSAttributedString(string: "Add caption", attributes: styleAttributes)
+            self.attributedPlaceholder = string
+            self.layoutNow()
+        }.store(in: &self.cancellables)
+    }
+    
+    override func getSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) -> CGSize {
+        let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
+        let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
+
+        // Get the max size available for the text, taking the textview's insets into account.
+        var size: CGSize = self.getTextContentSize(withMaxWidth: maxWidth - horizontalPadding,
+                                                   maxHeight: maxHeight - verticalPadding)
+        
+        let placeholderSize: CGSize = self.getPlaceholderContentSize(withMaxWidth: maxWidth - horizontalPadding,
+                                                                     maxHeight: maxHeight - verticalPadding)
+        let minWidth = placeholderSize.width + horizontalPadding + 4
+        let minHeight = placeholderSize.height + verticalPadding
+
+        // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
+        size.width += horizontalPadding
+        size.width = clamp(size.width, minWidth, maxWidth)
+
+        size.height += verticalPadding
+        size.height = clamp(size.height, minHeight, maxHeight)
+
+        return size
     }
     
     func animateCaption(text: String?) {
@@ -47,7 +99,6 @@ class CaptionTextView: TextView {
             self.alpha = 0
             
             self.setText(text)
-            self.textAlignment = .left
                     
             Task {
                 async let fadeIn: () = UIView.awaitAnimation(with: .fast, animations: {
@@ -116,7 +167,6 @@ class CaptionTextView: TextView {
             self.alpha = 0
             
             self.setText(result.bestTranscription.formattedString)
-            self.textAlignment = .left
                     
             Task {
                 async let fadeIn: () = UIView.awaitAnimation(with: .fast, animations: {
@@ -126,7 +176,6 @@ class CaptionTextView: TextView {
                 let _: [()] = await [fadeIn, textAnimation]
             }
         } else {
-            self.setText("No caption")
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.alpha = 1
             }
@@ -170,6 +219,16 @@ class CaptionTextView: TextView {
         }
 
         await self.animationTask?.value
+    }
+}
+
+extension CaptionTextView: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }
 
