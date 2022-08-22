@@ -143,10 +143,11 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     
     func stopRecording() {
         self.frontCameraView.stopRecordingAnimation()
+        self.selectionImpact.impactOccurred(intensity: 1.0)
+
         let _ = self.dataOutputQue.sync {
             Task {
                 do {
-                    self.selectionImpact.impactOccurred(intensity: 1.0)
                     try await self.recorder.stopRecording()
                 } catch {
                     self.state = .error
