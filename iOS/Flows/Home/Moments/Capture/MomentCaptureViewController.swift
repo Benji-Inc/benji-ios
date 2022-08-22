@@ -27,6 +27,7 @@ import KeyboardManager
 
      static let maxDuration: TimeInterval = 6.0
      let cornerRadius: CGFloat = 30
+     var willShowKeyboard: Bool = false
 
      override func initializeViews() {
          super.initializeViews()
@@ -53,7 +54,6 @@ import KeyboardManager
          self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
          
          self.view.addSubview(self.textView)
-         self.textView.textAlignment = .center
          
          self.setupHandlers()
      }
@@ -78,7 +78,7 @@ import KeyboardManager
          self.textView.setSize(withMaxWidth: self.doneButton.width)
          self.textView.match(.left, to: .left, of: self.doneButton)
          
-         if KeyboardManager.shared.isKeyboardShowing {
+         if self.willShowKeyboard {
              self.textView.bottom = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.long.value
          } else {
              self.textView.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
@@ -87,6 +87,10 @@ import KeyboardManager
 
      private func setupHandlers() {
          
+         self.textView.$publishedText.mainSink { [unowned self] _ in
+             self.view.layoutNow()
+         }.store(in: &self.cancellables)
+                  
          self.frontCameraView.animationDidEnd = { [unowned self] in
              guard self.state == .recording else { return }
              self.stopRecording()
@@ -109,10 +113,24 @@ import KeyboardManager
          }
          
          KeyboardManager.shared.$currentEvent.mainSink { [unowned self] event in
-             UIView.animate(withDuration: Theme.animationDurationFast) {
-                 self.view.layoutNow()
-                 self.textView.backgroundColor = KeyboardManager.shared.isKeyboardShowing ? ThemeColor.B0.color.withAlphaComponent(0.8) : ThemeColor.B0.color.withAlphaComponent(0.4)
+             switch event {
+                 
+             case .willShow(_):
+                 self.willShowKeyboard = true
+                 UIView.animate(withDuration: Theme.animationDurationFast) {
+                     self.view.layoutNow()
+                     self.textView.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.8)
+                 }
+             case .willHide(_):
+                 self.willShowKeyboard = false
+                 UIView.animate(withDuration: Theme.animationDurationFast) {
+                     self.view.layoutNow()
+                     self.textView.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
+                 }
+             default:
+                 break
              }
+             
          }.store(in: &self.cancellables)
      }
 
@@ -173,21 +191,18 @@ import KeyboardManager
      override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesBegan(touches, with: event)
          guard self.state == .idle else { return }
-
          self.startRecording()
      }
 
      override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesEnded(touches, with: event)
          guard self.state == .recording else { return }
-         
          self.stopRecording()
      }
 
      override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
          super.touchesCancelled(touches, with: event)
          guard self.state == .recording else { return }
-         
          self.stopRecording()
      }
  }
@@ -195,7 +210,7 @@ import KeyboardManager
  extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate {
 
      func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-         self.frontCameraView.stopRecordingAnimation()
+         self.stopRecording()
          return true
      }
  }

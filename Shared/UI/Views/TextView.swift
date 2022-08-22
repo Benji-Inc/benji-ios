@@ -19,6 +19,7 @@ class TextView: UITextView {
     var maxLength: Int = 500
 
     @Published var isEditing: Bool = false
+    @Published private(set) var publishedText: String = ""
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -35,6 +36,7 @@ class TextView: UITextView {
             // Always have some text in this textview so that we don't lose the text attributes.
             let string = newValue ?? ""
             self.setTextWithAttributes(string)
+            self.publishedText = string 
         }
     }
 
@@ -70,7 +72,7 @@ class TextView: UITextView {
                 .paragraphStyle: paragraphStyle]
     }
     
-    private var attributedPlaceholder: NSAttributedString? {
+    var attributedPlaceholder: NSAttributedString? {
         didSet { self.setNeedsDisplay() }
     }
 
@@ -79,6 +81,7 @@ class TextView: UITextView {
     init(frame: CGRect = .zero,
          font: FontType,
          textColor: ThemeColor,
+         alignment: NSTextAlignment = .left,
          textContainer: NSTextContainer? = nil) {
 
         self.kerning = font.kern
@@ -87,6 +90,7 @@ class TextView: UITextView {
 
         self.font = font.font
         self.textColor = textColor.color.resolvedColor(with: self.traitCollection)
+        self.textAlignment = alignment
 
         self.initializeViews()
     }
@@ -103,7 +107,11 @@ class TextView: UITextView {
     }
 
     convenience init() {
-        self.init(frame: .zero, font: .smallBold, textColor: .white, textContainer: nil)
+        self.init(frame: .zero,
+                  font: .smallBold,
+                  textColor: .white,
+                  alignment: .left,
+                  textContainer: nil)
     }
 
     func initializeViews() {
@@ -117,7 +125,6 @@ class TextView: UITextView {
         self.textContainer.lineBreakMode = .byWordWrapping
         self.textContainer.lineFragmentPadding = 0
 
-        self.textAlignment = .center
         self.isUserInteractionEnabled = true
         self.dataDetectorTypes = .all
 
@@ -133,6 +140,7 @@ class TextView: UITextView {
                 return false 
             })
             .mainSink { [unowned self] (value) in
+                self.publishedText = self.text
                 self.textDidChange()
             }.store(in: &self.cancellables)
 
@@ -185,11 +193,13 @@ class TextView: UITextView {
         self.linkTextAttributes = [.foregroundColor: ThemeColor.D1.color, .underlineStyle: 0]
     }
 
-    func set(placeholder: Localized, color: ThemeColor = .whiteWithAlpha) {
+    func set(placeholder: Localized,
+             alignment: NSTextAlignment = .center,
+             color: ThemeColor = .whiteWithAlpha) {
         var styleAttributes = StringStyle(font: .regular, color: color).attributes
-        let centeredParagraphStyle = NSMutableParagraphStyle()
-        centeredParagraphStyle.alignment = .center
-        styleAttributes[.paragraphStyle] = centeredParagraphStyle
+        let style = NSMutableParagraphStyle()
+        style.alignment = alignment
+        styleAttributes[.paragraphStyle] = style
         let string = NSAttributedString(string: localized(placeholder), attributes: styleAttributes)
         self.attributedPlaceholder = string
     }
@@ -288,5 +298,35 @@ class TextView: UITextView {
         return attText.boundingRect(with: maxTextSize,
                                     options: .usesLineFragmentOrigin,
                                     context: nil).size
+    }
+    
+    func getPlaceholderSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) -> CGSize {
+        let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
+        let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
+
+        // Get the max size available for the text, taking the textview's insets into account.
+        var size: CGSize = self.getPlaceholderContentSize(withMaxWidth: maxWidth - horizontalPadding,
+                                                          maxHeight: maxHeight - verticalPadding)
+
+        // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
+        size.width += horizontalPadding
+        size.width = clamp(size.width, max: maxWidth)
+
+        size.height += verticalPadding
+        size.height = clamp(size.height, max: maxHeight)
+
+        return size
+    }
+    
+    func getPlaceholderContentSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = .infinity) -> CGSize {
+        guard let placeholder = self.attributedPlaceholder, !placeholder.string.isEmpty else {
+            return CGSize.zero
+        }
+
+        let maxTextSize = CGSize(width: maxWidth, height: maxHeight)
+
+        return placeholder.boundingRect(with: maxTextSize,
+                                        options: .usesLineFragmentOrigin,
+                                        context: nil).size
     }
 }

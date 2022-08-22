@@ -20,6 +20,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     lazy var session = AVCaptureMultiCamSession()
     lazy var recorder = PiPRecorder()
     
+    private(set) var selectionImpact = UIImpactFeedbackGenerator()
+    
     enum State {
         case idle
         case recording
@@ -136,12 +138,15 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
         self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
         self.state = .recording
+        self.selectionImpact.impactOccurred(intensity: 1.0)
     }
     
     func stopRecording() {
+        self.frontCameraView.stopRecordingAnimation()
         let _ = self.dataOutputQue.sync {
             Task {
                 do {
+                    self.selectionImpact.impactOccurred(intensity: 1.0)
                     try await self.recorder.stopRecording()
                 } catch {
                     self.state = .error

@@ -100,7 +100,11 @@ class UserOnboardingViewController: ViewController {
 class OnboardingMessageTextView: TextView {
     
     init() {
-        super.init(frame: .zero, font: .small, textColor: .white, textContainer: nil)
+        super.init(frame: .zero,
+                   font: .small,
+                   textColor: .white,
+                   alignment: .center,
+                   textContainer: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
