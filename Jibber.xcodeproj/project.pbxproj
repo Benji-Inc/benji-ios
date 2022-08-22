@@ -759,6 +759,8 @@
 		D6A0095728B11BCA0018FA98 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095628B11BCA0018FA98 /* CommentsViewController.swift */; };
 		D6A0095928B11BEC0018FA98 /* CommentsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095828B11BEC0018FA98 /* CommentsCoordinator.swift */; };
 		D6A0095B28B128320018FA98 /* CommentsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095A28B128320018FA98 /* CommentsViewController+Extensions.swift */; };
+		D6A0095F28B1596A0018FA98 /* MomentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095E28B159690018FA98 /* MomentButton.swift */; };
+		D6A0096128B15A7C0018FA98 /* ExpressionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */; };
 		D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -1414,6 +1416,8 @@
 		D6A0095628B11BCA0018FA98 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		D6A0095828B11BEC0018FA98 /* CommentsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCoordinator.swift; sourceTree = "<group>"; };
 		D6A0095A28B128320018FA98 /* CommentsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommentsViewController+Extensions.swift"; sourceTree = "<group>"; };
+		D6A0095E28B159690018FA98 /* MomentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentButton.swift; sourceTree = "<group>"; };
+		D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionButton.swift; sourceTree = "<group>"; };
 		D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderViewController.swift; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
@@ -2756,6 +2760,8 @@
 				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
 				D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */,
 				D6A0095328B03AAA0018FA98 /* CommentsButton.swift */,
+				D6A0095E28B159690018FA98 /* MomentButton.swift */,
+				D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -3964,6 +3970,7 @@
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				8068A0062868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
+				D6A0096128B15A7C0018FA98 /* ExpressionButton.swift in Sources */,
 				D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* MemberAddCell.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */,
@@ -4060,6 +4067,7 @@
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
 				D60B887327F7732100B3E1C2 /* NoticeCell.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
+				D6A0095F28B1596A0018FA98 /* MomentButton.swift in Sources */,
 				D6AA621528528EE600FA4D02 /* OrbCollectionViewLayout.swift in Sources */,
 				8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */,
 				D60B887B27F8A13A00B3E1C2 /* SectionDividerView.swift in Sources */,

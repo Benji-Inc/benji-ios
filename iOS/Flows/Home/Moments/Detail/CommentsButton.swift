@@ -8,41 +8,18 @@
 
 import Foundation
 import Combine
-import ScrollCounter
 
-class CommentsButton: ThemeButton {
+class CommentsButton: MomentButton {
     
     private var controller: MessageSequenceController?
     private var subscriptions = Set<AnyCancellable>()
+        
+    init() {
+        super.init(with: .rectangleStack)
+    }
     
-    var counter = NumberScrollCounter(value: 0,
-                                      scrollDuration: Theme.animationDurationSlow,
-                                      decimalPlaces: 0,
-                                      prefix: "",
-                                      suffix: nil,
-                                      seperator: "",
-                                      seperatorSpacing: 0,
-                                      font: FontType.smallBold.font,
-                                      textColor: ThemeColor.white.color,
-                                      animateInitialValue: true,
-                                      gradientColor: nil,
-                                      gradientStop: nil)
-        
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.addSubview(self.counter)
-        
-        let pointSize: CGFloat = 22
-        
-        self.set(style: .image(symbol: .rectangleStack,
-                               palletteColors: [.white],
-                               pointSize: pointSize,
-                               backgroundColor: .clear))
-        
-        self.showShadow(withOffset: 0, opacity: 1.0)
-        
-        self.clipsToBounds = false
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func configure(with moment: Moment) {
@@ -51,18 +28,16 @@ class CommentsButton: ThemeButton {
         }
         
         self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
+        
+        if let sequence = self.controller?.messageSequence {
+            self.counter.setValue(Float(sequence.totalUnread))
+            self.counter.isVisible = sequence.totalUnread > 0
+        }
                 
         self.controller?.messageSequenceChangePublisher.mainSink(receiveValue: { [unowned self] _ in
             guard let sequence = self.controller?.messageSequence else { return }
             self.counter.setValue(Float(sequence.totalUnread))
+            self.counter.isVisible = sequence.totalUnread > 0
         }).store(in: &self.subscriptions)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.counter.sizeToFit()
-        self.counter.centerX = self.halfWidth - 1
-        self.counter.top = self.height 
     }
 }

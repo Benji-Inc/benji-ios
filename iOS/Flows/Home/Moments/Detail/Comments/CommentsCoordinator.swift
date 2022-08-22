@@ -42,30 +42,12 @@ class CommentsCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
         guard let target = deepLink.deepLinkTarget else { return }
         
         switch target {
-        case .conversation:
-            break
-            //            let messageID = deepLink.messageId
-            //            guard let conversationId = deepLink.conversationId else { break }
-            //
-            //            if conversationId == self.conversationVC.conversationId {
-            //                Task {
-            //                    await self.conversationVC.scrollToConversation(with: conversationId,
-            //                                                                   messageId: messageID,
-            //                                                                   animateScroll: false,
-            //                                                                   animateSelection: true)
-            //                }.add(to: self.taskPool)
-            //            } else {
-            //                self.conversationVC.startingMessageId = deepLink.messageId
-            //                self.conversationVC.conversationId = conversationId
-            //            }
-            
         case .profile:
-            break
-            //            Task {
-            //                guard let personId = self.deepLink?.personId,
-            //                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
-            //                self.presentProfile(for: person)
-            //            }
+            Task {
+                guard let personId = self.deepLink?.personId,
+                      let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
+                self.presentProfile(for: person)
+            }
         default:
             break
         }
@@ -113,18 +95,19 @@ class CommentsCoordinator: InputHandlerCoordinator<Void>, DeepLinkHandler {
     
     override func presentThread(for message: Messageable, startingReplyId: String?) {
         
-        let coordinator = ThreadCoordinator(with: message,
-                                            startingReplyId: startingReplyId,
-                                            router: self.router,
-                                            deepLink: self.deepLink)
-        
-        self.present(coordinator) { [unowned self] result in
-            switch result {
-            case .conversation(let conversationId):
-                break
-                //self.commentsVC.conversationId = conversationId
-            case .deeplink(let deeplink):
-                self.handle(deepLink: deeplink)
+        Task.onMainActorAsync {
+            let coordinator = ThreadCoordinator(with: message,
+                                                startingReplyId: startingReplyId,
+                                                router: self.router,
+                                                deepLink: self.deepLink)
+            
+            self.present(coordinator) { [unowned self] result in
+                switch result {
+                case .deeplink(let deeplink):
+                    self.handle(deepLink: deeplink)
+                default:
+                    break
+                }
             }
         }
     }

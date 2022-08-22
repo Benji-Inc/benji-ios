@@ -119,7 +119,7 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             self.loadInitialData()
             
             self.segmentControl.selectedSegmentIndex = 0
-            self.startLoadAllTask()
+            self.startLoadAllMoments()
 
             self.view.setNeedsLayout()
         }.add(to: self.autocancelTaskPool)

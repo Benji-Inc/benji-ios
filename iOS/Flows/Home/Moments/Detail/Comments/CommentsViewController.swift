@@ -19,22 +19,18 @@ class CommentsViewController: InputHandlerViewContoller,
         return "SCREEN_COMMENTS"
     }
     
-    lazy var selectionViewController = ConversationSelectionViewController()
-
     var messageContentDelegate: MessageContentDelegate? {
         get { return self.dataSource.messageContentDelegate}
         set { self.dataSource.messageContentDelegate = newValue }
     }
     
-    var blurView = DarkBlurView()
     lazy var dismissInteractionController: PanDismissInteractionController? = nil
 
     // Collection View
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
 
-    let headerVC = ConversationHeaderViewController()
-    private let darkBlur = DarkBlurView()
+    var blurView = DarkBlurView()
 
     private(set) var conversationController: ConversationController?
 
@@ -90,17 +86,16 @@ class CommentsViewController: InputHandlerViewContoller,
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.medium(), .large()]
-            sheet.prefersGrabberVisible = false
+            sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
         
-        self.view.insertSubview(self.darkBlur, belowSubview: self.collectionView)
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
                 
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.conversationLayout.delegate = self
-
-        self.addChild(viewController: self.headerVC, toView: self.view)
+        self.dataSource.uiState = .write
         
         self.subscribeToUIUpdates()
         self.setupInputHandlers()
@@ -111,17 +106,10 @@ class CommentsViewController: InputHandlerViewContoller,
         
         guard self.presentedViewController.isNil else { return }
         
-        self.darkBlur.expandToSuperviewSize()
-
-        self.headerVC.view.expandToSuperviewWidth()
-        self.headerVC.view.height = self.state.headerHeight
-        self.headerVC.view.pinToSafeArea(.top, offset: .standard)
-
+        self.blurView.expandToSuperviewSize()
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.match(.top, to: .bottom, of: self.headerVC.view, offset: .xtraLong)
-        self.collectionView.height = self.view.height - self.headerVC.view.bottom
-        
-        self.selectionViewController.view.expandToSuperviewSize()
+        self.collectionView.height = self.view.height - Theme.ContentOffset.xtraLong.value
+        self.collectionView.pin(.top, offset: .xtraLong)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -140,18 +128,6 @@ class CommentsViewController: InputHandlerViewContoller,
                 .mainSink { [unowned self] conversationId in
                 
                     if let conversationId = conversationId {
-                        
-                        if self.selectionViewController.parent.exists {
-                            Task {
-                                await UIView.awaitAnimation(with: .fast, animations: {
-                                    self.selectionViewController.view.alpha = 0
-                                })
-                                
-                                self.selectionViewController.removeFromParent()
-                                self.selectionViewController.view.removeFromSuperview()
-                            }
-                        }
-
                         Task {
                             // Initialize the datasource before listening for updates to ensure that the sections
                             // are set up.
@@ -163,19 +139,7 @@ class CommentsViewController: InputHandlerViewContoller,
                             await self.initializeDataSource()
                             self.subscribeToConversationUpdates()
                         }
-                    } else {
-                        self.selectionViewController.view.alpha = 1.0
-                        self.addChild(self.selectionViewController)
-                        self.view.insertSubview(self.selectionViewController.view, aboveSubview: self.headerVC.view)
-                        self.view.layoutNow()
-                        
-                        Task {
-                            // Hack to get the input text view to layout correctly
-                            await Task.sleep(seconds:0.1)
-                            self.messageInputController.swipeInputView.textView.becomeFirstResponder()
-                        }
                     }
-                    
                 }.store(in: &self.cancellables)
         }
     }
@@ -193,12 +157,7 @@ class CommentsViewController: InputHandlerViewContoller,
     }
 
     func updateUI(for state: ConversationUIState, forceLayout: Bool = false) {
-        guard self.presentedViewController.isNil || forceLayout else { return }
-        
-        self.headerVC.update(for: state)
-        self.dataSource.uiState = state
 
-        self.dataSource.reconfigureAllItems()
     }
 
     // MARK: - Message Loading and Updates

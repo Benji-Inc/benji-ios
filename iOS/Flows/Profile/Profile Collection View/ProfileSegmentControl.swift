@@ -11,8 +11,8 @@ import Foundation
 class ProfileSegmentControl: UISegmentedControl {
     
     enum SegmentType: Int {
-        case conversations
         case moments
+        case conversations
     }
     
     var didSelectSegmentIndex: ((SegmentType) -> Void)? = nil
@@ -29,8 +29,8 @@ class ProfileSegmentControl: UISegmentedControl {
             self.didSelectSegmentIndex?(.moments)
         }
             
+        self.insertSegment(action: momentsAction, at: 0, animated: false)
         self.insertSegment(action: conversationsAction, at: 1, animated: false)
-        self.insertSegment(action: momentsAction, at: 2, animated: false)
 
         let attributes: [NSAttributedString.Key : Any] = [.font : FontType.small.font, .foregroundColor : ThemeColor.white.color.withAlphaComponent(0.6)]
         self.setTitleTextAttributes(attributes, for: .normal)

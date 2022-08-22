@@ -16,6 +16,7 @@ class MomentViewController: ViewController {
     private let captionTextView = CaptionTextView()
     let personView = BorderedPersonView()
     let commentsButton = CommentsButton()
+    let expressionsButton = ExpressionButton()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
     let blurView = MomentBlurView()
@@ -63,6 +64,8 @@ class MomentViewController: ViewController {
         self.controlsContainer.addSubview(self.commentsButton)
         self.commentsButton.configure(with: self.moment)
         
+        self.controlsContainer.addSubview(self.expressionsButton)
+        
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
         
@@ -92,6 +95,10 @@ class MomentViewController: ViewController {
         self.commentsButton.squaredSize = self.personView.height
         self.commentsButton.centerX = self.personView.centerX
         self.commentsButton.match(.bottom, to: .top, of: self.personView, offset: .negative(.custom(30)))
+        
+        self.expressionsButton.squaredSize = self.personView.height
+        self.expressionsButton.centerX = self.personView.centerX
+        self.expressionsButton.match(.bottom, to: .top, of: self.commentsButton, offset: .negative(.custom(30)))
         
         let maxWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - Theme.ContentOffset.xtraLong.value
         self.captionTextView.setSize(withMaxWidth: maxWidth)

@@ -20,13 +20,6 @@ extension CommentsViewController {
     }
 
     func subscribeToUIUpdates() {
-        self.messageInputController.$inputState
-            .removeDuplicates()
-            .mainSink { [unowned self] state in
-                UIView.animate(withDuration: Theme.animationDurationFast) {
-                    self.headerVC.view.alpha = state == .collapsed ? 1.0 : 0.5
-                }
-            }.store(in: &self.cancellables)
         
         self.$state
             .removeDuplicates()
@@ -42,8 +35,19 @@ extension CommentsViewController {
                 switch currentEvent {
                 case .willShow:
                     self.state = .write
+                    if let sheet = self.popoverPresentationController?.adaptiveSheetPresentationController {
+                        sheet.animateChanges {
+                            sheet.selectedDetentIdentifier = .large
+                        }
+                    }
+                    
                 case .willHide:
                     self.state = .read
+                    if let sheet = self.popoverPresentationController?.adaptiveSheetPresentationController {
+                        sheet.animateChanges {
+                            sheet.selectedDetentIdentifier = .medium
+                        }
+                    }
                 case .didChangeFrame:
                     self.view.setNeedsLayout()
                 default:
