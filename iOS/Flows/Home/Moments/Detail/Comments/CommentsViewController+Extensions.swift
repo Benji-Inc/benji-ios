@@ -35,19 +35,8 @@ extension CommentsViewController {
                 switch currentEvent {
                 case .willShow:
                     self.state = .write
-                    if let sheet = self.popoverPresentationController?.adaptiveSheetPresentationController {
-                        sheet.animateChanges {
-                            sheet.selectedDetentIdentifier = .large
-                        }
-                    }
-                    
                 case .willHide:
                     self.state = .read
-                    if let sheet = self.popoverPresentationController?.adaptiveSheetPresentationController {
-                        sheet.animateChanges {
-                            sheet.selectedDetentIdentifier = .medium
-                        }
-                    }
                 case .didChangeFrame:
                     self.view.setNeedsLayout()
                 default:

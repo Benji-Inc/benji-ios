@@ -85,7 +85,7 @@ class CommentsViewController: InputHandlerViewContoller,
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
@@ -108,7 +108,7 @@ class CommentsViewController: InputHandlerViewContoller,
         
         self.blurView.expandToSuperviewSize()
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.height = self.view.height - Theme.ContentOffset.xtraLong.value
+        self.collectionView.height = self.view.height - self.view.safeAreaInsets.top - 30
         self.collectionView.pin(.top, offset: .xtraLong)
     }
 
@@ -157,7 +157,10 @@ class CommentsViewController: InputHandlerViewContoller,
     }
 
     func updateUI(for state: ConversationUIState, forceLayout: Bool = false) {
-
+        guard self.presentedViewController.isNil || forceLayout else { return }
+        
+        self.dataSource.uiState = state
+        self.dataSource.reconfigureAllItems()
     }
 
     // MARK: - Message Loading and Updates
