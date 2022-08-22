@@ -14,8 +14,9 @@ class MomentViewController: ViewController {
     
     private let controlsContainer = BaseView()
     private let captionTextView = CaptionTextView()
-    private let createAtLabel = ThemeLabel(font: .xtraSmall)
     let personView = BorderedPersonView()
+    let commentsButton = CommentsButton()
+    let expressionsButton = ExpressionButton()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
     let blurView = MomentBlurView()
@@ -60,6 +61,10 @@ class MomentViewController: ViewController {
         self.captionTextView.isSelectable = false
         
         self.controlsContainer.addSubview(self.personView)
+        self.controlsContainer.addSubview(self.commentsButton)
+        self.commentsButton.configure(with: self.moment)
+        
+        self.controlsContainer.addSubview(self.expressionsButton)
         
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
@@ -86,6 +91,14 @@ class MomentViewController: ViewController {
         self.personView.squaredSize = 35
         self.personView.pinToSafeAreaRight()
         self.personView.pinToSafeAreaBottom()
+        
+        self.commentsButton.squaredSize = self.personView.height
+        self.commentsButton.centerX = self.personView.centerX
+        self.commentsButton.match(.bottom, to: .top, of: self.personView, offset: .negative(.custom(30)))
+        
+        self.expressionsButton.squaredSize = self.personView.height
+        self.expressionsButton.centerX = self.personView.centerX
+        self.expressionsButton.match(.bottom, to: .top, of: self.commentsButton, offset: .negative(.custom(30)))
         
         let maxWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - Theme.ContentOffset.xtraLong.value
         self.captionTextView.setSize(withMaxWidth: maxWidth)
@@ -116,15 +129,9 @@ class MomentViewController: ViewController {
             Task {
                 guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
                 self.captionTextView.animateCaption(text: moment.caption)
-                
-                if let createAt = moment.createdAt {
-                    let dateText = Date.hourMinuteTimeOfDayWithDate.string(from: createAt)
-                    self.createAtLabel.setText(dateText)
-                }
-                
                 self.personView.set(expression: nil, person: moment.author)
                 self.view.layoutNow()
-            }
+            } 
         }
     }
     

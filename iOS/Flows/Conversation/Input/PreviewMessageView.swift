@@ -106,25 +106,25 @@ class PreviewMessageView: SpeechBubbleView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.personGradientView.squaredSize = 40
-        self.imageView.squaredSize = 40
+        self.personGradientView.squaredSize = 34
+        self.imageView.squaredSize = 34
 
         let maxWidth: CGFloat
-        = self.width - self.personGradientView.width - self.imageView.width - Theme.ContentOffset.long.value
+        = self.width - self.personGradientView.width - self.imageView.width - Theme.ContentOffset.standard.value.doubled
 
-        self.personGradientView.pin(.left, offset: .long)
-        self.personGradientView.pin(.bottom, offset: .long)
+        self.personGradientView.pin(.left, offset: .standard)
+        self.personGradientView.pin(.bottom, offset: .standard)
         
-        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height + Theme.ContentOffset.long.value)
+        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height + Theme.ContentOffset.standard.value.doubled)
         self.textView.match(.left, to: .right, of: self.personGradientView)
         self.textView.center.y = self.halfHeight
 
         self.imageView.centerOnX()
-        self.imageView.pin(.bottom, offset: .custom(12))
-        self.imageView.pin(.right, offset: .long)
+        self.imageView.pin(.bottom, offset: .standard)
+        self.imageView.pin(.right, offset: .standard)
 
         self.deliveryTypeView.centerOnX()
-        self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.height - 4))
+        self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.halfHeight - 4))
         
         self.countCircle.pin(.bottom, offset: .short)
         self.countCircle.pin(.right, offset: .short)

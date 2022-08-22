@@ -14,7 +14,6 @@ import Parse
      case expression
      case file
      case preview
-     case conversationId
      case caption
  }
 
@@ -26,6 +25,11 @@ import Parse
      
      var isFromCurrentUser: Bool {
          return self.author?.objectId == User.current()?.objectId
+     }
+     
+     var commentsId: String {
+         guard let objectId = self.objectId else { return "" }
+         return "moment:" + objectId
      }
 
      var author: User? {
@@ -46,11 +50,6 @@ import Parse
      var preview: PFFileObject? {
          get { self.getObject(for: .preview) }
          set { self.setObject(for: .preview, with: newValue) }
-     }
-
-     var conversationId: String? {
-         get { self.getObject(for: .conversationId) }
-         set { self.setObject(for: .conversationId, with: newValue) }
      }
      
      var caption: String? {

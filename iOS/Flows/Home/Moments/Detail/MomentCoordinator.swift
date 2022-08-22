@@ -41,6 +41,10 @@ import Coordinator
              guard let author = self.moment.author else { return }
              self.presentProfile(for: author)
          }
+         
+         self.momentVC.commentsButton.didSelect { [unowned self] in
+             self.presentComments()
+         }
      }
      
      func presentMomentCapture() {
@@ -66,5 +70,20 @@ import Coordinator
          }
          
          self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
+     }
+     
+     func presentComments() {
+         self.removeChild()
+         
+         let coordinator = CommentsCoordinator(router: self.router,
+                                               deepLink: self.deepLink,
+                                               conversationId: self.moment.commentsId,
+                                               startingMessageId: nil,
+                                               openReplies: false)
+         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+             self.momentVC.dismiss(animated: true)
+         })
+         
+         self.router.present(coordinator, source: self.momentVC)
      }
  }

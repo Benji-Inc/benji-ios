@@ -755,6 +755,12 @@
 		D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9927C0070C001D8855 /* Achievement.swift */; };
 		D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
+		D6A0095428B03AAA0018FA98 /* CommentsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095328B03AAA0018FA98 /* CommentsButton.swift */; };
+		D6A0095728B11BCA0018FA98 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095628B11BCA0018FA98 /* CommentsViewController.swift */; };
+		D6A0095928B11BEC0018FA98 /* CommentsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095828B11BEC0018FA98 /* CommentsCoordinator.swift */; };
+		D6A0095B28B128320018FA98 /* CommentsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095A28B128320018FA98 /* CommentsViewController+Extensions.swift */; };
+		D6A0095F28B1596A0018FA98 /* MomentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095E28B159690018FA98 /* MomentButton.swift */; };
+		D6A0096128B15A7C0018FA98 /* ExpressionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */; };
 		D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -1406,6 +1412,12 @@
 		D69D2F9927C0070C001D8855 /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
 		D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementCell.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
+		D6A0095328B03AAA0018FA98 /* CommentsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsButton.swift; sourceTree = "<group>"; };
+		D6A0095628B11BCA0018FA98 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		D6A0095828B11BEC0018FA98 /* CommentsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCoordinator.swift; sourceTree = "<group>"; };
+		D6A0095A28B128320018FA98 /* CommentsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommentsViewController+Extensions.swift"; sourceTree = "<group>"; };
+		D6A0095E28B159690018FA98 /* MomentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentButton.swift; sourceTree = "<group>"; };
+		D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionButton.swift; sourceTree = "<group>"; };
 		D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderViewController.swift; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
@@ -2607,6 +2619,16 @@
 			path = Parse;
 			sourceTree = "<group>";
 		};
+		D6A0095528B11B9C0018FA98 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				D6A0095828B11BEC0018FA98 /* CommentsCoordinator.swift */,
+				D6A0095628B11BCA0018FA98 /* CommentsViewController.swift */,
+				D6A0095A28B128320018FA98 /* CommentsViewController+Extensions.swift */,
+			);
+			path = Comments;
+			sourceTree = "<group>";
+		};
 		D6A4A1F425E954CB007F3E15 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -2731,11 +2753,15 @@
 		D6AF4AB828A6CD2800225F37 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				D6A0095528B11B9C0018FA98 /* Comments */,
 				D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */,
 				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
 				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
 				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
 				D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */,
+				D6A0095328B03AAA0018FA98 /* CommentsButton.swift */,
+				D6A0095E28B159690018FA98 /* MomentButton.swift */,
+				D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -3637,6 +3663,7 @@
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
 				D646D36627E505280077D20B /* AttachmentCell.swift in Sources */,
 				D627E4CC277E0079007B3286 /* WelcomeViewController.swift in Sources */,
+				D6A0095428B03AAA0018FA98 /* CommentsButton.swift in Sources */,
 				D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */,
 				D6129FB027ADC6530058811C /* WalletCollectionView.swift in Sources */,
 				D6C8F1682826D7AC00226583 /* VideoAttachment.swift in Sources */,
@@ -3806,6 +3833,7 @@
 				D6B2B65D283D3B23007D507B /* JibberIntroContentView.swift in Sources */,
 				D6265ECE279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
+				D6A0095B28B128320018FA98 /* CommentsViewController+Extensions.swift in Sources */,
 				D6B2B657283D3A1A007D507B /* ConnectionRequestContentView.swift in Sources */,
 				D6AA61F6285255C900FA4D02 /* MembersViewController.swift in Sources */,
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,
@@ -3931,6 +3959,7 @@
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
+				D6A0095928B11BEC0018FA98 /* CommentsCoordinator.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D61A33D727D4FAA900056242 /* ContextCueCoordinator.swift in Sources */,
@@ -3941,6 +3970,7 @@
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				8068A0062868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
+				D6A0096128B15A7C0018FA98 /* ExpressionButton.swift in Sources */,
 				D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* MemberAddCell.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */,
@@ -4037,6 +4067,7 @@
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
 				D60B887327F7732100B3E1C2 /* NoticeCell.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
+				D6A0095F28B1596A0018FA98 /* MomentButton.swift in Sources */,
 				D6AA621528528EE600FA4D02 /* OrbCollectionViewLayout.swift in Sources */,
 				8052D85A27347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift in Sources */,
 				D60B887B27F8A13A00B3E1C2 /* SectionDividerView.swift in Sources */,
@@ -4060,6 +4091,7 @@
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6B2B650283A9150007D507B /* ConversationContentView.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ThreadViewController.swift in Sources */,
+				D6A0095728B11BCA0018FA98 /* CommentsViewController.swift in Sources */,
 				D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */,
 				D60CA47427ED1C1800F0871A /* OptionCell.swift in Sources */,
 				D64C323E270391AE004BC1BD /* Person.swift in Sources */,

@@ -90,19 +90,19 @@ class MomentsStore {
         }
     }
     
-    func createMoment(from recording: PiPRecording, caption: String?) async throws -> Moment? {
+    func createMoment(from recording: PiPRecording, caption: String?) async throws -> Moment {
         
         guard let expressionURL = recording.frontRecordingURL,
                let momentURL = recording.backRecordingURL,
-              let previewURL = recording.previewURL else { return nil }
+              let previewURL = recording.previewURL else { throw ClientError.message(detail: "Missing moment recorded media") }
         
         try await self.initializeIfNeeded()
         
-        guard !self.hasRecordedToday else { return nil }
+        guard !self.hasRecordedToday else { throw ClientError.message(detail: "Moment for today already created.") }
         
-        let expressionData = try! Data(contentsOf: expressionURL)
-        let momentData = try! Data(contentsOf: momentURL)
-        let previewData = try! Data(contentsOf: previewURL)
+        let expressionData = try Data(contentsOf: expressionURL)
+        let momentData = try Data(contentsOf: momentURL)
+        let previewData = try Data(contentsOf: previewURL)
 
         let expression = Expression()
 
@@ -112,11 +112,8 @@ class MomentsStore {
 
         let savedExpression = try await expression.saveToServer()
 
-        #warning("Add conversation id to moment creation")
-
         let moment = Moment()
         moment.expression = savedExpression
-        moment.conversationId = "Some conversation ID"
         moment.author = User.current()
         moment.file = PFFileObject(name: "moment.mov", data: momentData)
         moment.preview = PFFileObject(name: "preview.mov", data: previewData)
@@ -125,6 +122,8 @@ class MomentsStore {
         let savedMoment = try await moment.saveToServer()
         
         self.__moments.append(savedMoment)
+        
+        try await JibberChatClient.shared.createNewConversation(for: savedMoment)
 
         return savedMoment
     }
