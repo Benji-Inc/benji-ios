@@ -42,7 +42,7 @@ class CommentsViewController: InputHandlerViewContoller,
     lazy var messageInputController: SwipeableInputAccessoryViewController = {
         let inputController = SwipeableInputAccessoryViewController()
         inputController.delegate = self.swipeInputDelegate
-        inputController.swipeInputView.textView.restorationIdentifier = "list"
+        inputController.swipeInputView.textView.restorationIdentifier = "comments"
         return inputController
     }()
     

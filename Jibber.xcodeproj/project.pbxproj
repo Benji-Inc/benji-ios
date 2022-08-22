@@ -2754,14 +2754,14 @@
 			isa = PBXGroup;
 			children = (
 				D6A0095528B11B9C0018FA98 /* Comments */,
-				D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */,
-				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
-				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
-				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
-				D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */,
 				D6A0095328B03AAA0018FA98 /* CommentsButton.swift */,
-				D6A0095E28B159690018FA98 /* MomentButton.swift */,
 				D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */,
+				D6AF4ABD28A6F91400225F37 /* MomentBlurView.swift */,
+				D6A0095E28B159690018FA98 /* MomentButton.swift */,
+				D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */,
+				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
+				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
+				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";

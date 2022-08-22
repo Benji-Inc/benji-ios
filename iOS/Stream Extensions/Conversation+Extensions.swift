@@ -110,3 +110,22 @@ extension Conversation: MessageSequence {
         return messageArray
     }
 }
+
+extension Conversation {
+    // Used for comment based conversations for Moments
+    var expressions: [ExpressionInfo] {
+        guard let value = self.extraData["expressions"], case RawJSON.array(let array) = value else { return [] }
+        
+        var values: [ExpressionInfo] = []
+        
+        array.forEach { value in
+            if case RawJSON.dictionary(let dict) = value,
+                let authorValue = dict["authorId"], case RawJSON.string(let authorId) = authorValue,
+               let expressionValue = dict["expressionId"], case RawJSON.string(let expressionId) = expressionValue {
+                values.append(ExpressionInfo(authorId: authorId, expressionId: expressionId))
+            }
+        }
+                
+        return values
+    }
+}
