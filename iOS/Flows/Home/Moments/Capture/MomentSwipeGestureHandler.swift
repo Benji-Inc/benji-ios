@@ -41,7 +41,6 @@ class MomentSwipeGestureHandler {
         switch pan.state {
         case .began:
             self.panStartPoint = currentPoint
-            self.initializeAnimator()
         case .changed:
 
             if self.interactionInProgress {
@@ -54,26 +53,31 @@ class MomentSwipeGestureHandler {
                       currentPoint.y < startY,
                       startY - currentPoint.y > self.threshold {
                 
+                self.initializeAnimator()
                 self.viewController.pausePlayback()
                 // Only start interaction if the pan drags far enough
                 self.interactionInProgress = true
             }
 
         case .ended, .cancelled, .failed:
-            guard let animator = self.animator, animator.state == .stopped else {
-                return
-            }
-
+            guard let animator = self.animator else { return }
+            
             self.viewController.bottomOffset = nil
             self.interactionInProgress = false
             self.panStartPoint = nil
 
-            if animator.fractionComplete > 0.3 || pan.velocity(in: nil).y > 400  {
-                animator.finishAnimation(at: .end)
+            if animator.fractionComplete > 0.25 || pan.velocity(in: nil).y > 400  {
+                animator.isReversed = false
             } else {
                 self.viewController.resumePlayback()
-                animator.finishAnimation(at: .start)
+                animator.isReversed = true
             }
+            
+            let timing = UISpringTimingParameters(dampingRatio: 0.6)
+            let newDuration = UIViewPropertyAnimator(duration: Theme.animationDurationSlow, timingParameters: timing).duration
+            let durationFactor = CGFloat(newDuration / animator.duration)
+        
+            animator.continueAnimation(withTimingParameters: timing, durationFactor: durationFactor)
 
         case .possible:
             break
@@ -118,7 +122,7 @@ class MomentSwipeGestureHandler {
         })
         
         self.animator?.isUserInteractionEnabled = false
-        self.animator?.pausesOnCompletion = true
+        self.animator?.pausesOnCompletion = false
         self.animator?.pauseAnimation()
     }
 

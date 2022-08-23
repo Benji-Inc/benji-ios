@@ -21,6 +21,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
     
     let label = ThemeLabel(font: .medium, textColor: .white)
     let textView = CaptionTextView()
+    let confirmationView = MomentConfirmationView() 
     
     private lazy var panGestureHandler = MomentSwipeGestureHandler(viewController: self)
     
@@ -52,6 +53,8 @@ class MomentCaptureViewController: PiPRecordingViewController {
         
         self.presentationController?.delegate = self
         
+        self.view.insertSubview(self.confirmationView, belowSubview: self.backCameraView)
+        
         self.backCameraView.layer.cornerRadius = self.cornerRadius
         self.backCameraView.layer.masksToBounds = true
         
@@ -67,6 +70,8 @@ class MomentCaptureViewController: PiPRecordingViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        self.confirmationView.expandToSuperviewSize()
         
         if let offset = self.bottomOffset {
             self.backCameraView.bottom = offset
@@ -91,6 +96,15 @@ class MomentCaptureViewController: PiPRecordingViewController {
         
         self.panGestureHandler.didFinish = { [unowned self] in
             logDebug("Did finish")
+            
+            Task {
+                await self.confirmationView.showCircle()
+            }
+            
+            // Create moment
+            // Show loading
+            // On success show animation and selection impact
+            // On failure show error and reset
             
             //             Task {
             //                 guard let recording = self.recording,
@@ -148,7 +162,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         case .recording:
             self.animate(text: "")
         case .playback:
-            self.animate(text: "Swipe up to Share")
+            self.animate(text: "Swipe Up")
         case .error:
             self.animate(text: "Recording Failed")
         }

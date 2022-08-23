@@ -762,6 +762,7 @@
 		D6A0095F28B1596A0018FA98 /* MomentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095E28B159690018FA98 /* MomentButton.swift */; };
 		D6A0096128B15A7C0018FA98 /* ExpressionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */; };
 		D6A0096328B539A20018FA98 /* MomentSwipeGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096228B539A20018FA98 /* MomentSwipeGestureHandler.swift */; };
+		D6A0096528B587360018FA98 /* MomentConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096428B587360018FA98 /* MomentConfirmationView.swift */; };
 		D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -1420,6 +1421,7 @@
 		D6A0095E28B159690018FA98 /* MomentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentButton.swift; sourceTree = "<group>"; };
 		D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionButton.swift; sourceTree = "<group>"; };
 		D6A0096228B539A20018FA98 /* MomentSwipeGestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentSwipeGestureHandler.swift; sourceTree = "<group>"; };
+		D6A0096428B587360018FA98 /* MomentConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentConfirmationView.swift; sourceTree = "<group>"; };
 		D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderViewController.swift; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
@@ -2177,6 +2179,7 @@
 				D6125B8528AD771500199414 /* CaptionTextView.swift */,
 				D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */,
 				D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */,
+				D6A0096428B587360018FA98 /* MomentConfirmationView.swift */,
 				D6A0096228B539A20018FA98 /* MomentSwipeGestureHandler.swift */,
 				D63F9648289B29D2004F6C0D /* PIP */,
 			);
@@ -3981,6 +3984,7 @@
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */,
 				801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
+				D6A0096528B587360018FA98 /* MomentConfirmationView.swift in Sources */,
 				D61C1D252840409900F58F84 /* BaseCoordinator.swift in Sources */,
 				80B046F32819FB180079AE47 /* MetalView.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
