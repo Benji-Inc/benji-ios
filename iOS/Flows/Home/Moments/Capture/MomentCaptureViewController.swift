@@ -13,205 +13,220 @@ import Localization
 import Speech
 import KeyboardManager
 
- class MomentCaptureViewController: PiPRecordingViewController {
+class MomentCaptureViewController: PiPRecordingViewController {
+    
+    override var analyticsIdentifier: String? {
+        return "SCREEN_MOMENT"
+    }
+    
+    let label = ThemeLabel(font: .medium, textColor: .white)
+    let textView = CaptionTextView()
+    
+    private lazy var panGestureHandler = MomentSwipeGestureHandler(viewController: self)
+    
+    private lazy var panRecognizer = SwipeGestureRecognizer { [unowned self] (recognizer) in
+        self.panGestureHandler.handle(pan: recognizer)
+    }
+    
+    var didCompleteMoment: ((Moment) -> Void)? = nil
+    
+    static let maxDuration: TimeInterval = 6.0
+    let cornerRadius: CGFloat = 30
+    var willShowKeyboard: Bool = false
+    
+    var bottomOffset: CGFloat?
+    
+    override func initializeViews() {
+        super.initializeViews()
+        
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.preferredCornerRadius = self.cornerRadius
+        }
+        
+        self.view.set(backgroundColor: .B0)
+        
+        self.presentationController?.delegate = self
+        
+        self.backCameraView.layer.cornerRadius = self.cornerRadius
+        self.backCameraView.layer.masksToBounds = true
+        
+        self.view.addSubview(self.label)
+        self.label.showShadow(withOffset: 0, opacity: 1.0)
+        
+        self.view.addSubview(self.textView)
+        
+        self.view.addGestureRecognizer(self.panRecognizer)
+        
+        self.setupHandlers()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if let offset = self.bottomOffset {
+            self.backCameraView.bottom = offset
+            self.frontCameraView.match(.top, to: .top, of: self.backCameraView, offset: .custom(self.frontCameraView.left))
+        }
+        
+        self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.label.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
+        self.label.centerOnX()
+        
+        self.textView.setSize(withMaxWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.textView.pinToSafeAreaLeft()
+        
+        if self.willShowKeyboard {
+            self.textView.bottom = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.long.value
+        } else {
+            self.textView.match(.bottom, to: .bottom, of: self.backCameraView, offset: .negative(.custom(self.textView.left)))
+        }
+    }
+    
+    private func setupHandlers() {
+        
+        self.panGestureHandler.didFinish = { [unowned self] in
+            logDebug("Did finish")
+            
+            //             Task {
+            //                 guard let recording = self.recording,
+            //                       let moment = await self.createMoment(from: recording) else { return }
+            //                 self.didCompleteMoment?(moment)
+            //             }
+        }
+        
+        self.textView.$publishedText.mainSink { [unowned self] _ in
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
+        
+        self.frontCameraView.animationDidEnd = { [unowned self] in
+            guard self.state == .recording else { return }
+            self.stopRecording()
+        }
+        
+        self.view.didSelect { [unowned self] in
+            if self.textView.isFirstResponder {
+                self.textView.resignFirstResponder()
+            } else if self.state == .playback {
+                self.state = .idle
+            }
+        }
+        
+        KeyboardManager.shared.$currentEvent.mainSink { [unowned self] event in
+            switch event {
+                
+            case .willShow(_):
+                self.willShowKeyboard = true
+                UIView.animate(withDuration: Theme.animationDurationFast) {
+                    self.view.layoutNow()
+                    self.textView.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.8)
+                }
+            case .willHide(_):
+                self.willShowKeyboard = false
+                UIView.animate(withDuration: Theme.animationDurationFast) {
+                    self.view.layoutNow()
+                    self.textView.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
+                }
+            default:
+                break
+            }
+            
+        }.store(in: &self.cancellables)
+    }
+    
+    override func handle(state: State) {
+        super.handle(state: state)
+        
+        switch state {
+        case .idle:
+            self.textView.alpha = 0
+            self.animate(text: "Press and Hold")
+        case .recording:
+            self.animate(text: "")
+        case .playback:
+            self.animate(text: "Swipe up to Share")
+        case .error:
+            self.animate(text: "Recording Failed")
+        }
+    }
+    
+    override func handleSpeech(result: SFSpeechRecognitionResult?) {
+        self.textView.animateSpeech(result: result)
+        self.view.layoutNow()
+    }
+    
+    private func createMoment(from recording: PiPRecording) async -> Moment? {
+        // await self.doneButton.handleEvent(status: .loading)
+        
+        do {
+            return  try await MomentsStore.shared.createMoment(from: recording,
+                                                               caption: self.textView.text)
+        } catch {
+            //await self.doneButton.handleEvent(status: .error("Error"))
+            return nil
+        }
+    }
+    
+    private var animateTask: Task<Void, Never>?
+    
+    func animate(text: Localized) {
+        self.animateTask?.cancel()
+        
+        self.animateTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 0
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            self.label.setText(text)
+            self.view.layoutNow()
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 1.0
+            })
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        guard self.state == .idle else { return }
+        self.startRecording()
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        guard self.state == .recording else { return }
+        
+        let touch = touches.first?.gestureRecognizers?.first as? SwipeGestureRecognizer
+        
+        if touch.isNil {
+            self.stopRecording()
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        guard self.state == .recording else { return }
+        
+        let touch = touches.first?.gestureRecognizers?.first as? SwipeGestureRecognizer
+        
+        if touch.isNil {
+            self.stopRecording()
+        }
+    }
+}
 
-     override var analyticsIdentifier: String? {
-         return "SCREEN_MOMENT"
-     }
-
-     private let label = ThemeLabel(font: .medium, textColor: .white)
-     private let doneButton = ThemeButton()
-     private let textView = CaptionTextView()
-
-     var didCompleteMoment: ((Moment) -> Void)? = nil
-
-     static let maxDuration: TimeInterval = 6.0
-     let cornerRadius: CGFloat = 30
-     var willShowKeyboard: Bool = false
-
-     override func initializeViews() {
-         super.initializeViews()
-         
-         self.modalPresentationStyle = .popover
-         if let pop = self.popoverPresentationController {
-             let sheet = pop.adaptiveSheetPresentationController
-             sheet.detents = [.large()]
-             sheet.prefersGrabberVisible = true
-             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-             sheet.preferredCornerRadius = self.cornerRadius
-         }
-         
-         self.view.set(backgroundColor: .B0)
-
-         self.presentationController?.delegate = self
-
-         self.backCameraView.layer.cornerRadius = self.cornerRadius
-         self.backCameraView.layer.masksToBounds = true
-
-         self.view.addSubview(self.label)
-         self.label.showShadow(withOffset: 0, opacity: 1.0)
-
-         self.view.addSubview(self.doneButton)
-         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-         
-         self.view.addSubview(self.textView)
-         
-         self.setupHandlers()
-     }
-
-     override func viewDidLayoutSubviews() {
-         super.viewDidLayoutSubviews()
-                  
-         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
-         self.label.centerOnX()
-         
-         self.doneButton.setSize(with: self.view.width)
-         self.doneButton.centerOnX()
-
-         if self.state == .playback, !self.isBeingClosed {
-             self.doneButton.pinToSafeAreaBottom()
-             self.label.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
-         } else {
-             self.doneButton.top = self.view.height
-             self.label.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
-         }
-         
-         self.textView.setSize(withMaxWidth: self.doneButton.width)
-         self.textView.pinToSafeAreaLeft()
-         
-         if self.willShowKeyboard {
-             self.textView.bottom = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.long.value
-         } else {
-             self.textView.match(.bottom, to: .bottom, of: self.backCameraView, offset: .negative(.custom(self.textView.left)))
-         }
-     }
-
-     private func setupHandlers() {
-         
-         self.textView.$publishedText.mainSink { [unowned self] _ in
-             self.view.layoutNow()
-         }.store(in: &self.cancellables)
-                  
-         self.frontCameraView.animationDidEnd = { [unowned self] in
-             guard self.state == .recording else { return }
-             self.stopRecording()
-         }
-
-         self.view.didSelect { [unowned self] in
-             if self.textView.isFirstResponder {
-                 self.textView.resignFirstResponder()
-             } else if self.state == .playback {
-                 self.state = .idle
-             }
-         }
-
-         self.doneButton.didSelect { [unowned self] in
-             Task {
-                 guard let recording = self.recording,
-                       let moment = await self.createMoment(from: recording) else { return }
-                 self.didCompleteMoment?(moment)
-             }
-         }
-         
-         KeyboardManager.shared.$currentEvent.mainSink { [unowned self] event in
-             switch event {
-                 
-             case .willShow(_):
-                 self.willShowKeyboard = true
-                 UIView.animate(withDuration: Theme.animationDurationFast) {
-                     self.view.layoutNow()
-                     self.textView.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.8)
-                 }
-             case .willHide(_):
-                 self.willShowKeyboard = false
-                 UIView.animate(withDuration: Theme.animationDurationFast) {
-                     self.view.layoutNow()
-                     self.textView.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
-                 }
-             default:
-                 break
-             }
-             
-         }.store(in: &self.cancellables)
-     }
-
-     override func handle(state: State) {
-         super.handle(state: state)
-         
-         switch state {
-         case .idle:
-             self.textView.alpha = 0 
-             self.animate(text: "Press and Hold")
-         case .playback, .recording:
-             self.animate(text: "")
-         case .error:
-             self.animate(text: "Recording Failed")
-         }
-     }
-     
-     override func handleSpeech(result: SFSpeechRecognitionResult?) {
-         self.textView.animateSpeech(result: result)
-         self.view.layoutNow()
-     }
-
-     private func createMoment(from recording: PiPRecording) async -> Moment? {
-         await self.doneButton.handleEvent(status: .loading)
-         
-         do {
-             return  try await MomentsStore.shared.createMoment(from: recording,
-                                                                caption: self.textView.text)
-         } catch {
-             await self.doneButton.handleEvent(status: .error("Error"))
-             return nil
-         }
-     }
-     
-     private var animateTask: Task<Void, Never>?
-     
-     func animate(text: Localized) {
-         self.animateTask?.cancel()
-         
-         self.animateTask = Task { [weak self] in
-             guard let `self` = self else { return }
-             
-             await UIView.awaitAnimation(with: .fast, animations: {
-                 self.label.alpha = 0
-             })
-             
-             guard !Task.isCancelled else { return }
-             
-             self.label.setText(text)
-             self.view.layoutNow()
-             
-             await UIView.awaitAnimation(with: .fast, animations: {
-                 self.label.alpha = 1.0
-             })
-         }
-     }
-
-     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-         super.touchesBegan(touches, with: event)
-         guard self.state == .idle else { return }
-         self.startRecording()
-     }
-
-     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-         super.touchesEnded(touches, with: event)
-         guard self.state == .recording else { return }
-         self.stopRecording()
-     }
-
-     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-         super.touchesCancelled(touches, with: event)
-         guard self.state == .recording else { return }
-         self.stopRecording()
-     }
- }
-
- extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate {
-
-     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-         self.stopRecording()
-         return true
-     }
- }
+extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        self.stopRecording()
+        return true
+    }
+}

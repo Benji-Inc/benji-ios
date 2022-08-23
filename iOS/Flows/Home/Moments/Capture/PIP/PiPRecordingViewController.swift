@@ -114,8 +114,8 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         self.backCameraView.pin(.top)
         
         self.frontCameraView.squaredSize = self.view.width * 0.25
-        self.frontCameraView.pinToSafeAreaTop()
         self.frontCameraView.pinToSafeAreaLeft()
+        self.frontCameraView.match(.top, to: .top, of: self.backCameraView, offset: .custom(self.frontCameraView.left))
     }
     
     // MARK: - PUBLIC
@@ -141,6 +141,16 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
         self.state = .recording
         self.selectionImpact.impactOccurred(intensity: 1.0)
+    }
+    
+    func pausePlayback() {
+        self.frontCameraView.playbackView.playerLayer.player?.pause()
+        self.backCameraView.playbackView.playerLayer.player?.pause()
+    }
+    
+    func resumePlayback() {
+        self.frontCameraView.playbackView.playerLayer.player?.play()
+        self.backCameraView.playbackView.playerLayer.player?.play()
     }
     
     func stopRecording() {
