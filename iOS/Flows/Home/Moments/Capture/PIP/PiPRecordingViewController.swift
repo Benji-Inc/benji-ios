@@ -109,7 +109,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.backCameraView.expandToSuperviewSize()
+        self.backCameraView.expandToSuperviewWidth()
+        self.backCameraView.height = self.view.height - self.view.safeAreaInsets.bottom - self.view.height * 0.15
+        self.backCameraView.pin(.top)
         
         self.frontCameraView.squaredSize = self.view.width * 0.25
         self.frontCameraView.pinToSafeAreaTop()

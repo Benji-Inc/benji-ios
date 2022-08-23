@@ -31,6 +31,8 @@ class ExpressionButton: MomentButton {
         if let expressions = self.controller?.conversation?.expressions {
             self.counter.setValue(Float(expressions.count))
             self.counter.isVisible = expressions.count > 0
+        } else {
+            self.counter.isVisible = false 
         }
         
         self.controller?.channelChangePublisher.mainSink(receiveValue: { [unowned self] _ in

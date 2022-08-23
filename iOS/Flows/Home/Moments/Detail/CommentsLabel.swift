@@ -9,17 +9,23 @@
 import Foundation
 import Combine
 
-class CommentsButton: MomentButton {
+class CommentsLabel: ThemeLabel {
     
     private var controller: MessageSequenceController?
     private var subscriptions = Set<AnyCancellable>()
         
     init() {
-        super.init(with: .rectangleStack)
+        super.init(font: .regular, textColor: .whiteWithAlpha)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func initializeLabel() {
+        super.initializeLabel()
+        
+        self.isUserInteractionEnabled = true 
     }
     
     func configure(with moment: Moment) {
@@ -30,14 +36,26 @@ class CommentsButton: MomentButton {
         self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
         
         if let sequence = self.controller?.messageSequence {
-            self.counter.setValue(Float(sequence.totalUnread))
-            self.counter.isVisible = sequence.totalUnread > 0
+            self.updateText(for: sequence.totalUnread)
         }
                 
         self.controller?.messageSequenceChangePublisher.mainSink(receiveValue: { [unowned self] _ in
             guard let sequence = self.controller?.messageSequence else { return }
-            self.counter.setValue(Float(sequence.totalUnread))
-            self.counter.isVisible = sequence.totalUnread > 0
+            self.updateText(for: sequence.totalUnread)
         }).store(in: &self.subscriptions)
+    }
+    
+    private func updateText(for count: Int) {
+        var text = ""
+        
+        if count == 0 {
+            text = "Add comment"
+        } else if count == 1 {
+            text = "View unread comment"
+        } else {
+            text = "View \(count) unread comments"
+        }
+        
+        self.setText(text)
     }
 }

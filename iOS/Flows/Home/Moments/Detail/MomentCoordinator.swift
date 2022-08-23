@@ -42,7 +42,7 @@ import Coordinator
              self.presentProfile(for: author)
          }
          
-         self.momentVC.commentsButton.didSelect { [unowned self] in
+         self.momentVC.commentsLabel.didSelect { [unowned self] in
              self.presentComments()
          }
      }

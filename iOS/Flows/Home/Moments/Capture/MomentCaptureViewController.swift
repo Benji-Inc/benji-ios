@@ -46,6 +46,7 @@ import KeyboardManager
          self.presentationController?.delegate = self
 
          self.backCameraView.layer.cornerRadius = self.cornerRadius
+         self.backCameraView.layer.masksToBounds = true
 
          self.view.addSubview(self.label)
          self.label.showShadow(withOffset: 0, opacity: 1.0)
@@ -72,16 +73,16 @@ import KeyboardManager
              self.label.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
          } else {
              self.doneButton.top = self.view.height
-             self.label.pinToSafeAreaBottom()
+             self.label.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
          }
          
          self.textView.setSize(withMaxWidth: self.doneButton.width)
-         self.textView.match(.left, to: .left, of: self.doneButton)
+         self.textView.pinToSafeAreaLeft()
          
          if self.willShowKeyboard {
              self.textView.bottom = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.long.value
          } else {
-             self.textView.match(.bottom, to: .top, of: self.doneButton, offset: .negative(.long))
+             self.textView.match(.bottom, to: .bottom, of: self.backCameraView, offset: .negative(.custom(self.textView.left)))
          }
      }
 
