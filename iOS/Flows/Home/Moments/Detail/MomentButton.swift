@@ -41,7 +41,7 @@ class MomentButton: ThemeButton {
         
         self.addSubview(self.counter)
         
-        let pointSize: CGFloat = 22
+        let pointSize: CGFloat = 26
         
         self.set(style: .image(symbol: self.symbol,
                                palletteColors: [.white],

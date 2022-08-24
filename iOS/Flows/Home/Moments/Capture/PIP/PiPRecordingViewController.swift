@@ -26,6 +26,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case idle
         case recording
         case playback
+        case uploading
         case error
     }
 
@@ -109,11 +110,13 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.backCameraView.expandToSuperviewSize()
+        self.backCameraView.expandToSuperviewWidth()
+        self.backCameraView.height = self.view.height - self.view.safeAreaInsets.bottom - self.view.height * 0.15
+        self.backCameraView.pin(.top)
         
         self.frontCameraView.squaredSize = self.view.width * 0.25
-        self.frontCameraView.pinToSafeAreaTop()
         self.frontCameraView.pinToSafeAreaLeft()
+        self.frontCameraView.match(.top, to: .top, of: self.backCameraView, offset: .custom(self.frontCameraView.left))
     }
     
     // MARK: - PUBLIC
@@ -139,6 +142,16 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
         self.state = .recording
         self.selectionImpact.impactOccurred(intensity: 1.0)
+    }
+    
+    func pausePlayback() {
+        self.frontCameraView.playbackView.playerLayer.player?.pause()
+        self.backCameraView.playbackView.playerLayer.player?.pause()
+    }
+    
+    func resumePlayback() {
+        self.frontCameraView.playbackView.playerLayer.player?.play()
+        self.backCameraView.playbackView.playerLayer.player?.play()
     }
     
     func stopRecording() {

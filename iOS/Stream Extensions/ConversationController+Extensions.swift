@@ -568,4 +568,40 @@ extension ConversationController: MessageSequenceController {
             return change
         }.eraseToAnyPublisher()
     }
+    
+    func add(expression: Expression) async throws {
+        
+        var extraData = self.conversation?.extraData ?? [:]
+        var expressions: [RawJSON] = []
+        if let value = extraData["expressions"], case RawJSON.array(let array) = value {
+            expressions = array
+        }
+        do {
+            let saved = try await expression.saveToServer()
+            
+            let expressionDict: [String: RawJSON] = ["authorId": .string(User.current()!.objectId!),
+                                                     "expressionId": .string(saved.objectId!)]
+            expressions.append(.dictionary(expressionDict))
+            
+            extraData["expressions"] = .array(expressions)
+        } catch {
+            throw(ClientError.apiError(detail: "Error saving expression for message."))
+        }
+        
+        return await withCheckedContinuation({ continuation in
+            self.updateChannel(name: nil, imageURL: nil, team: nil, extraData: extraData) { error in
+                if let e = error {
+                    Task {
+                        await ToastScheduler.shared.schedule(toastType: .error(e))
+                    }
+                    logError(e)
+                } else {
+                    Task {
+                        await ToastScheduler.shared.schedule(toastType: .success(ImageSymbol.faceSmiling, "Expression added"))
+                    }
+                }
+                continuation.resume(returning: ())
+            }
+        })
+    }
 }

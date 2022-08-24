@@ -15,6 +15,8 @@ class CaptionTextView: TextView {
     
     var cancellables = Set<AnyCancellable>()
     
+    var placeholderText: String = "Add caption"
+    
     init() {
         super.init(frame: .zero, font: .regular, textColor: .white, alignment: .left, textContainer: nil)
     }
@@ -60,9 +62,10 @@ class CaptionTextView: TextView {
         self.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
         
         self.$publishedText.mainSink { [unowned self] text in
+            guard !self.placeholderText.isEmpty else { return }
             let color: ThemeColor = text.isEmpty ? .whiteWithAlpha : .clear
             let styleAttributes = StringStyle(font: .regular, color: color).attributes
-            let string = NSAttributedString(string: "Add caption", attributes: styleAttributes)
+            let string = NSAttributedString(string: self.placeholderText, attributes: styleAttributes)
             self.attributedPlaceholder = string
             self.layoutNow()
         }.store(in: &self.cancellables)
@@ -108,7 +111,6 @@ class CaptionTextView: TextView {
                 let _: [()] = await [fadeIn, textAnimation]
             }
         } else {
-            self.setText("No caption")
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.alpha = 1
             }

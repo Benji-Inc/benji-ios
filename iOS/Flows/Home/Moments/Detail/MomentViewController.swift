@@ -15,7 +15,7 @@ class MomentViewController: ViewController {
     private let controlsContainer = BaseView()
     private let captionTextView = CaptionTextView()
     let personView = BorderedPersonView()
-    let commentsButton = CommentsButton()
+    let commentsLabel = CommentsLabel()
     let expressionsButton = ExpressionButton()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
@@ -55,16 +55,21 @@ class MomentViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
+        self.momentView.layer.cornerRadius = self.cornerRadius
+        self.momentView.layer.masksToBounds = true
+        
         self.view.addSubview(self.controlsContainer)
         self.controlsContainer.addSubview(self.captionTextView)
         self.captionTextView.isEditable = false
         self.captionTextView.isSelectable = false
+        self.captionTextView.placeholderText = ""
         
         self.controlsContainer.addSubview(self.personView)
-        self.controlsContainer.addSubview(self.commentsButton)
-        self.commentsButton.configure(with: self.moment)
+        self.controlsContainer.addSubview(self.commentsLabel)
+        self.commentsLabel.configure(with: self.moment)
         
         self.controlsContainer.addSubview(self.expressionsButton)
+        self.expressionsButton.configure(with: self.moment)
         
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
@@ -81,7 +86,9 @@ class MomentViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.momentView.expandToSuperviewSize()
+        self.momentView.expandToSuperviewWidth()
+        self.momentView.height = self.view.height - self.view.safeAreaInsets.bottom - self.view.height * 0.15
+        self.momentView.pin(.top)
         self.controlsContainer.expandToSuperviewSize()
         
         self.expressionView.squaredSize = self.view.width * 0.25
@@ -89,21 +96,23 @@ class MomentViewController: ViewController {
         self.expressionView.pinToSafeAreaLeft()
         
         self.personView.squaredSize = 35
-        self.personView.pinToSafeAreaRight()
-        self.personView.pinToSafeAreaBottom()
-        
-        self.commentsButton.squaredSize = self.personView.height
-        self.commentsButton.centerX = self.personView.centerX
-        self.commentsButton.match(.bottom, to: .top, of: self.personView, offset: .negative(.custom(30)))
+        self.personView.pinToSafeAreaLeft()
+        self.personView.top = self.momentView.height + Theme.ContentOffset.long.value
         
         self.expressionsButton.squaredSize = self.personView.height
-        self.expressionsButton.centerX = self.personView.centerX
-        self.expressionsButton.match(.bottom, to: .top, of: self.commentsButton, offset: .negative(.custom(30)))
+        self.expressionsButton.pinToSafeAreaRight()
+        self.expressionsButton.centerY = self.personView.centerY
         
-        let maxWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - Theme.ContentOffset.xtraLong.value
+        let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - self.expressionsButton.width - Theme.ContentOffset.long.value.doubled
+        self.commentsLabel.setSize(withWidth: maxLabelWidth)
+        self.commentsLabel.centerY = self.personView.centerY
+        self.commentsLabel.match(.left, to: .right, of: self.personView, offset: .long)
+        
+        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
         self.captionTextView.setSize(withMaxWidth: maxWidth)
         self.captionTextView.pinToSafeAreaLeft()
-        self.captionTextView.pinToSafeAreaBottom()
+        self.captionTextView.bottom = self.momentView.height - self.captionTextView.left
+        self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
         
         self.blurView.expandToSuperviewSize()
     }
