@@ -52,3 +52,20 @@ extension PFFileObject: ImageDisplayable {
         }
     }
 }
+
+extension PFFileObject {
+    
+    func saveDataInBackground(progressHandler: ((Int) -> Void)? = nil) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.saveInBackground { success, error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else if success {
+                    continuation.resume(returning: ())
+                }
+            } progressBlock: { progress in
+                progressHandler?(Int(progress))
+            }
+        }
+    }
+}

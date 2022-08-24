@@ -20,11 +20,8 @@ import Coordinator
      override func start() {
          super.start()
 
-         self.momentCaptureVC.didCompleteMoment = { [unowned self] moment in
-             Task {
-                 await ToastScheduler.shared.schedule(toastType: .success(.recordingTape, "Moment made"))
-             }
-             self.finishFlow(with: moment)
+         self.momentCaptureVC.didCompleteMoment = { [unowned self] in
+             self.finishFlow(with: nil)
          }
      }
  }

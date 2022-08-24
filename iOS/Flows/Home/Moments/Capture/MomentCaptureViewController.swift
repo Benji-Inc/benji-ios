@@ -29,7 +29,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         self.panGestureHandler.handle(pan: recognizer)
     }
     
-    var didCompleteMoment: ((Moment) -> Void)? = nil
+    var didCompleteMoment: CompletionOptional = nil 
     
     static let maxDuration: TimeInterval = 6.0
     let cornerRadius: CGFloat = 30
@@ -98,19 +98,11 @@ class MomentCaptureViewController: PiPRecordingViewController {
             logDebug("Did finish")
             
             Task {
-                await self.confirmationView.showCircle()
+                guard let recording = self.recording else { return }
+                await self.confirmationView.uploadMoment(from: recording, caption: self.textView.text)
+                await Task.sleep(seconds: 1.0)
+                self.didCompleteMoment?()
             }
-            
-            // Create moment
-            // Show loading
-            // On success show animation and selection impact
-            // On failure show error and reset
-            
-            //             Task {
-            //                 guard let recording = self.recording,
-            //                       let moment = await self.createMoment(from: recording) else { return }
-            //                 self.didCompleteMoment?(moment)
-            //             }
         }
         
         self.textView.$publishedText.mainSink { [unowned self] _ in
@@ -165,24 +157,14 @@ class MomentCaptureViewController: PiPRecordingViewController {
             self.animate(text: "Swipe Up")
         case .error:
             self.animate(text: "Recording Failed")
+        case .uploading:
+            break 
         }
     }
     
     override func handleSpeech(result: SFSpeechRecognitionResult?) {
         self.textView.animateSpeech(result: result)
         self.view.layoutNow()
-    }
-    
-    private func createMoment(from recording: PiPRecording) async -> Moment? {
-        // await self.doneButton.handleEvent(status: .loading)
-        
-        do {
-            return  try await MomentsStore.shared.createMoment(from: recording,
-                                                               caption: self.textView.text)
-        } catch {
-            //await self.doneButton.handleEvent(status: .error("Error"))
-            return nil
-        }
     }
     
     private var animateTask: Task<Void, Never>?

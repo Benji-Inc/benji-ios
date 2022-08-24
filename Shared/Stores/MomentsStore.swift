@@ -90,6 +90,7 @@ class MomentsStore {
         }
     }
     
+    @discardableResult
     func createMoment(from recording: PiPRecording, caption: String?) async throws -> Moment {
         
         guard let expressionURL = recording.frontRecordingURL,

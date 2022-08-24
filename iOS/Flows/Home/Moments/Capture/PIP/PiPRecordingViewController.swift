@@ -26,6 +26,7 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         case idle
         case recording
         case playback
+        case uploading
         case error
     }
 
