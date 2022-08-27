@@ -21,7 +21,7 @@ class MomentViewController: ViewController {
     private let detailsContainer = BaseView()
     
     let commentsLabel = CommentsLabel()
-    let expressionsButton = MomentReactionsView()
+    let reactionsView = MomentReactionsView()
     let menuButton = ThemeButton()
     let expressionView = MomentExpressiontVideoView()
     let momentView = MomentVideoView()
@@ -60,8 +60,6 @@ class MomentViewController: ViewController {
             sheet.preferredCornerRadius = self.cornerRadius
         }
         
-        // counter for reactions
-        // multi video support
         // replace add people cell in comments
         // Add message preview for latest comment
         
@@ -88,8 +86,8 @@ class MomentViewController: ViewController {
         self.controlsContainer.addSubview(self.commentsLabel)
         self.commentsLabel.configure(with: self.moment)
         
-        self.controlsContainer.addSubview(self.expressionsButton)
-        self.expressionsButton.configure(with: self.moment)
+        self.controlsContainer.addSubview(self.reactionsView)
+        self.reactionsView.configure(with: self.moment)
         
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
@@ -123,14 +121,14 @@ class MomentViewController: ViewController {
         self.menuButton.pin(.top)
         self.menuButton.pinToSafeAreaRight()
         
-        let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.expressionsButton.width - Theme.ContentOffset.long.value
+        let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.reactionsView.width - Theme.ContentOffset.long.value
         self.commentsLabel.setSize(withWidth: maxLabelWidth)
         self.commentsLabel.match(.top, to: .bottom, of: self.momentView, offset: .xtraLong)
         self.commentsLabel.pinToSafeAreaLeft()
         
-        self.expressionsButton.squaredSize = 35
-        self.expressionsButton.pinToSafeAreaRight()
-        self.expressionsButton.centerY = self.commentsLabel.centerY
+        self.reactionsView.squaredSize = 35
+        self.reactionsView.pinToSafeAreaRight()
+        self.reactionsView.centerY = self.commentsLabel.centerY
         
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
         self.captionTextView.setSize(withMaxWidth: maxWidth)

@@ -42,8 +42,13 @@ import StreamChat
              self.presentProfile(for: person)
          }
          
-         self.momentVC.expressionsButton.didSelect { [unowned self] in
-             self.presentAddExpression()
+         self.momentVC.reactionsView.didSelect { [unowned self] in
+             guard let controller = self.momentVC.reactionsView.controller else { return }
+             if let expressions = controller.conversation?.expressions, expressions.count > 0 {
+                 self.presentExpressions(startingExpression: expressions.first!, expressions: expressions)
+             } else {
+                 self.presentAddExpression()
+             }
          }
          
          self.momentVC.blurView.button.didSelect { [unowned self] in
@@ -117,7 +122,7 @@ import StreamChat
          self.removeChild()
 
          coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-             self.momentVC.expressionsButton.reactionsView.expressionVideoView.shouldPlay = true
+             self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = true
              self.momentVC.expressionView.shouldPlay = true
              self.momentVC.momentView.shouldPlay = true
          }
@@ -128,7 +133,7 @@ import StreamChat
              }
          }
          
-         self.momentVC.expressionsButton.reactionsView.expressionVideoView.shouldPlay = false
+         self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = false
          self.momentVC.expressionView.shouldPlay = false
          self.momentVC.momentView.shouldPlay = false
          

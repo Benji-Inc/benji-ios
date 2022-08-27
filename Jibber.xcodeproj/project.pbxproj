@@ -924,6 +924,8 @@
 		D6D557FE27C9B8AE0024D1CD /* ProfileCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D557FD27C9B8AE0024D1CD /* ProfileCollectionView.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D6D75C0428BA7D6E009578E7 /* ViewedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C0328BA7D6E009578E7 /* ViewedLabel.swift */; };
+		D6D75C0728BAE088009578E7 /* ReactionsVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C0628BAE088009578E7 /* ReactionsVideoView.swift */; };
+		D6D75C0928BAE0AB009578E7 /* ReactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C0828BAE0AB009578E7 /* ReactionsView.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -1535,6 +1537,8 @@
 		D6D557FD27C9B8AE0024D1CD /* ProfileCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionView.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 		D6D75C0328BA7D6E009578E7 /* ViewedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewedLabel.swift; sourceTree = "<group>"; };
+		D6D75C0628BAE088009578E7 /* ReactionsVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsVideoView.swift; sourceTree = "<group>"; };
+		D6D75C0828BAE0AB009578E7 /* ReactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsView.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
@@ -2773,7 +2777,7 @@
 				D6A0095E28B159690018FA98 /* MomentButton.swift */,
 				D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */,
 				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
-				D6A0096028B15A7C0018FA98 /* MomentReactionsView.swift */,
+				D6D75C0528BAE061009578E7 /* Reactions */,
 				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
 				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
 				D6D75C0328BA7D6E009578E7 /* ViewedLabel.swift */,
@@ -2904,6 +2908,16 @@
 				D6D4ECCE28613DDF002C71CE /* ConversationSelectionViewController.swift */,
 			);
 			path = "Conversation Selection";
+			sourceTree = "<group>";
+		};
+		D6D75C0528BAE061009578E7 /* Reactions */ = {
+			isa = PBXGroup;
+			children = (
+				D6A0096028B15A7C0018FA98 /* MomentReactionsView.swift */,
+				D6D75C0628BAE088009578E7 /* ReactionsVideoView.swift */,
+				D6D75C0828BAE0AB009578E7 /* ReactionsView.swift */,
+			);
+			path = Reactions;
 			sourceTree = "<group>";
 		};
 		D6D96EEB27C59DD000BDCD01 /* Profile */ = {
@@ -3847,6 +3861,7 @@
 				D619C58927F129B70082AD19 /* EmotionsViewController.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
 				D6B2B65D283D3B23007D507B /* JibberIntroContentView.swift in Sources */,
+				D6D75C0928BAE0AB009578E7 /* ReactionsView.swift in Sources */,
 				D6265ECE279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
 				D6A0095B28B128320018FA98 /* CommentsViewController+Extensions.swift in Sources */,
@@ -4102,6 +4117,7 @@
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				8024B95326F278C8008ABF7F /* ConversationCollectionViewDataSource.swift in Sources */,
 				D61C1D28284041DE00F58F84 /* PresentableCoordinator.swift in Sources */,
+				D6D75C0728BAE088009578E7 /* ReactionsVideoView.swift in Sources */,
 				80D5C28B2817187D00182DB6 /* ExpressionDetailViewController.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */,
