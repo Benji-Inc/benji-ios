@@ -113,4 +113,12 @@ class VideoView: BaseView {
             }
         }
     }
+    
+    func append(videoURL: URL) {
+        if self.videoURL.isNil {
+            self.videoURL = videoURL
+        } else {
+            
+        }
+    }
 }

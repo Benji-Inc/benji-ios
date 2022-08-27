@@ -33,6 +33,10 @@ import Coordinator
      override func start() {
          super.start()
          
+         self.momentVC.didSelectViewProfile = { [unowned self] person in
+             self.presentProfile(for: person)
+         }
+         
          self.momentVC.expressionsButton.didSelect { [unowned self] in
              self.presentAddExpression()
          }
@@ -41,76 +45,52 @@ import Coordinator
              self.presentMomentCapture()
          }
          
-         self.momentVC.personView.didSelect { [unowned self] in
-             guard let author = self.moment.author else { return }
-             self.presentProfile(for: author)
-         }
-         
          self.momentVC.commentsLabel.didSelect { [unowned self] in
              self.presentComments()
          }
      }
      
-     func presentMomentCapture() {
-         self.removeChild()
-         
+     func presentMomentCapture() {         
          let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
-         self.addChildAndStart(coordinator) { [unowned self] result in
-             self.momentVC.dismiss(animated: true) {
-                 self.momentVC.state = .loading
-             }
+         
+         self.present(coordinator) { [unowned self] result in
+             self.momentVC.state = .loading
          }
-         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
      }
      
      func presentProfile(for person: PersonType) {
-         
-         self.removeChild()
-         
+                  
          let coordinator = ProfileCoordinator(with: person, router: self.router, deepLink: self.deepLink)
          
-         self.addChildAndStart(coordinator) { [unowned self] result in
+         self.present(coordinator) { [unowned self] result in
              self.finishFlow(with: result)
          }
-         
-         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
-     }
+    }
      
      func presentComments() {
-         self.removeChild()
-         
          let coordinator = CommentsCoordinator(router: self.router,
                                                deepLink: self.deepLink,
                                                conversationId: self.moment.commentsId,
                                                startingMessageId: nil,
                                                openReplies: false)
-         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-             self.momentVC.dismiss(animated: true)
-         })
-         
-         self.router.present(coordinator, source: self.momentVC)
+         self.present(coordinator)
      }
      
      func presentExpressions(startingExpression: ExpressionInfo, expressions: [ExpressionInfo]) {
          
-         let controller = ConversationController.controller(for: self.moment.commentsId)
-
          let coordinator = ExpressionDetailCoordinator(router: self.router,
                                                        deepLink: self.deepLink,
                                                        startingExpression: startingExpression,
                                                        expressions: expressions)
-         self.addChildAndStart(coordinator) { [unowned self] result in
-             
-         }
-         
-         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
+         self.present(coordinator)
      }
      
      func presentAddExpression() {
          let coordinator = ExpressionCoordinator(favoriteType: nil,
                                                  router: self.router,
                                                  deepLink: self.deepLink)
-         self.addChildAndStart(coordinator) { [unowned self] result in
+         
+         self.present(coordinator) { [unowned self] result in
              guard let expression = result else { return }
              
              expression.emotions.forEach { emotion in
@@ -123,8 +103,30 @@ import Coordinator
              Task {
                  try await controller.add(expression: expression)
              }
-             self.momentVC.dismiss(animated: true)
          }
-         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
+     }
+     
+     func present<ChildResult>(_ coordinator: PresentableCoordinator<ChildResult>,
+                               finishedHandler: ((ChildResult) -> Void)? = nil,
+                               cancelHandler: (() -> Void)? = nil) {
+         self.removeChild()
+
+         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+             self.momentVC.expressionsButton.reactionsView.expressionVideoView.shouldPlay = true
+             self.momentVC.expressionView.shouldPlay = true
+             self.momentVC.momentView.shouldPlay = true
+         }
+         
+         self.addChildAndStart(coordinator) { [unowned self] result in
+             self.momentVC.dismiss(animated: true) {
+                 finishedHandler?(result)
+             }
+         }
+         
+         self.momentVC.expressionsButton.reactionsView.expressionVideoView.shouldPlay = false
+         self.momentVC.expressionView.shouldPlay = false
+         self.momentVC.momentView.shouldPlay = false
+         
+         self.router.present(coordinator, source: self.momentVC, cancelHandler: cancelHandler)
      }
  }

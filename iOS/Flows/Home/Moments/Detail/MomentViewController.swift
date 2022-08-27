@@ -14,12 +14,14 @@ class MomentViewController: ViewController {
     
     private let controlsContainer = BaseView()
     private let captionTextView = CaptionTextView()
-    let personView = BorderedPersonView()
     let commentsLabel = CommentsLabel()
-    let expressionsButton = ExpressionButton()
-    private let expressionView = MomentExpressiontVideoView()
-    private let momentView = MomentVideoView()
+    let expressionsButton = MomentReactionsView()
+    let menuButton = ThemeButton()
+    let expressionView = MomentExpressiontVideoView()
+    let momentView = MomentVideoView()
     let blurView = MomentBlurView()
+    
+    var didSelectViewProfile: ((PersonType) -> Void)? = nil
     
     let cornerRadius: CGFloat = 30
     
@@ -52,6 +54,14 @@ class MomentViewController: ViewController {
             sheet.preferredCornerRadius = self.cornerRadius
         }
         
+        // menu button to view profile
+        // counter for reactions
+        // multi video support
+        // remove profile view
+        // fix captions
+        // fix profile previews
+        // add user to comments channel if not added.
+        
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
@@ -64,7 +74,6 @@ class MomentViewController: ViewController {
         self.captionTextView.isSelectable = false
         self.captionTextView.placeholderText = ""
         
-        self.controlsContainer.addSubview(self.personView)
         self.controlsContainer.addSubview(self.commentsLabel)
         self.commentsLabel.configure(with: self.moment)
         
@@ -73,6 +82,10 @@ class MomentViewController: ViewController {
         
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
+        
+        self.controlsContainer.addSubview(self.menuButton)
+        self.menuButton.set(style: .image(symbol: .ellipsis, palletteColors: [.whiteWithAlpha], pointSize: 22, backgroundColor: .clear))
+        self.menuButton.showsMenuAsPrimaryAction = true
         
         self.$state
             .removeDuplicates()
@@ -95,18 +108,18 @@ class MomentViewController: ViewController {
         self.expressionView.pinToSafeAreaTop()
         self.expressionView.pinToSafeAreaLeft()
         
-        self.personView.squaredSize = 35
-        self.personView.pinToSafeAreaLeft()
-        self.personView.top = self.momentView.height + Theme.ContentOffset.long.value
+        self.menuButton.squaredSize = 44
+        self.menuButton.pin(.top)
+        self.menuButton.pinToSafeAreaRight()
         
-        self.expressionsButton.squaredSize = self.personView.height
-        self.expressionsButton.pinToSafeAreaRight()
-        self.expressionsButton.centerY = self.personView.centerY
-        
-        let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - self.expressionsButton.width - Theme.ContentOffset.long.value.doubled
+        let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.expressionsButton.width - Theme.ContentOffset.long.value
         self.commentsLabel.setSize(withWidth: maxLabelWidth)
-        self.commentsLabel.centerY = self.personView.centerY
-        self.commentsLabel.match(.left, to: .right, of: self.personView, offset: .long)
+        self.commentsLabel.match(.top, to: .bottom, of: self.momentView, offset: .xtraLong)
+        self.commentsLabel.pinToSafeAreaLeft()
+        
+        self.expressionsButton.squaredSize = 35
+        self.expressionsButton.pinToSafeAreaRight()
+        self.expressionsButton.centerY = self.commentsLabel.centerY
         
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
         self.captionTextView.setSize(withMaxWidth: maxWidth)
@@ -138,9 +151,12 @@ class MomentViewController: ViewController {
             Task {
                 guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
                 self.captionTextView.animateCaption(text: moment.caption)
-                self.personView.set(expression: nil, person: moment.author)
                 self.view.layoutNow()
-            } 
+
+                if let person = try? await moment.author?.retrieveDataIfNeeded() {
+                    self.menuButton.menu = self.createMenu(for: person)
+                }
+            }
         }
     }
     
@@ -178,5 +194,21 @@ class MomentViewController: ViewController {
         
         self.expressionView.playerLayer.player?.play()
         self.momentView.playerLayer.player?.play()
+    }
+    
+    private func createMenu(for person: PersonType) -> UIMenu? {
+        guard person.isCurrentUser else { return nil }
+        
+        let profile = UIAction(title: "View Profile",
+                              image: ImageSymbol.personCircle.image,
+                              attributes: []) { [unowned self] action in
+            self.didSelectViewProfile?(person)
+        }
+
+        return UIMenu.init(title: "Menu",
+                           image: nil,
+                           identifier: nil,
+                           options: [],
+                           children: [profile])
     }
 }
