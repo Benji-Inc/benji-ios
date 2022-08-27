@@ -33,7 +33,7 @@ class CommentsLabel: ThemeLabel {
             subscription.cancel()
         }
         
-        self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
+        self.controller = ConversationController.controller(for: moment.commentsId)
         
         if let sequence = self.controller?.messageSequence {
             self.updateText(for: sequence.totalUnread)

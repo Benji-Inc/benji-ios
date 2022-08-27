@@ -763,6 +763,12 @@
 		D6A0096128B15A7C0018FA98 /* ExpressionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096028B15A7C0018FA98 /* ExpressionButton.swift */; };
 		D6A0096328B539A20018FA98 /* MomentSwipeGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096228B539A20018FA98 /* MomentSwipeGestureHandler.swift */; };
 		D6A0096528B587360018FA98 /* MomentConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096428B587360018FA98 /* MomentConfirmationView.swift */; };
+		D6A0096628B9A9D20018FA98 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
+		D6A0096728B9A9D30018FA98 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
+		D6A0096828B9AA090018FA98 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8056B325281B448A00358880 /* Expression.swift */; };
+		D6A0096928B9AA0A0018FA98 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8056B325281B448A00358880 /* Expression.swift */; };
+		D6A0096A28B9AA1F0018FA98 /* EmotionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* EmotionCategory.swift */; };
+		D6A0096B28B9AA1F0018FA98 /* EmotionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* EmotionCategory.swift */; };
 		D6A3E24927025AC900CEBAC0 /* ConversationHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3E24827025AC900CEBAC0 /* ConversationHeaderViewController.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -3501,6 +3507,7 @@
 				D61128752804DC7200574B96 /* User+INPerson.swift in Sources */,
 				D61128962804DF7200574B96 /* TextView.swift in Sources */,
 				D61128812804DCBB00574B96 /* UserNotificationManager.swift in Sources */,
+				D6A0096628B9A9D20018FA98 /* Conversation+Intents.swift in Sources */,
 				D61128502804DC3200574B96 /* PhoneTextField.swift in Sources */,
 				D61128392804DBEE00574B96 /* UIControl+Extensions.swift in Sources */,
 				D61128B82804E9F300574B96 /* PassThroughView.swift in Sources */,
@@ -4157,6 +4164,7 @@
 				D61A33DA27D51D4C00056242 /* ContextCue.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
 				D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */,
+				D6A0096728B9A9D30018FA98 /* Conversation+Intents.swift in Sources */,
 				8056B328281B488B00358880 /* MockMessage.swift in Sources */,
 				D63DB27225E9997F00F6B323 /* ResourceObject.swift in Sources */,
 				D63DB26725E9997200F6B323 /* ScreenSize.swift in Sources */,
@@ -4282,6 +4290,7 @@
 				D687595D2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				D68759642728A55A00AF7C07 /* FontType.swift in Sources */,
 				D68759672728A59600AF7C07 /* User+Extensions.swift in Sources */,
+				D6A0096A28B9AA1F0018FA98 /* EmotionCategory.swift in Sources */,
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
 				D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */,
 				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
@@ -4305,6 +4314,7 @@
 				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,
 				D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */,
 				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
+				D6A0096828B9AA090018FA98 /* Expression.swift in Sources */,
 				800718DF278620F1005DD884 /* EventLogger.swift in Sources */,
 				D661DFC727C6D73400625182 /* Date+Extensions.swift in Sources */,
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
@@ -4335,6 +4345,7 @@
 				D6AE0FFE267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
 				D67B00C227D2B2B400284564 /* User+Extensions.swift in Sources */,
 				D66ED457267D35E100332BA3 /* Config.swift in Sources */,
+				D6A0096B28B9AA1F0018FA98 /* EmotionCategory.swift in Sources */,
 				D61A9B5627D2B17C008D8C57 /* FontType.swift in Sources */,
 				D67B00C327D2B2C400284564 /* Optional+Extensions.swift in Sources */,
 				D66ED45A267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
@@ -4352,6 +4363,7 @@
 				D61A9B5527D2B166008D8C57 /* String+Extensions.swift in Sources */,
 				D65D460527A9FE620019301C /* Notice.swift in Sources */,
 				D61A9B5127D2AADF008D8C57 /* User+INPerson.swift in Sources */,
+				D6A0096928B9AA0A0018FA98 /* Expression.swift in Sources */,
 				D61A33EB27D6754F00056242 /* ThemeColor.swift in Sources */,
 				802EDDAC27ECD49F005ECA9C /* String+DataTypes.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,

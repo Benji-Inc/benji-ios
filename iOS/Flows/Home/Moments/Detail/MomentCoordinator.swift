@@ -33,6 +33,10 @@ import Coordinator
      override func start() {
          super.start()
          
+         self.momentVC.expressionsButton.didSelect { [unowned self] in
+             self.presentAddExpression()
+         }
+         
          self.momentVC.blurView.button.didSelect { [unowned self] in
              self.presentMomentCapture()
          }
@@ -85,5 +89,42 @@ import Coordinator
          })
          
          self.router.present(coordinator, source: self.momentVC)
+     }
+     
+     func presentExpressions(startingExpression: ExpressionInfo, expressions: [ExpressionInfo]) {
+         
+         let controller = ConversationController.controller(for: self.moment.commentsId)
+
+         let coordinator = ExpressionDetailCoordinator(router: self.router,
+                                                       deepLink: self.deepLink,
+                                                       startingExpression: startingExpression,
+                                                       expressions: expressions)
+         self.addChildAndStart(coordinator) { [unowned self] result in
+             
+         }
+         
+         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
+     }
+     
+     func presentAddExpression() {
+         let coordinator = ExpressionCoordinator(favoriteType: nil,
+                                                 router: self.router,
+                                                 deepLink: self.deepLink)
+         self.addChildAndStart(coordinator) { [unowned self] result in
+             guard let expression = result else { return }
+             
+             expression.emotions.forEach { emotion in
+                 AnalyticsManager.shared.trackEvent(type: .emotionSelected,
+                                                    properties: ["value": emotion.rawValue])
+             }
+             
+             let controller = ConversationController.controller(for: self.moment.commentsId)
+             
+             Task {
+                 try await controller.add(expression: expression)
+             }
+             self.momentVC.dismiss(animated: true)
+         }
+         self.router.present(coordinator, source: self.momentVC, cancelHandler: nil)
      }
  }
