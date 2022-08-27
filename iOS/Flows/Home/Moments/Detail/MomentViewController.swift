@@ -56,7 +56,6 @@ class MomentViewController: ViewController {
         
         // counter for reactions
         // multi video support
-        // fix captions
         // fix profile previews
         // add user to comments channel if not added.
         

@@ -33,6 +33,7 @@ class BorderedPersonView: PersonGradientView {
     }()
     
     #if IOS
+    var didTapViewProfile: CompletionOptional = nil
     let contextCueView = ContextCueView()
     #endif
 
@@ -43,7 +44,17 @@ class BorderedPersonView: PersonGradientView {
         self.imageView.clipsToBounds = true
         self.layer.insertSublayer(self.shadowLayer, at: 0)
         self.layer.insertSublayer(self.gradientLayer, at: 1)
+        
         #if IOS
+        let interaction = UIContextMenuInteraction(delegate: self)
+        self.addInteraction(interaction)
+        
+        self.didTapViewProfile = { [unowned self] in
+            var dl = DeepLinkObject(target: .profile)
+            dl.personId = self.person?.personId ?? ""
+            LaunchManager.shared.delegate?.launchManager(LaunchManager.shared, didReceive: .deepLink(dl))
+        }
+        
         self.addSubview(self.contextCueView)
         self.layer.insertSublayer(self.pulseLayer, below: self.contextCueView.layer)
         #endif
@@ -75,6 +86,7 @@ class BorderedPersonView: PersonGradientView {
         guard let person = person else { return }
         
         #if IOS
+        self.person = person 
         self.contextCueView.configure(with: person)
         #endif
         
@@ -87,6 +99,7 @@ class BorderedPersonView: PersonGradientView {
         super.didRecieveUpdateFor(person: person)
         self.setColors(for: person)
         #if IOS
+        self.person = person
         self.contextCueView.configure(with: person)
         #endif
     }
@@ -112,3 +125,25 @@ class BorderedPersonView: PersonGradientView {
         }
     }
 }
+
+#if IOS
+extension BorderedPersonView: PersonContextDelegate {
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let person = self.person else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil) { () -> UIViewController? in
+            return PersonPreviewViewController(with: person)
+        } actionProvider: { (suggestions) -> UIMenu? in
+            return self.getMenu(for: person)
+        }
+    }
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                willEndFor configuration: UIContextMenuConfiguration,
+                                animator: UIContextMenuInteractionAnimating?) {
+
+    }
+}
+#endif

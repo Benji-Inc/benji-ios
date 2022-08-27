@@ -214,7 +214,8 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             }
             
             // Add past dates
-            for i in stride(from: 0, to: 21 - daysTillSat, by: 1) {
+            let allDays: Int = daysTillSat == 0 ? 14 : 21
+            for i in stride(from: 0, to: allDays - daysTillSat, by: 1) {
                 if let date = Date().subtract(component: .day, amount: i) {
                     if let moment = moments?.first(where: { moment in
                         if let createdAt = moment.createdAt, createdAt.isSameDay(as: date) {
