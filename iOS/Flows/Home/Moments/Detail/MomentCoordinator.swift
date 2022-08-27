@@ -8,6 +8,7 @@
 
 import Foundation
 import Coordinator
+import StreamChat
 
  class MomentCoordinator: PresentableCoordinator<ProfileResult?> {
 
@@ -32,6 +33,10 @@ import Coordinator
      
      override func start() {
          super.start()
+         
+         // If the user has not been added to the comments convo, add them. This will represent views. 
+         let controller = ConversationController.controller(for: self.moment.commentsId)
+         controller.addMembers(userIds: Set([User.current()!.objectId!]))
          
          self.momentVC.didSelectViewProfile = { [unowned self] person in
              self.presentProfile(for: person)
