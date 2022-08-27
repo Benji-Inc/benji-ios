@@ -12,7 +12,7 @@ import Combine
 class MomentReactionsView: BaseView {
     
     private let button = ThemeButton()
-    let reactionsView = PersonGradientView()
+    let reactionsView = ReactionsView()
     private let badgeView = BadgeCounterView()
     
     private var controller: ConversationController?
@@ -51,24 +51,19 @@ class MomentReactionsView: BaseView {
     }
     
     func configure(with moment: Moment) {
+        
         self.subscriptions.forEach { subscription in
             subscription.cancel()
         }
-        
         
         self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
         let expressions = self.controller?.conversation?.expressions ?? []
         
         self.badgeView.set(value: expressions.count)
         
-        if let info = expressions.first {
-    
-            Task {
-                let expression = try await Expression.getObject(with: info.expressionId)
-                self.reactionsView.set(expression: expression, person: nil)
-                self.reactionsView.isHidden = false
-            }
-            
+        if !expressions.isEmpty {
+            self.reactionsView.set(expressions: expressions)
+            self.reactionsView.isHidden = false
             self.button.isHidden = true
         } else {
             self.button.isHidden = false
@@ -79,19 +74,15 @@ class MomentReactionsView: BaseView {
             let expressions = self.controller?.conversation?.expressions ?? []
             self.badgeView.set(value: expressions.count)
             
-            if let info = self.controller?.conversation?.expressions.first {
-        
-                Task {
-                    let expression = try await Expression.getObject(with: info.expressionId)
-                    self.reactionsView.set(expression: expression, person: nil)
-                    self.reactionsView.isHidden = false
-                }
-                
+            if !expressions.isEmpty {
+                self.reactionsView.set(expressions: expressions)
+                self.reactionsView.isHidden = false
                 self.button.isHidden = true
             } else {
                 self.button.isHidden = false
                 self.reactionsView.isHidden = true
             }
+            
         }).store(in: &self.subscriptions)
     }
 }
@@ -99,7 +90,7 @@ class MomentReactionsView: BaseView {
 class ReactionsView: BaseView {
     
     let emotionGradientView = EmotionGradientView()
-    let expressionVideoView = ExpressionVideoView()
+    let expressionVideoView = ReactionsVideoView()
     var cornerRadiusRatio: CGFloat = 0.25
     
     override func initializeSubviews() {
@@ -145,27 +136,19 @@ class ReactionsView: BaseView {
         
         self.loadTask = Task { [weak self] in
             guard let `self` = self else { return }
+            
+            var all: [Expression] = []
+            
+            await expressions.asyncForEach { info in
+                guard !Task.isCancelled else { return }
+                
+                if let expression = try? await Expression.getObject(with: info.expressionId) {
+                    all.append(expression)
+                }
+            }
 
-//            var expression: Expression?
-//            if let expressionId = info?.expressionId {
-//                expression = try? await Expression.getObject(with: expressionId)
-//            }
-
-            guard !Task.isCancelled else { return }
-
-            //self.set(expression: expression, person: person)
+            self.expressionVideoView.expressions = all
         }
-    }
-    
-    func set(expression: Expression?, person: PersonType?) {
-        self.expressionVideoView.expression = expression
-        self.expressionVideoView.isVisible = expression.exists
-
-        if let expression = expression {
-            self.set(emotionCounts: expression.emotionCounts)
-        }
-        
-        self.setNeedsLayout()
     }
     
     func set(emotionCounts: [Emotion: Int], defaultColors: [ThemeColor] = [.B0, .B6]) {
@@ -200,12 +183,16 @@ class ReactionsVideoView: VideoView {
 
         self.loadTask = Task { [weak self] in
             
+            var allURLs: [URL] = []
+            
             await self?.expressions.asyncForEach { expression in
                 guard let videoURL = try? await expression.file?.retrieveCachedPathURL() else { return }
                 guard !Task.isCancelled else { return }
 
-                //append to url
+                allURLs.append(videoURL)
             }
+            
+            self?.updatePlayer(with: allURLs)
         }
     }
 }

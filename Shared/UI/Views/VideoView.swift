@@ -134,7 +134,7 @@ class VideoView: BaseView {
     private func subsribeToPlayerUpdates() {
         self.token?.invalidate()
         
-        self.token = self.playerLayer.player?.observe(\.currentItem) { [weak self] player, foo in
+        self.token = self.playerLayer.player?.observe(\.currentItem) { [weak self] player, _ in
             guard let quePlayer = player as? AVQueuePlayer else { return }
 
             if quePlayer.items().count == 1 {
