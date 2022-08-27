@@ -22,6 +22,7 @@ enum ImageSymbol: String, ImageDisplayable {
     case plus = "plus"
     case trash = "trash"
     case eyeglasses = "eyeglasses"
+    case eye = "eye"
     case videoFill = "video.fill"
     case faceSmiling = "face.smiling"
     case camera = "camera"

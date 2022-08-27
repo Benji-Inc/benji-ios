@@ -14,6 +14,12 @@ class MomentViewController: ViewController {
     
     private let controlsContainer = BaseView()
     private let captionTextView = CaptionTextView()
+    
+    private let nameLabel = ThemeLabel(font: .smallBold)
+    private let dateLabel = ThemeLabel(font: .xtraSmall)
+    private let viewedLabel = ViewedLabel()
+    private let detailsContainer = BaseView()
+    
     let commentsLabel = CommentsLabel()
     let expressionsButton = MomentReactionsView()
     let menuButton = ThemeButton()
@@ -56,13 +62,23 @@ class MomentViewController: ViewController {
         
         // counter for reactions
         // multi video support
-        // add user to comments channel if not added.
+        // replace add people cell in comments
+        // Add message preview for latest comment
         
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
         self.momentView.layer.cornerRadius = self.cornerRadius
         self.momentView.layer.masksToBounds = true
+        
+        self.view.addSubview(self.detailsContainer)
+        self.detailsContainer.addSubview(self.nameLabel)
+        self.detailsContainer.addSubview(self.dateLabel)
+        self.dateLabel.setText(self.moment.createdAt?.getTimeAgoString() ?? "")
+        
+        self.detailsContainer.addSubview(self.viewedLabel)
+        
+        self.detailsContainer.alpha = 0
         
         self.view.addSubview(self.controlsContainer)
         self.controlsContainer.addSubview(self.captionTextView)
@@ -122,6 +138,21 @@ class MomentViewController: ViewController {
         self.captionTextView.bottom = self.momentView.height - self.captionTextView.left
         self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
         
+        self.detailsContainer.expandToSuperviewWidth()
+        self.detailsContainer.height = 30
+        self.detailsContainer.match(.bottom, to: .bottom, of: self.momentView)
+        
+        self.nameLabel.setSize(withWidth: self.view.width)
+        self.nameLabel.pinToSafeAreaLeft()
+        self.nameLabel.pin(.bottom, offset: .xtraLong)
+        
+        self.dateLabel.setSize(withWidth: self.view.width)
+        self.dateLabel.pinToSafeAreaLeft()
+        self.dateLabel.match(.bottom, to: .top, of: self.nameLabel, offset: .negative(.short))
+        
+        self.viewedLabel.pinToSafeAreaRight()
+        self.viewedLabel.centerY = self.nameLabel.centerY
+        
         self.blurView.expandToSuperviewSize()
     }
     
@@ -146,10 +177,11 @@ class MomentViewController: ViewController {
             Task {
                 guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
                 self.captionTextView.animateCaption(text: moment.caption)
-                self.view.layoutNow()
-
+                self.viewedLabel.configure(with: moment)
                 if let person = try? await moment.author?.retrieveDataIfNeeded() {
+                    self.nameLabel.setText(person.fullName.capitalized)
                     self.menuButton.menu = self.createMenu(for: person)
+                    self.view.layoutNow()
                 }
             }
         }
@@ -160,7 +192,10 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.expressionView.alpha = 0.5
+            self.momentView.playerLayer.opacity = 0.5
             self.controlsContainer.alpha = 0.0
+            self.detailsContainer.alpha = 1.0
         }
 
         self.expressionView.playerLayer.player?.pause()
@@ -172,7 +207,10 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.expressionView.alpha = 1.0
+            self.momentView.playerLayer.opacity = 1.0
             self.controlsContainer.alpha = 1.0
+            self.detailsContainer.alpha = 0.0
         }
         
         self.expressionView.playerLayer.player?.play()
@@ -184,7 +222,10 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.expressionView.alpha = 1.0
+            self.momentView.playerLayer.opacity = 1.0
             self.controlsContainer.alpha = 1.0
+            self.detailsContainer.alpha = 0.0
         }
         
         self.expressionView.playerLayer.player?.play()
@@ -195,8 +236,8 @@ class MomentViewController: ViewController {
         guard person.isCurrentUser else { return nil }
         
         let profile = UIAction(title: "View Profile",
-                              image: ImageSymbol.personCircle.image,
-                              attributes: []) { [unowned self] action in
+                               image: ImageSymbol.personCircle.image,
+                               attributes: []) { [unowned self] action in
             self.didSelectViewProfile?(person)
         }
 

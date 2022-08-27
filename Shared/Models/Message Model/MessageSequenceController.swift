@@ -12,6 +12,7 @@ import StreamChat
 
 protocol MessageSequenceController {
 
+    var memberCount: Int { get }
     var conversationId: String? { get }
     var messageSequence: MessageSequence? { get }
     var messageArray: [Messageable] { get }
@@ -35,6 +36,10 @@ extension MessageSequenceController {
 /// An object representing a controller for a null message sequence. It will have no cid and an empty array of messages.
 struct EmptyMessageSequenceController: MessageSequenceController {
 
+    var memberCount: Int {
+        return 0
+    }
+    
     var conversationId: String? = nil
     var messageSequence: MessageSequence? = nil
     var messageArray: [Messageable] = []
