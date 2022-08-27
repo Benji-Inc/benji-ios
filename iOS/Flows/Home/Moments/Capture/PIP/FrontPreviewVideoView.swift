@@ -130,7 +130,7 @@ class FrontPreviewVideoView: VideoPreviewView {
             self.playbackView.alpha = 1.0
         } completion: { _ in
             self.playbackView.shouldPlay = true
-            self.playbackView.updatePlayer(with: url)
+            self.playbackView.updatePlayer(with: [url])
         }
     }
     

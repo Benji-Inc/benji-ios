@@ -28,17 +28,14 @@ class VideoView: BaseView {
             }
         }
     }
-    
-    var currentVideoURL: URL? {
-        guard let urlAsset = self.playerLayer.player?.currentItem?.asset as? AVURLAsset else { return nil }
-        return urlAsset.url
-    }
-    
+        
     @Published var isPlaying: Bool = false
 
     let playerLayer = AVPlayerLayer(player: nil)
     /// An object that keeps looping the video back to the beginning.
     private(set) var looper: AVPlayerLooper?
+    
+    private(set) var allURLs: [URL] = []
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -66,16 +63,18 @@ class VideoView: BaseView {
     }
     
     func reset() {
-        self.updatePlayer(with: nil)
+        self.updatePlayer(with: [])
     }
 
     /// A task for loading a video track from a url.
     private var loadTracksTask: Task<Void, Never>?
 
-    func updatePlayer(with url: URL?) {
+    func updatePlayer(with urls: [URL]) {
         self.loadTracksTask?.cancel()
+        
+        self.allURLs = urls
 
-        guard let videoURL = url else {
+        guard !urls.isEmpty else {
             // Stop playback if the url is nil.
             self.playerLayer.player = nil
             self.looper = nil 
@@ -83,29 +82,42 @@ class VideoView: BaseView {
         }
 
         self.loadTracksTask = Task { [weak self] in
-            // Retrieve the video asset.
-            let asset = AVAsset(url: videoURL)
             
-            guard let tracks = try? await asset.loadTracks(withMediaType: .video), !Task.isCancelled else { return }
-
-            // We will only have one video track, so the first one is the one we want.
-            guard let videoAsset = tracks.first?.asset else { return }
+            var videoItems: [AVPlayerItem] = []
             
-            let videoItem = AVPlayerItem(asset: videoAsset)
+            await urls.asyncForEach { videoURL in
+                // Retrieve the video asset.
+                let asset = AVAsset(url: videoURL)
+                
+                guard let tracks = try? await asset.loadTracks(withMediaType: .video), !Task.isCancelled else { return }
 
-            if let player = self?.playerLayer.player {
+                // We will only have one video track, so the first one is the one we want.
+                guard let videoAsset = tracks.first?.asset else { return }
+                
+                let videoItem = AVPlayerItem(asset: videoAsset)
+                
+                videoItems.append(videoItem)
+            }
+            
+            if let player = self?.playerLayer.player, videoItems.count == 1 {
                 // No need to create a new player if we already have one. Just update the video.
-                player.replaceCurrentItem(with: videoItem)
+                player.replaceCurrentItem(with: videoItems.first)
             } else {
-                // If no player exists, create a new one and assign it the downloaded video.
-                let player = AVQueuePlayer(items: [videoItem])
+                // If no player exists, create a new one and assign it the downloaded videos.
+                let player = AVQueuePlayer(items: videoItems)
                 player.automaticallyWaitsToMinimizeStalling = false
                 self?.playerLayer.player = player
             }
             
             guard let player = self?.playerLayer.player as? AVQueuePlayer else { return }
             
-            self?.looper = AVPlayerLooper(player: player, templateItem: videoItem)
+            // If we only have one item, use the built in looper
+            if videoItems.count == 1, let first = videoItems.first {
+                self?.looper = AVPlayerLooper(player: player, templateItem: first)
+            } else if videoItems.count > 1 {
+                // Otherwise subscribe to updates to force a loop
+                self?.subsribeToPlayerUpdates()
+            }
             
             if self?.shouldPlay == true {
                 player.playImmediately(atRate: 1.0)
@@ -115,5 +127,27 @@ class VideoView: BaseView {
                 player.volume = audio ? 1.0 : 0.0
             }
         }
+    }
+    
+    private var token: NSKeyValueObservation?
+    
+    private func subsribeToPlayerUpdates() {
+        self.token?.invalidate()
+        
+        self.token = self.playerLayer.player?.observe(\.currentItem) { [weak self] player, foo in
+            guard let quePlayer = player as? AVQueuePlayer else { return }
+
+            if quePlayer.items().count == 1 {
+                self?.reAddURLs(to: quePlayer)
+            }
+        }
+    }
+    
+    private func reAddURLs(to player: AVQueuePlayer) {
+        self.allURLs.forEach({ url in
+            let asset = AVURLAsset(url: url)
+            let item = AVPlayerItem(asset: asset)
+            player.insert(item, after: player.items().last)
+        })
     }
 }

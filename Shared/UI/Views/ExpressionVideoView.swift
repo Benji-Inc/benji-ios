@@ -32,12 +32,14 @@ class ExpressionVideoView: VideoView {
         }
 
         self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
             guard let videoURL = try? await expression.file?.retrieveCachedPathURL(),
-                  videoURL != self?.currentVideoURL else { return }
+                  !self.allURLs.contains(videoURL) else { return }
 
             guard !Task.isCancelled else { return }
 
-            self?.updatePlayer(with: videoURL)
+            self.updatePlayer(with: [videoURL])
         }
     }
 }

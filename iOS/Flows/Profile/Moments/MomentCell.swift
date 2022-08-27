@@ -55,7 +55,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
             if let momentId = item.momentId {
                 self.animationView.play()
                 if let previewURL = try? await Moment.getObject(with: momentId).preview?.retrieveCachedPathURL() {
-                    self.videoView.updatePlayer(with: previewURL)
+                    self.videoView.updatePlayer(with: [previewURL])
                 }
                 self.animationView.stop()
             }

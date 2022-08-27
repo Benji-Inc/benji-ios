@@ -166,7 +166,11 @@ class FaceCaptureViewController: ViewController {
     // MARK: - Video Preview
 
     func setVideoPreview(with videoURL: URL?) {
-        self.videoPreviewView.updatePlayer(with: videoURL)
+        if let videoURL = videoURL {
+            self.videoPreviewView.updatePlayer(with: [videoURL])
+        } else {
+            self.videoPreviewView.updatePlayer(with: [])
+        }
     }
 
     // MARK: - AVAssetWriter Vars
