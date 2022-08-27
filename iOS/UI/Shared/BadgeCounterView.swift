@@ -36,11 +36,12 @@ class BadgeCounterView: BaseView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+                
         self.counter.sizeToFit()
         
         self.width = self.counter.width + Theme.ContentOffset.short.value
-        self.height = self.counter.height + Theme.ContentOffset.short.value
+        let proposedHeight = self.counter.height + Theme.ContentOffset.short.value
+        self.height = clamp(proposedHeight, Theme.ContentOffset.short.value.doubled, 100)
         
         if self.width < self.height {
             self.width = self.height
@@ -49,11 +50,14 @@ class BadgeCounterView: BaseView {
         self.makeRound()
         
         self.counter.centerOnXAndY()
+        
+        logDebug("height = \(self.height)")
     }
     
     func set(value: Int) {
         self.counter.setValue(Float(value))
         self.animateChanges(shouldShow: value > 0)
+        self.layoutNow()
     }
     
     func animateChanges(shouldShow: Bool) {

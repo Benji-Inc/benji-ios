@@ -13,6 +13,7 @@ class MomentReactionsView: BaseView {
     
     private let button = ThemeButton()
     let reactionsView = PersonGradientView()
+    private let badgeView = BadgeCounterView()
     
     private var controller: ConversationController?
     private var subscriptions = Set<AnyCancellable>()
@@ -33,6 +34,11 @@ class MomentReactionsView: BaseView {
                                       backgroundColor: .clear))
         
         self.button.isHidden = true
+        
+        self.addSubview(self.badgeView)
+        self.badgeView.set(value: 10)
+
+        self.clipsToBounds = false
     }
     
     override func layoutSubviews() {
@@ -40,12 +46,16 @@ class MomentReactionsView: BaseView {
         
         self.reactionsView.expandToSuperviewSize()
         self.button.expandToSuperviewSize()
+        
+        self.badgeView.center = CGPoint(x: self.width - 2,
+                                        y: self.height - 2)
     }
     
     func configure(with moment: Moment) {
         self.subscriptions.forEach { subscription in
             subscription.cancel()
         }
+        
         
         self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
         if let info = self.controller?.conversation?.expressions.first {
