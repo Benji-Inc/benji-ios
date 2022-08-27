@@ -88,10 +88,10 @@ import StreamChat
      
      func presentExpressions(startingExpression: ExpressionInfo, expressions: [ExpressionInfo]) {
          
-         let coordinator = ExpressionDetailCoordinator(router: self.router,
-                                                       deepLink: self.deepLink,
-                                                       startingExpression: startingExpression,
-                                                       expressions: expressions)
+         let coordinator = ReactionsDetailCoordinator(router: self.router,
+                                                      deepLink: self.deepLink,
+                                                      startingExpression: startingExpression,
+                                                      expressions: expressions)
          self.present(coordinator)
      }
      

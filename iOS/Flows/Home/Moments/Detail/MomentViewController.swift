@@ -29,7 +29,7 @@ class MomentViewController: ViewController {
     
     var didSelectViewProfile: ((PersonType) -> Void)? = nil
     
-    let cornerRadius: CGFloat = 30
+    static let cornerRadius: CGFloat = 30
     
     enum State {
         case initial
@@ -57,7 +57,7 @@ class MomentViewController: ViewController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.preferredCornerRadius = self.cornerRadius
+            sheet.preferredCornerRadius = MomentViewController.cornerRadius
         }
         
         // replace add people cell in comments
@@ -66,7 +66,7 @@ class MomentViewController: ViewController {
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
-        self.momentView.layer.cornerRadius = self.cornerRadius
+        self.momentView.layer.cornerRadius = MomentViewController.cornerRadius
         self.momentView.layer.masksToBounds = true
         
         self.view.addSubview(self.detailsContainer)
