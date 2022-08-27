@@ -17,7 +17,6 @@ class MomentReactionsView: BaseView {
     
     private var controller: ConversationController?
     private var subscriptions = Set<AnyCancellable>()
-        
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -36,8 +35,8 @@ class MomentReactionsView: BaseView {
         self.button.isHidden = true
         
         self.addSubview(self.badgeView)
-        self.badgeView.set(value: 10)
-
+        self.badgeView.minToShow = 1
+        
         self.clipsToBounds = false
     }
     
@@ -58,7 +57,11 @@ class MomentReactionsView: BaseView {
         
         
         self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
-        if let info = self.controller?.conversation?.expressions.first {
+        let expressions = self.controller?.conversation?.expressions ?? []
+        
+        self.badgeView.set(value: expressions.count)
+        
+        if let info = expressions.first {
     
             Task {
                 let expression = try await Expression.getObject(with: info.expressionId)
@@ -73,6 +76,9 @@ class MomentReactionsView: BaseView {
         }
         
         self.controller?.channelChangePublisher.mainSink(receiveValue: { [unowned self] _ in
+            let expressions = self.controller?.conversation?.expressions ?? []
+            self.badgeView.set(value: expressions.count)
+            
             if let info = self.controller?.conversation?.expressions.first {
         
                 Task {

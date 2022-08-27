@@ -10,6 +10,8 @@ import Foundation
 import ScrollCounter
 
 class BadgeCounterView: BaseView {
+    
+    var minToShow: Int = 0
         
     var counter = NumberScrollCounter(value: 0,
                                       scrollDuration: Theme.animationDurationSlow,
@@ -49,14 +51,12 @@ class BadgeCounterView: BaseView {
         
         self.makeRound()
         
-        self.counter.centerOnXAndY()
-        
-        logDebug("height = \(self.height)")
+        self.counter.centerOnXAndY()        
     }
     
     func set(value: Int) {
         self.counter.setValue(Float(value))
-        self.animateChanges(shouldShow: value > 0)
+        self.animateChanges(shouldShow: value > self.minToShow)
         self.layoutNow()
     }
     
