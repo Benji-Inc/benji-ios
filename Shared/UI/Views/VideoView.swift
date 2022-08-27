@@ -28,11 +28,10 @@ class VideoView: BaseView {
             }
         }
     }
-
-    var videoURL: URL? {
-        didSet {
-            self.updatePlayer(with: self.videoURL)
-        }
+    
+    var currentVideoURL: URL? {
+        guard let urlAsset = self.playerLayer.player?.currentItem?.asset as? AVURLAsset else { return nil }
+        return urlAsset.url
     }
     
     @Published var isPlaying: Bool = false
@@ -65,11 +64,15 @@ class VideoView: BaseView {
 
         self.playerLayer.frame = self.bounds
     }
+    
+    func reset() {
+        self.updatePlayer(with: nil)
+    }
 
     /// A task for loading a video track from a url.
     private var loadTracksTask: Task<Void, Never>?
 
-    private func updatePlayer(with url: URL?) {
+    func updatePlayer(with url: URL?) {
         self.loadTracksTask?.cancel()
 
         guard let videoURL = url else {
@@ -111,14 +114,6 @@ class VideoView: BaseView {
             if let audio = self?.shouldPlayAudio {
                 player.volume = audio ? 1.0 : 0.0
             }
-        }
-    }
-    
-    func append(videoURL: URL) {
-        if self.videoURL.isNil {
-            self.videoURL = videoURL
-        } else {
-            
         }
     }
 }

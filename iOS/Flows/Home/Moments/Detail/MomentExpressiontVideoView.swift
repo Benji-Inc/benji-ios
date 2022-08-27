@@ -17,7 +17,7 @@ class MomentExpressiontVideoView: VideoView {
             // Only update the video if this is a new expression.
             guard self.expression != oldValue else { return }
 
-            self.videoURL = nil
+            self.reset()
             self.updatePlayer()
         }
     }
@@ -48,18 +48,18 @@ class MomentExpressiontVideoView: VideoView {
         self.loadTask?.cancel()
 
         guard let expression = self.expression else {
-            self.videoURL = nil
+            self.reset()
             return
         }
 
         self.loadTask = Task { [weak self] in
             guard let updated = try? await expression.retrieveDataIfNeeded(),
                 let videoURL = try? await updated.file?.retrieveCachedPathURL(),
-                  videoURL != self?.videoURL else { return }
+                  videoURL != self?.currentVideoURL else { return }
 
             guard !Task.isCancelled else { return }
 
-            self?.videoURL = videoURL
+            self?.updatePlayer(with: videoURL)
         }
     }
 }
