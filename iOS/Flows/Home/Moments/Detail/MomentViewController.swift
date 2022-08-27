@@ -54,10 +54,8 @@ class MomentViewController: ViewController {
             sheet.preferredCornerRadius = self.cornerRadius
         }
         
-        // menu button to view profile
         // counter for reactions
         // multi video support
-        // remove profile view
         // fix captions
         // fix profile previews
         // add user to comments channel if not added.
@@ -72,7 +70,6 @@ class MomentViewController: ViewController {
         self.controlsContainer.addSubview(self.captionTextView)
         self.captionTextView.isEditable = false
         self.captionTextView.isSelectable = false
-        self.captionTextView.placeholderText = ""
         
         self.controlsContainer.addSubview(self.commentsLabel)
         self.commentsLabel.configure(with: self.moment)
