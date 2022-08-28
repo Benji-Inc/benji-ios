@@ -65,9 +65,7 @@ class ReactionsDetailCoordinator: PresentableCoordinator<Void> {
         self.removeChild()
 
         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-//            self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = true
-//            self.momentVC.expressionView.shouldPlay = true
-//            self.momentVC.momentView.shouldPlay = true
+
         }
         
         self.addChildAndStart(coordinator) { [unowned self] result in
@@ -75,10 +73,6 @@ class ReactionsDetailCoordinator: PresentableCoordinator<Void> {
                 finishedHandler?(result)
             }
         }
-        
-//        self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = false
-//        self.momentVC.expressionView.shouldPlay = false
-//        self.momentVC.momentView.shouldPlay = false
         
         self.router.present(coordinator, source: self.detailVC, cancelHandler: cancelHandler)
     }

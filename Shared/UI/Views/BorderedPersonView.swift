@@ -139,11 +139,5 @@ extension BorderedPersonView: PersonContextDelegate {
             return self.getMenu(for: person)
         }
     }
-
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
-                                willEndFor configuration: UIContextMenuConfiguration,
-                                animator: UIContextMenuInteractionAnimating?) {
-
-    }
 }
 #endif

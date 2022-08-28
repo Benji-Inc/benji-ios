@@ -60,9 +60,6 @@ class MomentViewController: ViewController {
             sheet.preferredCornerRadius = MomentViewController.cornerRadius
         }
         
-        // replace add people cell in comments
-        // Add message preview for latest comment
-        
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
