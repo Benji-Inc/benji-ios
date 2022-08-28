@@ -57,6 +57,7 @@ class MomentSwipeGestureHandler {
                 self.viewController.pausePlayback()
                 // Only start interaction if the pan drags far enough
                 self.interactionInProgress = true
+                self.viewController.state = .uploading
             }
 
         case .ended, .cancelled, .failed:
@@ -70,6 +71,7 @@ class MomentSwipeGestureHandler {
                 animator.isReversed = false
             } else {
                 self.viewController.resumePlayback()
+                self.viewController.state = .playback
                 animator.isReversed = true
             }
             
@@ -103,7 +105,6 @@ class MomentSwipeGestureHandler {
             UIView.animateKeyframes(withDuration: 0, delay: 0) {
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
-                    self.viewController.confirmationView.animationView.alpha = 1.0 
                     self.viewController.bottomOffset = 0
                     self.viewController.view.layoutNow()
                 }
@@ -134,6 +135,6 @@ class MomentSwipeGestureHandler {
     }
     
     private func shouldHandlePan() -> Bool {
-        return self.viewController.state == .playback
+        return self.viewController.state == .uploading || self.viewController.state == .playback
     }
 }

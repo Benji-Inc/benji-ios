@@ -49,6 +49,8 @@ class MomentCaptureViewController: PiPRecordingViewController {
             sheet.preferredCornerRadius = self.cornerRadius
         }
         
+        self.panRecognizer.delegate = self
+        
         self.view.set(backgroundColor: .B0)
         
         self.presentationController?.delegate = self
@@ -64,6 +66,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         self.view.addSubview(self.textView)
         
         self.view.addGestureRecognizer(self.panRecognizer)
+        
         
         self.setupHandlers()
     }
@@ -158,7 +161,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         case .error:
             self.animate(text: "Recording Failed")
         case .uploading:
-            break 
+            self.animateTask?.cancel()
         }
     }
     
@@ -229,22 +232,16 @@ class MomentCaptureViewController: PiPRecordingViewController {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        guard self.state == .recording else { return }
         
-        let touch = touches.first?.gestureRecognizers?.first as? SwipeGestureRecognizer
-        
-        if touch.isNil {
+        if self.frontCameraView.isAnimating {
             self.stopRecording()
         }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
-        guard self.state == .recording else { return }
-        
-        let touch = touches.first?.gestureRecognizers?.first as? SwipeGestureRecognizer
-        
-        if touch.isNil {
+
+        if self.frontCameraView.isAnimating {
             self.stopRecording()
         }
     }
@@ -255,5 +252,16 @@ extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         self.stopRecording()
         return true
+    }
+}
+
+extension MomentCaptureViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is SwipeGestureRecognizer {
+            return self.state == .playback
+        } else {
+            return true
+        }
     }
 }
