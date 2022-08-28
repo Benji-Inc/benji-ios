@@ -154,7 +154,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         case .recording:
             self.animate(text: "")
         case .playback:
-            self.animate(text: "Swipe Up")
+            self.animateSwipeUp()
         case .error:
             self.animate(text: "Recording Failed")
         case .uploading:
@@ -168,6 +168,37 @@ class MomentCaptureViewController: PiPRecordingViewController {
     }
     
     private var animateTask: Task<Void, Never>?
+    
+    private func animateSwipeUp() {
+        self.animateTask?.cancel()
+        
+        self.label.setText("Swipe Up")
+        self.label.alpha = 0
+        self.label.transform = CGAffineTransform(translationX: 0, y: 100)
+        
+        self.animateTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitSpringAnimation(with: .custom(1.5), options: .curveEaseIn, animations: {
+                self.label.alpha = 1.0
+                self.label.transform = .identity
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            await Task.sleep(seconds: 5.0)
+            
+            guard !Task.isCancelled else { return }
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 0
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            self.animateSwipeUp()
+        }
+    }
     
     func animate(text: Localized) {
         self.animateTask?.cancel()

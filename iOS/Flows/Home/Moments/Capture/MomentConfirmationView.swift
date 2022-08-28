@@ -7,12 +7,15 @@
 //
 
 import Foundation
+import Lottie
 
 class MomentConfirmationView: BaseView {
     
     let circle = BaseView()
     let progressView = UIProgressView()
     let label = ThemeLabel(font: .display)
+    let animationView = AnimationView()
+    let animationOffset: CGFloat = 0
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -35,6 +38,10 @@ class MomentConfirmationView: BaseView {
         self.addSubview(self.progressView)
         self.progressView.progressTintColor = ThemeColor.D6.color
         self.progressView.alpha = 0
+        
+        self.addSubview(self.animationView)
+        self.animationView.load(animation: .loading)
+        self.animationView.alpha = 0 
     }
     
     override func layoutSubviews() {
@@ -48,6 +55,10 @@ class MomentConfirmationView: BaseView {
         self.progressView.width = self.width * 0.25
         self.progressView.centerOnX()
         self.progressView.match(.top, to: .bottom, of: self.label, offset: .standard)
+        
+        self.animationView.squaredSize = 50
+        self.animationView.centerOnX()
+        self.animationView.top = self.animationOffset
     }
     
     func uploadMoment(from recording: PiPRecording, caption: String?) async {

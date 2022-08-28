@@ -15,7 +15,7 @@ class MomentSwipeGestureHandler {
     var interactionInProgress = false // If we're currently in a create interaction
 
     let threshold: CGFloat = 10 // Distance, in points, a pan must move vertically before a dismissal
-    let distance: CGFloat = 250 // Distance that a pan must move to fully create the moment
+    let distance: CGFloat = 100 // Distance that a pan must move to fully create the moment
 
     var panStartPoint: CGPoint? // Where the pan gesture began
     
@@ -103,6 +103,7 @@ class MomentSwipeGestureHandler {
             UIView.animateKeyframes(withDuration: 0, delay: 0) {
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
+                    self.viewController.confirmationView.animationView.alpha = 1.0 
                     self.viewController.bottomOffset = 0
                     self.viewController.view.layoutNow()
                 }
