@@ -539,6 +539,10 @@ extension ConversationController {
 }
 
 extension ConversationController: MessageSequenceController {
+    
+    var memberCount: Int {
+        return self.conversation?.memberCount ?? 0 
+    }
 
     var conversationId: String? {
         return self.cid?.description

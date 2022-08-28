@@ -111,6 +111,7 @@ extension Conversation: MessageSequence {
     }
 }
 
+#if IOS
 extension Conversation {
     // Used for comment based conversations for Moments
     var expressions: [ExpressionInfo] {
@@ -129,3 +130,4 @@ extension Conversation {
         return values
     }
 }
+#endif

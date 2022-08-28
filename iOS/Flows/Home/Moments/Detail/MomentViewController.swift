@@ -14,14 +14,22 @@ class MomentViewController: ViewController {
     
     private let controlsContainer = BaseView()
     private let captionTextView = CaptionTextView()
-    let personView = BorderedPersonView()
+    
+    private let nameLabel = ThemeLabel(font: .smallBold)
+    private let dateLabel = ThemeLabel(font: .xtraSmall)
+    private let viewedLabel = ViewedLabel()
+    private let detailsContainer = BaseView()
+    
     let commentsLabel = CommentsLabel()
-    let expressionsButton = ExpressionButton()
-    private let expressionView = MomentExpressiontVideoView()
-    private let momentView = MomentVideoView()
+    let reactionsView = MomentReactionsView()
+    let menuButton = ThemeButton()
+    let expressionView = MomentExpressiontVideoView()
+    let momentView = MomentVideoView()
     let blurView = MomentBlurView()
     
-    let cornerRadius: CGFloat = 30
+    var didSelectViewProfile: ((PersonType) -> Void)? = nil
+    
+    static let cornerRadius: CGFloat = 30
     
     enum State {
         case initial
@@ -49,30 +57,41 @@ class MomentViewController: ViewController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.preferredCornerRadius = self.cornerRadius
+            sheet.preferredCornerRadius = MomentViewController.cornerRadius
         }
         
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.momentView)
-        self.momentView.layer.cornerRadius = self.cornerRadius
+        self.momentView.layer.cornerRadius = MomentViewController.cornerRadius
         self.momentView.layer.masksToBounds = true
+        
+        self.view.addSubview(self.detailsContainer)
+        self.detailsContainer.addSubview(self.nameLabel)
+        self.detailsContainer.addSubview(self.dateLabel)
+        self.dateLabel.setText(self.moment.createdAt?.getTimeAgoString() ?? "")
+        
+        self.detailsContainer.addSubview(self.viewedLabel)
+        
+        self.detailsContainer.alpha = 0
         
         self.view.addSubview(self.controlsContainer)
         self.controlsContainer.addSubview(self.captionTextView)
         self.captionTextView.isEditable = false
         self.captionTextView.isSelectable = false
-        self.captionTextView.placeholderText = ""
         
-        self.controlsContainer.addSubview(self.personView)
         self.controlsContainer.addSubview(self.commentsLabel)
         self.commentsLabel.configure(with: self.moment)
         
-        self.controlsContainer.addSubview(self.expressionsButton)
-        self.expressionsButton.configure(with: self.moment)
+        self.controlsContainer.addSubview(self.reactionsView)
+        self.reactionsView.configure(with: self.moment)
         
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.expressionView)
+        
+        self.controlsContainer.addSubview(self.menuButton)
+        self.menuButton.set(style: .image(symbol: .ellipsis, palletteColors: [.whiteWithAlpha], pointSize: 22, backgroundColor: .clear))
+        self.menuButton.showsMenuAsPrimaryAction = true
         
         self.$state
             .removeDuplicates()
@@ -95,24 +114,39 @@ class MomentViewController: ViewController {
         self.expressionView.pinToSafeAreaTop()
         self.expressionView.pinToSafeAreaLeft()
         
-        self.personView.squaredSize = 35
-        self.personView.pinToSafeAreaLeft()
-        self.personView.top = self.momentView.height + Theme.ContentOffset.long.value
+        self.menuButton.squaredSize = 44
+        self.menuButton.pin(.top)
+        self.menuButton.pinToSafeAreaRight()
         
-        self.expressionsButton.squaredSize = self.personView.height
-        self.expressionsButton.pinToSafeAreaRight()
-        self.expressionsButton.centerY = self.personView.centerY
-        
-        let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.personView.width - self.expressionsButton.width - Theme.ContentOffset.long.value.doubled
+        let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.reactionsView.width - Theme.ContentOffset.long.value
         self.commentsLabel.setSize(withWidth: maxLabelWidth)
-        self.commentsLabel.centerY = self.personView.centerY
-        self.commentsLabel.match(.left, to: .right, of: self.personView, offset: .long)
+        self.commentsLabel.match(.top, to: .bottom, of: self.momentView, offset: .xtraLong)
+        self.commentsLabel.pinToSafeAreaLeft()
+        
+        self.reactionsView.squaredSize = 35
+        self.reactionsView.pinToSafeAreaRight()
+        self.reactionsView.centerY = self.commentsLabel.centerY
         
         let maxWidth = Theme.getPaddedWidth(with: self.view.width)
         self.captionTextView.setSize(withMaxWidth: maxWidth)
         self.captionTextView.pinToSafeAreaLeft()
         self.captionTextView.bottom = self.momentView.height - self.captionTextView.left
         self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
+        
+        self.detailsContainer.expandToSuperviewWidth()
+        self.detailsContainer.height = 30
+        self.detailsContainer.match(.bottom, to: .bottom, of: self.momentView)
+        
+        self.nameLabel.setSize(withWidth: self.view.width)
+        self.nameLabel.pinToSafeAreaLeft()
+        self.nameLabel.pin(.bottom, offset: .xtraLong)
+        
+        self.dateLabel.setSize(withWidth: self.view.width)
+        self.dateLabel.pinToSafeAreaLeft()
+        self.dateLabel.match(.bottom, to: .top, of: self.nameLabel, offset: .negative(.short))
+        
+        self.viewedLabel.pinToSafeAreaRight()
+        self.viewedLabel.centerY = self.nameLabel.centerY
         
         self.blurView.expandToSuperviewSize()
     }
@@ -138,9 +172,13 @@ class MomentViewController: ViewController {
             Task {
                 guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
                 self.captionTextView.animateCaption(text: moment.caption)
-                self.personView.set(expression: nil, person: moment.author)
-                self.view.layoutNow()
-            } 
+                self.viewedLabel.configure(with: moment)
+                if let person = try? await moment.author?.retrieveDataIfNeeded() {
+                    self.nameLabel.setText(person.fullName.capitalized)
+                    self.menuButton.menu = self.createMenu(for: person)
+                    self.view.layoutNow()
+                }
+            }
         }
     }
     
@@ -149,7 +187,10 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.expressionView.alpha = 0.5
+            self.momentView.playerLayer.opacity = 0.5
             self.controlsContainer.alpha = 0.0
+            self.detailsContainer.alpha = 1.0
         }
 
         self.expressionView.playerLayer.player?.pause()
@@ -161,7 +202,10 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.expressionView.alpha = 1.0
+            self.momentView.playerLayer.opacity = 1.0
             self.controlsContainer.alpha = 1.0
+            self.detailsContainer.alpha = 0.0
         }
         
         self.expressionView.playerLayer.player?.play()
@@ -173,10 +217,29 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.expressionView.alpha = 1.0
+            self.momentView.playerLayer.opacity = 1.0
             self.controlsContainer.alpha = 1.0
+            self.detailsContainer.alpha = 0.0
         }
         
         self.expressionView.playerLayer.player?.play()
         self.momentView.playerLayer.player?.play()
+    }
+    
+    private func createMenu(for person: PersonType) -> UIMenu? {
+        guard person.isCurrentUser else { return nil }
+        
+        let profile = UIAction(title: "View Profile",
+                               image: ImageSymbol.personCircle.image,
+                               attributes: []) { [unowned self] action in
+            self.didSelectViewProfile?(person)
+        }
+
+        return UIMenu.init(title: "Menu",
+                           image: nil,
+                           identifier: nil,
+                           options: [],
+                           children: [profile])
     }
 }

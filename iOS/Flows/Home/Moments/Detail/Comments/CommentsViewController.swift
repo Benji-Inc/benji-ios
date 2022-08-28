@@ -88,6 +88,7 @@ class CommentsViewController: InputHandlerViewContoller,
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+            sheet.preferredCornerRadius = MomentViewController.cornerRadius
         }
         
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)

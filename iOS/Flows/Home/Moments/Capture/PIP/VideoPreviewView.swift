@@ -46,12 +46,12 @@ class VideoPreviewView: BaseView {
             self.playbackView.alpha = 1.0
         } completion: { _ in
             self.playbackView.shouldPlay = true
-            self.playbackView.videoURL = url
+            self.playbackView.updatePlayer(with: [url])
         }
     }
     
     func stopPlayback() {
-        self.playbackView.videoURL = nil
+        self.playbackView.reset()
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.playbackView.alpha = 0.0
