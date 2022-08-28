@@ -56,7 +56,7 @@ class MomentReactionsView: BaseView {
             subscription.cancel()
         }
         
-        self.controller = JibberChatClient.shared.conversationController(for: moment.commentsId)
+        self.controller = ConversationController.controller(for: moment.commentsId)
         let expressions = self.controller?.conversation?.expressions ?? []
         
         self.badgeView.set(value: expressions.count)

@@ -21,11 +21,11 @@ class ExpressionDetailViewController: DiffableCollectionViewController<EmotionDe
 
     private var emotions: [Emotion] = []
     private let startingExpression: ExpressionInfo?
-    private let expressions: [ExpressionInfo]
+    var expressions: [ExpressionInfo]
     
     let pageIndicator = PagingIndicatorView(with: .onExpressionIndexChanged)
 
-    init(startingExpression: ExpressionInfo,
+    init(startingExpression: ExpressionInfo?,
          expressions: [ExpressionInfo],
          delegate: ExpressionDetailViewControllerDelegate) {
 

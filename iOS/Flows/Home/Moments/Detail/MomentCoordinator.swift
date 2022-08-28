@@ -45,7 +45,7 @@ import StreamChat
          self.momentVC.reactionsView.didSelect { [unowned self] in
              guard let controller = self.momentVC.reactionsView.controller else { return }
              if let expressions = controller.conversation?.expressions, expressions.count > 0 {
-                 self.presentExpressions(startingExpression: expressions.first!, expressions: expressions)
+                 self.presentReactions()
              } else {
                  self.presentAddExpression()
              }
@@ -86,12 +86,10 @@ import StreamChat
          self.present(coordinator)
      }
      
-     func presentExpressions(startingExpression: ExpressionInfo, expressions: [ExpressionInfo]) {
-         
+     func presentReactions() {
          let coordinator = ReactionsDetailCoordinator(router: self.router,
                                                       deepLink: self.deepLink,
-                                                      startingExpression: startingExpression,
-                                                      expressions: expressions)
+                                                      moment: self.moment)
          self.present(coordinator)
      }
      

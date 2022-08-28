@@ -8,11 +8,25 @@
 
 import Foundation
 import Transitions
+import Combine
 
 class ReactionsDetailViewController: ExpressionDetailViewController {
     
     let blurView = DarkBlurView()
     let button = ThemeButton()
+    private let moment: Moment
+    
+    private(set) var controller: ConversationController?
+    private var subscriptions = Set<AnyCancellable>()
+    
+    init(with moment: Moment, delegate: ExpressionDetailViewControllerDelegate) {
+        self.moment = moment
+        super.init(startingExpression: nil, expressions: [], delegate: delegate)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func initializeViews() {
         super.initializeViews()
@@ -43,6 +57,44 @@ class ReactionsDetailViewController: ExpressionDetailViewController {
         
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
-        self.button.match(.bottom, to: .top, of: self.pageIndicator, offset: .negative(.long))
+        self.button.pinToSafeAreaBottom()
+        
+        self.pageIndicator.match(.bottom, to: .top, of: self.button, offset: .negative(.long))
+    }
+    
+    override func retrieveDataForSnapshot() async -> [EmotionDetailCollectionViewDataSource.SectionType : [EmotionDetailCollectionViewDataSource.ItemType]] {
+        
+        self.controller = ConversationController.controller(for: self.moment.commentsId)
+        self.expressions = self.controller?.conversation?.expressions ?? []
+        
+        return await super.retrieveDataForSnapshot()
+    }
+    
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        self.subscribeToUpdates()
+    }
+    
+    private func subscribeToUpdates() {
+        self.controller?.channelChangePublisher.mainSink(receiveValue: { [unowned self] _ in
+            
+            Task {
+                let expressions = self.controller?.conversation?.expressions ?? []
+                
+                let items: [EmotionDetailCollectionViewDataSource.ItemType] = expressions.compactMap { info in
+                    return .expression(info)
+                }
+
+                var snapshot = self.dataSource.snapshot()
+                snapshot.setItems(items, in: .info)
+                
+                self.pageIndicator.pageIndicator.numberOfPages = items.count
+                self.pageIndicator.layoutNow()
+                
+                await self.dataSource.apply(snapshot)
+            }
+            
+        }).store(in: &self.subscriptions)
     }
 }
