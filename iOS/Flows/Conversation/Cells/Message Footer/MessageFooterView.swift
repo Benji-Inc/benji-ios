@@ -41,10 +41,6 @@ class MessageFooterView: BaseView {
         self.replySummary.replyView.didSelect { [unowned self] in
             self.didTapViewReplies?()
         }
-        
-        self.expressionStackedView.didTapAdd = { [unowned self] in
-            // Do stuff here
-        }
     }
     
     func configure(for message: Messageable) {
