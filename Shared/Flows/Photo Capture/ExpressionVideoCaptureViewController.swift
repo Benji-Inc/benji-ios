@@ -58,9 +58,4 @@ class ExpressionVideoCaptureViewController: ViewController {
             break
         }
     }
-    
-    func set(favoriteType: FavoriteType) {
-        self.emotionGradientView.set(emotionCounts: [favoriteType.emotion: 1])
-        self.view.setNeedsLayout()
-    }
 }

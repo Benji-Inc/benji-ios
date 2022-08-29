@@ -15,7 +15,6 @@ struct ExpressionInfo: Hashable {
 }
 
 enum ExpressionKey: String {
-    case isFavorite
     case author
     case file
     case emotionCounts
@@ -67,11 +66,6 @@ final class Expression: PFObject, PFSubclassing {
     var emojiString: String? {
         get { self.getObject(for: .emojiString) }
         set { self.setObject(for: .emojiString, with: newValue) }
-    }
-    
-    var isFavorite: Bool? {
-        get { self.getObject(for: .isFavorite) }
-        set { self.setObject(for: .isFavorite, with: newValue) }
     }
     
     var info: ExpressionInfo? {

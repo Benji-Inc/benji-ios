@@ -99,9 +99,8 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
         }
     }
     
-    func presentExpressionCreation(for message: Messageable, withFavorite type: FavoriteType? = nil) {
-        let coordinator = ExpressionCoordinator(favoriteType: type,
-                                                router: self.router,
+    func presentExpressionCreation(for message: Messageable) {
+        let coordinator = ExpressionCoordinator(router: self.router,
                                                 deepLink: self.deepLink)
         self.present(coordinator) { result in
             guard let expression = result else { return }
@@ -124,8 +123,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     }
     
     func presentExpressions() {
-        let coordinator = ExpressionCoordinator(favoriteType: nil,
-                                                router: self.router,
+        let coordinator = ExpressionCoordinator(router: self.router,
                                                 deepLink: self.deepLink)
         self.present(coordinator) { [unowned self] expression in
             AnalyticsManager.shared.trackEvent(type: .expressionMade)
@@ -316,13 +314,6 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
             await self.add(expression: expression, toMessage: message)
         }
     }
-    
-    func messageContent(_ content: MessageContentView,
-                        didTapFavorite type: FavoriteType,
-                        forMessage message: Messageable) {
-        
-        self.presentExpressionCreation(for: message, withFavorite: type)
-    }
 
     func messageContent(_ content: MessageContentView,
                         didTapExpression expression: ExpressionInfo,
@@ -330,6 +321,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                 
         let coordinator = ExpressionDetailCoordinator(router: self.router,
                                                       deepLink: self.deepLink,
+                                                      message: message,
                                                       startingExpression: expression,
                                                       expressions: message.expressions)
         self.present(coordinator)

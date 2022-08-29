@@ -84,30 +84,9 @@ class MessageCell: UICollectionViewCell {
             self.content.delegate?.messageContent(self.content, didTapViewReplies: message)
         }
         
-        self.footerView.favoriteExpressionsView.didSelectFavorite = { [unowned self] favorite in
-            
-            Task {
-                guard let message = self.message else { return }
-                
-                if let expression = try? await favorite.getExpression() {
-                    self.content.delegate?.messageContent(self.content,
-                                                          didTapAddFavorite: expression,
-                                                          toMessage: message)
-                } else {
-                    self.content.delegate?.messageContent(self.content, didTapFavorite: favorite, forMessage: message)
-                }
-                
-                await self.footerView.favoriteExpressionsView.dismiss()
-            }
-        }
-        
-        self.footerView.favoriteExpressionsView.didSelectEdit = { [unowned self] favorite in
-            Task {
-                guard let message = self.message else { return }
-                
-                self.content.delegate?.messageContent(self.content, didTapFavorite: favorite, forMessage: message)
-                await self.footerView.favoriteExpressionsView.dismiss()
-            }
+        self.footerView.expressionStackedView.addExpressionView.didSelect { [unowned self] in
+            guard let message = self.message else { return }
+            self.content.delegate?.messageContent(self.content, didTapAddExpressionForMessage: message)
         }
 
         self.conversationsManagerSubscription = ConversationsManager.shared.$activeConversation

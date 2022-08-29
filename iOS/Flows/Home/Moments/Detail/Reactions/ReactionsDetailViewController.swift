@@ -13,7 +13,6 @@ import Combine
 class ReactionsDetailViewController: ExpressionDetailViewController {
     
     let blurView = DarkBlurView()
-    let button = ThemeButton()
     private let moment: Moment
     
     private(set) var controller: ConversationController?
@@ -21,7 +20,7 @@ class ReactionsDetailViewController: ExpressionDetailViewController {
     
     init(with moment: Moment, delegate: ExpressionDetailViewControllerDelegate) {
         self.moment = moment
-        super.init(startingExpression: nil, expressions: [], delegate: delegate)
+        super.init(startingExpression: nil, expressions: [], message: nil, delegate: delegate)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,9 +31,6 @@ class ReactionsDetailViewController: ExpressionDetailViewController {
         super.initializeViews()
         
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
-        
-        self.view.addSubview(self.button)
-        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Add"))
     }
 
     override func viewDidLoad() {
@@ -54,12 +50,6 @@ class ReactionsDetailViewController: ExpressionDetailViewController {
         super.viewDidLayoutSubviews()
         
         self.blurView.expandToSuperviewSize()
-        
-        self.button.setSize(with: self.view.width)
-        self.button.centerOnX()
-        self.button.pinToSafeAreaBottom()
-        
-        self.pageIndicator.match(.bottom, to: .top, of: self.button, offset: .negative(.long))
     }
     
     override func retrieveDataForSnapshot() async -> [EmotionDetailCollectionViewDataSource.SectionType : [EmotionDetailCollectionViewDataSource.ItemType]] {

@@ -11,17 +11,7 @@ import Coordinator
 
 class ExpressionCoordinator: PresentableCoordinator<Expression?> {
 
-    private lazy var expressionVC = ExpressionViewController(with: self.favoriteType)
-    
-    private let favoriteType: FavoriteType?
-    
-    init(favoriteType: FavoriteType?,
-         router: CoordinatorRouter,
-         deepLink: DeepLinkable?) {
-        
-        self.favoriteType = favoriteType
-        super.init(router: router, deepLink: deepLink)
-    }
+    private lazy var expressionVC = ExpressionViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.expressionVC
