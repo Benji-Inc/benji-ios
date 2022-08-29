@@ -12,7 +12,6 @@ import AVFoundation
 extension PiPRecordingViewController {
     
     func configureBackCamera() -> Bool {
-        
         // Find the back camera
         guard let backCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
             logDebug("Could not find the back camera")
@@ -93,7 +92,6 @@ extension PiPRecordingViewController {
     }
     
     func configureFrontCamera() -> Bool {
-        
         // Find the front camera
         guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
             logDebug("Could not find the front camera")
@@ -163,7 +161,6 @@ extension PiPRecordingViewController {
     }
     
     func configureMicrophone() -> Bool {
-        
         // Find the microphone
         guard let microphone = AVCaptureDevice.default(for: .audio) else {
             logDebug("Could not find the microphone")
@@ -194,7 +191,7 @@ extension PiPRecordingViewController {
         }
         
         // Add the front microphone audio data output
-        guard session.canAddOutput(self.micDataOutput) else {
+        guard self.session.canAddOutput(self.micDataOutput) else {
             logDebug("Could not add the front microphone audio data output")
             return false
         }
