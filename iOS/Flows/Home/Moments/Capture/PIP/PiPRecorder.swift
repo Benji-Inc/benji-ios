@@ -52,8 +52,7 @@ class PiPRecorder {
     
     // MARK: - PUBLIC
     
-    func initialize(backVideoSettings: [String: Any]?,
-                    audioSettings: [String: Any]?) {
+    func initialize(backVideoSettings: [String: Any]?, audioSettings: [String: Any]?) {
         self.reset()
         
         self.backVideoSettings = backVideoSettings
@@ -89,10 +88,9 @@ class PiPRecorder {
     
     func recordAudio(sampleBuffer: CMSampleBuffer) {
         guard self.isReadyToRecord, let assetWriter = self.frontAssetWriter else { return }
-        
-        if assetWriter.status == .unknown {
-            self.startWritingSession(with: assetWriter, and: sampleBuffer)
-        } else if assetWriter.status == .writing {
+
+        // To avoid starting the front asset writer twice, audio samples will NOT trigger the writer to start.
+        if assetWriter.status == .writing {
             self.handleAudioInput(from: sampleBuffer)
         }
     }
@@ -143,13 +141,15 @@ class PiPRecorder {
     private func initializeFront() {
         // Create an asset writer that records to a temporary file
         let outputFileName = NSUUID().uuidString + "front"
-        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("mov")
-        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov) else {
-            return
-        }
+        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(outputFileName)
+            .appendingPathExtension("mov")
+
+        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov) else { return }
         
         // Add a video input
-        let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video, outputSettings: self.frontVideoSettings)
+        let assetWriterVideoInput = AVAssetWriterInput(mediaType: .video,
+                                                       outputSettings: self.frontVideoSettings)
         assetWriterVideoInput.expectsMediaDataInRealTime = true
         assetWriterVideoInput.mediaTimeScale = CMTimeScale(bitPattern: 600)
         if assetWriter.canAdd(assetWriterVideoInput) {
@@ -167,8 +167,12 @@ class PiPRecorder {
     private func initializeBack() {
         // Create an asset writer that records to a temporary file
         let outputFileName = NSUUID().uuidString + "back"
-        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(outputFileName).appendingPathExtension("mov")
-        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov), let settings = self.backVideoSettings else {
+        let outputFileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(outputFileName)
+            .appendingPathExtension("mov")
+
+        guard let assetWriter = try? AVAssetWriter(url: outputFileURL, fileType: .mov),
+              let settings = self.backVideoSettings else {
             return
         }
                 
@@ -184,14 +188,19 @@ class PiPRecorder {
     }
     
     private func initializeAudio() {
-        guard let settings = self.audioSettings, let writer = self.frontAssetWriter, self.assetWriterAudioInput.isNil else { return }
+        guard let settings = self.audioSettings,
+              let frontAssetWriter = self.frontAssetWriter,
+              self.assetWriterAudioInput.isNil else {
+            return
+        }
+
         // Add an audio input
         let assetWriterAudioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: settings)
         assetWriterAudioInput.expectsMediaDataInRealTime = true
-        if writer.canAdd(assetWriterAudioInput) {
-            writer.add(assetWriterAudioInput)
+        if frontAssetWriter.canAdd(assetWriterAudioInput) {
+            frontAssetWriter.add(assetWriterAudioInput)
         }
-        
+
         self.assetWriterAudioInput = assetWriterAudioInput
     }
     
@@ -247,7 +256,9 @@ class PiPRecorder {
     // MARK: - STOP RECORDING 
     
     private func stopRecordingFront() async throws -> URL {
-        guard let writer = self.frontAssetWriter else { throw ClientError.apiError(detail: "No front asset writer") }
+        guard let writer = self.frontAssetWriter else {
+            throw ClientError.apiError(detail: "No front asset writer")
+        }
 
         if writer.status == .writing {
             self.frontAssetWriterVideoInput?.markAsFinished()
@@ -259,14 +270,16 @@ class PiPRecorder {
     }
     
     private func stopRecordingBack() async throws -> URL {
-        guard let writer = self.backAssetWriter else { throw ClientError.apiError(detail: "No front asset writer") }
+        guard let writer = self.backAssetWriter else {
+            throw ClientError.apiError(detail: "No front asset writer")
+        }
 
         if writer.status == .writing {
             self.backAssetWriterVideoInput?.markAsFinished()
             await writer.finishWriting()
             return writer.outputURL
         } else {
-            throw ClientError.apiError(detail: "Back Failied \(writer.status)")
+            throw ClientError.apiError(detail: "Back Failed \(writer.status)")
         }
     }
     
