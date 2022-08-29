@@ -205,14 +205,7 @@ class PiPRecorder {
     }
     
     private func startWritingSession(with writer: AVAssetWriter, and sampleBuffer: CMSampleBuffer) {
-        let didStartWriting = writer.startWriting()
-        if !didStartWriting {
-            if self.frontAssetWriter === writer {
-                logDebug("failed front because \(writer.error.debugDescription)")
-            } else if self.backAssetWriter === writer {
-                logDebug("failed back because \(writer.error.debugDescription)")
-            }
-        }
+        writer.startWriting()
         let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         writer.startSession(atSourceTime: startTime)
     }
