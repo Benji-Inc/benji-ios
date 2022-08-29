@@ -39,8 +39,7 @@ class ReactionsDetailCoordinator: PresentableCoordinator<Void> {
     }
     
     func presentAddExpression() {
-        let coordinator = ExpressionCoordinator(favoriteType: nil,
-                                                router: self.router,
+        let coordinator = ExpressionCoordinator(router: self.router,
                                                 deepLink: self.deepLink)
         
         self.present(coordinator) { [unowned self] result in

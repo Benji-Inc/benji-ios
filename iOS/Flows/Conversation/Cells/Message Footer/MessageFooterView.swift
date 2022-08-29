@@ -22,7 +22,6 @@ class MessageFooterView: BaseView {
     let statusLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
     
     let expressionStackedView = StackedExpressionView()
-    lazy var favoriteExpressionsView = FavoriteExpressionsView()
             
     private(set) var message: Messageable?
 
@@ -44,13 +43,7 @@ class MessageFooterView: BaseView {
         }
         
         self.expressionStackedView.didTapAdd = { [unowned self] in
-            Task {
-                if self.favoriteExpressionsView.superview.isNil {
-                    await self.favoriteExpressionsView.reveal(in: self)
-                } else {
-                    await self.favoriteExpressionsView.dismiss()
-                }
-            }
+            // Do stuff here
         }
     }
     
@@ -81,9 +74,6 @@ class MessageFooterView: BaseView {
         self.statusLabel.setSize(withWidth: self.width)
         self.statusLabel.pin(.top, offset: .short)
         self.statusLabel.pin(.right)
-        
-        self.favoriteExpressionsView.match(.bottom, to: .top, of: self.expressionStackedView, offset: .negative(.standard))
-        self.favoriteExpressionsView.pin(.left)
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -91,12 +81,10 @@ class MessageFooterView: BaseView {
         let replyPoint = self.convert(point, to: self.replySummary)
         let replyButtonPoint = self.convert(point, to: self.replyButton)
         let expressionPoint = self.convert(point, to: self.expressionStackedView)
-        let favoritePoint = self.convert(point, to: self.favoriteExpressionsView)
 
         return self.replySummary.point(inside: replyPoint, with: event)
         || self.replyButton.point(inside: replyButtonPoint, with: event)
         || self.expressionStackedView.point(inside: expressionPoint, with: event)
-        || self.favoriteExpressionsView.point(inside: favoritePoint, with: event)
     }
 
     private func getString(for deliveryStatus: DeliveryStatus) -> String {
