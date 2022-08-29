@@ -19,6 +19,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         return "SCREEN_MOMENT"
     }
     
+    let confirmationLabel = ThemeLabel(font: .medium, textColor: .white)
     let label = ThemeLabel(font: .medium, textColor: .white)
     let textView = CaptionTextView()
     let confirmationView = MomentConfirmationView() 
@@ -35,7 +36,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
     let cornerRadius: CGFloat = 30
     var willShowKeyboard: Bool = false
     
-    var bottomOffset: CGFloat?
+    var backOffset: CGFloat?
     
     override func initializeViews() {
         super.initializeViews()
@@ -63,10 +64,15 @@ class MomentCaptureViewController: PiPRecordingViewController {
         self.view.addSubview(self.label)
         self.label.showShadow(withOffset: 0, opacity: 1.0)
         
+        self.view.addSubview(self.confirmationLabel)
+        self.confirmationLabel.textAlignment = .center
+        self.confirmationLabel.alpha = 0
+        self.confirmationLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        self.confirmationLabel.setText("Ready!")
+        
         self.view.addSubview(self.textView)
         
         self.view.addGestureRecognizer(self.panRecognizer)
-        
         
         self.setupHandlers()
     }
@@ -76,10 +82,14 @@ class MomentCaptureViewController: PiPRecordingViewController {
         
         self.confirmationView.expandToSuperviewSize()
         
-        if let offset = self.bottomOffset {
+        if let offset = self.backOffset {
             self.backCameraView.bottom = offset
             self.frontCameraView.match(.top, to: .top, of: self.backCameraView, offset: .custom(self.frontCameraView.left))
         }
+        
+        self.confirmationLabel.setSize(withWidth: self.view.width)
+        self.confirmationLabel.centerOnX()
+        self.confirmationLabel.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.label.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
