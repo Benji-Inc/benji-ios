@@ -321,6 +321,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
                 
         let coordinator = ExpressionDetailCoordinator(router: self.router,
                                                       deepLink: self.deepLink,
+                                                      message: message,
                                                       startingExpression: expression,
                                                       expressions: message.expressions)
         self.present(coordinator)
