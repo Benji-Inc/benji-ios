@@ -127,7 +127,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         if showLoadMore {
             messageItems.insert(.loadMore, at: 0)
         } else {
-            messageItems.insert(.initial, at: 0)
+           // messageItems.insert(.initial, at: 0)
         }
         
         var snapshot = self.snapshot()
