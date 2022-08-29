@@ -40,6 +40,12 @@ class ExpandingTextView: TextView {
         self.textContainerInset.top = Theme.ContentOffset.long.value + 1
         self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
+    
+    func setPlaceholderForComments() {
+        self.initialPlaceholder = "Add Comment"
+        self.set(placeholder: "Add Comment")
+    }
+    
 
     func setPlaceholder(for people: [PersonType], isReply: Bool) {
         var placeholderText = isReply ? "Reply to " : "Message "

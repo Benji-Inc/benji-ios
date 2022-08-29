@@ -22,7 +22,7 @@ class VideoView: BaseView {
             guard let player = self.playerLayer.player else { return }
             
             if self.shouldPlay, !self.isPlaying {
-                player.playImmediately(atRate: 1.0 )
+                player.playImmediately(atRate: 1.0)
             } else if !self.shouldPlay, self.isPlaying {
                 player.pause()
             }

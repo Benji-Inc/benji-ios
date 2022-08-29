@@ -46,7 +46,7 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     /// The current input state of the accessory view.
     @Published var inputState: InputState = .collapsed
-
+    
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Message State
