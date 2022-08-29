@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Lottie
 
 class MomentConfirmationView: BaseView {
     

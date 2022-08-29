@@ -95,8 +95,6 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
             .mainSink { [unowned self] isReady in
                 if isReady, !self.frontCameraView.isAnimating {
                     self.frontCameraView.startRecordingAnimation()
-                } else {
-                    self.frontCameraView.stopRecordingAnimation()
                 }
             }.store(in: &self.cancellables)
     }

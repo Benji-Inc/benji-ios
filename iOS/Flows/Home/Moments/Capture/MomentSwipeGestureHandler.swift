@@ -57,12 +57,13 @@ class MomentSwipeGestureHandler {
                 self.viewController.pausePlayback()
                 // Only start interaction if the pan drags far enough
                 self.interactionInProgress = true
+                self.viewController.state = .uploading
             }
 
         case .ended, .cancelled, .failed:
             guard let animator = self.animator else { return }
             
-            self.viewController.bottomOffset = nil
+            self.viewController.backOffset = nil
             self.interactionInProgress = false
             self.panStartPoint = nil
 
@@ -70,6 +71,7 @@ class MomentSwipeGestureHandler {
                 animator.isReversed = false
             } else {
                 self.viewController.resumePlayback()
+                self.viewController.state = .playback
                 animator.isReversed = true
             }
             
@@ -97,18 +99,24 @@ class MomentSwipeGestureHandler {
             }
         }
         
-        self.viewController.bottomOffset = nil
+        self.viewController.backOffset = nil
                 
         self.animator = UIViewPropertyAnimator(duration: 0, curve: .linear, animations: {
             UIView.animateKeyframes(withDuration: 0, delay: 0) {
                 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
-                    self.viewController.bottomOffset = 0
+                    self.viewController.backOffset = 0
                     self.viewController.view.layoutNow()
                 }
                 
-                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.1) {
-                    self.viewController.label.alpha = 0
+                UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.05) {
+                    self.viewController.confirmationLabel.transform = .identity
+                    self.viewController.confirmationLabel.alpha = 1
+                }
+                
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.01) {
+                    self.viewController.confirmationLabel.alpha = 0 
+                    self.viewController.label.alpha = 0 
                     self.viewController.textView.alpha = 0
                     self.viewController.frontCameraView.alpha = 0
                 }
@@ -127,12 +135,17 @@ class MomentSwipeGestureHandler {
     }
 
     private func progress(currentPoint: CGPoint) -> CGFloat {
-        guard let startY = self.panStartPoint?.y else { return 0.0 }
-        let progress = (startY - currentPoint.y) / self.distance
+        let diff = self.getDistanceOfPan(from: currentPoint)
+        let progress = (diff / self.distance)
         return clamp(progress, 0.0, 1.0)
     }
     
+    private func getDistanceOfPan(from point: CGPoint) -> CGFloat {
+        guard let startY = self.panStartPoint?.y else { return 0.0 }
+        return (startY - point.y)
+    }
+    
     private func shouldHandlePan() -> Bool {
-        return self.viewController.state == .playback
+        return self.viewController.state == .uploading || self.viewController.state == .playback
     }
 }

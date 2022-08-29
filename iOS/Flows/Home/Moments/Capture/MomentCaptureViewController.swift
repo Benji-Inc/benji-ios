@@ -19,6 +19,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         return "SCREEN_MOMENT"
     }
     
+    let confirmationLabel = ThemeLabel(font: .medium, textColor: .white)
     let label = ThemeLabel(font: .medium, textColor: .white)
     let textView = CaptionTextView()
     let confirmationView = MomentConfirmationView() 
@@ -35,7 +36,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
     let cornerRadius: CGFloat = 30
     var willShowKeyboard: Bool = false
     
-    var bottomOffset: CGFloat?
+    var backOffset: CGFloat?
     
     override func initializeViews() {
         super.initializeViews()
@@ -49,6 +50,8 @@ class MomentCaptureViewController: PiPRecordingViewController {
             sheet.preferredCornerRadius = self.cornerRadius
         }
         
+        self.panRecognizer.delegate = self
+        
         self.view.set(backgroundColor: .B0)
         
         self.presentationController?.delegate = self
@@ -60,6 +63,12 @@ class MomentCaptureViewController: PiPRecordingViewController {
         
         self.view.addSubview(self.label)
         self.label.showShadow(withOffset: 0, opacity: 1.0)
+        
+        self.view.addSubview(self.confirmationLabel)
+        self.confirmationLabel.textAlignment = .center
+        self.confirmationLabel.alpha = 0
+        self.confirmationLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        self.confirmationLabel.setText("Ready!")
         
         self.view.addSubview(self.textView)
         
@@ -73,10 +82,14 @@ class MomentCaptureViewController: PiPRecordingViewController {
         
         self.confirmationView.expandToSuperviewSize()
         
-        if let offset = self.bottomOffset {
+        if let offset = self.backOffset {
             self.backCameraView.bottom = offset
             self.frontCameraView.match(.top, to: .top, of: self.backCameraView, offset: .custom(self.frontCameraView.left))
         }
+        
+        self.confirmationLabel.setSize(withWidth: self.view.width)
+        self.confirmationLabel.centerOnX()
+        self.confirmationLabel.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
         self.label.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
@@ -154,11 +167,11 @@ class MomentCaptureViewController: PiPRecordingViewController {
         case .recording:
             self.animate(text: "")
         case .playback:
-            self.animate(text: "Swipe Up")
+            self.animateSwipeUp()
         case .error:
             self.animate(text: "Recording Failed")
         case .uploading:
-            break 
+            self.animateTask?.cancel()
         }
     }
     
@@ -168,6 +181,37 @@ class MomentCaptureViewController: PiPRecordingViewController {
     }
     
     private var animateTask: Task<Void, Never>?
+    
+    private func animateSwipeUp() {
+        self.animateTask?.cancel()
+        
+        self.label.setText("Swipe Up")
+        self.label.alpha = 0
+        self.label.transform = CGAffineTransform(translationX: 0, y: 100)
+        
+        self.animateTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
+            await UIView.awaitSpringAnimation(with: .custom(1.5), options: .curveEaseIn, animations: {
+                self.label.alpha = 1.0
+                self.label.transform = .identity
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            await Task.sleep(seconds: 5.0)
+            
+            guard !Task.isCancelled else { return }
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 0
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            self.animateSwipeUp()
+        }
+    }
     
     func animate(text: Localized) {
         self.animateTask?.cancel()
@@ -198,22 +242,16 @@ class MomentCaptureViewController: PiPRecordingViewController {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        guard self.state == .recording else { return }
         
-        let touch = touches.first?.gestureRecognizers?.first as? SwipeGestureRecognizer
-        
-        if touch.isNil {
+        if self.frontCameraView.isAnimating {
             self.stopRecording()
         }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
-        guard self.state == .recording else { return }
-        
-        let touch = touches.first?.gestureRecognizers?.first as? SwipeGestureRecognizer
-        
-        if touch.isNil {
+
+        if self.frontCameraView.isAnimating {
             self.stopRecording()
         }
     }
@@ -224,5 +262,16 @@ extension MomentCaptureViewController: UIAdaptivePresentationControllerDelegate 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         self.stopRecording()
         return true
+    }
+}
+
+extension MomentCaptureViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is SwipeGestureRecognizer {
+            return self.state == .playback
+        } else {
+            return true
+        }
     }
 }
