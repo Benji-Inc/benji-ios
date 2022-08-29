@@ -42,13 +42,15 @@ import StreamChat
              self.presentProfile(for: person)
          }
          
-         self.momentVC.reactionsView.didSelect { [unowned self] in
+         self.momentVC.reactionsView.reactionsView.didSelect { [unowned self] in
              guard let controller = self.momentVC.reactionsView.controller else { return }
              if let expressions = controller.conversation?.expressions, expressions.count > 0 {
                  self.presentReactions()
-             } else {
-                 self.presentAddExpression()
              }
+         }
+         
+         self.momentVC.reactionsView.button.didSelect { [unowned self] in
+             self.presentAddExpression()
          }
          
          self.momentVC.blurView.button.didSelect { [unowned self] in

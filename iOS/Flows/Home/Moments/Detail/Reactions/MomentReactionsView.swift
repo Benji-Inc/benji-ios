@@ -11,7 +11,7 @@ import Combine
 
 class MomentReactionsView: BaseView {
     
-    private let button = ThemeButton()
+    let button = ThemeButton()
     let reactionsView = ReactionsView()
     private let badgeView = BadgeCounterView()
     

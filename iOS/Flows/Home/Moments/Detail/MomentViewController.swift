@@ -184,7 +184,7 @@ class MomentViewController: ViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        guard self.state == .playback else { return }
+        guard self.state == .playback, self.shouldHandleTouch(for: touches, event: event) else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.expressionView.alpha = 0.5
@@ -215,7 +215,7 @@ class MomentViewController: ViewController {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         guard self.state == .playback else { return }
-        
+    
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.expressionView.alpha = 1.0
             self.momentView.playerLayer.opacity = 1.0
@@ -225,6 +225,12 @@ class MomentViewController: ViewController {
         
         self.expressionView.playerLayer.player?.play()
         self.momentView.playerLayer.player?.play()
+    }
+    
+    func shouldHandleTouch(for touches: Set<UITouch>, event: UIEvent?) -> Bool {
+        guard let firstTouch = touches.first else { return false }
+        let location = firstTouch.location(in: self.view)
+        return location.y <= self.momentView.bottom
     }
     
     private func createMenu(for person: PersonType) -> UIMenu? {

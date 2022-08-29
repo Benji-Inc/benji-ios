@@ -12,8 +12,7 @@ import PhotosUI
 import Transitions
 
 /// A view controller for displaying a single conversation.
-class CommentsViewController: InputHandlerViewContoller,
-                                  ConversationListCollectionViewLayoutDelegate {
+class CommentsViewController: InputHandlerViewContoller, ConversationListCollectionViewLayoutDelegate {
     
     override var analyticsIdentifier: String? {
         return "SCREEN_COMMENTS"
@@ -301,13 +300,9 @@ class CommentsViewController: InputHandlerViewContoller,
             ConversationsManager.shared.activeController = controller
 
             self.messageInputTask = Task { [weak self] in
-                let people = await JibberChatClient.shared.getPeople(for: controller.conversation!)
-
                 guard !Task.isCancelled else { return }
-
                 self?.messageInputController.resetExpression()
-                self?.messageInputController.swipeInputView.textView.setPlaceholder(for: people,
-                                                                                    isReply: false)
+                self?.messageInputController.swipeInputView.textView.setPlaceholderForComments()
                 self?.messageInputController.updateSwipeHint(shouldPlay: true)
             }
 

@@ -2781,9 +2781,9 @@
 				D6A0095E28B159690018FA98 /* MomentButton.swift */,
 				D63F963D289AE3A5004F6C0D /* MomentCoordinator.swift */,
 				D6AF4ABB28A6EA8200225F37 /* MomentExpressiontVideoView.swift */,
-				D6D75C0528BAE061009578E7 /* Reactions */,
 				D6AF4AB928A6CFE600225F37 /* MomentVideoView.swift */,
 				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
+				D6D75C0528BAE061009578E7 /* Reactions */,
 				D6D75C0328BA7D6E009578E7 /* ViewedLabel.swift */,
 			);
 			path = Detail;
