@@ -20,6 +20,22 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
     override func start() {
         super.start()
         
+        Task {
+            guard let moment = try? await Moment.getObject(with: "92YKVKK06N").retrieveDataIfNeeded() else { return }
+            let note = UNMutableNotificationContent()
+            note.setData(value: "92YKVKK06N", for: .momentId)
+            note.setData(value: DeepLinkTarget.moment.rawValue, for: .target)
+            note.title = "Moment"
+            note.body = "New moment added"
+            if let expression = try? await moment.expression?.retrieveDataIfNeeded(),
+               let url = try? await expression.file?.retrieveCachedPathURL(), 
+                let attachment = await UNNotificationAttachment.getAttachment(url: url) {
+                note.attachments = [attachment]
+            }
+            await UserNotificationManager.shared.scheduleNotification(with: note)
+        }
+        
+        
         if let deepLink = self.deepLink {
             self.handle(deepLink: deepLink)
         }
@@ -48,6 +64,11 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                 guard let personId = self.deepLink?.personId,
                       let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
                 self.presentProfile(for: person)
+            }
+        case .moment:
+            Task {
+                guard let moment = try? await Moment.getObject(with: self.deepLink?.momentId) else { return }
+                self.presentMoment(with: moment)
             }
         default:
             break
@@ -185,3 +206,4 @@ extension HomeCoordinator: MessageContentDelegate {
         }
     }
 }
+

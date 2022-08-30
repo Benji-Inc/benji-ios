@@ -10,6 +10,7 @@ import Foundation
 import Localization
 import Speech
 import Combine
+import UIKit
 
 class CaptionTextView: TextView {
     

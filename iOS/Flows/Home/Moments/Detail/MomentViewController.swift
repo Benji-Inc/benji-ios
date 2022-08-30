@@ -13,7 +13,7 @@ class MomentViewController: ViewController {
     private let moment: Moment
     
     private let controlsContainer = BaseView()
-    private let captionTextView = CaptionTextView()
+    //private let captionTextView = CaptionTextView()
     
     private let nameLabel = ThemeLabel(font: .smallBold)
     private let dateLabel = ThemeLabel(font: .xtraSmall)
@@ -23,9 +23,10 @@ class MomentViewController: ViewController {
     let commentsLabel = CommentsLabel()
     let reactionsView = MomentReactionsView()
     let menuButton = ThemeButton()
-    let expressionView = MomentExpressiontVideoView()
-    let momentView = MomentVideoView()
-    let blurView = MomentBlurView()
+//    let expressionView = MomentExpressiontVideoView()
+//    let momentView = MomentVideoView()
+//    let blurView = MomentBlurView()
+    let contentView = MomentContentView()
     
     var didSelectViewProfile: ((PersonType) -> Void)? = nil
     
@@ -62,9 +63,9 @@ class MomentViewController: ViewController {
         
         self.view.set(backgroundColor: .B0)
         
-        self.view.addSubview(self.momentView)
-        self.momentView.layer.cornerRadius = MomentViewController.cornerRadius
-        self.momentView.layer.masksToBounds = true
+        self.view.addSubview(self.contentView)
+        self.contentView.layer.cornerRadius = MomentViewController.cornerRadius
+        self.contentView.layer.masksToBounds = true
         
         self.view.addSubview(self.detailsContainer)
         self.detailsContainer.addSubview(self.nameLabel)
@@ -76,9 +77,9 @@ class MomentViewController: ViewController {
         self.detailsContainer.alpha = 0
         
         self.view.addSubview(self.controlsContainer)
-        self.controlsContainer.addSubview(self.captionTextView)
-        self.captionTextView.isEditable = false
-        self.captionTextView.isSelectable = false
+        //self.controlsContainer.addSubview(self.captionTextView)
+//        self.captionTextView.isEditable = false
+//        self.captionTextView.isSelectable = false
         
         self.controlsContainer.addSubview(self.commentsLabel)
         self.commentsLabel.configure(with: self.moment)
@@ -86,8 +87,8 @@ class MomentViewController: ViewController {
         self.controlsContainer.addSubview(self.reactionsView)
         self.reactionsView.configure(with: self.moment)
         
-        self.view.addSubview(self.blurView)
-        self.view.addSubview(self.expressionView)
+//        self.view.addSubview(self.blurView)
+//        self.view.addSubview(self.expressionView)
         
         self.controlsContainer.addSubview(self.menuButton)
         self.menuButton.set(style: .image(symbol: .ellipsis, palletteColors: [.whiteWithAlpha], pointSize: 22, backgroundColor: .clear))
@@ -105,14 +106,15 @@ class MomentViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.momentView.expandToSuperviewWidth()
-        self.momentView.height = self.view.height - self.view.safeAreaInsets.bottom - self.view.height * 0.15
-        self.momentView.pin(.top)
+        self.contentView.expandToSuperviewWidth()
+        self.contentView.height = self.view.height - self.view.safeAreaInsets.bottom - self.view.height * 0.15
+        self.contentView.pin(.top)
+        
         self.controlsContainer.expandToSuperviewSize()
         
-        self.expressionView.squaredSize = self.view.width * 0.25
-        self.expressionView.pinToSafeAreaTop()
-        self.expressionView.pinToSafeAreaLeft()
+//        self.expressionView.squaredSize = self.view.width * 0.25
+//        self.expressionView.pinToSafeAreaTop()
+//        self.expressionView.pinToSafeAreaLeft()
         
         self.menuButton.squaredSize = 44
         self.menuButton.pin(.top)
@@ -120,22 +122,22 @@ class MomentViewController: ViewController {
         
         let maxLabelWidth = Theme.getPaddedWidth(with: self.view.width) - self.reactionsView.width - Theme.ContentOffset.long.value
         self.commentsLabel.setSize(withWidth: maxLabelWidth)
-        self.commentsLabel.match(.top, to: .bottom, of: self.momentView, offset: .xtraLong)
+        self.commentsLabel.match(.top, to: .bottom, of: self.contentView, offset: .xtraLong)
         self.commentsLabel.pinToSafeAreaLeft()
         
         self.reactionsView.squaredSize = 35
         self.reactionsView.pinToSafeAreaRight()
         self.reactionsView.centerY = self.commentsLabel.centerY
         
-        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
-        self.captionTextView.setSize(withMaxWidth: maxWidth)
-        self.captionTextView.pinToSafeAreaLeft()
-        self.captionTextView.bottom = self.momentView.height - self.captionTextView.left
-        self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
+//        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
+//        self.captionTextView.setSize(withMaxWidth: maxWidth)
+//        self.captionTextView.pinToSafeAreaLeft()
+//        self.captionTextView.bottom = self.momentView.height - self.captionTextView.left
+//        self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
         
         self.detailsContainer.expandToSuperviewWidth()
         self.detailsContainer.height = 30
-        self.detailsContainer.match(.bottom, to: .bottom, of: self.momentView)
+        self.detailsContainer.match(.bottom, to: .bottom, of: self.contentView)
         
         self.nameLabel.setSize(withWidth: self.view.width)
         self.nameLabel.pinToSafeAreaLeft()
@@ -147,8 +149,6 @@ class MomentViewController: ViewController {
         
         self.viewedLabel.pinToSafeAreaRight()
         self.viewedLabel.centerY = self.nameLabel.centerY
-        
-        self.blurView.expandToSuperviewSize()
     }
     
     private func handle(state: State) {
@@ -156,22 +156,22 @@ class MomentViewController: ViewController {
         case .initial:
             break
         case .loading:
-            
-            self.blurView.configure(for: self.moment)
-            self.expressionView.expression = self.moment.expression
-            
-            if MomentsStore.shared.hasRecordedToday || self.moment.isFromCurrentUser {
-                self.blurView.animateBlur(shouldShow: false)
-                self.momentView.loadFullMoment(for: self.moment)
-                self.state = .playback
-            } else {
-                self.blurView.animateBlur(shouldShow: true)
-                self.momentView.loadPreview(for: self.moment)
-            }
+            self.contentView.configure(with: self.moment)
+//            self.blurView.configure(for: self.moment)
+//            self.expressionView.expression = self.moment.expression
+//
+//            if MomentsStore.shared.hasRecordedToday || self.moment.isFromCurrentUser {
+//                self.blurView.animateBlur(shouldShow: false)
+//                self.momentView.loadFullMoment(for: self.moment)
+//                self.state = .playback
+//            } else {
+//                self.blurView.animateBlur(shouldShow: true)
+//                self.momentView.loadPreview(for: self.moment)
+//            }
         case .playback:
             Task {
                 guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
-                self.captionTextView.animateCaption(text: moment.caption)
+                //self.captionTextView.animateCaption(text: moment.caption)
                 self.viewedLabel.configure(with: moment)
                 if let person = try? await moment.author?.retrieveDataIfNeeded() {
                     self.nameLabel.setText(person.fullName.capitalized)
@@ -187,14 +187,12 @@ class MomentViewController: ViewController {
         guard self.state == .playback, self.shouldHandleTouch(for: touches, event: event) else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.expressionView.alpha = 0.5
-            self.momentView.playerLayer.opacity = 0.5
+            self.contentView.alpha = 0.5
             self.controlsContainer.alpha = 0.0
             self.detailsContainer.alpha = 1.0
         }
 
-        self.expressionView.playerLayer.player?.pause()
-        self.momentView.playerLayer.player?.pause()
+        self.contentView.pause()
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -202,14 +200,12 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.expressionView.alpha = 1.0
-            self.momentView.playerLayer.opacity = 1.0
+            self.contentView.alpha = 1.0
             self.controlsContainer.alpha = 1.0
             self.detailsContainer.alpha = 0.0
         }
         
-        self.expressionView.playerLayer.player?.play()
-        self.momentView.playerLayer.player?.play()
+        self.contentView.play()
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -217,20 +213,18 @@ class MomentViewController: ViewController {
         guard self.state == .playback else { return }
     
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.expressionView.alpha = 1.0
-            self.momentView.playerLayer.opacity = 1.0
+            self.contentView.alpha = 1.0
             self.controlsContainer.alpha = 1.0
             self.detailsContainer.alpha = 0.0
         }
         
-        self.expressionView.playerLayer.player?.play()
-        self.momentView.playerLayer.player?.play()
+        self.contentView.play()
     }
     
     func shouldHandleTouch(for touches: Set<UITouch>, event: UIEvent?) -> Bool {
         guard let firstTouch = touches.first else { return false }
         let location = firstTouch.location(in: self.view)
-        return location.y <= self.momentView.bottom
+        return location.y <= self.contentView.bottom
     }
     
     private func createMenu(for person: PersonType) -> UIMenu? {

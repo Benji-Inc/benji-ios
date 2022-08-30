@@ -14,6 +14,7 @@ enum UserNotificationCategory: String, CaseIterable {
     case connectionRequest = "connectionRequest"
     case connnectionConfirmed = "connectionConfirmed"
     case newMessage = "MESSAGE_NEW"
+    case moment
     
     var category: UNNotificationCategory {
         switch self {
@@ -35,6 +36,12 @@ enum UserNotificationCategory: String, CaseIterable {
             }
             return UNNotificationCategory(identifier: self.rawValue,
                                           actions: actions,
+                                          intentIdentifiers: [],
+                                          hiddenPreviewsBodyPlaceholder: "",
+                                          options: .customDismissAction)
+        case .moment:
+            return UNNotificationCategory(identifier: self.rawValue,
+                                          actions: [],
                                           intentIdentifiers: [],
                                           hiddenPreviewsBodyPlaceholder: "",
                                           options: .customDismissAction)

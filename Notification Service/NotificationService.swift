@@ -223,7 +223,7 @@ class NotificationService: UNNotificationServiceExtension {
         content.setData(value: DeepLinkTarget.conversation.rawValue, for: .target)
          
         if let payload = self.message?.photoAttachments.first,
-           let attachment = await self.getAttachment(url: payload.imageURL) {
+           let attachment = await UNNotificationAttachment.getAttachment(url: payload.imageURL) {
             content.attachments = [attachment]
         }
         
@@ -253,39 +253,6 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     // MARK: - Helper Functions
-    
-    private func getAttachment(url: URL, identifier: String = "image") async -> UNNotificationAttachment? {
-        return await withCheckedContinuation { continuation in
-            let task = URLSession.shared.downloadTask(with: url) { (downloadedUrl, _, _) in
-
-                guard let downloadedUrl = downloadedUrl else {
-                    continuation.resume(returning: nil)
-                    return
-                }
-              
-                guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
-                    continuation.resume(returning: nil)
-                    return
-                }
-              
-                let localURL = URL(fileURLWithPath: path).appendingPathComponent(url.lastPathComponent)
-              
-                do {
-                    try FileManager.default.moveItem(at: downloadedUrl, to: localURL)
-                } catch {
-                    continuation.resume(returning: nil)
-                    return
-                }
-                
-                if let attachment = try? UNNotificationAttachment(identifier: identifier, url: localURL, options: nil) {
-                    continuation.resume(returning: attachment)
-                } else {
-                    continuation.resume(returning: nil)
-                }
-            }
-            task.resume()
-        }
-     }
 
     /// Gets the app badge number stored in user defaults.
     private func getUserDefaultsBadgeNumber() -> Int {

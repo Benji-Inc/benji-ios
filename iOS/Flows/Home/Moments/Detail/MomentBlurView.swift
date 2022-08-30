@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class MomentBlurView: BaseView {
     
@@ -70,11 +71,6 @@ class MomentBlurView: BaseView {
         
         self.button.setSize(with: self.width)
         self.button.centerOnX()
-        
-        if self.blurredEffectView.effect.exists {
-            self.button.pinToSafeAreaBottom()
-        } else {
-            self.button.top = self.height
-        }
+        self.button.match(.top, to: .bottom, of: self.label, offset: .xtraLong)
     }
 }

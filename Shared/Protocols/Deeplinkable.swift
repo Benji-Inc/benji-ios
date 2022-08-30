@@ -44,6 +44,15 @@ extension DeepLinkable {
         }
     }
     
+    var momentId: String? {
+        get {
+            return self.customMetadata.value(forKey: "momentId") as? String
+        }
+        set {
+            self.customMetadata.setValue(newValue, forKey: "momentId")
+        }
+    }
+    
     var personId: String? {
         get {
             return self.customMetadata.value(forKey: "personId") as? String

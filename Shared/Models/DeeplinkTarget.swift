@@ -18,6 +18,7 @@ enum DeepLinkTarget: String, CaseIterable {
     case wallet
     case profile
     case waitlist
+    case moment
 
     func diffIdentifier() -> NSObjectProtocol {
         return self.rawValue as NSObjectProtocol

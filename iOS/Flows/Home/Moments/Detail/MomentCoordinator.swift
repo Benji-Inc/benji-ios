@@ -53,7 +53,7 @@ import StreamChat
              self.presentAddExpression()
          }
          
-         self.momentVC.blurView.button.didSelect { [unowned self] in
+         self.momentVC.contentView.didSelectCapture = { [unowned self] in
              self.presentMomentCapture()
          }
          
@@ -122,8 +122,7 @@ import StreamChat
 
          coordinator.toPresentable().dismissHandlers.append { [unowned self] in
              self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = true
-             self.momentVC.expressionView.shouldPlay = true
-             self.momentVC.momentView.shouldPlay = true
+             self.momentVC.contentView.play()
          }
          
          self.addChildAndStart(coordinator) { [unowned self] result in
@@ -133,8 +132,7 @@ import StreamChat
          }
          
          self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = false
-         self.momentVC.expressionView.shouldPlay = false
-         self.momentVC.momentView.shouldPlay = false
+         self.momentVC.contentView.pause()
          
          self.router.present(coordinator, source: self.momentVC, cancelHandler: cancelHandler)
      }

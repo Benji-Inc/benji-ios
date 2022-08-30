@@ -40,7 +40,9 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
         case .connnectionConfirmed:
             break
         case .newMessage:
-            break 
+            break
+        case .moment:
+            self.view.set(backgroundColor: .red)
         }
 
         self.view.layoutNow()
