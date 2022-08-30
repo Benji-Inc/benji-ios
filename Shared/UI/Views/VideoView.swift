@@ -95,7 +95,6 @@ class VideoView: BaseView {
         }
 
         self.loadTracksTask = Task { [weak self] in
-            
             var videoItems: [AVPlayerItem] = []
             
             await urls.asyncForEach { videoURL in
