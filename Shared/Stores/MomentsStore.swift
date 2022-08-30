@@ -90,6 +90,7 @@ class MomentsStore {
         }
     }
     
+    #if IOS
     @discardableResult
     func createMoment(from recording: PiPRecording, caption: String?) async throws -> Moment {
         
@@ -128,6 +129,7 @@ class MomentsStore {
 
         return savedMoment
     }
+    #endif 
     
     //MARK: PRIVATE
     

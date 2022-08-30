@@ -71,6 +71,6 @@ class MomentBlurView: BaseView {
         
         self.button.setSize(with: self.width)
         self.button.centerOnX()
-        self.button.match(.top, to: .bottom, of: self.label, offset: .xtraLong)
+        self.button.pinToSafeAreaBottom()
     }
 }

@@ -57,7 +57,7 @@ class MomentContentView: BaseView {
         self.blurView.configure(for: moment)
         self.expressionView.expression = moment.expression
         
-        //            if MomentsStore.shared.hasRecordedToday || self.moment.isFromCurrentUser {
+        //            if moment.isAvailable {
         //                self.blurView.animateBlur(shouldShow: false)
         //                self.momentView.loadFullMoment(for: self.moment)
         //                self.state = .playback

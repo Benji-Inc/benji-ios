@@ -936,6 +936,8 @@
 		D6D75C1B28BE766D009578E7 /* CaptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6125B8528AD771500199414 /* CaptionTextView.swift */; };
 		D6D75C1C28BE7966009578E7 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9641289AE403004F6C0D /* Moment.swift */; };
 		D6D75C1D28BE7967009578E7 /* Moment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F9641289AE403004F6C0D /* Moment.swift */; };
+		D6D75C1E28BE8169009578E7 /* MomentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972CA28A422A400920998 /* MomentsStore.swift */; };
+		D6D75C1F28BE816A009578E7 /* MomentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972CA28A422A400920998 /* MomentsStore.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -3596,6 +3598,7 @@
 				D61128432804DBEE00574B96 /* UIImage+MediaItem.swift in Sources */,
 				D611284D2804DC3200574B96 /* OnboardingCoordinator.swift in Sources */,
 				D61128762804DC7200574B96 /* User.swift in Sources */,
+				D6D75C1F28BE816A009578E7 /* MomentsStore.swift in Sources */,
 				D61128872804DCCA00574B96 /* Objectable.swift in Sources */,
 				D61128AB2804E73600574B96 /* DisclosureModalViewController.swift in Sources */,
 				D61128232804DBCD00574B96 /* Equatable+Extensions.swift in Sources */,
@@ -4250,6 +4253,7 @@
 				D63DB23425E9992600F6B323 /* UIEdgeInsets+Extensions.swift in Sources */,
 				807A7BC726C5B5A20023A71E /* Task+Extensions.swift in Sources */,
 				D6D75C1228BE734B009578E7 /* MomentContentView.swift in Sources */,
+				D6D75C1E28BE8169009578E7 /* MomentsStore.swift in Sources */,
 				D6BF814F2721EEBF006D7760 /* Toast.swift in Sources */,
 				D63DB21225E998D700F6B323 /* Config.swift in Sources */,
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,

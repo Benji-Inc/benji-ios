@@ -157,17 +157,7 @@ class MomentViewController: ViewController {
             break
         case .loading:
             self.contentView.configure(with: self.moment)
-//            self.blurView.configure(for: self.moment)
-//            self.expressionView.expression = self.moment.expression
-//
-//            if MomentsStore.shared.hasRecordedToday || self.moment.isFromCurrentUser {
-//                self.blurView.animateBlur(shouldShow: false)
-//                self.momentView.loadFullMoment(for: self.moment)
-//                self.state = .playback
-//            } else {
-//                self.blurView.animateBlur(shouldShow: true)
-//                self.momentView.loadPreview(for: self.moment)
-//            }
+            self.detailsContainer.isVisible = self.moment.isAvailable
         case .playback:
             Task {
                 guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
