@@ -108,8 +108,6 @@ class MomentCaptureViewController: PiPRecordingViewController {
     private func setupHandlers() {
         
         self.panGestureHandler.didFinish = { [unowned self] in
-            logDebug("Did finish")
-            
             Task {
                 guard let recording = self.recording else { return }
                 await self.confirmationView.uploadMoment(from: recording, caption: self.textView.text)

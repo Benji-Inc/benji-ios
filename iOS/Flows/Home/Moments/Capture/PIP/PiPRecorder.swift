@@ -35,13 +35,13 @@ class PiPRecorder {
     private var backVideoSettings: [String: Any]?
     private var audioSettings: [String: Any]?
     
-    let pixelBufferAttributes: [String: Any] = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
-                                                           kCVPixelBufferWidthKey: 480,
-                                                          kCVPixelBufferHeightKey: 480,
-                                              kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
+    let pixelBufferAttributes: [String: Any] = [kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA,
+                                                          kCVPixelBufferWidthKey: 480,
+                                                         kCVPixelBufferHeightKey: 480,
+                                             kCVPixelBufferMetalCompatibilityKey: true] as [String: Any]
     
     private var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor?
-        
+
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
     @Published private(set) var isReadyToRecord: Bool = false
