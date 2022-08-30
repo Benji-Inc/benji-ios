@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 import Vision
 import Speech
+import VideoToolbox
 
 class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
@@ -135,9 +136,15 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     // MARK: - PUBLIC
     
     func startRecording() {
-        let settings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mp4)
-        let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4)
-        self.recorder.initialize(backVideoSettings: settings, audioSettings: audioSettings)
+        var backVideoSettings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mov)
+        // Adjust the bitrate for change video size (less bitrate, less size and quality)
+        // This bitrate will need to be adjusted for videos that are higher res than 1080.
+        var compressionSettings = backVideoSettings?[AVVideoCompressionPropertiesKey] as! [String : Any]
+        compressionSettings[AVVideoAverageBitRateKey] = NSNumber(integerLiteral: 3_500_000)
+        backVideoSettings?[AVVideoCompressionPropertiesKey] = compressionSettings
+
+        let audioSettings = self.micDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mov)
+        self.recorder.initialize(backVideoSettings: backVideoSettings, audioSettings: audioSettings)
         self.state = .recording
         self.selectionImpact.impactOccurred(intensity: 1.0)
     }
