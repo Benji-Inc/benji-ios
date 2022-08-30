@@ -6,6 +6,7 @@
 //  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
+import UIKit
 import AVFoundation
 
 class VideoView: BaseView {
@@ -39,7 +40,8 @@ class VideoView: BaseView {
     
     override func initializeSubviews() {
         super.initializeSubviews()
-        
+
+        // Keep the isPlaying status up to date by monitoring rateDidChange notifications
         NotificationCenter.default.publisher(for: AVPlayer.rateDidChangeNotification)
             .filter({ [unowned self] notification in
                 if let player = notification.object as? AVPlayer,
@@ -52,7 +54,16 @@ class VideoView: BaseView {
                 guard let player = value.object as? AVQueuePlayer else { return }
                 self.isPlaying = player.timeControlStatus == .playing
             }.store(in: &self.cancellables)
-        
+
+        // Keep track of app foreground events so we can restart the player if necessary.
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self,
+                                       selector: #selector(appMovedToForeground),
+                                       name: UIApplication.willEnterForegroundNotification,
+                                       object: nil)
+
+
+        // Initialize views
         self.layer.addSublayer(self.playerLayer)
     }
 
@@ -65,6 +76,8 @@ class VideoView: BaseView {
     func reset() {
         self.updatePlayer(with: [])
     }
+
+    // MARK: - Video Setting
 
     /// A task for loading a video track from a url.
     private var loadTracksTask: Task<Void, Never>?
@@ -82,7 +95,6 @@ class VideoView: BaseView {
         }
 
         self.loadTracksTask = Task { [weak self] in
-            
             var videoItems: [AVPlayerItem] = []
             
             await urls.asyncForEach { videoURL in
@@ -149,5 +161,15 @@ class VideoView: BaseView {
             let item = AVPlayerItem(asset: asset)
             player.insert(item, after: player.items().last)
         })
+    }
+
+    // MARK: - App Lifecycle Event Handling
+
+    @objc private func appMovedToForeground() {
+        guard let player = self.playerLayer.player else { return }
+
+        if self.shouldPlay, !self.isPlaying {
+            player.playImmediately(atRate: 1.0)
+        }
     }
 }
