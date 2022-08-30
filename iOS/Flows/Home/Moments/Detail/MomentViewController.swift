@@ -13,7 +13,6 @@ class MomentViewController: ViewController {
     private let moment: Moment
     
     private let controlsContainer = BaseView()
-    //private let captionTextView = CaptionTextView()
     
     private let nameLabel = ThemeLabel(font: .smallBold)
     private let dateLabel = ThemeLabel(font: .xtraSmall)
@@ -23,9 +22,6 @@ class MomentViewController: ViewController {
     let commentsLabel = CommentsLabel()
     let reactionsView = MomentReactionsView()
     let menuButton = ThemeButton()
-//    let expressionView = MomentExpressiontVideoView()
-//    let momentView = MomentVideoView()
-//    let blurView = MomentBlurView()
     let contentView = MomentContentView()
     
     var didSelectViewProfile: ((PersonType) -> Void)? = nil
@@ -77,18 +73,12 @@ class MomentViewController: ViewController {
         self.detailsContainer.alpha = 0
         
         self.view.addSubview(self.controlsContainer)
-        //self.controlsContainer.addSubview(self.captionTextView)
-//        self.captionTextView.isEditable = false
-//        self.captionTextView.isSelectable = false
         
         self.controlsContainer.addSubview(self.commentsLabel)
         self.commentsLabel.configure(with: self.moment)
         
         self.controlsContainer.addSubview(self.reactionsView)
         self.reactionsView.configure(with: self.moment)
-        
-//        self.view.addSubview(self.blurView)
-//        self.view.addSubview(self.expressionView)
         
         self.controlsContainer.addSubview(self.menuButton)
         self.menuButton.set(style: .image(symbol: .ellipsis, palletteColors: [.whiteWithAlpha], pointSize: 22, backgroundColor: .clear))
@@ -112,10 +102,6 @@ class MomentViewController: ViewController {
         
         self.controlsContainer.expandToSuperviewSize()
         
-//        self.expressionView.squaredSize = self.view.width * 0.25
-//        self.expressionView.pinToSafeAreaTop()
-//        self.expressionView.pinToSafeAreaLeft()
-        
         self.menuButton.squaredSize = 44
         self.menuButton.pin(.top)
         self.menuButton.pinToSafeAreaRight()
@@ -128,12 +114,6 @@ class MomentViewController: ViewController {
         self.reactionsView.squaredSize = 35
         self.reactionsView.pinToSafeAreaRight()
         self.reactionsView.centerY = self.commentsLabel.centerY
-        
-//        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
-//        self.captionTextView.setSize(withMaxWidth: maxWidth)
-//        self.captionTextView.pinToSafeAreaLeft()
-//        self.captionTextView.bottom = self.momentView.height - self.captionTextView.left
-//        self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
         
         self.detailsContainer.expandToSuperviewWidth()
         self.detailsContainer.height = 30
@@ -159,9 +139,9 @@ class MomentViewController: ViewController {
             self.contentView.configure(with: self.moment)
             self.detailsContainer.isVisible = self.moment.isAvailable
         case .playback:
+            self.contentView.beginPlayback()
             Task {
                 guard let moment = try? await self.moment.retrieveDataIfNeeded() else { return }
-                //self.captionTextView.animateCaption(text: moment.caption)
                 self.viewedLabel.configure(with: moment)
                 if let person = try? await moment.author?.retrieveDataIfNeeded() {
                     self.nameLabel.setText(person.fullName.capitalized)
