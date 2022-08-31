@@ -24,7 +24,7 @@ class ViewedLabel: BaseView {
                                       seperator: "",
                                       seperatorSpacing: 0,
                                       font: FontType.smallBold.font,
-                                      textColor: ThemeColor.whiteWithAlpha.color,
+                                      textColor: ThemeColor.white.color,
                                       animateInitialValue: true,
                                       gradientColor: nil,
                                       gradientStop: nil)
@@ -36,7 +36,7 @@ class ViewedLabel: BaseView {
         self.addSubview(self.imageView)
         
         self.imageView.setPoint(size: 20)
-        self.imageView.tintColor = ThemeColor.whiteWithAlpha.color
+        self.imageView.tintColor = ThemeColor.white.color
     }
     
     func configure(with moment: Moment) {

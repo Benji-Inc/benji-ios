@@ -79,6 +79,7 @@ class MomentContentView: BaseView {
             if moment.isAvailable {
                 self.captionTextView.setText(moment.caption)
                 self.captionTextView.animateCaption(text: moment.caption)
+                self.layoutNow()
             }
         }
 

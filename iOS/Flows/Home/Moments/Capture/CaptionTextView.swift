@@ -60,7 +60,7 @@ class CaptionTextView: TextView {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.innerCornerRadius
         
-        self.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.4)
+        self.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.6)
         
         self.$publishedText.mainSink { [unowned self] text in
             guard !self.placeholderText.isEmpty else { return }

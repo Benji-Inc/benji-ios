@@ -37,7 +37,7 @@ class MessageExpressionCell: CollectionViewManagerCell, ManageableCell {
 class ExpressionContentView: BaseView {
     
     let personView = PersonGradientView()
-    let label = ThemeLabel(font: .xtraSmall)
+    let label = ThemeLabel(font: .small)
     
     private(set) var personId: String?
     
