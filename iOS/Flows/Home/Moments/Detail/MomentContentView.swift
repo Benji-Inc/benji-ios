@@ -139,7 +139,6 @@ class MomentContentView: BaseView {
     }
     
     private func createMenu(for person: PersonType) -> UIMenu? {
-        guard person.isCurrentUser else { return nil }
         
         let profile = UIAction(title: "View Profile",
                                image: ImageSymbol.personCircle.image,

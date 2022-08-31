@@ -14,9 +14,7 @@ class MomentViewController: ViewController {
     
     let footerView = MomentFooterView()
     lazy var contentView = MomentContentView(with: self.moment)
-        
-    static let cornerRadius: CGFloat = 30
-        
+                
     init(with moment: Moment) {
         self.moment = moment
         super.init()
@@ -35,18 +33,22 @@ class MomentViewController: ViewController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.preferredCornerRadius = MomentViewController.cornerRadius
+            sheet.preferredCornerRadius = Theme.screenRadius
         }
         
         self.view.set(backgroundColor: .B0)
         
         self.view.addSubview(self.contentView)
-        self.contentView.layer.cornerRadius = MomentViewController.cornerRadius
+        self.contentView.layer.cornerRadius = Theme.screenRadius
         self.contentView.layer.masksToBounds = true
         
         self.view.addSubview(self.footerView)
                 
-        self.footerView.configure(for: self.moment)
+        // If the user has not been added to the comments convo, add them. This will represent views.
+        let controller = ConversationController.controller(for: self.moment.commentsId)
+        controller.addMembers(userIds: Set([User.current()!.objectId!])) { [unowned self] error in
+            self.footerView.configure(for: self.moment)
+        }
     }
     
     override func viewDidLayoutSubviews() {

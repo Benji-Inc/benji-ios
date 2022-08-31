@@ -25,6 +25,7 @@ class MomentFooterView: BaseView {
         self.moment = moment
         self.commentsLabel.configure(with: moment)
         self.reactionsView.configure(with: moment)
+        self.layoutNow()
     }
     
     override func layoutSubviews() {

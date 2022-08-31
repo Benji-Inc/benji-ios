@@ -79,7 +79,7 @@ class FaceCaptureViewController: ViewController {
         self.view.addSubview(self.cameraViewContainer)
         self.cameraViewContainer.addSubview(self.cameraView)
         self.cameraViewContainer.layer.borderColor = ThemeColor.B1.color.cgColor
-        self.cameraViewContainer.layer.borderWidth = 4
+        self.cameraViewContainer.layer.borderWidth = 2
         self.cameraViewContainer.clipsToBounds = true
 
         self.cameraViewContainer.addSubview(self.videoPreviewView)

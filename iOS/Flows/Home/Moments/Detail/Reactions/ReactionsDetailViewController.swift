@@ -42,7 +42,7 @@ class ReactionsDetailViewController: ExpressionDetailViewController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-            sheet.preferredCornerRadius = MomentViewController.cornerRadius
+            sheet.preferredCornerRadius = Theme.screenRadius
         }
     }
     

@@ -34,10 +34,6 @@ import StreamChat
      override func start() {
          super.start()
          
-         // If the user has not been added to the comments convo, add them. This will represent views. 
-         let controller = ConversationController.controller(for: self.moment.commentsId)
-         controller.addMembers(userIds: Set([User.current()!.objectId!]))
-         
          self.momentVC.contentView.delegate = self
          
          self.momentVC.footerView.reactionsView.reactionsView.didSelect { [unowned self] in

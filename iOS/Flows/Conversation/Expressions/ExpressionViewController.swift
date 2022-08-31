@@ -60,6 +60,7 @@ class ExpressionViewController: ViewController {
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
             sheet.detents = [.large()]
+            sheet.preferredCornerRadius = Theme.screenRadius
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
         }
