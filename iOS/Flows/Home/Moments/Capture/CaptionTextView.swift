@@ -73,6 +73,7 @@ class CaptionTextView: TextView {
     }
     
     override func getSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) -> CGSize {
+        let maxWidth = clamp(maxWidth, min: 0)
         let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
         let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
 
@@ -82,7 +83,7 @@ class CaptionTextView: TextView {
         
         let placeholderSize: CGSize = self.getPlaceholderContentSize(withMaxWidth: maxWidth - horizontalPadding,
                                                                      maxHeight: maxHeight - verticalPadding)
-        let minWidth = placeholderSize.width + horizontalPadding + 4
+        let minWidth = clamp(placeholderSize.width + horizontalPadding + 4, min: 0) 
         let minHeight = placeholderSize.height + verticalPadding
 
         // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
@@ -114,6 +115,7 @@ class CaptionTextView: TextView {
         } else {
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.alpha = 1
+                self.layoutNow()
             }
         }
     }

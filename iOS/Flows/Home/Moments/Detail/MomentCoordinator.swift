@@ -38,9 +38,7 @@ import StreamChat
          let controller = ConversationController.controller(for: self.moment.commentsId)
          controller.addMembers(userIds: Set([User.current()!.objectId!]))
          
-         self.momentVC.contentView.didSelectViewProfile = { [unowned self] person in
-             self.presentProfile(for: person)
-         }
+         self.momentVC.contentView.delegate = self
          
          self.momentVC.footerView.reactionsView.reactionsView.didSelect { [unowned self] in
              guard let controller = self.momentVC.footerView.reactionsView.controller else { return }
@@ -51,10 +49,6 @@ import StreamChat
          
          self.momentVC.footerView.reactionsView.button.didSelect { [unowned self] in
              self.presentAddExpression()
-         }
-         
-         self.momentVC.contentView.didSelectCapture = { [unowned self] in
-             self.presentMomentCapture()
          }
          
          self.momentVC.footerView.commentsLabel.didSelect { [unowned self] in
@@ -137,3 +131,13 @@ import StreamChat
          self.router.present(coordinator, source: self.momentVC, cancelHandler: cancelHandler)
      }
  }
+
+extension MomentCoordinator: MomentContentViewDelegate {
+    func momentContentViewDidSelectCapture(_ view: MomentContentView) {
+        self.presentMomentCapture()
+    }
+    
+    func momentContent(_ view: MomentContentView, didSelectPerson person: PersonType) {
+        self.presentProfile(for: person)
+    }
+}

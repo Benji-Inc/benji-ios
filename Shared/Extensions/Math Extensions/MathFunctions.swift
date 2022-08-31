@@ -27,6 +27,7 @@ func pow(_ lhs: Int, _ rhs: Int) -> Int {
 }
 
 func clamp(_ value: CGFloat, _ min: CGFloat, _ max: CGFloat) -> CGFloat {
+    guard min <= max else { return .zero }
     return (min...max).clamp(value)
 }
 

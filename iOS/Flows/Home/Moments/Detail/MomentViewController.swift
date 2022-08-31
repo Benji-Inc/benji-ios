@@ -13,7 +13,7 @@ class MomentViewController: ViewController {
     private let moment: Moment
     
     let footerView = MomentFooterView()
-    let contentView = MomentContentView()
+    lazy var contentView = MomentContentView(with: self.moment)
         
     static let cornerRadius: CGFloat = 30
         
@@ -46,7 +46,6 @@ class MomentViewController: ViewController {
         
         self.view.addSubview(self.footerView)
                 
-        self.contentView.configure(with: self.moment)
         self.footerView.configure(for: self.moment)
     }
     

@@ -9,18 +9,36 @@
 import Foundation
 import UIKit
 
+protocol MomentContentViewDelegate: AnyObject {
+    func momentContentViewDidSelectCapture(_ view: MomentContentView)
+    func momentContent(_ view: MomentContentView, didSetCaption caption: String?)
+    func momentContent(_ view: MomentContentView, didSelectPerson person: PersonType)
+}
+
+extension MomentContentViewDelegate {
+    func momentContent(_ view: MomentContentView, didSetCaption caption: String?) {}
+}
+
 class MomentContentView: BaseView {
     
-    private let menuButton = ThemeButton()
+    let menuButton = ThemeButton()
     private let detailContentView = MomentDetailContentView()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
     private let blurView = MomentBlurView()
-    private let captionTextView = CaptionTextView()
-    private var moment: Moment?
+    let captionTextView = CaptionTextView()
+    private let moment: Moment
     
-    var didSelectCapture: CompletionOptional = nil
-    var didSelectViewProfile: ((PersonType) -> Void)? = nil
+    weak var delegate: MomentContentViewDelegate?
+    
+    init(with moment: Moment) {
+        self.moment = moment
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -40,10 +58,31 @@ class MomentContentView: BaseView {
         self.captionTextView.isSelectable = false
         
         self.blurView.button.didSelect { [unowned self] in
-            self.didSelectCapture?() 
+            self.delegate?.momentContentViewDidSelectCapture(self)
         }
         
         self.clipsToBounds = true
+        
+        self.blurView.configure(for: moment)
+        self.detailContentView.configure(for: moment)
+        self.expressionView.expression = moment.expression
+        
+        self.captionTextView.publisher(for: \.text).mainSink { [unowned self] text in
+            self.delegate?.momentContent(self, didSetCaption: text)
+        }.store(in: &self.cancellables)
+        
+        Task {
+            guard let moment = try? await moment.retrieveDataIfNeeded() else { return }
+            if let person = try? await moment.author?.retrieveDataIfNeeded() {
+                self.menuButton.menu = self.createMenu(for: person)
+            }
+            if moment.isAvailable {
+                self.captionTextView.setText(moment.caption)
+                self.captionTextView.animateCaption(text: moment.caption)
+            }
+        }
+
+        self.showMomentIfAvailable()
     }
     
     override func layoutSubviews() {
@@ -78,38 +117,15 @@ class MomentContentView: BaseView {
         self.detailContentView.alpha = show ? 1.0 : 0.0 
     }
     
-    func configure(with moment: Moment) {
-        self.moment = moment
-        self.blurView.configure(for: moment)
-        self.detailContentView.configure(for: moment)
-        self.expressionView.expression = moment.expression
-        
-        Task {
-            guard let moment = try? await moment.retrieveDataIfNeeded() else { return }
-            if let person = try? await moment.author?.retrieveDataIfNeeded() {
-                self.menuButton.menu = self.createMenu(for: person)
-            }
-            
-            if moment.isAvailable {
-                self.captionTextView.animateCaption(text: moment.caption)
-            }
-        }
-
-        self.showMomentIfAvailable()
-    }
-    
     func showMomentIfAvailable() {
-        guard let moment = self.moment else {
-            return
-        }
         
-        if moment.isAvailable {
+        if self.moment.isAvailable {
             self.momentView.loadFullMoment(for: moment)
         } else {
             self.momentView.loadPreview(for: moment)
         }
         
-        self.blurView.animateBlur(shouldShow: !moment.isAvailable)
+        self.blurView.animateBlur(shouldShow: !self.moment.isAvailable)
     }
     
     func play() {
@@ -128,7 +144,7 @@ class MomentContentView: BaseView {
         let profile = UIAction(title: "View Profile",
                                image: ImageSymbol.personCircle.image,
                                attributes: []) { [unowned self] action in
-            self.didSelectViewProfile?(person)
+            self.delegate?.momentContent(self, didSelectPerson: person)
         }
 
         return UIMenu.init(title: "Menu",
