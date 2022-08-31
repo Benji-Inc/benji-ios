@@ -15,6 +15,8 @@ import Parse
 class NotificationViewController: UIViewController, UNNotificationContentExtension {
 
     private var cancellables = Set<AnyCancellable>()
+    
+    private var content: UIView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,10 +42,22 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
         case .connnectionConfirmed:
             break
         case .newMessage:
-            break 
+            break
+        case .moment:
+            
+            self.preferredContentSize = UIScreen.main.bounds.size
+            self.view.setNeedsUpdateConstraints()
+            self.view.setNeedsLayout()
+            
+            Task {
+                guard let moment = try? await Moment.getObject(with: notification.momentId) else { return }
+                let contentView = MomentContentView(with: moment)
+                contentView.menuButton.isVisible = false 
+                contentView.delegate = self
+                self.content = contentView
+                self.view.addSubview(contentView)
+            }
         }
-
-        self.view.layoutNow()
     }
 
     func didReceive(_ response: UNNotificationResponse, completionHandler completion: @escaping (UNNotificationContentExtensionResponseOption) -> Void) {
@@ -57,6 +71,24 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        if let first = self.view.subviews.first {
+            first.expandToSuperviewSize()
+        }
+    }
+}
 
+extension NotificationViewController: MomentContentViewDelegate {
+    
+    func momentContentViewDidSelectCapture(_ view: MomentContentView) {
+        
+    }
+    
+    func momentContent(_ view: MomentContentView, didSelectPerson person: PersonType) {
+        
+    }
+    
+    func momentContent(_ view: MomentContentView, didSetCaption caption: String?) {
+        
     }
 }

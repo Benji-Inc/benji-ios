@@ -31,6 +31,7 @@ enum NotificationContentKey: String {
     case conversationId = "conversationId"
     case messageId = "messageId"
     case connectionId = "connectionId"
+    case momentId = "momentId"
 }
 
 extension UNNotificationContent {
@@ -55,6 +56,11 @@ extension UNNotificationContent {
 
     var connectionId: String? {
         guard let value: String = self.value(for: .connectionId) else { return nil }
+        return value
+    }
+    
+    var momentId: String? {
+        guard let value: String = self.value(for: .momentId) else { return nil }
         return value
     }
 
@@ -122,5 +128,42 @@ extension UNMutableNotificationContent {
         streamData[key.rawValue] = value
         self.userInfo["stream"] = streamData
     }
+}
+
+extension UNNotificationAttachment {
+    
+    static func getAttachment(url: URL, identifier: String = "image") async -> UNNotificationAttachment? {
+        return await withCheckedContinuation { continuation in
+            let task = URLSession.shared.downloadTask(with: url) { (downloadedUrl, _, _) in
+
+                guard let downloadedUrl = downloadedUrl else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+              
+                guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+              
+                let localURL = URL(fileURLWithPath: path).appendingPathComponent(url.lastPathComponent)
+              
+                do {
+                    try FileManager.default.moveItem(at: downloadedUrl, to: localURL)
+                } catch {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                
+                if let attachment = try? UNNotificationAttachment(identifier: identifier, url: localURL, options: nil) {
+                    continuation.resume(returning: attachment)
+                } else {
+                    continuation.resume(returning: nil)
+                }
+            }
+            task.resume()
+        }
+     }
+
 }
 

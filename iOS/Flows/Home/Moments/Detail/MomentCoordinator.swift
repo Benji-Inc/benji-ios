@@ -38,26 +38,20 @@ import StreamChat
          let controller = ConversationController.controller(for: self.moment.commentsId)
          controller.addMembers(userIds: Set([User.current()!.objectId!]))
          
-         self.momentVC.didSelectViewProfile = { [unowned self] person in
-             self.presentProfile(for: person)
-         }
+         self.momentVC.contentView.delegate = self
          
-         self.momentVC.reactionsView.reactionsView.didSelect { [unowned self] in
-             guard let controller = self.momentVC.reactionsView.controller else { return }
+         self.momentVC.footerView.reactionsView.reactionsView.didSelect { [unowned self] in
+             guard let controller = self.momentVC.footerView.reactionsView.controller else { return }
              if let expressions = controller.conversation?.expressions, expressions.count > 0 {
                  self.presentReactions()
              }
          }
          
-         self.momentVC.reactionsView.button.didSelect { [unowned self] in
+         self.momentVC.footerView.reactionsView.button.didSelect { [unowned self] in
              self.presentAddExpression()
          }
          
-         self.momentVC.blurView.button.didSelect { [unowned self] in
-             self.presentMomentCapture()
-         }
-         
-         self.momentVC.commentsLabel.didSelect { [unowned self] in
+         self.momentVC.footerView.commentsLabel.didSelect { [unowned self] in
              self.presentComments()
          }
      }
@@ -66,7 +60,7 @@ import StreamChat
          let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
          
          self.present(coordinator) { [unowned self] result in
-             self.momentVC.state = .loading
+             self.momentVC.contentView.showMomentIfAvailable()
          }
      }
      
@@ -121,9 +115,8 @@ import StreamChat
          self.removeChild()
 
          coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-             self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = true
-             self.momentVC.expressionView.shouldPlay = true
-             self.momentVC.momentView.shouldPlay = true
+             self.momentVC.footerView.reactionsView.reactionsView.expressionVideoView.shouldPlay = true
+             self.momentVC.contentView.play()
          }
          
          self.addChildAndStart(coordinator) { [unowned self] result in
@@ -132,10 +125,19 @@ import StreamChat
              }
          }
          
-         self.momentVC.reactionsView.reactionsView.expressionVideoView.shouldPlay = false
-         self.momentVC.expressionView.shouldPlay = false
-         self.momentVC.momentView.shouldPlay = false
+         self.momentVC.footerView.reactionsView.reactionsView.expressionVideoView.shouldPlay = false
+         self.momentVC.contentView.pause()
          
          self.router.present(coordinator, source: self.momentVC, cancelHandler: cancelHandler)
      }
  }
+
+extension MomentCoordinator: MomentContentViewDelegate {
+    func momentContentViewDidSelectCapture(_ view: MomentContentView) {
+        self.presentMomentCapture()
+    }
+    
+    func momentContent(_ view: MomentContentView, didSelectPerson person: PersonType) {
+        self.presentProfile(for: person)
+    }
+}

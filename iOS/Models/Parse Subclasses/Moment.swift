@@ -23,6 +23,10 @@ import Parse
          return String(describing: self)
      }
      
+     var isAvailable: Bool {
+         return MomentsStore.shared.hasRecordedToday || self.isFromCurrentUser
+     }
+     
      var isFromCurrentUser: Bool {
          return self.author?.objectId == User.current()?.objectId
      }

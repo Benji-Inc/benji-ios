@@ -10,6 +10,10 @@ import Foundation
 import UserNotifications
 
 extension UNNotification {
+    
+    var momentId: String? {
+        return self.request.content.momentId
+    }
 
     var messageId: String? {
         return self.request.content.messageId

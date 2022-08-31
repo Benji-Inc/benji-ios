@@ -49,6 +49,11 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                       let person = await PeopleStore.shared.getPerson(withPersonId: personId) else { return }
                 self.presentProfile(for: person)
             }
+        case .moment:
+            Task {
+                guard let moment = try? await Moment.getObject(with: self.deepLink?.momentId) else { return }
+                self.presentMoment(with: moment)
+            }
         default:
             break
         }
@@ -185,3 +190,4 @@ extension HomeCoordinator: MessageContentDelegate {
         }
     }
 }
+
