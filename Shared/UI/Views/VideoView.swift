@@ -56,12 +56,15 @@ class VideoView: BaseView {
             }.store(in: &self.cancellables)
 
         // Keep track of app foreground events so we can restart the player if necessary.
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self,
-                                       selector: #selector(appMovedToForeground),
-                                       name: UIApplication.willEnterForegroundNotification,
-                                       object: nil)
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).mainSink { [weak self] _ in
+            guard let `self` = self else { return }
+            guard let player = self.playerLayer.player else { return }
 
+            if self.shouldPlay, !self.isPlaying {
+                player.playImmediately(atRate: 1.0)
+            }
+            
+        }.store(in: &self.cancellables)
 
         // Initialize views
         self.layer.addSublayer(self.playerLayer)
@@ -161,15 +164,5 @@ class VideoView: BaseView {
             let item = AVPlayerItem(asset: asset)
             player.insert(item, after: player.items().last)
         })
-    }
-
-    // MARK: - App Lifecycle Event Handling
-
-    @objc private func appMovedToForeground() {
-        guard let player = self.playerLayer.player else { return }
-
-        if self.shouldPlay, !self.isPlaying {
-            player.playImmediately(atRate: 1.0)
-        }
     }
 }

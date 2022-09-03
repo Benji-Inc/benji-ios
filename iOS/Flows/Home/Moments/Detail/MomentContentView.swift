@@ -82,6 +82,11 @@ class MomentContentView: BaseView {
                 self.layoutNow()
             }
         }
+        
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).mainSink { [weak self] _ in
+            guard let `self` = self else { return }
+            self.showMomentIfAvailable()
+        }.store(in: &self.cancellables)
 
         self.showMomentIfAvailable()
     }
