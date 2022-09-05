@@ -39,14 +39,7 @@ class LaunchManager {
 
     func launchApp(with deepLink: DeepLinkable?) async -> LaunchStatus {
         // Initialize Parse if necessary
-        if Parse.currentConfiguration.isNil  {
-            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
-                configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appId
-                configuration.isLocalDatastoreEnabled = true
-            }))
-        }
+        Config.shared.initializeParseIfNeeded()
         
         SentrySDK.start { options in
             options.dsn = "https://674f5b98c542435fadeffd8828582b32@o1232170.ingest.sentry.io/6380104"

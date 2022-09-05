@@ -78,19 +78,8 @@ class NotificationService: UNNotificationServiceExtension {
 
     private func initializeParse() async {
         return await withCheckedContinuation { continuation in
-            if Parse.currentConfiguration.isNil  {
-                let config = ParseClientConfiguration { configuration in
-                    configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                    // Allow parse to access the data from the main app bundle.
-                    configuration.containingApplicationBundleIdentifier = Config.shared.environment.bundleId
-                    configuration.server = Config.shared.environment.url
-                    configuration.applicationId = Config.shared.environment.appId
-                    configuration.isLocalDatastoreEnabled = true
-                }
-
-                Parse.initialize(with: config)
-            }
-
+            // Initialize Parse if necessary
+            Config.shared.initializeParseIfNeeded()
             continuation.resume(returning: ())
         }
     }

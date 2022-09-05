@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 enum Environment: String {
 
@@ -15,13 +16,22 @@ enum Environment: String {
 
     var url: String {
         switch self {
+        //case .staging: return "https://parseapi.back4app.com"
         case .staging: return "https://jibber-development-backend.herokuapp.com/parse"
         case .production: return "https://jibber-backend.herokuapp.com/parse"
         }
     }
+    
+//    var clientKey: String {
+//        switch self {
+//        //case .staging: return "pDUO1RZrns7OQqUzz3VJhLTk3h2VhyinDQXvhAbp"
+//        case .production: return ""
+//        }
+//    }
 
     var appId: String {
         switch self {
+        //case .staging: return "zjvzFwmCPlSfCPKLd6C9cdm3HNxwMOA07iAoqffR"
         case .staging: return "jibber-development"
         case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
         }
@@ -106,4 +116,16 @@ class Config: NSObject {
         version = version.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.").inverted)
         return version
     }()
+    
+    func initializeParseIfNeeded() {
+        if Parse.currentConfiguration.isNil  {
+            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
+                configuration.applicationGroupIdentifier = self.environment.groupId
+               // configuration.clientKey = self.environment.clientKey
+                configuration.server = self.environment.url
+                configuration.applicationId = self.environment.appId
+                configuration.isLocalDatastoreEnabled = true
+            }))
+        }
+    }
 }
