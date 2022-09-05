@@ -37,11 +37,16 @@ class CommentsLabel: ThemeLabel {
         
         if let sequence = self.controller?.messageSequence {
             self.updateText(for: sequence.totalUnread)
+        } else {
+            self.updateText(for: 0)
         }
                 
         self.controller?.messageSequenceChangePublisher.mainSink(receiveValue: { [unowned self] _ in
-            guard let sequence = self.controller?.messageSequence else { return }
-            self.updateText(for: sequence.totalUnread)
+            if let sequence = self.controller?.messageSequence {
+                self.updateText(for: sequence.totalUnread)
+            } else {
+                self.updateText(for: 0)
+            }
         }).store(in: &self.subscriptions)
     }
     
@@ -57,5 +62,6 @@ class CommentsLabel: ThemeLabel {
         }
         
         self.setText(text)
+        self.layoutNow()
     }
 }

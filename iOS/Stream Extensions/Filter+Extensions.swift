@@ -42,22 +42,23 @@ extension Filter where Scope: AnyChannelListFilterScope {
     }
 
     /// Filter to match conversations that contain all the members with the passed in user ids. May contain other members.
-    static func containsAtLeastThese(userIds: [UserId]) -> Filter<Scope> {
-        var memberFilters: [Filter<Scope>] = []
+    static func containsAtLeastThese(userIds: [UserId], type: ChannelType = .messaging) -> Filter<Scope> {
+        var filters: [Filter<Scope>] = []
         for userID in userIds {
-            memberFilters.append(.containMembers(userIds: [userID]))
+            filters.append(.containMembers(userIds: [userID]))
         }
-
-        return .and(memberFilters)
+        filters.append(.equal(.type, to: type))
+        return .and(filters)
     }
     
     /// Filter to match conversations that match all the included cids.
-    static func containsAtLeastThese(conversationIds: [ConversationId]) -> Filter<Scope> {
-        var conversationFilters: [Filter<Scope>] = []
+    static func containsAtLeastThese(conversationIds: [ConversationId], type: ChannelType = .messaging) -> Filter<Scope> {
+        var filters: [Filter<Scope>] = []
         for cid in conversationIds {
-            conversationFilters.append(.equal(.cid, to: cid))
+            filters.append(.equal(.cid, to: cid))
         }
-
-        return .and(conversationFilters)
+        
+        filters.append(.equal(.type, to: type))
+        return .and(filters)
     }
 }

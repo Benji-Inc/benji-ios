@@ -109,7 +109,7 @@ class MomentContentView: BaseView {
         
         self.detailContentView.expandToSuperviewWidth()
         self.detailContentView.height = 30
-        self.detailContentView.pin(.bottom)
+        self.detailContentView.pin(.top)
         
         self.menuButton.squaredSize = 44
         self.menuButton.pin(.top)
@@ -117,6 +117,7 @@ class MomentContentView: BaseView {
     }
     
     func shouldShowDetail(_ show: Bool) {
+        self.expressionView.alpha = show ? 0.0 : 1.0
         self.menuButton.alpha = show ? 0.0 : 1.0
         self.captionTextView.alpha = show ? 0.0 : 1.0
         self.momentView.alpha = show ? 0.5 : 1.0
@@ -183,11 +184,11 @@ private class MomentDetailContentView: BaseView {
         
         self.nameLabel.setSize(withWidth: self.width)
         self.nameLabel.pinToSafeAreaLeft()
-        self.nameLabel.pin(.bottom, offset: .xtraLong)
+        self.nameLabel.pin(.top, offset: .xtraLong)
         
         self.dateLabel.setSize(withWidth: self.width)
         self.dateLabel.pinToSafeAreaLeft()
-        self.dateLabel.match(.bottom, to: .top, of: self.nameLabel, offset: .negative(.short))
+        self.dateLabel.match(.top, to: .bottom, of: self.nameLabel, offset: .short)
         
         #if IOS
         self.viewedLabel.pinToSafeAreaRight()

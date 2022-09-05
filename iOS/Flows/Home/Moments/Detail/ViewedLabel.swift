@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import ScrollCounter
+import StreamChat
 
 class ViewedLabel: BaseView {
     
@@ -45,16 +46,16 @@ class ViewedLabel: BaseView {
         }
         
         self.controller = ConversationController.controller(for: moment.commentsId)
-        
+                
         if let count = self.controller?.memberCount {
             self.counter.setValue(Float(count), animated: true)
-            self.counter.isVisible = count > 0
+        } else {
+            self.counter.setValue(0, animated: false)
         }
                 
         self.controller?.messageSequenceChangePublisher.mainSink(receiveValue: { [unowned self] _ in
             if let count = self.controller?.memberCount {
                 self.counter.setValue(Float(count), animated: true)
-                self.counter.isVisible = count > 0
             }
         }).store(in: &self.subscriptions)
     }
