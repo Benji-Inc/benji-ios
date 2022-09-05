@@ -938,6 +938,7 @@
 		D6D75C1E28BE8169009578E7 /* MomentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972CA28A422A400920998 /* MomentsStore.swift */; };
 		D6D75C1F28BE816A009578E7 /* MomentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972CA28A422A400920998 /* MomentsStore.swift */; };
 		D6D75C2328BEAF65009578E7 /* MomentFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2228BEAF65009578E7 /* MomentFooterView.swift */; };
+		D6D75C2428C66E5E009578E7 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -4426,6 +4427,7 @@
 				D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6CDA29327D16F9400823968 /* DeeplinkTarget.swift in Sources */,
 				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
+				D6D75C2428C66E5E009578E7 /* Optional+Extensions.swift in Sources */,
 				D611F7BC2815B0FE006D09D3 /* EmojiCategory.swift in Sources */,
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
 				D6DBC0EC285152E4007312FC /* ImageDisplayable.swift in Sources */,

@@ -23,17 +23,8 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     }
     
     private func initializeParse() {
-        if Parse.currentConfiguration == nil  {
-            let config = ParseClientConfiguration { configuration in
-                configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                configuration.containingApplicationBundleIdentifier = Config.shared.environment.bundleId
-                configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appId
-                configuration.isLocalDatastoreEnabled = true
-            }
-            
-            Parse.initialize(with: config)
-        }
+        // Initialize Parse if necessary
+        Config.shared.initializeParseIfNeeded()
     }
     
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {

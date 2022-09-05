@@ -21,15 +21,8 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if Parse.currentConfiguration == nil  {
-            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
-                configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                configuration.containingApplicationBundleIdentifier = Config.shared.environment.bundleId
-                configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appId
-                configuration.isLocalDatastoreEnabled = true
-            }))
-        }
+        // Initialize Parse if necessary
+        Config.shared.initializeParseIfNeeded()
     }
     
     func didReceive(_ notification: UNNotification) {
