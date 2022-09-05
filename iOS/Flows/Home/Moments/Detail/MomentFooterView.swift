@@ -31,13 +31,14 @@ class MomentFooterView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        self.reactionsView.squaredSize = 35
+        self.reactionsView.pinToSafeAreaRight()
+        
         let maxLabelWidth = Theme.getPaddedWidth(with: self.width) - self.reactionsView.width - Theme.ContentOffset.long.value
         self.commentsLabel.setSize(withWidth: maxLabelWidth)
         self.commentsLabel.pin(.top, offset: .xtraLong)
         self.commentsLabel.pinToSafeAreaLeft()
         
-        self.reactionsView.squaredSize = 35
-        self.reactionsView.pinToSafeAreaRight()
         self.reactionsView.centerY = self.commentsLabel.centerY
     }
 }
