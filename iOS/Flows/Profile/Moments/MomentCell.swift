@@ -12,6 +12,16 @@ import Lottie
 struct MomentViewModel: Hashable {
     var date: Date
     var momentId: String?
+    var isAvailable: Bool {
+        if let daysAgo = Date.today.subtract(component: .day, amount: 13),
+           self.date.isBetween(Date.today, and: daysAgo) {
+            return true
+        } else if self.date.isSameDay(as: Date.today) {
+            return true
+        }
+        
+        return false
+    }
 }
 
 class MomentCell: CollectionViewManagerCell, ManageableCell {
@@ -45,9 +55,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         self.label.alpha = item.momentId.exists ? 0 : 1.0
         self.label.text = ""
         
-        if let daysAgo = Date.today.subtract(component: .day, amount: 13), item.date.isBetween(Date.today, and: daysAgo) {
-            self.label.setText("\(item.date.day)")
-        } else if item.date.isSameDay(as: Date.today) {
+        if item.isAvailable {
             self.label.setText("\(item.date.day)")
         }
         
@@ -86,5 +94,32 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         self.animationView.stop()
         self.label.text = ""
         self.videoView.reset()
+    }
+    
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        guard let currentItem = self.currentItem, currentItem.isAvailable else {
+            super.updateConfiguration(using: state)
+            return
+        }
+        
+        // Get the system default background configuration for a plain style list cell in the current state.
+        var backgroundConfig = UIBackgroundConfiguration.listPlainCell().updated(for: state)
+
+        // Customize the background color to be clear, no matter the state.
+        backgroundConfig.backgroundColor = ThemeColor.clear.color
+        
+        // Apply the background configuration to the cell.
+        self.backgroundConfiguration = backgroundConfig
+        
+        if state.isHighlighted {
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.label.transform = CGAffineTransform.init(scaleX: 0.5, y: 0.5)
+            }
+            self.selectionImpact.impactOccurred(intensity: 1.0)
+        } else {
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.label.transform = .identity
+            }
+        }
     }
 }

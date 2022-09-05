@@ -57,13 +57,15 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
             case .unreadMessages(let model):
                 self.finishFlow(with: .conversation(model.conversationId))
             case .moment(let model):
+                guard model.isAvailable else { return }
                 Task {
                     if let moment = try? await Moment.getObject(with: model.momentId) {
                         self.presentMoment(with: moment)
                     } else {
-                        Task {
-                            await ToastScheduler.shared.schedule(toastType: .success(.eyeSlash, "No Moment Recorded"), position: .bottom)
-                        }
+                        await ToastScheduler.shared.schedule(toastType: .success(.eyeSlash,
+                                                                                 "No Moment Recorded"),
+                                                             position: .bottom,
+                                                             duration: 3)
                     }
                 }
             default:
