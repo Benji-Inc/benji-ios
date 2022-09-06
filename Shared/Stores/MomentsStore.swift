@@ -65,6 +65,28 @@ class MomentsStore {
         }
     }
     
+    func getAll(for person: PersonType) async throws -> [Moment] {
+        return try await withCheckedThrowingContinuation { continuation in
+            if let query = Moment.query(),
+                let user = person as? User {
+                
+                query.whereKey("author", equalTo: user)
+                query.includeKey("preview")
+                query.findObjectsInBackground { objects, error in
+                    if let moments = objects as? [Moment] {
+                        continuation.resume(returning: moments)
+                    } else if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(throwing: ClientError.apiError(detail: "Failed to retrieve moments"))
+                    }
+                }
+            } else {
+                continuation.resume(throwing: ClientError.apiError(detail: "No query for Moments"))
+            }
+        }
+    }
+    
     func getLast14DaysMoments(for person: PersonType) async throws -> [Moment] {
         return try await withCheckedThrowingContinuation { continuation in
             if let query = Moment.query(),

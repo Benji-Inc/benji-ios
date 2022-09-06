@@ -105,6 +105,18 @@ extension Date {
         formatter.dateFormat = "h:mm a, MMM d"
         return formatter
     }
+    
+    static var monthWithDate: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM"
+        return formatter
+    }
+    
+    static var yearWithDate: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY"
+        return formatter
+    }
 
     static var hourMinuteTimeOfDay: DateFormatter {
         let formatter = DateFormatter()

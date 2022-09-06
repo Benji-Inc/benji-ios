@@ -10,14 +10,23 @@ import Foundation
 import Lottie
 
 struct MomentViewModel: Hashable {
-    var date: Date
+    var day: Int
+    var month: Int
+    var year: Int
     var momentId: String?
-    var isAvailable: Bool {
-        if let daysAgo = Date.today.subtract(component: .day, amount: 13),
-           self.date.isBetween(Date.today, and: daysAgo) {
-            return true
-        } else if self.date.isSameDay(as: Date.today) {
-            return true
+    var isAvailable: Bool
+    
+    var isToday: Bool {
+        let today = Date.today
+        return today.day == self.day
+        && today.month == self.month
+        && today.year == self.year
+    }
+    
+    var isInFuture: Bool {
+        let today = Date.today
+        if today.year == self.year, today.month == self.month {
+            return today.day < self.day
         }
         
         return false
@@ -48,16 +57,15 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.animationView)
         self.animationView.loopMode = .loop
+        
+        self.contentView.layer.borderColor = ThemeColor.white.color.cgColor
+        self.contentView.layer.borderWidth = 0
     }
     
     func configure(with item: MomentViewModel) {
         
         self.label.alpha = item.momentId.exists ? 0 : 1.0
-        self.label.text = ""
-        
-        if item.isAvailable {
-            self.label.setText("\(item.date.day)")
-        }
+        self.label.setText("\(item.day)")
         
         Task {
             if let momentId = item.momentId {
@@ -69,9 +77,15 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
             }
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
-                self.label.alpha = 1
+                if item.isAvailable {
+                    self.label.alpha = item.isInFuture ? 0.1 : 1.0
+                } else {
+                    self.label.alpha = 0
+                }
             }
         }
+        
+        self.contentView.layer.borderWidth = item.isToday ? 1.0 : 0.0
         
         self.setNeedsLayout()
     }
@@ -93,6 +107,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         
         self.animationView.stop()
         self.label.text = ""
+        self.contentView.layer.borderWidth = 0 
         self.videoView.reset()
     }
     

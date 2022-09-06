@@ -10,7 +10,8 @@ import Foundation
 
 class MomentsFooterView: UICollectionReusableView {
     
-    let timeLabel = ThemeLabel(font: .regular)
+    let timeLabel = ThemeLabel(font: .small, textColor: .whiteWithAlpha)
+    let button = ThemeButton()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,15 +27,20 @@ class MomentsFooterView: UICollectionReusableView {
         self.addSubview(self.timeLabel)
         self.timeLabel.setText("Last 14 Days")
         self.timeLabel.textAlignment = .center
+        
+        self.addSubview(self.button)
+        self.button.set(style: .custom(color: .white, textColor: .B0, text: "View All"))
     }
     
     func animate() {
         self.timeLabel.alpha = 0.0
+        self.button.alpha = 0.0
 
         Task.onMainActorAsync {
             await Task.sleep(seconds: 0.65)
             await UIView.awaitAnimation(with: .slow, animations: {
                 self.timeLabel.alpha = 1.0
+                self.button.alpha = 1.0
             })
         }
     }
@@ -43,6 +49,11 @@ class MomentsFooterView: UICollectionReusableView {
         super.layoutSubviews()
         
         self.timeLabel.setSize(withWidth: Theme.getPaddedWidth(with: self.width))
-        self.timeLabel.centerOnXAndY()
+        self.timeLabel.centerOnX()
+        self.timeLabel.pin(.top, offset: .xtraLong)
+        
+        self.button.setSize(with: self.width + Theme.ContentOffset.xtraLong.value.doubled)
+        self.button.pin(.bottom)
+        self.button.centerOnX()
     }
 }
