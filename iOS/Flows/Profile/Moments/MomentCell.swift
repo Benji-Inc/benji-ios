@@ -15,6 +15,22 @@ struct MomentViewModel: Hashable {
     var year: Int
     var momentId: String?
     var isAvailable: Bool
+    
+    var isToday: Bool {
+        let today = Date.today
+        return today.day == self.day
+        && today.month == self.month
+        && today.year == self.year
+    }
+    
+    var isInFuture: Bool {
+        let today = Date.today
+        if today.year == self.year, today.month == self.month {
+            return today.day < self.day
+        }
+        
+        return false
+    }
 }
 
 class MomentCell: CollectionViewManagerCell, ManageableCell {
@@ -46,11 +62,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: MomentViewModel) {
         
         self.label.alpha = item.momentId.exists ? 0 : 1.0
-        self.label.text = ""
-        
-        if item.isAvailable {
-            self.label.setText("\(item.day)")
-        }
+        self.label.setText("\(item.day)")
         
         Task {
             if let momentId = item.momentId {
@@ -62,8 +74,17 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
             }
             
             UIView.animate(withDuration: Theme.animationDurationFast) {
-                self.label.alpha = 1
+                if item.isAvailable {
+                    self.label.alpha = item.isInFuture ? 0.1 : 1.0
+                } else {
+                    self.label.alpha = 0
+                }
             }
+        }
+        
+        if item.isToday {
+            self.contentView.layer.borderColor = ThemeColor.white.color.cgColor
+            self.contentView.layer.borderWidth = 1
         }
         
         self.setNeedsLayout()

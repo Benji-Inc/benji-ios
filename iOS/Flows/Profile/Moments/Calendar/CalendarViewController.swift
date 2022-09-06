@@ -58,6 +58,8 @@ class CalendarViewController: DiffableCollectionViewController<CalendarRange,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.collectionView.animationView.isHidden = true 
+        
         self.darkBlurView.expandToSuperviewSize()
         
         self.daysOfTheWeekView.width = self.view.width - Theme.ContentOffset.long.value.doubled
@@ -70,15 +72,21 @@ class CalendarViewController: DiffableCollectionViewController<CalendarRange,
         self.segmentGradientView.height = self.daysOfTheWeekView.height + Theme.ContentOffset.xtraLong.value.doubled
     }
     
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+        
+        guard let last = self.ranges.last else { return }
+        
+        let ip = IndexPath(item: last.startOfMonth.weekday, section: self.ranges.count - 1)
+        
+        self.collectionView.scrollToItem(at: ip, at: .top, animated: true)
+    }
+    
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<CalendarRange, CalendarDataSource.ItemType>)
     -> AnimationCycle? {
-        guard let last = self.ranges.last else { return nil }
-        let ip = IndexPath(item: last.total - 1, section: self.ranges.count - 1)
-
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
-                              shouldConcatenate: true,
-                              scrollToIndexPath: ip)
+                              shouldConcatenate: false)
     }
     
     override func getAllSections() -> [CalendarRange] {

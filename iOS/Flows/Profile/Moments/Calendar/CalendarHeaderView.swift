@@ -38,7 +38,7 @@ class CalendarHeaderView: UICollectionReusableView {
         super.layoutSubviews()
         
         self.label.setSize(withWidth: self.width)
-        self.label.pin(.left)
+        self.label.pin(.left, offset: .short)
         self.label.pin(.bottom)
         
         self.yearLabel.setSize(withWidth: self.width)
