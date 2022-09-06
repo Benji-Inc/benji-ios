@@ -10,18 +10,11 @@ import Foundation
 import Lottie
 
 struct MomentViewModel: Hashable {
-    var date: Date
+    var day: Int
+    var month: Int
+    var year: Int
     var momentId: String?
-    var isAvailable: Bool {
-        if let daysAgo = Date.today.subtract(component: .day, amount: 13),
-           self.date.isBetween(Date.today, and: daysAgo) {
-            return true
-        } else if self.date.isSameDay(as: Date.today) {
-            return true
-        }
-        
-        return false
-    }
+    var isAvailable: Bool
 }
 
 class MomentCell: CollectionViewManagerCell, ManageableCell {
@@ -56,7 +49,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         self.label.text = ""
         
         if item.isAvailable {
-            self.label.setText("\(item.date.day)")
+            self.label.setText("\(item.day)")
         }
         
         Task {

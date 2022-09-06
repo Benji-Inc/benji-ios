@@ -8,18 +8,14 @@
 
 import Foundation
 
-struct CalendarRange {
-    let month: Int
-    let year: Int
-    let daysInMonth: Int
+struct CalendarRange: Hashable {
+    let components: DateComponents
+    let startOfMonth: Date 
+    let numberOfDays: Int
+    let total: Int
 }
 
-class CalendarDataSource: CollectionViewDataSource<CalendarDataSource.SectionType, CalendarDataSource.ItemType> {
-    
-    enum SectionType: Int, CaseIterable {
-        case conversations
-        case moments
-    }
+class CalendarDataSource: CollectionViewDataSource<CalendarRange, CalendarDataSource.ItemType> {
     
     enum ItemType: Hashable {
         case moment(MomentViewModel)
@@ -27,11 +23,11 @@ class CalendarDataSource: CollectionViewDataSource<CalendarDataSource.SectionTyp
     
     let momentConfig = ManageableCellRegistration<MomentCell>().provider
     
-    private let headerConfig = ManageableHeaderRegistration<MomentsHeaderView>().provider
+    private let headerConfig = ManageableHeaderRegistration<CalendarHeaderView>().provider
     
     weak var messageContentDelegate: MessageContentDelegate?
     
-    override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
+    override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: CalendarRange, item: ItemType) -> UICollectionViewCell? {
                 
         switch item {
         case .moment(let model):
@@ -43,12 +39,13 @@ class CalendarDataSource: CollectionViewDataSource<CalendarDataSource.SectionTyp
     
     override func dequeueSupplementaryView(with collectionView: UICollectionView,
                                            kind: String,
-                                           section: SectionType,
+                                           section: CalendarRange,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
                         
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            header.configure(with: section.startOfMonth)
             header.animate()
             return header
         default:

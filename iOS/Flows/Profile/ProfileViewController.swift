@@ -208,7 +208,18 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             if daysTillSat > 0 {
                 for i in stride(from: daysTillSat, to: 0, by: -1) {
                     if let date = Date().add(component: .day, amount: i) {
-                        items.append(.moment(MomentViewModel(date: date)))
+                        var isAvailable: Bool = false
+                        if let daysAgo = Date.today.subtract(component: .day, amount: 13),
+                           date.isBetween(Date.today, and: daysAgo) {
+                            isAvailable = true
+                        } else if date.isSameDay(as: Date.today) {
+                            isAvailable = true
+                        }
+                        let model = MomentViewModel(day: date.day,
+                                                    month: date.month,
+                                                    year: date.year,
+                                                    isAvailable: isAvailable)
+                        items.append(.moment(model))
                     }
                 }
             }
@@ -217,6 +228,14 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             let allDays: Int = daysTillSat == 0 ? 14 : 21
             for i in stride(from: 0, to: allDays - daysTillSat, by: 1) {
                 if let date = Date().subtract(component: .day, amount: i) {
+                    var isAvailable: Bool = false
+                    if let daysAgo = Date.today.subtract(component: .day, amount: 13),
+                       date.isBetween(Date.today, and: daysAgo) {
+                        isAvailable = true
+                    } else if date.isSameDay(as: Date.today) {
+                        isAvailable = true
+                    }
+                    
                     if let moment = moments?.first(where: { moment in
                         if let createdAt = moment.createdAt, createdAt.isSameDay(as: date) {
                             return true
@@ -224,9 +243,18 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
                             return false
                         }
                     }) {
-                        items.append(.moment(MomentViewModel(date: date, momentId: moment.objectId!)))
+                        let model = MomentViewModel(day: date.day,
+                                                    month: date.month,
+                                                    year: date.year,
+                                                    momentId: moment.objectId!,
+                                                    isAvailable: isAvailable)
+                        items.append(.moment(model))
                     } else {
-                        items.append(.moment(MomentViewModel(date: date)))
+                        let model = MomentViewModel(day: date.day,
+                                                    month: date.month,
+                                                    year: date.year,
+                                                    isAvailable: isAvailable)
+                        items.append(.moment(model))
                     }
                 }
             }

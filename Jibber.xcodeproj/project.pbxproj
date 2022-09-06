@@ -944,6 +944,7 @@
 		D6D75C2B28C6BF37009578E7 /* CalendarCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2A28C6BF37009578E7 /* CalendarCollectionViewLayout.swift */; };
 		D6D75C2D28C6BF4B009578E7 /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */; };
 		D6D75C2F28C6C463009578E7 /* CalendarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */; };
+		D6D75C3128C7D31E009578E7 /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3028C7D31E009578E7 /* CalendarHeaderView.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -1560,6 +1561,7 @@
 		D6D75C2A28C6BF37009578E7 /* CalendarCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCoordinator.swift; sourceTree = "<group>"; };
+		D6D75C3028C7D31E009578E7 /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
@@ -2945,9 +2947,10 @@
 			children = (
 				D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */,
 				D6D75C2A28C6BF37009578E7 /* CalendarCollectionViewLayout.swift */,
-				D6D75C2828C6BF19009578E7 /* CalendarDataSource.swift */,
-				D6D75C2628C6BF07009578E7 /* CalendarViewController.swift */,
 				D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */,
+				D6D75C2828C6BF19009578E7 /* CalendarDataSource.swift */,
+				D6D75C3028C7D31E009578E7 /* CalendarHeaderView.swift */,
+				D6D75C2628C6BF07009578E7 /* CalendarViewController.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -3750,6 +3753,7 @@
 				D6AA6211285270E200FA4D02 /* NoticesCollectionView.swift in Sources */,
 				D630F2652832F98E00737977 /* PersonConnectionViewController.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
+				D6D75C3128C7D31E009578E7 /* CalendarHeaderView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
 				D6D4ECD328613E00002C71CE /* ConversationSelectionDataSource.swift in Sources */,
 				D61128C52804EF2E00574B96 /* ReactionType.swift in Sources */,
