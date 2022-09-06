@@ -45,6 +45,8 @@ class CalendarViewController: DiffableCollectionViewController<CalendarDataSourc
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        self.darkBlurView.expandToSuperviewSize()
+        
         self.daysOfTheWeekView.expandToSuperviewWidth()
         self.daysOfTheWeekView.height = 40
         self.daysOfTheWeekView.pin(.top)

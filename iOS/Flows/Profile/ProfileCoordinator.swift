@@ -49,6 +49,10 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
             }
         }
         
+        self.profileVC.dataSource.didSelectViewAll = { [unowned self] in
+            self.presentCalendar()
+        }
+        
         self.profileVC.$selectedItems.mainSink { [unowned self] items in
             guard let first = items.first else { return }
             switch first {
@@ -72,6 +76,16 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
                 break
             }
         }.store(in: &self.cancellables)
+    }
+    
+    func presentCalendar() {
+        self.removeChild()
+        
+        let coordinator = CalendarCoordinator(with: self.person, router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] _ in
+            
+        }
+        self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
     }
     
     func presentProfilePicture() {

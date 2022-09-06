@@ -32,6 +32,8 @@ class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType,
     
     weak var messageContentDelegate: MessageContentDelegate?
     
+    var didSelectViewAll: CompletionOptional = nil 
+    
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
         
         switch item {
@@ -67,6 +69,9 @@ class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType,
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
             footer.animate()
+            footer.button.didSelect { [unowned self] in
+                self.didSelectViewAll?()
+            }
             return footer
         case UICollectionView.elementKindSectionHeader:
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
