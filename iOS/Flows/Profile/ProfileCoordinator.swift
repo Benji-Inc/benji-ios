@@ -82,8 +82,12 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
         self.removeChild()
         
         let coordinator = CalendarCoordinator(with: self.person, router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { [unowned self] _ in
-            
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            if let result = result {
+                self.finishFlow(with: result)
+            } else {
+                self.profileVC.dismiss(animated: true)
+            }
         }
         self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
     }

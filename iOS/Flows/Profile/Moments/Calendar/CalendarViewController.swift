@@ -51,6 +51,8 @@ class CalendarViewController: DiffableCollectionViewController<CalendarRange,
         self.view.insertSubview(self.segmentGradientView, aboveSubview: self.collectionView)
         self.view.insertSubview(self.daysOfTheWeekView, aboveSubview: self.segmentGradientView)
         
+        self.collectionView.allowsMultipleSelection = false
+
         self.ranges = self.getRanges()
         self.loadInitialData()
     }
