@@ -57,6 +57,9 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.addSubview(self.animationView)
         self.animationView.loopMode = .loop
+        
+        self.contentView.layer.borderColor = ThemeColor.white.color.cgColor
+        self.contentView.layer.borderWidth = 0
     }
     
     func configure(with item: MomentViewModel) {
@@ -82,10 +85,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
             }
         }
         
-        if item.isToday {
-            self.contentView.layer.borderColor = ThemeColor.white.color.cgColor
-            self.contentView.layer.borderWidth = 1
-        }
+        self.contentView.layer.borderWidth = item.isToday ? 1.0 : 0.0
         
         self.setNeedsLayout()
     }
@@ -107,6 +107,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         
         self.animationView.stop()
         self.label.text = ""
+        self.contentView.layer.borderWidth = 0 
         self.videoView.reset()
     }
     
