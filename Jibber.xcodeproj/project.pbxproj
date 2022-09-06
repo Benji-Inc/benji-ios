@@ -939,6 +939,11 @@
 		D6D75C1F28BE816A009578E7 /* MomentsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972CA28A422A400920998 /* MomentsStore.swift */; };
 		D6D75C2328BEAF65009578E7 /* MomentFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2228BEAF65009578E7 /* MomentFooterView.swift */; };
 		D6D75C2428C66E5E009578E7 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
+		D6D75C2728C6BF07009578E7 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2628C6BF07009578E7 /* CalendarViewController.swift */; };
+		D6D75C2928C6BF19009578E7 /* CalendarDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2828C6BF19009578E7 /* CalendarDataSource.swift */; };
+		D6D75C2B28C6BF37009578E7 /* CalendarCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2A28C6BF37009578E7 /* CalendarCollectionViewLayout.swift */; };
+		D6D75C2D28C6BF4B009578E7 /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */; };
+		D6D75C2F28C6C463009578E7 /* CalendarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -1550,6 +1555,11 @@
 		D6D75C0C28BAE2AB009578E7 /* ReactionsDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsDetailViewController.swift; sourceTree = "<group>"; };
 		D6D75C1028BE7333009578E7 /* MomentContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentContentView.swift; sourceTree = "<group>"; };
 		D6D75C2228BEAF65009578E7 /* MomentFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentFooterView.swift; sourceTree = "<group>"; };
+		D6D75C2628C6BF07009578E7 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		D6D75C2828C6BF19009578E7 /* CalendarDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDataSource.swift; sourceTree = "<group>"; };
+		D6D75C2A28C6BF37009578E7 /* CalendarCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
+		D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCoordinator.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
@@ -2625,6 +2635,7 @@
 		D69972D128A4532000920998 /* Moments */ = {
 			isa = PBXGroup;
 			children = (
+				D6D75C2528C6BED8009578E7 /* Calendar */,
 				D69972D228A4533300920998 /* MomentCell.swift */,
 				D6AF4AB428A58AEA00225F37 /* MomentsHeaderView.swift */,
 				D6AF4AB628A58B0C00225F37 /* MomentsFooterView.swift */,
@@ -2927,6 +2938,18 @@
 				D6D75C0C28BAE2AB009578E7 /* ReactionsDetailViewController.swift */,
 			);
 			path = Reactions;
+			sourceTree = "<group>";
+		};
+		D6D75C2528C6BED8009578E7 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */,
+				D6D75C2A28C6BF37009578E7 /* CalendarCollectionViewLayout.swift */,
+				D6D75C2828C6BF19009578E7 /* CalendarDataSource.swift */,
+				D6D75C2628C6BF07009578E7 /* CalendarViewController.swift */,
+				D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */,
+			);
+			path = Calendar;
 			sourceTree = "<group>";
 		};
 		D6D96EEB27C59DD000BDCD01 /* Profile */ = {
@@ -3763,6 +3786,7 @@
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* PersonView.swift in Sources */,
 				D646955827370A7B00BF47CE /* ToastView.swift in Sources */,
+				D6D75C2D28C6BF4B009578E7 /* CalendarCollectionView.swift in Sources */,
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
 				80058BBD27F657C80083AF1F /* MessageDeliveryTypeBadgeView.swift in Sources */,
 				D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */,
@@ -3778,12 +3802,14 @@
 				D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
+				D6D75C2928C6BF19009578E7 /* CalendarDataSource.swift in Sources */,
 				D6AA620D28526FC200FA4D02 /* NoticesViewController.swift in Sources */,
 				D630F2682832F99F00737977 /* PersonConnectionCoordinator.swift in Sources */,
 				80BF68B1278D351600BFE828 /* ConversationCollectionView.swift in Sources */,
 				D63F963E289AE3A5004F6C0D /* MomentCoordinator.swift in Sources */,
 				D63F9640289AE3D2004F6C0D /* MomentViewController.swift in Sources */,
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
+				D6D75C2B28C6BF37009578E7 /* CalendarCollectionViewLayout.swift in Sources */,
 				D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				80D5C292281719EB00182DB6 /* ExpressionDetailCoordinator.swift in Sources */,
@@ -3980,6 +4006,7 @@
 				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
 				D61C1D18283FF0B900F58F84 /* SymbolImageView.swift in Sources */,
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
+				D6D75C2F28C6C463009578E7 /* CalendarCoordinator.swift in Sources */,
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
@@ -4125,6 +4152,7 @@
 				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* ProfileDataSource.swift in Sources */,
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,
+				D6D75C2728C6BF07009578E7 /* CalendarViewController.swift in Sources */,
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,

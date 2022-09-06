@@ -252,7 +252,6 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
             
             self?.collectionView.collectionViewLayout = ProfileCollectionViewLayout()
 
-
             var userIds: [String] = []
             if user.isCurrentUser {
                 userIds.append(user.objectId!)
