@@ -268,17 +268,17 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
         let request = SFSpeechURLRecognitionRequest(url: url)
 
         // start recognition!
-        recognizer?.recognitionTask(with: request) { [unowned self] (result, error) in
+        recognizer?.recognitionTask(with: request) { [weak self] (result, error) in
             // abort if we didn't get any transcription back
             guard let result = result else {
                 logDebug("There was an error: \(error!)")
-                self.handleSpeech(result: nil)
+                self?.handleSpeech(result: nil)
                 return
             }
             
             // if we got the final transcription back, print it
             if result.isFinal {
-                self.handleSpeech(result: result)
+                self?.handleSpeech(result: result)
             }
         }
     }

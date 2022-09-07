@@ -29,6 +29,8 @@ class CalendarCoordinator: PresentableCoordinator<ProfileResult?> {
     override func start() {
         super.start()
         
+        self.calendarVC.dataSource.momentDelegate = self 
+        
         self.calendarVC.$selectedItems.mainSink { [unowned self] items in
             guard let first = items.first else { return }
             
@@ -62,5 +64,25 @@ class CalendarCoordinator: PresentableCoordinator<ProfileResult?> {
             }
         }
         self.router.present(coordinator, source: self.calendarVC, cancelHandler: nil)
+    }
+    
+    func presentMomentCapture() {
+        
+        self.removeChild()
+        let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { _ in }
+        
+        self.router.present(coordinator, source: self.calendarVC, cancelHandler: nil)
+    }
+}
+
+extension CalendarCoordinator: MomentCellDelegate {
+    func moment(_ cell: MomentCell, didSelect moment: Moment) {
+        self.presentMoment(with: moment)
+    }
+    
+    func momentCellDidSelectRecord(_ cell: MomentCell) {
+        self.presentMomentCapture()
     }
 }

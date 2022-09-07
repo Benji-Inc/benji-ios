@@ -945,6 +945,8 @@
 		D6D75C2D28C6BF4B009578E7 /* CalendarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */; };
 		D6D75C2F28C6C463009578E7 /* CalendarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */; };
 		D6D75C3128C7D31E009578E7 /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3028C7D31E009578E7 /* CalendarHeaderView.swift */; };
+		D6D75C3328C8098E009578E7 /* MomentPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3228C8098E009578E7 /* MomentPreviewViewController.swift */; };
+		D6D75C3528C80AD4009578E7 /* MomentCell+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3428C80AD4009578E7 /* MomentCell+Preview.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -1562,6 +1564,8 @@
 		D6D75C2C28C6BF4B009578E7 /* CalendarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCollectionView.swift; sourceTree = "<group>"; };
 		D6D75C2E28C6C463009578E7 /* CalendarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCoordinator.swift; sourceTree = "<group>"; };
 		D6D75C3028C7D31E009578E7 /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
+		D6D75C3228C8098E009578E7 /* MomentPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentPreviewViewController.swift; sourceTree = "<group>"; };
+		D6D75C3428C80AD4009578E7 /* MomentCell+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentCell+Preview.swift"; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
@@ -2639,8 +2643,10 @@
 			children = (
 				D6D75C2528C6BED8009578E7 /* Calendar */,
 				D69972D228A4533300920998 /* MomentCell.swift */,
-				D6AF4AB428A58AEA00225F37 /* MomentsHeaderView.swift */,
+				D6D75C3428C80AD4009578E7 /* MomentCell+Preview.swift */,
+				D6D75C3228C8098E009578E7 /* MomentPreviewViewController.swift */,
 				D6AF4AB628A58B0C00225F37 /* MomentsFooterView.swift */,
+				D6AF4AB428A58AEA00225F37 /* MomentsHeaderView.swift */,
 			);
 			path = Moments;
 			sourceTree = "<group>";
@@ -3970,6 +3976,7 @@
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
 				80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */,
+				D6D75C3328C8098E009578E7 /* MomentPreviewViewController.swift in Sources */,
 				D671E1F326402B1F00BF2B8D /* ToastQueue.swift in Sources */,
 				80580E1D2805F1F900B7264C /* EmotionCircleView.swift in Sources */,
 				D6739A6327BC45730047BBCA /* JibsDetailView.swift in Sources */,
@@ -4153,6 +4160,7 @@
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D61A33E927D5C4CD00056242 /* ContextCueView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
+				D6D75C3528C80AD4009578E7 /* MomentCell+Preview.swift in Sources */,
 				8004E3D127D7C81600E9931F /* SwipeableInputAccessoryViewController.swift in Sources */,
 				D6D96EFB27C5B4EC00BDCD01 /* ProfileDataSource.swift in Sources */,
 				D6129FAA27ADC6030058811C /* WalletViewController.swift in Sources */,

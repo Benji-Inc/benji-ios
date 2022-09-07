@@ -25,15 +25,17 @@ class CalendarDataSource: CollectionViewDataSource<CalendarRange, CalendarDataSo
     
     private let headerConfig = ManageableHeaderRegistration<CalendarHeaderView>().provider
     
-    weak var messageContentDelegate: MessageContentDelegate?
+    weak var momentDelegate: MomentCellDelegate?
     
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: CalendarRange, item: ItemType) -> UICollectionViewCell? {
                 
         switch item {
         case .moment(let model):
-            return collectionView.dequeueConfiguredReusableCell(using: self.momentConfig,
-                                                                for: indexPath,
-                                                                item: model)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.momentConfig,
+                                                                    for: indexPath,
+                                                                    item: model)
+            cell.delegate = self.momentDelegate
+            return cell 
         }
     }
     

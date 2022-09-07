@@ -33,6 +33,11 @@ struct MomentViewModel: Hashable {
     }
 }
 
+protocol MomentCellDelegate: AnyObject {
+    func moment(_ cell: MomentCell, didSelect moment: Moment)
+    func momentCellDidSelectRecord(_ cell: MomentCell)
+}
+
 class MomentCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = MomentViewModel
     
@@ -40,6 +45,9 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
     let label = ThemeLabel(font: .regularBold)
     let videoView = VideoView()
     let animationView = AnimationView.with(animation: .loading)
+    private(set) var moment: Moment?
+    
+    weak var delegate: MomentCellDelegate? 
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -60,6 +68,9 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         
         self.contentView.layer.borderColor = ThemeColor.white.color.cgColor
         self.contentView.layer.borderWidth = 0
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        self.contentView.addInteraction(interaction)
     }
     
     func configure(with item: MomentViewModel) {
@@ -70,7 +81,8 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         Task {
             if let momentId = item.momentId {
                 self.animationView.play()
-                if let previewURL = try? await Moment.getObject(with: momentId).preview?.retrieveCachedPathURL() {
+                self.moment = try? await Moment.getObject(with: momentId)
+                if let previewURL = try? await self.moment?.preview?.retrieveCachedPathURL() {
                     self.videoView.updatePlayer(with: [previewURL])
                 }
                 self.animationView.stop()
@@ -138,3 +150,4 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         }
     }
 }
+

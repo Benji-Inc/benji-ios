@@ -37,7 +37,8 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
         super.start()
         
         self.profileVC.dataSource.messageContentDelegate = self
-                
+        self.profileVC.dataSource.momentDelegate = self
+        
         if let user = self.person as? User, user.isCurrentUser {
             
             self.profileVC.header.didSelectUpdateProfilePicture = { [unowned self] in
@@ -133,6 +134,28 @@ class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
             }
         }
         self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
+    }
+    
+    func presentMomentCapture() {
+        
+        self.removeChild()
+        let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
+        
+        self.addChildAndStart(coordinator) { _ in
+            
+        }
+        
+        self.router.present(coordinator, source: self.profileVC, cancelHandler: nil)
+    }
+}
+
+extension ProfileCoordinator: MomentCellDelegate {
+    func moment(_ cell: MomentCell, didSelect moment: Moment) {
+        self.presentMoment(with: moment)
+    }
+    
+    func momentCellDidSelectRecord(_ cell: MomentCell) {
+        self.presentMomentCapture()
     }
 }
 
