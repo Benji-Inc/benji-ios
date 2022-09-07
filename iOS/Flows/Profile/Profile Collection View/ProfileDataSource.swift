@@ -31,16 +31,19 @@ class ProfileDataSource: CollectionViewDataSource<ProfileDataSource.SectionType,
     private let footerConfig = ManageableFooterRegistration<MomentsFooterView>().provider
     
     weak var messageContentDelegate: MessageContentDelegate?
-    
-    var didSelectViewAll: CompletionOptional = nil 
+    weak var momentDelegate: MomentCellDelegate?
+
+    var didSelectViewAll: CompletionOptional = nil
     
     override func dequeueCell(with collectionView: UICollectionView, indexPath: IndexPath, section: SectionType, item: ItemType) -> UICollectionViewCell? {
         
         switch item {
         case .moment(let model):
-            return collectionView.dequeueConfiguredReusableCell(using: self.momentConfig,
-                                                                for: indexPath,
-                                                                item: model)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.momentConfig,
+                                                                    for: indexPath,
+                                                                    item: model)
+            cell.delegate = self.momentDelegate
+            return cell 
         case .conversation(let conversationId):
             let cell = collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                     for: indexPath,

@@ -25,7 +25,7 @@ class MomentContentView: BaseView {
     private let detailContentView = MomentDetailContentView()
     private let expressionView = MomentExpressiontVideoView()
     private let momentView = MomentVideoView()
-    private let blurView = MomentBlurView()
+    let blurView = MomentBlurView()
     let captionTextView = CaptionTextView()
     private let moment: Moment
     
