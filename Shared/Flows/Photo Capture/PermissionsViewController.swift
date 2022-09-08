@@ -205,7 +205,9 @@ class PermissionsViewController: DisclosureModalViewController {
     #if !APPCLIP && !NOTIFICATION
     private func handleNotifications(isON: Bool) {
         Task {
-            if await UserNotificationManager.shared.register(application: UIApplication.shared) {
+            await UserNotificationManager.shared.register(application: UIApplication.shared)
+            let settings = await UserNotificationManager.shared.getNotificationSettings()
+            if settings.authorizationStatus == .authorized {
                 self.state = .finished
             } else {
                 self.notificationSwitchView.switchView.setOn(false, animated: true)

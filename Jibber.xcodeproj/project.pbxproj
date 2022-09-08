@@ -947,6 +947,8 @@
 		D6D75C3128C7D31E009578E7 /* CalendarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3028C7D31E009578E7 /* CalendarHeaderView.swift */; };
 		D6D75C3328C8098E009578E7 /* MomentPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3228C8098E009578E7 /* MomentPreviewViewController.swift */; };
 		D6D75C3528C80AD4009578E7 /* MomentCell+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3428C80AD4009578E7 /* MomentCell+Preview.swift */; };
+		D6D75C3728C90205009578E7 /* UserNotificationManger+Moments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3628C90205009578E7 /* UserNotificationManger+Moments.swift */; };
+		D6D75C3928C90205009578E7 /* UserNotificationManger+Moments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C3628C90205009578E7 /* UserNotificationManger+Moments.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */; };
 		D6D96EEF27C59E0400BDCD01 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */; };
@@ -1566,6 +1568,7 @@
 		D6D75C3028C7D31E009578E7 /* CalendarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHeaderView.swift; sourceTree = "<group>"; };
 		D6D75C3228C8098E009578E7 /* MomentPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentPreviewViewController.swift; sourceTree = "<group>"; };
 		D6D75C3428C80AD4009578E7 /* MomentCell+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MomentCell+Preview.swift"; sourceTree = "<group>"; };
+		D6D75C3628C90205009578E7 /* UserNotificationManger+Moments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserNotificationManger+Moments.swift"; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6D96EEC27C59DED00BDCD01 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6D96EEE27C59E0400BDCD01 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
@@ -2675,9 +2678,10 @@
 		D6A4A1F425E954CB007F3E15 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
-				D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */,
 				D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */,
+				D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */,
+				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
+				D6D75C3628C90205009578E7 /* UserNotificationManger+Moments.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -3634,6 +3638,7 @@
 				D6D75C1F28BE816A009578E7 /* MomentsStore.swift in Sources */,
 				D61128872804DCCA00574B96 /* Objectable.swift in Sources */,
 				D61128AB2804E73600574B96 /* DisclosureModalViewController.swift in Sources */,
+				D6D75C3928C90205009578E7 /* UserNotificationManger+Moments.swift in Sources */,
 				D61128232804DBCD00574B96 /* Equatable+Extensions.swift in Sources */,
 				D61128A92804E5E700574B96 /* CloudFunction.swift in Sources */,
 				D61128A12804E22F00574B96 /* Person.swift in Sources */,
@@ -4016,6 +4021,7 @@
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D61A33D127D4F2AE00056242 /* ContextCue.swift in Sources */,
 				D61C1D18283FF0B900F58F84 /* SymbolImageView.swift in Sources */,
+				D6D75C3728C90205009578E7 /* UserNotificationManger+Moments.swift in Sources */,
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				D6D75C2F28C6C463009578E7 /* CalendarCoordinator.swift in Sources */,
 				D6129FAE27ADC6410058811C /* TransactionCell.swift in Sources */,
