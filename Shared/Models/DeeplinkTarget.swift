@@ -19,6 +19,7 @@ enum DeepLinkTarget: String, CaseIterable {
     case profile
     case waitlist
     case moment
+    case capture
 
     func diffIdentifier() -> NSObjectProtocol {
         return self.rawValue as NSObjectProtocol

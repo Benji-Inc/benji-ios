@@ -54,6 +54,8 @@ class HomeCoordinator: PresentableCoordinator<Void>, DeepLinkHandler {
                 guard let moment = try? await Moment.getObject(with: self.deepLink?.momentId) else { return }
                 self.presentMoment(with: moment)
             }
+        case .capture:
+            self.presentMomentCapture()
         default:
             break
         }

@@ -56,16 +56,33 @@ class UserNotificationManager: NSObject {
         }
     }
     
-    @discardableResult
+    private var registerTask: Task<Void, Error>?
+    
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
-                  application: UIApplication) async -> Bool {
+                  application: UIApplication) async {
         
-        self.application = application
-        let granted = await self.requestAuthorization(with: options)
-        if granted {
-            await application.registerForRemoteNotifications()  // To update our token
+        // If we already have an register task, wait for it to finish.
+        if let registerTask = self.registerTask {
+            try? await registerTask.value
+            return
         }
-        return granted
+        
+        // Otherwise start a new initialization task and wait for it to finish.
+        self.registerTask = Task {
+            self.application = application
+            let granted = await self.requestAuthorization(with: options)
+            if granted {
+                await application.registerForRemoteNotifications()  // To update our token
+                await self.scheduleMomentReminders()
+            }
+        }
+        
+        do {
+            try await self.registerTask?.value
+        } catch {
+            // Dispose of the task because it failed, then pass the error along.
+            self.registerTask = nil
+        }
     }
     
     private func requestAuthorization(with options: UNAuthorizationOptions = [.alert, .sound, .badge]) async -> Bool {
@@ -112,11 +129,22 @@ class UserNotificationManager: NSObject {
         //        }
     }
     
-    func scheduleNotification(with content: UNNotificationContent) async {
-        let request = UNNotificationRequest(identifier: UUID().uuidString,
+    func scheduleNotification(with content: UNNotificationContent,
+                              identifier: String = UUID().uuidString,
+                              trigger: UNNotificationTrigger? = nil) async {
+        
+        let request = UNNotificationRequest(identifier: identifier,
                                             content: content,
-                                            trigger: nil)
+                                            trigger: trigger)
         try? await self.center.add(request)
+    }
+    
+    func getPendingRequests() async -> [UNNotificationRequest] {
+        return await withCheckedContinuation({ continuation in
+            self.center.getPendingNotificationRequests { requests in
+                continuation.resume(returning: requests)
+            }
+        })
     }
     
     // MARK: - Message Event Handling
