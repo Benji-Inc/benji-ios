@@ -30,7 +30,6 @@ class SwipeableInputAccessoryView: BaseView {
 
     /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
-    @IBOutlet var expressionView: AddExpressionView!
     
     // MARK: - Layout/Animation Properties
 
@@ -81,9 +80,9 @@ class SwipeableInputAccessoryView: BaseView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.expressionView.configure(with: nil, showPlus: false)
+        //self.expressionView.configure(with: nil, showPlus: false)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-        self.expressionView.personGradientView.expressionVideoView.shouldPlay = true 
+        //self.expressionView.personGradientView.expressionVideoView.shouldPlay = true
     }
 
     override func layoutSubviews() {
@@ -112,7 +111,7 @@ class SwipeableInputAccessoryView: BaseView {
             NSLayoutConstraint.activate([self.textViewCollapsedVerticalCenterConstraint,
                                          self.textViewCollapsedVerticalHeightContstraint])
             
-            textViewPadding = self.expressionView.right
+            textViewPadding = self.addView.right
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
             self.textView.isScrollEnabled = false
@@ -172,7 +171,7 @@ class SwipeableInputAccessoryView: BaseView {
 
     func setShowMessageDetailOptions(shouldShowDetail: Bool, showAvatar: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.expressionView.alpha = shouldShowDetail ? 1.0 : 0.0
+            //self.expressionView.alpha = shouldShowDetail ? 1.0 : 0.0
                                     
             if shouldShowDetail {
                 self.characterCountView.update(with: self.textView.text.count, max: self.textView.maxLength)

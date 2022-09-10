@@ -351,7 +351,6 @@ class ConversationViewController: InputHandlerViewContoller,
 
                 guard !Task.isCancelled else { return }
 
-                self?.messageInputController.resetExpression()
                 self?.messageInputController.swipeInputView.textView.setPlaceholder(for: people,
                                                                                     isReply: false)
                 self?.messageInputController.updateSwipeHint(shouldPlay: true)
