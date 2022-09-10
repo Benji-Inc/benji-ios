@@ -35,8 +35,8 @@ class ExpandingTextView: TextView {
         self.keyboardType = .twitter
         self.tintColor = ThemeColor.white.color.resolvedColor(with: self.traitCollection)
 
-        self.textContainerInset.left = Theme.ContentOffset.long.value
-        self.textContainerInset.right = Theme.ContentOffset.long.value
+        self.textContainerInset.left = Theme.ContentOffset.standard.value
+        self.textContainerInset.right = Theme.ContentOffset.standard.value
         self.textContainerInset.top = Theme.ContentOffset.long.value + 1
         self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
@@ -76,7 +76,7 @@ class ExpandingTextView: TextView {
         }
 
         self.initialPlaceholder = placeholderText
-        self.set(placeholder: placeholderText)
+        self.set(placeholder: placeholderText, alignment: .left)
     }
 
     func setPlaceholder(for kind: MessageKind) {
