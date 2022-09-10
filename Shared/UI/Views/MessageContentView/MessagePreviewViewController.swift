@@ -28,7 +28,7 @@ class MessagePreviewViewController: ViewController {
 
         guard let window = UIWindow.topWindow() else { return }
         
-        self.content.layoutState = .expanded
+        self.content.layoutState = .full
         self.view.addSubview(self.content)
         self.content.configureBackground(color: ThemeColor.B6.color,
                                          textColor: ThemeColor.white.color,

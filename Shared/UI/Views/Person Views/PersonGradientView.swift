@@ -38,6 +38,8 @@ class PersonGradientView: DisplayableImageView {
 
         self.expressionVideoView.expandToSuperviewSize()
         self.expressionVideoView.layer.cornerRadius = self.layer.cornerRadius
+        
+        self.imageView.layer.cornerRadius = self.layer.cornerRadius
     }
     
     func getSize(forHeight height: CGFloat) -> CGSize {
