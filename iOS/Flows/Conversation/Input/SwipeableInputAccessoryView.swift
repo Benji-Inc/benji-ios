@@ -168,7 +168,6 @@ class SwipeableInputAccessoryView: BaseView {
 
     func setShowMessageDetailOptions(shouldShowDetail: Bool, showAvatar: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            //self.expressionView.alpha = shouldShowDetail ? 1.0 : 0.0
                                     
             if shouldShowDetail {
                 self.characterCountView.update(with: self.textView.text.count, max: self.textView.maxLength)
