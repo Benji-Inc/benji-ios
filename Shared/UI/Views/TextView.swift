@@ -16,7 +16,7 @@ class TextView: UITextView {
     // Trim white space and newline characters when end editing. Default is true
     var trimWhiteSpaceWhenEndEditing: Bool = true
     // Maximum length of text. 0 means no limit.
-    var maxLength: Int = 500
+    var maxLength: Int = 400
 
     @Published var isEditing: Bool = false
     @Published private(set) var publishedText: String = ""

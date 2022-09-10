@@ -27,7 +27,7 @@ class MessageFooterView: BaseView {
 
     override func initializeSubviews() {
         super.initializeSubviews()
-                
+                        
         self.addSubview(self.statusLabel)
         self.statusLabel.textAlignment = .right
         
@@ -68,15 +68,20 @@ class MessageFooterView: BaseView {
         self.replySummary.pin(.left)
         
         self.statusLabel.setSize(withWidth: self.width)
-        self.statusLabel.pin(.top, offset: .short)
         self.statusLabel.pin(.right)
+        self.statusLabel.match(.bottom, to: .bottom, of: self.expressionStackedView)
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+
         // Only handle touches on the view that are present.
         let replyPoint = self.convert(point, to: self.replySummary)
         let replyButtonPoint = self.convert(point, to: self.replyButton)
         let expressionPoint = self.convert(point, to: self.expressionStackedView)
+        
+        if self.replySummary.point(inside: replyPoint, with: event), self.replySummary.alpha == 0 {
+            return false
+        }
 
         return self.replySummary.point(inside: replyPoint, with: event)
         || self.replyButton.point(inside: replyButtonPoint, with: event)

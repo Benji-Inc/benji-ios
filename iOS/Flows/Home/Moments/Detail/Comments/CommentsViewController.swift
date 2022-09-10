@@ -301,7 +301,6 @@ class CommentsViewController: InputHandlerViewContoller, ConversationListCollect
 
             self.messageInputTask = Task { [weak self] in
                 guard !Task.isCancelled else { return }
-                self?.messageInputController.resetExpression()
                 self?.messageInputController.swipeInputView.textView.setPlaceholderForComments()
                 self?.messageInputController.updateSwipeHint(shouldPlay: true)
             }

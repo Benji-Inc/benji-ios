@@ -12,7 +12,6 @@ import Combine
 class PreviewMessageView: SpeechBubbleView {
 
     private let minHeight: CGFloat = 52
-    private let personGradientView = PersonGradientView()
     let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
     private let countCircle = CircleCountView() 
@@ -33,8 +32,6 @@ class PreviewMessageView: SpeechBubbleView {
         super.initializeSubviews()
         
         self.tailLength = 0
-
-        self.addSubview(self.personGradientView)
 
         self.addSubview(self.textView)
         self.textView.textAlignment = .left
@@ -106,38 +103,22 @@ class PreviewMessageView: SpeechBubbleView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.personGradientView.squaredSize = 34
         self.imageView.squaredSize = 34
 
         let maxWidth: CGFloat
-        = self.width - self.personGradientView.width - self.imageView.width - Theme.ContentOffset.standard.value.doubled
+        = self.width - self.imageView.width - Theme.ContentOffset.standard.value.doubled
 
-        self.personGradientView.pin(.left, offset: .standard)
-        self.personGradientView.pin(.bottom, offset: .standard)
+        self.imageView.pin(.left, offset: .standard)
+        self.imageView.pin(.bottom, offset: .standard)
         
         self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height + Theme.ContentOffset.standard.value.doubled)
-        self.textView.match(.left, to: .right, of: self.personGradientView)
+        self.textView.match(.left, to: .right, of: self.imageView)
         self.textView.center.y = self.halfHeight
-
-        self.imageView.centerOnX()
-        self.imageView.pin(.bottom, offset: .standard)
-        self.imageView.pin(.right, offset: .standard)
 
         self.deliveryTypeView.centerOnX()
         self.deliveryTypeView.pin(.top, offset: .custom(-self.deliveryTypeView.halfHeight - 4))
         
         self.countCircle.pin(.bottom, offset: .short)
         self.countCircle.pin(.right, offset: .short)
-    }
-
-    func set(expression: Expression?) {
-        self.personGradientView.isVisible = expression.exists
-        
-        guard let expression = expression else {
-            self.personGradientView.set(displayable: User.current())
-            return
-        }
-        
-        self.personGradientView.set(expression: expression, person: nil)
     }
 }

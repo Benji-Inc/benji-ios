@@ -83,7 +83,7 @@ class MessageSummaryView: BaseView {
         
         self.replyView.expandToSuperviewSize()
         
-        self.badgeView.pin(.bottom, offset: .negative(.custom(4)))
+        self.badgeView.pin(.top, offset: .negative(.custom(4)))
         self.badgeView.pin(.right, offset: .negative(.custom(4)))
     }
 }

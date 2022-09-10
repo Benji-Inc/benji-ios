@@ -59,7 +59,7 @@ class SwipeInputPanGestureHandler {
         // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     deliveryType: .respectful,
-                                    expression: self.viewController.currentExpression,
+                                    expression: nil,
                                     previousMessage: self.viewController.editableMessage)
         return object.isSendable
     }
@@ -67,7 +67,7 @@ class SwipeInputPanGestureHandler {
     private func handlePanBegan() {
         let object = SendableObject(kind: self.viewController.currentMessageKind,
                                     deliveryType: .respectful,
-                                    expression: self.viewController.currentExpression,
+                                    expression: nil,
                                     previousMessage: self.viewController.editableMessage)
         self.viewController.sendable = object
 
@@ -81,7 +81,6 @@ class SwipeInputPanGestureHandler {
         self.previewView = PreviewMessageView(orientation: .down,
                                               bubbleColor: object.deliveryType.color.color)
         self.previewView?.frame = self.inputView.inputContainerView.frame
-        self.previewView?.set(expression: self.viewController.currentExpression)
         self.previewView?.messageKind = self.viewController.currentMessageKind
         self.previewView?.showShadow(withOffset: 8)
         self.inputView.addSubview(self.previewView!)
@@ -89,7 +88,7 @@ class SwipeInputPanGestureHandler {
         self.initialPreviewCenter = self.previewView?.center
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputView.expressionView.alpha = 0.0
+            self.inputView.addView.alpha = 0.0
         }
         
         self.animatePreviewScale(shouldScale: true)
@@ -279,7 +278,7 @@ class SwipeInputPanGestureHandler {
         }
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.inputView.expressionView.alpha = 1.0
+            self.inputView.addView.alpha = 1.0
         }
     }
 }

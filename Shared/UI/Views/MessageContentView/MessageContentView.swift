@@ -44,6 +44,7 @@ class MessageContentView: BaseView {
     enum Layout {
         case collapsed
         case expanded
+        case full
     }
 
     // Sizing
@@ -51,6 +52,10 @@ class MessageContentView: BaseView {
     static let collapsedHeight: CGFloat = 94 - MessageContentView.bubbleTailLength
     static var collapsedBubbleHeight: CGFloat {
         return MessageContentView.collapsedHeight - MessageContentView.textViewPadding
+    }
+    static var fullBubbleHeight: CGFloat {
+        guard let window = UIWindow.topWindow() else { return .zero }
+        return window.height - MessageContentView.textViewPadding - window.safeAreaInsets.top - window.safeAreaInsets.bottom
     }
     static let authorViewHeight: CGFloat = 38
 
@@ -190,7 +195,61 @@ class MessageContentView: BaseView {
         self.dateView.setSize(withWidth: self.mainContentArea.width - self.dateView.left)
         
         self.deliveryView.centerY = self.dateView.centerY
+        
+        // If full, extend text to far right and move media/links below it
+        switch self.layoutState {
+        case .collapsed, .expanded:
+            self.layoutDefaultContent()
+        case .full:
+            self.layoutFullContent()
+        }
+    }
+    
+    private func layoutFullContent() {
+        
+        // Text view
+        self.textView.size = self.textView.getSize(width: self.mainContentArea.width, layout: self.layoutState)
+        self.textView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+        self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+        self.textView.updateFontSize(state: self.layoutState)
+        
+        // Link view
+        if self.textView.isVisible {
+            self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.linkView.height = MessageContentView.standardHeight
+            self.linkView.expand(.right)
+            self.linkView.pin(.bottom)
+        } else {
+            self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+            self.linkView.expand(.right)
+            self.linkView.expand(.bottom)
+        }
 
+        // Image view
+        if self.textView.isVisible {
+            self.imageView.match(.left, to: .left, of: self.textView)
+            self.imageView.expand(.right)
+            self.imageView.height = MessageContentView.standardHeight
+            self.imageView.pin(.bottom)
+        } else {
+            self.imageView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+            self.imageView.match(.top, to: .bottom, of: self.dateView, offset: .short)
+            self.imageView.expand(.bottom)
+            self.imageView.expand(.right)
+        }
+        
+        self.countCircle.match(.top, to: .top, of: self.imageView, offset: .short)
+        self.countCircle.match(.right, to: .right, of: self.imageView, offset: .negative(.short))
+        self.countCircle.showShadow(withOffset: 2)
+        
+        self.videoImageView.squaredSize = 16
+        self.videoImageView.match(.bottom, to: .bottom, of: self.imageView, offset: .negative(.short))
+        self.videoImageView.match(.left, to: .left, of: self.imageView, offset: .short)
+        self.videoImageView.showShadow(withOffset: 2)
+    }
+    
+    private func layoutDefaultContent() {
         // Link view
         self.linkView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
         self.linkView.match(.top, to: .bottom, of: self.dateView, offset: .short)
@@ -384,7 +443,23 @@ class MessageContentView: BaseView {
     func getSize(with width: CGFloat) -> CGSize {
         var size = self.textView.getSize(width: width, layout: self.layoutState)
         size.width += MessageContentView.textViewPadding
-        size.height += self.bubbleView.tailLength + MessageContentView.textViewPadding
+        switch self.layoutState {
+        case .collapsed, .expanded:
+            size.height += self.bubbleView.tailLength + MessageContentView.textViewPadding
+        case .full:
+            size.height += self.bubbleView.tailLength + MessageContentView.textViewPadding
+            if self.imageView.isVisible {
+                size.height += MessageContentView.standardHeight
+                if self.textView.isVisible {
+                    size.height += MessageContentView.textViewPadding + MessageContentView.padding.value
+                }
+            } else if self.linkView.isVisible {
+                size.height += MessageContentView.standardHeight
+                if self.textView.isVisible {
+                    size.height += MessageContentView.textViewPadding + MessageContentView.padding.value
+                }
+            }
+        }
         return size
     }
 }
@@ -395,15 +470,28 @@ extension MessageTextView {
         let maxTextWidth: CGFloat
         var maxTextHeight: CGFloat = MessageContentView.standardHeight
         
+        switch layout {
+        case .collapsed:
+            maxTextHeight = MessageContentView.collapsedBubbleHeight
+        case .expanded:
+            break
+        case .full:
+            maxTextHeight = MessageContentView.fullBubbleHeight
+        }
+        
         if layout == .collapsed {
             maxTextHeight = MessageContentView.collapsedBubbleHeight
         }
         
-        let size = CGSize(width: MessageContentView.authorViewHeight,
-                          height: MessageContentView.authorViewHeight)
-        maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
+        maxTextWidth = self.getMaxWidth(with: width)
 
         return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
+    }
+    
+    func getMaxWidth(with width: CGFloat) -> CGFloat {
+        let size = CGSize(width: MessageContentView.authorViewHeight,
+                          height: MessageContentView.authorViewHeight)
+        return width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
     }
 
     /// Updates the font size to be appropriate for the amount of text displayed.

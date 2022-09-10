@@ -110,8 +110,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func initializeViews() {
         super.initializeViews()
                 
-        self.messageInputController.resetExpression()
-
         self.modalPresentationStyle = .overCurrentContext
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)

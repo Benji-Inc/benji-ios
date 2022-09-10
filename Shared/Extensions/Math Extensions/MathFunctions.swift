@@ -18,8 +18,8 @@ func round(_ value: CGFloat, toNearest: CGFloat) -> CGFloat {
 
 // MARK: - Clamping
 
-func clamp(_ value: Int, min: Int) -> Int {
-    return (min...Int.max).clamp(value)
+func clamp(_ value: Int, min: Int, max: Int = Int.max) -> Int {
+    return (min...max).clamp(value)
 }
 
 func pow(_ lhs: Int, _ rhs: Int) -> Int {

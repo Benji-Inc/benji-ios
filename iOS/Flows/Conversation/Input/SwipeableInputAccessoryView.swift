@@ -30,7 +30,6 @@ class SwipeableInputAccessoryView: BaseView {
 
     /// A view that contains delivery type and emotion selection views.
     @IBOutlet var inputTypeContainer: UIView!
-    @IBOutlet var expressionView: AddExpressionView!
     
     // MARK: - Layout/Animation Properties
 
@@ -81,9 +80,7 @@ class SwipeableInputAccessoryView: BaseView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.expressionView.configure(with: nil, showPlus: false)
         self.doneButton.set(style: .custom(color: .white, textColor: .B0, text: "Done"))
-        self.expressionView.personGradientView.expressionVideoView.shouldPlay = true 
     }
 
     override func layoutSubviews() {
@@ -102,7 +99,7 @@ class SwipeableInputAccessoryView: BaseView {
 
     func updateLayout(for inputState: InputState) {
         let newInputHeight: CGFloat
-        var textViewPadding: CGFloat = Theme.ContentOffset.short.value
+        var textViewPadding: CGFloat = Theme.ContentOffset.standard.value
         var newAddViewSize: CGFloat = 0
         var bottomConstraint: CGFloat = 12
         switch inputState {
@@ -112,7 +109,7 @@ class SwipeableInputAccessoryView: BaseView {
             NSLayoutConstraint.activate([self.textViewCollapsedVerticalCenterConstraint,
                                          self.textViewCollapsedVerticalHeightContstraint])
             
-            textViewPadding = self.expressionView.right
+            textViewPadding = 48
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
             self.textView.isScrollEnabled = false
@@ -163,7 +160,6 @@ class SwipeableInputAccessoryView: BaseView {
             self.addViewHeightContstrain.constant = newAddViewSize
             self.inputContainerHeightConstraint.constant = newInputHeight
             self.textViewLeadingConstraint.constant = textViewPadding
-            self.textViewTrailingConstraint.constant = textViewPadding
             self.inputBottomConstraint.constant = bottomConstraint
             // Layout the window so that our container view also animates
             self.window?.layoutNow()
@@ -172,7 +168,6 @@ class SwipeableInputAccessoryView: BaseView {
 
     func setShowMessageDetailOptions(shouldShowDetail: Bool, showAvatar: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.expressionView.alpha = shouldShowDetail ? 1.0 : 0.0
                                     
             if shouldShowDetail {
                 self.characterCountView.update(with: self.textView.text.count, max: self.textView.maxLength)

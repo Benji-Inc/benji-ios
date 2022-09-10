@@ -18,7 +18,7 @@ extension UserNotificationManager {
             return request.identifier.contains("moment")
         }.count
 
-        current = clamp(current, min: 0)
+        current = clamp(current, min: 0, max: 6)
 
         // Ensure reminders are at least 7 days out
         await (current - 1...7).asyncForEach({ index in

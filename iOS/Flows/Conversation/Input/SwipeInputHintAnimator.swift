@@ -25,7 +25,7 @@ class SwipeInputHintAnimator {
         self.swipeHintTask?.cancel()
 
         self.view?.inputContainerView.transform = .identity
-        self.view?.expressionView.alpha = 1.0
+        self.view?.addView.alpha = 1.0
 
         guard shouldPlay, UserDefaultsManager.getInt(for: .numberOfSwipeHints) < 3 else { return }
             

@@ -51,8 +51,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
     // MARK: - Message State
 
-    @Published var currentExpression: Expression?
-
     var editableMessage: Messageable?
     @Published var currentMessageKind: MessageKind = .text(String())
     var sendable: SendableObject?
@@ -60,14 +58,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
     // MARK: - Layout/Animation Properties
 
     private lazy var hintAnimator = SwipeInputHintAnimator(swipeInputView: self.swipeInputView)
-    
-    deinit {
-        if let currentExpression = currentExpression {
-            Task {
-                try await currentExpression.deleteInBackground()
-            }
-        }
-    }
 
     // MARK: BaseView Setup and Layout
 
@@ -80,10 +70,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
 
         self.setupGestures()
         self.setupHandlers()
-    }
-    
-    func resetExpression() {
-        self.currentExpression = nil
     }
 
     private lazy var panRecognizer = SwipeGestureRecognizer { [unowned self] (recognizer) in
@@ -174,10 +160,6 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
                 self.swipeInputView.updateLayout(for: inputState)
             }.store(in: &self.cancellables)
         
-        self.$currentExpression.mainSink { [unowned self] expression in
-            self.swipeInputView.expressionView.configure(withExpression: expression, showPlus: false)
-        }.store(in: &self.cancellables)
-        
         self.$currentMessageKind
             .removeDuplicates()
             .mainSink { [unowned self] kind in
@@ -263,6 +245,5 @@ class SwipeableInputAccessoryViewController: UIInputViewController {
         self.swipeInputView.inputContainerView.alpha = 1
         self.swipeInputView.characterCountView.alpha = 0.0        
         self.currentMessageKind = .text("")
-        self.resetExpression()
     }
 }
