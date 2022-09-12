@@ -39,7 +39,11 @@ import StreamChat
          self.momentVC.footerView.reactionsView.reactionsView.didSelect { [unowned self] in
              guard let controller = self.momentVC.footerView.reactionsView.controller else { return }
              if let expressions = controller.conversation?.expressions, expressions.count > 0 {
-                 self.presentReactions()
+                 if self.moment.isAvailable {
+                     self.presentReactions()
+                 } else {
+                     self.showReactionsAlert()
+                 }
              }
          }
          
@@ -86,7 +90,7 @@ import StreamChat
          let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
          
          self.present(coordinator) { [unowned self] result in
-             self.momentVC.contentView.showMomentIfAvailable()
+             self.momentVC.showMomentIfAvailable()
          }
      }
      

@@ -43,12 +43,8 @@ class MomentViewController: ViewController {
         self.contentView.layer.masksToBounds = true
         
         self.view.addSubview(self.footerView)
-                
-        // If the user has not been added to the comments convo, add them. This will represent views.
-        let controller = ConversationController.controller(for: self.moment.commentsId)
-        controller.addMembers(userIds: Set([User.current()!.objectId!])) { [unowned self] error in
-            self.footerView.configure(for: self.moment)
-        }
+        
+        self.showMomentIfAvailable()
     }
     
     override func viewDidLayoutSubviews() {
@@ -65,7 +61,14 @@ class MomentViewController: ViewController {
     
     func showMomentIfAvailable() {
         self.contentView.showMomentIfAvailable()
-        self.footerView.isVisible = self.moment.isAvailable
+        
+        if self.moment.isAvailable {
+            // If the user has not been added to the comments convo, add them. This will represent views.
+            let controller = ConversationController.controller(for: self.moment.commentsId)
+            controller.addMembers(userIds: Set([User.current()!.objectId!])) { [unowned self] error in
+                self.footerView.configure(for: self.moment)
+            }
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
