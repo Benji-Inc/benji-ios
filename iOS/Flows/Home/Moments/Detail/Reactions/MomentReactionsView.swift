@@ -28,7 +28,7 @@ class MomentReactionsView: BaseView {
         let pointSize: CGFloat = 26
         
         self.button.set(style: .image(symbol: .faceSmiling,
-                                      palletteColors: [.white],
+                                      palletteColors: [.whiteWithAlpha],
                                       pointSize: pointSize,
                                       backgroundColor: .clear))
         

@@ -44,11 +44,19 @@ import StreamChat
          }
          
          self.momentVC.footerView.reactionsView.button.didSelect { [unowned self] in
-             self.presentAddExpression()
+             if self.moment.isAvailable {
+                 self.presentAddExpression()
+             } else {
+                 self.showReactionsAlert()
+             }
          }
          
          self.momentVC.footerView.commentsLabel.didSelect { [unowned self] in
-             self.presentComments()
+             if self.moment.isAvailable {
+                 self.presentComments()
+             } else {
+                 self.showCommentsAlert()
+             }
          }
          
          if let deepLink = self.deepLink {
@@ -147,6 +155,40 @@ import StreamChat
          self.momentVC.contentView.pause()
          
          self.router.present(coordinator, source: self.momentVC, cancelHandler: cancelHandler)
+     }
+     
+     func showCommentsAlert() {
+         let alert = UIAlertController(title: "Comments Unavailable",
+                                       message: "To view comments, record today's moment.",
+                                       preferredStyle: .alert)
+         
+         let record = UIAlertAction(title: "Record", style: .default) { [unowned self] _ in
+             self.presentMomentCapture()
+         }
+         
+         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in }
+         
+         alert.addAction(record)
+         alert.addAction(cancel)
+         
+         self.router.topmostViewController.present(alert, animated: true)
+     }
+     
+     func showReactionsAlert() {
+         let alert = UIAlertController(title: "Reactions Unavailable",
+                                       message: "To view reactions, record today's moment.",
+                                       preferredStyle: .alert)
+         
+         let record = UIAlertAction(title: "Record", style: .default) { [unowned self] _ in
+             self.presentMomentCapture()
+         }
+         
+         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in }
+         
+         alert.addAction(record)
+         alert.addAction(cancel)
+         
+         self.router.topmostViewController.present(alert, animated: true)
      }
  }
 
