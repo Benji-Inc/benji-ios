@@ -10,7 +10,7 @@ import Foundation
 import Coordinator
 import StreamChat
 
- class MomentCoordinator: PresentableCoordinator<ProfileResult?> {
+ class MomentCoordinator: PresentableCoordinator<ProfileResult?>, DeepLinkHandler {
 
      private let moment: Moment
 
@@ -49,6 +49,28 @@ import StreamChat
          
          self.momentVC.footerView.commentsLabel.didSelect { [unowned self] in
              self.presentComments()
+         }
+         
+         if let deepLink = self.deepLink {
+             self.handle(deepLink: deepLink)
+         }
+     }
+     
+     func handle(deepLink: DeepLinkable) {
+         guard let target = deepLink.deepLinkTarget else {
+             return
+         }
+
+         switch target {
+         case .comment:
+             Task.onMainActorAsync {
+                 await Task.sleep(seconds: 0.25)
+                 self.presentComments()
+             }
+         case .capture:
+             self.presentMomentCapture()
+         default:
+             break
          }
      }
      

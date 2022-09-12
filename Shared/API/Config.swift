@@ -117,7 +117,7 @@ class Config: NSObject {
         return version
     }()
     
-    func initializeParseIfNeeded() {
+    func initializeParseIfNeeded(includeBundleId: Bool = true) {
         if Parse.currentConfiguration.isNil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
                 configuration.applicationGroupIdentifier = self.environment.groupId
@@ -125,6 +125,9 @@ class Config: NSObject {
                 configuration.server = self.environment.url
                 configuration.applicationId = self.environment.appId
                 configuration.isLocalDatastoreEnabled = true
+                if includeBundleId {
+                    configuration.containingApplicationBundleIdentifier = self.environment.bundleId
+                }
             }))
         }
     }
