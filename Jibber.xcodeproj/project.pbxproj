@@ -763,7 +763,6 @@
 		D6A0096128B15A7C0018FA98 /* MomentReactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096028B15A7C0018FA98 /* MomentReactionsView.swift */; };
 		D6A0096328B539A20018FA98 /* MomentSwipeGestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096228B539A20018FA98 /* MomentSwipeGestureHandler.swift */; };
 		D6A0096528B587360018FA98 /* MomentConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0096428B587360018FA98 /* MomentConfirmationView.swift */; };
-		D6A0096628B9A9D20018FA98 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D6A0096728B9A9D30018FA98 /* Conversation+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */; };
 		D6A0096828B9AA090018FA98 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8056B325281B448A00358880 /* Expression.swift */; };
 		D6A0096928B9AA0A0018FA98 /* Expression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8056B325281B448A00358880 /* Expression.swift */; };
@@ -3577,7 +3576,6 @@
 				D61128752804DC7200574B96 /* User+INPerson.swift in Sources */,
 				D61128962804DF7200574B96 /* TextView.swift in Sources */,
 				D61128812804DCBB00574B96 /* UserNotificationManager.swift in Sources */,
-				D6A0096628B9A9D20018FA98 /* Conversation+Intents.swift in Sources */,
 				D6D75C1728BE738B009578E7 /* MomentVideoView.swift in Sources */,
 				D61128502804DC3200574B96 /* PhoneTextField.swift in Sources */,
 				D61128392804DBEE00574B96 /* UIControl+Extensions.swift in Sources */,
