@@ -752,6 +752,9 @@
 		D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */; };
 		D69D2F9A27C0070C001D8855 /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9927C0070C001D8855 /* Achievement.swift */; };
 		D69D2F9C27C00ECE001D8855 /* AchievementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */; };
+		D69DF9AA28CE4E6500C5280D /* MomentAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69DF9A928CE4E6500C5280D /* MomentAction.swift */; };
+		D69DF9AB28CE4EB800C5280D /* MomentAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69DF9A928CE4E6500C5280D /* MomentAction.swift */; };
+		D69DF9AC28CE4EBF00C5280D /* MomentAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69DF9A928CE4E6500C5280D /* MomentAction.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A0095428B03AAA0018FA98 /* CommentsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095328B03AAA0018FA98 /* CommentsLabel.swift */; };
 		D6A0095728B11BCA0018FA98 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A0095628B11BCA0018FA98 /* CommentsViewController.swift */; };
@@ -1443,6 +1446,7 @@
 		D69D2F9727BF1D48001D8855 /* WalletSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSegmentControl.swift; sourceTree = "<group>"; };
 		D69D2F9927C0070C001D8855 /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
 		D69D2F9B27C00ECE001D8855 /* AchievementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementCell.swift; sourceTree = "<group>"; };
+		D69DF9A928CE4E6500C5280D /* MomentAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentAction.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A0095328B03AAA0018FA98 /* CommentsLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsLabel.swift; sourceTree = "<group>"; };
 		D6A0095628B11BCA0018FA98 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
@@ -2388,6 +2392,7 @@
 			children = (
 				D695B44125BA398400843780 /* Attachments */,
 				D6E974352752C47F00D95F08 /* EmotionCategory.swift */,
+				D69DF9A928CE4E6500C5280D /* MomentAction.swift */,
 				D6617CF326743DFE00439C06 /* Parse Subclasses */,
 				D64C323D270391AE004BC1BD /* Person.swift */,
 				D61128C42804EF2E00574B96 /* ReactionType.swift */,
@@ -3654,6 +3659,7 @@
 				D611287A2804DCB000574B96 /* FontType.swift in Sources */,
 				D61128342804DBE400574B96 /* String+PhoneNumbers.swift in Sources */,
 				D61128142804DB9C00574B96 /* RootNavigationController.swift in Sources */,
+				D69DF9AC28CE4EBF00C5280D /* MomentAction.swift in Sources */,
 				D611F7BD2815B0FE006D09D3 /* EmojiCategory.swift in Sources */,
 				80580E1E2805F82500B7264C /* EmotionCircleCollectionView.swift in Sources */,
 				D61128412804DBEE00574B96 /* UIWindow+Extensions.swift in Sources */,
@@ -3764,6 +3770,7 @@
 				D6AA6211285270E200FA4D02 /* NoticesCollectionView.swift in Sources */,
 				D630F2652832F98E00737977 /* PersonConnectionViewController.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
+				D69DF9AA28CE4E6500C5280D /* MomentAction.swift in Sources */,
 				D6D75C3128C7D31E009578E7 /* CalendarHeaderView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
 				D6D4ECD328613E00002C71CE /* ConversationSelectionDataSource.swift in Sources */,
@@ -4313,6 +4320,7 @@
 				D63DB27125E9997F00F6B323 /* ImageDisplayable.swift in Sources */,
 				D63DB25225E9995100F6B323 /* SessionManager.swift in Sources */,
 				8007AB71286A348800CF5B0F /* VideoView.swift in Sources */,
+				D69DF9AB28CE4EB800C5280D /* MomentAction.swift in Sources */,
 				D6BF814B2721EE84006D7760 /* ToastScheduler.swift in Sources */,
 				D63DB29825E999B200F6B323 /* DisplayableImageView.swift in Sources */,
 				D63DB29025E999B200F6B323 /* BaseView.swift in Sources */,

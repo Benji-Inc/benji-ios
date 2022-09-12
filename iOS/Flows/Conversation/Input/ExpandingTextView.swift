@@ -43,7 +43,7 @@ class ExpandingTextView: TextView {
     
     func setPlaceholderForComments() {
         self.initialPlaceholder = "Add Comment"
-        self.set(placeholder: "Add Comment")
+        self.set(placeholder: "Add Comment", alignment: .left)
     }
     
 

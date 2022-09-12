@@ -39,7 +39,7 @@ class LaunchManager {
 
     func launchApp(with deepLink: DeepLinkable?) async -> LaunchStatus {
         // Initialize Parse if necessary
-        Config.shared.initializeParseIfNeeded()
+        Config.shared.initializeParseIfNeeded(includeBundleId: false)
         
         SentrySDK.start { options in
             options.dsn = "https://674f5b98c542435fadeffd8828582b32@o1232170.ingest.sentry.io/6380104"

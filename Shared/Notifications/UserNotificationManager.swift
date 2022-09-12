@@ -220,6 +220,10 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
 #else
             completionHandler()
 #endif
+        } else if let momentAction = MomentAction.init(rawValue: response.actionIdentifier) {
+            self.handleMoment(action: momentAction,
+                              response: response,
+                              completion: completionHandler)
         } else if let target = response.notification.deepLinkTarget {
             var deepLink = DeepLinkObject(target: target)
             deepLink.customMetadata = response.notification.customMetadata
@@ -232,6 +236,15 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 openSettingsFor notification: UNNotification?) {}
+    
+    private func handleMoment(action: MomentAction,
+                              response: UNNotificationResponse,
+                              completion: @escaping () -> Void) {
+        var deepLink = DeepLinkObject(target: action.target)
+        deepLink.customMetadata = response.notification.customMetadata
+        self.delegate?.userNotificationManager(willHandle: deepLink)
+        completion()
+    }
     
 #if IOS
     private func handle(suggestion: SuggestedReply,

@@ -43,6 +43,8 @@ class MomentContentView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
         self.addSubview(self.momentView)
         self.addSubview(self.expressionView)
         self.addSubview(self.detailContentView)
@@ -104,7 +106,7 @@ class MomentContentView: BaseView {
         let maxWidth = Theme.getPaddedWidth(with: self.width)
         self.captionTextView.setSize(withMaxWidth: maxWidth)
         self.captionTextView.pinToSafeAreaLeft()
-        self.captionTextView.bottom = self.momentView.height - self.captionTextView.left
+        self.captionTextView.bottom = self.height - self.captionTextView.left
         self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
         
         self.detailContentView.expandToSuperviewWidth()

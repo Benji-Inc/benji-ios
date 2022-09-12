@@ -38,7 +38,8 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
             break
         case .moment:
             
-            self.preferredContentSize = UIScreen.main.bounds.size
+            self.preferredContentSize = CGSize(width: UIScreen.main.bounds.width,
+                                               height: UIScreen.main.bounds.height * 0.7)
             self.view.setNeedsUpdateConstraints()
             self.view.setNeedsLayout()
             
@@ -47,6 +48,12 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
                 let contentView = MomentContentView(with: moment)
                 contentView.menuButton.isVisible = false 
                 contentView.delegate = self
+                    
+                let actions = MomentAction.getActions(for: moment).compactMap({ momentAction in
+                    return momentAction.action
+                })
+                self.extensionContext?.notificationActions = actions
+                
                 self.content = contentView
                 self.view.addSubview(contentView)
             }
@@ -54,8 +61,10 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     }
 
     func didReceive(_ response: UNNotificationResponse, completionHandler completion: @escaping (UNNotificationContentExtensionResponseOption) -> Void) {
-
-        if let _ = UserNotificationAction.init(rawValue: response.actionIdentifier) {
+        
+        if let _ = MomentAction.init(rawValue: response.actionIdentifier) {
+            completion(.dismissAndForwardAction)
+        } else if let _ = UserNotificationAction.init(rawValue: response.actionIdentifier) {
             completion(.dismissAndForwardAction)
         } else {
             completion(.doNotDismiss)
@@ -82,6 +91,6 @@ extension NotificationViewController: MomentContentViewDelegate {
     }
     
     func momentContent(_ view: MomentContentView, didSetCaption caption: String?) {
-        
+        self.view.layoutNow()
     }
 }
