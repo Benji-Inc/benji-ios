@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AVFoundation
 
 protocol MomentContentViewDelegate: AnyObject {
     func momentContentViewDidSelectCapture(_ view: MomentContentView)
@@ -28,6 +29,22 @@ class MomentContentView: BaseView {
     let blurView = MomentBlurView()
     let captionTextView = CaptionTextView()
     private let moment: Moment
+    
+    var isReadyForDisplay: Bool {
+        return self.momentView.playerLayer.isReadyForDisplay
+    }
+    
+    var momentVideoItem: AVPlayerItem? {
+        return self.momentView.playerLayer.player?.currentItem
+    }
+    
+    var isPlaying: Bool {
+        return self.momentView.isPlaying
+    }
+    
+    var isShowingDetail: Bool {
+        return self.detailContentView.alpha == 1.0 
+    }
     
     weak var delegate: MomentContentViewDelegate?
     
@@ -118,6 +135,12 @@ class MomentContentView: BaseView {
         self.menuButton.pinToSafeAreaRight()
     }
     
+    func shouldShowOnlyMoment(_ show: Bool) {
+        self.expressionView.alpha = show ? 0.0 : 1.0
+        self.menuButton.alpha = show ? 0.0 : 1.0
+        self.captionTextView.alpha = show ? 0.0 : 1.0
+    }
+    
     func shouldShowDetail(_ show: Bool) {
         self.expressionView.alpha = show ? 0.0 : 1.0
         self.menuButton.alpha = show ? 0.0 : 1.0
@@ -145,6 +168,20 @@ class MomentContentView: BaseView {
     func pause() {
         self.expressionView.playerLayer.player?.pause()
         self.momentView.playerLayer.player?.pause()
+    }
+    
+    func mute() {
+        self.expressionView.playerLayer.player?.isMuted = true
+        self.momentView.playerLayer.player?.isMuted = true
+    }
+    
+    func unMute() {
+        self.expressionView.playerLayer.player?.isMuted = false
+        self.momentView.playerLayer.player?.isMuted = false
+    }
+    
+    func seek(to: CMTime, toleranceBefore: CMTime, toleranceAfter: CMTime) {
+        self.momentView.playerLayer.player?.seek(to: to, toleranceBefore: toleranceBefore, toleranceAfter: toleranceAfter)
     }
     
     private func createMenu(for person: PersonType) -> UIMenu? {
