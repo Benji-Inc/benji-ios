@@ -39,16 +39,28 @@ import StreamChat
          self.momentVC.footerView.reactionsView.reactionsView.didSelect { [unowned self] in
              guard let controller = self.momentVC.footerView.reactionsView.controller else { return }
              if let expressions = controller.conversation?.expressions, expressions.count > 0 {
-                 self.presentReactions()
+                 if self.moment.isAvailable {
+                     self.presentReactions()
+                 } else {
+                     self.showReactionsAlert()
+                 }
              }
          }
          
          self.momentVC.footerView.reactionsView.button.didSelect { [unowned self] in
-             self.presentAddExpression()
+             if self.moment.isAvailable {
+                 self.presentAddExpression()
+             } else {
+                 self.showReactionsAlert()
+             }
          }
          
          self.momentVC.footerView.commentsLabel.didSelect { [unowned self] in
-             self.presentComments()
+             if self.moment.isAvailable {
+                 self.presentComments()
+             } else {
+                 self.showCommentsAlert()
+             }
          }
          
          if let deepLink = self.deepLink {
@@ -78,7 +90,7 @@ import StreamChat
          let coordinator = MomentCaptureCoordinator(router: self.router, deepLink: self.deepLink)
          
          self.present(coordinator) { [unowned self] result in
-             self.momentVC.contentView.showMomentIfAvailable()
+             self.momentVC.showMomentIfAvailable()
          }
      }
      
@@ -147,6 +159,40 @@ import StreamChat
          self.momentVC.contentView.pause()
          
          self.router.present(coordinator, source: self.momentVC, cancelHandler: cancelHandler)
+     }
+     
+     func showCommentsAlert() {
+         let alert = UIAlertController(title: "Comments Unavailable",
+                                       message: "To view comments, record today's moment.",
+                                       preferredStyle: .alert)
+         
+         let record = UIAlertAction(title: "Record", style: .default) { [unowned self] _ in
+             self.presentMomentCapture()
+         }
+         
+         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in }
+         
+         alert.addAction(record)
+         alert.addAction(cancel)
+         
+         self.router.topmostViewController.present(alert, animated: true)
+     }
+     
+     func showReactionsAlert() {
+         let alert = UIAlertController(title: "Reactions Unavailable",
+                                       message: "To view reactions, record today's moment.",
+                                       preferredStyle: .alert)
+         
+         let record = UIAlertAction(title: "Record", style: .default) { [unowned self] _ in
+             self.presentMomentCapture()
+         }
+         
+         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { _ in }
+         
+         alert.addAction(record)
+         alert.addAction(cancel)
+         
+         self.router.topmostViewController.present(alert, animated: true)
      }
  }
 

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVKit
 
 class MomentViewController: ViewController {
     
@@ -14,7 +15,10 @@ class MomentViewController: ViewController {
     
     let footerView = MomentFooterView()
     lazy var contentView = MomentContentView(with: self.moment)
-                
+    
+    // time when scrubbing began
+    private var scrubbingBeginTime: CMTime?
+    
     init(with moment: Moment) {
         self.moment = moment
         super.init()
@@ -43,12 +47,40 @@ class MomentViewController: ViewController {
         self.contentView.layer.masksToBounds = true
         
         self.view.addSubview(self.footerView)
+        
+        let panGesture = UIPanGestureRecognizer()
+        panGesture.delegate = self
+        panGesture.minimumNumberOfTouches = 1
+        panGesture.maximumNumberOfTouches = 2
+        panGesture.cancelsTouchesInView = true
+        panGesture.addTarget(self, action: #selector(didScrub(recognizer:)))
+        self.contentView.addGestureRecognizer(panGesture)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handle))
+        longPress.delegate = self
+        longPress.minimumPressDuration = 0.25
+
+        self.contentView.addGestureRecognizer(longPress)
+        
+        self.contentView.didSelect { [unowned self] in
+            if self.contentView.isShowingDetail {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
+                    self.contentView.shouldShowDetail(false)
+                    self.footerView.alpha = 1.0
+                }
                 
-        // If the user has not been added to the comments convo, add them. This will represent views.
-        let controller = ConversationController.controller(for: self.moment.commentsId)
-        controller.addMembers(userIds: Set([User.current()!.objectId!])) { [unowned self] error in
-            self.footerView.configure(for: self.moment)
+                self.contentView.unMute()
+            } else {
+                UIView.animate(withDuration: Theme.animationDurationFast) {
+                    self.contentView.shouldShowDetail(true)
+                    self.footerView.alpha = 0.0
+                }
+                
+                self.contentView.mute()
+            }
         }
+        
+        self.showMomentIfAvailable()
     }
     
     override func viewDidLayoutSubviews() {
@@ -65,46 +97,93 @@ class MomentViewController: ViewController {
     
     func showMomentIfAvailable() {
         self.contentView.showMomentIfAvailable()
-        self.footerView.isVisible = self.moment.isAvailable
+        
+        if self.moment.isAvailable {
+            // If the user has not been added to the comments convo, add them. This will represent views.
+            let controller = ConversationController.controller(for: self.moment.commentsId)
+            controller.addMembers(userIds: Set([User.current()!.objectId!])) { [unowned self] error in
+                self.footerView.configure(for: self.moment)
+            }
+        } else {
+            self.footerView.configure(for: self.moment)
+        }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard self.shouldHandleTouch(for: touches, event: event) else { return }
+    @objc private func didScrub(recognizer: UIPanGestureRecognizer) {
         
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.contentView.shouldShowDetail(true)
-            self.footerView.alpha = 0.0
-        }
-
-        self.contentView.pause()
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.contentView.shouldShowDetail(false)
-            self.footerView.alpha = 1.0
+        guard self.contentView.isReadyForDisplay == true,
+              let currentItem = self.contentView.momentVideoItem else {
+            return
         }
         
-        self.contentView.play()
+        switch recognizer.state {
+        case .possible:
+            // nothing to do here
+            break
+        case .began:
+            // pause playback when user begins panning
+            self.contentView.pause()
+            
+            // set time scrubbing began
+            self.scrubbingBeginTime = currentItem.currentTime()
+        case .changed:
+            guard let scrubbingBeginTime = self.scrubbingBeginTime else {
+                return
+            }
+            let totalSeconds = currentItem.duration.seconds
+            // translate point of pan in view
+            let point = recognizer.translation(in: self.view)
+            let scrubbingBeginPercent = Double(scrubbingBeginTime.seconds/totalSeconds)
+            // calculate percentage of point in view
+            var percent = Double(point.x/self.view.bounds.width)
+            percent += scrubbingBeginPercent
+            if percent < 0 {
+                percent = 0
+            } else if percent > 1.0 {
+                percent = 1.0
+            }
+            // calculate time to seek to in video timeline
+            let seconds = Float64(percent * totalSeconds)
+            let time = CMTimeMakeWithSeconds(seconds, preferredTimescale: currentItem.duration.timescale)
+            self.contentView.seek(to: time, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        case .ended, .cancelled, .failed:
+            // reset scrubbing begin time
+            self.scrubbingBeginTime = nil
+            // resume playback after user stops panning
+            self.contentView.play()
+            
+        @unknown default:
+            break
+        }
     }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
     
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.contentView.shouldShowDetail(false)
-            self.footerView.alpha = 1.0
+    @objc private func handle(longPress: UILongPressGestureRecognizer) {
+        switch longPress.state {
+        case .possible:
+            break
+        case .began:
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.contentView.shouldShowOnlyMoment(true)
+                self.footerView.alpha = 0.0
+            }
+            self.contentView.mute()
+        case .changed:
+            break
+        case .ended, .cancelled, .failed:
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.contentView.shouldShowOnlyMoment(false)
+                self.footerView.alpha = 1.0
+            }
+            self.contentView.unMute()
+        @unknown default:
+            break
         }
-        
-        self.contentView.play()
     }
+}
+
+extension MomentViewController: UIGestureRecognizerDelegate {
     
-    func shouldHandleTouch(for touches: Set<UITouch>, event: UIEvent?) -> Bool {
-        guard let firstTouch = touches.first else { return false }
-        let location = firstTouch.location(in: self.view)
-        return location.y <= self.contentView.bottom
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

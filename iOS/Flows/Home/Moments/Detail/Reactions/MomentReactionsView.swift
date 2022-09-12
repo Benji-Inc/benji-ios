@@ -28,7 +28,7 @@ class MomentReactionsView: BaseView {
         let pointSize: CGFloat = 26
         
         self.button.set(style: .image(symbol: .faceSmiling,
-                                      palletteColors: [.white],
+                                      palletteColors: [.whiteWithAlpha],
                                       pointSize: pointSize,
                                       backgroundColor: .clear))
         
@@ -52,26 +52,16 @@ class MomentReactionsView: BaseView {
     
     func configure(with moment: Moment) {
         
-        self.subscriptions.forEach { subscription in
-            subscription.cancel()
-        }
+        Task {
         
-        self.controller = ConversationController.controller(for: moment.commentsId)
-        let expressions = self.controller?.conversation?.expressions ?? []
-        
-        self.badgeView.set(value: expressions.count)
-        
-        if !expressions.isEmpty {
-            self.reactionsView.set(expressions: expressions)
-            self.reactionsView.isHidden = false
-            self.button.isHidden = true
-        } else {
-            self.button.isHidden = false
-            self.reactionsView.isHidden = true
-        }
-        
-        self.controller?.channelChangePublisher.mainSink(receiveValue: { [unowned self] _ in
+            self.subscriptions.forEach { subscription in
+                subscription.cancel()
+            }
+            
+            self.controller = ConversationController.controller(for: moment.commentsId)
+            try? await self.controller?.synchronize()
             let expressions = self.controller?.conversation?.expressions ?? []
+            
             self.badgeView.set(value: expressions.count)
             
             if !expressions.isEmpty {
@@ -83,6 +73,20 @@ class MomentReactionsView: BaseView {
                 self.reactionsView.isHidden = true
             }
             
-        }).store(in: &self.subscriptions)
+            self.controller?.channelChangePublisher.mainSink(receiveValue: { [unowned self] _ in
+                let expressions = self.controller?.conversation?.expressions ?? []
+                self.badgeView.set(value: expressions.count)
+                
+                if !expressions.isEmpty {
+                    self.reactionsView.set(expressions: expressions)
+                    self.reactionsView.isHidden = false
+                    self.button.isHidden = true
+                } else {
+                    self.button.isHidden = false
+                    self.reactionsView.isHidden = true
+                }
+                
+            }).store(in: &self.subscriptions)
+        }
     }
 }

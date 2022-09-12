@@ -472,7 +472,6 @@ extension FaceCaptureViewController: MTKViewDelegate {
 
         if !self.hasRenderedFaceImage {
             Task.onMainActorAsync {
-                await Task.sleep(seconds: 1.5)
                 self.hasRenderedFaceImage = true
                 view.alpha = 1.0
             }
