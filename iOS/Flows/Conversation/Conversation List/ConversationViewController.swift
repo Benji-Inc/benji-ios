@@ -181,7 +181,7 @@ class ConversationViewController: InputHandlerViewContoller,
                         Task {
                             // Hack to get the input text view to layout correctly
                             await Task.sleep(seconds:0.1)
-                            self.messageInputController.swipeInputView.textView.becomeFirstResponder()
+                            self.messageInputController.swipeInputView.textView.becomeResponder()
                         }
                     }
                     
@@ -364,7 +364,7 @@ class ConversationViewController: InputHandlerViewContoller,
                 // The input accessory view should be shown when centered on a conversation. If there's not
                 // already set as first responder, then make the VC first responder.
                 if UIResponder.firstResponder.isNil {
-                    self?.becomeFirstResponder()
+                    self?.becomeResponder()
                 }
             }
         } else {
@@ -379,7 +379,7 @@ class ConversationViewController: InputHandlerViewContoller,
                 guard !Task.isCancelled else { return }
 
                 // Hide the keyboard and accessory view when we're not centered on a conversation.
-                UIResponder.firstResponder?.resignFirstResponder()
+                UIResponder.firstResponder?.resignResponder()
             }
         }
     }

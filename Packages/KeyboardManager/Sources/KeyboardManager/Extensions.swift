@@ -26,6 +26,14 @@ public extension UIResponder {
     @objc private func findFirstResponder(sender: AnyObject) {
         UIResponder.currentFirstResponder = self
     }
+    
+    func resignResponder() {
+        _ = self.resignFirstResponder()
+    }
+    
+    func becomeResponder() {
+        _ = self.becomeFirstResponder()
+    }
 }
 
 internal extension Publisher where Self.Failure == Never {
