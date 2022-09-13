@@ -59,7 +59,7 @@ enum MessageDeliveryType: String, CaseIterable {
         case .timeSensitive:
             colors = [.red, .white]
         case .conversational:
-            colors = [.white]
+            colors = [.white, .white]
         case .respectful:
             colors = [.whiteWithAlpha, .white]
         }

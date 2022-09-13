@@ -4,7 +4,6 @@ platform :ios, '14.0'
 def shared_pods
   pod 'ParseLiveQuery'
   pod 'ScrollCounter'
-  pod 'PostHog'
 end
 
 def ios_pods

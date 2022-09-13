@@ -66,7 +66,7 @@ enum ImageSymbol: String, ImageDisplayable {
         case .jiblogo:
             return UIImage(named: "jiblogo")
         default:
-            return UIImage(systemName: self.rawValue)?.withRenderingMode(.alwaysTemplate)
+            return UIImage(systemName: self.rawValue)?.withRenderingMode(.automatic)
         }
     }
         
@@ -90,9 +90,7 @@ enum ImageSymbol: String, ImageDisplayable {
             return color.color
         }
         let config = UIImage.SymbolConfiguration.init(paletteColors: uicolors)
-        let multi = UIImage.SymbolConfiguration.preferringMulticolor()
-        let combined = config.applying(multi)
-        return combined
+        return config
     }
     
     var highlightSymbol: ImageSymbol? {

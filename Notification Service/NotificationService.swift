@@ -90,7 +90,7 @@ class NotificationService: UNNotificationServiceExtension {
         var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
         config.isLocalStorageEnabled = true
         config.applicationGroupIdentifier = Config.shared.environment.groupId
-        let client = ChatClient(config: config, tokenProvider: nil)
+        let client = ChatClient(config: config)
 
         do {
             // Get the app token and then apply it to the chat client.

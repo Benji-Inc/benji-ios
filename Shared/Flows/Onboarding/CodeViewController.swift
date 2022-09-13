@@ -56,7 +56,7 @@ class CodeViewController: TextInputViewController<String?> {
                                             installationId: installation.installationId)
                 .makeRequest()
 
-            self.textField.resignFirstResponder()
+            self.textField.resignResponder()
             guard let token = dict["sessionToken"] else { return }
             
             try await User.become(withSessionToken: token)

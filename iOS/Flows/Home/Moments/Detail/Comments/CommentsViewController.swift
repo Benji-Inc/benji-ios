@@ -313,7 +313,7 @@ class CommentsViewController: InputHandlerViewContoller, ConversationListCollect
                 // The input accessory view should be shown when centered on a conversation. If there's not
                 // already set as first responder, then make the VC first responder.
                 if UIResponder.firstResponder.isNil {
-                    self?.becomeFirstResponder()
+                    self?.becomeResponder()
                 }
             }
         } else {
@@ -328,7 +328,7 @@ class CommentsViewController: InputHandlerViewContoller, ConversationListCollect
                 guard !Task.isCancelled else { return }
 
                 // Hide the keyboard and accessory view when we're not centered on a conversation.
-                UIResponder.firstResponder?.resignFirstResponder()
+                UIResponder.firstResponder?.resignResponder()
             }
         }
     }

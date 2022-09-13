@@ -78,9 +78,9 @@ class JibberChatClient {
         
         return await withCheckedContinuation { continuation in
             if let client = self.client {
-                client.currentUserController().addDevice(token: token, completion: { error in
-                    continuation.resume(returning: ())
-                })
+                let device = PushDevice.apn(token: token)
+                client.currentUserController().addDevice(device)
+                continuation.resume(returning: ())
             } else {
                 continuation.resume(returning: ())
             }
@@ -90,7 +90,7 @@ class JibberChatClient {
     func connectAnonymousUser() async throws {
         var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
         config.applicationGroupIdentifier = Config.shared.environment.groupId
-        self.client = ChatClient.init(config: config, tokenProvider: nil)
+        self.client = ChatClient.init(config: config)
                 
         return try await withCheckedThrowingContinuation({ continuation in
             self.client?.connectAnonymousUser { error in
@@ -108,7 +108,7 @@ class JibberChatClient {
         var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
         config.applicationGroupIdentifier = Config.shared.environment.groupId
 
-        self.client = ChatClient.init(config: config, tokenProvider: nil)
+        self.client = ChatClient.init(config: config)
         let token = try await self.getChatToken()
         self.client?.setToken(token: token)
         try await self.connectUser(with: token)

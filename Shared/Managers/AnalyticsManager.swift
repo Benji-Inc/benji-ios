@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PostHog
 
 class AnalyticsManager {
     
@@ -32,21 +31,15 @@ class AnalyticsManager {
     
     init() {
         if isRelease {
-            let configuration = PHGPostHogConfiguration(apiKey: "phc_vOn43aOVi1hlzaOpFZqDe4BrKmMgVcz4wtW0LghCyYP",
-                                                        host: "https://app.posthog.com")
             
-            configuration.captureApplicationLifecycleEvents = true; // Record certain application events automatically!
-            PHGPostHog.setup(with: configuration)
         }
     }
     
     func trackEvent(type: EventType, properties: [String: Any]? = nil) {
         guard isRelease else { return }
-        PHGPostHog.shared()?.capture(type.rawValue, properties: properties)
     }
     
     func trackStreen(type: String, properties: [String: Any]? = nil) {
         guard isRelease else { return }
-        PHGPostHog.shared()?.screen(type, properties: properties)
     }
 }

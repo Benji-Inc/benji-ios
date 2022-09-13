@@ -218,7 +218,7 @@ class InputHandlerCoordinator<Result>: PresentableCoordinator<Result>,
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         Task.onMainActorAsync {
             self.inputHandlerViewController.dismiss(animated: true) {
-                self.inputHandlerViewController.becomeFirstResponder()
+                self.inputHandlerViewController.becomeResponder()
             }
             
             let text = self.inputHandlerViewController.swipeableVC.swipeInputView.textView.text ?? ""
