@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import PostHog
 import Sentry
 
 enum LaunchActivity {
