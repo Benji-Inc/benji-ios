@@ -6,6 +6,5 @@ ${BUILT_PRODUCTS_DIR}/Imaginary/Imaginary.framework
 ${BUILT_PRODUCTS_DIR}/Lightbox/Lightbox.framework
 ${BUILT_PRODUCTS_DIR}/Parse/Parse.framework
 ${BUILT_PRODUCTS_DIR}/ParseLiveQuery/ParseLiveQuery.framework
-${BUILT_PRODUCTS_DIR}/PostHog/PostHog.framework
 ${BUILT_PRODUCTS_DIR}/ScrollCounter/ScrollCounter.framework
 ${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework

@@ -78,9 +78,9 @@ class JibberChatClient {
         
         return await withCheckedContinuation { continuation in
             if let client = self.client {
-                client.currentUserController().addDevice(token: token, completion: { error in
-                    continuation.resume(returning: ())
-                })
+                let device = PushDevice.apn(token: token)
+                client.currentUserController().addDevice(device)
+                continuation.resume(returning: ())
             } else {
                 continuation.resume(returning: ())
             }
