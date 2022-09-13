@@ -190,7 +190,7 @@
 		49DEE8439026E2294FC15327D16B1EBE /* PFACLState.m in Sources */ = {isa = PBXBuildFile; fileRef = AF53CE9F3E9BFD86E2A61C7DB28B5C50 /* PFACLState.m */; };
 		49E617A134E4E5D48A49400DBE8E1FB9 /* PFAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = 781E69D763FB419C7A5A898AAC8F6E8E /* PFAssert.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4A40A8D31116AF369C010DBF231FCC7D /* BFTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BF57B6EE2E2C76920047CA0681731BA /* BFTask.m */; };
-		4A40D27059D49C5A67B9AEE47993B364 /* Parse-Parse in Resources */ = {isa = PBXBuildFile; fileRef = ED7ADA84A7005589821D254428CD2D26 /* Parse-Parse */; };
+		4A40D27059D49C5A67B9AEE47993B364 /* Parse.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ED7ADA84A7005589821D254428CD2D26 /* Parse.bundle */; };
 		4A47E0FDAAACCD45F7DCE5CA94B37B84 /* PFSQLiteStatement.h in Headers */ = {isa = PBXBuildFile; fileRef = E9356D3F619446C3DB33F31A01653AE5 /* PFSQLiteStatement.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4A4E6BE10B177250921F177FE122665B /* PFPropertyInfo_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 304958D1F7FEAB3A0D45E231ECF4409E /* PFPropertyInfo_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		4B19D3D3CDD62005D6770B4CB58A5102 /* PFQueryController.h in Headers */ = {isa = PBXBuildFile; fileRef = D731BE58A6FCC58FC3856C567F1903F5 /* PFQueryController.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -1427,7 +1427,7 @@
 		9B2A2F6C30482B6F5A9A53304677C351 /* PFCurrentInstallationController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PFCurrentInstallationController.m; path = Parse/Parse/Internal/Installation/CurrentInstallationController/PFCurrentInstallationController.m; sourceTree = "<group>"; };
 		9BD3989D152DB6CB7B5AF071CEFB7161 /* ButtonBackgroundDisplayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ButtonBackgroundDisplayer.swift; path = Sources/iOS/ButtonBackgroundDisplayer.swift; sourceTree = "<group>"; };
 		9D0974F67310140CC9FA1C34AA264CF1 /* PFSQLiteDatabase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PFSQLiteDatabase.m; path = Parse/Parse/Internal/LocalDataStore/SQLite/PFSQLiteDatabase.m; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9DB3BCFCB34ACAAFD9A9C6565E3F9712 /* PFQueryConstants.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFQueryConstants.h; path = Parse/Parse/Internal/Query/PFQueryConstants.h; sourceTree = "<group>"; };
 		9E73D63BE568121D8262AB70DE60E873 /* PFObjectSubclassingController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFObjectSubclassingController.h; path = Parse/Parse/Internal/Object/Subclassing/PFObjectSubclassingController.h; sourceTree = "<group>"; };
 		9ED9A3ABBB0581F8E0E1493467625436 /* Lightbox-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Lightbox-prefix.pch"; sourceTree = "<group>"; };
@@ -1634,9 +1634,9 @@
 		EB850AD2F06C7B1D0D299689394DDC3A /* Bolts-Swift-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Bolts-Swift-Info.plist"; sourceTree = "<group>"; };
 		EB940EB322010F67309DA5B27F4756E3 /* PFURLSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PFURLSession.m; path = Parse/Parse/Internal/Commands/CommandRunner/URLSession/Session/PFURLSession.m; sourceTree = "<group>"; };
 		ED47C042273522AA62C5306F3BDC231A /* PFInstallationIdentifierStore_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFInstallationIdentifierStore_Private.h; path = Parse/Parse/Internal/Installation/InstallationIdentifierStore/PFInstallationIdentifierStore_Private.h; sourceTree = "<group>"; };
-		ED7ADA84A7005589821D254428CD2D26 /* Parse-Parse */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Parse-Parse"; path = Parse.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED7ADA84A7005589821D254428CD2D26 /* Parse.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Parse.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED87CDC8830E9B8D307A8DDA57BAF3E2 /* PFInstallation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PFInstallation.m; path = Parse/Parse/PFInstallation.m; sourceTree = "<group>"; };
-		EDF05CC15F3A86084C593FC03446B7E6 /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = en.lproj; path = Parse/Parse/Resources/en.lproj; sourceTree = "<group>"; };
+		EDF05CC15F3A86084C593FC03446B7E6 /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = en.lproj; path = Parse/Parse/Resources/en.lproj; sourceTree = "<group>"; };
 		EE0B1DBEF3D9FD564E481BC295D798C4 /* PFOfflineObjectController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFOfflineObjectController.h; path = Parse/Parse/Internal/Object/Controller/OfflineController/PFOfflineObjectController.h; sourceTree = "<group>"; };
 		EE19B2F7526F43B2135A83279EBDD504 /* PFURLSessionFileDownloadTaskDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFURLSessionFileDownloadTaskDelegate.h; path = Parse/Parse/Internal/Commands/CommandRunner/URLSession/Session/TaskDelegate/PFURLSessionFileDownloadTaskDelegate.h; sourceTree = "<group>"; };
 		EE52684F7E5CD2B7524210491F451F76 /* ParseLiveQuery-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ParseLiveQuery-umbrella.h"; sourceTree = "<group>"; };
@@ -1930,7 +1930,6 @@
 				E6FC0ADEF959E96C1B427F3EA0202957 /* UIViewController+PHGScreen.m */,
 				BAF2DD3896EFD721DAD483E39F2B7092 /* Support Files */,
 			);
-			name = PostHog;
 			path = PostHog;
 			sourceTree = "<group>";
 		};
@@ -1967,7 +1966,6 @@
 				C10C80D972B3A0479E6842785638DA98 /* TaskCompletionSource.swift */,
 				CA9E42782C223CCF6083D644D92F8A6B /* Support Files */,
 			);
-			name = "Bolts-Swift";
 			path = "Bolts-Swift";
 			sourceTree = "<group>";
 		};
@@ -1981,7 +1979,6 @@
 				681EB5EC1D3BBE64B9F265E3D070A420 /* ScrollCounter.h */,
 				8D403F6A4F521F1AA57B49B277DD36ED /* Support Files */,
 			);
-			name = ScrollCounter;
 			path = ScrollCounter;
 			sourceTree = "<group>";
 		};
@@ -2383,7 +2380,6 @@
 				FAF633FB4774BB78346AC6F141919BA8 /* Support Files */,
 				6B3333393F4C5FAA6AE2E030F4BFF539 /* Tasks */,
 			);
-			name = Bolts;
 			path = Bolts;
 			sourceTree = "<group>";
 		};
@@ -2451,7 +2447,6 @@
 				C900AFCCE2DD7D25D4C85BE10021DD35 /* Resources */,
 				AFC22B5CB0FB4ED5315CF868BC3DE457 /* Support Files */,
 			);
-			name = Lightbox;
 			path = Lightbox;
 			sourceTree = "<group>";
 		};
@@ -2461,7 +2456,6 @@
 				38DEC0727107826EB69E51B3A6EE612A /* Core */,
 				51400FB5E60461079945E9B8052C9E28 /* Support Files */,
 			);
-			name = Parse;
 			path = Parse;
 			sourceTree = "<group>";
 		};
@@ -2524,7 +2518,6 @@
 				5CD4B759878D5603A8E73CA5CBFD87BE /* View+Imaginary.swift */,
 				F5EA935FD7C6AD40D5F03FF1445B7EAF /* Support Files */,
 			);
-			name = Imaginary;
 			path = Imaginary;
 			sourceTree = "<group>";
 		};
@@ -2537,7 +2530,7 @@
 				A8EC60D6804D647FCD95230228CDE484 /* Imaginary */,
 				4839ACA053EFB6CF25272430B180126B /* Lightbox */,
 				0652F2476C7C87C6C0F6CB68072EA25F /* Parse */,
-				ED7ADA84A7005589821D254428CD2D26 /* Parse-Parse */,
+				ED7ADA84A7005589821D254428CD2D26 /* Parse.bundle */,
 				A2C95F95FB954017681ED5E53540105F /* ParseLiveQuery */,
 				A401B2776AA155DD7B7708E316555ED9 /* Pods-AppClip */,
 				DF3321F91D1A7E772346F49CF6AD2C4D /* Pods-Intents Extension */,
@@ -2659,7 +2652,6 @@
 				C745084C3644A8AD9D892C7AF05D4069 /* Subscription.swift */,
 				8EA28A51AC8F8258BE688A14A634BFD6 /* Support Files */,
 			);
-			name = ParseLiveQuery;
 			path = ParseLiveQuery;
 			sourceTree = "<group>";
 		};
@@ -2688,7 +2680,6 @@
 				8DF3728195F58584054543D2A9551714 /* WSEngine.swift */,
 				4B26E272114600C6947A288811CD2CE6 /* Support Files */,
 			);
-			name = Starscream;
 			path = Starscream;
 			sourceTree = "<group>";
 		};
@@ -2805,7 +2796,6 @@
 				3B1D88141848BC11AF8F98A03E5DA93F /* UIImage+Extensions.swift */,
 				0D9C87C93BA762423F5B0A0B171D0982 /* Support Files */,
 			);
-			name = Cache;
 			path = Cache;
 			sourceTree = "<group>";
 		};
@@ -3601,7 +3591,7 @@
 			);
 			name = "Parse-Parse";
 			productName = Parse;
-			productReference = ED7ADA84A7005589821D254428CD2D26 /* Parse-Parse */;
+			productReference = ED7ADA84A7005589821D254428CD2D26 /* Parse.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -3723,7 +3713,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A40D27059D49C5A67B9AEE47993B364 /* Parse-Parse in Resources */,
+				4A40D27059D49C5A67B9AEE47993B364 /* Parse.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5020,6 +5010,7 @@
 			baseConfigurationReference = 16AA21F66F60BD1C8EF8E04E2238F54F /* Parse.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Parse";
+				DEVELOPMENT_TEAM = 863YH82QFN;
 				IBSC_MODULE = Parse;
 				INFOPLIST_FILE = "Target Support Files/Parse/ResourceBundle-Parse-Parse-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5170,6 +5161,7 @@
 			baseConfigurationReference = 2EC1DD17B8B3356877035D7AF69CDA87 /* Parse.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Parse";
+				DEVELOPMENT_TEAM = 863YH82QFN;
 				IBSC_MODULE = Parse;
 				INFOPLIST_FILE = "Target Support Files/Parse/ResourceBundle-Parse-Parse-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
