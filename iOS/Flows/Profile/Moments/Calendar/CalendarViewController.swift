@@ -55,6 +55,11 @@ class CalendarViewController: DiffableCollectionViewController<CalendarRange,
 
         self.ranges = self.getRanges()
         self.loadInitialData()
+        
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).mainSink { [weak self] _ in
+            guard let `self` = self else { return }
+            self.dataSource.reconfigureAllItems()
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
