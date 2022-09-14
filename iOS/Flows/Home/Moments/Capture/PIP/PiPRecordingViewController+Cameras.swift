@@ -130,16 +130,7 @@ extension PiPRecordingViewController {
         self.session.addOutputWithNoConnections(self.frontOutput)
         // Check if CVPixelFormat Lossy or Lossless Compression is supported
         
-        if self.frontOutput.availableVideoPixelFormatTypes.contains(kCVPixelFormatType_Lossy_32BGRA) {
-            // Set the Lossy format
-            self.frontOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_Lossy_32BGRA)]
-        } else if self.frontOutput.availableVideoPixelFormatTypes.contains(kCVPixelFormatType_Lossless_32BGRA) {
-            // Set the Lossless format
-            self.frontOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_Lossless_32BGRA)]
-        } else {
-            // Set to the fallback format
-            self.frontOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
-        }
+        self.frontOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
 
         self.frontOutput.setSampleBufferDelegate(self, queue: self.dataOutputQue)
         
