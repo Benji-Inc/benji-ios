@@ -1,14 +1,14 @@
 //
-//  MessageDateLabel.swift
+//  LocalTimeLabel.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 4/26/22.
+//  Created by Benji Dodgson on 9/14/22.
 //  Copyright © 2022 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-class RealtimeDateLabel: ThemeLabel, RealtimeHandler {
+class LocalTimeLabel: ThemeLabel, RealtimeHandler {
     
     var timeInterval: TimeInterval?
     
@@ -32,12 +32,5 @@ class RealtimeDateLabel: ThemeLabel, RealtimeHandler {
         self.text = timeAgo.string
         self.timeInterval = timeAgo.fromNow.timeInterval
         self.setNeedsLayout()
-    }
-}
-
-class MessageDateLabel: RealtimeDateLabel {
-    
-    func configure(with message: Messageable) {
-        self.configure(with: message.createdAt)
     }
 }

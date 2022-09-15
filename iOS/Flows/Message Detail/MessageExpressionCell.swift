@@ -72,7 +72,7 @@ class ExpressionContentView: BaseView {
             self.isVisible = true 
 
             self.personView.set(expression: expression, person: nil)
-            let dateString = expression.createdAt?.getTimeAgoString()
+            let dateString = expression.createdAt?.getTimeAgo().string
             self.label.setText(dateString)
             
             self.setNeedsLayout()

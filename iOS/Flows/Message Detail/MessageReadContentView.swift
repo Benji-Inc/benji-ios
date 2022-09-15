@@ -48,7 +48,7 @@ class MessageReadContentView: BaseView {
             guard let person = await PeopleStore.shared.getPerson(withPersonId: authorId) else { return }
 
             self.personView.set(person: person)
-            let dateString = item.createdAt?.getTimeAgoString()
+            let dateString = item.createdAt?.getTimeAgo().string
             self.label.setText(dateString)
             
             self.setNeedsLayout()
