@@ -123,19 +123,19 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
 
             self.view.setNeedsLayout()
         }.add(to: self.autocancelTaskPool)
+    }
+    
+    override func willEnterForeground() {
+        super.willEnterForeground()
         
-        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).mainSink { [weak self] _ in
-            guard let `self` = self else { return }
-            switch self.segmentControl.selectedSegmentIndex {
-            case 0:
-                self.startLoadAllMoments()
-            case 1:
-                self.startLoadAllTask()
-            default:
-                break
-            }
-            
-        }.store(in: &self.cancellables)
+        switch self.segmentControl.selectedSegmentIndex {
+        case 0:
+            self.startLoadAllMoments()
+        case 1:
+            self.startLoadAllTask()
+        default:
+            break
+        }
     }
     
     override func viewDidLayoutSubviews() {
