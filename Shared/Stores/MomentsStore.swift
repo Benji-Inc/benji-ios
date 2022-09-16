@@ -31,6 +31,7 @@ class MomentsStore {
     }
 
     private var initializeTask: Task<Void, Error>?
+    private var cancellables = Set<AnyCancellable>()
     
     //MARK: PUBLIC
 
@@ -43,7 +44,7 @@ class MomentsStore {
 
         // Otherwise start a new initialization task and wait for it to finish.
         self.initializeTask = Task {
-            // Get all of the notices.
+            // Get all of todays moments.
             self.__moments = try await self.fetchAllOfTodaysMoments()
             
             self.subscribeToUpdates()
@@ -57,7 +58,7 @@ class MomentsStore {
             throw error
         }
     }
-    
+        
     func getTodaysMoment(withPersonId personId: String) async -> Moment? {
         try? await self.initializeIfNeeded()
         return self.todaysMoments.first { moment in
@@ -190,6 +191,16 @@ class MomentsStore {
     }
     
     private func subscribeToUpdates() {
+        
+        // Keep track of app foreground events so we can be sure its the same day.
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).mainSink { [weak self] _ in
+            guard let `self` = self else { return }
+            
+            Task {
+                self.__moments = try await self.fetchAllOfTodaysMoments()
+            }
+        }.store(in: &self.cancellables)
+        
         Client.shared.shouldPrintWebSocketLog = false
 
         // Query for all of todays moments.

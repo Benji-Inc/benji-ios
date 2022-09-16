@@ -8,9 +8,36 @@
 
 import Foundation
 
-class MessageDateLabel: ThemeLabel {
+class RealtimeDateLabel: ThemeLabel, RealtimeHandler {
+    
+    var timeInterval: TimeInterval?
+    
+    var timer: Timer?
+    
+    private var date: Date?
+    
+    func configure(with date: Date) {
+        self.date = date
+        self.update(with: date)
+        self.initializeTimer()
+    }
+    
+    func timerDidFire() {
+        guard let date = self.date else { return }
+        self.update(with: date)
+    }
+    
+    private func update(with date: Date) {
+        let timeAgo = date.getTimeAgo()
+        self.text = timeAgo.string
+        self.timeInterval = timeAgo.fromNow.timeInterval
+        self.setNeedsLayout()
+    }
+}
+
+class MessageDateLabel: RealtimeDateLabel {
     
     func configure(with message: Messageable) {
-        self.text = message.createdAt.getTimeAgoString()
+        self.configure(with: message.createdAt)
     }
 }

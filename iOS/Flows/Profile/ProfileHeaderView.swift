@@ -19,7 +19,7 @@ class ProfileHeaderView: BaseView {
     let memberLabel = ThemeLabel(font: .regular)
     
     let localLabel = ThemeLabel(font: .small)
-    let timeLabel = ThemeLabel(font: .regular)
+    let timeLabel = LocalTimeLabel(font: .regular)
     
     let focusLabel = ThemeLabel(font: .small)
     let focusCircle = BaseView()
@@ -79,12 +79,7 @@ class ProfileHeaderView: BaseView {
                 self.memberLabel.setText("#\(position)")
             }
 
-            if user.isCurrentUser {
-                let nowTime = Date.hourMinuteTimeOfDay.string(from: Date())
-                self.timeLabel.setText(nowTime)
-            } else {
-                self.timeLabel.setText(user.getLocalTime())
-            }
+            self.timeLabel.configure(with: user)
         }
 
         if let status = person.focusStatus {

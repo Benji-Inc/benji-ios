@@ -57,6 +57,12 @@ class CalendarViewController: DiffableCollectionViewController<CalendarRange,
         self.loadInitialData()
     }
     
+    override func willEnterForeground() {
+        super.willEnterForeground()
+        
+        self.dataSource.reconfigureAllItems()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         

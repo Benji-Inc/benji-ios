@@ -34,7 +34,7 @@ class ConversationMemberCell: CollectionViewManagerCell, ManageableCell {
     let nameLabel = ThemeLabel(font: .medium)
     
     let localTimeLabel = ThemeLabel(font: .small)
-    let timeLabel = ThemeLabel(font: .small)
+    let timeLabel = LocalTimeLabel(font: .small)
     
     let focusLabel = ThemeLabel(font: .small)
     let focusCircle = BaseView()
@@ -87,13 +87,8 @@ class ConversationMemberCell: CollectionViewManagerCell, ManageableCell {
             self.nameLabel.setText(person.givenName)
             
             if let user = person as? User {
-                if user.isCurrentUser {
-                    let nowTime = Date.hourMinuteTimeOfDay.string(from: Date())
-                    self.timeLabel.setText(nowTime)
-                } else {
-                    self.timeLabel.setText(user.getLocalTime())
-                }
                 
+                self.timeLabel.configure(with: user)                
                 self.localTimeLabel.isHidden = false
                 self.timeLabel.isHidden = false
             }

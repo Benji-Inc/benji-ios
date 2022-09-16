@@ -30,6 +30,16 @@ class ViewController: CoordinatorViewController {
             cancellable.cancel()
         }
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Keep track of app foreground events.
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).mainSink { [weak self] _ in
+            guard let `self` = self else { return }
+            self.willEnterForeground()
+        }.store(in: &self.cancellables)
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -50,5 +60,8 @@ class ViewController: CoordinatorViewController {
             AnalyticsManager.shared.trackStreen(type: identifier, properties: nil)
         }
     }
+    
+    /// Called when the app enters the foreground
+    func willEnterForeground() {}
 }
 

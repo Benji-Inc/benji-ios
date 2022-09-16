@@ -125,6 +125,19 @@ class ProfileViewController: DiffableCollectionViewController<ProfileDataSource.
         }.add(to: self.autocancelTaskPool)
     }
     
+    override func willEnterForeground() {
+        super.willEnterForeground()
+        
+        switch self.segmentControl.selectedSegmentIndex {
+        case 0:
+            self.startLoadAllMoments()
+        case 1:
+            self.startLoadAllTask()
+        default:
+            break
+        }
+    }
+    
     override func viewDidLayoutSubviews() {
         self.header.expandToSuperviewWidth()
         self.header.height = ProfileHeaderView.height

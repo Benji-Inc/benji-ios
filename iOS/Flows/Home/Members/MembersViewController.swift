@@ -42,6 +42,12 @@ class MembersViewController: DiffableCollectionViewController<MembersDataSource.
         }
     }
     
+    override func willEnterForeground() {
+        super.willEnterForeground()
+        
+        self.reloadPeople()
+    }
+    
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersDataSource.SectionType, MembersDataSource.ItemType>) -> AnimationCycle? {
         return nil
     }

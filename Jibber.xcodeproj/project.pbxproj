@@ -738,6 +738,12 @@
 		D69565CE2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
+		D69649FE28D2EAB9003C99F6 /* LocalTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69649FD28D2EAB9003C99F6 /* LocalTimeLabel.swift */; };
+		D69649FF28D2EAB9003C99F6 /* LocalTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69649FD28D2EAB9003C99F6 /* LocalTimeLabel.swift */; };
+		D6964A0028D2EAB9003C99F6 /* LocalTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69649FD28D2EAB9003C99F6 /* LocalTimeLabel.swift */; };
+		D6964A0228D2EAE0003C99F6 /* RealtimeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6964A0128D2EAE0003C99F6 /* RealtimeHandler.swift */; };
+		D6964A0328D2EAE0003C99F6 /* RealtimeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6964A0128D2EAE0003C99F6 /* RealtimeHandler.swift */; };
+		D6964A0428D2EAE0003C99F6 /* RealtimeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6964A0128D2EAE0003C99F6 /* RealtimeHandler.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D6977D6527D1780900A65330 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6977D6427D1780900A65330 /* StreamChat */; };
@@ -876,6 +882,12 @@
 		D6C7EC272805E62D00A35808 /* WaitlistCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */; };
 		D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
 		D6C7EC2A2805E64000A35808 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C7EC282805E64000A35808 /* WaitlistViewController.swift */; };
+		D6C82E9B28D228E2002BEC18 /* TimeAgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */; };
+		D6C82E9C28D228E2002BEC18 /* TimeAgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */; };
+		D6C82E9D28D228E2002BEC18 /* TimeAgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */; };
+		D6C82E9E28D228E2002BEC18 /* TimeAgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */; };
+		D6C82E9F28D228E2002BEC18 /* TimeAgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */; };
+		D6C82EA028D228E2002BEC18 /* TimeAgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */; };
 		D6C8F1682826D7AC00226583 /* VideoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C8F1672826D7AC00226583 /* VideoAttachment.swift */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
 		D6CC1485276BEF5B005F617F /* Text+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CC1484276BEF5B005F617F /* Text+Extensions.swift */; };
@@ -1437,6 +1449,8 @@
 		D6953743286234B600CFAF02 /* NoticeBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeBadgeView.swift; sourceTree = "<group>"; };
 		D69565CD2790CC820063E802 /* PFConfig+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFConfig+Extensions.swift"; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
+		D69649FD28D2EAB9003C99F6 /* LocalTimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalTimeLabel.swift; sourceTree = "<group>"; };
+		D6964A0128D2EAE0003C99F6 /* RealtimeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeHandler.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972CA28A422A400920998 /* MomentsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsStore.swift; sourceTree = "<group>"; };
 		D69972D228A4533300920998 /* MomentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentCell.swift; sourceTree = "<group>"; };
@@ -1521,6 +1535,7 @@
 		D6C64540280F4CEB00C10267 /* PagingIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingIndicatorView.swift; sourceTree = "<group>"; };
 		D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistCoordinator.swift; sourceTree = "<group>"; };
 		D6C7EC282805E64000A35808 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
+		D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeAgo.swift; sourceTree = "<group>"; };
 		D6C8F1672826D7AC00226583 /* VideoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoAttachment.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
 		D6CC1484276BEF5B005F617F /* Text+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Extensions.swift"; sourceTree = "<group>"; };
@@ -2365,6 +2380,7 @@
 				D609AE3B236F913F004FA89A /* Objectable.swift */,
 				D6D1502821D6085200CD8CE4 /* ResourceObject.swift */,
 				D686DA5C25799EB6000B4C04 /* Statusable.swift */,
+				D6964A0128D2EAE0003C99F6 /* RealtimeHandler.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -2382,6 +2398,7 @@
 				D6405B65236E001A00FAA06B /* Parse Subclasses */,
 				D642735222C85B740088256B /* SystemAvatar.swift */,
 				D61EC0EF21D313D900204BEE /* View Models */,
+				D6C82E9A28D228E2002BEC18 /* TimeAgo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2441,6 +2458,7 @@
 				D61EC0E121D30E6000204BEE /* ThemeLabel.swift */,
 				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
 				8007AB6F286A348800CF5B0F /* VideoView.swift */,
+				D69649FD28D2EAB9003C99F6 /* LocalTimeLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3562,6 +3580,7 @@
 				D61128242804DBD200574B96 /* CGVector+Extensions.swift in Sources */,
 				D61128912804DE8C00574B96 /* Config.swift in Sources */,
 				D611286C2804DC5400574B96 /* ClientError.swift in Sources */,
+				D6964A0028D2EAB9003C99F6 /* LocalTimeLabel.swift in Sources */,
 				D611289C2804E10F00574B96 /* VibrancyView.swift in Sources */,
 				D611281E2804DBC900574B96 /* Range+Extensions.swift in Sources */,
 				D61128A52804E4F300574B96 /* FaceCaptureViewController.swift in Sources */,
@@ -3591,6 +3610,7 @@
 				D611286D2804DC6000574B96 /* MicroAnimation.swift in Sources */,
 				D61128892804DCCA00574B96 /* Statusable.swift in Sources */,
 				D61128722804DC6D00574B96 /* Reservation.swift in Sources */,
+				D6964A0428D2EAE0003C99F6 /* RealtimeHandler.swift in Sources */,
 				D61C1D262840409900F58F84 /* BaseCoordinator.swift in Sources */,
 				D611286B2804DC5400574B96 /* AnimationDuration.swift in Sources */,
 				D61128852804DCCA00574B96 /* Deeplinkable.swift in Sources */,
@@ -3676,6 +3696,7 @@
 				D61128462804DBEE00574B96 /* UIView+Animations.swift in Sources */,
 				D611285E2804DC4700574B96 /* Typealias.swift in Sources */,
 				D611286A2804DC5400574B96 /* DeeplinkObject.swift in Sources */,
+				D6C82EA028D228E2002BEC18 /* TimeAgo.swift in Sources */,
 				D61128782804DC7200574B96 /* User+Extensions.swift in Sources */,
 				D611281D2804DBC900574B96 /* Array+Extensions.swift in Sources */,
 				D611F7B92815A136006D09D3 /* SuggestedReply.swift in Sources */,
@@ -3924,6 +3945,7 @@
 				D619C58927F129B70082AD19 /* EmotionsViewController.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
 				D6B2B65D283D3B23007D507B /* JibberIntroContentView.swift in Sources */,
+				D6C82E9B28D228E2002BEC18 /* TimeAgo.swift in Sources */,
 				D6D75C0928BAE0AB009578E7 /* ReactionsView.swift in Sources */,
 				D6265ECE279E2CE90020BD26 /* RepliesSequenceCollectionViewDataSource.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
@@ -4066,6 +4088,7 @@
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				8068A0062868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
+				D6964A0228D2EAE0003C99F6 /* RealtimeHandler.swift in Sources */,
 				D6A0096128B15A7C0018FA98 /* MomentReactionsView.swift in Sources */,
 				D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* MemberAddCell.swift in Sources */,
@@ -4179,6 +4202,7 @@
 				80665BA627B2F2F3002A8F69 /* MockMessage.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
+				D69649FE28D2EAB9003C99F6 /* LocalTimeLabel.swift in Sources */,
 				8024B95326F278C8008ABF7F /* ConversationCollectionViewDataSource.swift in Sources */,
 				D6D75C2328BEAF65009578E7 /* MomentFooterView.swift in Sources */,
 				D61C1D28284041DE00F58F84 /* PresentableCoordinator.swift in Sources */,
@@ -4225,6 +4249,7 @@
 				D63DB22D25E9991F00F6B323 /* Selectable.swift in Sources */,
 				D63DB26B25E9997800F6B323 /* UserNotificationCategory.swift in Sources */,
 				D63DB23D25E9992900F6B323 /* UNNotificationContent+Extensions.swift in Sources */,
+				D69649FF28D2EAB9003C99F6 /* LocalTimeLabel.swift in Sources */,
 				D63DB22F25E9991F00F6B323 /* Publisher+Extensions.swift in Sources */,
 				D66AB0F3277A498D007A35D1 /* PhotoVideoCaptureSession.swift in Sources */,
 				D6D75C1828BE7391009578E7 /* MomentBlurView.swift in Sources */,
@@ -4276,6 +4301,7 @@
 				801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
 				D63DB22E25E9991F00F6B323 /* PhoneKit.swift in Sources */,
 				D63DB22225E9990100F6B323 /* Range+Extensions.swift in Sources */,
+				D6964A0328D2EAE0003C99F6 /* RealtimeHandler.swift in Sources */,
 				D63DB25D25E9995E00F6B323 /* User.swift in Sources */,
 				807E98EB273497610076889C /* UIColor+Extensions.swift in Sources */,
 				D63DB21425E998D700F6B323 /* Connection+Cloud.swift in Sources */,
@@ -4358,6 +4384,7 @@
 				D660C4CA2793626700221F76 /* AddView.swift in Sources */,
 				D682B417279204A1005DD3B3 /* ConversationMember+Extensions.swift in Sources */,
 				D6D75C1C28BE7966009578E7 /* Moment.swift in Sources */,
+				D6C82E9C28D228E2002BEC18 /* TimeAgo.swift in Sources */,
 				8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D69565CF2790CC820063E802 /* PFConfig+Extensions.swift in Sources */,
 				D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
@@ -4387,6 +4414,7 @@
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
 				D61A33DB27D51D4D00056242 /* ContextCue.swift in Sources */,
 				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
+				D6C82E9D28D228E2002BEC18 /* TimeAgo.swift in Sources */,
 				D61316B0273C859700DC782B /* MessageDeliveryType.swift in Sources */,
 				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
 				D6AE0FEB267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
@@ -4468,6 +4496,7 @@
 				D6AE0FF5267D2CD800C6B048 /* SessionManager.swift in Sources */,
 				D6AE0FF2267D2CCA00C6B048 /* ClientError.swift in Sources */,
 				D6AE0FFB267D2D9500C6B048 /* Objectable.swift in Sources */,
+				D6C82E9E28D228E2002BEC18 /* TimeAgo.swift in Sources */,
 				D611F7BB2815B0FD006D09D3 /* EmojiCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4487,6 +4516,7 @@
 				D61A33EC27D6755000056242 /* ThemeColor.swift in Sources */,
 				D611F7B82815A136006D09D3 /* SuggestedReply.swift in Sources */,
 				D6AE0FFF267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
+				D6C82E9F28D228E2002BEC18 /* TimeAgo.swift in Sources */,
 				D66ED458267D35E200332BA3 /* Config.swift in Sources */,
 				D66ED45B267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0FEF267D2CBA00C6B048 /* Objectable.swift in Sources */,
@@ -4583,7 +4613,7 @@
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClipStaging.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppClip/Info.plist;
@@ -4600,7 +4630,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging.Clip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4623,7 +4653,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppClip/Info.plist;
@@ -4640,7 +4670,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS.Clip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4781,7 +4811,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4789,7 +4819,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -4811,7 +4841,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4819,7 +4849,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -4838,7 +4868,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4847,7 +4877,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -4866,7 +4896,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4875,7 +4905,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -4894,7 +4924,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -4909,7 +4939,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -4927,7 +4957,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -4942,7 +4972,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -4961,7 +4991,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -4976,7 +5006,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -4994,7 +5024,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -5009,7 +5039,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -5028,7 +5058,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
@@ -5043,7 +5073,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS-staging.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -5062,7 +5092,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
@@ -5077,7 +5107,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.iOS.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;

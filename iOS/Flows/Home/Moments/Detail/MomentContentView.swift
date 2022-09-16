@@ -240,7 +240,7 @@ private class MomentDetailContentView: BaseView {
         self.viewedLabel.configure(with: moment)
         #endif
         
-        self.dateLabel.setText(moment.createdAt?.getTimeAgoString() ?? "")
+        self.dateLabel.setText(moment.createdAt?.getTimeAgo().string ?? "")
         self.layoutNow()
         
         Task {
