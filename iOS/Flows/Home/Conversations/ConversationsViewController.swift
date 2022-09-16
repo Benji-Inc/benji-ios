@@ -95,6 +95,8 @@ class ConversationsViewController: DiffableCollectionViewController<Conversation
             var userIds: [String] = []
             userIds.append(user.objectId!)
             
+            logDebug(user.objectId!)
+            
             let filter = Filter<ChannelListFilterScope>.containsAtLeastThese(userIds: userIds)
             let query = ChannelListQuery(filter: filter,
                                          sort: [Sorting(key: .lastMessageAt, isAscending: false)],
