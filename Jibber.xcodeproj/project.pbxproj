@@ -698,6 +698,7 @@
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D6850D5A2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
 		D6850D5B2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
+		D68590F328D6371100836B3E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68590F228D6371100836B3E /* LocationManager.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
@@ -1429,6 +1430,7 @@
 		D684840922CD48D000362AC3 /* GradientPassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientPassThroughView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D6850D592798967E001327D3 /* PullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullView.swift; sourceTree = "<group>"; };
+		D68590F228D6371100836B3E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
 		D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Intents.swift"; sourceTree = "<group>"; };
 		D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PhoneNumbers.swift"; sourceTree = "<group>"; };
@@ -2366,6 +2368,7 @@
 				D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */,
 				D6B95AF627236E1000FBE66A /* ConversationsManager.swift */,
 				D666127327E2EA38006CDF3D /* AchievementsManager.swift */,
+				D68590F228D6371100836B3E /* LocationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -4057,6 +4060,7 @@
 				8097946B28A3117600500218 /* MembersCollectionViewLayout.swift in Sources */,
 				D6D96EFF27C5BD3E00BDCD01 /* ProfileSegmentControl.swift in Sources */,
 				D692E884286A44150001F99B /* MessageExpressionCell.swift in Sources */,
+				D68590F328D6371100836B3E /* LocationManager.swift in Sources */,
 				D692E886286B71BF0001F99B /* ExpressionViewController+Animation.swift in Sources */,
 				D65E66D5285962560040E3D8 /* ShortcutViewController.swift in Sources */,
 				D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */,

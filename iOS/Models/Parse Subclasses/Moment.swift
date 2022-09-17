@@ -15,6 +15,7 @@ import Parse
      case file
      case preview
      case caption
+     case location
  }
 
  final class Moment: PFObject, PFSubclassing {
@@ -59,6 +60,11 @@ import Parse
      var caption: String? {
          get { self.getObject(for: .caption) }
          set { self.setObject(for: .caption, with: newValue) }
+     }
+     
+     var location: PFGeoPoint? {
+         get { self.getObject(for: .location) }
+         set { self.setObject(for: .location, with: newValue) }
      }
  }
 
