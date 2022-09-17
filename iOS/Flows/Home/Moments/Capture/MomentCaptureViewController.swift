@@ -58,6 +58,10 @@ class MomentCaptureViewController: PiPRecordingViewController {
         
         self.view.insertSubview(self.confirmationView, belowSubview: self.backCameraView)
         
+        self.confirmationView.button.didSelect { [unowned self] in
+            self.didCompleteMoment?()
+        }
+        
         self.backCameraView.layer.cornerRadius = self.cornerRadius
         self.backCameraView.layer.masksToBounds = true
         
@@ -111,8 +115,6 @@ class MomentCaptureViewController: PiPRecordingViewController {
             Task {
                 guard let recording = self.recording else { return }
                 await self.confirmationView.uploadMoment(from: recording, caption: self.textView.text)
-                await Task.sleep(seconds: 1.0)
-                self.didCompleteMoment?()
             }
         }
         
