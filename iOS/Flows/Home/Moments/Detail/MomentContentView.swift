@@ -106,6 +106,14 @@ class MomentContentView: BaseView {
             guard let `self` = self else { return }
             self.showMomentIfAvailable()
         }.store(in: &self.cancellables)
+        
+        self.momentView.playerLayer.publisher(for: \.isReadyForDisplay).mainSink { [unowned self] isReady in
+            if self.moment.isAvailable {
+                self.blurView.animateBlur(shouldShow: !isReady)
+            } else {
+                self.blurView.animateBlur(shouldShow: true)
+            }
+        }.store(in: &self.cancellables)
 
         self.showMomentIfAvailable()
     }
@@ -151,18 +159,21 @@ class MomentContentView: BaseView {
     
     func showMomentIfAvailable() {
         
+        self.momentView.loadPreview(for: moment)
+        
         if self.moment.isAvailable {
             self.momentView.loadFullMoment(for: moment)
-        } else {
-            self.momentView.loadPreview(for: moment)
         }
-        
-        self.blurView.animateBlur(shouldShow: !self.moment.isAvailable)
     }
     
     func play() {
-        self.expressionView.playerLayer.player?.play()
-        self.momentView.playerLayer.player?.play()
+        if self.momentView.playerLayer.isReadyForDisplay {
+            self.expressionView.playerLayer.player?.play()
+            self.momentView.playerLayer.player?.play()
+        } else {
+            logDebug("retry")
+            self.play()
+        }
     }
     
     func pause() {

@@ -127,7 +127,6 @@ class ConversationMemberCell: CollectionViewManagerCell, ManageableCell {
         self.timeLabel.pin(.right)
         self.timeLabel.centerY = self.focusLabel.centerY
         
-        self.localTimeLabel.setSize(withWidth: self.width)
         self.localTimeLabel.pin(.right)
         self.localTimeLabel.match(.bottom, to: .top, of: self.timeLabel, offset: .negative(.short))
         

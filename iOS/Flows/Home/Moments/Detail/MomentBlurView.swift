@@ -38,16 +38,22 @@ class MomentBlurView: BaseView {
     
     func configure(for moment: Moment) {
         Task {
-            guard let person = try? await moment.author?.retrieveDataIfNeeded() else { return }
+            guard let moment = try? await moment.retrieveDataIfNeeded() else { return }
             
-            self.label.setText("To view this Moment from \(person.givenName),\nfirst share one of yours.")
-            self.layoutNow()
+            if moment.isAvailable {
+                self.button.isVisible = false
+                self.label.setText("Loading...")
+                self.layoutNow()
+            } else if let person = try? await moment.author?.retrieveDataIfNeeded() {
+                self.label.setText("To view this Moment from \(person.givenName),\nfirst share one of yours.")
+                self.button.isVisible = true
+                self.layoutNow()
+            }            
         }
     }
     
     func animateBlur(shouldShow: Bool) {
         Task {
-            
             await UIView.awaitAnimation(with: .fast) {
                 self.blurredEffectView.effect = shouldShow ? self.blurEffect : nil
                 self.alpha = shouldShow ? 1.0 : 0
