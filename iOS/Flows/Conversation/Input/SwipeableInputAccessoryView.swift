@@ -109,7 +109,7 @@ class SwipeableInputAccessoryView: BaseView {
             NSLayoutConstraint.activate([self.textViewCollapsedVerticalCenterConstraint,
                                          self.textViewCollapsedVerticalHeightContstraint])
             
-            textViewPadding = 48
+            textViewPadding = 40
 
             self.textView.textContainer.lineBreakMode = .byTruncatingTail
             self.textView.isScrollEnabled = false
@@ -159,7 +159,7 @@ class SwipeableInputAccessoryView: BaseView {
             self.addViewWidthContstrain.constant = newAddViewSize
             self.addViewHeightContstrain.constant = newAddViewSize
             self.inputContainerHeightConstraint.constant = newInputHeight
-            self.textViewLeadingConstraint.constant = textViewPadding
+            self.textViewTrailingConstraint.constant = textViewPadding
             self.inputBottomConstraint.constant = bottomConstraint
             // Layout the window so that our container view also animates
             self.window?.layoutNow()

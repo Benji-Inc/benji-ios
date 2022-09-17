@@ -108,11 +108,11 @@ class PreviewMessageView: SpeechBubbleView {
         let maxWidth: CGFloat
         = self.width - self.imageView.width - Theme.ContentOffset.standard.value.doubled
 
-        self.imageView.pin(.left, offset: .standard)
+        self.imageView.pin(.right, offset: .standard)
         self.imageView.pin(.bottom, offset: .standard)
         
         self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.height + Theme.ContentOffset.standard.value.doubled)
-        self.textView.match(.left, to: .right, of: self.imageView)
+        self.textView.pin(.left, offset: .standard)
         self.textView.center.y = self.halfHeight
 
         self.deliveryTypeView.centerOnX()
