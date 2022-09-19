@@ -115,7 +115,9 @@ class MomentsStore {
     
     #if IOS
     @discardableResult
-    func createMoment(from recording: PiPRecording, caption: String?) async throws -> Moment {
+    func createMoment(from recording: PiPRecording,
+                      location: CLLocation?,
+                      caption: String?) async throws -> Moment {
         
         guard let expressionURL = recording.frontRecordingURL,
                let momentURL = recording.backRecordingURL,
@@ -143,6 +145,7 @@ class MomentsStore {
         moment.file = PFFileObject(name: "moment.mov", data: momentData)
         moment.preview = PFFileObject(name: "preview.mov", data: previewData)
         moment.caption = caption ?? "No caption"
+        moment.location = PFGeoPoint(location: location)
 
         let savedMoment = try await moment.saveToServer()
         
