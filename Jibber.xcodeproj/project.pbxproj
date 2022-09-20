@@ -699,6 +699,8 @@
 		D6850D5A2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
 		D6850D5B2798967E001327D3 /* PullView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6850D592798967E001327D3 /* PullView.swift */; };
 		D68590F328D6371100836B3E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68590F228D6371100836B3E /* LocationManager.swift */; };
+		D68593E028DA0B5A00836B3E /* LocationSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68593DF28DA0B5A00836B3E /* LocationSwitchView.swift */; };
+		D68593E228DA0B6B00836B3E /* WeatherSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68593E128DA0B6B00836B3E /* WeatherSwitchView.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
@@ -1431,6 +1433,8 @@
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D6850D592798967E001327D3 /* PullView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullView.swift; sourceTree = "<group>"; };
 		D68590F228D6371100836B3E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		D68593DF28DA0B5A00836B3E /* LocationSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSwitchView.swift; sourceTree = "<group>"; };
+		D68593E128DA0B6B00836B3E /* WeatherSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSwitchView.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
 		D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Intents.swift"; sourceTree = "<group>"; };
 		D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PhoneNumbers.swift"; sourceTree = "<group>"; };
@@ -2240,6 +2244,8 @@
 				D6A0096428B587360018FA98 /* MomentConfirmationView.swift */,
 				D6A0096228B539A20018FA98 /* MomentSwipeGestureHandler.swift */,
 				D63F9648289B29D2004F6C0D /* PIP */,
+				D68593DF28DA0B5A00836B3E /* LocationSwitchView.swift */,
+				D68593E128DA0B6B00836B3E /* WeatherSwitchView.swift */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -3800,6 +3806,7 @@
 				D6739A6527BC4BC40047BBCA /* BallanceDetailView.swift in Sources */,
 				D6AA61FC2852593500FA4D02 /* HomeCoordinator.swift in Sources */,
 				D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
+				D68593E228DA0B6B00836B3E /* WeatherSwitchView.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D6850D5A2798967E001327D3 /* PullView.swift in Sources */,
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,
@@ -3883,6 +3890,7 @@
 				D60CA47827EE299A00F0871A /* EmojiPickerViewController.swift in Sources */,
 				D62D16322736F60400C542CE /* ToastStatusView.swift in Sources */,
 				D6E974362752C47F00D95F08 /* EmotionCategory.swift in Sources */,
+				D68593E028DA0B5A00836B3E /* LocationSwitchView.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6DEC40027A2213E0072D9D0 /* ConversationCoordinator+Presentation.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceCaptureViewController.swift in Sources */,

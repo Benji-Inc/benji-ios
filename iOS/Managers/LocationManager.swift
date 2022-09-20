@@ -17,9 +17,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private var cancellables = Set<AnyCancellable>()
     
     var isAuthorized: Bool {
-        return self.manager.authorizationStatus == .authorizedWhenInUse
+        return self.authorizationStatus == .authorizedWhenInUse
     }
     
+    @Published private(set) var authorizationStatus: CLAuthorizationStatus?
     @Published private(set) var currentLocation: CLLocation?
     @Published private(set) var currentPlaceMark: CLPlacemark?
     
@@ -85,7 +86,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        
+        self.authorizationStatus = manager.authorizationStatus 
         switch manager.authorizationStatus {
         case .authorizedWhenInUse:  // Location services are available.
             //enableLocationFeatures()

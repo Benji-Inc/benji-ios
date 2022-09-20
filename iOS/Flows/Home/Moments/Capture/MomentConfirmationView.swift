@@ -21,8 +21,9 @@ class MomentConfirmationView: BaseView {
     
     let button = ThemeButton()
     
-    let locationButton = ThemeButton()
-    
+    let locationSwitch = LocationSwitchView()
+    let weatherSwitch = WeatherSwitchView()
+        
     private var savedMoment: Moment?
     
     var didTapFinish: CompletionOptional = nil
@@ -62,16 +63,8 @@ class MomentConfirmationView: BaseView {
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Finished"))
         self.button.alpha = 0
         
-        self.addSubview(self.locationButton)
-        self.locationButton.set(style: .custom(color: .whiteWithAlpha, textColor: .white, text: "Add Location"))
-        self.locationButton.alpha = 0
-        self.locationButton.didSelect { 
-            if LocationManager.shared.isAuthorized {
-                LocationManager.shared.requestCurrentLocation()
-            } else {
-                LocationManager.shared.requestAuthorization()
-            }
-        }
+        self.addSubview(self.locationSwitch)
+        self.addSubview(self.weatherSwitch)
         
         self.button.didSelect { [unowned self] in
             Task {
@@ -102,20 +95,30 @@ class MomentConfirmationView: BaseView {
         self.button.pinToSafeAreaBottom()
         self.button.centerOnX()
         
-        self.locationButton.setSize(with: self.width)
-        self.locationButton.match(.bottom, to: .top, of: self.button, offset: .negative(.standard))
-        self.locationButton.centerOnX()
+        self.weatherSwitch.setSize(with: self.width)
+        self.weatherSwitch.match(.bottom, to: .top, of: self.button, offset: .negative(.standard))
+        self.weatherSwitch.centerOnX()
+        
+        self.locationSwitch.setSize(with: self.width)
+        self.locationSwitch.match(.bottom, to: .top, of: self.weatherSwitch, offset: .negative(.standard))
+        self.locationSwitch.centerOnX()
     }
     
     func updateMomentIfNeeded() async {
-        guard let moment = self.savedMoment else { return }
+        guard let moment = self.savedMoment else {
+            self.didTapFinish?()
+            return
+        }
+        
         let location = PFGeoPoint(location: LocationManager.shared.currentLocation)
         
-        if moment.location != location {
+        if moment.location != location, self.locationSwitch.isON {
             moment.location = location
             await self.button.handleLoadingState()
             _ = try? await moment.saveToServer()
             await self.button.handleEvent(status: .complete)
+            self.didTapFinish?()
+        } else {
             self.didTapFinish?()
         }
     }
@@ -160,7 +163,8 @@ class MomentConfirmationView: BaseView {
                 self.label.transform = .identity
                 self.label.alpha = 1.0
                 self.button.alpha = 1.0
-                self.locationButton.alpha = 1.0
+                self.locationSwitch.state = LocationManager.shared.isAuthorized ? .enabled : .disabled
+                self.weatherSwitch.state = LocationManager.shared.isAuthorized ? .enabled : .disabled
             })
             
             await Task.sleep(seconds: 2.0)
@@ -194,11 +198,22 @@ class MomentConfirmationView: BaseView {
                               location: CLLocation?,
                               caption: String?) async throws {
         do {
+            let locationToSave: CLLocation? = self.locationSwitch.isON ? location : nil
+            //Add Weather
             self.savedMoment = try await MomentsStore.shared.createMoment(from: recording,
-                                                                          location: location,
+                                                                          location: locationToSave,
                                                                           caption: caption)
         } catch {
             throw ClientError.error(error: error)
+        }
+    }
+    
+    private func updateWeatherSwitchState() {
+        if LocationManager.shared.isAuthorized {
+            // Set state
+            self.weatherSwitch.state = .enabled
+        } else {
+            self.weatherSwitch.state = .disabled
         }
     }
 }
