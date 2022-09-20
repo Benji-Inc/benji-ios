@@ -136,6 +136,12 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
     // MARK: - PUBLIC
     
     func startRecording() {
+        
+        // Grab the current location if we have it. 
+        if LocationManager.shared.isAuthorized {
+            LocationManager.shared.requestCurrentLocation()
+        }
+        
         var backVideoSettings = self.backOutput.recommendedVideoSettingsForAssetWriter(writingTo: .mov)
         // Adjust the bitrate for change video size (less bitrate, less size and quality)
         // This bitrate will need to be adjusted for videos that are higher res than 1080.

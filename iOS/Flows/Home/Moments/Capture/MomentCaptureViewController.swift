@@ -135,6 +135,10 @@ class MomentCaptureViewController: PiPRecordingViewController {
             }
         }
         
+        self.confirmationView.didTapFinish = { [unowned self] in
+            self.didCompleteMoment?()
+        }
+        
         KeyboardManager.shared.$currentEvent.mainSink { [unowned self] event in
             switch event {
                 

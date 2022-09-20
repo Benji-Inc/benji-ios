@@ -9,6 +9,7 @@
 import Foundation
 import Lottie
 import Parse
+import AVKit
 
 class MomentConfirmationView: BaseView {
     
@@ -23,6 +24,8 @@ class MomentConfirmationView: BaseView {
     let locationButton = ThemeButton()
     
     private var savedMoment: Moment?
+    
+    var didTapFinish: CompletionOptional = nil
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -72,7 +75,9 @@ class MomentConfirmationView: BaseView {
         }
         
         self.button.didSelect { [unowned self] in
-          // update moment
+            Task {
+                await self.updateMomentIfNeeded()
+            }
         }
     }
     
@@ -103,9 +108,17 @@ class MomentConfirmationView: BaseView {
         self.locationButton.centerOnX()
     }
     
-    func updateMoment() async {
+    func updateMomentIfNeeded() async {
         guard let moment = self.savedMoment else { return }
-        moment.location = PFGeoPoint(location: LocationManager.shared.currentLocation)
+        let location = PFGeoPoint(location: LocationManager.shared.currentLocation)
+        
+        if moment.location != location {
+            moment.location = location
+            await self.button.handleLoadingState()
+            _ = try? await moment.saveToServer()
+            await self.button.handleEvent(status: .complete)
+            self.didTapFinish?()
+        }
     }
     
     func uploadMoment(from recording: PiPRecording, caption: String?) async {
@@ -118,6 +131,10 @@ class MomentConfirmationView: BaseView {
         if let url = recording.backRecordingURL {
             self.preview.updatePlayer(with: [url])
         }
+        
+        self.preview.playerLayer.player?.pause()
+        
+        guard let currentItem = self.preview.playerLayer.player?.currentItem else { return }
         
         await UIView.awaitSpringAnimation(with: .fast, animations: {
             self.progressView.alpha = 1.0
