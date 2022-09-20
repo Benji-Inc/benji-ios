@@ -48,7 +48,6 @@ class MomentConfirmationView: BaseView {
         self.preview.layer.cornerRadius = Theme.cornerRadius
         self.preview.layer.masksToBounds = true
         self.preview.clipsToBounds = true
-        self.preview.backgroundColor = .red
         self.preview.playerLayer.videoGravity = .resizeAspectFill
         
         self.addSubview(self.label)
@@ -66,7 +65,7 @@ class MomentConfirmationView: BaseView {
         self.addSubview(self.locationButton)
         self.locationButton.set(style: .custom(color: .whiteWithAlpha, textColor: .white, text: "Add Location"))
         self.locationButton.alpha = 0
-        self.locationButton.didSelect { [unowned self] in
+        self.locationButton.didSelect { 
             if LocationManager.shared.isAuthorized {
                 LocationManager.shared.requestCurrentLocation()
             } else {
@@ -131,11 +130,7 @@ class MomentConfirmationView: BaseView {
         if let url = recording.backRecordingURL {
             self.preview.updatePlayer(with: [url])
         }
-        
-        self.preview.playerLayer.player?.pause()
-        
-        guard let currentItem = self.preview.playerLayer.player?.currentItem else { return }
-        
+                        
         await UIView.awaitSpringAnimation(with: .fast, animations: {
             self.progressView.alpha = 1.0
             self.preview.alpha = 1.0
