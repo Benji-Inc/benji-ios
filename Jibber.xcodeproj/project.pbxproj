@@ -906,6 +906,12 @@
 		D6CDA29327D16F9400823968 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
 		D6CDA29427D170DA00823968 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E721D3107A00204BEE /* Date+Extensions.swift */; };
 		D6CDA29527D170DB00823968 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E721D3107A00204BEE /* Date+Extensions.swift */; };
+		D6CEB1D128DA82A400FC1F05 /* PFGeopoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D028DA82A400FC1F05 /* PFGeopoint+Extensions.swift */; };
+		D6CEB1D228DA82A400FC1F05 /* PFGeopoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D028DA82A400FC1F05 /* PFGeopoint+Extensions.swift */; };
+		D6CEB1D328DA82A400FC1F05 /* PFGeopoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D028DA82A400FC1F05 /* PFGeopoint+Extensions.swift */; };
+		D6CEB1D528DA88C000FC1F05 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */; };
+		D6CEB1D628DA88C000FC1F05 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */; };
+		D6CEB1D728DA88C000FC1F05 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */; };
 		D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D145FC21D550E400CD8CE4 /* AttributedString.swift */; };
 		D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D145FE21D5510400CD8CE4 /* StringStyle.swift */; };
 		D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460421D5524C00CD8CE4 /* StringCasing.swift */; };
@@ -1551,6 +1557,8 @@
 		D6CC148C276C003E005F617F /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Onboarding+Cloud.swift"; sourceTree = "<group>"; };
 		D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Connection+Cloud.swift"; sourceTree = "<group>"; };
+		D6CEB1D028DA82A400FC1F05 /* PFGeopoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFGeopoint+Extensions.swift"; sourceTree = "<group>"; };
+		D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailView.swift; sourceTree = "<group>"; };
 		D6D145FC21D550E400CD8CE4 /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
 		D6D145FE21D5510400CD8CE4 /* StringStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringStyle.swift; sourceTree = "<group>"; };
 		D6D1460421D5524C00CD8CE4 /* StringCasing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringCasing.swift; sourceTree = "<group>"; };
@@ -2692,6 +2700,7 @@
 				D6966516263D96D70009114B /* PFFileObject+Extensions.swift */,
 				D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */,
 				8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */,
+				D6CEB1D028DA82A400FC1F05 /* PFGeopoint+Extensions.swift */,
 			);
 			path = Parse;
 			sourceTree = "<group>";
@@ -2842,6 +2851,7 @@
 				D63F963F289AE3D2004F6C0D /* MomentViewController.swift */,
 				D6D75C0528BAE061009578E7 /* Reactions */,
 				D6D75C0328BA7D6E009578E7 /* ViewedLabel.swift */,
+				D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -3568,6 +3578,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6CEB1D328DA82A400FC1F05 /* PFGeopoint+Extensions.swift in Sources */,
 				D61128732804DC6D00574B96 /* QuePositions.swift in Sources */,
 				D61128992804E0E600574B96 /* Switchable.swift in Sources */,
 				D611283B2804DBEE00574B96 /* UIViewController+Extensions.swift in Sources */,
@@ -3609,6 +3620,7 @@
 				D61128392804DBEE00574B96 /* UIControl+Extensions.swift in Sources */,
 				D61128B82804E9F300574B96 /* PassThroughView.swift in Sources */,
 				D611287C2804DCB000574B96 /* ThemeColor.swift in Sources */,
+				D6CEB1D728DA88C000FC1F05 /* LocationDetailView.swift in Sources */,
 				D611283A2804DBEE00574B96 /* UIEdgeInsets+Extensions.swift in Sources */,
 				D611281C2804DBC600574B96 /* Character+Extensions.swift in Sources */,
 				D61128A82804E5D200574B96 /* TransitionRouter.swift in Sources */,
@@ -3988,6 +4000,7 @@
 				D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */,
 				8098CC61270F8A2300636484 /* ConversationListCollectionView.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
+				D6CEB1D128DA82A400FC1F05 /* PFGeopoint+Extensions.swift in Sources */,
 				D646D36427E505190077D20B /* AttachmentsCollectionView.swift in Sources */,
 				D6222E5F27A0C5FC001806D6 /* PeopleNavigationController.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
@@ -4071,6 +4084,7 @@
 				D68590F328D6371100836B3E /* LocationManager.swift in Sources */,
 				D692E886286B71BF0001F99B /* ExpressionViewController+Animation.swift in Sources */,
 				D65E66D5285962560040E3D8 /* ShortcutViewController.swift in Sources */,
+				D6CEB1D528DA88C000FC1F05 /* LocationDetailView.swift in Sources */,
 				D6B2B665283D737E007D507B /* NoticeDetailContentView.swift in Sources */,
 				D61A33E327D5730500056242 /* ContextCueCollectionViewLayout.swift in Sources */,
 				804E585A276D484900700923 /* PlaceholderMessageCell.swift in Sources */,
@@ -4263,6 +4277,7 @@
 				D63DB23D25E9992900F6B323 /* UNNotificationContent+Extensions.swift in Sources */,
 				D69649FF28D2EAB9003C99F6 /* LocalTimeLabel.swift in Sources */,
 				D63DB22F25E9991F00F6B323 /* Publisher+Extensions.swift in Sources */,
+				D6CEB1D228DA82A400FC1F05 /* PFGeopoint+Extensions.swift in Sources */,
 				D66AB0F3277A498D007A35D1 /* PhotoVideoCaptureSession.swift in Sources */,
 				D6D75C1828BE7391009578E7 /* MomentBlurView.swift in Sources */,
 				D63DB25525E9995700F6B323 /* DeeplinkObject.swift in Sources */,
@@ -4339,6 +4354,7 @@
 				D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
 				D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */,
 				807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */,
+				D6CEB1D628DA88C000FC1F05 /* LocationDetailView.swift in Sources */,
 				D63DB24D25E9994B00F6B323 /* Completeable.swift in Sources */,
 				D63DB23425E9992600F6B323 /* UIEdgeInsets+Extensions.swift in Sources */,
 				807A7BC726C5B5A20023A71E /* Task+Extensions.swift in Sources */,

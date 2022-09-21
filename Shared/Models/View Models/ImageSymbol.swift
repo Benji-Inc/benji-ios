@@ -58,6 +58,7 @@ enum ImageSymbol: String, ImageDisplayable {
     case jiblogo
     case hare = "hare"
     case recordingTape = "recordingtape"
+    case mappingPin = "mappin.and.ellipse"
     
     var image: UIImage? {
         switch self {
@@ -78,7 +79,7 @@ enum ImageSymbol: String, ImageDisplayable {
             colors = [.whiteWithAlpha, .white]
         case .bell, .bellFill, .person3, .person3Fill, .bolt, .boltFill, .rectangleStack, .rectangleStackFill:
             colors = [.white]
-        case .bellBadge:
+        case .bellBadge, .mappingPin:
             colors = [.red, .white]
         case .xMarkCircleFill:
             colors = [.whiteWithAlpha, .whiteWithAlpha]

@@ -134,8 +134,7 @@ class MomentContentView: BaseView {
         self.captionTextView.bottom = self.height - self.captionTextView.left
         self.captionTextView.isVisible = !self.captionTextView.placeholderText.isEmpty
         
-        self.detailContentView.expandToSuperviewWidth()
-        self.detailContentView.height = 30
+        self.detailContentView.expandToSuperviewSize()
         self.detailContentView.pin(.top)
         
         self.menuButton.squaredSize = 44
@@ -219,6 +218,8 @@ private class MomentDetailContentView: BaseView {
     private let viewedLabel = ViewedLabel()
     #endif
     
+    private let locationView = LocationDetailView()
+    
     override func initializeSubviews() {
         super.initializeSubviews()
         
@@ -227,6 +228,9 @@ private class MomentDetailContentView: BaseView {
         #if IOS
         self.addSubview(self.viewedLabel)
         #endif
+        
+        self.addSubview(self.locationView)
+        self.locationView.isVisible = false
     }
     
     override func layoutSubviews() {
@@ -244,6 +248,11 @@ private class MomentDetailContentView: BaseView {
         self.viewedLabel.pinToSafeAreaRight()
         self.viewedLabel.centerY = self.nameLabel.centerY
         #endif
+        
+        self.locationView.height = 22
+        self.locationView.width = self.halfWidth
+        self.locationView.pinToSafeAreaLeft()
+        self.locationView.pin(.bottom, offset: .xtraLong)
     }
     
     func configure(for moment: Moment) {
@@ -258,8 +267,11 @@ private class MomentDetailContentView: BaseView {
             guard let moment = try? await moment.retrieveDataIfNeeded() else { return }
             if let person = try? await moment.author?.retrieveDataIfNeeded() {
                 self.nameLabel.setText(person.fullName.capitalized)
-                self.layoutNow()
             }
+            
+            await self.locationView.configure(with: moment)
+            
+            self.layoutNow()
         }
     }
 }
