@@ -447,6 +447,9 @@
 		D637651E27E983FC00CCDA7F /* ConversationInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651D27E983FC00CCDA7F /* ConversationInfoCell.swift */; };
 		D637652027E98CB400CCDA7F /* ConversationEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D637651F27E98CB400CCDA7F /* ConversationEditCell.swift */; };
 		D6381D7327E1666100102FB4 /* EmojiCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6381D7227E1666100102FB4 /* EmojiCategory.swift */; };
+		D639892328DF1EB900F0CD61 /* LocationToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639892228DF1EB900F0CD61 /* LocationToggleView.swift */; };
+		D639892728DF1EF900F0CD61 /* EmotionsToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639892628DF1EF900F0CD61 /* EmotionsToggleView.swift */; };
+		D639892B28DF1F1500F0CD61 /* WeatherToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639892A28DF1F1500F0CD61 /* WeatherToggleView.swift */; };
 		D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
 		D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
@@ -912,6 +915,9 @@
 		D6CEB1D528DA88C000FC1F05 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */; };
 		D6CEB1D628DA88C000FC1F05 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */; };
 		D6CEB1D728DA88C000FC1F05 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */; };
+		D6CEB1D928DB595E00FC1F05 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D828DB595E00FC1F05 /* ToggleView.swift */; };
+		D6CEB1DA28DB595E00FC1F05 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D828DB595E00FC1F05 /* ToggleView.swift */; };
+		D6CEB1DB28DB595E00FC1F05 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CEB1D828DB595E00FC1F05 /* ToggleView.swift */; };
 		D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D145FC21D550E400CD8CE4 /* AttributedString.swift */; };
 		D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D145FE21D5510400CD8CE4 /* StringStyle.swift */; };
 		D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460421D5524C00CD8CE4 /* StringCasing.swift */; };
@@ -1311,6 +1317,9 @@
 		D637651D27E983FC00CCDA7F /* ConversationInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationInfoCell.swift; sourceTree = "<group>"; };
 		D637651F27E98CB400CCDA7F /* ConversationEditCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationEditCell.swift; sourceTree = "<group>"; };
 		D6381D7227E1666100102FB4 /* EmojiCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCategory.swift; sourceTree = "<group>"; };
+		D639892228DF1EB900F0CD61 /* LocationToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationToggleView.swift; sourceTree = "<group>"; };
+		D639892628DF1EF900F0CD61 /* EmotionsToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionsToggleView.swift; sourceTree = "<group>"; };
+		D639892A28DF1F1500F0CD61 /* WeatherToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherToggleView.swift; sourceTree = "<group>"; };
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
 		D63D5C96265811B000543200 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
@@ -1559,6 +1568,7 @@
 		D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Connection+Cloud.swift"; sourceTree = "<group>"; };
 		D6CEB1D028DA82A400FC1F05 /* PFGeopoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFGeopoint+Extensions.swift"; sourceTree = "<group>"; };
 		D6CEB1D428DA88C000FC1F05 /* LocationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailView.swift; sourceTree = "<group>"; };
+		D6CEB1D828DB595E00FC1F05 /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
 		D6D145FC21D550E400CD8CE4 /* AttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedString.swift; sourceTree = "<group>"; };
 		D6D145FE21D5510400CD8CE4 /* StringStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringStyle.swift; sourceTree = "<group>"; };
 		D6D1460421D5524C00CD8CE4 /* StringCasing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringCasing.swift; sourceTree = "<group>"; };
@@ -2213,6 +2223,17 @@
 			path = "Conversation Detail";
 			sourceTree = "<group>";
 		};
+		D639892128DF1EA100F0CD61 /* Toggle */ = {
+			isa = PBXGroup;
+			children = (
+				D6CEB1D828DB595E00FC1F05 /* ToggleView.swift */,
+				D639892228DF1EB900F0CD61 /* LocationToggleView.swift */,
+				D639892628DF1EF900F0CD61 /* EmotionsToggleView.swift */,
+				D639892A28DF1F1500F0CD61 /* WeatherToggleView.swift */,
+			);
+			path = Toggle;
+			sourceTree = "<group>";
+		};
 		D63C67DA23D4147C00EA373A /* Face Detection */ = {
 			isa = PBXGroup;
 			children = (
@@ -2254,6 +2275,7 @@
 				D63F9648289B29D2004F6C0D /* PIP */,
 				D68593DF28DA0B5A00836B3E /* LocationSwitchView.swift */,
 				D68593E128DA0B6B00836B3E /* WeatherSwitchView.swift */,
+				D639892128DF1EA100F0CD61 /* Toggle */,
 			);
 			path = Capture;
 			sourceTree = "<group>";
@@ -3618,6 +3640,7 @@
 				D6D75C1728BE738B009578E7 /* MomentVideoView.swift in Sources */,
 				D61128502804DC3200574B96 /* PhoneTextField.swift in Sources */,
 				D61128392804DBEE00574B96 /* UIControl+Extensions.swift in Sources */,
+				D6CEB1DB28DB595E00FC1F05 /* ToggleView.swift in Sources */,
 				D61128B82804E9F300574B96 /* PassThroughView.swift in Sources */,
 				D611287C2804DCB000574B96 /* ThemeColor.swift in Sources */,
 				D6CEB1D728DA88C000FC1F05 /* LocationDetailView.swift in Sources */,
@@ -3874,6 +3897,7 @@
 				D6079703279F442B000D0715 /* PeopleViewController+Search.swift in Sources */,
 				D6D75C2B28C6BF37009578E7 /* CalendarCollectionViewLayout.swift in Sources */,
 				D6222E5D27A09FF8001806D6 /* PeopleFooterView.swift in Sources */,
+				D639892728DF1EF900F0CD61 /* EmotionsToggleView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				80D5C292281719EB00182DB6 /* ExpressionDetailCoordinator.swift in Sources */,
 				D6AA61F8285255DC00FA4D02 /* ConversationsViewController.swift in Sources */,
@@ -4104,6 +4128,7 @@
 				D6C7EC292805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6A0095928B11BEC0018FA98 /* CommentsCoordinator.swift in Sources */,
+				D6CEB1D928DB595E00FC1F05 /* ToggleView.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D61A33D727D4FAA900056242 /* ContextCueCoordinator.swift in Sources */,
@@ -4133,6 +4158,7 @@
 				802EDDAB27ECD496005ECA9C /* String+DataTypes.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D692E88E286E04740001F99B /* RepliesBadgeView.swift in Sources */,
+				D639892B28DF1F1500F0CD61 /* WeatherToggleView.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6079705279F574E000D0715 /* PersonCell.swift in Sources */,
 				D678EC2426F530850071DB0D /* Circle.swift in Sources */,
@@ -4206,6 +4232,7 @@
 				D692E888286BB8030001F99B /* ReplyButton.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
+				D639892328DF1EB900F0CD61 /* LocationToggleView.swift in Sources */,
 				D6AA62012852616D00FA4D02 /* HomeCoordinator+Notices.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
@@ -4336,6 +4363,7 @@
 				D6850D5B2798967E001327D3 /* PullView.swift in Sources */,
 				8068A0072868CA5900786B1E /* ExpressionVideoView.swift in Sources */,
 				D6C3892F2724B8E5004D29D5 /* MessageDeliveryType.swift in Sources */,
+				D6CEB1DA28DB595E00FC1F05 /* ToggleView.swift in Sources */,
 				D62D16342736F60400C542CE /* ToastStatusView.swift in Sources */,
 				D63DB22625E9990900F6B323 /* CGPoint+Extensions.swift in Sources */,
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,

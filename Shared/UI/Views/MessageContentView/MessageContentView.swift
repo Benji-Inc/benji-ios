@@ -295,7 +295,7 @@ class MessageContentView: BaseView {
         let isDifferentMessage = self.message?.id != message.id
 
         self.message = message
-
+        
         self.textView.isVisible = message.kind.hasText && !message.kind.isLink
         self.imageView.isVisible = message.kind.hasImage
         self.linkView.isVisible = message.kind.isLink

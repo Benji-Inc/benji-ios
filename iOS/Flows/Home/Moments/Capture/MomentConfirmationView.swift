@@ -21,8 +21,9 @@ class MomentConfirmationView: BaseView {
     
     let button = ThemeButton()
     
-    let locationSwitch = LocationSwitchView()
-    let weatherSwitch = WeatherSwitchView()
+    let emotionsToggle = ToggleView(type: .emotions)
+    let weatherToggle = ToggleView(type: .weather)
+    let locationToggle = ToggleView(type: .location)
         
     private var savedMoment: Moment?
     
@@ -63,8 +64,12 @@ class MomentConfirmationView: BaseView {
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Finished"))
         self.button.alpha = 0
         
-        self.addSubview(self.locationSwitch)
-        self.addSubview(self.weatherSwitch)
+        self.addSubview(self.emotionsToggle)
+        self.emotionsToggle.alpha = 0
+        self.addSubview(self.weatherToggle)
+        self.weatherToggle.alpha = 0
+        self.addSubview(self.locationToggle)
+        self.locationToggle.alpha = 0
         
         self.button.didSelect { [unowned self] in
             Task {
@@ -95,13 +100,14 @@ class MomentConfirmationView: BaseView {
         self.button.pinToSafeAreaBottom()
         self.button.centerOnX()
         
-        self.weatherSwitch.setSize(with: self.width)
-        self.weatherSwitch.match(.bottom, to: .top, of: self.button, offset: .negative(.standard))
-        self.weatherSwitch.centerOnX()
+        self.emotionsToggle.match(.bottom, to: .top, of: self.button, offset: .negative(.xtraLong))
+        self.emotionsToggle.centerX = self.width * 0.25
         
-        self.locationSwitch.setSize(with: self.width)
-        self.locationSwitch.match(.bottom, to: .top, of: self.weatherSwitch, offset: .negative(.standard))
-        self.locationSwitch.centerOnX()
+        self.weatherToggle.match(.top, to: .top, of: self.emotionsToggle)
+        self.weatherToggle.centerX = self.halfWidth
+        
+        self.locationToggle.match(.top, to: .top, of: self.emotionsToggle)
+        self.locationToggle.centerX = self.width * 0.75
     }
     
     func updateMomentIfNeeded() async {
@@ -112,7 +118,7 @@ class MomentConfirmationView: BaseView {
         
         let location = PFGeoPoint(location: LocationManager.shared.currentLocation)
         
-        if moment.location != location, self.locationSwitch.isON {
+        if moment.location != location, self.locationToggle.isON {
             moment.location = location
             await self.button.handleLoadingState()
             _ = try? await moment.saveToServer()
@@ -140,9 +146,11 @@ class MomentConfirmationView: BaseView {
         })
         
         do {
-            async let creation: () = try await self.createMoment(from: recording,
-                                                                 location: LocationManager.shared.currentLocation,
-                                                                 caption: caption)
+            
+            async let creation: () = Task.sleep(seconds: 1.0)
+//            async let creation: () = try await self.createMoment(from: recording,
+//                                                                 location: LocationManager.shared.currentLocation,
+//                                                                 caption: caption)
             self.progressView.setProgress(0.9, animated: true)
             
             let _ = try await [creation]
@@ -161,8 +169,9 @@ class MomentConfirmationView: BaseView {
                 self.label.transform = .identity
                 self.label.alpha = 1.0
                 self.button.alpha = 1.0
-                self.locationSwitch.state = LocationManager.shared.isAuthorized ? .enabled : .disabled
-                self.weatherSwitch.state = LocationManager.shared.isAuthorized ? .enabled : .disabled
+                self.locationToggle.alpha = 1.0
+                self.emotionsToggle.alpha = 1.0
+                self.weatherToggle.alpha = 1.0
             })
             
             await Task.sleep(seconds: 2.0)
@@ -196,22 +205,13 @@ class MomentConfirmationView: BaseView {
                               location: CLLocation?,
                               caption: String?) async throws {
         do {
-            let locationToSave: CLLocation? = self.locationSwitch.isON ? location : nil
+            let locationToSave: CLLocation? = self.locationToggle.isON ? location : nil
             //Add Weather
             self.savedMoment = try await MomentsStore.shared.createMoment(from: recording,
                                                                           location: locationToSave,
                                                                           caption: caption)
         } catch {
             throw ClientError.error(error: error)
-        }
-    }
-    
-    private func updateWeatherSwitchState() {
-        if LocationManager.shared.isAuthorized {
-            // Set state
-            self.weatherSwitch.state = .enabled
-        } else {
-            self.weatherSwitch.state = .disabled
         }
     }
 }

@@ -59,6 +59,8 @@ enum ImageSymbol: String, ImageDisplayable {
     case hare = "hare"
     case recordingTape = "recordingtape"
     case mappingPin = "mappin.and.ellipse"
+    case cloudRain = "cloud.rain"
+    case heart = "heart.fill"
     
     var image: UIImage? {
         switch self {
