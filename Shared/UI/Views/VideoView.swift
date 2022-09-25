@@ -60,7 +60,7 @@ class VideoView: BaseView {
             guard let `self` = self else { return }
             guard let player = self.playerLayer.player else { return }
 
-            if self.shouldPlay, !self.isPlaying {
+            if self.shouldPlay, !self.isPlaying, self.alpha != 0 {
                 player.playImmediately(atRate: 1.0)
             }
             
