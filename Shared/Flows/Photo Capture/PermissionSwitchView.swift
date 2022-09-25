@@ -22,8 +22,6 @@ class PermissionSwitchView: BaseView {
     enum PermissionType {
         case focus
         case notificaitons
-        case location
-        case weather
 
         var text: Localized {
             switch self {
@@ -31,10 +29,6 @@ class PermissionSwitchView: BaseView {
                 return "Focus Status"
             case .notificaitons:
                 return "Notifications"
-            case .location:
-                return "Current Location"
-            case .weather:
-                return "Weather"
             }
         }
     }
