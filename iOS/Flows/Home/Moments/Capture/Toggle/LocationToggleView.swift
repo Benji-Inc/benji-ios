@@ -22,8 +22,20 @@ class LocationToggleView: ToggleView {
         super.initializeSubviews()
         
         LocationManager.shared.$authorizationStatus.mainSink { [unowned self] status in
-            self.button.isEnabled = LocationManager.shared.isAuthorized
             self.isON = LocationManager.shared.isAuthorized
+        }.store(in: &self.cancellables)
+        
+        LocationManager.shared.$currentLocation.mainSink { [unowned self] location in
+            if let current = location {
+                Task {
+                    await self.label.setText(current.getStreetString())
+                    self.layoutNow()
+                }
+            } else {
+                self.label.setText("Location")
+                self.layoutNow()
+            }
+            
         }.store(in: &self.cancellables)
     }
     

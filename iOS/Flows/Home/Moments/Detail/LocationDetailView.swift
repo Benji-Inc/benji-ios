@@ -35,7 +35,7 @@ class LocationDetailView: BaseView {
     }
     
     func configure(with moment: Moment) async {
-        if let locationString = await moment.location?.getLocationString(), !locationString.isEmpty {
+        if let locationString = await moment.location?.clLocation?.getLocationString(), !locationString.isEmpty {
             self.label.setText(locationString)
             self.isVisible = true
         } else {

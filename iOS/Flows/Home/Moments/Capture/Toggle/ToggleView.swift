@@ -77,8 +77,7 @@ class ToggleView: BaseView {
     
     func update(isON: Bool) {
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.button.transform = isON ? .identity : .init(scaleX: 0.95, y: 0.95)
-            self.button.alpha = isON ? 1.0 : 0.8
+            self.button.alpha = isON ? 1.0 : 0.25
         }
     }
     
