@@ -21,9 +21,9 @@ class MomentConfirmationView: BaseView {
     
     let button = ThemeButton()
     
-    let emotionsToggle = ToggleView(type: .emotions)
-    let weatherToggle = ToggleView(type: .weather)
-    let locationToggle = ToggleView(type: .location)
+    let emotionsToggle = EmotionsToggleView()
+    let weatherToggle = WeatherToggleView()
+    let locationToggle = LocationToggleView()
         
     private var savedMoment: Moment?
     

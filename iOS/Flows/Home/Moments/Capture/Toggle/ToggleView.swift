@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class ToggleView: BaseView {
     
@@ -63,17 +64,22 @@ class ToggleView: BaseView {
         self.addSubview(self.button)
         
         self.button.didSelect { [unowned self] in
-            // do stuff
             self.isON.toggle()
-            self.updateButtonState()
         }
         
+        self.$isON.mainSink { [unowned self] isON in
+            self.update(isON: isON)
+        }.store(in: &self.cancellables)
+        
         self.label.setText(type.text)
-        self.button.set(style: .image(symbol: type.symbol, palletteColors: [.white], pointSize: 30, backgroundColor: .whiteWithAlpha))
+        self.button.set(style: .image(symbol: type.symbol, palletteColors: [.white], pointSize: 24, backgroundColor: .whiteWithAlpha))
     }
     
-    func updateButtonState() {
-        
+    func update(isON: Bool) {
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.button.transform = isON ? .identity : .init(scaleX: 0.95, y: 0.95)
+            self.button.alpha = isON ? 1.0 : 0.8
+        }
     }
     
     override func layoutSubviews() {

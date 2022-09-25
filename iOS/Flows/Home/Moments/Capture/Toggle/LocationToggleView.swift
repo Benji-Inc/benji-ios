@@ -24,12 +24,11 @@ class LocationToggleView: ToggleView {
         LocationManager.shared.$authorizationStatus.mainSink { [unowned self] status in
             self.button.isEnabled = LocationManager.shared.isAuthorized
             self.isON = LocationManager.shared.isAuthorized
-            self.updateButtonState()
         }.store(in: &self.cancellables)
     }
     
-    override func updateButtonState() {
-        super.updateButtonState()
+    override func update(isON: Bool) {
+        super.update(isON: isON)
         
         if self.isON {
             if !LocationManager.shared.isAuthorized {
