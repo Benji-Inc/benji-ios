@@ -57,6 +57,8 @@ class ToggleView: BaseView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
+        self.alpha = 0
+        
         self.clipsToBounds = false
         self.addSubview(self.label)
         self.label.textAlignment = .center
@@ -76,6 +78,7 @@ class ToggleView: BaseView {
     }
     
     func update(isON: Bool) {
+
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.button.alpha = isON ? 1.0 : 0.25
         }

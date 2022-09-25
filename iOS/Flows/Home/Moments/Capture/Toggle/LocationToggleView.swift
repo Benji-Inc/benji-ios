@@ -42,9 +42,17 @@ class LocationToggleView: ToggleView {
     override func update(isON: Bool) {
         super.update(isON: isON)
         
-        if self.isON {
-            if !LocationManager.shared.isAuthorized {
-                LocationManager.shared.requestAuthorization()
+        guard self.alpha != 0 else { return }
+
+        Task {
+            if self.isON {
+                if !LocationManager.shared.isAuthorized {
+                    LocationManager.shared.requestAuthorization()
+                } else {
+                    await ToastScheduler.shared.schedule(toastType: .success(.mappingPin, "Location added"), duration: 3)
+                }
+            } else {
+                await ToastScheduler.shared.schedule(toastType: .success(.mappingPin, "Location removed"), duration: 3)
             }
         }
     }

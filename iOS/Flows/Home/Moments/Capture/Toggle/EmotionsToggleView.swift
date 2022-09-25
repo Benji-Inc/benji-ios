@@ -21,6 +21,15 @@ class EmotionsToggleView: ToggleView {
     override func initializeSubviews() {
         super.initializeSubviews()
         
-        
+    }
+    
+    override func update(isON: Bool) {
+        super.update(isON: isON)
+        guard self.alpha != 0 else { return }
+
+        Task {
+            let text = isON ? "Emotions added" : "Emotions removed"
+            await ToastScheduler.shared.schedule(toastType: .success(.heart, text), duration: 3)
+        }
     }
 }

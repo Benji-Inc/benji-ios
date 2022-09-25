@@ -65,11 +65,8 @@ class MomentConfirmationView: BaseView {
         self.button.alpha = 0
         
         self.addSubview(self.emotionsToggle)
-        self.emotionsToggle.alpha = 0
         self.addSubview(self.weatherToggle)
-        self.weatherToggle.alpha = 0
         self.addSubview(self.locationToggle)
-        self.locationToggle.alpha = 0
         
         self.button.didSelect { [unowned self] in
             Task {
@@ -83,10 +80,10 @@ class MomentConfirmationView: BaseView {
         
         self.circle.centerOnXAndY()
         
-        self.preview.width = self.width * 0.33
+        self.preview.width = self.width * 0.4
         self.preview.height = self.preview.width * 1.5
         self.preview.centerOnX()
-        self.preview.centerY = self.height * 0.15
+        self.preview.pinToSafeAreaTop()
         
         self.progressView.width = self.preview.width
         self.progressView.centerOnX()
@@ -101,13 +98,13 @@ class MomentConfirmationView: BaseView {
         self.button.centerOnX()
         
         self.emotionsToggle.match(.bottom, to: .top, of: self.button, offset: .negative(.xtraLong))
-        self.emotionsToggle.centerX = self.width * 0.25
+        self.emotionsToggle.centerX = self.width * 0.2
         
         self.weatherToggle.match(.top, to: .top, of: self.emotionsToggle)
         self.weatherToggle.centerX = self.halfWidth
         
         self.locationToggle.match(.top, to: .top, of: self.emotionsToggle)
-        self.locationToggle.centerX = self.width * 0.75
+        self.locationToggle.centerX = self.width * 0.8
     }
     
     func updateMomentIfNeeded() async {
