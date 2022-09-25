@@ -38,17 +38,9 @@ extension PiPRecordingViewController {
             }
         }
         
-        if self.recorder.isReadyToRecord {
-            if isVideoOutput {
-                if isFrontVideoOutput {
-                    self.recorder.recordFrontVideo(sampleBuffer: sampleBuffer,
-                                                   ciImage: self.frontCameraView.currentCIImage)
-                } else {
-                    self.recorder.recordBackVideo(sampleBuffer: sampleBuffer)
-                }
-            } else {
-                self.recorder.recordAudio(sampleBuffer: sampleBuffer)
-            }
-        }
+        self.recorder.startRecording(with: sampleBuffer,
+                                     isVideoOutput: isVideoOutput,
+                                     isFrontVideoOutput: isFrontVideoOutput,
+                                     ciImage: self.frontCameraView.currentCIImage)
     }
 }
