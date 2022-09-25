@@ -102,12 +102,10 @@ class PermissionsViewController: DisclosureModalViewController {
         self.button.height = Theme.buttonHeight
         self.button.pinToSafeAreaBottom()
 
-        self.notificationSwitchView.expandToSuperviewWidth()
-        self.notificationSwitchView.height = Theme.buttonHeight
+        self.notificationSwitchView.setSize(with: self.view.width)
         self.notificationSwitchView.match(.bottom, to: .top, of: self.button, offset: .negative(.standard))
 
-        self.focusSwitchView.expandToSuperviewWidth()
-        self.focusSwitchView.height = Theme.buttonHeight
+        self.focusSwitchView.setSize(with: self.view.width)
         self.focusSwitchView.match(.bottom, to: .top, of: self.notificationSwitchView, offset: .negative(.standard))
     }
 

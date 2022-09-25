@@ -46,4 +46,10 @@ class LocalTimeLabel: ThemeLabel, RealtimeHandler {
         let localTime = formatter.string(from: Date())
         return localTime.isEmpty ? "Unknown" : localTime
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.setSize(withWidth: 200)
+    }
 }

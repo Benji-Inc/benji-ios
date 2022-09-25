@@ -69,13 +69,13 @@ class PermissionSwitchView: BaseView {
         self.layer.borderColor = ThemeColor.white.color.cgColor
         self.layer.borderWidth = 2
         
-        self.switchView.onTintColor = ThemeColor.D6.color
+        self.switchView.onTintColor = ThemeColor.whiteWithAlpha.color
         self.switchView.thumbTintColor = ThemeColor.white.color
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
         self.roundCorners()
 
         self.label.setSize(withWidth: self.width)
@@ -105,5 +105,9 @@ class PermissionSwitchView: BaseView {
                 self.alpha = 0.0
             }
         }
+    }
+    
+    func setSize(with width: CGFloat) {
+        self.size = CGSize(width: Theme.getPaddedWidth(with: width), height: Theme.buttonHeight)
     }
 }

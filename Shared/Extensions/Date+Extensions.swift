@@ -82,12 +82,6 @@ extension Date {
         return Date.subtract(component: component, amount: amount, toDate: self)
     }
 
-    static var jsonFriendly: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ"
-        return formatter
-    }
-
     static var dayHourMinuteTimeOfDay: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "E, h:mm a"

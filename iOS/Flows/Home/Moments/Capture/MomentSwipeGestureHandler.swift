@@ -45,7 +45,6 @@ class MomentSwipeGestureHandler {
 
             if self.interactionInProgress {
                 let progress = self.progress(currentPoint: currentPoint)
-                logDebug("\(progress)")
                 self.animator?.fractionComplete = progress
             } else if self.panStartPoint.isNil {
                 self.panStartPoint = currentPoint

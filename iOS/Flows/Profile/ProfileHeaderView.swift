@@ -108,7 +108,6 @@ class ProfileHeaderView: BaseView {
         self.localLabel.centerX = self.width * 0.2
         self.localLabel.bottom = self.personView.bottom
         
-        self.timeLabel.setSize(withWidth: self.width)
         self.timeLabel.centerX = self.localLabel.centerX
         self.timeLabel.match(.bottom, to: .top, of: self.localLabel, offset: .negative(.short))
         

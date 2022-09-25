@@ -46,7 +46,10 @@ class MomentVideoView: VideoView {
             self.animationView.play()
             
             guard let videoURL = try? await file.retrieveCachedPathURL(),
-                  !self.allURLs.contains(videoURL) else { return }
+                  !self.allURLs.contains(videoURL) else {
+                self.animationView.stop()
+                return
+            }
 
             guard !Task.isCancelled else { return }
 
