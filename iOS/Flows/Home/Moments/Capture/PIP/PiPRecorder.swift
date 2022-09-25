@@ -45,6 +45,7 @@ class PiPRecorder {
     var didCapturePIPRecording: ((PiPRecording) -> Void)?
     
     @Published private(set) var isReadyToRecord: Bool = false
+    private var hasWrittenFirstFrontVideoFrame: Bool = false
     
     deinit {
         FileManager.clearTmpDirectory()
@@ -66,7 +67,24 @@ class PiPRecorder {
     
     // MARK: - RECORDING
     
-    func recordFrontVideo(sampleBuffer: CMSampleBuffer, ciImage: CIImage?) {
+    func startRecording(with sampleBuffer: CMSampleBuffer,
+                        isVideoOutput: Bool,
+                        isFrontVideoOutput: Bool, 
+                        ciImage: CIImage?) {
+        guard self.isReadyToRecord else { return }
+        
+        if isVideoOutput {
+            if isFrontVideoOutput {
+                self.recordFrontVideo(sampleBuffer: sampleBuffer, ciImage: ciImage)
+            } else {
+                self.recordBackVideo(sampleBuffer: sampleBuffer)
+            }
+        } else {
+            self.recordAudio(sampleBuffer: sampleBuffer)
+        }
+    }
+    
+    private func recordFrontVideo(sampleBuffer: CMSampleBuffer, ciImage: CIImage?) {
         guard self.isReadyToRecord, let assetWriter = self.frontAssetWriter else { return }
         
         if assetWriter.status == .unknown {
@@ -76,7 +94,7 @@ class PiPRecorder {
         }
     }
     
-    func recordBackVideo(sampleBuffer: CMSampleBuffer) {
+    private func recordBackVideo(sampleBuffer: CMSampleBuffer) {
         guard self.isReadyToRecord, let assetWriter = self.backAssetWriter else { return }
         
         if assetWriter.status == .unknown {
@@ -86,7 +104,7 @@ class PiPRecorder {
         }
     }
     
-    func recordAudio(sampleBuffer: CMSampleBuffer) {
+    private func recordAudio(sampleBuffer: CMSampleBuffer) {
         guard self.isReadyToRecord, let assetWriter = self.frontAssetWriter else { return }
 
         // To avoid starting the front asset writer twice, audio samples will NOT trigger the writer to start.
@@ -241,6 +259,7 @@ class PiPRecorder {
                                       preferredTimescale: CMTimeScale(bitPattern: 600))
 
         self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
+        self.hasWrittenFirstFrontVideoFrame = true
     }
     
     private func handleBackInput(from sampleBuffer: CMSampleBuffer) {
@@ -249,7 +268,7 @@ class PiPRecorder {
     }
     
     private func handleAudioInput(from sampleBuffer: CMSampleBuffer) {
-        guard let input = self.assetWriterAudioInput, input.isReadyForMoreMediaData else { return }
+        guard let input = self.assetWriterAudioInput, input.isReadyForMoreMediaData, self.hasWrittenFirstFrontVideoFrame else { return }
         input.append(sampleBuffer)
     }
     
