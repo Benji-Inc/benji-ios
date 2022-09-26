@@ -18,3 +18,11 @@ extension Optional {
         return self == nil ? false: true
     }
 }
+
+extension Optional where Self == String? {
+    
+    var isNotEmpty: Bool {
+        guard let text = self else { return false }
+        return !text.isEmpty
+    }
+}

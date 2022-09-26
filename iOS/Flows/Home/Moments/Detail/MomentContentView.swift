@@ -145,7 +145,7 @@ class MomentContentView: BaseView {
     func shouldShowOnlyMoment(_ show: Bool) {
         self.expressionView.alpha = show ? 0.0 : 1.0
         self.menuButton.alpha = show ? 0.0 : 1.0
-        if let text = self.captionTextView.text, !text.isEmpty{
+        if self.captionTextView.text.isNotEmpty {
             self.captionTextView.alpha = show ? 0.0 : 1.0
         } else {
             self.captionTextView.alpha = 0
@@ -155,7 +155,7 @@ class MomentContentView: BaseView {
     func shouldShowDetail(_ show: Bool) {
         self.expressionView.alpha = show ? 0.0 : 1.0
         self.menuButton.alpha = show ? 0.0 : 1.0
-        if let text = self.captionTextView.text, !text.isEmpty {
+        if self.captionTextView.text.isNotEmpty {
             self.captionTextView.alpha = show ? 0.0 : 1.0
         } else {
             self.captionTextView.alpha = 0
