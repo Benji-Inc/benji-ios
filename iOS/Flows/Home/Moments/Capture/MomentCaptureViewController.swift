@@ -67,6 +67,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         
         self.view.addSubview(self.label)
         self.label.showShadow(withOffset: 0, opacity: 1.0)
+        self.label.textAlignment = .center
         
         self.view.addSubview(self.confirmationLabel)
         self.confirmationLabel.textAlignment = .center
@@ -96,6 +97,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         self.confirmationLabel.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
         
         self.label.setSize(withWidth: Theme.getPaddedWidth(with: self.view.width))
+        self.label.width = Theme.getPaddedWidth(with: self.view.width)
         self.label.match(.top, to: .bottom, of: self.backCameraView, offset: .long)
         self.label.centerOnX()
         
@@ -130,9 +132,12 @@ class MomentCaptureViewController: PiPRecordingViewController {
         self.view.didSelect { [unowned self] in
             if self.textView.isFirstResponder {
                 self.textView.resignFirstResponder()
-            } else if self.state == .playback {
-                self.state = .idle
             }
+        }
+        
+        self.view.onDoubleTap { [unowned self] in
+            guard self.state == .playback else { return }
+            self.state = .idle
         }
         
         self.confirmationView.didTapFinish = { [unowned self] in
@@ -203,7 +208,24 @@ class MomentCaptureViewController: PiPRecordingViewController {
             
             guard !Task.isCancelled else { return }
             
-            await Task.sleep(seconds: 5.0)
+            await Task.sleep(seconds: 2)
+            
+            guard !Task.isCancelled else { return }
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 0
+            })
+            
+            self.label.setText("OR double tap to Retake")
+            self.label.layoutNow()
+            
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.label.alpha = 1
+            })
+            
+            guard !Task.isCancelled else { return }
+            
+            await Task.sleep(seconds: 2)
             
             guard !Task.isCancelled else { return }
             

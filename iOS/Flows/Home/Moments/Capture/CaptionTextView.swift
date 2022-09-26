@@ -98,7 +98,7 @@ class CaptionTextView: TextView {
     
     func animateCaption(text: String?) {
 
-        if let text = text {
+        if let text = text, !text.isEmpty {
             self.animationTask?.cancel()
             self.setTextColor(.clear)
             self.alpha = 0
@@ -112,7 +112,7 @@ class CaptionTextView: TextView {
                 async let textAnimation: () = self.startAnimation()
                 let _: [()] = await [fadeIn, textAnimation]
             }
-        } else {
+        } else if self.isEditable {
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.alpha = 1
                 self.layoutNow()
