@@ -145,13 +145,21 @@ class MomentContentView: BaseView {
     func shouldShowOnlyMoment(_ show: Bool) {
         self.expressionView.alpha = show ? 0.0 : 1.0
         self.menuButton.alpha = show ? 0.0 : 1.0
-        self.captionTextView.alpha = show ? 0.0 : 1.0
+        if let text = self.captionTextView.text, !text.isEmpty{
+            self.captionTextView.alpha = show ? 0.0 : 1.0
+        } else {
+            self.captionTextView.alpha = 0
+        }
     }
     
     func shouldShowDetail(_ show: Bool) {
         self.expressionView.alpha = show ? 0.0 : 1.0
         self.menuButton.alpha = show ? 0.0 : 1.0
-        self.captionTextView.alpha = show ? 0.0 : 1.0
+        if let text = self.captionTextView.text, !text.isEmpty {
+            self.captionTextView.alpha = show ? 0.0 : 1.0
+        } else {
+            self.captionTextView.alpha = 0
+        }
         self.momentView.alpha = show ? 0.5 : 1.0
         self.detailContentView.alpha = show ? 1.0 : 0.0 
     }
@@ -170,7 +178,6 @@ class MomentContentView: BaseView {
             self.expressionView.playerLayer.player?.play()
             self.momentView.playerLayer.player?.play()
         } else {
-            logDebug("retry")
             self.play()
         }
     }

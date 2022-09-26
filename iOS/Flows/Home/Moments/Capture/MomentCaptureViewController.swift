@@ -216,7 +216,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
                 self.label.alpha = 0
             })
             
-            self.label.setText("Double tap to Retake")
+            self.label.setText("OR double tap to Retake")
             self.label.layoutNow()
             
             await UIView.awaitAnimation(with: .fast, animations: {
