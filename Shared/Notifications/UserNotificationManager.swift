@@ -20,7 +20,7 @@ class UserNotificationManager: NSObject {
     static let shared = UserNotificationManager()
     weak var delegate: UserNotificationManagerDelegate?
     
-    private let center = UNUserNotificationCenter.current()
+    let center = UNUserNotificationCenter.current()
     private(set) var application: UIApplication?
     
     override init() {
@@ -136,7 +136,11 @@ class UserNotificationManager: NSObject {
         let request = UNNotificationRequest(identifier: identifier,
                                             content: content,
                                             trigger: trigger)
-        try? await self.center.add(request)
+        do {
+            try await self.center.add(request)
+        } catch {
+            logError(error)
+        }
     }
     
     func getPendingRequests() async -> [UNNotificationRequest] {
@@ -180,7 +184,7 @@ class UserNotificationManager: NSObject {
 #endif
     
     // It was suggested that in order for this to work it needs to be called on a background thread.
-    private func removeNotifications(with identifiers: [String]) {
+    func removeNotifications(with identifiers: [String]) {
         //background code
         self.center.removeDeliveredNotifications(withIdentifiers: identifiers)
         self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
