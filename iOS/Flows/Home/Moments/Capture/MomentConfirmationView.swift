@@ -144,10 +144,9 @@ class MomentConfirmationView: BaseView {
         
         do {
             
-            async let creation: () = Task.sleep(seconds: 1.0)
-//            async let creation: () = try await self.createMoment(from: recording,
-//                                                                 location: LocationManager.shared.currentLocation,
-//                                                                 caption: caption)
+            async let creation: () = try await self.createMoment(from: recording,
+                                                                 location: LocationManager.shared.currentLocation,
+                                                                 caption: caption)
             self.progressView.setProgress(0.9, animated: true)
             
             let _ = try await [creation]

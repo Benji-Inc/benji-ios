@@ -25,12 +25,11 @@ class WeatherToggleView: ToggleView {
     }
     
     override func update(isON: Bool) {
-        super.update(isON: isON)
         guard self.alpha != 0 else { return }
-
+        
+        self.button.alpha = 0.25
         Task {
-            let text = isON ? "Weather added" : "Weather removed"
-            await ToastScheduler.shared.schedule(toastType: .success(.cloudRain, text), duration: 3)
+            await ToastScheduler.shared.schedule(toastType: .success(.cloudRain, "Weather COMING SOON"), duration: 3)
         }
     }
 }
