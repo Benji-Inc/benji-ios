@@ -694,6 +694,8 @@
 		D67B00CA27D2D52500284564 /* DataController+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E3426EAD2F300C077BA /* DataController+Async.swift */; };
 		D67B00CB27D2DBB000284564 /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
+		D67E939628E1EE8600C22C0B /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E939528E1EE8600C22C0B /* WeatherManager.swift */; };
+		D67E939828E1F24B00C22C0B /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E939728E1F24B00C22C0B /* Weather.swift */; };
 		D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D682B4152792023F005DD3B3 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */; };
@@ -1443,6 +1445,8 @@
 		D67934DA23DC011D00536B44 /* CharacterCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCountView.swift; sourceTree = "<group>"; };
 		D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFInstallation+Extensions.swift"; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		D67E939528E1EE8600C22C0B /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		D67E939728E1F24B00C22C0B /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
 		D682B4142792023F005DD3B3 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
 		D682F030278E47930016A24E /* ConversationsMessagesCellAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsMessagesCellAttributes.swift; sourceTree = "<group>"; };
@@ -2380,6 +2384,7 @@
 				D63F9641289AE403004F6C0D /* Moment.swift */,
 				D6617CF426743DFE00439C06 /* Notice.swift */,
 				D6129FB327ADC72E0058811C /* Transaction.swift */,
+				D67E939728E1F24B00C22C0B /* Weather.swift */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -2404,6 +2409,7 @@
 				D6B95AF627236E1000FBE66A /* ConversationsManager.swift */,
 				D666127327E2EA38006CDF3D /* AchievementsManager.swift */,
 				D68590F228D6371100836B3E /* LocationManager.swift */,
+				D67E939528E1EE8600C22C0B /* WeatherManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -3802,6 +3808,7 @@
 				80D5C2B428174DC300182DB6 /* TransitionRouter+Blur.swift in Sources */,
 				D627E4C8277A9129007B3286 /* InitialMessageCell.swift in Sources */,
 				D6129FAC27ADC61F0058811C /* WalletHeaderView.swift in Sources */,
+				D67E939628E1EE8600C22C0B /* WeatherManager.swift in Sources */,
 				D65E66D7285A46AC0040E3D8 /* ShortcutOptionView.swift in Sources */,
 				D650C1E125B5F1730037C59A /* PersonView+Extensions.swift in Sources */,
 				D69972D328A4533300920998 /* MomentCell.swift in Sources */,
@@ -4142,6 +4149,7 @@
 				D6A0096128B15A7C0018FA98 /* MomentReactionsView.swift in Sources */,
 				D63F9647289B2758004F6C0D /* PiPRecordingViewController.swift in Sources */,
 				D60B887127F75F6D00B3E1C2 /* MemberAddCell.swift in Sources */,
+				D67E939828E1F24B00C22C0B /* Weather.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientPassThroughView.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D69D2F9827BF1D48001D8855 /* WalletSegmentControl.swift in Sources */,

@@ -31,7 +31,7 @@ extension UserNotificationManager {
 
                 let content = UNMutableNotificationContent()
                 content.title = "Record a Moment 🤳"
-                content.body = "To see Moments from others 👀"
+                content.body = "And see Moments from others 👀"
                 content.interruptionLevel = .timeSensitive
                 content.setData(value: "capture", for: .target)
                 let identifier = "moment" + UUID().uuidString

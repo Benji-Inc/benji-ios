@@ -24,12 +24,10 @@ class EmotionsToggleView: ToggleView {
     }
     
     override func update(isON: Bool) {
-        super.update(isON: isON)
         guard self.alpha != 0 else { return }
-
+        self.button.alpha = 0.25
         Task {
-            let text = isON ? "Emotions added" : "Emotions removed"
-            await ToastScheduler.shared.schedule(toastType: .success(.heart, text), duration: 3)
+            await ToastScheduler.shared.schedule(toastType: .success(.heart, "Emotions COMING SOON"), duration: 3)
         }
     }
 }
