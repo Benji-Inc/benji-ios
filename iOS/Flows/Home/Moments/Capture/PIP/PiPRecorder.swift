@@ -46,6 +46,7 @@ class PiPRecorder {
     
     @Published private(set) var isReadyToRecord: Bool = false
     private var hasWrittenFirstFrontVideoFrame: Bool = false
+    private var startTime: CMTime?
     
     deinit {
         FileManager.clearTmpDirectory()
@@ -88,7 +89,8 @@ class PiPRecorder {
         guard self.isReadyToRecord, let assetWriter = self.frontAssetWriter else { return }
         
         if assetWriter.status == .unknown {
-            self.startWritingSession(with: assetWriter, and: sampleBuffer)
+            self.startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+            self.startWritingSession(with: assetWriter, startTime: self.startTime!, and: sampleBuffer)
         } else if assetWriter.status == .writing {
             self.handleFrontInput(from: sampleBuffer, image: ciImage)
         }
@@ -98,7 +100,9 @@ class PiPRecorder {
         guard self.isReadyToRecord, let assetWriter = self.backAssetWriter else { return }
         
         if assetWriter.status == .unknown {
-            self.startWritingSession(with: assetWriter, and: sampleBuffer)
+            if let startTime = self.startTime {
+                self.startWritingSession(with: assetWriter, startTime: startTime, and: sampleBuffer)
+            }
         } else if assetWriter.status == .writing {
             self.handleBackInput(from: sampleBuffer)
         }
@@ -152,6 +156,8 @@ class PiPRecorder {
         self.stopRecordingTask = nil
         self.assetWriterAudioInput = nil
         self.isReadyToRecord = false
+        self.startTime = nil
+        self.hasWrittenFirstFrontVideoFrame = false
     }
     
     // MARK: - INITIALZE WRITERS/INPUTS
@@ -222,9 +228,10 @@ class PiPRecorder {
         self.assetWriterAudioInput = assetWriterAudioInput
     }
     
-    private func startWritingSession(with writer: AVAssetWriter, and sampleBuffer: CMSampleBuffer) {
+    private func startWritingSession(with writer: AVAssetWriter,
+                                     startTime: CMTime,
+                                     and sampleBuffer: CMSampleBuffer) {
         writer.startWriting()
-        let startTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         writer.startSession(atSourceTime: startTime)
     }
     
@@ -254,21 +261,22 @@ class PiPRecorder {
         let adjustedImage = currentImage.transformed(by: transform)
         context.render(adjustedImage, to: pixelBuffer!)
 
-        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer).seconds
-        let presentationTime = CMTime(seconds: currentTime,
-                                      preferredTimescale: CMTimeScale(bitPattern: 600))
-
-        self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: presentationTime)
+        let currentTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        self.pixelBufferAdaptor?.append(pixelBuffer!, withPresentationTime: currentTime)
         self.hasWrittenFirstFrontVideoFrame = true
     }
     
     private func handleBackInput(from sampleBuffer: CMSampleBuffer) {
-        guard let input = self.backAssetWriterVideoInput, input.isReadyForMoreMediaData else { return }
+        guard let input = self.backAssetWriterVideoInput,
+              input.isReadyForMoreMediaData,
+              self.hasWrittenFirstFrontVideoFrame else { return }
         input.append(sampleBuffer)
     }
     
     private func handleAudioInput(from sampleBuffer: CMSampleBuffer) {
-        guard let input = self.assetWriterAudioInput, input.isReadyForMoreMediaData, self.hasWrittenFirstFrontVideoFrame else { return }
+        guard let input = self.assetWriterAudioInput,
+                input.isReadyForMoreMediaData,
+                self.hasWrittenFirstFrontVideoFrame else { return }
         input.append(sampleBuffer)
     }
     
