@@ -9,6 +9,7 @@
 import Foundation
 import Lottie
 import MetalKit
+import AVKit
 
 class FrontPreviewVideoView: VideoPreviewView {
     
@@ -19,6 +20,7 @@ class FrontPreviewVideoView: VideoPreviewView {
     var animation = CABasicAnimation(keyPath: "strokeEnd")
     
     private(set) var isAnimating: Bool = false
+    private(set) var isPlayback: Bool = false
     
     lazy var shapeLayer: CAShapeLayer = {
         let shapeLayer = CAShapeLayer()
@@ -59,6 +61,12 @@ class FrontPreviewVideoView: VideoPreviewView {
         self.layer.borderWidth = 2
         
         self.clipsToBounds = true
+        
+        self.playbackView.$isPlaying.mainSink { [unowned self] isPlaying in
+            guard isPlaying, let duration = self.playbackView.playerLayer.player?.currentItem?.duration else { return }
+            
+            self.startPlaybackAnimation(with: duration)
+        }.store(in: &self.cancellables)
     }
     
     override func layoutSubviews() {
@@ -122,8 +130,28 @@ class FrontPreviewVideoView: VideoPreviewView {
         self.currentCIImage = blendFilter.outputImage?.oriented(.leftMirrored)
     }
     
+    private func startPlaybackAnimation(with duration: CMTime) {
+        
+        self.shapeLayer.removeFromSuperlayer()
+        self.layer.addSublayer(self.shapeLayer)
+                
+        self.animation.delegate = nil 
+        self.animation.fromValue = 0.01
+        self.animation.duration = duration.seconds
+        self.animation.isRemovedOnCompletion = false
+        self.animation.fillMode = .forwards
+        self.animation.repeatCount = Float.greatestFiniteMagnitude
+        
+        self.shapeLayer.path = UIBezierPath(roundedRect: self.bounds,
+                                            byRoundingCorners: [.allCorners],
+                                            cornerRadii: CGSize(width: self.height * 0.25, height: self.height * 0.25)).cgPath
+    
+        self.shapeLayer.add(self.animation, forKey: "MyAnimation")
+    }
+    
     // Overriding because changing the alpha on the preivew layer, hides the entire view.
     override func beginPlayback(with url: URL) {
+        self.isPlayback = true
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.cameraView.alpha = 0.0
@@ -131,12 +159,14 @@ class FrontPreviewVideoView: VideoPreviewView {
         } completion: { _ in
             self.playbackView.shouldPlay = true
             self.playbackView.updatePlayer(with: [url])
+            
         }
     }
     
     override func stopPlayback() {
+        self.stopRecordingAnimation() 
         self.playbackView.reset()
-        
+        self.isPlayback = false
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.playbackView.alpha = 0.0
             self.cameraView.alpha = 1.0
@@ -151,7 +181,9 @@ extension FrontPreviewVideoView: CAAnimationDelegate {
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        self.isAnimating = false 
+        self.isAnimating = false
+        
+        guard !self.isPlayback else { return }
         self.animationDidEnd?()
     }
 }

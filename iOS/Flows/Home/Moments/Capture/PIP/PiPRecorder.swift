@@ -100,7 +100,7 @@ class PiPRecorder {
         guard self.isReadyToRecord, let assetWriter = self.backAssetWriter else { return }
         
         if assetWriter.status == .unknown {
-            if let startTime = self.startTime {
+            if let startTime = self.startTime, self.hasWrittenFirstFrontVideoFrame {
                 self.startWritingSession(with: assetWriter, startTime: startTime, and: sampleBuffer)
             }
         } else if assetWriter.status == .writing {
@@ -109,7 +109,9 @@ class PiPRecorder {
     }
     
     private func recordAudio(sampleBuffer: CMSampleBuffer) {
-        guard self.isReadyToRecord, let assetWriter = self.frontAssetWriter else { return }
+        guard self.isReadyToRecord,
+                let assetWriter = self.frontAssetWriter,
+                self.hasWrittenFirstFrontVideoFrame else { return }
 
         // To avoid starting the front asset writer twice, audio samples will NOT trigger the writer to start.
         if assetWriter.status == .writing {
