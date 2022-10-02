@@ -10,6 +10,7 @@ import Foundation
 import Lottie
 import Parse
 import AVKit
+import KeyboardManager
 
 class MomentConfirmationView: BaseView {
     
@@ -18,11 +19,10 @@ class MomentConfirmationView: BaseView {
     let circle = BaseView()
     let progressView = UIProgressView()
     let label = ThemeLabel(font: .medium)
+    let captionTextView = CaptionTextView()
     
     let button = ThemeButton()
     
-    let emotionsToggle = EmotionsToggleView()
-    let weatherToggle = WeatherToggleView()
     let locationToggle = LocationToggleView()
         
     private var savedMoment: Moment?
@@ -64,8 +64,8 @@ class MomentConfirmationView: BaseView {
         self.button.set(style: .custom(color: .white, textColor: .B0, text: "Finished"))
         self.button.alpha = 0
         
-        self.addSubview(self.emotionsToggle)
-        self.addSubview(self.weatherToggle)
+        self.addSubview(self.captionTextView)
+        
         self.addSubview(self.locationToggle)
         
         self.button.didSelect { [unowned self] in
@@ -97,14 +97,13 @@ class MomentConfirmationView: BaseView {
         self.button.pinToSafeAreaBottom()
         self.button.centerOnX()
         
-        self.emotionsToggle.match(.bottom, to: .top, of: self.button, offset: .negative(.xtraLong))
-        self.emotionsToggle.centerX = self.width * 0.2
-        
-        self.weatherToggle.match(.top, to: .top, of: self.emotionsToggle)
-        self.weatherToggle.centerX = self.halfWidth
-        
-        self.locationToggle.match(.top, to: .top, of: self.emotionsToggle)
-        self.locationToggle.centerX = self.width * 0.8
+        self.captionTextView.width = self.button.width
+        self.captionTextView.height = self.button.height.doubled
+        self.captionTextView.centerOnX()
+        self.captionTextView.match(.top, to: .bottom, of: self.label, offset: .long)
+
+        self.locationToggle.match(.bottom, to: .top, of: self.button, offset: .negative(.xtraLong))
+        self.locationToggle.centerOnX()
     }
     
     func updateMomentIfNeeded() async {
@@ -114,16 +113,14 @@ class MomentConfirmationView: BaseView {
         }
         
         let location = PFGeoPoint(location: LocationManager.shared.currentLocation)
+        let caption = self.captionTextView.text
         
-        if moment.location != location, self.locationToggle.isON {
-            moment.location = location
-            await self.button.handleLoadingState()
-            _ = try? await moment.saveToServer()
-            await self.button.handleEvent(status: .complete)
-            self.didTapFinish?()
-        } else {
-            self.didTapFinish?()
-        }
+        moment.location = location
+        moment.caption = caption
+        await self.button.handleLoadingState()
+        _ = try? await moment.saveToServer()
+        await self.button.handleEvent(status: .complete)
+        self.didTapFinish?()
     }
     
     func uploadMoment(from recording: PiPRecording, caption: String?) async {
@@ -143,7 +140,7 @@ class MomentConfirmationView: BaseView {
         })
         
         do {
-            
+            //async let creation: () = Task.sleep(seconds: 1.0)
             async let creation: () = try await self.createMoment(from: recording,
                                                                  location: LocationManager.shared.currentLocation,
                                                                  caption: caption)
@@ -166,8 +163,7 @@ class MomentConfirmationView: BaseView {
                 self.label.alpha = 1.0
                 self.button.alpha = 1.0
                 self.locationToggle.alpha = 1.0
-                self.emotionsToggle.alpha = 1.0
-                self.weatherToggle.alpha = 1.0
+                self.captionTextView.alpha = 1.0
             })
             
             await Task.sleep(seconds: 2.0)

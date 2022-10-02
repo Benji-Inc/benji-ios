@@ -114,6 +114,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
     private func setupHandlers() {
         
         self.panGestureHandler.didFinish = { [unowned self] in
+            self.view.bringSubviewToFront(self.confirmationView)
             Task {
                 guard let recording = self.recording else { return }
                 await self.confirmationView.uploadMoment(from: recording, caption: self.textView.text)
@@ -145,12 +146,16 @@ class MomentCaptureViewController: PiPRecordingViewController {
         }
         
         KeyboardManager.shared.$currentEvent.mainSink { [unowned self] event in
+            guard self.confirmationView.alpha == 0 else { return }
+            
             switch event {
                 
             case .willShow(_):
                 self.willShowKeyboard = true
                 UIView.animate(withDuration: Theme.animationDurationFast) {
-                    self.view.layoutNow()
+                    if self.confirmationView.alpha == 0 {
+                        self.view.layoutNow()
+                    }
                     self.textView.backgroundColor = ThemeColor.B0.color.withAlphaComponent(0.8)
                 }
             case .willHide(_):
@@ -216,7 +221,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
                 self.label.alpha = 0
             })
             
-            self.label.setText("OR double tap to Retake")
+            self.label.setText("Double tap to Retake")
             self.label.layoutNow()
             
             await UIView.awaitAnimation(with: .fast, animations: {

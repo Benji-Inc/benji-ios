@@ -286,6 +286,7 @@ extension ConversationController {
 
                 switch result {
                 case .success(let messageID):
+                    logDebug(messageID)
                     continuation.resume(returning: messageID)
 
                     Task {
