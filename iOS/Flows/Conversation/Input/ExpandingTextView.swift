@@ -29,6 +29,7 @@ class ExpandingTextView: TextView {
     override func initializeViews() {
         super.initializeViews()
 
+        self.textAlignment = .left
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false

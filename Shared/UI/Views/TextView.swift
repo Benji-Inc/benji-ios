@@ -194,7 +194,7 @@ class TextView: UITextView {
     }
 
     func set(placeholder: Localized,
-             alignment: NSTextAlignment = .center,
+             alignment: NSTextAlignment = .left,
              color: ThemeColor = .whiteWithAlpha) {
         var styleAttributes = StringStyle(font: .regular, color: color).attributes
         let style = NSMutableParagraphStyle()
