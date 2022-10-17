@@ -10,12 +10,13 @@ import Foundation
 import UIKit
 
 extension Array {
-    func random() -> Element {
-        return self[Int(arc4random_uniform(UInt32(self.count)))]
-    }
-
+    
     subscript(safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
+    }
+    
+    func random() -> Element {
+        return self[Int(arc4random_uniform(UInt32(self.count)))]
     }
 
     func equals<OtherSequence>(_ other: OtherSequence?,

@@ -66,23 +66,49 @@ class JibberChatClient {
         }
     }
     
-    func registerPush(for token: Data) async {
+    func registerPush(for token: Data) async throws {
+        
+        let device = PushDevice.apn(token: token)
 
-        if self.client.isNil {
+        if let client = self.client {
+            return try await withCheckedThrowingContinuation({ continuation in
+                client.currentUserController().addDevice(device) { error in
+                    if let e = error {
+                        continuation.resume(throwing: e)
+                    } else {
+                        continuation.resume(returning: ())
+                    }
+                }
+            })
+            
+        } else {
             do {
-                try await self.initializeTask?.value
+                if let task = self.initializeTask {
+                    try await task.value
+                    
+                    guard let client = self.client else {
+                        logError(ClientError.message(detail: "Failed to register push token"))
+                        return
+                    }
+                    
+                    return try await withCheckedThrowingContinuation({ continuation in
+                        client.currentUserController().addDevice(device) { error in
+                            if let e = error {
+                                continuation.resume(throwing: e)
+                            } else {
+                                continuation.resume(returning: ())
+                            }
+                        }
+                    })
+                    
+                } else if let user = User.current(), user.isAuthenticated {
+                    try await self.initialize(for: user)
+                    try await self.registerPush(for: token)
+                } else {
+                    throw ClientError.message(detail: "Failed to register push")
+                }
             } catch {
                 logError(error)
-            }
-        }
-        
-        return await withCheckedContinuation { continuation in
-            if let client = self.client {
-                let device = PushDevice.apn(token: token)
-                client.currentUserController().addDevice(device)
-                continuation.resume(returning: ())
-            } else {
-                continuation.resume(returning: ())
             }
         }
     }
@@ -110,7 +136,6 @@ class JibberChatClient {
 
         self.client = ChatClient.init(config: config)
         let token = try await self.getChatToken()
-        self.client?.setToken(token: token)
         try await self.connectUser(with: token)
         _ = ConversationsManager.shared
     }
