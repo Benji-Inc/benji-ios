@@ -42,7 +42,7 @@ class LaunchManager {
         
         SentrySDK.start { options in
             options.dsn = "https://674f5b98c542435fadeffd8828582b32@o1232170.ingest.sentry.io/6380104"
-            options.debug = Config.shared.environment == .staging // Enabled debug when first installing is always helpful
+            options.debug = false//Config.shared.environment == .staging // Enabled debug when first installing is always helpful
             // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
             options.tracesSampleRate = 1.0

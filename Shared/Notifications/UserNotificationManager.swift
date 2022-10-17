@@ -103,30 +103,45 @@ class UserNotificationManager: NSObject {
         }
     }
     
+    private var registerPushTask: Task<Void, Error>?
+        
     func registerPush(from deviceToken: Data) async {
-#if IOS
-        Task {
-            await JibberChatClient.shared.registerPush(for: deviceToken)
+        
+        if let registerTask = self.registerPushTask {
+            try? await registerTask.value
+            return
         }
-#endif
-        //        do {
-        ////            let installation = try await PFInstallation.getCurrent()
-        ////            installation.badge = 0
-        ////            installation.setDeviceTokenFrom(deviceToken)
-        ////            installation["user"] = User.current()
-        ////            try await installation.saveInBackground()
-        //
-        //        } catch {
-        //            logError(error)
-        //
-        //            // HACK: If the installation object was deleted off the server,
-        //            // then clear out the local installation object so we create a new one on next launch.
-        //            // We're using the private string "_currentInstallation" because Parse prevents us from
-        //            // deleting Installations normally.
-        //            if error.code == PFErrorCode.errorObjectNotFound.rawValue {
-        //                try? PFObject.unpinAllObjects(withName: "_currentInstallation")
-        //            }
-        //        }
+        
+        self.registerTask = Task {
+            #if IOS
+            try? await JibberChatClient.shared.registerPush(for: deviceToken)
+            #endif
+            do {
+                let installation = try await PFInstallation.getCurrent()
+                installation.badge = 0
+                installation.setDeviceTokenFrom(deviceToken)
+                installation["user"] = User.current()
+                try await installation.saveInBackground()
+                
+            } catch {
+                logError(error)
+                
+                // HACK: If the installation object was deleted off the server,
+                // then clear out the local installation object so we create a new one on next launch.
+                // We're using the private string "_currentInstallation" because Parse prevents us from
+                // deleting Installations normally.
+                if error.code == PFErrorCode.errorObjectNotFound.rawValue {
+                    try? PFObject.unpinAllObjects(withName: "_currentInstallation")
+                }
+            }
+        }
+        
+        do {
+            try await self.registerPushTask?.value
+        } catch {
+            // Dispose of the task because it failed, then pass the error along.
+            self.registerPushTask = nil
+        }
     }
     
     func scheduleNotification(with content: UNNotificationContent,
