@@ -114,12 +114,12 @@ class UserNotificationManager: NSObject {
         
         self.registerTask = Task {
             #if IOS
-            try? await JibberChatClient.shared.registerPush(for: deviceToken)
+            //try? await JibberChatClient.shared.registerPush(for: deviceToken)
             #endif
             do {
                 let installation = try await PFInstallation.getCurrent()
                 installation.badge = 0
-                installation.setDeviceTokenFrom(deviceToken)
+                installation.deviceToken = deviceToken.hexString
                 installation["user"] = User.current()
                 try await installation.saveInBackground()
                 
@@ -227,7 +227,6 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
         
         return [.banner, .list, .sound, .badge]
     }
-    
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,

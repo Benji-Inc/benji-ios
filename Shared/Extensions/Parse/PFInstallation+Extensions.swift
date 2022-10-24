@@ -12,7 +12,7 @@ import Parse
 extension PFInstallation {
 
     static func getCurrent() async throws -> PFInstallation {
-        let installation: PFInstallation = try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { continuation in
             self.getCurrentInstallationInBackground().continueWith { task in
                 do {
                     try Task.checkCancellation()
@@ -27,7 +27,12 @@ extension PFInstallation {
                 }
             }
         }
+    }
+}
 
-        return installation
+extension Data {
+    var hexString: String {
+        let hexString = map { String(format: "%02.2hhx", $0) }.joined()
+        return hexString
     }
 }

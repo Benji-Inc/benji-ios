@@ -112,7 +112,7 @@ class ThemeLabel: UILabel {
         
         guard let range = lowercased.range(of: text.lowercased()) else { return }
         
-        self.add(attributes: attributes, at: range.nsRange(text))
+        self.add(attributes: attributes, at: lowercased.nsRange(from: range))
     }
     
     func add(attributes: [NSAttributedString.Key : Any], at range: NSRange) {

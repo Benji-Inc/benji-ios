@@ -59,7 +59,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         
         if let highlightText = highlightText {
             let attributes: [NSAttributedString.Key : Any] = [.font: FontType.regularBold.font,
-                                                              .foregroundColor: ThemeColor.white.color]
+                                                              .foregroundColor: ThemeColor.D6.color]
             self.titleLabel.add(attributes: attributes, to: highlightText)
         }
 
@@ -75,7 +75,7 @@ class PersonCell: CollectionViewManagerCell, ManageableCell {
         }
         
         UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.titleLabel.alpha = isSelected ? 1.0 : 0.5
+            self.titleLabel.alpha = isSelected ? 1.0 : 0.9
             self.imageView.alpha = isSelected ? 1.0 : 0.5
             self.setNeedsLayout()
         }
