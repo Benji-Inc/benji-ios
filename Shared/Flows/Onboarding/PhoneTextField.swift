@@ -12,7 +12,7 @@ import UIKit
 
 class PhoneTextField: PhoneNumberTextField {
     
-    let padding = UIEdgeInsets(top: 0, left: -30 + Theme.ContentOffset.long.value, bottom: 0, right: 0)
+    let padding = UIEdgeInsets(top: 0, left: 30 + Theme.ContentOffset.long.value, bottom: 0, right: 0)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +22,7 @@ class PhoneTextField: PhoneNumberTextField {
         self.textContentType = .telephoneNumber
         self.keyboardType = .numbersAndPunctuation
         self.textColor = ThemeColor.white.color
-        self.textAlignment = .center
+        self.textAlignment = .left
     }
 
     required init(coder aDecoder: NSCoder) {
