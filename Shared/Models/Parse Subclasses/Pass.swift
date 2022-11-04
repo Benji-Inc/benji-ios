@@ -74,11 +74,6 @@ extension Pass: UIActivityItemSource {
         }
     }
     
-    var message: String? {
-        guard let link = self.link else { return nil }
-        return "Join me on Jibber by tapping 👇\n\(link)"
-    }
-    
     func prepareMetadata() async {
         return await withCheckedContinuation { continuation in
             let metadataProvider = LPMetadataProvider()
@@ -106,8 +101,7 @@ extension Pass: UIActivityItemSource {
     }
     
     func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
-        guard activityType == .message else { return "" }
-        return "foo"
+        return ""
     }
     
     func activityViewControllerLinkMetadata(_: UIActivityViewController) -> LPLinkMetadata? {

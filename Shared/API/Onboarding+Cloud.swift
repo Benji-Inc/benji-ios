@@ -76,12 +76,14 @@ struct FinalizeOnboarding: CloudFunction {
     
     let reservationId: String
     let passId: String
+    var forceUpgrade: Bool = false
 
     @discardableResult
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         
         let params: [String: Any] = ["passId": self.passId,
-                                     "reservationId": self.reservationId]
+                                     "reservationId": self.reservationId,
+                                     "forceUpgrade": self.forceUpgrade]
         
         _ = try await self.makeRequest(andUpdate: statusables,
                                        params: params,

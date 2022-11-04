@@ -25,7 +25,7 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
             guard let user = User.current() else { return }
             switch user.status {
             case .active:
-                self.finishFlow(with: () )
+                self.finishFlow(with: ())
             case .waitlist:
                 self.presentShareSheet()
             default:
@@ -65,23 +65,46 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
             await self.waitlistVC.button.handleEvent(status: .loading)
             guard let pass = try? await Pass.fetchPass() else { return }
             await pass.prepareMetadata()
-            await self.waitlistVC.button.handleEvent(status: .complete)
 
-            let ac = UIActivityViewController(activityItems: [pass], applicationActivities: [])
-            ac.excludedActivityTypes = [.postToFacebook, .postToVimeo, .postToWeibo, .assignToContact, .addToReadingList, .airDrop, .postToFlickr, .postToTencentWeibo, .assignToContact, .mail, .markupAsPDF, .saveToCameraRoll, .markupAsPDF]
-            if #available(iOS 15.4, *) {
-                ac.allowsProminentActivity = true
-            } 
-            ac.completionWithItemsHandler = { type, completed, items, error in
-                if let type = type {
-                    logDebug(type.rawValue)
-                }
-                
-                if completed {
-                    // Update status????
+            let ac = ActivityViewController(with: self, activityItems: [pass])
+            
+            Task.onMainActor {
+                self.router.topmostViewController.present(ac, animated: true) {
+                    Task {
+                        await self.waitlistVC.button.handleEvent(status: .complete)
+                    }
                 }
             }
-            self.router.topmostViewController.present(ac, animated: true)
+        }
+    }
+}
+
+extension WaitlistCoordinator: ActivityViewControllerDelegate {
+    
+    func activityView(_ controller: ActivityViewController, didCompleteWith result: ActivityViewController.Result) {
+        if result.didShare {
+            Task {
+                await upgradeUser()
+            }
+        }
+    }
+    
+    private func upgradeUser() async {
+        Task {
+            await self.waitlistVC.button.handleEvent(status: .loading)
+
+            do {
+                try await FinalizeOnboarding(reservationId: "",
+                                             passId: "",
+                                             forceUpgrade: true)
+                .makeRequest(andUpdate: [], viewsToIgnore: [self.waitlistVC.view])
+            } catch {
+                await ToastScheduler.shared.schedule(toastType: .error(error))
+            }
+            
+            await self.waitlistVC.button.handleEvent(status: .loading)
+            
+            self.finishFlow(with: ())
         }
     }
 }

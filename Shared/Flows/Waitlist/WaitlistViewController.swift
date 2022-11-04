@@ -75,7 +75,7 @@ class WaitlistViewController: ViewController {
             case .waitlist:
                 if let position = user.quePosition {
                     self.titleLabel.setText("You're #\(position)")
-                    self.descriptionLabel.setText("We will notify you when you are\navailable to join.")
+                    self.descriptionLabel.setText("Jibber works best with people you know,\n so share it to get immediate access.")
                 }
             default:
                 break
@@ -115,7 +115,7 @@ class WaitlistViewController: ViewController {
         if user.status == .active {
             self.button.set(style: .custom(color: .white, textColor: .B0, text: "Enter"))
         } else if user.status == .waitlist {
-            self.button.set(style: .custom(color: .white, textColor: .B0, text: "Share"))
+            self.button.set(style: .custom(color: .white, textColor: .B0, text: "Share for Access"))
         }
         
         #if IOS
