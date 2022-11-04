@@ -56,7 +56,6 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
     lazy var toolbar = TextFieldToolBar(button: self.barButton)
 
     init(textField: UITextField, placeholder: Localized?) {
-
         self.textEntry = TextEntryField(with: textField, placeholder: placeholder)
         super.init()
     }
@@ -112,8 +111,10 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
         self.textEntry.size = CGSize(width: width, height: height)
         self.textEntry.centerOnX()
 
-        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.short.value
-        self.textEntry.bottom = defaultOffset
+        let keyboardOffset = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.ContentOffset.short.value
+        let bottomOffset = self.view.halfHeight
+        
+        self.textEntry.bottom = clamp(bottomOffset, bottomOffset, keyboardOffset)
     }
 
     override func viewDidAppear(_ animated: Bool) {

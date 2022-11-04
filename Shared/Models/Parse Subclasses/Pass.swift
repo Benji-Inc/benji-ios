@@ -8,12 +8,12 @@
 
 import Foundation
 import Parse
+import LinkPresentation
 
 enum PassKey: String {
     case owner
     case attributes
     case connections
-    case link
 }
 
 final class Pass: PFObject, PFSubclassing {
@@ -32,10 +32,6 @@ final class Pass: PFObject, PFSubclassing {
 
     var connections: PFRelation<Connection>? {
         return self.getRelationalObject(for: .connections)
-    }
-
-    var link: String? {
-        return self.getObject(for: .link)
     }
 }
 
@@ -56,3 +52,76 @@ extension Pass: Objectable {
     }
 }
 
+private var passMetadataKey: UInt8 = 0
+private var linkKey: UInt8 = 0
+extension Pass: UIActivityItemSource {
+    
+    private(set) var metadata: LPLinkMetadata? {
+        get {
+            return self.getAssociatedObject(&passMetadataKey)
+        }
+        set {
+            self.setAssociatedObject(key: &passMetadataKey, value: newValue)
+        }
+    }
+    
+    private(set) var link: String? {
+        get {
+            return self.getAssociatedObject(&linkKey)
+        }
+        set {
+            self.setAssociatedObject(key: &linkKey, value: newValue)
+        }
+    }
+    
+    func prepareMetadata() async {
+        return await withCheckedContinuation { continuation in
+            let metadataProvider = LPMetadataProvider()
+            
+            if let objectId = self.objectId {
+                self.link = Config.domain + "/pass?passId=\(objectId)"
+            }
+            
+            if let link = self.link, let url = URL(string: link) {
+                metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
+                    self.metadata = metadata
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+    
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return URL(string: self.link!)!
+    }
+    
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        guard let link = self.link else { return nil }
+        return "Join me on Jibber 👇\n\(link)"
+    }
+    
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        return ""
+    }
+    
+    func activityViewControllerLinkMetadata(_: UIActivityViewController) -> LPLinkMetadata? {
+        return self.metadata
+    }
+    
+    static func fetchPass() async throws -> Pass {
+        return try await withCheckedThrowingContinuation { continuation in
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
+                return
+            }
+            query.whereKey("owner", equalTo: User.current()!)
+            query.getFirstObjectInBackground { object, error in
+                if let pass = object as? Pass {
+                    continuation.resume(returning: pass)
+                } else if let e = error {
+                    continuation.resume(throwing: e)
+                }
+            }
+        }
+    }
+}

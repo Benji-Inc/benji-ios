@@ -874,6 +874,8 @@
 		D6B95AF3272324BD00FBE66A /* PeopleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PeopleStore.swift */; };
 		D6B95AF5272324BD00FBE66A /* PeopleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF2272324BD00FBE66A /* PeopleStore.swift */; };
 		D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B95AF627236E1000FBE66A /* ConversationsManager.swift */; };
+		D6BD707129157E0100AC4A97 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BD707029157E0100AC4A97 /* ActivityViewController.swift */; };
+		D6BD707229157E0100AC4A97 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BD707029157E0100AC4A97 /* ActivityViewController.swift */; };
 		D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */; };
 		D6BF814B2721EE84006D7760 /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
 		D6BF814D2721EE9B006D7760 /* ToastQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQueue.swift */; };
@@ -1554,6 +1556,7 @@
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6B95AF2272324BD00FBE66A /* PeopleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleStore.swift; sourceTree = "<group>"; };
 		D6B95AF627236E1000FBE66A /* ConversationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsManager.swift; sourceTree = "<group>"; };
+		D6BD707029157E0100AC4A97 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
 		D6C31EAB281C66CB00FF6C56 /* ExpressionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionViewController.swift; sourceTree = "<group>"; };
 		D6C4BD3F27C95E8400579014 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
@@ -2944,6 +2947,7 @@
 			children = (
 				D6C7EC252805E62D00A35808 /* WaitlistCoordinator.swift */,
 				D6C7EC282805E64000A35808 /* WaitlistViewController.swift */,
+				D6BD707029157E0100AC4A97 /* ActivityViewController.swift */,
 			);
 			path = Waitlist;
 			sourceTree = "<group>";
@@ -3796,6 +3800,7 @@
 				D61128712804DC6D00574B96 /* EventLog.swift in Sources */,
 				D6C7EC2A2805E64000A35808 /* WaitlistViewController.swift in Sources */,
 				D61128512804DC3200574B96 /* CodeViewController.swift in Sources */,
+				D6BD707229157E0100AC4A97 /* ActivityViewController.swift in Sources */,
 				D611280F2804DB6200574B96 /* Lorem.swift in Sources */,
 				D61128262804DBD200574B96 /* MathFunctions.swift in Sources */,
 			);
@@ -4093,6 +4098,7 @@
 				D682F031278E47930016A24E /* ConversationsMessagesCellAttributes.swift in Sources */,
 				D6C64541280F4CEB00C10267 /* PagingIndicatorView.swift in Sources */,
 				D63F964A289B2AC8004F6C0D /* PiPRecordingViewController+Costs.swift in Sources */,
+				D6BD707129157E0100AC4A97 /* ActivityViewController.swift in Sources */,
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D6D96EFD27C5B50100BDCD01 /* ProfileCollectionViewLayout.swift in Sources */,
 				D63F9654289C94BD004F6C0D /* PiPRecordingViewController+Output.swift in Sources */,
@@ -4677,7 +4683,7 @@
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClipStaging.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppClip/Info.plist;
@@ -4717,7 +4723,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = AppClip/AppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppClip/Info.plist;
@@ -4875,7 +4881,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4905,7 +4911,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4932,7 +4938,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4960,7 +4966,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -4988,7 +4994,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -5021,7 +5027,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -5055,7 +5061,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -5088,7 +5094,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -5122,7 +5128,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
@@ -5156,7 +5162,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 863YH82QFN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";

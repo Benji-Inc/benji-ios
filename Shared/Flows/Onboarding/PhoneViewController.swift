@@ -33,7 +33,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
 
         super.init(textField: phoneField, placeholder: phoneField.placeholder)
 
-        phoneField.textAlignment = .center
+        phoneField.textAlignment = .left
     }
 
     required init?(coder aDecoder: NSCoder) {

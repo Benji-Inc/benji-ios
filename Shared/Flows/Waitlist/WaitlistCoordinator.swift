@@ -8,6 +8,7 @@
 
 import Foundation
 import Coordinator
+import UIKit
 
 class WaitlistCoordinator: PresentableCoordinator<Void> {
     
@@ -21,7 +22,15 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
         super.start()
         
         self.waitlistVC.button.didSelect { [unowned self] in
-            self.finishFlow(with: () )
+            guard let user = User.current() else { return }
+            switch user.status {
+            case .active:
+                self.finishFlow(with: ())
+            case .waitlist:
+                self.presentShareSheet()
+            default:
+                break
+            }
         }
         
         guard let deepLink = self.deepLink else { return }
@@ -48,6 +57,54 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
                 self.waitlistVC.descriptionLabel.setText("")
                 self.waitlistVC.view.setNeedsLayout()
             }
+        }
+    }
+    
+    private func presentShareSheet() {
+        Task {
+            await self.waitlistVC.button.handleEvent(status: .loading)
+            guard let pass = try? await Pass.fetchPass() else { return }
+            await pass.prepareMetadata()
+
+            let ac = ActivityViewController(with: self, activityItems: [pass])
+            
+            Task.onMainActor {
+                self.router.topmostViewController.present(ac, animated: true) {
+                    Task {
+                        await self.waitlistVC.button.handleEvent(status: .complete)
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension WaitlistCoordinator: ActivityViewControllerDelegate {
+    
+    func activityView(_ controller: ActivityViewController, didCompleteWith result: ActivityViewController.Result) {
+        if result.didShare {
+            Task {
+                await upgradeUser()
+            }
+        }
+    }
+    
+    private func upgradeUser() async {
+        Task {
+            await self.waitlistVC.button.handleEvent(status: .loading)
+
+            do {
+                try await FinalizeOnboarding(reservationId: "",
+                                             passId: "",
+                                             forceUpgrade: true)
+                .makeRequest(andUpdate: [], viewsToIgnore: [self.waitlistVC.view])
+            } catch {
+                await ToastScheduler.shared.schedule(toastType: .error(error))
+            }
+            
+            await self.waitlistVC.button.handleEvent(status: .loading)
+            
+            self.finishFlow(with: ())
         }
     }
 }

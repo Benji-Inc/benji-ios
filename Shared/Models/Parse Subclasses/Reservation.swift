@@ -21,8 +21,6 @@ enum ReservationKey: String {
 
 final class Reservation: PFObject, PFSubclassing {
     
-    static let domainURL = "https://joinjibber.com"
-
     static func parseClassName() -> String {
         return String(describing: self)
     }
@@ -117,7 +115,7 @@ extension Reservation: UIActivityItemSource {
             let metadataProvider = LPMetadataProvider()
 
             if let objectId = self.objectId {
-                self.link = Reservation.domainURL + "/reservation?reservationId=\(objectId)"
+                self.link = Config.domain + "/reservation?reservationId=\(objectId)"
             }
 
             if let link = self.link, let url = URL(string: link) {
