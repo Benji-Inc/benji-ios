@@ -134,6 +134,21 @@ class TapGestureRecognizer: UITapGestureRecognizer {
     }
 }
 
+class LongpressGestureRecognizer: UILongPressGestureRecognizer {
+    private var action: ((UILongPressGestureRecognizer) -> Void)?
+
+    init(action: ((UILongPressGestureRecognizer) -> Void)?) {
+        self.action = action
+        super.init(target: nil, action: nil)
+        self.allowableMovement = 30
+        self.addTarget(self, action: #selector(execute))
+    }
+
+    @objc private func execute() {
+        self.action?(self)
+    }
+}
+
 class PanGestureRecognizer: UIPanGestureRecognizer {
     private var action: (UIPanGestureRecognizer) -> Void
 
