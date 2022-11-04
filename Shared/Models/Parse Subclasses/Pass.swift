@@ -76,12 +76,7 @@ extension Pass: UIActivityItemSource {
     
     var message: String? {
         guard let link = self.link else { return nil }
-        return "Get the Jibber app so we can communicate with empathy.\nRSVP by tapping 👇\n\(link)"
-    }
-    
-    var reminderMessage: String? {
-        guard let link = self.link else { return nil }
-        return "Reminder! Get the Jibber app so we can communicate with empathy.\nRSVP by tapping 👇\n\(link)"
+        return "Join me on Jibber by tapping 👇\n\(link)"
     }
     
     func prepareMetadata() async {
@@ -107,10 +102,32 @@ extension Pass: UIActivityItemSource {
     
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         guard let link = self.link else { return nil }
-        return "Claim your reservation by tapping 👇\n\(link)"
+        return "Join me on Jibber 👇\n\(link)"
+    }
+    
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        guard activityType == .message else { return "" }
+        return "foo"
     }
     
     func activityViewControllerLinkMetadata(_: UIActivityViewController) -> LPLinkMetadata? {
         return self.metadata
+    }
+    
+    static func fetchPass() async throws -> Pass {
+        return try await withCheckedThrowingContinuation { continuation in
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
+                return
+            }
+            query.whereKey("owner", equalTo: User.current()!)
+            query.getFirstObjectInBackground { object, error in
+                if let pass = object as? Pass {
+                    continuation.resume(returning: pass)
+                } else if let e = error {
+                    continuation.resume(throwing: e)
+                }
+            }
+        }
     }
 }

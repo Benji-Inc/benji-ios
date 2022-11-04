@@ -74,7 +74,7 @@ class TextEntryField: BaseView, Sizeable {
         self.textField.pin(.left, offset: .long)
         self.textField.pin(.top, offset: .long)
         
-        var padding: CGFloat = 14
+        let padding: CGFloat = 14
 
         self.lineView.width = self.width - padding.doubled
         self.lineView.height = 2

@@ -21,6 +21,7 @@ class WaitlistViewController: ViewController {
     let titleLabel = ThemeLabel(font: .display)
     let descriptionLabel = ThemeLabel(font: .regular)
     let button = ThemeButton()
+    private var shouldShowButton = false
     
     override func initializeViews() {
         super.initializeViews()
@@ -35,7 +36,6 @@ class WaitlistViewController: ViewController {
         self.descriptionLabel.textAlignment = .center
         
         self.view.addSubview(self.button)
-        self.button.set(style: .custom(color: .white, textColor: .B0, text: "Enter"))
         self.button.alpha = 0.0
         
         PeopleStore.shared.$personUpdated.filter({ type in
@@ -47,6 +47,12 @@ class WaitlistViewController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.updateUI()
+    }
+    
+    override func willEnterForeground() {
+        super.willEnterForeground()
         
         self.updateUI()
     }
@@ -75,7 +81,7 @@ class WaitlistViewController: ViewController {
                 break
             }
             
-            self.displayNextStep(show: user.status == .active)
+            self.displayNextStep(for: user)
 
             self.view.setNeedsLayout()
         }
@@ -98,25 +104,38 @@ class WaitlistViewController: ViewController {
         
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
+        if self.shouldShowButton {
+            self.button.pinToSafeAreaBottom()
+        } else {
+            self.button.top = self.view.height
+        }
     }
     
-    func displayNextStep(show: Bool) {
+    func displayNextStep(for user: User) {
+        if user.status == .active {
+            self.button.set(style: .custom(color: .white, textColor: .B0, text: "Enter"))
+        } else if user.status == .waitlist {
+            self.button.set(style: .custom(color: .white, textColor: .B0, text: "Share"))
+        }
+        
         #if IOS
         Task {
+            self.shouldShowButton = user.status == .active
+            if user.status == .waitlist, let _ = try? await Pass.fetchPass() {
+                self.shouldShowButton = true
+            }
             await UIView.awaitAnimation(with: .fast, animations: {
-                if show {
-                    self.button.pinToSafeAreaBottom()
+                if self.shouldShowButton {
                     self.button.alpha = 1.0
                     self.view.layoutNow()
                 } else {
-                    self.button.top = self.view.height
                     self.button.alpha = 0.0
                     self.view.layoutNow()
                 }
             })
         }
         #else
-        guard let scene = view.window?.windowScene else { return }
+        guard let scene = self.view.window?.windowScene else { return }
         let config = SKOverlay.AppClipConfiguration(position: .bottom)
         let overlay = SKOverlay(configuration: config)
         overlay.present(in: scene)
