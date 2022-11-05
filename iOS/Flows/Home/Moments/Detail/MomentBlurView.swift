@@ -28,6 +28,7 @@ class MomentBlurView: BaseView {
         
         self.vibrancyEffectView.contentView.addSubview(self.imageView)
         self.imageView.tintColor = ThemeColor.white.color
+        self.imageView.isHidden = true
         
         self.vibrancyEffectView.contentView.addSubview(self.label)
         self.label.textAlignment = .center
@@ -47,6 +48,7 @@ class MomentBlurView: BaseView {
             } else if let person = try? await moment.author?.retrieveDataIfNeeded() {
                 self.label.setText("To view this Moment from \(person.givenName),\nfirst share one of yours.")
                 self.button.isVisible = true
+                self.imageView.isVisible = true 
                 self.layoutNow()
             }            
         }
