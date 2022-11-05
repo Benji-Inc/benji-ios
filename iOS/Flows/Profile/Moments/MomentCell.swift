@@ -73,16 +73,22 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addInteraction(interaction)
     }
     
+    private var loadTask: Task<Void, Error>?
+    
     func configure(with item: MomentViewModel) {
         
         self.label.alpha = item.momentId.exists ? 0 : 1.0
         self.label.setText("\(item.day)")
         
-        Task {
+        self.loadTask = Task { [weak self] in
+            guard let `self` = self else { return }
+            
             if let momentId = item.momentId {
                 self.animationView.play()
                 self.moment = try? await Moment.getObject(with: momentId)
+                guard !Task.isCancelled else { return }
                 if let previewURL = try? await self.moment?.preview?.retrieveCachedPathURL() {
+                    guard !Task.isCancelled else { return }
                     self.videoView.updatePlayer(with: [previewURL])
                 }
                 self.animationView.stop()
@@ -121,6 +127,7 @@ class MomentCell: CollectionViewManagerCell, ManageableCell {
         self.label.text = ""
         self.contentView.layer.borderWidth = 0 
         self.videoView.reset()
+        self.loadTask?.cancel()
     }
     
     override func updateConfiguration(using state: UICellConfigurationState) {
