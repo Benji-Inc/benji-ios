@@ -59,10 +59,11 @@ class UserNotificationManager: NSObject {
     private var registerTask: Task<Void, Error>?
     
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
-                  application: UIApplication) async {
+                  application: UIApplication,
+                  forceRegistration: Bool = false) async {
         
         // If we already have an register task, wait for it to finish.
-        if let registerTask = self.registerTask {
+        if let registerTask = self.registerTask, !forceRegistration {
             try? await registerTask.value
             return
         }

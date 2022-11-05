@@ -24,8 +24,10 @@ class MomentCaptureViewController: PiPRecordingViewController {
     let textView = CaptionTextView()
     let confirmationView = MomentConfirmationView() 
     
+    private lazy var longpressRecognizer = LongpressGestureRecognizer { [unowned self] recognizer in
+        self.handle(longpress: recognizer)
+    }
     private lazy var panGestureHandler = MomentSwipeGestureHandler(viewController: self)
-    
     private lazy var panRecognizer = SwipeGestureRecognizer { [unowned self] (recognizer) in
         self.panGestureHandler.handle(pan: recognizer)
     }
@@ -78,7 +80,7 @@ class MomentCaptureViewController: PiPRecordingViewController {
         self.view.addSubview(self.textView)
         
         self.view.addGestureRecognizer(self.panRecognizer)
-        
+        self.view.addGestureRecognizer(self.longpressRecognizer)
         self.setupHandlers()
     }
     
@@ -265,25 +267,17 @@ class MomentCaptureViewController: PiPRecordingViewController {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard self.state == .idle else { return }
-        self.startRecording()
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        
-        if self.frontCameraView.isAnimating {
-            self.stopRecording()
-        }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-
-        if self.frontCameraView.isAnimating {
-            self.stopRecording()
+    func handle(longpress: UILongPressGestureRecognizer) {
+        switch longpress.state {
+        case .began:
+            guard self.state == .idle else { return }
+            self.startRecording()
+        case .ended, .cancelled:
+            if self.frontCameraView.isAnimating {
+                self.stopRecording()
+            }
+        default:
+            break
         }
     }
 }
@@ -301,6 +295,8 @@ extension MomentCaptureViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is SwipeGestureRecognizer {
             return self.state == .playback
+        } else if gestureRecognizer is LongpressGestureRecognizer {
+            return self.state == .idle
         } else {
             return true
         }

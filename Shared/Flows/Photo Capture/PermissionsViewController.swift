@@ -45,7 +45,7 @@ class PermissionsViewController: DisclosureModalViewController {
                 return HightlightedPhrase(text: "Allowing Notifications means you never miss out on what’s important. No noise.",
                                           highlightedWords: [])
             case .finished:
-                return HightlightedPhrase(text: "Now that you have Focus and Notifications on, you are ready to Jibber!",
+                return HightlightedPhrase(text: "Now that you have Focus and Notifications on, you are ready for Jibber!",
                                           highlightedWords: [])
             }
         }
@@ -203,7 +203,7 @@ class PermissionsViewController: DisclosureModalViewController {
     #if !APPCLIP && !NOTIFICATION
     private func handleNotifications(isON: Bool) {
         Task {
-            await UserNotificationManager.shared.register(application: UIApplication.shared)
+            await UserNotificationManager.shared.register(application: UIApplication.shared, forceRegistration: true)
             let settings = await UserNotificationManager.shared.getNotificationSettings()
             if settings.authorizationStatus == .authorized {
                 self.state = .finished
