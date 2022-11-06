@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import LinkPresentation
 
  enum MomentKey: String {
      case author
@@ -94,3 +95,40 @@ import Parse
          return self.file
      }
  }
+
+private var urlKey: UInt8 = 0
+extension Moment: UIActivityItemSource {
+    
+    private(set) var previewURL: URL? {
+        get {
+            return self.getAssociatedObject(&urlKey)
+        }
+        set {
+            self.setAssociatedObject(key: &urlKey, value: newValue)
+        }
+    }
+    
+    func prepareMetadata() async {
+        _ = try? await self.retrieveDataIfNeeded()
+        self.previewURL = try? await self.preview?.retrieveCachedPathURL()
+    }
+    
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return ""
+    }
+    
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        let link =  Config.domain + "/moment?momentId=\(self.objectId!)"
+        return "Check out my moment 🤳\n\(link)"
+    }
+    
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        return ""
+    }
+    
+    func activityViewControllerLinkMetadata(_: UIActivityViewController) -> LPLinkMetadata? {
+        let metadata = LPLinkMetadata()
+        metadata.title = "Share Moment"
+        return metadata
+    }
+}

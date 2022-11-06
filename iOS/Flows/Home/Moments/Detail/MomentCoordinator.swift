@@ -63,6 +63,10 @@ import StreamChat
              }
          }
          
+         self.momentVC.footerView.shareButton.didSelect { [unowned self] in
+             self.presentShareSheet()
+         }
+         
          if let deepLink = self.deepLink {
              self.handle(deepLink: deepLink)
          }
@@ -194,6 +198,15 @@ import StreamChat
          
          self.router.topmostViewController.present(alert, animated: true)
      }
+     
+     func presentShareSheet() {
+         Task {
+             await self.moment.prepareMetadata()
+             
+             let activityVC = ActivityViewController(with: self, activityItems: [self.moment])
+             self.router.topmostViewController.present(activityVC, animated: true)
+         }
+     }
  }
 
 extension MomentCoordinator: MomentContentViewDelegate {
@@ -203,5 +216,12 @@ extension MomentCoordinator: MomentContentViewDelegate {
     
     func momentContent(_ view: MomentContentView, didSelectPerson person: PersonType) {
         self.presentProfile(for: person)
+    }
+}
+
+extension MomentCoordinator: ActivityViewControllerDelegate {
+    
+    func activityView(_ controller: ActivityViewController, didCompleteWith result: ActivityViewController.Result) {
+        
     }
 }
