@@ -21,7 +21,7 @@ class MomentFooterView: BaseView {
         self.addSubview(self.commentsLabel)
         self.addSubview(self.reactionsView)
         self.addSubview(self.shareButton)
-        self.shareButton.set(style: .custom(color: .D6, textColor: .white, text: "Share"))
+        self.shareButton.set(style: .image(symbol: .share, palletteColors: [.whiteWithAlpha], pointSize: 26, backgroundColor: .clear))
     }
     
     func configure(for moment: Moment) {
@@ -38,15 +38,22 @@ class MomentFooterView: BaseView {
         self.reactionsView.squaredSize = 35
         self.reactionsView.pinToSafeAreaRight()
         
-        let maxLabelWidth = Theme.getPaddedWidth(with: self.width) - self.reactionsView.width - Theme.ContentOffset.long.value
-        self.commentsLabel.setSize(withWidth: maxLabelWidth)
+        self.shareButton.squaredSize = 35
+        self.shareButton.match(.right, to: .left, of: self.reactionsView, offset: .negative(.long))
+        
+        var maxWidth: CGFloat = 0
+        
+        if self.shareButton.isVisible {
+            maxWidth = Theme.getPaddedWidth(with: self.width) - self.reactionsView.width - self.shareButton.width - Theme.ContentOffset.long.value.doubled
+        } else {
+            maxWidth = Theme.getPaddedWidth(with: self.width) - self.reactionsView.width - Theme.ContentOffset.long.value
+        }
+        
+        self.commentsLabel.setSize(withWidth: maxWidth)
         self.commentsLabel.pin(.top, offset: .xtraLong)
         self.commentsLabel.pinToSafeAreaLeft()
         
         self.reactionsView.centerY = self.commentsLabel.centerY
-        
-        self.shareButton.setSize(with: self.width)
-        self.shareButton.centerOnX()
-        self.shareButton.pinToSafeAreaBottom()
+        self.shareButton.centerY = self.commentsLabel.centerY
     }
 }
