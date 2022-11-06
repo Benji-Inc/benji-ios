@@ -41,7 +41,7 @@ class CalendarViewController: DiffableCollectionViewController<CalendarRange,
         self.modalPresentationStyle = .popover
         if let pop = self.popoverPresentationController {
             let sheet = pop.adaptiveSheetPresentationController
-            sheet.detents = [.large()]
+            sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = true
             sheet.preferredCornerRadius = Theme.screenRadius
