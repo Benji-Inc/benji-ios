@@ -99,11 +99,15 @@ class MomentViewController: ViewController {
         self.contentView.showMomentIfAvailable()
         
         if self.moment.isAvailable {
+            #if IOS
             // If the user has not been added to the comments convo, add them. This will represent views.
             let controller = ConversationController.controller(for: self.moment.commentsId)
             controller.addMembers(userIds: Set([User.current()!.objectId!])) { [unowned self] error in
                 self.footerView.configure(for: self.moment)
             }
+            #elseif APPCLIP
+            self.footerView.configure(for: self.moment)
+            #endif
         } else {
             self.footerView.configure(for: self.moment)
         }

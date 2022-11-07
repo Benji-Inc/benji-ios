@@ -154,6 +154,24 @@ class MainCoordinator: BaseCoordinator<Void> {
         }
     }
     
+    func runMomentFlow(with deepLink: DeepLinkable?) {
+        Task {
+            guard let moment = try? await Moment.getObject(with: deepLink?.momentId) else {
+                self.runOnboardingFlow(with: deepLink)
+                return
+            }
+            
+            let coordinator = MomentCoordinator(moment: moment,
+                                                router: self.router,
+                                                deepLink: deepLink)
+            self.router.setRootModule(coordinator, animated: true)
+            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+                // Attempt to take the user to the room screen after onboarding is complete.
+                self.runOnboardingFlow(with: deepLink)
+            })
+        }
+    }
+    
     func runWaitlistFlow(with deepLink: DeepLinkable?) {
         let coordinator = WaitlistCoordinator(router: self.router,
                                                 deepLink: deepLink)

@@ -11,8 +11,10 @@ import Combine
 
 class CommentsLabel: ThemeLabel {
     
+    #if IOS
     private var controller: MessageSequenceController?
     private var subscriptions = Set<AnyCancellable>()
+    #endif
         
     init() {
         super.init(font: .regular, textColor: .whiteWithAlpha)
@@ -25,10 +27,12 @@ class CommentsLabel: ThemeLabel {
     override func initializeLabel() {
         super.initializeLabel()
         
-        self.isUserInteractionEnabled = true 
+        self.isUserInteractionEnabled = true
+        self.updateText(for: 0)
     }
     
     func configure(with moment: Moment) {
+        #if IOS
         self.subscriptions.forEach { subscription in
             subscription.cancel()
         }
@@ -48,6 +52,7 @@ class CommentsLabel: ThemeLabel {
                 self.updateText(for: 0)
             }
         }).store(in: &self.subscriptions)
+        #endif
     }
     
     private func updateText(for count: Int) {

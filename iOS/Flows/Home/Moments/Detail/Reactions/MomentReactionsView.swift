@@ -13,16 +13,18 @@ class MomentReactionsView: BaseView {
     
     let button = ThemeButton()
     let reactionsView = ReactionsView()
+
+    #if IOS
     private let badgeView = BadgeCounterView()
-    
     private(set) var controller: ConversationController?
     private var subscriptions = Set<AnyCancellable>()
-
+    #endif
+    
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.reactionsView)
-        self.reactionsView.expressionVideoView.shouldPlay = true 
+        self.reactionsView.expressionVideoView.shouldPlay = true
         
         self.addSubview(self.button)
         let pointSize: CGFloat = 26
@@ -34,8 +36,10 @@ class MomentReactionsView: BaseView {
         
         self.button.isHidden = true
         
+        #if IOS
         self.addSubview(self.badgeView)
         self.badgeView.minToShow = 1
+        #endif
         
         self.clipsToBounds = false
     }
@@ -43,15 +47,17 @@ class MomentReactionsView: BaseView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.reactionsView.expandToSuperviewSize()
         self.button.expandToSuperviewSize()
         
+        #if IOS
+        self.reactionsView.expandToSuperviewSize()
         self.badgeView.center = CGPoint(x: self.width - 2,
                                         y: self.height - 2)
+        #endif
     }
     
     func configure(with moment: Moment) {
-        
+        #if IOS
         Task {
         
             self.subscriptions.forEach { subscription in
@@ -88,5 +94,8 @@ class MomentReactionsView: BaseView {
                 
             }).store(in: &self.subscriptions)
         }
+        #elseif APPCLIP
+        self.button.isVisible = true 
+        #endif
     }
 }
