@@ -172,7 +172,7 @@ extension HomeCoordinator: LaunchActivityHandler {
         case .reservation(_), .pass(_):
             self.presentPersonConnection(for: launchActivity)
         case .deepLink(let deepLinkable):
-            logDebug("Launched with: \(deepLinkable)")
+            self.handle(deepLink: deepLinkable)
         }
     }
 }

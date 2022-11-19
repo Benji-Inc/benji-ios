@@ -90,7 +90,13 @@ class MainCoordinator: BaseCoordinator<Void> {
         self.deepLink = deeplink
 
         // NOTE: Regardless of the deep link, the user needs to be created and activated to get
-        // to the whole app.
+        // to the whole app. Except for Moments.
+        
+        // Allow for moments to presented without onboarding
+        if deeplink.deepLinkTarget == .moment {
+            self.handle(deeplink)
+            return
+        }
 
         // If no user object has been created, allow the user to do so now.
         guard let user = User.current(), user.isAuthenticated else {
@@ -120,23 +126,29 @@ class MainCoordinator: BaseCoordinator<Void> {
         defer {
             self.deepLink = nil
         }
-
-        guard let target = deeplink.deepLinkTarget else { return }
+        
+        self.handle(deeplink)
+    }
+    
+    private func handle(_ link: DeepLinkable) {
+        guard let target = link.deepLinkTarget else { return }
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .home, .conversation, .wallet, .profile, .reservation, .thread, .moment, .capture, .comment:
+        case .home, .conversation, .wallet, .profile, .reservation, .thread, .capture, .comment:
         #if IOS
             Task {
-                await self.runHomeFlow(with: deeplink)
+                await self.runHomeFlow(with: link)
             }
         #elseif APPCLIP
-            self.runWaitlistFlow(with: deeplink)
+            self.runWaitlistFlow(with: link)
         #endif
         case .login:
-            self.runOnboardingFlow(with: deeplink)
+            self.runOnboardingFlow(with: link)
         case .waitlist:
-            self.runWaitlistFlow(with: deeplink)
+            self.runWaitlistFlow(with: link)
+        case .moment:
+            self.runMomentFlow(with: link)
         }
     }
 
@@ -155,7 +167,17 @@ class MainCoordinator: BaseCoordinator<Void> {
     }
     
     func runMomentFlow(with deepLink: DeepLinkable?) {
+//        #if IOS
+//        if let user = User.current(), user.status == .active, user.isOnboarded {
+//            self.runHomeFlow(with: deepLink)
+//            return
+//        }
+//        #endif
+        
+        // Move this to onboarding
+        // Ensure that Parse has been initialized. 
         Task {
+            await Task.sleep(seconds: 0.5)
             guard let moment = try? await Moment.getObject(with: deepLink?.momentId) else {
                 self.runOnboardingFlow(with: deepLink)
                 return

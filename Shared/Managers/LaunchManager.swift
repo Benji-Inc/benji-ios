@@ -127,6 +127,13 @@ class LaunchManager {
                    let passId = item.value {
                     self.delegate?.launchManager(self, didReceive: .pass(passId: passId))
                 }
+            case "/moment":
+                if let item = components.queryItems?.first,
+                   let momentId = item.value {
+                    var object = DeepLinkObject(target: .moment)
+                    object.momentId = momentId
+                    self.delegate?.launchManager(self, didReceive: .deepLink(object))
+                }
             default:
                 self.delegate?.launchManager(self, didReceive: .onboarding(phoneNumber: nil))
             }

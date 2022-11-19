@@ -240,7 +240,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 }
             }
         case .deepLink(_):
-            break 
+            break
         }
     }
 
