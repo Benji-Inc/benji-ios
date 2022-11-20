@@ -1027,6 +1027,9 @@
 		D6EB4DF023540E48005BF3B4 /* FaceCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceCaptureViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
+		D6F0A344292A7ECF0000C13C /* NSUserActivity+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F0A343292A7ECF0000C13C /* NSUserActivity+Extensions.swift */; };
+		D6F0A345292A7ECF0000C13C /* NSUserActivity+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F0A343292A7ECF0000C13C /* NSUserActivity+Extensions.swift */; };
+		D6F0A347292A7ECF0000C13C /* NSUserActivity+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F0A343292A7ECF0000C13C /* NSUserActivity+Extensions.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
 		D6F4602F27FE364E00B48973 /* MiniBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */; };
@@ -1651,6 +1654,7 @@
 		D6EB4DEF23540E48005BF3B4 /* FaceCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCaptureViewController.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
+		D6F0A343292A7ECF0000C13C /* NSUserActivity+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+Extensions.swift"; sourceTree = "<group>"; };
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
 		D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrancyView.swift; sourceTree = "<group>"; };
 		D6F4602E27FE364E00B48973 /* MiniBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniBadgeView.swift; sourceTree = "<group>"; };
@@ -2197,6 +2201,7 @@
 				D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */,
 				D63D5C96265811B000543200 /* URL+Extensions.swift */,
 				8004EE5327E8FE970086E010 /* URLSession+Extension.swift */,
+				D6F0A343292A7ECF0000C13C /* NSUserActivity+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3731,6 +3736,7 @@
 				D61128AB2804E73600574B96 /* DisclosureModalViewController.swift in Sources */,
 				D6D75C3928C90205009578E7 /* UserNotificationManger+Moments.swift in Sources */,
 				D61128232804DBCD00574B96 /* Equatable+Extensions.swift in Sources */,
+				D6F0A347292A7ECF0000C13C /* NSUserActivity+Extensions.swift in Sources */,
 				D61128A92804E5E700574B96 /* CloudFunction.swift in Sources */,
 				D61128A12804E22F00574B96 /* Person.swift in Sources */,
 				D61C1D29284041DE00F58F84 /* PresentableCoordinator.swift in Sources */,
@@ -3875,6 +3881,7 @@
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,
 				D6D96EED27C59DED00BDCD01 /* ProfileViewController.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
+				D6F0A344292A7ECF0000C13C /* NSUserActivity+Extensions.swift in Sources */,
 				D60B887927F7E05500B3E1C2 /* NoticeStore.swift in Sources */,
 				D6B2B65B283D3A9C007D507B /* InvitePromptContentView.swift in Sources */,
 				80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */,
@@ -4342,6 +4349,7 @@
 				D69972CD28A4354000920998 /* PersonGradientView.swift in Sources */,
 				D68B723427D3D8FA00F04AB1 /* AnalyticsManager.swift in Sources */,
 				D63DB26D25E9997F00F6B323 /* PersonType.swift in Sources */,
+				D6F0A345292A7ECF0000C13C /* NSUserActivity+Extensions.swift in Sources */,
 				D63DB26525E9997200F6B323 /* ThemeColor.swift in Sources */,
 				D63DB22325E9990500F6B323 /* Date+Extensions.swift in Sources */,
 				D63DB27025E9997F00F6B323 /* Deeplinkable.swift in Sources */,

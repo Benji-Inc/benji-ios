@@ -42,7 +42,7 @@ class MainCoordinator: BaseCoordinator<Void> {
     }
 
     /// A task to start the launch flow and handle a deep link. If the task is cancelled, the deep link will not be handled.
-    private var launchAndDeepLinkTask: Task<Void, Never>?
+    private(set) var launchAndDeepLinkTask: Task<Void, Never>?
     private func runLaunchFlow() {
         self.launchAndDeepLinkTask?.cancel()
 
@@ -53,6 +53,7 @@ class MainCoordinator: BaseCoordinator<Void> {
                 let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
                 self.router.setRootModule(launchCoordinator)
                 self.addChildAndStart(launchCoordinator) { result in
+                    
                     switch result {
                     case .success(let deepLink):
                         continuation.resume(returning: deepLink)
@@ -90,14 +91,8 @@ class MainCoordinator: BaseCoordinator<Void> {
         self.deepLink = deeplink
 
         // NOTE: Regardless of the deep link, the user needs to be created and activated to get
-        // to the whole app. Except for Moments.
+        // to the whole app.
         
-        // Allow for moments to presented without onboarding
-        if deeplink.deepLinkTarget == .moment {
-            self.handle(deeplink)
-            return
-        }
-
         // If no user object has been created, allow the user to do so now.
         guard let user = User.current(), user.isAuthenticated else {
             self.runOnboardingFlow(with: deeplink)
@@ -135,7 +130,7 @@ class MainCoordinator: BaseCoordinator<Void> {
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .home, .conversation, .wallet, .profile, .reservation, .thread, .capture, .comment:
+        case .home, .conversation, .wallet, .profile, .reservation, .thread, .capture, .comment, .moment:
         #if IOS
             Task {
                 await self.runHomeFlow(with: link)
@@ -147,12 +142,11 @@ class MainCoordinator: BaseCoordinator<Void> {
             self.runOnboardingFlow(with: link)
         case .waitlist:
             self.runWaitlistFlow(with: link)
-        case .moment:
-            self.runMomentFlow(with: link)
         }
     }
 
     func runOnboardingFlow(with deepLink: DeepLinkable?) {
+        self.removeChild()
         let coordinator = OnboardingCoordinator(router: self.router,
                                                 deepLink: deepLink)
         self.router.setRootModule(coordinator, animated: true)
@@ -166,35 +160,8 @@ class MainCoordinator: BaseCoordinator<Void> {
         }
     }
     
-    func runMomentFlow(with deepLink: DeepLinkable?) {
-//        #if IOS
-//        if let user = User.current(), user.status == .active, user.isOnboarded {
-//            self.runHomeFlow(with: deepLink)
-//            return
-//        }
-//        #endif
-        
-        // Move this to onboarding
-        // Ensure that Parse has been initialized. 
-        Task {
-            await Task.sleep(seconds: 0.5)
-            guard let moment = try? await Moment.getObject(with: deepLink?.momentId) else {
-                self.runOnboardingFlow(with: deepLink)
-                return
-            }
-            
-            let coordinator = MomentCoordinator(moment: moment,
-                                                router: self.router,
-                                                deepLink: deepLink)
-            self.router.setRootModule(coordinator, animated: true)
-            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-                // Attempt to take the user to the room screen after onboarding is complete.
-                self.runOnboardingFlow(with: deepLink)
-            })
-        }
-    }
-    
     func runWaitlistFlow(with deepLink: DeepLinkable?) {
+        self.removeChild()
         let coordinator = WaitlistCoordinator(router: self.router,
                                                 deepLink: deepLink)
         self.router.setRootModule(coordinator, animated: true)

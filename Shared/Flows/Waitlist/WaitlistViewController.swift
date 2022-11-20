@@ -22,6 +22,7 @@ class WaitlistViewController: ViewController {
     let descriptionLabel = ThemeLabel(font: .regular)
     let button = ThemeButton()
     private var shouldShowButton = false
+    var shouldDisplayUpdateOverlay: CompletionOptional = nil
     
     override func initializeViews() {
         super.initializeViews()
@@ -135,10 +136,7 @@ class WaitlistViewController: ViewController {
             })
         }
         #else
-        guard let scene = self.view.window?.windowScene else { return }
-        let config = SKOverlay.AppClipConfiguration(position: .bottom)
-        let overlay = SKOverlay(configuration: config)
-        overlay.present(in: scene)
+        self.shouldDisplayUpdateOverlay?()
         #endif
     }
 }

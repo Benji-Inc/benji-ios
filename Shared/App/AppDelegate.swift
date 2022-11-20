@@ -54,16 +54,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = scene as? UIWindowScene else { return }
         
+        let activity = connectionOptions.userActivities.first { activity in
+            return activity.activityType == NSUserActivityTypeBrowsingWeb
+        }
+        
+        var launchDeepLink: DeepLinkable?
+        if let launchActivity = activity?.launchActivity,
+            case LaunchActivity.deepLink(let deepLink) = launchActivity {
+            launchDeepLink = deepLink
+        }
+        
 #if !NOTIFICATION
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController, for: windowScene)
-        self.initializeMainCoordinator(with: rootNavController)
+        self.initializeMainCoordinator(with: rootNavController, deepLink: launchDeepLink)
         _ = UserNotificationManager.shared
 #endif
+        
         // Must be done after maincoordinator is initialized so delegate get set
-        if let activity = connectionOptions.userActivities.first(where: { activity in
-            return activity.activityType == NSUserActivityTypeBrowsingWeb
-        }) {
+        if let activity = activity, launchDeepLink.isNil {
             LaunchManager.shared.continueUser(activity: activity)
         }
     }
@@ -78,9 +87,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.makeKeyAndVisible()
     }
 
-    func initializeMainCoordinator(with rootNavController: RootNavigationController) {
+    func initializeMainCoordinator(with rootNavController: RootNavigationController, deepLink: DeepLinkable?) {
         let router = Router(navController: rootNavController)
-        self.mainCoordinator = MainCoordinator(router: router, deepLink: nil)
+        self.mainCoordinator = MainCoordinator(router: router, deepLink: deepLink)
         self.mainCoordinator?.start()
     }
 

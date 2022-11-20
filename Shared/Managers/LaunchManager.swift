@@ -106,37 +106,9 @@ class LaunchManager {
 #endif
     }
     
-    func continueUser(activity: NSUserActivity)  {
-        if activity.activityType == NSUserActivityTypeBrowsingWeb,
-           let incomingURL = activity.webpageURL,
-           let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
-            guard let path = components.path else { return }
-            switch path {
-            case "/onboarding":
-                if let item = components.queryItems?.first,
-                   let phoneNumber = item.value {
-                    self.delegate?.launchManager(self, didReceive: .onboarding(phoneNumber: phoneNumber))
-                }
-            case "/reservation":
-                if let item = components.queryItems?.first,
-                   let reservationId = item.value {
-                    self.delegate?.launchManager(self, didReceive: .reservation(reservationId: reservationId))
-                }
-            case "/pass":
-                if let item = components.queryItems?.first,
-                   let passId = item.value {
-                    self.delegate?.launchManager(self, didReceive: .pass(passId: passId))
-                }
-            case "/moment":
-                if let item = components.queryItems?.first,
-                   let momentId = item.value {
-                    var object = DeepLinkObject(target: .moment)
-                    object.momentId = momentId
-                    self.delegate?.launchManager(self, didReceive: .deepLink(object))
-                }
-            default:
-                self.delegate?.launchManager(self, didReceive: .onboarding(phoneNumber: nil))
-            }
+    func continueUser(activity: NSUserActivity) {
+        if let launchActivity = activity.launchActivity {
+            self.delegate?.launchManager(self, didReceive: launchActivity)
         }
     }
 }
