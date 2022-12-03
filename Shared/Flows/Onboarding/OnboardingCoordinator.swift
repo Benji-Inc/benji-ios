@@ -96,7 +96,9 @@ class OnboardingCoordinator: PresentableCoordinator<DeepLinkable?> {
                                                 router: self.router,
                                                 deepLink: deepLink)
             self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-                // Attempt to take the user to the room screen after onboarding is complete.
+                self.router.topmostViewController.dismiss(animated: true) {
+                    self.goToNextContentOrFinish()
+                }
             })
             
             self.router.present(coordinator, source: self.onboardingVC)
