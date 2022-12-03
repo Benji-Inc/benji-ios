@@ -10,12 +10,6 @@ import Foundation
 import Combine
 import Coordinator
 
-enum ProfileResult {
-    case conversation(String)
-    case openReplies(Messageable)
-    case message(Messageable)
-}
-
 class ProfileCoordinator: PresentableCoordinator<ProfileResult> {
     
     lazy var profileVC = ProfileViewController(with: self.person)

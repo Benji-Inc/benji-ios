@@ -42,7 +42,7 @@ class MainCoordinator: BaseCoordinator<Void> {
     }
 
     /// A task to start the launch flow and handle a deep link. If the task is cancelled, the deep link will not be handled.
-    private var launchAndDeepLinkTask: Task<Void, Never>?
+    private(set) var launchAndDeepLinkTask: Task<Void, Never>?
     private func runLaunchFlow() {
         self.launchAndDeepLinkTask?.cancel()
 
@@ -53,6 +53,7 @@ class MainCoordinator: BaseCoordinator<Void> {
                 let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
                 self.router.setRootModule(launchCoordinator)
                 self.addChildAndStart(launchCoordinator) { result in
+                    
                     switch result {
                     case .success(let deepLink):
                         continuation.resume(returning: deepLink)
@@ -91,7 +92,7 @@ class MainCoordinator: BaseCoordinator<Void> {
 
         // NOTE: Regardless of the deep link, the user needs to be created and activated to get
         // to the whole app.
-
+        
         // If no user object has been created, allow the user to do so now.
         guard let user = User.current(), user.isAuthenticated else {
             self.runOnboardingFlow(with: deeplink)
@@ -120,27 +121,32 @@ class MainCoordinator: BaseCoordinator<Void> {
         defer {
             self.deepLink = nil
         }
-
-        guard let target = deeplink.deepLinkTarget else { return }
+        
+        self.handle(deeplink)
+    }
+    
+    private func handle(_ link: DeepLinkable) {
+        guard let target = link.deepLinkTarget else { return }
 
         // Now attempt to handle the deeplink.
         switch target {
-        case .home, .conversation, .wallet, .profile, .reservation, .thread, .moment, .capture, .comment:
+        case .home, .conversation, .wallet, .profile, .reservation, .thread, .capture, .comment, .moment:
         #if IOS
             Task {
-                await self.runHomeFlow(with: deeplink)
+                await self.runHomeFlow(with: link)
             }
         #elseif APPCLIP
-            self.runWaitlistFlow(with: deeplink)
+            self.runWaitlistFlow(with: link)
         #endif
         case .login:
-            self.runOnboardingFlow(with: deeplink)
+            self.runOnboardingFlow(with: link)
         case .waitlist:
-            self.runWaitlistFlow(with: deeplink)
+            self.runWaitlistFlow(with: link)
         }
     }
 
     func runOnboardingFlow(with deepLink: DeepLinkable?) {
+        self.removeChild()
         let coordinator = OnboardingCoordinator(router: self.router,
                                                 deepLink: deepLink)
         self.router.setRootModule(coordinator, animated: true)
@@ -155,6 +161,7 @@ class MainCoordinator: BaseCoordinator<Void> {
     }
     
     func runWaitlistFlow(with deepLink: DeepLinkable?) {
+        self.removeChild()
         let coordinator = WaitlistCoordinator(router: self.router,
                                                 deepLink: deepLink)
         self.router.setRootModule(coordinator, animated: true)

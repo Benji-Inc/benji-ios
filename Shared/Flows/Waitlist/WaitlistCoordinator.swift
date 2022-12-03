@@ -9,6 +9,7 @@
 import Foundation
 import Coordinator
 import UIKit
+import StoreKit
 
 class WaitlistCoordinator: PresentableCoordinator<Void> {
     
@@ -21,22 +22,8 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
         
-        self.waitlistVC.button.didSelect { [unowned self] in
-            guard let user = User.current() else { return }
-            switch user.status {
-            case .active:
-                self.finishFlow(with: ())
-            case .waitlist:
-                self.presentShareSheet()
-            default:
-                break
-            }
-        }
-        
-        guard let deepLink = self.deepLink else { return }
-        
         Task {
-            if let reservationId = deepLink.reservationId,
+            if let reservationId = self.deepLink?.reservationId,
                 let reservation = try? await Reservation.getObject(with: reservationId),
                let createById = reservation.createdBy?.objectId,
                let person = await PeopleStore.shared.getPerson(withPersonId: createById) {
@@ -46,7 +33,7 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
                 self.waitlistVC.descriptionLabel.setText("You now have access to join \(person.givenName) on Jibber!")
                 self.waitlistVC.view.setNeedsLayout()
                 
-            } else if let passId = deepLink.passId,
+            } else if let passId = self.deepLink?.passId,
                         let pass = try? await Pass.getObject(with: passId),
                       let ownerId = pass.owner?.objectId,
                       let person = await PeopleStore.shared.getPerson(withPersonId: ownerId) {
@@ -56,6 +43,28 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
                 self.waitlistVC.descriptionLabel.setText("\(person.givenName) has granted you access to Jibber! Join below.")
                 self.waitlistVC.descriptionLabel.setText("")
                 self.waitlistVC.view.setNeedsLayout()
+            } else if let target = self.deepLink?.deepLinkTarget, target == .moment {
+                await self.presentMoment(with: deepLink)
+            }
+            
+            self.setupHandlers()
+        }
+    }
+    
+    private func setupHandlers() {
+        self.waitlistVC.shouldDisplayUpdateOverlay = { [unowned self] in
+            self.presentSKOverlay()
+        }
+        
+        self.waitlistVC.button.didSelect { [unowned self] in
+            guard let user = User.current() else { return }
+            switch user.status {
+            case .active:
+                self.finishFlow(with: ())
+            case .waitlist:
+                self.presentShareSheet()
+            default:
+                break
             }
         }
     }
@@ -76,6 +85,35 @@ class WaitlistCoordinator: PresentableCoordinator<Void> {
                 }
             }
         }
+    }
+    
+    func presentMoment(with deepLink: DeepLinkable?) async {
+        
+        guard let moment = try? await Moment.getObject(with: deepLink?.momentId) else {
+            return
+        }
+            
+        Task.onMainActor {
+            let coordinator = MomentCoordinator(moment: moment,
+                                                router: self.router,
+                                                deepLink: deepLink)
+            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+                self.router.topmostViewController.dismiss(animated: true) {
+                    self.presentSKOverlay()
+                }
+            })
+            
+            self.router.present(coordinator, source: self.waitlistVC)
+        }
+    }
+    
+    func presentSKOverlay() {
+    #if APPCLIP
+        guard let scene = self.waitlistVC.view.window?.windowScene else { return }
+        let config = SKOverlay.AppClipConfiguration(position: .bottom)
+        let overlay = SKOverlay(configuration: config)
+        overlay.present(in: scene)
+    #endif
     }
 }
 

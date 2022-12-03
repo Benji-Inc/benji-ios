@@ -40,12 +40,14 @@ class LaunchManager {
         // Initialize Parse if necessary
         Config.shared.initializeParseIfNeeded(includeBundleId: false)
         
-        SentrySDK.start { options in
-            options.dsn = "https://674f5b98c542435fadeffd8828582b32@o1232170.ingest.sentry.io/6380104"
-            options.debug = false//Config.shared.environment == .staging // Enabled debug when first installing is always helpful
-            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-            // We recommend adjusting this value in production.
-            options.tracesSampleRate = 1.0
+        Task.onMainActorAsync {
+            SentrySDK.start { options in
+                options.dsn = "https://674f5b98c542435fadeffd8828582b32@o1232170.ingest.sentry.io/6380104"
+                options.debug = false//Config.shared.environment == .staging // Enabled debug when first installing is always helpful
+                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                // We recommend adjusting this value in production.
+                options.tracesSampleRate = 1.0
+            }
         }
 
 #if !NOTIFICATION
@@ -106,30 +108,9 @@ class LaunchManager {
 #endif
     }
     
-    func continueUser(activity: NSUserActivity)  {
-        if activity.activityType == NSUserActivityTypeBrowsingWeb,
-           let incomingURL = activity.webpageURL,
-           let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
-            guard let path = components.path else { return }
-            switch path {
-            case "/onboarding":
-                if let item = components.queryItems?.first,
-                   let phoneNumber = item.value {
-                    self.delegate?.launchManager(self, didReceive: .onboarding(phoneNumber: phoneNumber))
-                }
-            case "/reservation":
-                if let item = components.queryItems?.first,
-                   let reservationId = item.value {
-                    self.delegate?.launchManager(self, didReceive: .reservation(reservationId: reservationId))
-                }
-            case "/pass":
-                if let item = components.queryItems?.first,
-                   let passId = item.value {
-                    self.delegate?.launchManager(self, didReceive: .pass(passId: passId))
-                }
-            default:
-                self.delegate?.launchManager(self, didReceive: .onboarding(phoneNumber: nil))
-            }
+    func continueUser(activity: NSUserActivity) {
+        if let launchActivity = activity.launchActivity {
+            self.delegate?.launchManager(self, didReceive: launchActivity)
         }
     }
 }

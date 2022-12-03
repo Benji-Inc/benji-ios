@@ -239,8 +239,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     self.switchTo(.phone(self.phoneVC))
                 }
             }
-        case .deepLink(_):
-            break 
+        case .deepLink(let deepLink):
+            if let target = deepLink.deepLinkTarget, target == .moment {
+                
+            }
         }
     }
 

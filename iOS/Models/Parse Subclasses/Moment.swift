@@ -26,8 +26,26 @@ import LinkPresentation
      }
      
      var isAvailable: Bool {
-         return MomentsStore.shared.hasRecordedToday || self.isFromCurrentUser
-     }
+         guard let user = User.current() else { return true }
+         
+         if MomentsStore.shared.hasRecordedToday {
+             return true
+         }
+         
+         if self.isFromCurrentUser {
+             return true
+         }
+         
+         if !user.isOnboarded {
+             return true
+         }
+         
+         if user.status == .waitlist {
+             return true
+         }
+         
+         return false
+    }
      
      var isFromCurrentUser: Bool {
          return self.author?.objectId == User.current()?.objectId

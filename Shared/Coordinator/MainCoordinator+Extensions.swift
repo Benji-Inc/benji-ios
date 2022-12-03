@@ -41,7 +41,14 @@ extension MainCoordinator: LaunchManagerDelegate {
 #if APPCLIP
     func handleAppClip(deepLink object: DeepLinkable) {
         self.deepLink = object
-        self.runOnboardingFlow(with: object)
+        if let target = object.deepLinkTarget,
+            target == .moment,
+           let user = User.current(),
+           user.status == .active {
+            self.runWaitlistFlow(with: object)
+        } else {
+            self.runOnboardingFlow(with: object)
+        }
     }
 #endif
 }

@@ -14,31 +14,35 @@ import Intents
 import Coordinator
 
 class OnboardingCoordinator: PresentableCoordinator<DeepLinkable?> {
-
+    
     private lazy var onboardingVC = OnboardingViewController(with: self)
-
+    
     override func toPresentable() -> DismissableVC {
         return self.onboardingVC
     }
-
+    
     override func start() {
         self.setInitialOnboardingContent()
         self.handle(deeplink: self.deepLink)
     }
-
+    
     func handle(deeplink: DeepLinkable?) {
         guard let link = deeplink else { return }
-
-        self.onboardingVC.reservationId = link.reservationId ?? ""
-        self.onboardingVC.passId = link.passId ?? ""
-        self.onboardingVC.updateUI()
+        
+        if let target = link.deepLinkTarget, target == .moment {
+            self.presentMoment(with: link)
+        } else {
+            self.onboardingVC.reservationId = link.reservationId ?? ""
+            self.onboardingVC.passId = link.passId ?? ""
+            self.onboardingVC.updateUI()
+        }
     }
-
+    
     // MARK: - Onboarding Flow Logic
-
+    
     private func setInitialOnboardingContent() {
         let userStatus = User.current()?.status
-
+        
         let initialContent: OnboardingContent
         switch userStatus {
         case .needsVerification, .inactive, .waitlist, .none:
@@ -47,17 +51,17 @@ class OnboardingCoordinator: PresentableCoordinator<DeepLinkable?> {
             self.finishFlow(with: nil)
             return
         }
-
+        
         self.onboardingVC.switchTo(initialContent)
     }
-
+    
     /// Returns the content for the first incompleted onboarding step in the onboarding sequence.
     private func getNextIncompleteOnboardingContent() -> OnboardingContent? {
         guard let current = User.current(), let status = current.status else {
             // If there is no user, then they'll need to provide a phone number to create one.
             return .phone(self.onboardingVC.phoneVC)
         }
-
+        
         switch status {
         case .needsVerification:
             return .code(self.onboardingVC.codeVC)
@@ -65,11 +69,11 @@ class OnboardingCoordinator: PresentableCoordinator<DeepLinkable?> {
             if !current.fullName.isValidFullName {
                 return .name(self.onboardingVC.nameVC)
             } else if current.smallImage.isNil {
-                #if targetEnvironment(simulator)
+#if targetEnvironment(simulator)
                 return nil
-                #else
+#else
                 return .photo(self.onboardingVC.photoVC)
-                #endif
+#endif
             } else {
                 return nil
             }
@@ -78,19 +82,41 @@ class OnboardingCoordinator: PresentableCoordinator<DeepLinkable?> {
             return nil
         }
     }
+    
+    func presentMoment(with deepLink: DeepLinkable?) {
+        
+        Task.onMainActorAsync {
+            guard let moment = try? await Moment.getObject(with: deepLink?.momentId) else {
+                return
+            }
+            
+            await Task.sleep(seconds: 0.5)
+            
+            let coordinator = MomentCoordinator(moment: moment,
+                                                router: self.router,
+                                                deepLink: deepLink)
+            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+                self.router.topmostViewController.dismiss(animated: true) {
+                    self.goToNextContentOrFinish()
+                }
+            })
+            
+            self.router.present(coordinator, source: self.onboardingVC)
+        }
+    }
 }
 
 extension OnboardingCoordinator: OnboardingViewControllerDelegate {
-
+    
     // MARK: - User Info Entry Flow
-
+    
     func onboardingViewControllerDidStartOnboarding(_ controller: OnboardingViewController) {
         let phoneVC = self.onboardingVC.phoneVC
         self.onboardingVC.switchTo(.phone(phoneVC))
     }
     
     func onboardingViewControllerDidSelectRSVP(_ controller: OnboardingViewController) {
-
+        
         let alertController = UIAlertController(title: "RSVP",
                                                 message: "Please enter the code you received.",
                                                 preferredStyle: .alert)
@@ -105,47 +131,47 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
                 controller.handle(launchActivity: .reservation(reservationId: text))
             }
         })
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
-        
+            
         })
-
+        
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
-
+        
         controller.present(alertController, animated: true, completion: nil)
     }
-
+    
     func onboardingViewController(_ controller: OnboardingViewController, didEnter phoneNumber: PhoneNumber) {
         let codeVC = self.onboardingVC.codeVC
         codeVC.phoneNumber = phoneNumber
         self.onboardingVC.switchTo(.code(codeVC))
     }
-
+    
     func onboardingViewControllerDidVerifyCode(_ controller: OnboardingViewController,
                                                andReturnCID cid: String?) {
         self.goToNextContentOrFinish()
     }
-
+    
     func onboardingViewController(_ controller: OnboardingViewController, didEnterName name: String) {
         Task {
             do {
                 guard let user = User.current() else { return }
                 user.formatName(from: name)
                 try await user.saveLocalThenServer()
-
+                
                 self.goToNextContentOrFinish()
             } catch {
                 await ToastScheduler.shared.schedule(toastType: .error(error))
             }
         }
     }
-
+    
     func onboardingViewControllerDidTakePhoto(_ controller: OnboardingViewController) {
         self.goToNextContentOrFinish()
     }
-
+    
     private func goToNextContentOrFinish() {
         if let nextContent = self.getNextIncompleteOnboardingContent() {
             self.onboardingVC.switchTo(nextContent)
@@ -162,7 +188,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     func finalizeOnboarding(user: User) {
         Task {
             self.onboardingVC.showLoading()
-
+            
             do {
                 try await FinalizeOnboarding(reservationId: self.onboardingVC.reservationId,
                                              passId: self.onboardingVC.passId)
@@ -185,7 +211,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
 // MARK: - Launch Activity Handling
 
 extension OnboardingCoordinator: LaunchActivityHandler {
-
+    
     nonisolated func handle(launchActivity: LaunchActivity) {
         Task.onMainActor {
             self.onboardingVC.handle(launchActivity: launchActivity)
