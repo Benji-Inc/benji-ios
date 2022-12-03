@@ -958,6 +958,11 @@
 		D6D4ECD528613E0D002C71CE /* ConversationSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4ECD428613E0D002C71CE /* ConversationSelectionCell.swift */; };
 		D6D4ECD728613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4ECD628613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift */; };
 		D6D557FE27C9B8AE0024D1CD /* ProfileCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D557FD27C9B8AE0024D1CD /* ProfileCollectionView.swift */; };
+		D6D6D4B3293BCDC6004140B8 /* PiPMixer.metal in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D4B2293BCDC6004140B8 /* PiPMixer.metal */; };
+		D6D6D4B5293BCE35004140B8 /* PiPVideoMixer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D4B4293BCE35004140B8 /* PiPVideoMixer.swift */; };
+		D6D6D4B7293BCEB2004140B8 /* MovieRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D4B6293BCEB2004140B8 /* MovieRecorder.swift */; };
+		D6D6D4B9293BCEFF004140B8 /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D4B8293BCEFF004140B8 /* PreviewView.swift */; };
+		D6D6D4BB293BCF36004140B8 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D4BA293BCF36004140B8 /* CameraViewController.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D6D75C0428BA7D6E009578E7 /* ViewedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C0328BA7D6E009578E7 /* ViewedLabel.swift */; };
 		D6D75C0728BAE088009578E7 /* ReactionsVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D75C0628BAE088009578E7 /* ReactionsVideoView.swift */; };
@@ -1613,6 +1618,11 @@
 		D6D4ECD428613E0D002C71CE /* ConversationSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSelectionCell.swift; sourceTree = "<group>"; };
 		D6D4ECD628613E22002C71CE /* ConversationSelectionCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSelectionCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6D557FD27C9B8AE0024D1CD /* ProfileCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionView.swift; sourceTree = "<group>"; };
+		D6D6D4B2293BCDC6004140B8 /* PiPMixer.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PiPMixer.metal; sourceTree = "<group>"; };
+		D6D6D4B4293BCE35004140B8 /* PiPVideoMixer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPVideoMixer.swift; sourceTree = "<group>"; };
+		D6D6D4B6293BCEB2004140B8 /* MovieRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRecorder.swift; sourceTree = "<group>"; };
+		D6D6D4B8293BCEFF004140B8 /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		D6D6D4BA293BCF36004140B8 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 		D6D75C0328BA7D6E009578E7 /* ViewedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewedLabel.swift; sourceTree = "<group>"; };
 		D6D75C0628BAE088009578E7 /* ReactionsVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsVideoView.swift; sourceTree = "<group>"; };
@@ -2289,6 +2299,7 @@
 		D63F9643289B09AD004F6C0D /* Capture */ = {
 			isa = PBXGroup;
 			children = (
+				D6D6D4B1293BCD97004140B8 /* New */,
 				D6125B8528AD771500199414 /* CaptionTextView.swift */,
 				D63F9635289AE2CA004F6C0D /* MomentCaptureCoordinator.swift */,
 				D63F9639289AE33C004F6C0D /* MomentCaptureViewController.swift */,
@@ -3025,6 +3036,18 @@
 				D6D4ECCE28613DDF002C71CE /* ConversationSelectionViewController.swift */,
 			);
 			path = "Conversation Selection";
+			sourceTree = "<group>";
+		};
+		D6D6D4B1293BCD97004140B8 /* New */ = {
+			isa = PBXGroup;
+			children = (
+				D6D6D4B2293BCDC6004140B8 /* PiPMixer.metal */,
+				D6D6D4B4293BCE35004140B8 /* PiPVideoMixer.swift */,
+				D6D6D4B6293BCEB2004140B8 /* MovieRecorder.swift */,
+				D6D6D4B8293BCEFF004140B8 /* PreviewView.swift */,
+				D6D6D4BA293BCF36004140B8 /* CameraViewController.swift */,
+			);
+			path = New;
 			sourceTree = "<group>";
 		};
 		D6D75C0528BAE061009578E7 /* Reactions */ = {
@@ -3863,6 +3886,7 @@
 				D63D71B525F00ED8004C26F7 /* PhotoVideoCaptureSession.swift in Sources */,
 				D687595C2728A0C400AF7C07 /* Conversation+Intents.swift in Sources */,
 				80A36AF2278F7C2600C0F097 /* LaunchCoordinator.swift in Sources */,
+				D6D6D4B5293BCE35004140B8 /* PiPVideoMixer.swift in Sources */,
 				D6AA61FA285255ED00FA4D02 /* TabView.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D6AA6211285270E200FA4D02 /* NoticesCollectionView.swift in Sources */,
@@ -3906,6 +3930,7 @@
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D657A35A27FB67D800664DD3 /* UnreadMessagesCounter.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
+				D6D6D4B7293BCEB2004140B8 /* MovieRecorder.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* PersonView.swift in Sources */,
 				D646955827370A7B00BF47CE /* ToastView.swift in Sources */,
 				D6D75C2D28C6BF4B009578E7 /* CalendarCollectionView.swift in Sources */,
@@ -4100,6 +4125,7 @@
 				D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */,
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
 				D6D75C1128BE7333009578E7 /* MomentContentView.swift in Sources */,
+				D6D6D4BB293BCF36004140B8 /* CameraViewController.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D666126B27E2871E006CDF3D /* BadgeView.swift in Sources */,
@@ -4270,11 +4296,13 @@
 				D692E888286BB8030001F99B /* ReplyButton.swift in Sources */,
 				80471C432732FE450022172C /* MessageSequenceCollectionViewDataSource.swift in Sources */,
 				D61A33E527D5731B00056242 /* ContextCueCollectionViewDataSource.swift in Sources */,
+				D6D6D4B3293BCDC6004140B8 /* PiPMixer.metal in Sources */,
 				D639892328DF1EB900F0CD61 /* LocationToggleView.swift in Sources */,
 				D6AA62012852616D00FA4D02 /* HomeCoordinator+Notices.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				800718DD27861507005DD884 /* EventLog.swift in Sources */,
+				D6D6D4B9293BCEFF004140B8 /* PreviewView.swift in Sources */,
 				D60B887327F7732100B3E1C2 /* NoticeCell.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
 				D6AA621528528EE600FA4D02 /* OrbCollectionViewLayout.swift in Sources */,

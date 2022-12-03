@@ -98,6 +98,9 @@ class PiPRecordingViewController: ViewController, AVCaptureVideoDataOutputSample
                     self.frontCameraView.startRecordingAnimation()
                 }
             }.store(in: &self.cancellables)
+        
+        // Keep the screen awake
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
